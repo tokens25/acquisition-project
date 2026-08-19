@@ -60,6 +60,7 @@ export const defaultSet: CardSet = {
     { code: 'DE', label: 'Germany', locale: 'de-DE', currency: 'EUR' },
     { code: 'IT', label: 'Italy', locale: 'it-IT', currency: 'EUR' },
     { code: 'GB', label: 'United Kingdom', locale: 'en-GB', currency: 'GBP' },
+    { code: 'US', label: 'United States', locale: 'en-US', currency: 'USD' },
   ],
   campaigns: [{ code: 'wc26', label: 'World Cup 2026' }],
   context: { market: 'IE' },
@@ -78,6 +79,7 @@ export const defaultSet: CardSet = {
         // The UK is priced in GBP — the currency comes from the market.
         { id: 'ultimate-gb', when: { market: 'GB' }, patch: { standardPrice: 29.99, introPrice: 22.99 } },
         // A campaign stacks on top of whatever the market resolved to.
+        { id: 'ultimate-us', when: { market: 'US' }, patch: { standardPrice: 34.99, introPrice: 29.99, planName: 'MSG+' } },
         { id: 'ultimate-wc26', when: { campaign: 'wc26' }, patch: { introMonths: 6 } },
         { id: 'ultimate-de-wc26', when: { market: 'DE', campaign: 'wc26' }, patch: { introPrice: 24.99 } },
       ],

@@ -57,6 +57,9 @@ and the set-level rules can block a publish. Markets and campaigns carry sparse
 overrides resolved by specificity, and validation runs across every context.
 See **[RULES.md](RULES.md)**.
 
+A draft of the sign-up journey rules — steps with selectors, and the open
+questions the Figma file cannot answer — is in **[JOURNEY-RULES.md](JOURNEY-RULES.md)**.
+
 ## Editing content
 
 The left pane is the authoring surface: only fields the spec marks as **authored**

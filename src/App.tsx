@@ -1,5 +1,6 @@
 import './App.css'
-import { CardSetView } from './card/CardSetView'
+import { JourneyView } from './card/JourneyView'
+import { signUpJourney } from './rules/journeys'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
 import { contextLabel, summarise, validateAll } from './rules/validate'
@@ -40,10 +41,11 @@ export function App() {
             </span>
           </div>
           <p className="page__section-note">
-            The set as it would render. Card heights and description lines resolve across
-            the set (S-2, S-3), not per card.
+            The journey as it resolves for this context — which steps appear, in order.
+            Only the plans step renders a real component; the rest carry their Figma frame,
+            their states and the runtime conditions they depend on.
           </p>
-          <CardSetView set={store.set} context={store.context} />
+          <JourneyView journey={signUpJourney} set={store.set} context={store.context} />
         </div>
       </div>
     </main>
