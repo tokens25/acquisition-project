@@ -4,9 +4,13 @@
   background: var(--color-surface-default);
 }
 
-.page__header {
+.page__header,
+.page__section {
   max-inline-size: 1480px;
-  margin: 0 auto var(--space-40);
+  margin: 0 auto;
+}
+.page__header {
+  margin-block-end: var(--space-48);
 }
 .page__title {
   margin: 0 0 var(--space-8);
@@ -20,19 +24,41 @@
   font-size: var(--font-size-caption-sm);
 }
 
-.page__controls {
-  display: flex;
-  gap: var(--space-16);
-  margin-block-start: var(--space-24);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-caption-xs);
+.page__section + .page__section {
+  margin-block-start: var(--space-64);
+  padding-block-start: var(--space-40);
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
 }
-.page__controls label {
+.page__section-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: var(--space-4);
+}
+.page__section-title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-heading-h6);
+  font-weight: var(--font-weight-bold);
+}
+.page__section-note {
+  margin: 0 0 var(--space-24);
+  max-inline-size: 720px;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.5;
+}
+
+.page__control {
   display: flex;
   gap: var(--space-8);
   align-items: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
 }
-.page__controls select {
+.page__control select {
   padding: var(--space-4) var(--space-8);
   border: var(--border-1) solid var(--color-border-full-color-default);
   border-radius: var(--radius-6);
@@ -42,12 +68,21 @@
   font-size: var(--font-size-caption-xs);
 }
 
+/* Editor and its live preview sit side by side, stacking on narrow screens. */
+.page__editor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-40);
+  align-items: start;
+}
+.page__preview {
+  position: sticky;
+  inset-block-start: var(--space-24);
+}
+
 .page__plans {
   display: flex;
-  max-inline-size: 1480px;
-  margin: 0 auto;
   flex-wrap: wrap;
   gap: var(--space-24);
   align-items: stretch;
-  justify-content: center;
 }

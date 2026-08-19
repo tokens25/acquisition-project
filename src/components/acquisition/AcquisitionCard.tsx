@@ -16,6 +16,8 @@ export interface AcquisitionCardProps {
   /** Plan name, e.g. "Ultimate". */
   title: string
   description: string
+  /** Trailing affordance appended to the description. */
+  moreLabel?: string
   /** Reveals the rest of the truncated description. */
   onMore?: () => void
 
@@ -65,6 +67,7 @@ export interface AcquisitionCardProps {
 export function AcquisitionCard({
   title,
   description,
+  moreLabel,
   onMore,
   ultimate = false,
   eyebrow,
@@ -98,6 +101,7 @@ export function AcquisitionCard({
         <CardHeader
           title={title}
           description={description}
+          moreLabel={moreLabel}
           onMore={onMore}
           ultimate={ultimate}
           device={device}
