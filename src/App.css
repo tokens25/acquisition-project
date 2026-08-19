@@ -1,21 +1,17 @@
 .page {
   min-block-size: 100vh;
-  padding: var(--space-48) var(--space-24) var(--space-64);
+  padding: var(--space-40) var(--space-24) var(--space-64);
   background: var(--color-surface-default);
 }
 
-.page__header,
-.page__section {
-  max-inline-size: 1480px;
-  margin: 0 auto;
-}
 .page__header {
-  margin-block-end: var(--space-48);
+  max-inline-size: 1600px;
+  margin: 0 auto var(--space-32);
 }
 .page__title {
   margin: 0 0 var(--space-8);
   color: var(--color-text-primary);
-  font-size: var(--font-size-display-4);
+  font-size: var(--font-size-display-5);
   font-weight: var(--font-weight-bold);
 }
 .page__subtitle {
@@ -24,14 +20,26 @@
   font-size: var(--font-size-caption-sm);
 }
 
-.page__section + .page__section {
-  margin-block-start: var(--space-64);
-  padding-block-start: var(--space-40);
-  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
-}
-.page__section-head {
+.page__split {
   display: flex;
+  max-inline-size: 1600px;
+  margin: 0 auto;
   flex-wrap: wrap;
+  gap: var(--space-40);
+  align-items: start;
+}
+.page__pane {
+  flex: 1 1 380px;
+  min-inline-size: 0;
+}
+.page__pane--preview {
+  flex: 2 1 720px;
+  position: sticky;
+  inset-block-start: var(--space-24);
+}
+
+.page__preview-head {
+  display: flex;
   gap: var(--space-16);
   align-items: center;
   justify-content: space-between;
@@ -45,44 +53,20 @@
 }
 .page__section-note {
   margin: 0 0 var(--space-24);
-  max-inline-size: 720px;
+  max-inline-size: 640px;
   color: var(--color-text-tertiary);
   font-size: var(--font-size-caption-xs);
   line-height: 1.5;
 }
-
-.page__control {
-  display: flex;
-  gap: var(--space-8);
-  align-items: center;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-caption-xs);
+.page__gate {
+  padding: var(--space-4) var(--space-12);
+  border-radius: var(--radius-full);
+  background: var(--color-accent-success-surface-1);
+  color: var(--color-accent-success-text);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
 }
-.page__control select {
-  padding: var(--space-4) var(--space-8);
-  border: var(--border-1) solid var(--color-border-full-color-default);
-  border-radius: var(--radius-6);
-  background: var(--color-surface-container-1);
-  color: var(--color-text-primary);
-  font-family: inherit;
-  font-size: var(--font-size-caption-xs);
-}
-
-/* Editor and its live preview sit side by side, stacking on narrow screens. */
-.page__editor {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-40);
-  align-items: start;
-}
-.page__preview {
-  position: sticky;
-  inset-block-start: var(--space-24);
-}
-
-.page__plans {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-24);
-  align-items: stretch;
+.page__gate[data-blocked] {
+  background: var(--color-accent-error-surface-1);
+  color: var(--color-accent-error-text);
 }

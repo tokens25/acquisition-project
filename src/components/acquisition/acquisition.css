@@ -356,3 +356,29 @@
   font-size: var(--font-size-caption-xs);
   line-height: 1.52;
 }
+
+/* ── Set-level layout (S-2, S-3) ───────────────────────────── */
+
+/* S-3 · every card renders at the tallest card's height — stretch does it. */
+.acq-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+  align-items: stretch;
+}
+
+/* S-2 · the whole set shares one description height: lines × 21px. */
+.acq-set[data-description-lines='1'] {
+  --acq-description-lines: 1;
+}
+.acq-set[data-description-lines='2'] {
+  --acq-description-lines: 2;
+}
+.acq-card-header__description {
+  min-block-size: calc(var(--acq-description-lines, 1) * 21px);
+}
+.acq-card-header__text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}

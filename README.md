@@ -49,25 +49,29 @@ live one level up in `src/components`.
 The `device` prop carries the Figma `Device` variant (`mobile` · `desktop` ·
 `xl`, the "Extra big" breakpoint) and is passed down from the card to every part.
 
+## Rules & logic
+
+The card is governed by an agreed spec, encoded as data in `src/rules` rather
+than kept as a document -- switches are authored, everything else is derived,
+and the set-level rules can block a publish. See **[RULES.md](RULES.md)**.
+
 ## Editing content
 
-The first section of the page is a built-in editor: one input per `AcquisitionCard`
-prop, with the card rendering live beside it. No CMS, no account, no backend.
+The left pane is the authoring surface: only fields the spec marks as **authored**
+appear as inputs. Derived and static values are listed read-only underneath, so
+an editor can see what a switch produced without being able to contradict it.
 
-- **Saves as you type** to `localStorage` under `acquisition-card-content`.
-- **Export JSON** downloads the content; **Import JSON** loads it back. That file is
-  how you move content between browsers, hand it to someone else, or commit it.
-- **Reset** restores the Figma variant 1 defaults.
+The right pane renders the set through the same rules layer the product would,
+with a publish gate that turns red when a rule fails.
 
-The model lives in [`src/editor/content.ts`](src/editor/content.ts) and mirrors the
-component props. Adding a prop to `AcquisitionCard` means adding a field to
-`CardContent`, a default, and an input in
-[`CardEditor.tsx`](src/editor/CardEditor.tsx).
+- **Saves as you type** to `localStorage` under `acquisition-card-set`.
+- **Export / Import JSON** moves a set between browsers or into the repo.
+- **Reset** restores the default set.
 
-Bundled artwork is stored **by id**, never by URL — Vite fingerprints asset URLs at
-build time, so saved content referencing a URL would break on the next deploy.
-Imported content is merged over the defaults, so files saved by an older version
-still load once new fields are added.
+Bundled artwork is stored **by id**, never by URL -- Vite fingerprints asset
+URLs at build time, so saved content referencing a URL would break on the next
+deploy. Imported content is merged over the defaults, so files saved by an
+older version still load.
 
 ## Themes
 

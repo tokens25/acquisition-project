@@ -13,42 +13,29 @@ import { Pricing, type PricingProps } from './Pricing'
 import type { Device } from './types'
 
 export interface AcquisitionCardProps {
-  /** Plan name, e.g. "Ultimate". */
+  /** Plan Name, already resolved. */
   title: string
   description: string
-  /** Trailing affordance appended to the description. */
-  moreLabel?: string
-  /** Reveals the rest of the truncated description. */
+  /** Shared line budget for the set (S-2). */
+  descriptionLines?: 1 | 2
   onMore?: () => void
 
-  /**
-   * Figma `Ultimate` — the flagship treatment: gold border, gold gradient title
-   * and a gold gradient CTA.
-   */
+  /** Gold border, gold gradient title and gold CTA. */
   ultimate?: boolean
-  /** Corner eyebrow copy. Omit for no eyebrow. Figma `Show Label/Eyebrow`. */
+  /** Corner eyebrow copy. Omit for none. */
   eyebrow?: string
 
-  /** Pricing block. `device` is inherited from the card. */
   pricing: Omit<PricingProps, 'device'>
 
-  /** CTA copy, e.g. "Get Ultimate". */
   ctaLabel: string
   onCtaClick?: () => void
-  /** Shows the green savings eyebrow above the CTA. Figma `Discount`. */
   discount?: boolean
   discountLabel?: string
 
-  /** Competition / team badges. Omit to hide the grid. */
-  logos?: Omit<LogoTilesProps, 'device'>
-
-  /** Promoted add-on. Omit for plans that don't carry one. */
+  logos?: LogoTilesProps
   addOn?: Omit<AddOnProps, 'device'>
-
-  /** `Feature` rows — pass `<Feature>` children. */
   features?: ReactNode
 
-  /** Footer link copy. Omit to drop the footer. */
   footerLabel?: string
   onFooterClick?: () => void
 
@@ -57,17 +44,17 @@ export interface AcquisitionCardProps {
 }
 
 /**
- * AcquisitionCard — the plan card users pick from on the Acquisition page.
+ * AcquisitionCard — the plan card users pick from.
  *
- * Composes the section's small components (CardHeader, Pricing, PlanCta,
- * LogoTiles, AddOn, FeaturesList) into the four Figma variants:
- *   1. Ultimate + discount + add-on   2. Standard + discount + add-on
- *   3. Standard, no discount          4. Ultimate, no discount
+ * Presentation only. Every value here arrives already decided: which price is
+ * primary, whether a badge shows, what the CTA says. The rules that produce
+ * them live above this component, in `src/rules`, because several of them
+ * depend on the other cards in the set and none of them belong to a single card.
  */
 export function AcquisitionCard({
   title,
   description,
-  moreLabel,
+  descriptionLines = 1,
   onMore,
   ultimate = false,
   eyebrow,
@@ -79,7 +66,7 @@ export function AcquisitionCard({
   logos,
   addOn,
   features,
-  footerLabel = 'All features & content',
+  footerLabel,
   onFooterClick,
   device = 'desktop',
   className,
@@ -101,7 +88,7 @@ export function AcquisitionCard({
         <CardHeader
           title={title}
           description={description}
-          moreLabel={moreLabel}
+          descriptionLines={descriptionLines}
           onMore={onMore}
           ultimate={ultimate}
           device={device}

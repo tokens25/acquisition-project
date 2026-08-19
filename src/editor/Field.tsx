@@ -122,3 +122,54 @@ export function FieldGroup({
     </fieldset>
   )
 }
+
+export function NumberField({
+  label,
+  hint,
+  value,
+  onChange,
+  step = 1,
+  min,
+}: BaseProps & { value: number; onChange: (value: number) => void; step?: number; min?: number }) {
+  return (
+    <label className="ed-field">
+      <span className="ed-field__label">{label}</span>
+      <input
+        className="ed-field__input"
+        type="number"
+        value={Number.isFinite(value) ? value : ''}
+        step={step}
+        min={min}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          const next = Number.parseFloat(e.target.value)
+          onChange(Number.isFinite(next) ? next : 0)
+        }}
+      />
+      {hint && <span className="ed-field__hint">{hint}</span>}
+    </label>
+  )
+}
+
+/** A value the editor may see but never set. */
+export function DerivedRow({
+  label,
+  value,
+  source,
+  note,
+}: {
+  label: string
+  value: string
+  source: 'derived' | 'static'
+  note: string
+}) {
+  return (
+    <div className="ed-derived" data-source={source}>
+      <span className="ed-derived__label">
+        {label}
+        <span className="ed-derived__tag">{source}</span>
+      </span>
+      <span className="ed-derived__value">{value || '—'}</span>
+      <span className="ed-field__hint">{note}</span>
+    </div>
+  )
+}

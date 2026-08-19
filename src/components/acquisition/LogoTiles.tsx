@@ -7,41 +7,33 @@ export interface PlanLogo {
 }
 
 export interface LogoTilesProps {
-  /** Logos to show, already scoped to the plan. */
+  /** Logos to render, already trimmed to the visible count by the caller. */
   logos: PlanLogo[]
-  /**
-   * How many tiles fit before the "+N" overflow tile. The design lays out five
-   * per row: `one` row shows 4 logos + overflow, `two` rows show 9 + overflow.
-   */
-  rows?: 'one' | 'two'
-  /**
-   * Total number of competitions in the plan. When it exceeds what fits, the
-   * remainder is rendered as the trailing "+N" tile.
-   */
-  total?: number
+  /** One or two rows of five. Decided by the rules layer, not here. */
+  rows?: 1 | 2
+  /** Hidden competitions; renders the trailing "+N" tile when above zero. */
+  overflowCount?: number
 }
 
-const PER_ROW = 5
-
 /**
- * LogoTiles — the grid of competition / team badges on an Acquisition card.
- * Figma: `Subscription Plan Logo Tile` (Rows = One | Two | Two +x).
+ * LogoTiles — the grid of competition badges on an Acquisition card.
+ * Figma: `Subscription Plan Logo Tile`.
+ *
+ * Layout only. Row count and overflow are inputs, because §5 of the card rules
+ * derives both from the add-on's presence and the competition total — and a
+ * rule computed in two places is a rule that eventually disagrees with itself.
  */
-export function LogoTiles({ logos, rows = 'one', total }: LogoTilesProps) {
-  const capacity = rows === 'two' ? PER_ROW * 2 : PER_ROW
-  const overflow = Math.max(0, (total ?? logos.length) - (capacity - 1))
-  const visible = overflow > 0 ? logos.slice(0, capacity - 1) : logos.slice(0, capacity)
-
+export function LogoTiles({ logos, rows = 1, overflowCount = 0 }: LogoTilesProps) {
   return (
     <ul className="acq-logo-tiles" data-rows={rows}>
-      {visible.map((logo, i) => (
+      {logos.map((logo, i) => (
         <li className="acq-logo-tiles__tile" key={`${logo.alt}-${i}`}>
           <img src={logo.src} alt={logo.alt} />
         </li>
       ))}
-      {overflow > 0 && (
+      {overflowCount > 0 && (
         <li className="acq-logo-tiles__tile acq-logo-tiles__tile--overflow">
-          <span>+{overflow}</span>
+          <span>+{overflowCount}</span>
         </li>
       )}
     </ul>
