@@ -1,12 +1,13 @@
 import './editor.css'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { logoCatalog } from '../card/assets'
-import type { AddOnType, AuthoredCard, Device } from '../rules/content'
+import type { AddOnType, AuthoredCard, CardPatch, Device } from '../rules/content'
 import { deriveCard } from '../rules/derive'
-import { validateSet } from '../rules/validate'
+import { marketFor, resolveCard } from '../rules/resolve'
+import { contextLabel, summarise, validateAll, validateContext } from '../rules/validate'
 import { CheckField, DerivedRow, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
-import type { CardSetStore } from './useCardSet'
+import { BASE_MARKET, type CardSetStore } from './useCardSet'
 
 const DEVICES: { value: Device; label: string }[] = [
   { value: 'mobile', label: 'Mobile' },
@@ -20,69 +21,65 @@ const ADDON_TYPES: { value: AddOnType; label: string }[] = [
   { value: 'discount-code', label: 'Discount code' },
 ]
 
-const LOCALES = [
-  { value: 'en-IE', label: 'English (EUR)' },
-  { value: 'de-DE', label: 'Deutsch (EUR)' },
-  { value: 'it-IT', label: 'Italiano (EUR)' },
-  { value: 'en-GB', label: 'English (UK)' },
-]
-
 /**
  * The authoring surface.
  *
  * Only fields §7 marks as authored appear as inputs. Everything derived or
  * static is listed read-only underneath, so an editor can see what a switch
  * produced without being able to contradict it.
+ *
+ * Edits land wherever the context points: on the base card, or on that
+ * market's difference from it.
  */
 export function SetEditor({ store }: { store: CardSetStore }) {
-  const { set, updateSet, updateCard, reset, exportJson, importJson, importError } = store
+  const { set, context, editingBase, setContext, updateSet, reset, exportJson, importJson, importError } = store
   const [openCard, setOpenCard] = useState(set.cards[0]?.id ?? '')
-  const fileInput = useRef<HTMLInputElement>(null)
 
-  const violations = validateSet(set)
-  const errors = violations.filter((v) => v.severity === 'error')
-  const warnings = violations.filter((v) => v.severity === 'warning')
+  const results = validateAll(set)
+  const coverage = summarise(results)
+  const here = validateContext(set, context)
+  const hereErrors = here.filter((v) => v.severity === 'error')
 
   return (
     <form className="ed" onSubmit={(e) => e.preventDefault()}>
       <div className="ed__bar">
-        <button type="button" className="ed__btn" onClick={exportJson}>
-          Export JSON
-        </button>
-        <button type="button" className="ed__btn" onClick={() => fileInput.current?.click()}>
+        <button type="button" className="ed__btn" onClick={exportJson}>Export JSON</button>
+        <label className="ed__btn">
           Import JSON
-        </button>
-        <button type="button" className="ed__btn ed__btn--quiet" onClick={reset}>
-          Reset
-        </button>
-        <input
-          ref={fileInput}
-          type="file"
-          accept="application/json"
-          hidden
-          onChange={(e) => {
-            const file = e.target.files?.[0]
-            if (file) void importJson(file)
-            e.target.value = ''
-          }}
-        />
+          <input
+            type="file"
+            accept="application/json"
+            hidden
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (file) void importJson(file)
+              e.target.value = ''
+            }}
+          />
+        </label>
+        <button type="button" className="ed__btn ed__btn--quiet" onClick={reset}>Reset</button>
       </div>
       {importError && <p className="ed__error">Import failed: {importError}</p>}
 
+      {/* Coverage — machines check every market, so a person only reviews changes. */}
       <div
         className="ed-gate"
-        data-state={errors.length ? 'blocked' : warnings.length ? 'warn' : 'clear'}
+        data-state={coverage.failing.length ? 'blocked' : coverage.warning.length ? 'warn' : 'clear'}
       >
         <p className="ed-gate__headline">
-          {errors.length
-            ? `Publish blocked — ${errors.length} rule ${errors.length === 1 ? 'violation' : 'violations'}`
-            : warnings.length
-              ? `Ready to publish — ${warnings.length} warning${warnings.length === 1 ? '' : 's'}`
-              : 'Ready to publish — all rules pass'}
+          {coverage.failing.length
+            ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`
+            : `Publish ready — ${coverage.total} contexts checked`}
         </p>
-        {violations.length > 0 && (
+        {coverage.failing.length > 0 && (
+          <p className="ed-gate__contexts">Failing: {coverage.failingLabels.join(', ')}</p>
+        )}
+        {coverage.warning.length > 0 && (
+          <p className="ed-gate__contexts">Warnings: {coverage.warningLabels.join(', ')}</p>
+        )}
+        {here.length > 0 && (
           <ul className="ed-gate__list">
-            {violations.map((v, i) => (
+            {here.map((v, i) => (
               <li key={i} data-severity={v.severity}>
                 <code>{v.rule}</code> {v.message}
                 {v.cardId && <span className="ed-gate__card"> · {v.cardId}</span>}
@@ -92,13 +89,25 @@ export function SetEditor({ store }: { store: CardSetStore }) {
         )}
       </div>
 
-      <FieldGroup title="Set">
+      <FieldGroup title="Context">
         <SelectField
-          label="Market / locale"
-          hint="Drives currency and number formatting."
-          value={set.locale}
-          options={LOCALES}
-          onChange={(v) => updateSet({ locale: v })}
+          label="Market"
+          hint={editingBase ? 'Editing the base — changes reach every market.' : `Editing ${context.market}'s difference from the base.`}
+          value={context.market}
+          options={[
+            { value: BASE_MARKET, label: 'Base — all markets' },
+            ...set.markets.map((m) => ({ value: m.code, label: `${m.label} (${m.currency})` })),
+          ]}
+          onChange={(v) => setContext({ ...context, market: v })}
+        />
+        <SelectField
+          label="Campaign"
+          value={context.campaign ?? ''}
+          options={[
+            { value: '', label: 'None' },
+            ...set.campaigns.map((c) => ({ value: c.code, label: c.label })),
+          ]}
+          onChange={(v) => setContext({ ...context, campaign: v || undefined })}
         />
         <SelectField
           label="Device"
@@ -108,6 +117,12 @@ export function SetEditor({ store }: { store: CardSetStore }) {
         />
       </FieldGroup>
 
+      <div className="ed-scope" data-base={editingBase || undefined}>
+        {editingBase
+          ? 'Editing the base card'
+          : `Editing ${contextLabel(context)} — only what you change is stored`}
+      </div>
+
       <div className="ed-tabs">
         {set.cards.map((c) => (
           <button
@@ -115,10 +130,10 @@ export function SetEditor({ store }: { store: CardSetStore }) {
             type="button"
             className="ed-tab"
             data-on={openCard === c.id || undefined}
-            data-invalid={errors.some((e) => e.cardId === c.id) || undefined}
+            data-invalid={hereErrors.some((e) => e.cardId === c.id) || undefined}
             onClick={() => setOpenCard(c.id)}
           >
-            {c.planName || c.id}
+            {resolveCard(c, context).planName || c.id}
           </button>
         ))}
       </div>
@@ -126,66 +141,79 @@ export function SetEditor({ store }: { store: CardSetStore }) {
       {set.cards
         .filter((c) => c.id === openCard)
         .map((card) => (
-          <CardFields key={card.id} card={card} locale={set.locale} onChange={updateCard} />
+          <CardFields key={card.id} card={card} store={store} />
         ))}
     </form>
   )
 }
 
-function CardFields({
-  card,
-  locale,
-  onChange,
-}: {
-  card: AuthoredCard
-  locale: string
-  onChange: (id: string, patch: Partial<AuthoredCard>) => void
-}) {
-  const d = deriveCard(card, locale)
-  const patch = (p: Partial<AuthoredCard>) => onChange(card.id, p)
+function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }) {
+  const { set, context, editingBase, updateCard, overriddenKeys, clearOverride } = store
+  const resolved = resolveCard(card, context)
+  const market = marketFor(set, context.market)
+  const d = deriveCard(resolved, market)
+  const overridden = overriddenKeys(card)
+
+  const patch = (p: CardPatch) => updateCard(card.id, p)
+  const mark = (key: keyof CardPatch) => (overridden.includes(key) ? ' ●' : '')
 
   const toggleLogo = (id: string) => {
-    const has = card.logos.some((l) => l.id === id)
+    const has = resolved.logos.some((l) => l.id === id)
     patch({
       logos: has
-        ? card.logos.filter((l) => l.id !== id)
-        : [...card.logos, { id, alt: logoCatalog[id].alt }],
+        ? resolved.logos.filter((l) => l.id !== id)
+        : [...resolved.logos, { id, alt: logoCatalog[id].alt }],
     })
   }
 
   return (
     <>
+      {!editingBase && (
+        <div className="ed-override">
+          <span>
+            {overridden.length
+              ? `Overridden here: ${overridden.join(', ')}`
+              : 'No differences from the base yet — edit a field to create one.'}
+          </span>
+          {overridden.length > 0 && (
+            <button type="button" className="ed__btn ed__btn--quiet" onClick={() => clearOverride(card.id)}>
+              Clear
+            </button>
+          )}
+        </div>
+      )}
+
       <FieldGroup title="Switches">
         <CheckField
-          label="Ultimate"
+          label={`Ultimate${mark('ultimate')}`}
           hint="Drives stroke, badge, plan-name fill and CTA appearance together. Max one per set (S-1)."
-          checked={card.ultimate}
+          checked={resolved.ultimate}
           onChange={(v) => patch({ ultimate: v })}
         />
         <CheckField
-          label="Discount"
+          label={`Discount${mark('discount')}`}
           hint="Drives the caption, primary and struck price, the explainer and the CTA area."
-          checked={card.discount}
+          checked={resolved.discount}
           onChange={(v) => patch({ discount: v })}
         />
       </FieldGroup>
 
       <FieldGroup title="Content">
-        <TextField label="Plan Name" hint="One value — header, CTA and add-on label." value={card.planName} onChange={(v) => patch({ planName: v })} />
-        <TextArea label="Description" hint="Full text. Never pre-truncate — the card measures and adds “… more”." value={card.description} onChange={(v) => patch({ description: v })} rows={4} />
+        <TextField label={`Plan Name${mark('planName')}`} hint="One value — header, CTA and add-on label." value={resolved.planName} onChange={(v) => patch({ planName: v })} />
+        <TextArea label={`Description${mark('description')}`} hint="Full text. Never pre-truncate — the card measures and adds “… more”." value={resolved.description} onChange={(v) => patch({ description: v })} rows={4} />
       </FieldGroup>
 
-      <FieldGroup title="Pricing">
-        <NumberField label="Standard price" value={card.standardPrice.amount} step={0.01} min={0} onChange={(v) => patch({ standardPrice: { ...card.standardPrice, amount: v } })} />
-        <NumberField label="Intro price" hint="Used as the primary price while Discount is on." value={card.introPrice.amount} step={0.01} min={0} onChange={(v) => patch({ introPrice: { ...card.introPrice, amount: v } })} />
-        <NumberField label="Intro months" value={card.introMonths} min={1} onChange={(v) => patch({ introMonths: v })} />
-        <TextField label="Billing period" value={card.installment} onChange={(v) => patch({ installment: v })} />
+      <FieldGroup title={`Pricing — ${market.currency}`}>
+        <NumberField label={`Standard price${mark('standardPrice')}`} value={resolved.standardPrice} step={0.01} min={0} onChange={(v) => patch({ standardPrice: v })} />
+        <NumberField label={`Intro price${mark('introPrice')}`} hint="Used as the primary price while Discount is on." value={resolved.introPrice} step={0.01} min={0} onChange={(v) => patch({ introPrice: v })} />
+        <NumberField label={`Intro months${mark('introMonths')}`} value={resolved.introMonths} min={1} onChange={(v) => patch({ introMonths: v })} />
+        <TextField label={`Billing period${mark('installment')}`} value={resolved.installment} onChange={(v) => patch({ installment: v })} />
       </FieldGroup>
 
       <FieldGroup title="Competitions">
         <div className="ed-logos">
           {Object.entries(logoCatalog).map(([id, logo]) => {
-            const on = card.logos.some((l) => l.id === id)
+            const on = resolved.logos.some((l) => l.id === id)
             return (
               <button key={id} type="button" className="ed-logo" data-on={on || undefined} onClick={() => toggleLogo(id)} title={logo.alt} aria-pressed={on}>
                 <img src={logo.src} alt={logo.alt} />
@@ -193,34 +221,34 @@ function CardFields({
             )
           })}
         </div>
-        <NumberField label="Total competitions" hint="Drives the derived “+N” tile." value={card.logoTotal} min={0} onChange={(v) => patch({ logoTotal: v })} />
+        <NumberField label={`Total competitions${mark('logoTotal')}`} hint="Drives the derived “+N” tile." value={resolved.logoTotal} min={0} onChange={(v) => patch({ logoTotal: v })} />
       </FieldGroup>
 
       <FieldGroup title="Add-on">
-        <CheckField label="Show add-on" checked={card.addOn.enabled} onChange={(v) => patch({ addOn: { ...card.addOn, enabled: v } })} />
-        <SelectField label="Type" value={card.addOn.type} options={ADDON_TYPES} onChange={(v) => patch({ addOn: { ...card.addOn, type: v } })} />
-        <TextField label="Title" value={card.addOn.title} onChange={(v) => patch({ addOn: { ...card.addOn, title: v } })} />
-        <TextField label="Subtitle" value={card.addOn.subtitle} onChange={(v) => patch({ addOn: { ...card.addOn, subtitle: v } })} />
+        <CheckField label="Show add-on" checked={resolved.addOn.enabled} onChange={(v) => patch({ addOn: { enabled: v } })} />
+        <SelectField label="Type" value={resolved.addOn.type} options={ADDON_TYPES} onChange={(v) => patch({ addOn: { type: v } })} />
+        <TextField label="Title" value={resolved.addOn.title} onChange={(v) => patch({ addOn: { title: v } })} />
+        <TextField label="Subtitle" value={resolved.addOn.subtitle} onChange={(v) => patch({ addOn: { subtitle: v } })} />
       </FieldGroup>
 
       <FieldGroup title="Features">
-        {card.features.map((feature, i) => (
+        {resolved.features.map((feature, i) => (
           <div className="ed-row" key={i}>
             <TextField
               label={`Feature ${i + 1}`}
               value={feature}
               onChange={(v) => {
-                const features = [...card.features]
+                const features = [...resolved.features]
                 features[i] = v
                 patch({ features })
               }}
             />
-            <button type="button" className="ed__btn ed__btn--quiet ed__btn--icon" onClick={() => patch({ features: card.features.filter((_, j) => j !== i) })} aria-label={`Remove feature ${i + 1}`}>
+            <button type="button" className="ed__btn ed__btn--quiet ed__btn--icon" onClick={() => patch({ features: resolved.features.filter((_, j) => j !== i) })} aria-label={`Remove feature ${i + 1}`}>
               ✕
             </button>
           </div>
         ))}
-        <button type="button" className="ed__btn" onClick={() => patch({ features: [...card.features, 'New feature'] })}>
+        <button type="button" className="ed__btn" onClick={() => patch({ features: [...resolved.features, 'New feature'] })}>
           Add feature
         </button>
       </FieldGroup>

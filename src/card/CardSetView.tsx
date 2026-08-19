@@ -1,9 +1,10 @@
-import { useLayoutEffect, useRef, useState } from 'react'
-import type { CardSet } from '../rules/content'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import type { CardSet, Context } from '../rules/content'
+import { marketFor, resolveSet } from '../rules/resolve'
 import { RuledCard } from './RuledCard'
 
 /**
- * Renders a set and resolves the two set-level layout rules.
+ * Renders a set for a context and resolves the two set-level layout rules.
  *
  * S-2 · one card wrapping to two lines pulls the whole set to two, capped there.
  * S-3 · every card renders at the tallest card's height.
@@ -13,9 +14,20 @@ import { RuledCard } from './RuledCard'
  * would remove the measurement, at the cost of restructuring the card's
  * internals — worth revisiting if the card ever becomes a grid throughout.
  */
-export function CardSetView({ set, onMore }: { set: CardSet; onMore?: () => void }) {
+export function CardSetView({
+  set,
+  context = set.context,
+  onMore,
+}: {
+  set: CardSet
+  context?: Context
+  onMore?: () => void
+}) {
   const ref = useRef<HTMLDivElement>(null)
   const [descriptionLines, setDescriptionLines] = useState<1 | 2>(1)
+
+  const cards = useMemo(() => resolveSet(set, context), [set, context])
+  const market = marketFor(set, context.market)
 
   useLayoutEffect(() => {
     const root = ref.current
@@ -35,15 +47,15 @@ export function CardSetView({ set, onMore }: { set: CardSet; onMore?: () => void
     const observer = new ResizeObserver(measure)
     observer.observe(root)
     return () => observer.disconnect()
-  }, [set])
+  }, [cards])
 
   return (
     <div className="acq-set" ref={ref} data-description-lines={descriptionLines}>
-      {set.cards.map((card) => (
+      {cards.map((card) => (
         <RuledCard
           key={card.id}
           card={card}
-          locale={set.locale}
+          market={market}
           device={set.device}
           descriptionLines={descriptionLines}
           onMore={onMore}

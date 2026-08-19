@@ -56,11 +56,13 @@ a first-class thing ([`CardSetView`](src/card/CardSetView.tsx)):
 
 ## Prices are numbers
 
-`{ amount, currency }`, not `"€25.99"`.
+A plain amount in major units, e.g. `25.99` — not `"€25.99"`.
 
 The savings amount is a computed delta and the explainer repeats
-`standardPrice` — both impossible from a formatted string. So is rendering
-`19,99 €` for `de-DE` off the same authored value.
+`standardPrice`; both are impossible from a formatted string. So is rendering
+the same authored value as `25,99 €` in Germany and `£25.99` in the UK.
+
+Currency is not authored either — see **Currency belongs to the market** below.
 
 ## Where the boundary sits
 
@@ -71,10 +73,56 @@ decided. The rules live above it in `src/rules`, applied by
 That split follows the spec's own framing — several rules depend on the other
 cards in the set, and none of them belong to a single card.
 
+## Market and campaign overrides
+
+A card is authored once. Markets and campaigns carry **sparse patches** applied
+in order of specificity, so you write a default and a dozen deltas rather than
+one record per permutation.
+
+```
+base                  →  €25.99 / €34.99, 3 months
+{ market: DE }        →  standardPrice 39.99, introPrice 29.99
+{ campaign: wc26 }    →  introMonths 6
+{ market: DE, wc26 }  →  introPrice 24.99
+```
+
+Resolution ([`resolve.ts`](src/rules/resolve.ts)) collects every override whose
+selector matches, sorts by **specificity** — the number of constraints — then by
+an explicit `priority`, then declaration order, and merges in that sequence.
+The last two make the outcome deterministic: two equally specific overrides must
+never depend on which happened to be evaluated first.
+
+Omitted keys are wildcards, so `{ campaign: 'wc26' }` applies in every market.
+A market with no override of its own inherits the base entirely — Italy renders
+the base values in Italian formatting, with nothing authored for it.
+
+### Currency belongs to the market
+
+Not to the card. `MarketConfig` carries `locale` and `currency`, so a card
+cannot hold a currency that contradicts the market rendering it, and the same
+authored `29.99` renders as `29,99 €` in Germany and `£29.99` in the UK.
+
+### Editing follows the context
+
+Pick a market and the form edits **that market's difference from the base**;
+pick "Base — all markets" and it edits the base. Only changed fields are stored,
+and the panel lists exactly which ones differ here.
+
+### Validation covers every context, not the visible one
+
+[`validateAll`](src/rules/validate.ts) resolves and checks all markets × campaigns
+— 8 contexts in the default set. A break in one market's override blocks the
+whole publish and names the failing contexts, because a market override can flip
+a switch and trip a set-level rule that the market on screen never shows.
+
+That is the coverage half of review: machines check the matrix, people review
+what changed.
+
 ## What isn't encoded yet
 
-- Market / campaign overrides. The set carries one `locale`; there is no
-  base-plus-differences resolution yet.
 - The "All features & content" modal (§6) — three triggers, one entry state.
 - Copy-length validation against the real rendered width, which is what would
-  catch German feature rows truncating.
+  catch German feature rows truncating in a `nowrap` column.
+- Platform and user state as context dimensions; only market and campaign exist.
+- Publishing itself — content lives in `localStorage` and exports as JSON;
+  writing it to git is the next step.

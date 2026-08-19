@@ -14,7 +14,7 @@ const meta = {
   parameters: { layout: 'centered' },
   args: {
     card: defaultSet.cards[0],
-    locale: defaultSet.locale,
+    market: defaultSet.markets[0],
     device: 'desktop' as const,
     descriptionLines: 2 as const,
   },
@@ -24,7 +24,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 /** Ultimate + Discount — gold stroke, badge, gold CTA, savings strip. */
-export const UltimateDiscounted: Story = {}
+export const UltimateDiscounted: Story = { args: {} }
 
 /** Standard + Discount — same content rules, no gold treatment. */
 export const StandardDiscounted: Story = {
@@ -49,5 +49,17 @@ export const Mobile: Story = {
 /** A whole set — S-2 and S-3 resolve across the cards, not per card. */
 export const WholeSet: StoryObj = {
   render: () => <CardSetView set={defaultSet} />,
+  parameters: { layout: 'padded' },
+}
+
+/** Germany — the same base card, resolved through its market overrides. */
+export const GermanMarket: StoryObj = {
+  render: () => <CardSetView set={defaultSet} context={{ market: 'DE' }} />,
+  parameters: { layout: 'padded' },
+}
+
+/** Germany during the World Cup campaign — two overrides stacked. */
+export const GermanCampaign: StoryObj = {
+  render: () => <CardSetView set={defaultSet} context={{ market: 'DE', campaign: 'wc26' }} />,
   parameters: { layout: 'padded' },
 }

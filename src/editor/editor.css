@@ -235,3 +235,35 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption-sm);
 }
+
+/* ── Context scope ─────────────────────────────────────────── */
+
+.ed-scope {
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-6);
+  background: var(--color-surface-container-3);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-xs);
+}
+.ed-scope[data-base] {
+  background: var(--color-surface-container-2);
+  color: var(--color-text-secondary);
+}
+
+.ed-override {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-8) var(--space-12);
+  border: var(--border-1) dashed var(--color-border-full-color-default);
+  border-radius: var(--radius-6);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+
+.ed-gate__contexts {
+  margin: var(--space-4) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+}

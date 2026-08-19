@@ -4,15 +4,17 @@ import hdrIcon from '../assets/icons/features-hdr.svg?raw'
 import devicesIcon from '../assets/icons/action-device-switch.svg?raw'
 import multiCamIcon from '../assets/icons/actions-multi-cam.svg?raw'
 import multiviewIcon from '../assets/icons/features-multiview.svg?raw'
-import type { AuthoredCard, Device } from '../rules/content'
+import type { AuthoredCard, Device, MarketConfig } from '../rules/content'
 import { deriveCard } from '../rules/derive'
+import { formatMoney } from '../rules/money'
 import { imageCatalog, resolveLogo } from './assets'
 
 const featureIcons = [multiviewIcon, multiCamIcon, hdrIcon, devicesIcon, downloadIcon]
 
 export interface RuledCardProps {
+  /** Already resolved for the context — base plus any market/campaign patches. */
   card: AuthoredCard
-  locale: string
+  market: MarketConfig
   device: Device
   /** Shared across the set by S-2. */
   descriptionLines: 1 | 2
@@ -27,8 +29,8 @@ export interface RuledCardProps {
  * unreachable: a badge cannot appear without a gold stroke, and a struck price
  * cannot differ from standardPrice, because neither is passed independently.
  */
-export function RuledCard({ card, locale, device, descriptionLines, onMore }: RuledCardProps) {
-  const d = deriveCard(card, locale)
+export function RuledCard({ card, market, device, descriptionLines, onMore }: RuledCardProps) {
+  const d = deriveCard(card, market)
 
   const resolved = card.logos
     .map(resolveLogo)
@@ -69,7 +71,7 @@ export function RuledCard({ card, locale, device, descriptionLines, onMore }: Ru
               title: card.addOn.title,
               subtitle: card.addOn.subtitle,
               planName: card.planName,
-              price: String(card.addOn.price.amount),
+              price: formatMoney(card.addOn.price, market.locale, market.currency),
               codeLabel: `${card.addOn.code} applied -${card.addOn.discountPercent}% OFF`,
             }
           : undefined

@@ -53,7 +53,9 @@ The `device` prop carries the Figma `Device` variant (`mobile` · `desktop` ·
 
 The card is governed by an agreed spec, encoded as data in `src/rules` rather
 than kept as a document -- switches are authored, everything else is derived,
-and the set-level rules can block a publish. See **[RULES.md](RULES.md)**.
+and the set-level rules can block a publish. Markets and campaigns carry sparse
+overrides resolved by specificity, and validation runs across every context.
+See **[RULES.md](RULES.md)**.
 
 ## Editing content
 

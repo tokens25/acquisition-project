@@ -2,25 +2,26 @@ import './App.css'
 import { CardSetView } from './card/CardSetView'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
-import { validateSet, hasErrors } from './rules/validate'
+import { contextLabel, summarise, validateAll } from './rules/validate'
 
 /**
  * Acquisition — authoring surface plus preview.
  *
  * The preview renders through the same rules layer the product would, so what
- * is approved here is what would ship. Publish is gated on the rules passing.
+ * is approved here is what would ship. Publishing is gated on every market
+ * passing, not just the one on screen.
  */
 export function App() {
   const store = useCardSet()
-  const violations = validateSet(store.set)
-  const blocked = hasErrors(violations)
+  const coverage = summarise(validateAll(store.set))
+  const blocked = coverage.failing.length > 0
 
   return (
     <main className="page">
       <header className="page__header">
         <h1 className="page__title">Choose your plan</h1>
         <p className="page__subtitle">
-          Rules and logic from the agreed card spec — switches in, everything else derived.
+          One card, authored once. Markets and campaigns carry only their differences.
         </p>
       </header>
 
@@ -31,16 +32,18 @@ export function App() {
 
         <div className="page__pane page__pane--preview">
           <div className="page__preview-head">
-            <h2 className="page__section-title">Preview</h2>
+            <h2 className="page__section-title">
+              Preview · {store.editingBase ? 'Base' : contextLabel(store.context)}
+            </h2>
             <span className="page__gate" data-blocked={blocked || undefined}>
-              {blocked ? 'Publish blocked' : 'Publish ready'}
+              {blocked ? `Blocked · ${coverage.failing.length}/${coverage.total}` : `Ready · ${coverage.total} checked`}
             </span>
           </div>
           <p className="page__section-note">
-            The set as it would render. Card heights and description lines are resolved
-            across the set (S-2, S-3), not per card.
+            The set as it would render. Card heights and description lines resolve across
+            the set (S-2, S-3), not per card.
           </p>
-          <CardSetView set={store.set} />
+          <CardSetView set={store.set} context={store.context} />
         </div>
       </div>
     </main>

@@ -1,31 +1,23 @@
 /**
- * Prices are numbers, not strings.
+ * Prices are numbers in major units, e.g. 25.99.
  *
- * The rules doc requires two derivations that a formatted string can't support:
- * the savings amount is a computed delta, and the price explainer repeats
- * standardPrice. Authoring "€25.99" makes both impossible, and makes
- * per-market formatting impossible too.
+ * Currency is NOT authored — it belongs to the market, so a card cannot carry a
+ * currency that contradicts the market rendering it. Formatting resolves at
+ * render time from the market's locale and currency.
  */
-export interface Money {
-  /** Major units, e.g. 25.99. */
-  amount: number
-  /** ISO 4217, e.g. "EUR". */
-  currency: string
-}
-
-export function formatMoney(money: Money, locale: string): string {
+export function formatMoney(amount: number, locale: string, currency: string): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: money.currency,
+    currency,
     minimumFractionDigits: 2,
-  }).format(money.amount)
+  }).format(amount)
 }
 
 /** Rounds to whole units — savings copy never shows cents. */
-export function formatMoneyWhole(money: Money, locale: string): string {
+export function formatMoneyWhole(amount: number, locale: string, currency: string): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: money.currency,
+    currency,
     maximumFractionDigits: 0,
-  }).format(money.amount)
+  }).format(amount)
 }
