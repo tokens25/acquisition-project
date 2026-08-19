@@ -1,0 +1,44 @@
+.dazn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-8);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  white-space: nowrap;
+  padding-inline: var(--space-12);
+}
+.dazn-btn--block {
+  inline-size: 100%;
+}
+.dazn-btn--lg {
+  block-size: 48px;
+  font-size: var(--font-size-button-lg);
+}
+.dazn-btn--md {
+  block-size: 40px;
+  font-size: var(--font-size-button-md);
+}
+
+/* Inverse-surface CTA — standard plans */
+.dazn-btn--primary {
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+}
+/* Gold gradient CTA — Ultimate plans (Dazn/subscribe-gold) */
+.dazn-btn--subscribe {
+  background: var(--gradient-subscribe);
+  color: var(--color-on-brand-gold);
+}
+.dazn-btn--tertiary {
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+.dazn-btn:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: var(--space-2);
+}

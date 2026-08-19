@@ -1,0 +1,358 @@
+/**
+ * Acquisition section — layout for the plan card and its building blocks.
+ * Every value resolves through a foundation token; the only literals are the
+ * geometry the design fixes in px (tile 52, toggle 28, add-on thumb 32).
+ *
+ * Figma: 🚀 Acquisition for ai → "Card for AI" (node 59:2307).
+ */
+
+/* ── Card ──────────────────────────────────────────────────── */
+
+.acq-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  max-inline-size: 347px; /* 295px content + 24px padding + 2px edge */
+  overflow: hidden;
+  border: var(--border-2) solid transparent;
+  border-radius: var(--radius-18);
+  background: linear-gradient(
+    155deg,
+    var(--color-surface-container-2) 9%,
+    var(--color-surface-default) 59%
+  );
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+}
+.acq-card[data-device='xl'] {
+  max-inline-size: 384px;
+}
+/* Ultimate — the flagship plan carries the gold edge. */
+.acq-card[data-ultimate] {
+  border-color: var(--color-brand-tertiary);
+}
+
+.acq-card__eyebrow {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  z-index: 1;
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  block-size: 20px;
+  margin: 0;
+  padding-inline: var(--space-12);
+  border-start-end-radius: var(--radius-18);
+  border-end-start-radius: var(--radius-18);
+  background: var(--gradient-subscribe);
+  color: var(--color-on-brand-gold);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.acq-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-24);
+}
+
+.acq-card__divider {
+  inline-size: 100%;
+  margin: var(--space-16) 0;
+  border: 0;
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+
+.acq-card__footer {
+  border-block-start: var(--border-1) solid var(--color-border-full-color-default);
+  padding: var(--space-12) var(--space-8) var(--space-16);
+}
+
+/* ── CardHeader ────────────────────────────────────────────── */
+
+.acq-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.acq-card-header__title {
+  margin: 0;
+  font-size: var(--font-size-heading-h6);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.32;
+}
+.acq-card-header[data-device='mobile'] .acq-card-header__title {
+  font-size: var(--font-size-button-lg);
+}
+.acq-card-header[data-device='xl'] .acq-card-header__title {
+  font-size: var(--font-size-heading-h5);
+}
+/* Ultimate plans paint the title with the subscribe gold gradient. */
+.acq-card-header__title[data-ultimate] {
+  background: var(--gradient-subscribe);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.acq-card-header__description {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.5;
+}
+.acq-card-header[data-device='mobile'] .acq-card-header__description {
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.52;
+}
+.acq-card-header__more {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-primary);
+  font: inherit;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+/* ── Pricing ───────────────────────────────────────────────── */
+
+.acq-pricing {
+  display: flex;
+  flex-direction: column;
+}
+
+.acq-pricing__caption,
+.acq-pricing__extra {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.12px;
+  line-height: 1.52;
+}
+
+.acq-pricing__row {
+  display: flex;
+  gap: var(--space-4);
+  align-items: baseline;
+  margin: 0;
+}
+.acq-pricing__price {
+  font-size: var(--font-size-heading-h5);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.32;
+}
+.acq-pricing[data-device='mobile'] .acq-pricing__price {
+  font-size: var(--font-size-heading-h6);
+}
+.acq-pricing[data-device='xl'] .acq-pricing__price {
+  font-size: var(--font-size-display-5);
+}
+.acq-pricing__crossed {
+  font-size: var(--font-size-button-lg);
+}
+.acq-pricing__installment {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-button-lg);
+}
+
+/* ── PlanCta (ButtonLabelEyebrow) ──────────────────────────── */
+
+.acq-plan-cta {
+  padding-block: var(--space-16) var(--space-12);
+}
+.acq-plan-cta__stack {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-8);
+}
+/* The savings eyebrow sits on a green plate that the CTA overlaps. */
+.acq-plan-cta__stack[data-discount] {
+  background: var(--color-accent-success-surface-1);
+}
+.acq-plan-cta__eyebrow {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+  justify-content: center;
+  block-size: 20px;
+  margin: 0;
+  padding-inline: var(--space-12);
+  color: var(--color-accent-success-text);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+}
+
+/* ── LogoTiles ─────────────────────────────────────────────── */
+
+.acq-logo-tiles {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-8);
+  margin: 0;
+  padding: var(--space-12) 0;
+  list-style: none;
+}
+.acq-logo-tiles__tile {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--radius-8);
+}
+.acq-logo-tiles__tile > img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.acq-logo-tiles__tile--overflow {
+  display: grid;
+  place-items: center;
+  border: var(--border-1) solid
+    color-mix(in srgb, var(--color-border-transparent-subtle) 16%, transparent);
+  background: color-mix(in srgb, var(--color-fill-overlay-3) 16%, transparent);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ── AddOn ─────────────────────────────────────────────────── */
+
+.acq-addon {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-2);
+  padding: var(--space-8) var(--space-12) var(--space-12);
+}
+/* One-off purchases and applied codes read as selectable, so they get the
+   heavier transparent border the design uses for interactive add-ons. */
+.acq-addon[data-type='one-time-payment'],
+.acq-addon[data-type='discount-code'] {
+  border: var(--border-2) solid
+    color-mix(in srgb, var(--color-border-transparent-subtle) 16%, transparent);
+  background: var(--color-surface-container-1);
+}
+
+.acq-addon__content {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+}
+.acq-addon__image {
+  flex: none;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: var(--radius-4);
+  object-fit: cover;
+}
+.acq-addon__text {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.acq-addon__title,
+.acq-addon__subtitle {
+  overflow: hidden;
+  margin: 0;
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.acq-addon__title {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  text-shadow: 0 2px 6px var(--color-fill-scrim);
+}
+.acq-addon__subtitle {
+  color: var(--color-text-secondary);
+}
+.acq-addon[data-device='mobile'] .acq-addon__title,
+.acq-addon[data-device='mobile'] .acq-addon__subtitle {
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.52;
+}
+
+.acq-addon__divider {
+  inline-size: 100%;
+  margin: var(--space-8) 0;
+  border: 0;
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+
+.acq-addon__footer {
+  display: flex;
+  min-block-size: 24px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+.acq-addon__status {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  margin: 0;
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.5;
+}
+.acq-addon[data-device='mobile'] .acq-addon__status {
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.52;
+}
+/* "Included in {plan}" — gold icon, gold gradient text. */
+.acq-addon__status--included {
+  color: var(--color-brand-secondary);
+}
+.acq-addon__status--included > span {
+  background: var(--gradient-subscribe);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.acq-addon__status--code {
+  color: var(--color-accent-success-text);
+}
+.acq-addon__status--payment {
+  color: var(--color-text-secondary);
+}
+.acq-addon__status--payment > strong {
+  color: var(--color-text-primary);
+}
+
+/* ── Features ──────────────────────────────────────────────── */
+
+.acq-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin: 0;
+  padding: var(--space-12) 0 0;
+  list-style: none;
+}
+.acq-feature {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  padding-block: var(--space-2);
+}
+.acq-feature__text {
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.5;
+  text-overflow: ellipsis;
+}
+.acq-feature[data-device='mobile'] .acq-feature__text {
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.52;
+}

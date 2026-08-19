@@ -1,0 +1,35 @@
+.dazn-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: flex-start;
+  inline-size: 48px;
+  block-size: 28px;
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-4);
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+.dazn-toggle[aria-checked='true'] {
+  justify-content: flex-end;
+  background: var(--color-accent-success-surface);
+}
+.dazn-toggle__knob {
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-inverse);
+  box-shadow:
+    0 3px 8px rgb(0 0 0 / 0.15),
+    0 3px 1px rgb(0 0 0 / 0.06);
+}
+.dazn-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.dazn-toggle:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: var(--space-2);
+}

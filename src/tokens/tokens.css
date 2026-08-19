@@ -1,0 +1,246 @@
+/**
+ * DAZN Design System — Foundation tokens
+ * Source: 📍 DS - Foundation 2026 (beta) — Figma
+ * Extracted: DAZN brand, Dark + Light themes.
+ *
+ * Dark is the default (:root). Light overrides live under [data-theme="light"].
+ * Non-color tokens (spacing, radius, typography) are theme-agnostic and live in :root.
+ *
+ * Naming: --color-<group>-<role>...  mirrors the semantic token tree
+ * (brand / text / surface / fill / border / accent).
+ *
+ * The `@tokens` / `@presenter` comments are read by the storybook-design-token
+ * addon to auto-generate the "Design Tokens" tab. Categories cover the :root
+ * (dark) values; `@tokens-end` stops the light overrides from being re-listed.
+ */
+
+:root {
+  /**
+   * @tokens Brand
+   * @presenter Color
+   */
+  --color-brand-primary: #f7ff1a; /* DAZN yellow */
+  --color-brand-secondary: #f2af3d; /* gold / dark */
+  --color-brand-tertiary: #fbed7d; /* gold / light */
+
+  /**
+   * @tokens Gradient
+   * @presenter Gradient
+   */
+  --gradient-subscribe: linear-gradient(90deg, #f2af3d 0%, #fbed7d 100%); /* subscribe gold */
+
+  /**
+   * @tokens Text
+   * @presenter Color
+   */
+  --color-text-primary: #fafbfc;
+  --color-text-secondary: #bcc5cb;
+  --color-text-tertiary: #76828c;
+  --color-text-disabled: #626e78;
+  --color-text-inverse: #080e12;
+
+  /**
+   * @tokens Surface
+   * @presenter Color
+   */
+  --color-surface-default: #080e12; /* darkest */
+  --color-surface-container-1: #0c1216;
+  --color-surface-container-2: #10171b;
+  --color-surface-container-3: #1b2227;
+  --color-surface-container-4: #21292e;
+  --color-surface-container-5: #2a3238; /* lightest */
+  --color-surface-inverse: #fafbfc;
+
+  /**
+   * @tokens Fill
+   * @presenter Color
+   */
+  --color-fill-overlay-1: #76828c;
+  --color-fill-overlay-2: #76828c;
+  --color-fill-overlay-3: #76828c;
+  --color-fill-overlay-4: #76828c;
+  --color-fill-overlay-5: #76828c;
+  --color-fill-scrim: #080e12; /* fixed across all brands/themes */
+
+  /**
+   * @tokens Border
+   * @presenter Color
+   */
+  --color-border-full-color-default: #444d53;
+  --color-border-full-color-subtle: #21292e;
+  --color-border-full-color-strong: #76828c;
+  --color-border-full-color-inverse: #fafbfc;
+  --color-border-transparent-default: #76828c;
+  --color-border-transparent-subtle: #76828c;
+
+  /**
+   * @tokens Accent
+   * @presenter Color
+   */
+  --color-accent-live: #d12424; /* fixed across all brands/themes */
+  --color-on-brand-gold: #131415; /* ink on the fixed subscribe gold — theme-independent */
+  --color-accent-link-text: #1183ff;
+  --color-accent-link-surface: #061e3b; /* blue 900 · state/surface/info/soft */
+  --color-accent-success-text: #79e99c;
+  --color-accent-success-surface: #79e99c;
+  --color-accent-success-surface-1: #043820;
+  --color-accent-success-surface-2: #147e4a;
+  --color-accent-success-border: #79e99c;
+  --color-accent-warning-text: #ff9600;
+  --color-accent-warning-surface: #ffc36e;
+  --color-accent-warning-surface-1: #4a2e06;
+  --color-accent-warning-border: #ff9600;
+  --color-accent-error-text: #ff8d8d;
+  --color-accent-error-surface: #d12424;
+  --color-accent-error-surface-1: #460909;
+  --color-accent-error-border: #ff8d8d;
+
+  /**
+   * @tokens Font Family
+   * @presenter FontFamily
+   */
+  --font-family: "DAZN Oscine", sans-serif;
+
+  /**
+   * @tokens Font Weight
+   * @presenter FontWeight
+   */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /**
+   * @tokens Font Size
+   * @presenter FontSize
+   */
+  --font-size-display-1: 56px;
+  --font-size-display-2: 48px;
+  --font-size-display-3: 40px;
+  --font-size-display-4: 36px;
+  --font-size-display-5: 32px;
+  --font-size-heading-h4: 28px;
+  --font-size-heading-h5: 24px;
+  --font-size-heading-h6: 22px;
+  --font-size-body-default: 18px;
+  --font-size-caption-sm: 14px;
+  --font-size-caption-xs: 12px;
+  --font-size-button-lg: 16px;
+  --font-size-button-md: 14px;
+  --font-size-button-sm: 12px;
+  --font-size-label-sm: 14px;
+  --font-size-label-xs: 12px;
+
+  /**
+   * @tokens Spacing
+   * @presenter Spacing
+   */
+  --space-none: 0px;
+  --space-2: 2px;
+  --space-4: 4px; /* 1x — root */
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-80: 80px;
+  --space-96: 96px;
+  --space-120: 120px;
+
+  /**
+   * @tokens Radius
+   * @presenter BorderRadius
+   */
+  --radius-none: 0px;
+  --radius-2: 2px;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px; /* cta-btn */
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-18: 18px; /* acquisition card */
+  --radius-full: 9999px;
+
+  /* @tokens-end */
+  --space-10: 10px;
+  --border-1: 1px;
+  --border-2: 2px;
+  --border-4: 4px;
+  --border-6: 6px;
+  --color-text-bright: #ffffff;
+  --font-size-avatar-36: 36px;
+  --font-size-avatar-24: 24px;
+  --font-size-avatar-16: 16px;
+  --font-size-avatar-14: 14px;
+  --font-size-avatar-12: 12px;
+
+}
+
+/* ============================================================
+ * DAZN Light theme — color overrides only
+ * (light: default = lightest → container-5 = darkest)
+ * Not annotated: the addon tab presents the dark (:root) palette;
+ * light values are exercised via [data-theme="light"] in the app / stories.
+ * ============================================================ */
+[data-theme="light"] {
+  /* ---- Brand ---- (unchanged across themes) */
+  --color-brand-primary: #f7ff1a;
+  --color-brand-secondary: #f2af3d;
+  --color-brand-tertiary: #fbed7d;
+
+  /* ---- Text ---- */
+  --color-text-primary: #080e12;
+  --color-text-secondary: #444d53;
+  --color-text-tertiary: #626e78;
+  --color-text-disabled: #a5afb6;
+  --color-text-inverse: #fafbfc;
+
+  /* ---- Surface ---- */
+  --color-surface-default: #ffffff;
+  --color-surface-container-1: #f5f7f8;
+  --color-surface-container-2: #e9edf0;
+  --color-surface-container-3: #dce2e6;
+  --color-surface-container-4: #cdd5da;
+  --color-surface-container-5: #bcc5cb;
+  --color-surface-inverse: #080e12;
+
+  /* ---- Fill ---- */
+  --color-fill-overlay-1: #446274;
+  --color-fill-overlay-2: #446274;
+  --color-fill-overlay-3: #446274;
+  --color-fill-overlay-4: #446274;
+  --color-fill-overlay-5: #446274;
+  --color-fill-scrim: #080e12;
+
+  /* ---- Border ---- */
+  --color-border-full-color-default: #a5afb6;
+  --color-border-full-color-subtle: #cdd5da;
+  --color-border-full-color-strong: #76828c;
+  --color-border-full-color-inverse: #080e12;
+  --color-border-transparent-default: #76828c;
+  --color-border-transparent-subtle: #446274;
+
+  /* ---- Accent ---- */
+  --color-accent-live: #d12424;
+  --color-accent-link-text: #0069db;
+  /* link.surface: light value not in export — inherits dark #061e3b until confirmed in Figma */
+  --color-accent-success-text: #0f6a3f;
+  --color-accent-success-surface: #0f6a3f;
+  --color-accent-success-surface-1: #d8f0e6;
+  --color-accent-success-surface-2: #ffffff;
+  --color-accent-success-border: #0f6a3f;
+  --color-accent-warning-text: #ff9600;
+  --color-accent-warning-surface: #ff9600;
+  --color-accent-warning-surface-1: #f7eddd;
+  --color-accent-warning-border: #ff9600;
+  --color-accent-error-text: #d12424;
+  --color-accent-error-surface: #d12424;
+  --color-accent-error-surface-1: #f5e5e5;
+  --color-accent-error-border: #d12424;
+  --color-text-bright: #ffffff;
+
+}

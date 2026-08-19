@@ -1,0 +1,53 @@
+.page {
+  min-block-size: 100vh;
+  padding: var(--space-48) var(--space-24) var(--space-64);
+  background: var(--color-surface-default);
+}
+
+.page__header {
+  max-inline-size: 1480px;
+  margin: 0 auto var(--space-40);
+}
+.page__title {
+  margin: 0 0 var(--space-8);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-display-4);
+  font-weight: var(--font-weight-bold);
+}
+.page__subtitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+
+.page__controls {
+  display: flex;
+  gap: var(--space-16);
+  margin-block-start: var(--space-24);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+}
+.page__controls label {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+}
+.page__controls select {
+  padding: var(--space-4) var(--space-8);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-6);
+  background: var(--color-surface-container-1);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+}
+
+.page__plans {
+  display: flex;
+  max-inline-size: 1480px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+  align-items: stretch;
+  justify-content: center;
+}

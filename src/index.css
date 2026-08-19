@@ -1,0 +1,36 @@
+/* DAZN Oscine — the design-system typeface. Weights used by Acquisition: light, regular, bold. */
+@font-face {
+  font-family: "DAZN Oscine";
+  src: url("./assets/fonts/DAZN_Oscine_Lt.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DAZN Oscine";
+  src: url("./assets/fonts/DAZN_Oscine_Rg.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DAZN Oscine";
+  src: url("./assets/fonts/DAZN_Oscine_Bd.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface-default);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+}

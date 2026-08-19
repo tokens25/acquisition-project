@@ -1,0 +1,13 @@
+.dazn-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--icon-size, 16px);
+  block-size: var(--icon-size, 16px);
+}
+.dazn-icon > svg {
+  inline-size: 100%;
+  block-size: 100%;
+  display: block;
+}
