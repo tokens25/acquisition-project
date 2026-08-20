@@ -377,8 +377,30 @@
 .acq-card-header__description {
   min-block-size: calc(var(--acq-description-lines, 1) * 21px);
 }
-.acq-card-header__text {
-  display: -webkit-box;
+/* Off-layout twin used to test candidate strings before committing one. */
+.acq-card-header__probe {
+  position: absolute;
+  visibility: hidden;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  pointer-events: none;
+  white-space: normal;
+}
+.acq-card-header__description {
+  position: relative;
   overflow: hidden;
-  -webkit-box-orient: vertical;
+}
+
+/* Set-level probe for S-2: measures full descriptions off-layout. */
+.acq-set {
+  position: relative;
+}
+.acq-set__probe {
+  position: absolute;
+  visibility: hidden;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  margin: 0;
+  pointer-events: none;
+  white-space: normal;
 }

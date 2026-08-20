@@ -9,10 +9,11 @@ import { RuledCard } from './RuledCard'
  * S-2 · one card wrapping to two lines pulls the whole set to two, capped there.
  * S-3 · every card renders at the tallest card's height.
  *
- * S-3 is pure CSS (stretch). S-2 needs to know whether any description wraps,
- * so it is measured once after layout and shared down. A CSS subgrid row track
- * would remove the measurement, at the cost of restructuring the card's
- * internals — worth revisiting if the card ever becomes a grid throughout.
+ * S-3 is pure CSS (stretch). S-2 has to be measured, and measured against the
+ * FULL text: each card truncates itself to whatever budget it is given, so
+ * asking a rendered card whether it wrapped would only ever confirm the budget
+ * it was already handed. One offscreen probe at the real description width
+ * answers the question the rule actually asks.
  */
 export function CardSetView({
   set,
@@ -24,6 +25,7 @@ export function CardSetView({
   onMore?: () => void
 }) {
   const ref = useRef<HTMLDivElement>(null)
+  const probeRef = useRef<HTMLParagraphElement>(null)
   const [descriptionLines, setDescriptionLines] = useState<1 | 2>(1)
 
   const cards = useMemo(() => resolveSet(set, context), [set, context])
@@ -31,16 +33,34 @@ export function CardSetView({
 
   useLayoutEffect(() => {
     const root = ref.current
-    if (!root) return
+    const probe = probeRef.current
+    if (!root || !probe) return
 
     const measure = () => {
-      const texts = root.querySelectorAll<HTMLElement>('.acq-card-header__text')
-      let anyWraps = false
-      texts.forEach((el) => {
-        const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 21
-        if (el.scrollHeight > lineHeight * 1.5) anyWraps = true
+      const sample = root.querySelector<HTMLElement>('.acq-card-header__description')
+      if (!sample) return
+      const width = sample.clientWidth
+      if (!width) return
+
+      const style = getComputedStyle(sample)
+      const lineHeight = parseFloat(style.lineHeight) || 21
+      Object.assign(probe.style, {
+        width: `${width}px`,
+        fontFamily: style.fontFamily,
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight,
+        lineHeight: style.lineHeight,
+        letterSpacing: style.letterSpacing,
       })
-      setDescriptionLines(anyWraps ? 2 : 1)
+
+      const anyWraps = cards.some((card) => {
+        probe.textContent = card.description
+        return probe.scrollHeight > lineHeight * 1.4
+      })
+      setDescriptionLines((prev) => {
+        const next = anyWraps ? 2 : 1
+        return prev === next ? prev : next
+      })
     }
 
     measure()
@@ -61,6 +81,7 @@ export function CardSetView({
           onMore={onMore}
         />
       ))}
+      <p className="acq-set__probe" ref={probeRef} aria-hidden="true" />
     </div>
   )
 }

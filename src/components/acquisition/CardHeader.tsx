@@ -1,6 +1,6 @@
 import './acquisition.css'
 
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import type { Device } from './types'
 
 export interface CardHeaderProps {
@@ -17,12 +17,20 @@ export interface CardHeaderProps {
   device?: Device
 }
 
+const SUFFIX = ' … more'
+
 /**
  * CardHeader — Plan Name + description.
  * Figma: `CardHeader` (Device × Ultimate).
  *
- * The trailing "… more" is a control, not copy: it appears only when the
- * description actually overflows the shared line budget, measured after render.
+ * The description is capped at the set's shared line budget and the trailing
+ * "… more" sits inline at the end of the last line. That rules out CSS
+ * line-clamp, which puts its ellipsis where it likes and leaves any following
+ * element on a line of its own — so the string itself is trimmed to the longest
+ * prefix that still fits once the control is appended.
+ *
+ * Per §4 the control is never part of the authored value: it appears only when
+ * the text actually overflows, which is a measurement, not content.
  */
 export function CardHeader({
   title,
@@ -32,16 +40,53 @@ export function CardHeader({
   ultimate = false,
   device = 'desktop',
 }: CardHeaderProps) {
-  const textRef = useRef<HTMLSpanElement>(null)
-  const [overflowing, setOverflowing] = useState(false)
+  const boxRef = useRef<HTMLParagraphElement>(null)
+  const probeRef = useRef<HTMLSpanElement>(null)
+  const [shown, setShown] = useState({ text: description, truncated: false })
 
-  useEffect(() => {
-    const el = textRef.current
-    if (!el) return
-    const measure = () => setOverflowing(el.scrollHeight - el.clientHeight > 1)
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(el)
+  useLayoutEffect(() => {
+    const box = boxRef.current
+    const probe = probeRef.current
+    if (!box || !probe) return
+
+    const compute = () => {
+      const width = box.clientWidth
+      if (!width) return
+
+      const lineHeight = parseFloat(getComputedStyle(box).lineHeight) || 21
+      // Half a line of slack absorbs sub-pixel rounding without admitting a third line.
+      const budget = lineHeight * descriptionLines + lineHeight * 0.4
+      probe.style.width = `${width}px`
+
+      const fits = (candidate: string) => {
+        probe.textContent = candidate
+        return probe.scrollHeight <= budget
+      }
+
+      let next: { text: string; truncated: boolean }
+      if (fits(description)) {
+        next = { text: description, truncated: false }
+      } else {
+        // Longest prefix that still fits once "… more" is on the end.
+        let lo = 0
+        let hi = description.length
+        while (lo < hi) {
+          const mid = Math.ceil((lo + hi) / 2)
+          if (fits(description.slice(0, mid).trimEnd() + SUFFIX)) lo = mid
+          else hi = mid - 1
+        }
+        next = { text: description.slice(0, lo).trimEnd(), truncated: true }
+      }
+
+      // Only commit real changes — the observer watches the element this writes to.
+      setShown((prev) =>
+        prev.text === next.text && prev.truncated === next.truncated ? prev : next,
+      )
+    }
+
+    compute()
+    const observer = new ResizeObserver(compute)
+    observer.observe(box)
     return () => observer.disconnect()
   }, [description, descriptionLines, device])
 
@@ -50,22 +95,17 @@ export function CardHeader({
       <h3 className="acq-card-header__title" data-ultimate={ultimate || undefined}>
         {title}
       </h3>
-      <p className="acq-card-header__description">
-        <span
-          className="acq-card-header__text"
-          ref={textRef}
-          style={{ WebkitLineClamp: descriptionLines }}
-        >
-          {description}
-        </span>
-        {overflowing &&
+      <p className="acq-card-header__description" ref={boxRef}>
+        {shown.text}
+        {shown.truncated &&
           (onMore ? (
             <button type="button" className="acq-card-header__more" onClick={onMore}>
-              … more
+              {SUFFIX}
             </button>
           ) : (
-            <span className="acq-card-header__more">… more</span>
+            <span className="acq-card-header__more">{SUFFIX}</span>
           ))}
+        <span className="acq-card-header__probe" ref={probeRef} aria-hidden="true" />
       </p>
     </header>
   )
