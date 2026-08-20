@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { AuthoredCard, CardPatch, CardSet, Context } from '../rules/content'
+import type { AuthoredCard, AuthoredFeature, CardPatch, CardSet, Context } from '../rules/content'
+import { CUSTOM_FEATURE, matchByLabel } from '../rules/features'
 import { defaultSet } from '../rules/defaults'
 import { findOverride } from '../rules/resolve'
 
@@ -9,6 +10,22 @@ const STORAGE_KEY = 'acquisition-card-set-v2'
 export const BASE_MARKET = '*'
 
 export const isBaseContext = (c: Context) => c.market === BASE_MARKET && !c.campaign
+
+/**
+ * Features used to be free strings. Map any saved that way back onto the
+ * catalogue by their wording, and keep the rest as custom lines so no content
+ * is lost on upgrade.
+ */
+function hydrateFeatures(input: unknown): AuthoredFeature[] | undefined {
+  if (!Array.isArray(input)) return undefined
+  return input.map((f) => {
+    if (typeof f === 'string') {
+      const match = matchByLabel(f)
+      return match ? { featureId: match.id } : { featureId: CUSTOM_FEATURE, label: f, iconId: 'check' }
+    }
+    return f as AuthoredFeature
+  })
+}
 
 function hydrate(raw: unknown): CardSet {
   if (typeof raw !== 'object' || raw === null) return defaultSet
@@ -24,7 +41,11 @@ function hydrate(raw: unknown): CardSet {
     cards: input.cards.map((c, i) => ({
       ...defaultSet.cards[i % defaultSet.cards.length],
       ...c,
-      overrides: c.overrides ?? [],
+      features: hydrateFeatures(c.features) ?? defaultSet.cards[i % defaultSet.cards.length].features,
+      overrides: (c.overrides ?? []).map((o) => ({
+        ...o,
+        patch: { ...o.patch, features: hydrateFeatures(o.patch?.features) },
+      })),
     })),
   }
 }

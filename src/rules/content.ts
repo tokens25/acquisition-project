@@ -34,6 +34,19 @@ export interface AuthoredAddOn {
 }
 
 /** The fields a market or campaign may override. Sparse by design. */
+/**
+ * One feature line: which capability it is, and optionally different wording
+ * for this context. The icon is never authored — it belongs to the capability.
+ */
+export interface AuthoredFeature {
+  /** Catalogue id, or 'custom' for a one-off line. */
+  featureId: string
+  /** Overrides the catalogue's copy here. */
+  label?: string
+  /** Only meaningful for 'custom', which has no catalogue entry to borrow from. */
+  iconId?: string
+}
+
 export interface CardPatch {
   planName?: string
   description?: string
@@ -46,7 +59,7 @@ export interface CardPatch {
   logos?: AuthoredLogo[]
   logoTotal?: number
   addOn?: Partial<AuthoredAddOn>
-  features?: string[]
+  features?: AuthoredFeature[]
 }
 
 /** Where a card is being rendered. Omitted keys match anything. */
@@ -99,8 +112,8 @@ export interface AuthoredCard {
 
   addOn: AuthoredAddOn
 
-  /** CMS order preserved (§7). */
-  features: string[]
+  /** CMS order preserved (§7). The icon comes from the catalogue, never here. */
+  features: AuthoredFeature[]
 
   /** Differences from the above, per market / campaign. */
   overrides: Override[]

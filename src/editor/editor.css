@@ -357,3 +357,47 @@
   letter-spacing: 0.12px;
   text-transform: uppercase;
 }
+
+/* ── Feature rows ──────────────────────────────────────────── */
+
+.ed-feature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block-end: var(--space-12);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.ed-feature:last-of-type {
+  border-block-end: 0;
+  padding-block-end: 0;
+}
+
+.ed-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+.ed-icon {
+  display: grid;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 32px;
+  padding: var(--space-6);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-6);
+  background: var(--color-surface-default);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.ed-icon[data-on] {
+  border-color: var(--color-brand-primary);
+  color: var(--color-text-primary);
+}
+.ed-icon > svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.ed-icon:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: 1px;
+}

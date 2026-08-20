@@ -1,3 +1,12 @@
+import checkIcon from '../assets/icons/action-check-circle.svg?raw'
+import devicesIcon from '../assets/icons/action-device-switch.svg?raw'
+import discountIcon from '../assets/icons/action-discount.svg?raw'
+import downloadIcon from '../assets/icons/actions-download.svg?raw'
+import multiCamIcon from '../assets/icons/actions-multi-cam.svg?raw'
+import giftIcon from '../assets/icons/settings-gift.svg?raw'
+import hdrIcon from '../assets/icons/features-hdr.svg?raw'
+import multiviewIcon from '../assets/icons/features-multiview.svg?raw'
+import valueIcon from '../assets/icons/value.svg?raw'
 import addOnImage from '../assets/addon-world-cup-2026.png'
 import devilsLogo from '../assets/logos/team-devils.png'
 import islandersLogo from '../assets/logos/team-islanders.png'
@@ -27,4 +36,20 @@ export function resolveLogo(ref: AuthoredLogo): { src: string; alt: string } | n
     return bundled ? { src: bundled.src, alt: ref.alt || bundled.alt } : null
   }
   return ref.src ? { src: ref.src, alt: ref.alt } : null
+}
+
+/**
+ * Icons a feature may use. Keyed by catalogue id so saved content never stores
+ * a build-time asset URL — the same reason logos are stored by id.
+ */
+export const iconCatalog: Record<string, string> = {
+  multiview: multiviewIcon,
+  multicam: multiCamIcon,
+  hdr: hdrIcon,
+  devices: devicesIcon,
+  download: downloadIcon,
+  check: checkIcon,
+  discount: discountIcon,
+  gift: giftIcon,
+  value: valueIcon,
 }

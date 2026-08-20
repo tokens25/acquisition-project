@@ -1,5 +1,6 @@
 import type { AuthoredCard, CardSet, Context } from './content'
 import { deriveCard } from './derive'
+import { findFeature } from './features'
 import { allContexts, marketFor, resolveSet } from './resolve'
 
 /**
@@ -65,7 +66,7 @@ function checkCard(card: AuthoredCard, set: CardSet, context: Context): Violatio
   if (card.features.length === 0) {
     out.push({ rule: 'C-features', severity: 'warning', message: 'No features listed.', cardId: card.id })
   }
-  if (card.features.some((f) => !f.trim())) {
+  if (card.features.some((f) => !(f.label ?? findFeature(f.featureId)?.defaultLabel ?? '').trim())) {
     out.push({ rule: 'C-features-empty', severity: 'error', message: 'A feature row is empty.', cardId: card.id })
   }
   if (card.addOn.enabled && !card.addOn.title.trim()) {

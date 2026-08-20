@@ -1,15 +1,9 @@
 import { AcquisitionCard, Feature, FeaturesList } from '../components/acquisition'
-import downloadIcon from '../assets/icons/actions-download.svg?raw'
-import hdrIcon from '../assets/icons/features-hdr.svg?raw'
-import devicesIcon from '../assets/icons/action-device-switch.svg?raw'
-import multiCamIcon from '../assets/icons/actions-multi-cam.svg?raw'
-import multiviewIcon from '../assets/icons/features-multiview.svg?raw'
 import type { AuthoredCard, Device, MarketConfig } from '../rules/content'
 import { deriveCard } from '../rules/derive'
 import { formatMoney } from '../rules/money'
-import { imageCatalog, resolveLogo } from './assets'
-
-const featureIcons = [multiviewIcon, multiCamIcon, hdrIcon, devicesIcon, downloadIcon]
+import { findFeature } from '../rules/features'
+import { iconCatalog, imageCatalog, resolveLogo } from './assets'
 
 export interface RuledCardProps {
   /** Already resolved for the context — base plus any market/campaign patches. */
@@ -78,11 +72,16 @@ export function RuledCard({ card, market, device, descriptionLines, onMore }: Ru
       }
       features={
         <FeaturesList device={device}>
-          {card.features.map((text, i) => (
-            <Feature key={`${text}-${i}`} icon={featureIcons[i % featureIcons.length]} device={device}>
-              {text}
-            </Feature>
-          ))}
+          {card.features.map((f, i) => {
+            const def = findFeature(f.featureId)
+            // Custom lines carry their own icon; catalogue lines never do.
+            const icon = iconCatalog[def?.icon ?? f.iconId ?? 'check']
+            return (
+              <Feature key={`${f.featureId}-${i}`} icon={icon} device={device}>
+                {f.label ?? def?.defaultLabel ?? ''}
+              </Feature>
+            )
+          })}
         </FeaturesList>
       }
       footerLabel={d.footerLabel}

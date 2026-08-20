@@ -1,8 +1,9 @@
 import './editor.css'
 
 import { useState } from 'react'
-import { logoCatalog } from '../card/assets'
-import type { AddOnType, AuthoredCard, CardPatch } from '../rules/content'
+import { iconCatalog, logoCatalog } from '../card/assets'
+import type { AddOnType, AuthoredCard, AuthoredFeature, CardPatch } from '../rules/content'
+import { CUSTOM_FEATURE, featureCatalogue, findFeature } from '../rules/features'
 import { marketFor, resolveCard } from '../rules/resolve'
 import { summarise, validateAll, validateContext } from '../rules/validate'
 import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
@@ -196,23 +197,80 @@ function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }
       </FieldGroup>
 
       <FieldGroup title="Features">
-        {resolved.features.map((feature, i) => (
-          <div className="ed-row" key={i}>
-            <TextField
-              label={`Feature ${i + 1}`}
-              value={feature}
-              onChange={(v) => {
-                const features = [...resolved.features]
-                features[i] = v
-                patch({ features })
-              }}
-            />
-            <button type="button" className="ed__btn ed__btn--quiet ed__btn--icon" onClick={() => patch({ features: resolved.features.filter((_, j) => j !== i) })} aria-label={`Remove feature ${i + 1}`}>
-              ✕
-            </button>
-          </div>
-        ))}
-        <button type="button" className="ed__btn" onClick={() => patch({ features: [...resolved.features, 'New feature'] })}>
+        {resolved.features.map((feature, i) => {
+          const def = findFeature(feature.featureId)
+          const isCustom = feature.featureId === CUSTOM_FEATURE
+          const update = (next: Partial<AuthoredFeature>) => {
+            const features = resolved.features.map((f, j) => (j === i ? { ...f, ...next } : f))
+            patch({ features })
+          }
+
+          return (
+            <div className="ed-feature" key={i}>
+              <div className="ed-row">
+                <SelectField
+                  label={`Feature ${i + 1}`}
+                  value={feature.featureId}
+                  options={[
+                    ...featureCatalogue.map((f) => ({ value: f.id, label: f.defaultLabel })),
+                    { value: CUSTOM_FEATURE, label: 'Custom line…' },
+                  ]}
+                  onChange={(v) =>
+                    update({
+                      featureId: v,
+                      // A catalogue feature brings its own icon; drop any custom one.
+                      iconId: v === CUSTOM_FEATURE ? (feature.iconId ?? 'check') : undefined,
+                    })
+                  }
+                />
+                <button
+                  type="button"
+                  className="ed__btn ed__btn--quiet ed__btn--icon"
+                  onClick={() => patch({ features: resolved.features.filter((_, j) => j !== i) })}
+                  aria-label={`Remove feature ${i + 1}`}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <TextField
+                label="Wording"
+                hint={
+                  isCustom
+                    ? 'Custom lines have no catalogue copy, so this is required.'
+                    : 'Leave empty to use the catalogue copy.'
+                }
+                placeholder={def?.defaultLabel}
+                value={feature.label ?? ''}
+                onChange={(v) => update({ label: v || undefined })}
+              />
+
+              {isCustom && (
+                <div className="ed-icons" role="group" aria-label="Icon">
+                  {Object.entries(iconCatalog).map(([id, svg]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      className="ed-icon"
+                      data-on={feature.iconId === id || undefined}
+                      onClick={() => update({ iconId: id })}
+                      title={id}
+                      aria-pressed={feature.iconId === id}
+                      dangerouslySetInnerHTML={{ __html: svg }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })}
+        <button
+          type="button"
+          className="ed__btn"
+          onClick={() =>
+            patch({ features: [...resolved.features, { featureId: featureCatalogue[0].id }] })
+          }
+        >
           Add feature
         </button>
       </FieldGroup>
