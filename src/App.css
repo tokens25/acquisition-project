@@ -98,3 +98,49 @@
   outline: var(--border-2) solid var(--color-brand-primary);
   outline-offset: 1px;
 }
+
+/* Page-level actions — top right, above everything they act on. */
+.page__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  align-items: start;
+  justify-content: space-between;
+}
+.page__titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+.page__btn {
+  padding: var(--space-6) var(--space-12);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-6);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption-xs);
+  cursor: pointer;
+}
+.page__btn:hover {
+  background: var(--color-surface-container-3);
+}
+.page__btn--quiet {
+  color: var(--color-text-tertiary);
+}
+.page__btn:focus-within,
+.page__btn:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: 1px;
+}
+.page__error {
+  max-inline-size: 1480px;
+  margin: 0 auto var(--space-16);
+  color: var(--color-accent-error-text);
+  font-size: var(--font-size-caption-xs);
+}

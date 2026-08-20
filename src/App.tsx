@@ -33,11 +33,38 @@ export function App() {
   return (
     <main className="page">
       <header className="page__header">
+        <div className="page__titles">
         <h1 className="page__title">Choose your plan</h1>
         <p className="page__subtitle">
           One card, authored once. Markets and campaigns carry only their differences.
         </p>
+        </div>
+        <div className="page__actions">
+          <button type="button" className="page__btn" onClick={store.exportJson}>
+            Export JSON
+          </button>
+          <label className="page__btn">
+            Import JSON
+            <input
+              type="file"
+              accept="application/json"
+              hidden
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) void store.importJson(file)
+                e.target.value = ''
+              }}
+            />
+          </label>
+          <button type="button" className="page__btn page__btn--quiet" onClick={store.reset}>
+            Reset
+          </button>
+        </div>
+
       </header>
+      {store.importError && (
+        <p className="page__error">Import failed: {store.importError}</p>
+      )}
 
       <div className="page__split">
         <div className="page__pane">

@@ -6,12 +6,6 @@
   max-inline-size: 420px;
   font-family: var(--font-family);
 }
-
-.ed__bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-8);
-}
 .ed__btn {
   padding: var(--space-6) var(--space-12);
   border: var(--border-1) solid var(--color-border-full-color-default);

@@ -26,8 +26,7 @@ const ADDON_TYPES: { value: AddOnType; label: string }[] = [
  * market's difference from it.
  */
 export function SetEditor({ store }: { store: CardSetStore }) {
-  const { set, context, editingBase, setContext, updateSet, reset, exportJson, importJson, importError } =
-    store
+  const { set, context, editingBase, setContext, updateSet } = store
   const [openCard, setOpenCard] = useState(set.cards[0]?.id ?? '')
 
   const results = validateAll(set)
@@ -37,24 +36,6 @@ export function SetEditor({ store }: { store: CardSetStore }) {
 
   return (
     <form className="ed" onSubmit={(e) => e.preventDefault()}>
-      <div className="ed__bar">
-        <button type="button" className="ed__btn" onClick={exportJson}>Export JSON</button>
-        <label className="ed__btn">
-          Import JSON
-          <input
-            type="file"
-            accept="application/json"
-            hidden
-            onChange={(e) => {
-              const file = e.target.files?.[0]
-              if (file) void importJson(file)
-              e.target.value = ''
-            }}
-          />
-        </label>
-        <button type="button" className="ed__btn ed__btn--quiet" onClick={reset}>Reset</button>
-      </div>
-      {importError && <p className="ed__error">Import failed: {importError}</p>}
 
       {/* Coverage — machines check every market, so a person only reviews changes. */}
       <div
