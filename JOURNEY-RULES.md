@@ -270,15 +270,16 @@ first playback?
 
 ## 5 · Scope
 
-Of the nine steps, acquisition plausibly owns **landing, plans, cadence and
-ready** — four. `auth` belongs to identity; `account` is shared; `checkout` and
-payment belong to billing with PCI constraints on the card fields; `home` is the
-product.
+**Answered — we own all nine.** My guess that ownership would cut the work from
+nine screens to four was wrong. It doesn't; the work is nine.
 
-**? Open question 8.** Which of these does your team actually own? Rebuilding
-another team's screens in this tool would duplicate their product and their
-rules. Confirming this before building components is the cheapest decision on
-this list.
+Two consequences worth keeping in view:
+
+- Owning the checkout **screen** is not the same as owning the card **fields**,
+  which are normally the payment provider's embed. What is authorable there is
+  the copy around the embed, not the embed.
+- J-4 still stands. However much of the screen is ours, the amount shown must
+  resolve from the pricing service, not from a copy tool.
 
 ---
 
