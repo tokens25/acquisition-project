@@ -42,10 +42,12 @@ function hydrate(raw: unknown): CardSet {
       ...defaultSet.cards[i % defaultSet.cards.length],
       ...c,
       features: hydrateFeatures(c.features) ?? defaultSet.cards[i % defaultSet.cards.length].features,
-      overrides: (c.overrides ?? []).map((o) => ({
-        ...o,
-        patch: { ...o.patch, features: hydrateFeatures(o.patch?.features) },
-      })),
+      overrides: (c.overrides ?? []).map((o) => {
+        // Only introduce `features` when there is something to migrate — an
+        // explicit undefined would blank the card's own list when merged.
+        const features = hydrateFeatures(o.patch?.features)
+        return features ? { ...o, patch: { ...o.patch, features } } : o
+      }),
     })),
   }
 }

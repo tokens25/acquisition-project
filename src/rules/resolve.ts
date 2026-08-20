@@ -22,9 +22,16 @@ export function specificity(override: Override): number {
 }
 
 function applyPatch(card: AuthoredCard, patch: CardPatch): AuthoredCard {
+  // A sparse patch states what it changes. A key present but undefined is not a
+  // change — spreading it would erase the base value, which is how a migration
+  // that set `features: undefined` blanked every card's feature list.
+  const stated = Object.fromEntries(
+    Object.entries(patch).filter(([, v]) => v !== undefined),
+  ) as Partial<AuthoredCard>
+
   return {
     ...card,
-    ...patch,
+    ...stated,
     // Nested objects merge rather than replace, so an override can change the
     // add-on's price without restating its title.
     addOn: patch.addOn ? { ...card.addOn, ...patch.addOn } : card.addOn,
