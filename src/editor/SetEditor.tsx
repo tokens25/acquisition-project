@@ -170,7 +170,12 @@ function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }
 
       <FieldGroup title={`Pricing — ${market.currency}`}>
         <CheckField
-          label={<>Discount{mark('discount')}</>}
+          label={
+            <>
+              <span className="ed-label-chip">Apply discount</span>
+              {mark('discount')}
+            </>
+          }
           hint="Drives the caption, primary and struck price, the explainer and the CTA area."
           checked={resolved.discount}
           onChange={(v) => patch({ discount: v })}
