@@ -6,7 +6,9 @@ import type { AddOnType, AuthoredCard, CardPatch } from '../rules/content'
 import { marketFor, resolveCard } from '../rules/resolve'
 import { summarise, validateAll, validateContext } from '../rules/validate'
 import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
+import { resolveJourney } from '../rules/journey'
 import { journeys } from '../rules/journeys'
+import { StepPicker } from './StepPicker'
 import { BASE_MARKET, type CardSetStore } from './useCardSet'
 
 const ADDON_TYPES: { value: AddOnType; label: string }[] = [
@@ -28,6 +30,12 @@ const ADDON_TYPES: { value: AddOnType; label: string }[] = [
 export function SetEditor({ store }: { store: CardSetStore }) {
   const { set, context, editingBase, setContext, updateSet } = store
   const [openCard, setOpenCard] = useState(set.cards[0]?.id ?? '')
+
+  const journey = journeys.find((j) => j.id === set.journeyId) ?? journeys[0]
+  const steps = resolveJourney(journey, context)
+  // A step can vanish when the journey or market changes; fall back to the first.
+  const selectedStep = steps.find((s) => s.id === set.stepId) ?? steps[0]
+  const editingPlans = selectedStep?.renderer === 'plans'
 
   const results = validateAll(set)
   const coverage = summarise(results)
@@ -84,28 +92,48 @@ export function SetEditor({ store }: { store: CardSetStore }) {
         />
       </FieldGroup>
 
-      <FieldGroup title="Tiers">
-        <div className="ed-tabs">
-        {set.cards.map((c) => (
-          <button
-            key={c.id}
-            type="button"
-            className="ed-tab"
-            data-on={openCard === c.id || undefined}
-            data-invalid={hereErrors.some((e) => e.cardId === c.id) || undefined}
-            onClick={() => setOpenCard(c.id)}
-          >
-            {resolveCard(c, context).planName || c.id}
-          </button>
-        ))}
-        </div>
+      <FieldGroup title="Steps">
+        <StepPicker
+          journey={journey}
+          context={context}
+          selectedId={set.stepId}
+          onSelect={(id) => updateSet({ stepId: id })}
+        />
       </FieldGroup>
 
-      {set.cards
-        .filter((c) => c.id === openCard)
-        .map((card) => (
-          <CardFields key={card.id} card={card} store={store} />
-        ))}
+      {!editingPlans && (
+        <p className="ed-placeholder">
+          <strong>{selectedStep?.shortName ?? selectedStep?.name}</strong> has no editable fields
+          yet. Only Subscription is wired up — the rest are placeholders for now.
+        </p>
+      )}
+
+      {editingPlans && (
+        <>
+          <FieldGroup title="Tiers">
+            <div className="ed-tabs">
+              {set.cards.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  className="ed-tab"
+                  data-on={openCard === c.id || undefined}
+                  data-invalid={hereErrors.some((e) => e.cardId === c.id) || undefined}
+                  onClick={() => setOpenCard(c.id)}
+                >
+                  {resolveCard(c, context).planName || c.id}
+                </button>
+              ))}
+            </div>
+          </FieldGroup>
+
+          {set.cards
+            .filter((c) => c.id === openCard)
+            .map((card) => (
+              <CardFields key={card.id} card={card} store={store} />
+            ))}
+        </>
+      )}
     </form>
   )
 }

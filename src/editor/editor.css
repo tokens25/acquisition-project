@@ -249,3 +249,67 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption-xs);
 }
+
+/* ── Step picker ───────────────────────────────────────────── */
+
+.ed-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ed-step {
+  display: flex;
+  inline-size: 100%;
+  gap: var(--space-8);
+  align-items: center;
+  padding: var(--space-6) var(--space-8);
+  border: 0;
+  border-radius: var(--radius-6);
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption-sm);
+  text-align: start;
+  cursor: pointer;
+}
+.ed-step:hover {
+  background: var(--color-surface-container-2);
+}
+.ed-step__num {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 20px;
+  block-size: 20px;
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-full);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-label-xs);
+}
+/* Green marks the step being edited. */
+.ed-step[data-on] {
+  color: var(--color-text-primary);
+}
+.ed-step[data-on] .ed-step__num {
+  border-color: var(--color-accent-success-surface);
+  background: var(--color-accent-success-surface);
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+}
+.ed-step:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: -2px;
+}
+
+.ed-placeholder {
+  margin: 0;
+  padding: var(--space-16);
+  border: var(--border-1) dashed var(--color-border-full-color-default);
+  border-radius: var(--radius-12);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.5;
+}

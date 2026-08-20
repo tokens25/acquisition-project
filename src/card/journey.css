@@ -112,3 +112,14 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+
+.jy__stub--solo {
+  max-inline-size: 420px;
+  min-block-size: 420px;
+}
+.jy__todo {
+  margin: auto 0 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  font-style: italic;
+}

@@ -126,6 +126,8 @@ export interface CardSet {
   context: Context
   /** Which journey the preview walks. */
   journeyId: string
+  /** Which step of it is being edited and previewed. */
+  stepId: string
   device: Device
   cards: AuthoredCard[]
 }

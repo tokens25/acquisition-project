@@ -19,6 +19,7 @@ function hydrate(raw: unknown): CardSet {
     campaigns: input.campaigns ?? defaultSet.campaigns,
     context: input.context ?? defaultSet.context,
     journeyId: input.journeyId ?? defaultSet.journeyId,
+    stepId: input.stepId ?? defaultSet.stepId,
     device: input.device ?? defaultSet.device,
     cards: input.cards.map((c, i) => ({
       ...defaultSet.cards[i % defaultSet.cards.length],

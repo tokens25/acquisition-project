@@ -40,6 +40,8 @@ export type SkipReason = 'seeded' | 'not-applicable'
 export interface Step {
   id: string
   name: string
+  /** Label for the step picker — the design uses short names there. */
+  shortName?: string
   figmaFrame?: string
   renderer: StepRenderer
   order: number

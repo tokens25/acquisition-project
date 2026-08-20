@@ -16,6 +16,7 @@ function steps(): Step[] {
     {
       id: 'landing',
       name: 'Landing',
+      shortName: 'Landing',
       figmaFrame: 'MSG+ - Landing page - Mobile',
       renderer: 'stub',
       order: 10,
@@ -25,6 +26,7 @@ function steps(): Step[] {
     {
       id: 'plans',
       name: 'Choose your subscription',
+      shortName: 'Subscription',
       figmaFrame: 'Plans',
       renderer: 'plans',
       order: 20,
@@ -36,6 +38,7 @@ function steps(): Step[] {
     {
       id: 'cadence',
       name: 'Choose how to pay',
+      shortName: 'How to pay',
       figmaFrame: 'Plans (payment-options)',
       renderer: 'stub',
       order: 30,
@@ -45,6 +48,7 @@ function steps(): Step[] {
     {
       id: 'connect-tv',
       name: 'Connect TV — dual screen',
+      shortName: 'Connect TV',
       figmaFrame: 'Connect TV- dual screen-option',
       renderer: 'stub',
       order: 35,
@@ -53,6 +57,7 @@ function steps(): Step[] {
     {
       id: 'auth',
       name: 'Log in or sign up',
+      shortName: 'Sign up',
       figmaFrame: 'Create',
       renderer: 'stub',
       order: 40,
@@ -62,6 +67,7 @@ function steps(): Step[] {
     {
       id: 'account',
       name: 'Finish signing up',
+      shortName: 'Account',
       figmaFrame: 'Complete Account',
       renderer: 'stub',
       order: 50,
@@ -72,6 +78,7 @@ function steps(): Step[] {
     {
       id: 'zip',
       name: 'Confirm your ZIP code',
+      shortName: 'ZIP code',
       figmaFrame: 'Zipcode',
       renderer: 'stub',
       order: 60,
@@ -84,6 +91,7 @@ function steps(): Step[] {
     {
       id: 'checkout',
       name: 'Checkout and payment',
+      shortName: 'Checkout',
       figmaFrame: 'Checkout',
       renderer: 'stub',
       order: 70,
@@ -94,6 +102,7 @@ function steps(): Step[] {
     {
       id: 'ready',
       name: 'Ready to watch',
+      shortName: 'Ready',
       figmaFrame: 'Credit card - zip code verified',
       renderer: 'stub',
       order: 80,
@@ -103,6 +112,7 @@ function steps(): Step[] {
     {
       id: 'home',
       name: 'Home',
+      shortName: 'Home',
       figmaFrame: 'mobile-hero-native',
       renderer: 'stub',
       order: 90,

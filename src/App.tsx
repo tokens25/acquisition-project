@@ -1,5 +1,5 @@
 import './App.css'
-import { JourneyView } from './card/JourneyView'
+import { StepPreview } from './card/StepPreview'
 import { journeys } from './rules/journeys'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
@@ -103,7 +103,7 @@ export function App() {
             Only the plans step renders a real component; the rest carry their Figma frame,
             their states and the runtime conditions they depend on.
           </p>
-          <JourneyView journey={journey} set={store.set} context={store.context} />
+          <StepPreview journey={journey} set={store.set} context={store.context} />
         </div>
       </div>
     </main>
