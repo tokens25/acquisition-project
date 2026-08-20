@@ -34,11 +34,18 @@
   min-inline-size: 0;
 }
 
-@media (min-width: 720px) {
+/* Splits at 860px, which is what the form actually needs plus a card beside it.
+   The Features row is the widest thing in the form: its longest option is 270px
+   of text, and with the select's padding, the 40px remove button, the row gap
+   and the group's own padding it needs 402px. Add the 40px column gap, a 347px
+   card and the page's 48px of padding and the split becomes possible at 837px;
+   860 leaves a little air so the next card peeks rather than sitting flush.
+
+   Below that the form would have to compress the feature dropdown into
+   truncating its own option text, so the preview goes underneath instead. */
+@media (min-width: 860px) {
   .page__split {
-    /* Fluid so a whole 347px card clears the form at the 720px minimum, while
-       the form still reaches a comfortable 380px on a wide screen. */
-    grid-template-columns: clamp(260px, 34vw, 380px) minmax(0, 1fr);
+    grid-template-columns: clamp(402px, 30vw, 420px) minmax(0, 1fr);
   }
   .page__pane--preview {
     position: sticky;
