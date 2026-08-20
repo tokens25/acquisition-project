@@ -3,36 +3,63 @@
 Drafted from Figma [`Landing page journeys`](https://www.figma.com/design/G636wazyXWJgDtBb0MWDza/-Copy-for-Alex---ai-project--MSG--Sign-up-journeys?node-id=2350-75321)
 (node `2350:75321`) and the code in [`src/rules/journey.ts`](src/rules/journey.ts).
 
-**Nothing here is agreed.** The card spec it mirrors states *"every rule below was
-agreed explicitly"* — this document is the opposite: a first pass for you to
-accept, correct or throw out. Rules marked **?** are ones I could not settle
-from the file alone.
+**Nothing here is agreed** except where marked. The card spec it mirrors states
+*"every rule below was agreed explicitly"* — this document is a first pass for
+you to accept, correct or throw out. Rules marked **?** are ones I could not
+settle from the file alone.
 
 ---
 
-## 0 · What the Figma file actually contains
+## 0 · Four journeys, one per entry CTA — ANSWERED
 
-The section holds **four sub-sections, all named identically**:
-`New logged out user - Zip Code auto detected`. They differ only in how many
-frames they draw:
+The section holds four sub-sections, all named
+`New logged out user - Zip Code auto detected`. They are **four journeys**, each
+starting from a different CTA on the landing page. The first frame of each
+section is the landing page showing the section that CTA lives in.
 
-| Section | Width | `Plans` frames | `Zipcode` frames | Total frames |
-| --- | --- | --- | --- | --- |
-| `2350:75322` | 8175 | 3 | 3 | 17 |
-| `2350:80514` | 7225 | 3 | 1 | 15 |
-| `2350:85706` | 6750 | 2 | 1 | 14 |
-| `2350:90898` | 6146 | 1 | 1 | 13 |
+| Section | Entry CTA | Landing section | `Plans` | `Zipcode` | Seeds |
+| --- | --- | --- | --- | --- | --- |
+| `2350:75322` | Sign up | Hero | 3 | 3 | — |
+| `2350:80514` | Check Your Market | Market checker | 3 | 1 | `zip` |
+| `2350:85706` | Get Ultimate | Features / Ultimate | 2 | 1 | `zip`, `tier` |
+| `2350:90898` | Get MSG+ | Plans / pricing | 1 | 1 | `zip`, `plan` |
 
-Every other frame is identical across all four, in the same order.
+The differing frame counts are not prototype fidelity — they are **what the CTA
+already knows**. Evidence from the landing frames' own text: `2350:80514` carries
+*"You're covered in 10001"* and team names; `2350:85706` carries *"Get Ultimate"*
+and *"Ultimate only"*; `2350:90898` carries *"Get MSG+"*, `Standard / Ultimate`
+and `$29.99`.
 
-**? Open question 1 — the most important one in this document.** Are these four
-*journeys*, or one journey drawn at four levels of prototype fidelity? The
-structure says the latter: same name, same steps, differing only in how many
-interaction states were laid out. If they are genuinely four journeys, the thing
-that distinguishes them is not expressed anywhere I can read, and the model
-below is wrong.
+### J-6 · The entry CTA seeds the journey
 
-I have drafted them as **one journey**.
+```
+seeds = what the CTA already carries
+
+zip    → the ZIP step is skipped, not removed — its value still flows on
+tier   → the plans step narrows, it does not disappear
+plan   → the plans step is skipped entirely
+```
+
+**A step disappears for two different reasons, and they must not be conflated.**
+
+| Reason | Meaning | The value |
+| --- | --- | --- |
+| `not-applicable` | Never exists here — ZIP outside the US | absent downstream |
+| `seeded` | Already captured by the entry | **still flows downstream** |
+
+Drop a seeded step without carrying its value and the journey loses the plan the
+user just chose. This is `knownAt()` in the code: what any step may treat as
+inbound, whether seeded by the entry or captured earlier.
+
+### Asked, narrowed, skipped
+
+A third state sits between asked and skipped. *Get Ultimate* pre-selects the
+tier but the plan is still chosen — so the step **narrows** rather than
+vanishing, which is exactly why Figma draws two Plans frames there and not one.
+
+**? Open question 1 (new).** Does *narrowed* mean the other tier is hidden, or
+merely deselected? Hiding it removes an upsell path; deselecting keeps it. The
+frames cannot tell me which.
 
 ---
 
@@ -46,40 +73,38 @@ separate steps:
 | `Complete Account – Empty`, `– Filled`, `– Filled` | One step, three form states |
 | `Checkout` × 4 | One step: summary → card entered → processing → paid |
 | `Zipcode` × 1–3 | One step: empty → entered → teams resolved |
-| `Plans` × 1–3 | **?** see Open question 2 |
+| `Plans` × 1–3 | One step, asked / narrowed / skipped by the entry seeds |
 
 **Rule J-0 · A step's states are runtime, not authored.** Form validity, payment
 progress and geo results are facts the product discovers. They must never be
 authorable, or someone will publish a journey stuck in "processing".
 
-**? Open question 2.** The three `Plans` frames in the longest section appear to
-be: subscription choice, subscription choice with the other plan selected, and
-`Choose how to pay` (billing cadence). I have drafted cadence as a **separate
+**? Open question 2.** The third `Plans` frame in the longest section appears to
+be `Choose how to pay` (billing cadence). I have drafted cadence as a **separate
 step** because it asks a different question. If it is one screen with two
-sections, `cadence` should be folded into `plans`.
-
----
+sections, fold it into `plans`.
 
 ## 2 · The journey
 
-A journey is an ordered list of steps, each with a selector. Omitted selector
-keys are wildcards — the same model the card overrides use.
+Each journey is an ordered list of steps with selectors, plus the seeds its
+entry carries. Omitted selector keys are wildcards — the same model the card
+overrides use.
 
-| # | Step | Figma frame | Selector | Runtime gate |
-| --- | --- | --- | --- | --- |
-| 10 | Landing | `MSG+ - Landing page - Mobile` | all | `auth.signedOut` |
-| 20 | Choose your subscription | `Plans` | all | — |
-| 30 | Choose how to pay | `Plans (payment-options)` | all | — |
-| 40 | Log in or sign up | `Create` | all | `auth.signedOut` |
-| 50 | Finish signing up | `Complete Account` | all | `form.valid` |
-| 60 | Confirm your ZIP code | `Zipcode` | `market = US` | `geo.zipKnown` |
-| 70 | Checkout and payment | `Checkout` | all | — |
-| 80 | Ready to watch | `Credit card - zip code verified` | all | `payment.succeeded` |
-| 90 | Home | `mobile-hero-native` | all | — |
+| # | Step | Figma frame | Selector | Captures | Runtime gate |
+| --- | --- | --- | --- | --- | --- |
+| 10 | Landing | `MSG+ - Landing page - Mobile` | all | — | `auth.signedOut` |
+| 20 | Choose your subscription | `Plans` | all | `plan` (narrowed by `tier`) | — |
+| 30 | Choose how to pay | `Plans (payment-options)` | all | — | — |
+| 40 | Log in or sign up | `Create` | all | — | `auth.signedOut` |
+| 50 | Finish signing up | `Complete Account` | all | — | `form.valid` |
+| 60 | Confirm your ZIP code | `Zipcode` | `market = US` | `zip` | `geo.zipKnown` |
+| 70 | Checkout and payment | `Checkout` | all | — | — |
+| 80 | Ready to watch | `Credit card - zip code verified` | all | — | `payment.succeeded` |
+| 90 | Home | `mobile-hero-native` | all | — | — |
 
-Resolved for Ireland this yields 8 steps; for the US, 9.
-
----
+Resolved in the US: Hero 9 steps, Check Your Market 8, Get Ultimate 8 (with
+`plans` narrowed), Get MSG+ 7. Outside the US every count drops by one, since
+`zip` is not applicable. Those numbers match the frames drawn in Figma.
 
 ## 3 · Journey-level rules
 
@@ -280,7 +305,9 @@ the same context, and agree.
 
 ## 7 · Decisions needed from you
 
-1. **Are the four Figma sections one journey or four?** Everything else depends on this.
+**Answered:** the four sections are four journeys, one per landing-page CTA.
+
+1. Does *narrowed* hide the other tier, or merely deselect it?
 2. Is `cadence` its own step or part of `plans`?
 3. Where do real prices come from?
 4. Does consent ever need its own screen?
@@ -288,3 +315,5 @@ the same context, and agree.
 6. Do the Standard/Ultimate tabs filter the set or preselect a card?
 7. Does the journey end at `ready` or at first playback?
 8. Which steps does your team own?
+9. **New.** Are there other landing-page CTAs not drawn here? Each one is a journey,
+   and the model only knows about the four in this file.

@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import './App.css'
 import { JourneyView } from './card/JourneyView'
-import { signUpJourney } from './rules/journeys'
+import { journeys } from './rules/journeys'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
 import { contextLabel, summarise, validateAll } from './rules/validate'
@@ -14,6 +15,8 @@ import { contextLabel, summarise, validateAll } from './rules/validate'
  */
 export function App() {
   const store = useCardSet()
+  const [journeyId, setJourneyId] = useState(journeys[0].id)
+  const journey = journeys.find((j) => j.id === journeyId) ?? journeys[0]
   const coverage = summarise(validateAll(store.set))
   const blocked = coverage.failing.length > 0
 
@@ -36,6 +39,16 @@ export function App() {
             <h2 className="page__section-title">
               Preview · {store.editingBase ? 'Base' : contextLabel(store.context)}
             </h2>
+            <label className="page__control">
+              Journey
+              <select value={journeyId} onChange={(e) => setJourneyId(e.target.value)}>
+                {journeys.map((j) => (
+                  <option key={j.id} value={j.id}>
+                    {j.name}
+                  </option>
+                ))}
+              </select>
+            </label>
             <span className="page__gate" data-blocked={blocked || undefined}>
               {blocked ? `Blocked · ${coverage.failing.length}/${coverage.total}` : `Ready · ${coverage.total} checked`}
             </span>
@@ -45,7 +58,7 @@ export function App() {
             Only the plans step renders a real component; the rest carry their Figma frame,
             their states and the runtime conditions they depend on.
           </p>
-          <JourneyView journey={signUpJourney} set={store.set} context={store.context} />
+          <JourneyView journey={journey} set={store.set} context={store.context} />
         </div>
       </div>
     </main>
