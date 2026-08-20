@@ -34,9 +34,11 @@
   min-inline-size: 0;
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 720px) {
   .page__split {
-    grid-template-columns: minmax(360px, 420px) minmax(0, 1fr);
+    /* Fluid so a whole 347px card clears the form at the 720px minimum, while
+       the form still reaches a comfortable 380px on a wide screen. */
+    grid-template-columns: clamp(260px, 34vw, 380px) minmax(0, 1fr);
   }
   .page__pane--preview {
     position: sticky;
@@ -64,19 +66,6 @@
   font-size: var(--font-size-caption-xs);
   line-height: 1.5;
 }
-.page__gate {
-  padding: var(--space-4) var(--space-12);
-  border-radius: var(--radius-full);
-  background: var(--color-accent-success-surface-1);
-  color: var(--color-accent-success-text);
-  font-size: var(--font-size-label-xs);
-  font-weight: var(--font-weight-bold);
-}
-.page__gate[data-blocked] {
-  background: var(--color-accent-error-surface-1);
-  color: var(--color-accent-error-text);
-}
-
 /* Preview device switch — mobile / desktop, at the top of the preview. */
 .page__devices {
   display: inline-flex;

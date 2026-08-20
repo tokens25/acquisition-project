@@ -3,7 +3,6 @@ import { StepPreview } from './card/StepPreview'
 import { journeys } from './rules/journeys'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
-import { summarise, validateAll } from './rules/validate'
 
 /**
  * Acquisition — authoring surface plus preview.
@@ -15,8 +14,6 @@ import { summarise, validateAll } from './rules/validate'
 export function App() {
   const store = useCardSet()
   const journey = journeys.find((j) => j.id === store.set.journeyId) ?? journeys[0]
-  const coverage = summarise(validateAll(store.set))
-  const blocked = coverage.failing.length > 0
 
   // "IE" is a market code, not something to show a person. Resolve it to the
   // market's own label, and the campaign's, so the heading reads as a place.
@@ -93,11 +90,7 @@ export function App() {
               >
                 Desktop
               </button>
-            </div>
-            <span className="page__gate" data-blocked={blocked || undefined}>
-              {blocked ? `Blocked · ${coverage.failing.length}/${coverage.total}` : `Ready · ${coverage.total} checked`}
-            </span>
-          </div>
+            </div>          </div>
           <p className="page__section-note">
             The journey as it resolves for this context — which steps appear, in order.
             Only the plans step renders a real component; the rest carry their Figma frame,
