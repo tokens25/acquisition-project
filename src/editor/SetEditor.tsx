@@ -3,10 +3,9 @@ import './editor.css'
 import { useState } from 'react'
 import { logoCatalog } from '../card/assets'
 import type { AddOnType, AuthoredCard, CardPatch } from '../rules/content'
-import { deriveCard } from '../rules/derive'
 import { marketFor, resolveCard } from '../rules/resolve'
-import { contextLabel, summarise, validateAll, validateContext } from '../rules/validate'
-import { CheckField, DerivedRow, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
+import { summarise, validateAll, validateContext } from '../rules/validate'
+import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
 import { BASE_MARKET, type CardSetStore } from './useCardSet'
 
 const ADDON_TYPES: { value: AddOnType; label: string }[] = [
@@ -94,22 +93,9 @@ export function SetEditor({ store }: { store: CardSetStore }) {
           ]}
           onChange={(v) => setContext({ ...context, market: v })}
         />
-        <SelectField
-          label="Campaign"
-          value={context.campaign ?? ''}
-          options={[
-            { value: '', label: 'None' },
-            ...set.campaigns.map((c) => ({ value: c.code, label: c.label })),
-          ]}
-          onChange={(v) => setContext({ ...context, campaign: v || undefined })}
-        />
       </FieldGroup>
 
-      <div className="ed-scope" data-base={editingBase || undefined}>
-        {editingBase
-          ? 'Editing the base card'
-          : `Editing ${contextLabel(context)} — only what you change is stored`}
-      </div>
+      <p className="ed-scope">Tiers</p>
 
       <div className="ed-tabs">
         {set.cards.map((c) => (
@@ -136,10 +122,9 @@ export function SetEditor({ store }: { store: CardSetStore }) {
 }
 
 function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }) {
-  const { set, context, editingBase, updateCard, overriddenKeys, clearOverride } = store
+  const { set, context, updateCard, overriddenKeys } = store
   const resolved = resolveCard(card, context)
   const market = marketFor(set, context.market)
-  const d = deriveCard(resolved, market)
   const overridden = overriddenKeys(card)
 
   const patch = (p: CardPatch) => updateCard(card.id, p)
@@ -156,42 +141,18 @@ function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }
 
   return (
     <>
-      {!editingBase && (
-        <div className="ed-override">
-          <span>
-            {overridden.length
-              ? `Overridden here: ${overridden.join(', ')}`
-              : 'No differences from the base yet — edit a field to create one.'}
-          </span>
-          {overridden.length > 0 && (
-            <button type="button" className="ed__btn ed__btn--quiet" onClick={() => clearOverride(card.id)}>
-              Clear
-            </button>
-          )}
-        </div>
-      )}
-
-      <FieldGroup title="Switches">
-        <CheckField
-          label={`Ultimate${mark('ultimate')}`}
-          hint="Drives stroke, badge, plan-name fill and CTA appearance together. Max one per set (S-1)."
-          checked={resolved.ultimate}
-          onChange={(v) => patch({ ultimate: v })}
-        />
-        <CheckField
-          label={`Discount${mark('discount')}`}
-          hint="Drives the caption, primary and struck price, the explainer and the CTA area."
-          checked={resolved.discount}
-          onChange={(v) => patch({ discount: v })}
-        />
-      </FieldGroup>
-
       <FieldGroup title="Content">
         <TextField label={`Plan Name${mark('planName')}`} hint="One value — header, CTA and add-on label." value={resolved.planName} onChange={(v) => patch({ planName: v })} />
         <TextArea label={`Description${mark('description')}`} hint="Full text. Never pre-truncate — the card measures and adds “… more”." value={resolved.description} onChange={(v) => patch({ description: v })} rows={4} />
       </FieldGroup>
 
       <FieldGroup title={`Pricing — ${market.currency}`}>
+        <CheckField
+          label={`Discount${mark('discount')}`}
+          hint="Drives the caption, primary and struck price, the explainer and the CTA area."
+          checked={resolved.discount}
+          onChange={(v) => patch({ discount: v })}
+        />
         <NumberField label={`Standard price${mark('standardPrice')}`} value={resolved.standardPrice} step={0.01} min={0} onChange={(v) => patch({ standardPrice: v })} />
         <NumberField label={`Intro price${mark('introPrice')}`} hint="Used as the primary price while Discount is on." value={resolved.introPrice} step={0.01} min={0} onChange={(v) => patch({ introPrice: v })} />
         <NumberField label={`Intro months${mark('introMonths')}`} value={resolved.introMonths} min={1} onChange={(v) => patch({ introMonths: v })} />
@@ -241,19 +202,6 @@ function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }
         </button>
       </FieldGroup>
 
-      <FieldGroup title="Produced for you">
-        <DerivedRow label="CTA label" value={d.ctaLabel} source="derived" note="Plan Name substitution" />
-        <DerivedRow label="Included in…" value={d.addOnIncludedLabel} source="derived" note="Plan Name substitution" />
-        <DerivedRow label="Primary price" value={d.primaryPrice} source="derived" note="Intro price while Discount is on" />
-        <DerivedRow label="Struck price" value={d.struckPrice ?? ''} source="derived" note="standardPrice, only when Discount is on" />
-        <DerivedRow label="Price explainer" value={d.explainer ?? ''} source="derived" note="Repeats standardPrice — one number, two positions" />
-        <DerivedRow label="Savings amount" value={d.savingsLabel ?? ''} source="derived" note="Computed delta over 12 months" />
-        <DerivedRow label="Logo rows" value={String(d.logoRows)} source="derived" note="1 if the add-on is present, else 2" />
-        <DerivedRow label="Overflow tile" value={d.overflowLabel ?? ''} source="derived" note="Count of hidden tiles" />
-        <DerivedRow label="Price caption" value={d.priceCaption ?? ''} source="static" note="Shown when Discount is on" />
-        <DerivedRow label="Badge" value={d.badgeText ?? ''} source="static" note="Ultimate only" />
-        <DerivedRow label="Footer" value={d.footerLabel} source="static" note="Always present" />
-      </FieldGroup>
     </>
   )
 }
