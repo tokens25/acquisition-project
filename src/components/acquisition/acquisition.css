@@ -359,12 +359,21 @@
 
 /* ── Set-level layout (S-2, S-3) ───────────────────────────── */
 
-/* S-3 · every card renders at the tallest card's height — stretch does it. */
+/* S-3 · every card renders at the tallest card's height — stretch does it.
+   The row scrolls sideways rather than wrapping: a set is read across, and a
+   card dropping to a second line would break the comparison it exists for. */
 .acq-set {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--space-24);
   align-items: stretch;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding-block-end: var(--space-8);
+  scroll-snap-type: x proximity;
+}
+.acq-set > .acq-card {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
 
 /* S-2 · the whole set shares one description height: lines × 21px. */

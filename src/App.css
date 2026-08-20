@@ -20,22 +20,28 @@
   font-size: var(--font-size-caption-sm);
 }
 
+/* Narrow: form, then preview beneath it — the phone arrangement.
+   Wide: form left, preview right and pinned. The breakpoint is where a 420px
+   form plus three 347px cards and their gaps stop fitting side by side. */
 .page__split {
-  display: flex;
+  display: grid;
   max-inline-size: 1600px;
   margin: 0 auto;
-  flex-wrap: wrap;
   gap: var(--space-40);
   align-items: start;
 }
 .page__pane {
-  flex: 1 1 380px;
   min-inline-size: 0;
 }
-.page__pane--preview {
-  flex: 2 1 720px;
-  position: sticky;
-  inset-block-start: var(--space-24);
+
+@media (min-width: 1500px) {
+  .page__split {
+    grid-template-columns: minmax(360px, 420px) minmax(0, 1fr);
+  }
+  .page__pane--preview {
+    position: sticky;
+    inset-block-start: var(--space-24);
+  }
 }
 
 .page__preview-head {
