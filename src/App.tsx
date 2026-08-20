@@ -4,7 +4,7 @@ import { JourneyView } from './card/JourneyView'
 import { journeys } from './rules/journeys'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
-import { contextLabel, summarise, validateAll } from './rules/validate'
+import { summarise, validateAll } from './rules/validate'
 
 /**
  * Acquisition — authoring surface plus preview.
@@ -19,6 +19,18 @@ export function App() {
   const journey = journeys.find((j) => j.id === journeyId) ?? journeys[0]
   const coverage = summarise(validateAll(store.set))
   const blocked = coverage.failing.length > 0
+
+  // "IE" is a market code, not something to show a person. Resolve it to the
+  // market's own label, and the campaign's, so the heading reads as a place.
+  const marketName = store.editingBase
+    ? 'Base'
+    : (store.set.markets.find((m) => m.code === store.context.market)?.label ?? store.context.market)
+  const campaignName = store.context.campaign
+    ? (store.set.campaigns.find((c) => c.code === store.context.campaign)?.label ??
+      store.context.campaign)
+    : null
+  const previewLabel = campaignName ? `${marketName} · ${campaignName}` : marketName
+
 
   return (
     <main className="page">
@@ -37,7 +49,7 @@ export function App() {
         <div className="page__pane page__pane--preview">
           <div className="page__preview-head">
             <h2 className="page__section-title">
-              Preview · {store.editingBase ? 'Base' : contextLabel(store.context)}
+              Preview · {previewLabel}
             </h2>
             <div className="page__devices" role="group" aria-label="Preview device">
               <button
