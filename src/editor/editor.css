@@ -314,24 +314,6 @@
   line-height: 1.5;
 }
 
-/* Override marker — the DS green label. Names the market the difference
-   belongs to, so a glance says "this field differs for Italy". */
-.ed-mark {
-  display: inline-block;
-  margin-inline-start: var(--space-6);
-  padding: 0 var(--space-6);
-  border-radius: var(--radius-4);
-  border: var(--border-1) solid
-    color-mix(in srgb, var(--color-accent-success-text) 45%, transparent);
-  background: none;
-  color: var(--color-accent-success-text);
-  font-size: var(--font-size-label-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.12px;
-  text-transform: uppercase;
-  vertical-align: baseline;
-}
-
 /* A field label rendered as the DS green label, per Figma 133:3825. */
 .ed-label-chip {
   display: inline-block;

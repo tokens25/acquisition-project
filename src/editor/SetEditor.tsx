@@ -139,18 +139,11 @@ export function SetEditor({ store }: { store: CardSetStore }) {
 }
 
 function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }) {
-  const { set, context, updateCard, overriddenKeys } = store
+  const { set, context, updateCard } = store
   const resolved = resolveCard(card, context)
   const market = marketFor(set, context.market)
-  const overridden = overriddenKeys(card)
 
   const patch = (p: CardPatch) => updateCard(card.id, p)
-  /**
-   * Marks a field that differs from the base in this context. Named rather than
-   * dotted — "IT" tells you which market owns the difference; a bullet doesn't.
-   */
-  const mark = (key: keyof CardPatch) =>
-    overridden.includes(key) ? <span className="ed-mark">{context.market}</span> : null
 
   const toggleLogo = (id: string) => {
     const has = resolved.logos.some((l) => l.id === id)
@@ -164,26 +157,21 @@ function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }
   return (
     <>
       <FieldGroup title="Content">
-        <TextField label={<>Plan Name{mark('planName')}</>} hint="One value — header, CTA and add-on label." value={resolved.planName} onChange={(v) => patch({ planName: v })} />
-        <TextArea label={<>Description{mark('description')}</>} hint="Full text. Never pre-truncate — the card measures and adds “… more”." value={resolved.description} onChange={(v) => patch({ description: v })} rows={4} />
+        <TextField label="Plan Name" hint="One value — header, CTA and add-on label." value={resolved.planName} onChange={(v) => patch({ planName: v })} />
+        <TextArea label="Description" hint="Full text. Never pre-truncate — the card measures and adds “… more”." value={resolved.description} onChange={(v) => patch({ description: v })} rows={4} />
       </FieldGroup>
 
       <FieldGroup title={`Pricing — ${market.currency}`}>
         <CheckField
-          label={
-            <>
-              <span className="ed-label-chip">Apply discount</span>
-              {mark('discount')}
-            </>
-          }
+          label={<span className="ed-label-chip">Apply discount</span>}
           hint="Drives the caption, primary and struck price, the explainer and the CTA area."
           checked={resolved.discount}
           onChange={(v) => patch({ discount: v })}
         />
-        <NumberField label={<>Standard price{mark('standardPrice')}</>} value={resolved.standardPrice} step={0.01} min={0} onChange={(v) => patch({ standardPrice: v })} />
-        <NumberField label={<>Intro price{mark('introPrice')}</>} hint="Used as the primary price while Discount is on." value={resolved.introPrice} step={0.01} min={0} onChange={(v) => patch({ introPrice: v })} />
-        <NumberField label={<>Intro months{mark('introMonths')}</>} value={resolved.introMonths} min={1} onChange={(v) => patch({ introMonths: v })} />
-        <TextField label={<>Billing period{mark('installment')}</>} value={resolved.installment} onChange={(v) => patch({ installment: v })} />
+        <NumberField label="Standard price" value={resolved.standardPrice} step={0.01} min={0} onChange={(v) => patch({ standardPrice: v })} />
+        <NumberField label="Discount price" hint="Used as the primary price while Discount is on." value={resolved.introPrice} step={0.01} min={0} onChange={(v) => patch({ introPrice: v })} />
+        <NumberField label="Discount months" value={resolved.introMonths} min={1} onChange={(v) => patch({ introMonths: v })} />
+        <TextField label="Billing period" value={resolved.installment} onChange={(v) => patch({ installment: v })} />
       </FieldGroup>
 
       <FieldGroup title="Competitions">
@@ -197,7 +185,7 @@ function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }
             )
           })}
         </div>
-        <NumberField label={<>Total competitions{mark('logoTotal')}</>} hint="Drives the derived “+N” tile." value={resolved.logoTotal} min={0} onChange={(v) => patch({ logoTotal: v })} />
+        <NumberField label="Total competitions" hint="Drives the derived “+N” tile." value={resolved.logoTotal} min={0} onChange={(v) => patch({ logoTotal: v })} />
       </FieldGroup>
 
       <FieldGroup title="Add-on">
