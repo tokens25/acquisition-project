@@ -303,6 +303,60 @@ the same context, and agree.
 
 ---
 
+## 6b · The journey space
+
+The landing-page CTAs are one axis among several. 📱 Mobile [Web] alone carries
+**five journey families**; 💻 Desktop mirrors most of them; there are **seven
+platform pages**.
+
+| Family | Figma | User state | Variants |
+| --- | --- | --- | --- |
+| Landing page journeys | `2350:75321` | anonymous | 4 — the entry CTAs, modelled |
+| Logged out new users | `2362:179952` | anonymous | 4 — browse hero, RSN tile, Starlink ×2 |
+| Logged in DAZN customer | `2362:250798` | registered / paying / lower tier | 3 |
+| Migration journeys | `2398:41587` | migrating | 4 — no payment method, CRM, TVE, organic |
+| Adobe TVE | `2518:495931` | anonymous | 4 (5 on desktop) |
+
+That is **19 journeys on one platform**, drawn again per platform — well over a
+hundred flows in the file. Nobody builds a hundred flows. This is the argument
+for configuration, in the design file's own hand.
+
+### The real axes
+
+Market and campaign are the *secondary* ones. The dominant axes are:
+
+```
+userState     anonymous · registered-free · paying-dazn · rsn-lower-tier · migrating
+entrySurface  landing-cta · open-browse-hero · rsn-tile · msg-tile · tv-provider · crm-email · starlink
+authPath      regular · tve-adobe · starlink
+platform      mobile-web · tablet · desktop · tv-html5 · tv-android · tv-tvos · tv-roku
+```
+
+The good news: the **step vocabulary stays small**. Nearly every journey walks
+the same steps — entry, plans, cadence, auth, account, zip, checkout, ready. What
+differs is which are seeded away, which narrow, and which never applied. The
+count multiplies; the components do not.
+
+### J-7 · Interrupts are not journeys
+
+Three sections hold loose frames with no sub-sections — **RSN Geolocation**,
+**Streaming limit**, **New session blocking while travelling**. They are states
+that can interrupt *any* journey, not steps within one.
+
+Modelling them as journeys would be a category error and would multiply the
+space again for nothing. They belong to a separate `Interrupt` type, keyed to
+runtime conditions.
+
+**? Open question 10.** Migration may not be a purchase journey at all — an
+existing subscriber being moved is closer to a confirmation than a funnel. If
+so it is a different journey *type*, not a variant, and it should not inherit
+the plans or checkout steps.
+
+**? Open question 11.** Do TV platforms change the steps, or only the layout?
+ZIP entry on a remote and provider auth via a code are structurally different
+interactions, which would make platform a step-level axis rather than a
+styling one.
+
 ## 7 · Decisions needed from you
 
 **Answered:** the four sections are four journeys, one per landing-page CTA.
@@ -315,5 +369,6 @@ the same context, and agree.
 6. Do the Standard/Ultimate tabs filter the set or preselect a card?
 7. Does the journey end at `ready` or at first playback?
 8. Which steps does your team own?
-9. **New.** Are there other landing-page CTAs not drawn here? Each one is a journey,
-   and the model only knows about the four in this file.
+9. ~~Other landing-page CTAs?~~ **Answered — no more CTAs, but more journey families.**
+10. Is migration a purchase journey at all, or a different type entirely?
+11. Do TV platforms change the steps, or only the layout?
