@@ -39,6 +39,24 @@ export function App() {
             <h2 className="page__section-title">
               Preview · {store.editingBase ? 'Base' : contextLabel(store.context)}
             </h2>
+            <div className="page__devices" role="group" aria-label="Preview device">
+              <button
+                type="button"
+                className="page__device"
+                data-on={store.set.device === 'mobile' || undefined}
+                onClick={() => store.updateSet({ device: 'mobile' })}
+              >
+                Mobile
+              </button>
+              <button
+                type="button"
+                className="page__device"
+                data-on={store.set.device !== 'mobile' || undefined}
+                onClick={() => store.updateSet({ device: 'desktop' })}
+              >
+                Desktop
+              </button>
+            </div>
             <label className="page__control">
               Journey
               <select value={journeyId} onChange={(e) => setJourneyId(e.target.value)}>

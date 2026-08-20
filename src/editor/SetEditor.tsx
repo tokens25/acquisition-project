@@ -2,18 +2,12 @@ import './editor.css'
 
 import { useState } from 'react'
 import { logoCatalog } from '../card/assets'
-import type { AddOnType, AuthoredCard, CardPatch, Device } from '../rules/content'
+import type { AddOnType, AuthoredCard, CardPatch } from '../rules/content'
 import { deriveCard } from '../rules/derive'
 import { marketFor, resolveCard } from '../rules/resolve'
 import { contextLabel, summarise, validateAll, validateContext } from '../rules/validate'
 import { CheckField, DerivedRow, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
 import { BASE_MARKET, type CardSetStore } from './useCardSet'
-
-const DEVICES: { value: Device; label: string }[] = [
-  { value: 'mobile', label: 'Mobile' },
-  { value: 'desktop', label: 'Desktop' },
-  { value: 'xl', label: 'Extra big' },
-]
 
 const ADDON_TYPES: { value: AddOnType; label: string }[] = [
   { value: 'included', label: 'Included in plan' },
@@ -32,7 +26,7 @@ const ADDON_TYPES: { value: AddOnType; label: string }[] = [
  * market's difference from it.
  */
 export function SetEditor({ store }: { store: CardSetStore }) {
-  const { set, context, editingBase, setContext, updateSet, reset, exportJson, importJson, importError } = store
+  const { set, context, editingBase, setContext, reset, exportJson, importJson, importError } = store
   const [openCard, setOpenCard] = useState(set.cards[0]?.id ?? '')
 
   const results = validateAll(set)
@@ -108,12 +102,6 @@ export function SetEditor({ store }: { store: CardSetStore }) {
             ...set.campaigns.map((c) => ({ value: c.code, label: c.label })),
           ]}
           onChange={(v) => setContext({ ...context, campaign: v || undefined })}
-        />
-        <SelectField
-          label="Device"
-          value={set.device}
-          options={DEVICES}
-          onChange={(v) => updateSet({ device: v })}
         />
       </FieldGroup>
 

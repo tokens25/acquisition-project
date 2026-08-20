@@ -70,3 +70,31 @@
   background: var(--color-accent-error-surface-1);
   color: var(--color-accent-error-text);
 }
+
+/* Preview device switch — mobile / desktop, at the top of the preview. */
+.page__devices {
+  display: inline-flex;
+  padding: var(--space-2);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-1);
+}
+.page__device {
+  padding: var(--space-4) var(--space-12);
+  border: 0;
+  border-radius: var(--radius-6);
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption-xs);
+  cursor: pointer;
+}
+.page__device[data-on] {
+  background: var(--color-surface-container-3);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+}
+.page__device:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: 1px;
+}
