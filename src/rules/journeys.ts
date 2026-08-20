@@ -43,13 +43,21 @@ function steps(): Step[] {
       note: 'Billing cadence — annual up-front versus monthly.',
     },
     {
+      id: 'connect-tv',
+      name: 'Connect TV — dual screen',
+      figmaFrame: 'Connect TV- dual screen-option',
+      renderer: 'stub',
+      order: 35,
+      note: 'TV pairing. Found in the RSN-tile and logged-in journeys, not in the landing four.',
+    },
+    {
       id: 'auth',
       name: 'Log in or sign up',
       figmaFrame: 'Create',
       renderer: 'stub',
       order: 40,
       requires: ['auth.signedOut'],
-      note: 'Owned by identity. Skipped entirely when already signed in.',
+      note: 'Skipped entirely when already signed in — confirmed by the logged-in families, which drop it.',
     },
     {
       id: 'account',
@@ -80,7 +88,8 @@ function steps(): Step[] {
       renderer: 'stub',
       order: 70,
       states: ['summary', 'card entered', 'processing', 'paid'],
-      note: 'Order summary plus payment. Owned by billing.',
+      note:
+        'Order summary plus payment. Owned in-house (Q8), though the card fields themselves are normally the payment provider embed.',
     },
     {
       id: 'ready',

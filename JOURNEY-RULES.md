@@ -357,9 +357,63 @@ ZIP entry on a remote and provider auth via a code are structurally different
 interactions, which would make platform a step-level axis rather than a
 styling one.
 
+## 6c · Validation
+
+
+### Where it predicted correctly
+
+| Journey | Auth steps | Zip | Plans | Total |
+| --- | --- | --- | --- | --- |
+| Logged out — browse hero | `Create` + `Complete Account`×3 | 1 | **3** | 15 |
+| Logged out — RSN tile | `Create` + `Complete Account`×3 | 1 | **2** | 16 |
+| **Logged in — free registered** | **none** | 1 | **2** | 12 |
+| **Logged in — paying DAZN** | **none** | 1 | **2** | 12 |
+| **Logged in — RSN lower tier upgrade** | **none** | **none** | **1** | 9 |
+
+Logged-in journeys drop `Create` and `Complete Account` **entirely** — auth is
+seeded by the user state, exactly as J-6 predicts. The upgrade journey drops
+auth, account *and* zip, and narrows plans to a single frame. Three independent
+confirmations that frame counts encode what is already known.
+
+### Three gaps the validation found
+
+**1. A step my model doesn't have.** `Connect TV - dual screen` appears in the
+RSN-tile and both logged-in journeys. It is a TV-pairing step, and it isn't in
+the nine.
+
+**2. Step order is per-journey, not universal.** Starlink runs
+`Zipcode → Plans`, not `Plans → … → Zipcode`. So a journey is genuinely its own
+ordered list; a shared list with selectors cannot express this. J-2's constraint
+graph becomes load-bearing rather than theoretical.
+
+**3. Entry frames vary, and one journey never reaches checkout.** Entries seen:
+`Anonymous`, `Home of - MSG+`, `mobile-hero-native`, `Paywall`. And the second
+Starlink journey ends at `Paywall` with **no Checkout at all** — either a
+blocked path or an incomplete draft.
+
+`mobile-hero-native` appears at both the start and the end of logged-in
+journeys: the product is both where they come from and where they return.
+
+**? Open question 12.** Is the second Starlink journey (no checkout, ends at
+`Paywall`) a real blocked path, or an unfinished frame set?
+
 ## 7 · Decisions needed from you
 
-**Answered:** the four sections are four journeys, one per landing-page CTA.
+**Answered so far**
+
+| | | |
+| --- | --- | --- |
+| Q1 (original) | Four journeys, one per landing CTA | model rewritten |
+| Q8 | **We own all nine screens** | no scope reduction — the work is nine, not four |
+| Q9 | No more landing CTAs, but five journey families | space mapped |
+| Q10 | Migration is *partly* purchase | varies per variant — needs splitting |
+| Q11 | **Platform changes layout, not steps** | seven platform pages collapse to one model |
+
+Q11 is the biggest simplification in this document: the drawn space drops from
+well over a hundred flows to **nineteen**, with platform handled the way the
+card already handles device.
+
+**Still open**
 
 1. Does *narrowed* hide the other tier, or merely deselect it?
 2. Is `cadence` its own step or part of `plans`?
@@ -368,7 +422,9 @@ styling one.
 5. Is the ZIP step a confirmation or a fallback — and is there a `geo.zipUnknown` journey?
 6. Do the Standard/Ultimate tabs filter the set or preselect a card?
 7. Does the journey end at `ready` or at first playback?
-8. Which steps does your team own?
-9. ~~Other landing-page CTAs?~~ **Answered — no more CTAs, but more journey families.**
-10. Is migration a purchase journey at all, or a different type entirely?
-11. Do TV platforms change the steps, or only the layout?
+10b. **Which** migration variants are purchases? "Some of it" needs to become a list,
+   because the purchase ones inherit plans and checkout and the rest do not.
+12. Is the second Starlink journey (no checkout, ends at `Paywall`) a real blocked
+   path, or an unfinished frame set?
+13. **New.** `Connect TV — dual screen` isn't in the nine steps. Where does it belong,
+   and which journeys require it?

@@ -147,7 +147,12 @@ export const interrupts: Interrupt[] = [
   },
 ]
 
-/** Rough size of the drawn space, for arguing about approach. */
+/**
+ * Platform does NOT change the steps — only the page layout (answered Q11).
+ * So the seven platform pages are seven renderings of the same journeys, and
+ * platform drops out of the journey model entirely. It stays where it already
+ * lived: a rendering concern, alongside the card's mobile/desktop/xl device.
+ */
 export const platforms: Platform[] = [
   'mobile-web',
   'tablet',
