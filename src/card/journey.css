@@ -123,3 +123,18 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   font-size: var(--font-size-caption-xs);
   font-style: italic;
 }
+
+/* Step name leads; journey and inbound context follow it. */
+.jy__entry {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-8);
+  align-items: baseline;
+}
+.jy__step-name {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+}
+.jy__meta {
+  color: var(--color-text-tertiary);
+}

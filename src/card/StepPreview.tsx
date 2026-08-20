@@ -31,9 +31,15 @@ export function StepPreview({
 
   return (
     <div className="jy">
+      {/* Lead with the step's own name. The entry CTA is quoted and labelled
+          because a journey can enter from "Sign up" while a later step is also
+          called Sign up — without that, the line reads as the wrong step. */}
       <p className="jy__entry">
-        Step {position} of {steps.length} · entry <strong>{journey.entry.cta}</strong>
-        {inbound.length > 0 && <span className="jy__seeds"> — inbound: {inbound.join(', ')}</span>}
+        <strong className="jy__step-name">{step.shortName ?? step.name}</strong>
+        <span className="jy__meta">
+          step {position} of {steps.length} · entered from “{journey.entry.cta}”
+        </span>
+        {inbound.length > 0 && <span className="jy__seeds">inbound: {inbound.join(', ')}</span>}
       </p>
 
       {step.renderer === 'plans' ? (
