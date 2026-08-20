@@ -313,3 +313,19 @@
   font-size: var(--font-size-caption-xs);
   line-height: 1.5;
 }
+
+/* Override marker — the DS green label. Names the market the difference
+   belongs to, so a glance says "this field differs for Italy". */
+.ed-mark {
+  display: inline-block;
+  margin-inline-start: var(--space-6);
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-4);
+  background: var(--color-accent-success-surface-1);
+  color: var(--color-accent-success-text);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+  vertical-align: baseline;
+}

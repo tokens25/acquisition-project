@@ -1,7 +1,7 @@
 import type { ChangeEvent, ReactNode } from 'react'
 
 interface BaseProps {
-  label: string
+  label: ReactNode
   hint?: string
 }
 
