@@ -401,3 +401,40 @@
   outline: var(--border-2) solid var(--color-brand-primary);
   outline-offset: 1px;
 }
+
+/* ── Select and inline controls ────────────────────────────
+   Native select arrows can't be sized or inset, so the chevron is drawn as a
+   background: 16px rather than the browser's ~13px, and held clear of the edge.
+   Two rules because a data URI can't take currentColor — the light theme needs
+   its own ink. */
+
+.ed {
+  --ed-control-h: 40px;
+  --ed-chevron: 16px;
+}
+
+input.ed-field__input,
+select.ed-field__input {
+  block-size: var(--ed-control-h);
+}
+
+select.ed-field__input {
+  appearance: none;
+  padding-inline-end: calc(var(--ed-chevron) + var(--space-24));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bcc5cb' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-12) center;
+  background-size: var(--ed-chevron) var(--ed-chevron);
+}
+[data-theme='light'] select.ed-field__input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23444d53' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Square the remove button to the control it sits beside, so the row lines up. */
+.ed__btn--icon {
+  display: grid;
+  place-items: center;
+  inline-size: var(--ed-control-h);
+  block-size: var(--ed-control-h);
+  padding: 0;
+}
