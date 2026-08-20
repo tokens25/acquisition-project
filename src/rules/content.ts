@@ -124,6 +124,8 @@ export interface CardSet {
   campaigns: CampaignConfig[]
   /** Which market / campaign the preview is showing. */
   context: Context
+  /** Which journey the preview walks. */
+  journeyId: string
   device: Device
   cards: AuthoredCard[]
 }

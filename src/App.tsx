@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import { JourneyView } from './card/JourneyView'
 import { journeys } from './rules/journeys'
@@ -15,8 +14,7 @@ import { summarise, validateAll } from './rules/validate'
  */
 export function App() {
   const store = useCardSet()
-  const [journeyId, setJourneyId] = useState(journeys[0].id)
-  const journey = journeys.find((j) => j.id === journeyId) ?? journeys[0]
+  const journey = journeys.find((j) => j.id === store.set.journeyId) ?? journeys[0]
   const coverage = summarise(validateAll(store.set))
   const blocked = coverage.failing.length > 0
 
@@ -69,16 +67,6 @@ export function App() {
                 Desktop
               </button>
             </div>
-            <label className="page__control">
-              Journey
-              <select value={journeyId} onChange={(e) => setJourneyId(e.target.value)}>
-                {journeys.map((j) => (
-                  <option key={j.id} value={j.id}>
-                    {j.name}
-                  </option>
-                ))}
-              </select>
-            </label>
             <span className="page__gate" data-blocked={blocked || undefined}>
               {blocked ? `Blocked · ${coverage.failing.length}/${coverage.total}` : `Ready · ${coverage.total} checked`}
             </span>

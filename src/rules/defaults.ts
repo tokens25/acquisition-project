@@ -64,6 +64,7 @@ export const defaultSet: CardSet = {
   ],
   campaigns: [{ code: 'wc26', label: 'World Cup 2026' }],
   context: { market: 'IE' },
+  journeyId: 'hero-signup',
   device: 'desktop',
   cards: [
     card({

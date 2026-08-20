@@ -6,6 +6,7 @@ import type { AddOnType, AuthoredCard, CardPatch } from '../rules/content'
 import { marketFor, resolveCard } from '../rules/resolve'
 import { summarise, validateAll, validateContext } from '../rules/validate'
 import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
+import { journeys } from '../rules/journeys'
 import { BASE_MARKET, type CardSetStore } from './useCardSet'
 
 const ADDON_TYPES: { value: AddOnType; label: string }[] = [
@@ -25,7 +26,8 @@ const ADDON_TYPES: { value: AddOnType; label: string }[] = [
  * market's difference from it.
  */
 export function SetEditor({ store }: { store: CardSetStore }) {
-  const { set, context, editingBase, setContext, reset, exportJson, importJson, importError } = store
+  const { set, context, editingBase, setContext, updateSet, reset, exportJson, importJson, importError } =
+    store
   const [openCard, setOpenCard] = useState(set.cards[0]?.id ?? '')
 
   const results = validateAll(set)
@@ -93,11 +95,16 @@ export function SetEditor({ store }: { store: CardSetStore }) {
           ]}
           onChange={(v) => setContext({ ...context, market: v })}
         />
+        <SelectField
+          label="Journey"
+          value={set.journeyId}
+          options={journeys.map((j) => ({ value: j.id, label: j.name }))}
+          onChange={(v) => updateSet({ journeyId: v })}
+        />
       </FieldGroup>
 
-      <p className="ed-scope">Tiers</p>
-
-      <div className="ed-tabs">
+      <FieldGroup title="Tiers">
+        <div className="ed-tabs">
         {set.cards.map((c) => (
           <button
             key={c.id}
@@ -110,7 +117,8 @@ export function SetEditor({ store }: { store: CardSetStore }) {
             {resolveCard(c, context).planName || c.id}
           </button>
         ))}
-      </div>
+        </div>
+      </FieldGroup>
 
       {set.cards
         .filter((c) => c.id === openCard)
