@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { CadenceOffer, CardSet, Context, Tier, TierPatch } from '../rules/content'
 import { DIRECT } from '../rules/content'
 import { defaultSet } from '../rules/defaults'
+import { adaptEngineContent, isEngineContent } from '../rules/adapt'
 import { findOverride, resolveOffer } from '../rules/resolve'
 
 const STORAGE_KEY = 'acquisition-card-set-v3'
@@ -62,11 +63,14 @@ export interface CardSetStore {
   exportJson: () => void
   importJson: (file: File) => Promise<void>
   importError: string | null
+  /** Assumptions the adapter had to make, surfaced rather than swallowed. */
+  importNotes: string[]
 }
 
 export function useCardSet(): CardSetStore {
   const [set, setSet] = useState<CardSet>(read)
   const [importError, setImportError] = useState<string | null>(null)
+  const [importNotes, setImportNotes] = useState<string[]>([])
 
   useEffect(() => {
     try {
@@ -174,9 +178,22 @@ export function useCardSet(): CardSetStore {
     URL.revokeObjectURL(url)
   }, [set])
 
+  /**
+   * Accepts our own export, or the engineering-side one — that export is
+   * recognisable by its `cadenceOffers` key, and is adapted on the way in so
+   * their content needs no manual step to reach the renderer.
+   */
   const importJson = useCallback(async (file: File) => {
     try {
-      setSet(hydrate(JSON.parse(await file.text())))
+      const parsed: unknown = JSON.parse(await file.text())
+      if (isEngineContent(parsed)) {
+        const { set: adapted, notes } = adaptEngineContent(parsed)
+        setSet(adapted)
+        setImportNotes(notes)
+      } else {
+        setSet(hydrate(parsed))
+        setImportNotes([])
+      }
       setImportError(null)
     } catch (err) {
       setImportError(err instanceof Error ? err.message : 'Could not read that file')
@@ -197,6 +214,7 @@ export function useCardSet(): CardSetStore {
     exportJson,
     importJson,
     importError,
+    importNotes,
   }
 }
 

@@ -146,3 +146,15 @@
   color: var(--color-accent-error-text);
   font-size: var(--font-size-caption-xs);
 }
+
+/* Adapter assumptions — shown after an import so nothing is silently guessed. */
+.page__notes {
+  max-inline-size: 1600px;
+  margin: 0 auto var(--space-16);
+  padding-inline-start: var(--space-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--color-accent-warning-text);
+  font-size: var(--font-size-caption-xs);
+}

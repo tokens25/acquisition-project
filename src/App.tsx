@@ -62,6 +62,13 @@ export function App() {
       {store.importError && (
         <p className="page__error">Import failed: {store.importError}</p>
       )}
+      {store.importNotes.length > 0 && (
+        <ul className="page__notes">
+          {store.importNotes.map((n) => (
+            <li key={n}>{n}</li>
+          ))}
+        </ul>
+      )}
 
       <div className="page__split">
         <div className="page__pane">
