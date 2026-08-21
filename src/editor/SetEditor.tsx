@@ -421,8 +421,8 @@ function OrphanFeatures({ store }: { store: CardSetStore }) {
   return (
     <FieldGroup title="Unused feature lines">
       <p className="ed-field__hint">
-        Still offered in the picker, used by no tier. Nothing references them, so removing one
-        cannot leave a tier pointing at a line that is gone.
+        These lines appear in the Feature dropdown, but no plan uses them. Deleting one changes
+        nothing on any card.
       </p>
       {orphans.map((feature) => (
         <div className="ed-row" key={feature.id}>
