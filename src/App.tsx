@@ -2,6 +2,7 @@ import './App.css'
 
 import { useState } from 'react'
 import { StepPreview } from './card/StepPreview'
+import { Assistant } from './editor/Assistant'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
 
@@ -120,6 +121,7 @@ export function App() {
 
       <div className="page__split">
         <div className="page__pane">
+          <Assistant store={store} />
           <SetEditor store={store} />
         </div>
 

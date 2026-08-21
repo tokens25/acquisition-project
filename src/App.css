@@ -31,6 +31,9 @@
   align-items: start;
 }
 .page__pane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
   min-inline-size: 0;
 }
 

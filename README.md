@@ -126,3 +126,25 @@ first the write is refused rather than silently overwriting their work.
 
 `scripts/seed-content-file.sh` regenerates the file from the shipped defaults.
 It discards whatever is published, so it is for a fresh start only.
+
+## Content assistant
+
+`/api/assistant` proxies the Anthropic Messages API so the key stays on the
+server. Set `ANTHROPIC_API_KEY` on the Vercel project and the panel appears;
+without it the panel says so rather than looking broken. `ANTHROPIC_MODEL`
+overrides the default.
+
+The model is given the current content and the rules that govern it — the
+two-line description budget, one Ultimate per set, features as catalogue ids,
+prices as commercial facts it must not invent. It answers with prose, a
+proposal, or both.
+
+**It cannot change anything.** A proposal comes back as a list of specific
+edits, shown against what is there now, and applying it is a separate click.
+Applied changes go through the same store methods the form uses, so a
+market-scoped edit becomes an override exactly as a typed one would — and the
+publish gate then checks it across every market.
+
+**It sends content to Anthropic.** Every request includes the current content
+set. That is a data-sharing decision for the team to make deliberately, not a
+technical detail: don't set the key until someone has agreed to it.

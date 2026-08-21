@@ -1,0 +1,185 @@
+/* The assistant panel. Sits beside the form, below it on a narrow screen. */
+.as {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  gap: var(--space-12);
+  padding: var(--space-16);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-1);
+}
+.as--off {
+  padding: var(--space-12) var(--space-16);
+}
+.as__off {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+.as__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.as__title {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+}
+.as__hint {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+.as__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  min-block-size: 120px;
+  max-block-size: 420px;
+  overflow-y: auto;
+}
+.as__empty {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+.as__empty p {
+  margin: 0 0 var(--space-6);
+}
+.as__empty ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.as__empty button {
+  padding: var(--space-6) var(--space-12);
+  border: var(--border-1) dashed var(--color-border-full-color-default);
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  text-align: start;
+  cursor: pointer;
+}
+.as__empty button:hover {
+  background: var(--color-surface-container-2);
+}
+.as__turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.as__turn[data-role='user'] .as__text {
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+}
+.as__text {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.as__busy,
+.as__error {
+  margin: 0;
+  font-size: var(--font-size-caption-xs);
+}
+.as__busy {
+  color: var(--color-text-tertiary);
+}
+.as__error {
+  color: var(--color-accent-error-text);
+}
+.as__proposal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-12);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-12);
+}
+.as__proposal[data-applied] {
+  opacity: 0.6;
+}
+.as__proposal-summary {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+}
+.as__changes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-caption-xs);
+}
+.as__changes code {
+  color: var(--color-text-secondary);
+}
+.as__scope {
+  color: var(--color-text-tertiary);
+}
+.as__value {
+  margin-block-start: var(--space-2);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+.as__apply {
+  align-self: start;
+  padding: var(--space-6) var(--space-12);
+  border: var(--border-1) solid var(--color-brand-primary);
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-label-xs);
+  cursor: pointer;
+}
+.as__apply:disabled {
+  border-color: var(--color-border-full-color-subtle);
+  color: var(--color-text-tertiary);
+  cursor: default;
+}
+.as__compose {
+  display: flex;
+  gap: var(--space-8);
+  align-items: end;
+}
+.as__input {
+  flex: 1;
+  padding: var(--space-8) var(--space-12);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-default);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-sm);
+  resize: vertical;
+}
+.as__send {
+  padding: var(--space-8) var(--space-16);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-label-xs);
+  cursor: pointer;
+}
+.as__send:disabled {
+  color: var(--color-text-tertiary);
+  cursor: default;
+}
