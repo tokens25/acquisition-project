@@ -80,7 +80,7 @@ export const defaultSet: CardSet = {
   campaigns: [{ code: 'wc26', label: 'World Cup 2026' }],
   channels: [
     { code: DIRECT, label: 'Direct' },
-    { code: 'movistar', label: 'Movistar' },
+    { code: 'movistar', label: 'Movistar', markets: ['ES'] },
   ],
   cadences: CADENCES,
 

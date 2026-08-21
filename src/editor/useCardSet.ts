@@ -3,6 +3,9 @@ import type { CadenceOffer, CardSet, Context, Tier, TierPatch } from '../rules/c
 import { DIRECT } from '../rules/content'
 import { defaultSet } from '../rules/defaults'
 import { adaptEngineContent, isEngineContent } from '../rules/adapt'
+import type { Journey } from '../rules/journey'
+import { journeysFor } from '../rules/journey'
+import { journeys } from '../rules/journeys'
 import { findOverride, resolveOffer } from '../rules/resolve'
 
 const STORAGE_KEY = 'acquisition-card-set-v3'
@@ -52,6 +55,8 @@ export interface CardSetStore {
   context: Context
   editingBase: boolean
   setContext: (context: Context) => void
+  /** The journey that runs in this context — never one that doesn't. */
+  journey: Journey
   updateSet: (patch: Partial<CardSet>) => void
   /** Writes to the base tier, or to this context's override. */
   updateTier: (id: string, patch: TierPatch) => void
@@ -84,7 +89,14 @@ export function useCardSet(): CardSetStore {
   const editingBase = isBaseContext(context)
 
   const setContext = useCallback((next: Context) => {
-    setSet((prev) => ({ ...prev, context: next }))
+    setSet((prev) => {
+      // A partner storefront belongs to its markets. Carrying `movistar` into
+      // Germany would resolve tiers against a shop that isn't there — so the
+      // pair is made unreachable rather than merely hidden from the picker.
+      const channel = prev.channels.find((c) => c.code === next.channel)
+      const operates = !channel?.markets || channel.markets.includes(next.market)
+      return { ...prev, context: operates ? next : { ...next, channel: DIRECT } }
+    })
   }, [])
 
   const updateSet = useCallback((patch: Partial<CardSet>) => {
@@ -200,11 +212,20 @@ export function useCardSet(): CardSetStore {
     }
   }, [])
 
+  // Resolved here, not in each consumer: the editor and the preview must agree
+  // on which journey is on screen, and two copies of this line would drift.
+  const journey =
+    journeysFor(journeys, context).find((j) => j.id === set.journeyId) ??
+    journeysFor(journeys, context)[0] ??
+    journeys[0]
+
   return {
     set,
     context,
     editingBase,
     setContext,
+    journey,
+
     updateSet,
     updateTier,
     updateOffer,

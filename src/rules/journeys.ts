@@ -177,4 +177,22 @@ export const journeys: Journey[] = [
   ),
 ]
 
+journeys.push({
+  id: 'movistar-partner',
+  name: 'Movistar — partner storefront',
+  audience: 'anonymous',
+  // Scoped by channel, not market: Movistar operates in Spain, so the channel
+  // already carries the country. Naming ES here too would let the two drift.
+  when: { channel: 'movistar' },
+  entry: {
+    cta: 'Add DAZN to your plan',
+    section: 'Partner storefront',
+    figmaFrame: '—',
+    figmaSection: '—',
+  },
+  seeds: ['zip'],
+  steps: steps(),
+})
+
 export const signUpJourney = journeys[0]
+

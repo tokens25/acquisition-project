@@ -1,6 +1,5 @@
 import './App.css'
 import { StepPreview } from './card/StepPreview'
-import { journeys } from './rules/journeys'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
 
@@ -13,7 +12,7 @@ import { useCardSet } from './editor/useCardSet'
  */
 export function App() {
   const store = useCardSet()
-  const journey = journeys.find((j) => j.id === store.set.journeyId) ?? journeys[0]
+  const { journey } = store
 
   // "IE" is a market code, not something to show a person. Resolve it to the
   // market's own label, and the campaign's, so the heading reads as a place.

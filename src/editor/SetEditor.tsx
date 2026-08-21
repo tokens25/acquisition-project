@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { logoArtwork } from '../card/assets'
 import type { AddOnPurchaseType, CardSet, Tier, TierPatch } from '../rules/content'
 import { DIRECT } from '../rules/content'
-import { resolveJourney } from '../rules/journey'
+import { journeysFor, resolveJourney } from '../rules/journey'
 import { journeys } from '../rules/journeys'
 import { marketFor, resolveTier } from '../rules/resolve'
 import { summarise, validateAll, validateContext } from '../rules/validate'
@@ -25,10 +25,18 @@ const PURCHASE_TYPES: { value: AddOnPurchaseType; label: string }[] = [
  * cadence it is not sold at has no row at all.
  */
 export function SetEditor({ store }: { store: CardSetStore }) {
-  const { set, context, editingBase, setContext, updateSet } = store
+  const { set, context, editingBase, setContext, updateSet, journey } = store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
-  const journey = journeys.find((j) => j.id === set.journeyId) ?? journeys[0]
+  // A storefront belongs to its markets, and a journey to its storefront — so
+  // both pickers narrow as the market changes, rather than offering a flow that
+  // does not run here and quietly previewing content against it.
+  const channelsHere = set.channels.filter(
+    (c) => !c.markets || c.markets.includes(context.market),
+  )
+  const journeysHere = journeysFor(journeys, context)
+  const hiddenJourneys = journeys.length - journeysHere.length
+
   const steps = resolveJourney(journey, context)
   const selectedStep = steps.find((s) => s.id === set.stepId) ?? steps[0]
   const editingPlans = selectedStep?.renderer === 'plans'
@@ -79,7 +87,7 @@ export function SetEditor({ store }: { store: CardSetStore }) {
           label="Storefront"
           hint={context.channel === DIRECT ? 'Direct sells live tiers only.' : 'Partners also carry direct tiers flagged visible to them, legacy or not.'}
           value={context.channel}
-          options={set.channels.map((c) => ({ value: c.code, label: c.label }))}
+          options={channelsHere.map((c) => ({ value: c.code, label: c.label }))}
           onChange={(v) => setContext({ ...context, channel: v })}
         />
         <SelectField
@@ -91,8 +99,11 @@ export function SetEditor({ store }: { store: CardSetStore }) {
         />
         <SelectField
           label="Journey"
-          value={set.journeyId}
-          options={journeys.map((j) => ({ value: j.id, label: j.name }))}
+          hint={hiddenJourneys > 0
+            ? `${hiddenJourneys} ${hiddenJourneys === 1 ? 'journey does' : 'journeys do'} not run in this market or storefront.`
+            : undefined}
+          value={journey.id}
+          options={journeysHere.map((j) => ({ value: j.id, label: j.name }))}
           onChange={(v) => updateSet({ journeyId: v })}
         />
       </FieldGroup>

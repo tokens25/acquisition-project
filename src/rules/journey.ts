@@ -82,6 +82,28 @@ export interface Journey {
   /** What the entry already knows. Seeded steps drop out. */
   seeds: Seed[]
   steps: Step[]
+  /**
+   * Where this journey runs. Omitted keys are wildcards, exactly as on a step.
+   *
+   * Partner journeys rarely need one: a channel belongs to a market, so a
+   * Movistar journey is Spanish by construction. Stating it twice invites the
+   * two to disagree. Reach for this when a DIRECT journey genuinely differs —
+   * an unlaunched market, a country with its own purchase flow.
+   */
+  when?: Partial<Pick<Context, 'market' | 'channel'>>
+}
+
+/** Whether a journey runs in this context at all. */
+export function journeyApplies(journey: Journey, context: Context): boolean {
+  const { market, channel } = journey.when ?? {}
+  if (market !== undefined && market !== context.market) return false
+  if (channel !== undefined && channel !== context.channel) return false
+  return true
+}
+
+/** Journeys available here, in declaration order. */
+export function journeysFor(all: Journey[], context: Context): Journey[] {
+  return all.filter((j) => journeyApplies(j, context))
 }
 
 export interface ResolvedStep {

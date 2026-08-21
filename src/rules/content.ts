@@ -151,6 +151,12 @@ export interface CampaignConfig {
 export interface ChannelConfig {
   code: string
   label: string
+  /**
+   * Markets this storefront operates in. Omitted means everywhere, which is
+   * only true of `direct` — a partner belongs to its countries, and scoping the
+   * channel once beats repeating the market on every journey it owns.
+   */
+  markets?: string[]
 }
 
 /** A set is the unit S-1, S-2 and S-3 are evaluated over. */
