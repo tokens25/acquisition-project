@@ -3,11 +3,28 @@ import type { ChangeEvent, ReactNode } from 'react'
 interface BaseProps {
   label: ReactNode
   hint?: string
+  /**
+   * Why this control changes nothing in the context on screen.
+   *
+   * Left editable, not disabled: a value that does nothing here still does
+   * something somewhere, and that is usually the reason it is being set. What
+   * it must not do is look live while having no effect — the preview would
+   * simply not move, and the honest reading of that is that the app is broken.
+   */
+  inert?: string
+}
+
+/** Renders a control's hint, or the reason it is inert in this context. */
+function Foot({ hint, inert }: { hint?: string; inert?: string }) {
+  if (inert) return <span className="ed-field__inert">{inert}</span>
+  if (hint) return <span className="ed-field__hint">{hint}</span>
+  return null
 }
 
 export function TextField({
   label,
   hint,
+  inert,
   value,
   onChange,
   placeholder,
@@ -17,7 +34,7 @@ export function TextField({
   placeholder?: string
 }) {
   return (
-    <label className="ed-field">
+    <label className="ed-field" data-inert={inert ? '' : undefined}>
       <span className="ed-field__label">{label}</span>
       <input
         className="ed-field__input"
@@ -26,7 +43,7 @@ export function TextField({
         placeholder={placeholder}
         onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
       />
-      {hint && <span className="ed-field__hint">{hint}</span>}
+      <Foot hint={hint} inert={inert} />
     </label>
   )
 }
@@ -34,12 +51,13 @@ export function TextField({
 export function TextArea({
   label,
   hint,
+  inert,
   value,
   onChange,
   rows = 3,
 }: BaseProps & { value: string; onChange: (value: string) => void; rows?: number }) {
   return (
-    <label className="ed-field">
+    <label className="ed-field" data-inert={inert ? '' : undefined}>
       <span className="ed-field__label">{label}</span>
       <textarea
         className="ed-field__input ed-field__input--area"
@@ -47,7 +65,7 @@ export function TextArea({
         value={value}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
       />
-      {hint && <span className="ed-field__hint">{hint}</span>}
+      <Foot hint={hint} inert={inert} />
     </label>
   )
 }
@@ -55,6 +73,7 @@ export function TextArea({
 export function SelectField<T extends string>({
   label,
   hint,
+  inert,
   value,
   options,
   onChange,
@@ -64,7 +83,7 @@ export function SelectField<T extends string>({
   onChange: (value: T) => void
 }) {
   return (
-    <label className="ed-field">
+    <label className="ed-field" data-inert={inert ? '' : undefined}>
       <span className="ed-field__label">{label}</span>
       <select
         className="ed-field__input"
@@ -77,7 +96,7 @@ export function SelectField<T extends string>({
           </option>
         ))}
       </select>
-      {hint && <span className="ed-field__hint">{hint}</span>}
+      <Foot hint={hint} inert={inert} />
     </label>
   )
 }
@@ -85,11 +104,12 @@ export function SelectField<T extends string>({
 export function CheckField({
   label,
   hint,
+  inert,
   checked,
   onChange,
 }: BaseProps & { checked: boolean; onChange: (checked: boolean) => void }) {
   return (
-    <label className="ed-field ed-field--check">
+    <label className="ed-field ed-field--check" data-inert={inert ? '' : undefined}>
       <input
         className="ed-field__check"
         type="checkbox"
@@ -98,7 +118,7 @@ export function CheckField({
       />
       <span>
         <span className="ed-field__label">{label}</span>
-        {hint && <span className="ed-field__hint">{hint}</span>}
+        <Foot hint={hint} inert={inert} />
       </span>
     </label>
   )
@@ -126,6 +146,7 @@ export function FieldGroup({
 export function NumberField({
   label,
   hint,
+  inert,
   value,
   onChange,
   step = 1,
@@ -139,7 +160,7 @@ export function NumberField({
   max?: number
 }) {
   return (
-    <label className="ed-field">
+    <label className="ed-field" data-inert={inert ? '' : undefined}>
       <span className="ed-field__label">{label}</span>
       <input
         className="ed-field__input"
@@ -153,7 +174,7 @@ export function NumberField({
           onChange(Number.isFinite(next) ? next : 0)
         }}
       />
-      {hint && <span className="ed-field__hint">{hint}</span>}
+      <Foot hint={hint} inert={inert} />
     </label>
   )
 }

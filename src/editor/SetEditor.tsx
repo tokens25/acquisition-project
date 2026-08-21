@@ -192,6 +192,22 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
 
   const patch = (p: TierPatch) => updateTier(tier.id, p)
 
+  // Two availability controls are consulted only on one side of the direct /
+  // partner line (see filterAcquirableTiers). Naming which side keeps a control
+  // that cannot move the preview from reading as one that is broken.
+  const onDirect = context.channel === DIRECT
+  const tierChannel = resolved.channel || DIRECT
+  const statusInert = onDirect
+    ? undefined
+    : `No effect on ${context.channel} — status closes a tier on the direct storefront only. Partners carry it either way.`
+  const partnersInert =
+    tierChannel !== DIRECT
+      ? `No effect — this tier is exclusive to ${tierChannel}, so there is no direct version for a partner to carry.`
+      : onDirect
+        ? 'No effect on direct — this decides whether partner storefronts may carry the tier.'
+        : undefined
+
+
   const toggleLogo = (id: string) => {
     const has = resolved.logoTiles.includes(id)
     patch({
@@ -210,6 +226,7 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
         <SelectField
           label="Status"
           hint="Legacy closes a tier to new direct customers. Partners may still sell it."
+          inert={statusInert}
           value={resolved.status}
           options={[
             { value: 'live', label: 'Live' },
@@ -220,6 +237,7 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
         <CheckField
           label="Partners may carry this"
           hint="Only meaningful for direct tiers."
+          inert={partnersInert}
           checked={resolved.visibleToPartners}
           onChange={(v) => patch({ visibleToPartners: v })}
         />
