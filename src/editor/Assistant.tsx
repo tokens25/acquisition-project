@@ -148,10 +148,24 @@ export function Assistant({ store }: { store: CardSetStore }) {
     setTurns((prev) => prev.map((t, i) => (i === index ? { ...t, applied: true } : t)))
   }
 
+  // Switched off, not broken. The panel keeps its shape and says what it would
+  // do and what it needs — a single grey line reads as an error nobody can act
+  // on, which is how this looked the first time.
   if (unavailable) {
     return (
       <aside className="as as--off">
-        <p className="as__off">{unavailable}</p>
+        <header className="as__head">
+          <h2 className="as__title">Assistant · off</h2>
+          <p className="as__hint">
+            Upload the content spreadsheet and ask what is missing, or have the gaps drafted for
+            review. Every suggestion is applied by hand, never automatically.
+          </p>
+        </header>
+        <p className="as__off">
+          {unavailable} Add <code>ANTHROPIC_API_KEY</code> to the Vercel project to switch this on,
+          or to a local <code>.env</code> to try it here first. Note that requests send the content
+          to Anthropic.
+        </p>
       </aside>
     )
   }

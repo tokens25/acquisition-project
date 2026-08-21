@@ -111,7 +111,7 @@ export default async function handler(request: Request): Promise<Response> {
 
   const key = process.env.ANTHROPIC_API_KEY
   if (!key) {
-    return json({ configured: false, reason: 'ANTHROPIC_API_KEY is not set on this deployment.' })
+    return json({ configured: false, reason: 'ANTHROPIC_API_KEY is not set.' })
   }
   if (request.method === 'GET') return json({ configured: true, model: MODEL })
   if (request.method !== 'POST') return json({ error: `${request.method} is not supported.` }, 405)

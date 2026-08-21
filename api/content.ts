@@ -81,7 +81,7 @@ export default async function handler(request: Request): Promise<Response> {
     })
 
   if (!token) {
-    return json({ configured: false, reason: 'GITHUB_TOKEN is not set on this deployment.' }, 200)
+    return json({ configured: false, reason: 'GITHUB_TOKEN is not set.' }, 200)
   }
 
   try {
