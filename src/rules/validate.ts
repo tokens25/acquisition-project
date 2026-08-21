@@ -1,14 +1,13 @@
-import type { AuthoredCard, CardSet, Context } from './content'
+import type { CadenceOffer, CardSet, Context, Tier } from './content'
 import { deriveCard } from './derive'
-import { findFeature } from './features'
-import { allContexts, marketFor, resolveSet } from './resolve'
+import { allContexts, marketFor, resolveOffer, resolveSet, resolveTier } from './resolve'
 
 /**
  * The rules that can reject a publish.
  *
- * Set-level rules (§2) depend on the cards rendered beside them, so they are
- * evaluated over a resolved set — and because a market override can change a
- * switch, they must be evaluated for EVERY market, not only the one on screen.
+ * Set-level rules depend on the cards rendered beside them, so they run over a
+ * resolved set — and because a market override can flip a switch, they run for
+ * every context, not only the one on screen.
  */
 
 export type Severity = 'error' | 'warning'
@@ -17,7 +16,7 @@ export interface Violation {
   rule: string
   severity: Severity
   message: string
-  cardId?: string
+  tierId?: string
 }
 
 export interface ContextResult {
@@ -25,70 +24,109 @@ export interface ContextResult {
   violations: Violation[]
 }
 
-const label = (c: Context) => (c.campaign ? `${c.market} · ${c.campaign}` : c.market)
+export const contextLabel = (c: Context) =>
+  [c.market, c.channel, c.cadence, c.campaign].filter(Boolean).join(' · ')
 
-/** S-1 · Max one Ultimate card per set. Zero is valid. */
-function checkS1(cards: AuthoredCard[]): Violation[] {
-  const ultimates = cards.filter((c) => c.ultimate)
+/** S-1 · Max one Ultimate per set. Zero is valid. */
+function checkS1(tiers: Tier[]): Violation[] {
+  const ultimates = tiers.filter((t) => t.ultimate)
   if (ultimates.length <= 1) return []
   return [
     {
       rule: 'S-1',
       severity: 'error',
-      message: `${ultimates.length} Ultimate cards — only one is allowed. Two gold-stroked cards cancel the signal out.`,
+      message: `${ultimates.length} Ultimate tiers — only one is allowed. Two gold-stroked cards cancel the signal out.`,
     },
   ]
 }
 
-function checkCard(card: AuthoredCard, set: CardSet, context: Context): Violation[] {
+/** Offer-level rules, from the engineering schema. */
+function checkOffer(offer: CadenceOffer, tier: Tier): Violation[] {
   const out: Violation[] = []
-  const market = marketFor(set, context.market)
-  const d = deriveCard(card, market)
+  const id = tier.id
 
-  if (!card.planName.trim()) {
-    out.push({ rule: 'C-name', severity: 'error', message: 'Plan Name is required — it feeds the header, the CTA and the add-on label.', cardId: card.id })
+  if (!(offer.standardPrice > 0)) {
+    out.push({ rule: 'O-price', severity: 'error', message: `No price for ${offer.cadence}.`, tierId: id })
   }
-  if (!card.description.trim()) {
-    out.push({ rule: 'C-desc', severity: 'error', message: 'Description is required.', cardId: card.id })
+  if (offer.discount && (offer.introPrice === null || !(offer.introPrice > 0))) {
+    out.push({ rule: 'O-intro', severity: 'error', message: 'Discount is on but no discount price is set.', tierId: id })
   }
-  if (card.discount && card.introPrice >= card.standardPrice) {
-    out.push({ rule: 'C-price', severity: 'error', message: 'Intro price must be below the standard price, or the card strikes a price identical to the one beside it.', cardId: card.id })
+  if (offer.discount && offer.introPrice !== null && offer.introPrice >= offer.standardPrice) {
+    out.push({ rule: 'O-intro-high', severity: 'error', message: 'Discount price must be below the standard price, or the card strikes a price identical to the one beside it.', tierId: id })
   }
-  if (card.discount && card.introMonths < 1) {
-    out.push({ rule: 'C-intro', severity: 'error', message: 'Intro period must be at least 1 month.', cardId: card.id })
+  if (offer.addOnId && offer.includedAddOnIds.includes(offer.addOnId)) {
+    out.push({ rule: 'O-addon-both', severity: 'error', message: `"${offer.addOnId}" is both sold and bundled on the same offer — a bundled benefit is never independently purchasable.`, tierId: id })
   }
-  if (card.logoTotal < card.logos.length) {
-    out.push({ rule: 'C-logos', severity: 'error', message: `Total competitions (${card.logoTotal}) is fewer than the ${card.logos.length} logos supplied.`, cardId: card.id })
+  if (offer.addOnId && !offer.addOnPurchaseType) {
+    out.push({ rule: 'O-addon-type', severity: 'error', message: 'A sellable add-on needs a purchase type.', tierId: id })
   }
-  if (card.logos.length < d.visibleLogoCount) {
-    out.push({ rule: 'C-logos-supply', severity: 'warning', message: `${d.visibleLogoCount} tiles will render but only ${card.logos.length} logos are supplied.`, cardId: card.id })
+  if (!offer.addOnId && (offer.addOnPurchaseType || offer.addOnDiscountPercent)) {
+    out.push({ rule: 'O-addon-orphan', severity: 'error', message: 'Purchase type set with no add-on to sell.', tierId: id })
   }
-  if (card.features.length === 0) {
-    out.push({ rule: 'C-features', severity: 'warning', message: 'No features listed.', cardId: card.id })
-  }
-  if (card.features.some((f) => !(f.label ?? findFeature(f.featureId)?.defaultLabel ?? '').trim())) {
-    out.push({ rule: 'C-features-empty', severity: 'error', message: 'A feature row is empty.', cardId: card.id })
-  }
-  if (card.addOn.enabled && !card.addOn.title.trim()) {
-    out.push({ rule: 'C-addon', severity: 'error', message: 'Add-on is shown but has no title.', cardId: card.id })
+  if (
+    offer.addOnPurchaseType === 'discount_code' &&
+    !(offer.addOnDiscountPercent && offer.addOnDiscountPercent > 0 && offer.addOnDiscountPercent < 100)
+  ) {
+    out.push({ rule: 'O-addon-pct', severity: 'error', message: 'A discount-code add-on needs a percentage between 0 and 100.', tierId: id })
   }
   return out
 }
 
-/** Validates one context. */
-export function validateContext(set: CardSet, context: Context): Violation[] {
-  const cards = resolveSet(set, context)
-  return [...checkS1(cards), ...cards.flatMap((c) => checkCard(c, set, context))]
+function checkTier(set: CardSet, tier: Tier, offer: CadenceOffer, context: Context): Violation[] {
+  const out: Violation[] = []
+  const d = deriveCard(set, tier, offer, marketFor(set, context.market), context)
+
+  if (!tier.planName.trim()) {
+    out.push({ rule: 'C-name', severity: 'error', message: 'Plan Name is required — it feeds the header, the CTA and the add-on label.', tierId: tier.id })
+  }
+  if (!tier.description.trim()) {
+    out.push({ rule: 'C-desc', severity: 'error', message: 'Description is required.', tierId: tier.id })
+  }
+  if (tier.features.length === 0) {
+    out.push({ rule: 'C-features', severity: 'warning', message: 'No features listed.', tierId: tier.id })
+  }
+  if (tier.logoTotal < tier.logoTiles.length) {
+    out.push({ rule: 'C-logos', severity: 'error', message: `Total competitions (${tier.logoTotal}) is fewer than the ${tier.logoTiles.length} logos supplied.`, tierId: tier.id })
+  }
+
+  // Unknown catalogue ids render a placeholder in preview but never publish.
+  for (const ref of d.missingRefs) {
+    out.push({ rule: 'A-missing', severity: 'error', message: `${ref} is not in its catalogue — no artwork exists for it yet.`, tierId: tier.id })
+  }
+  const deprecated = [...d.logos, ...d.features].filter((x) => x.state === 'deprecated')
+  if (deprecated.length) {
+    out.push({ rule: 'A-deprecated', severity: 'warning', message: `${deprecated.length} retired asset(s) still in use — they render, but should be swapped.`, tierId: tier.id })
+  }
+
+  return [...out, ...checkOffer(offer, tier)]
 }
 
-/**
- * Validates every market and campaign.
- *
- * This is the coverage half of review: machines check the whole matrix, so a
- * person only has to look at what changed.
- */
+export function validateContext(set: CardSet, context: Context): Violation[] {
+  const cards = resolveSet(set, context)
+  return [
+    ...checkS1(cards.map((c) => c.tier)),
+    ...cards.flatMap(({ tier, offer }) => checkTier(set, tier, offer, context)),
+  ]
+}
+
+/** Offers whose tier no longer exists, checked once rather than per context. */
+function checkOrphans(set: CardSet): Violation[] {
+  const ids = new Set(set.tiers.map((t) => t.id))
+  return set.offers
+    .filter((o) => !ids.has(o.tierId))
+    .map((o) => ({
+      rule: 'O-orphan',
+      severity: 'error' as const,
+      message: `Offer "${o.id}" points at a tier that does not exist.`,
+    }))
+}
+
 export function validateAll(set: CardSet): ContextResult[] {
-  return allContexts(set).map((context) => ({ context, violations: validateContext(set, context) }))
+  const orphans = checkOrphans(set)
+  return allContexts(set).map((context) => ({
+    context,
+    violations: [...orphans, ...validateContext(set, context)],
+  }))
 }
 
 export const hasErrors = (violations: Violation[]) => violations.some((v) => v.severity === 'error')
@@ -100,9 +138,9 @@ export function summarise(results: ContextResult[]) {
     total: results.length,
     failing,
     warning,
-    failingLabels: failing.map((r) => label(r.context)),
-    warningLabels: warning.map((r) => label(r.context)),
+    failingLabels: failing.map((r) => contextLabel(r.context)),
+    warningLabels: warning.map((r) => contextLabel(r.context)),
   }
 }
 
-export { label as contextLabel }
+export { resolveTier, resolveOffer }

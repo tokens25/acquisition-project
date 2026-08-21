@@ -1,14 +1,24 @@
-import type { AuthoredCard, CardPatch, CardSet, Context, Override } from './content'
+import type {
+  AddOnEntry,
+  CadenceOffer,
+  CardSet,
+  CatalogEntry,
+  Context,
+  FeatureEntry,
+  Override,
+  Tier,
+  TierPatch,
+} from './content'
+import { DIRECT } from './content'
 
 /**
- * Base plus differences.
+ * Base plus differences, then joined to a way of paying.
  *
- * A card is authored once. Markets and campaigns carry sparse patches, applied
- * in order of specificity so you write a default and a dozen deltas rather than
- * one record per permutation.
+ * A tier is authored once. Markets and campaigns carry sparse patches applied
+ * by specificity; pricing is a separate join, because the same plan is sold at
+ * different prices depending on cadence and is often not sold at some at all.
  */
 
-/** An override matches when every constraint it states is satisfied. */
 export function matches(override: Override, context: Context): boolean {
   const { market, campaign } = override.when
   if (market !== undefined && market !== context.market) return false
@@ -16,37 +26,21 @@ export function matches(override: Override, context: Context): boolean {
   return true
 }
 
-/** Number of constraints — the base ({}) scores 0 and always applies first. */
 export function specificity(override: Override): number {
   return Object.values(override.when).filter((v) => v !== undefined).length
 }
 
-function applyPatch(card: AuthoredCard, patch: CardPatch): AuthoredCard {
+function applyPatch(tier: Tier, patch: TierPatch): Tier {
   // A sparse patch states what it changes. A key present but undefined is not a
-  // change — spreading it would erase the base value, which is how a migration
-  // that set `features: undefined` blanked every card's feature list.
+  // change — spreading it would erase the base value.
   const stated = Object.fromEntries(
     Object.entries(patch).filter(([, v]) => v !== undefined),
-  ) as Partial<AuthoredCard>
-
-  return {
-    ...card,
-    ...stated,
-    // Nested objects merge rather than replace, so an override can change the
-    // add-on's price without restating its title.
-    addOn: patch.addOn ? { ...card.addOn, ...patch.addOn } : card.addOn,
-  }
+  ) as Partial<Tier>
+  return { ...tier, ...stated }
 }
 
-/**
- * Resolves a card for a context.
- *
- * Ordering is (specificity, priority, declaration order). The last two make it
- * deterministic — two equally specific overrides must never depend on which
- * happened to be evaluated first.
- */
-export function resolveCard(card: AuthoredCard, context: Context): AuthoredCard {
-  const applicable = card.overrides
+export function resolveTier(tier: Tier, context: Context): Tier {
+  return tier.overrides
     .map((o, index) => ({ o, index }))
     .filter(({ o }) => matches(o, context))
     .sort((a, b) => {
@@ -56,38 +50,129 @@ export function resolveCard(card: AuthoredCard, context: Context): AuthoredCard 
       if (byPriority !== 0) return byPriority
       return a.index - b.index
     })
-
-  return applicable.reduce((acc, { o }) => applyPatch(acc, o.patch), card)
+    .reduce((acc, { o }) => applyPatch(acc, o.patch), tier)
 }
 
-export function resolveSet(set: CardSet, context: Context = set.context): AuthoredCard[] {
-  return set.cards.map((card) => resolveCard(card, context))
+/**
+ * The offer for a tier at this cadence, in this market.
+ *
+ * A market-scoped offer beats an unscoped one. Returning null means the tier is
+ * not sold this way here — which is a fact to respect, not a gap to fill.
+ */
+export function resolveOffer(
+  set: CardSet,
+  tierId: string,
+  context: Context,
+): CadenceOffer | null {
+  const candidates = set.offers.filter(
+    (o) => o.tierId === tierId && o.cadence === context.cadence,
+  )
+  const scoped = candidates.find((o) => o.market === context.market)
+  return scoped ?? candidates.find((o) => o.market === undefined) ?? null
 }
+
+/**
+ * Which tiers a storefront may sell to new customers.
+ *
+ * `status` and partner visibility are separate dimensions. Direct enforces
+ * live/legacy on itself; a partner storefront carries its own exclusive tiers
+ * plus any direct tier flagged visible to partners — regardless of status,
+ * because a partner may still be selling what DAZN has closed on its own.
+ */
+export function filterAcquirableTiers(
+  tiers: Tier[],
+  { channel = DIRECT, includeLegacy = false }: { channel?: string; includeLegacy?: boolean } = {},
+): Tier[] {
+  const onDirect = channel === DIRECT
+  return tiers.filter((tier) => {
+    const tierChannel = tier.channel || DIRECT
+    if (tierChannel === channel) {
+      if (onDirect && !includeLegacy && tier.status !== 'live') return false
+      return true
+    }
+    if (!onDirect && tierChannel === DIRECT) return tier.visibleToPartners === true
+    return false
+  })
+}
+
+export interface ResolvedCard {
+  tier: Tier
+  offer: CadenceOffer
+}
+
+/** Tiers this storefront sells at this cadence, in display order. */
+export function resolveSet(set: CardSet, context: Context = set.context): ResolvedCard[] {
+  return filterAcquirableTiers(set.tiers, { channel: context.channel })
+    .map((tier) => ({ tier: resolveTier(tier, context), offer: resolveOffer(set, tier.id, context) }))
+    .filter((r): r is ResolvedCard => r.offer !== null)
+    .sort((a, b) => a.tier.displayOrder - b.tier.displayOrder)
+}
+
+/** Tiers dropped from this view, and why — for the preview's blast radius. */
+export function excludedTiers(set: CardSet, context: Context = set.context) {
+  const acquirable = new Set(
+    filterAcquirableTiers(set.tiers, { channel: context.channel }).map((t) => t.id),
+  )
+  return set.tiers
+    .filter((t) => !acquirable.has(t.id) || resolveOffer(set, t.id, context) === null)
+    .map((t) => ({
+      tier: t,
+      reason: !acquirable.has(t.id)
+        ? (`not sold on ${context.channel}` as const)
+        : (`not sold ${context.cadence}` as const),
+    }))
+}
+
+/* ── Catalogue resolution ─────────────────────────────────────
+   Unknown id means no artwork exists — render a placeholder so the layout an
+   editor sees now matches what lands later, and block publish. Deprecated means
+   the artwork still exists, so keep rendering it and flag it. */
+
+export type Resolution<T> =
+  | { state: 'ok'; entry: T }
+  | { state: 'deprecated'; entry: T }
+  | { state: 'missing'; id: string }
+
+function lookup<T extends { id: string; status: 'active' | 'deprecated' }>(
+  catalog: T[],
+  id: string,
+): Resolution<T> {
+  const entry = catalog.find((e) => e.id === id)
+  if (!entry) return { state: 'missing', id }
+  return entry.status === 'deprecated' ? { state: 'deprecated', entry } : { state: 'ok', entry }
+}
+
+export const resolveLogo = (set: CardSet, id: string): Resolution<CatalogEntry> =>
+  lookup(set.logoCatalog, id)
+
+export const resolveFeature = (set: CardSet, id: string): Resolution<FeatureEntry> =>
+  lookup(set.featureCatalog, id)
+
+export const findAddOn = (set: CardSet, id: string): AddOnEntry | undefined =>
+  set.addOnCatalog.find((a) => a.id === id)
 
 export function marketFor(set: CardSet, code: string) {
   return set.markets.find((m) => m.code === code) ?? set.markets[0]
 }
 
-/** Every context worth validating — all markets, with and without each campaign. */
+/** Every context worth validating — markets × channels × cadences, with campaigns. */
 export function allContexts(set: CardSet): Context[] {
   const out: Context[] = []
   for (const market of set.markets) {
-    out.push({ market: market.code })
-    for (const campaign of set.campaigns) {
-      out.push({ market: market.code, campaign: campaign.code })
+    for (const channel of set.channels) {
+      for (const cadence of set.cadences) {
+        out.push({ market: market.code, channel: channel.code, cadence })
+        for (const campaign of set.campaigns) {
+          out.push({ market: market.code, channel: channel.code, cadence, campaign: campaign.code })
+        }
+      }
     }
   }
   return out
 }
 
-/** Which fields an override changes, for showing what a market actually differs on. */
-export function patchedKeys(patch: CardPatch): string[] {
-  return Object.keys(patch).filter((k) => patch[k as keyof CardPatch] !== undefined)
-}
-
-/** The override that a given context writes to, if one exists. */
-export function findOverride(card: AuthoredCard, context: Context): Override | undefined {
-  return card.overrides.find(
+export function findOverride(tier: Tier, context: Context): Override | undefined {
+  return tier.overrides.find(
     (o) => o.when.market === context.market && o.when.campaign === context.campaign,
   )
 }

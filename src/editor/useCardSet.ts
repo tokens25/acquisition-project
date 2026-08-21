@@ -1,54 +1,32 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { AuthoredCard, AuthoredFeature, CardPatch, CardSet, Context } from '../rules/content'
-import { CUSTOM_FEATURE, matchByLabel } from '../rules/features'
+import type { CadenceOffer, CardSet, Context, Tier, TierPatch } from '../rules/content'
+import { DIRECT } from '../rules/content'
 import { defaultSet } from '../rules/defaults'
-import { findOverride } from '../rules/resolve'
+import { findOverride, resolveOffer } from '../rules/resolve'
 
-const STORAGE_KEY = 'acquisition-card-set-v2'
+const STORAGE_KEY = 'acquisition-card-set-v3'
 
-/** Market value meaning "the base card, before any market difference". */
+/** Market value meaning "the base tier, before any market difference". */
 export const BASE_MARKET = '*'
 
 export const isBaseContext = (c: Context) => c.market === BASE_MARKET && !c.campaign
 
 /**
- * Features used to be free strings. Map any saved that way back onto the
- * catalogue by their wording, and keep the rest as custom lines so no content
- * is lost on upgrade.
+ * Content saved before pricing moved onto offers cannot be migrated field by
+ * field — a card carried one price, an offer needs one per cadence, and
+ * inventing the missing ones would fabricate commercial facts. So a v2 set is
+ * not upgraded: it starts fresh, and its old key is left untouched in case
+ * anything needs recovering by hand.
  */
-function hydrateFeatures(input: unknown): AuthoredFeature[] | undefined {
-  if (!Array.isArray(input)) return undefined
-  return input.map((f) => {
-    if (typeof f === 'string') {
-      const match = matchByLabel(f)
-      return match ? { featureId: match.id } : { featureId: CUSTOM_FEATURE, label: f, iconId: 'check' }
-    }
-    return f as AuthoredFeature
-  })
-}
-
 function hydrate(raw: unknown): CardSet {
   if (typeof raw !== 'object' || raw === null) return defaultSet
   const input = raw as Partial<CardSet>
-  if (!Array.isArray(input.cards) || input.cards.length === 0) return defaultSet
+  if (!Array.isArray(input.tiers) || !Array.isArray(input.offers)) return defaultSet
   return {
-    markets: input.markets ?? defaultSet.markets,
-    campaigns: input.campaigns ?? defaultSet.campaigns,
-    context: input.context ?? defaultSet.context,
-    journeyId: input.journeyId ?? defaultSet.journeyId,
-    stepId: input.stepId ?? defaultSet.stepId,
-    device: input.device ?? defaultSet.device,
-    cards: input.cards.map((c, i) => ({
-      ...defaultSet.cards[i % defaultSet.cards.length],
-      ...c,
-      features: hydrateFeatures(c.features) ?? defaultSet.cards[i % defaultSet.cards.length].features,
-      overrides: (c.overrides ?? []).map((o) => {
-        // Only introduce `features` when there is something to migrate — an
-        // explicit undefined would blank the card's own list when merged.
-        const features = hydrateFeatures(o.patch?.features)
-        return features ? { ...o, patch: { ...o.patch, features } } : o
-      }),
-    })),
+    ...defaultSet,
+    ...input,
+    context: { ...defaultSet.context, ...input.context },
+    tiers: input.tiers.map((t) => ({ ...t, overrides: t.overrides ?? [] })),
   }
 }
 
@@ -61,9 +39,8 @@ function read(): CardSet {
   }
 }
 
-/** The selector an edit in this context should be written to. */
-function selectorFor(context: Context): Partial<Context> {
-  const when: Partial<Context> = {}
+function selectorFor(context: Context): Partial<Pick<Context, 'market' | 'campaign'>> {
+  const when: Partial<Pick<Context, 'market' | 'campaign'>> = {}
   if (context.market !== BASE_MARKET) when.market = context.market
   if (context.campaign) when.campaign = context.campaign
   return when
@@ -71,16 +48,16 @@ function selectorFor(context: Context): Partial<Context> {
 
 export interface CardSetStore {
   set: CardSet
-  /** Where edits currently land. */
   context: Context
   editingBase: boolean
   setContext: (context: Context) => void
   updateSet: (patch: Partial<CardSet>) => void
-  /** Writes to the base card, or to this context's override. */
-  updateCard: (id: string, patch: CardPatch) => void
-  /** Fields this context differs from the base on. */
-  overriddenKeys: (card: AuthoredCard) => string[]
-  clearOverride: (id: string) => void
+  /** Writes to the base tier, or to this context's override. */
+  updateTier: (id: string, patch: TierPatch) => void
+  /** Edits the offer pricing this tier at the current cadence and market. */
+  updateOffer: (tierId: string, patch: Partial<CadenceOffer>) => void
+  offerFor: (tierId: string) => CadenceOffer | null
+  overriddenKeys: (tier: Tier) => string[]
   reset: () => void
   exportJson: () => void
   importJson: (file: File) => Promise<void>
@@ -95,7 +72,7 @@ export function useCardSet(): CardSetStore {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(set))
     } catch {
-      // Private mode or full quota — the page still works, it just won't persist.
+      // Private mode or a full quota — the page still works, it just won't persist.
     }
   }, [set])
 
@@ -110,55 +87,72 @@ export function useCardSet(): CardSetStore {
     setSet((prev) => ({ ...prev, ...patch }))
   }, [])
 
-  const updateCard = useCallback((id: string, patch: CardPatch) => {
+  const updateTier = useCallback((id: string, patch: TierPatch) => {
     setSet((prev) => {
       const ctx = prev.context
       if (isBaseContext(ctx)) {
-        return {
-          ...prev,
-          cards: prev.cards.map((c) =>
-            c.id === id
-              ? { ...c, ...patch, addOn: patch.addOn ? { ...c.addOn, ...patch.addOn } : c.addOn }
-              : c,
-          ),
-        }
+        return { ...prev, tiers: prev.tiers.map((t) => (t.id === id ? { ...t, ...patch } : t)) }
       }
-
       const when = selectorFor(ctx)
       return {
         ...prev,
-        cards: prev.cards.map((c) => {
-          if (c.id !== id) return c
-          const existing = findOverride(c, ctx)
+        tiers: prev.tiers.map((t) => {
+          if (t.id !== id) return t
+          const existing = findOverride(t, ctx)
           if (existing) {
             return {
-              ...c,
-              overrides: c.overrides.map((o) =>
-                o.id === existing.id
-                  ? {
-                      ...o,
-                      patch: {
-                        ...o.patch,
-                        ...patch,
-                        addOn: patch.addOn ? { ...o.patch.addOn, ...patch.addOn } : o.patch.addOn,
-                      },
-                    }
-                  : o,
+              ...t,
+              overrides: t.overrides.map((o) =>
+                o.id === existing.id ? { ...o, patch: { ...o.patch, ...patch } } : o,
               ),
             }
           }
-          const id2 = `${c.id}-${when.market ?? 'all'}${when.campaign ? `-${when.campaign}` : ''}`
-          return { ...c, overrides: [...c.overrides, { id: id2, when, patch }] }
+          const oid = `${t.id}-${when.market ?? 'all'}${when.campaign ? `-${when.campaign}` : ''}`
+          return { ...t, overrides: [...t.overrides, { id: oid, when, patch }] }
         }),
       }
     })
   }, [])
 
+  /**
+   * Pricing edits land on the offer for (tier, cadence, market). Editing while
+   * a market is selected forks a market-scoped offer rather than changing the
+   * price everywhere — the same base-plus-differences rule the tiers follow.
+   */
+  const updateOffer = useCallback((tierId: string, patch: Partial<CadenceOffer>) => {
+    setSet((prev) => {
+      const ctx = prev.context
+      const target = resolveOffer(prev, tierId, ctx)
+      if (!target) return prev
+
+      const scopeMarket = ctx.market === BASE_MARKET ? undefined : ctx.market
+      const alreadyScoped = target.market === scopeMarket
+
+      if (alreadyScoped) {
+        return {
+          ...prev,
+          offers: prev.offers.map((o) => (o.id === target.id ? { ...o, ...patch } : o)),
+        }
+      }
+      const forked: CadenceOffer = {
+        ...target,
+        ...patch,
+        id: `${target.id}-${scopeMarket ?? 'all'}`,
+        market: scopeMarket,
+      }
+      return { ...prev, offers: [...prev.offers, forked] }
+    })
+  }, [])
+
+  const offerFor = useCallback(
+    (tierId: string) => resolveOffer(set, tierId, context),
+    [set, context],
+  )
+
   const overriddenKeys = useCallback(
-    (card: AuthoredCard) => {
+    (tier: Tier) => {
       if (editingBase) return []
-      const existing = findOverride(card, context)
-      // Merging can leave a key present but undefined; those are not overrides.
+      const existing = findOverride(tier, context)
       return existing
         ? Object.entries(existing.patch)
             .filter(([, v]) => v !== undefined)
@@ -167,17 +161,6 @@ export function useCardSet(): CardSetStore {
     },
     [context, editingBase],
   )
-
-  const clearOverride = useCallback((id: string) => {
-    setSet((prev) => ({
-      ...prev,
-      cards: prev.cards.map((c) => {
-        if (c.id !== id) return c
-        const existing = findOverride(c, prev.context)
-        return existing ? { ...c, overrides: c.overrides.filter((o) => o.id !== existing.id) } : c
-      }),
-    }))
-  }, [])
 
   const reset = useCallback(() => setSet(defaultSet), [])
 
@@ -206,12 +189,15 @@ export function useCardSet(): CardSetStore {
     editingBase,
     setContext,
     updateSet,
-    updateCard,
+    updateTier,
+    updateOffer,
+    offerFor,
     overriddenKeys,
-    clearOverride,
     reset,
     exportJson,
     importJson,
     importError,
   }
 }
+
+export { DIRECT }

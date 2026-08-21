@@ -413,3 +413,12 @@
   pointer-events: none;
   white-space: normal;
 }
+
+.acq-set__empty {
+  margin: 0;
+  padding: var(--space-16);
+  border: var(--border-1) dashed var(--color-border-full-color-default);
+  border-radius: var(--radius-12);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+}

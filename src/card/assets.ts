@@ -15,34 +15,30 @@ import netsLogo from '../assets/logos/team-nets.png'
 import rangersLogo from '../assets/logos/team-rangers.png'
 import sabresLogo from '../assets/logos/team-sabres.png'
 import yankeesLogo from '../assets/logos/team-yankees.png'
-import type { AuthoredLogo } from '../rules/content'
-
-/** Bundled artwork, addressed by a stable id — Vite fingerprints the URLs. */
-export const logoCatalog: Record<string, { src: string; alt: string }> = {
-  yankees: { src: yankeesLogo, alt: 'New York Yankees' },
-  nets: { src: netsLogo, alt: 'Brooklyn Nets' },
-  knicks: { src: knicksLogo, alt: 'New York Knicks' },
-  rangers: { src: rangersLogo, alt: 'New York Rangers' },
-  devils: { src: devilsLogo, alt: 'New Jersey Devils' },
-  islanders: { src: islandersLogo, alt: 'New York Islanders' },
-  sabres: { src: sabresLogo, alt: 'Buffalo Sabres' },
-}
-
-export const imageCatalog: Record<string, string> = { 'world-cup': addOnImage }
-
-export function resolveLogo(ref: AuthoredLogo): { src: string; alt: string } | null {
-  if (ref.id) {
-    const bundled = logoCatalog[ref.id]
-    return bundled ? { src: bundled.src, alt: ref.alt || bundled.alt } : null
-  }
-  return ref.src ? { src: ref.src, alt: ref.alt } : null
-}
 
 /**
- * Icons a feature may use. Keyed by catalogue id so saved content never stores
- * a build-time asset URL — the same reason logos are stored by id.
+ * Artwork, keyed by catalogue id.
+ *
+ * The catalogue itself — names, alt text, active/deprecated — lives in the
+ * content model. This file only answers "where are the bytes", because Vite
+ * fingerprints asset URLs at build time and a stored URL would break on the
+ * next deploy.
  */
-export const iconCatalog: Record<string, string> = {
+export const logoArtwork: Record<string, string> = {
+  yankees: yankeesLogo,
+  nets: netsLogo,
+  knicks: knicksLogo,
+  rangers: rangersLogo,
+  devils: devilsLogo,
+  islanders: islandersLogo,
+  sabres: sabresLogo,
+}
+
+export const imageArtwork: Record<string, string> = {
+  'world-cup': addOnImage,
+}
+
+export const iconArtwork: Record<string, string> = {
   multiview: multiviewIcon,
   multicam: multiCamIcon,
   hdr: hdrIcon,

@@ -1,52 +1,44 @@
 import './editor.css'
 
 import { useState } from 'react'
-import { iconCatalog, logoCatalog } from '../card/assets'
-import type { AddOnType, AuthoredCard, AuthoredFeature, CardPatch } from '../rules/content'
-import { CUSTOM_FEATURE, featureCatalogue, findFeature } from '../rules/features'
-import { marketFor, resolveCard } from '../rules/resolve'
-import { summarise, validateAll, validateContext } from '../rules/validate'
-import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
+import { logoArtwork } from '../card/assets'
+import type { AddOnPurchaseType, CardSet, Tier, TierPatch } from '../rules/content'
+import { DIRECT } from '../rules/content'
 import { resolveJourney } from '../rules/journey'
 import { journeys } from '../rules/journeys'
+import { marketFor, resolveTier } from '../rules/resolve'
+import { summarise, validateAll, validateContext } from '../rules/validate'
+import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
 import { StepPicker } from './StepPicker'
 import { BASE_MARKET, type CardSetStore } from './useCardSet'
 
-const ADDON_TYPES: { value: AddOnType; label: string }[] = [
-  { value: 'included', label: 'Included in plan' },
-  { value: 'one-time-payment', label: 'One time payment' },
-  { value: 'discount-code', label: 'Discount code' },
+const PURCHASE_TYPES: { value: AddOnPurchaseType; label: string }[] = [
+  { value: 'one_time_payment', label: 'One time payment' },
+  { value: 'discount_code', label: 'Discount code' },
 ]
 
 /**
  * The authoring surface.
  *
- * Only fields §7 marks as authored appear as inputs. Everything derived or
- * static is listed read-only underneath, so an editor can see what a switch
- * produced without being able to contradict it.
- *
- * Edits land wherever the context points: on the base card, or on that
- * market's difference from it.
+ * Only authored fields appear as inputs. Pricing edits land on the offer for
+ * (tier, cadence, market) — the same plan sold two ways has two prices, and a
+ * cadence it is not sold at has no row at all.
  */
 export function SetEditor({ store }: { store: CardSetStore }) {
   const { set, context, editingBase, setContext, updateSet } = store
-  const [openCard, setOpenCard] = useState(set.cards[0]?.id ?? '')
+  const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   const journey = journeys.find((j) => j.id === set.journeyId) ?? journeys[0]
   const steps = resolveJourney(journey, context)
-  // A step can vanish when the journey or market changes; fall back to the first.
   const selectedStep = steps.find((s) => s.id === set.stepId) ?? steps[0]
   const editingPlans = selectedStep?.renderer === 'plans'
 
-  const results = validateAll(set)
-  const coverage = summarise(results)
+  const coverage = summarise(validateAll(set))
   const here = validateContext(set, context)
   const hereErrors = here.filter((v) => v.severity === 'error')
 
   return (
     <form className="ed" onSubmit={(e) => e.preventDefault()}>
-
-      {/* Coverage — machines check every market, so a person only reviews changes. */}
       <div
         className="ed-gate"
         data-state={coverage.failing.length ? 'blocked' : coverage.warning.length ? 'warn' : 'clear'}
@@ -57,17 +49,15 @@ export function SetEditor({ store }: { store: CardSetStore }) {
             : `Publish ready — ${coverage.total} contexts checked`}
         </p>
         {coverage.failing.length > 0 && (
-          <p className="ed-gate__contexts">Failing: {coverage.failingLabels.join(', ')}</p>
-        )}
-        {coverage.warning.length > 0 && (
-          <p className="ed-gate__contexts">Warnings: {coverage.warningLabels.join(', ')}</p>
+          <p className="ed-gate__contexts">Failing: {coverage.failingLabels.slice(0, 6).join(', ')}
+            {coverage.failing.length > 6 && ` and ${coverage.failing.length - 6} more`}</p>
         )}
         {here.length > 0 && (
           <ul className="ed-gate__list">
-            {here.map((v, i) => (
+            {here.slice(0, 8).map((v, i) => (
               <li key={i} data-severity={v.severity}>
                 <code>{v.rule}</code> {v.message}
-                {v.cardId && <span className="ed-gate__card"> · {v.cardId}</span>}
+                {v.tierId && <span className="ed-gate__card"> · {v.tierId}</span>}
               </li>
             ))}
           </ul>
@@ -84,6 +74,20 @@ export function SetEditor({ store }: { store: CardSetStore }) {
             ...set.markets.map((m) => ({ value: m.code, label: `${m.label} (${m.currency})` })),
           ]}
           onChange={(v) => setContext({ ...context, market: v })}
+        />
+        <SelectField
+          label="Storefront"
+          hint={context.channel === DIRECT ? 'Direct sells live tiers only.' : 'Partners also carry direct tiers flagged visible to them, legacy or not.'}
+          value={context.channel}
+          options={set.channels.map((c) => ({ value: c.code, label: c.label }))}
+          onChange={(v) => setContext({ ...context, channel: v })}
+        />
+        <SelectField
+          label="How to pay"
+          hint="A tier with no offer at this cadence is not sold this way, and does not render."
+          value={context.cadence}
+          options={set.cadences.map((c) => ({ value: c, label: c }))}
+          onChange={(v) => setContext({ ...context, cadence: v })}
         />
         <SelectField
           label="Journey"
@@ -113,25 +117,25 @@ export function SetEditor({ store }: { store: CardSetStore }) {
         <>
           <FieldGroup title="Tiers">
             <div className="ed-tabs">
-              {set.cards.map((c) => (
+              {set.tiers.map((t) => (
                 <button
-                  key={c.id}
+                  key={t.id}
                   type="button"
                   className="ed-tab"
-                  data-on={openCard === c.id || undefined}
-                  data-invalid={hereErrors.some((e) => e.cardId === c.id) || undefined}
-                  onClick={() => setOpenCard(c.id)}
+                  data-on={openTier === t.id || undefined}
+                  data-invalid={hereErrors.some((e) => e.tierId === t.id) || undefined}
+                  onClick={() => setOpenTier(t.id)}
                 >
-                  {resolveCard(c, context).planName || c.id}
+                  {resolveTier(t, context).planName || t.id}
                 </button>
               ))}
             </div>
           </FieldGroup>
 
-          {set.cards
-            .filter((c) => c.id === openCard)
-            .map((card) => (
-              <CardFields key={card.id} card={card} store={store} />
+          {set.tiers
+            .filter((t) => t.id === openTier)
+            .map((tier) => (
+              <TierFields key={tier.id} tier={tier} store={store} />
             ))}
         </>
       )}
@@ -139,19 +143,18 @@ export function SetEditor({ store }: { store: CardSetStore }) {
   )
 }
 
-function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }) {
-  const { set, context, updateCard } = store
-  const resolved = resolveCard(card, context)
+function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
+  const { set, context, updateTier, updateOffer, offerFor } = store
+  const resolved = resolveTier(tier, context)
   const market = marketFor(set, context.market)
+  const offer = offerFor(tier.id)
 
-  const patch = (p: CardPatch) => updateCard(card.id, p)
+  const patch = (p: TierPatch) => updateTier(tier.id, p)
 
   const toggleLogo = (id: string) => {
-    const has = resolved.logos.some((l) => l.id === id)
+    const has = resolved.logoTiles.includes(id)
     patch({
-      logos: has
-        ? resolved.logos.filter((l) => l.id !== id)
-        : [...resolved.logos, { id, alt: logoCatalog[id].alt }],
+      logoTiles: has ? resolved.logoTiles.filter((l) => l !== id) : [...resolved.logoTiles, id],
     })
   }
 
@@ -162,26 +165,46 @@ function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }
         <TextArea label="Description" hint="Full text. Never pre-truncate — the card measures and adds “… more”." value={resolved.description} onChange={(v) => patch({ description: v })} rows={4} />
       </FieldGroup>
 
-      <FieldGroup title={`Pricing — ${market.currency}`}>
-        <CheckField
-          label={<span className="ed-label-chip">Apply discount</span>}
-          hint="Drives the caption, primary and struck price, the explainer and the CTA area."
-          checked={resolved.discount}
-          onChange={(v) => patch({ discount: v })}
+      <FieldGroup title="Availability">
+        <SelectField
+          label="Status"
+          hint="Legacy closes a tier to new direct customers. Partners may still sell it."
+          value={resolved.status}
+          options={[
+            { value: 'live', label: 'Live' },
+            { value: 'legacy', label: 'Legacy' },
+          ]}
+          onChange={(v) => patch({ status: v as Tier['status'] })}
         />
-        <NumberField label="Standard price" value={resolved.standardPrice} step={0.01} min={0} onChange={(v) => patch({ standardPrice: v })} />
-        <NumberField label="Discount price" hint="Used as the primary price while Discount is on." value={resolved.introPrice} step={0.01} min={0} onChange={(v) => patch({ introPrice: v })} />
-        <NumberField label="Discount months" value={resolved.introMonths} min={1} onChange={(v) => patch({ introMonths: v })} />
-        <TextField label="Billing period" value={resolved.installment} onChange={(v) => patch({ installment: v })} />
+        <CheckField
+          label="Partners may carry this"
+          hint="Only meaningful for direct tiers."
+          checked={resolved.visibleToPartners}
+          onChange={(v) => patch({ visibleToPartners: v })}
+        />
+        <CheckField
+          label="Ultimate treatment"
+          hint="Gold stroke, badge, gold plan name and gold CTA — max one per set (S-1)."
+          checked={resolved.ultimate}
+          onChange={(v) => patch({ ultimate: v })}
+        />
       </FieldGroup>
+
+      <OfferFields
+        set={set}
+        currency={market.currency}
+        cadence={context.cadence}
+        offer={offer}
+        onChange={(p) => updateOffer(tier.id, p)}
+      />
 
       <FieldGroup title="Competitions">
         <div className="ed-logos">
-          {Object.entries(logoCatalog).map(([id, logo]) => {
-            const on = resolved.logos.some((l) => l.id === id)
+          {set.logoCatalog.map((logo) => {
+            const on = resolved.logoTiles.includes(logo.id)
             return (
-              <button key={id} type="button" className="ed-logo" data-on={on || undefined} onClick={() => toggleLogo(id)} title={logo.alt} aria-pressed={on}>
-                <img src={logo.src} alt={logo.alt} />
+              <button key={logo.id} type="button" className="ed-logo" data-on={on || undefined} onClick={() => toggleLogo(logo.id)} title={logo.name} aria-pressed={on}>
+                <img src={logoArtwork[logo.id]} alt={logo.altText} />
               </button>
             )
           })}
@@ -189,92 +212,101 @@ function CardFields({ card, store }: { card: AuthoredCard; store: CardSetStore }
         <NumberField label="Total competitions" hint="Drives the derived “+N” tile." value={resolved.logoTotal} min={0} onChange={(v) => patch({ logoTotal: v })} />
       </FieldGroup>
 
-      <FieldGroup title="Add-on">
-        <CheckField label="Show add-on" checked={resolved.addOn.enabled} onChange={(v) => patch({ addOn: { enabled: v } })} />
-        <SelectField label="Type" value={resolved.addOn.type} options={ADDON_TYPES} onChange={(v) => patch({ addOn: { type: v } })} />
-        <TextField label="Title" value={resolved.addOn.title} onChange={(v) => patch({ addOn: { title: v } })} />
-        <TextField label="Subtitle" value={resolved.addOn.subtitle} onChange={(v) => patch({ addOn: { subtitle: v } })} />
-      </FieldGroup>
-
       <FieldGroup title="Features">
-        {resolved.features.map((feature, i) => {
-          const def = findFeature(feature.featureId)
-          const isCustom = feature.featureId === CUSTOM_FEATURE
-          const update = (next: Partial<AuthoredFeature>) => {
-            const features = resolved.features.map((f, j) => (j === i ? { ...f, ...next } : f))
-            patch({ features })
-          }
-
-          return (
-            <div className="ed-feature" key={i}>
-              <div className="ed-row">
-                <SelectField
-                  label={`Feature ${i + 1}`}
-                  value={feature.featureId}
-                  options={[
-                    ...featureCatalogue.map((f) => ({ value: f.id, label: f.defaultLabel })),
-                    { value: CUSTOM_FEATURE, label: 'Custom line…' },
-                  ]}
-                  onChange={(v) =>
-                    update({
-                      featureId: v,
-                      // A catalogue feature brings its own icon; drop any custom one.
-                      iconId: v === CUSTOM_FEATURE ? (feature.iconId ?? 'check') : undefined,
-                    })
-                  }
-                />
-                <button
-                  type="button"
-                  className="ed__btn ed__btn--quiet ed__btn--icon"
-                  onClick={() => patch({ features: resolved.features.filter((_, j) => j !== i) })}
-                  aria-label={`Remove feature ${i + 1}`}
-                >
-                  ✕
-                </button>
-              </div>
-
-              <TextField
-                label="Wording"
-                hint={
-                  isCustom
-                    ? 'Custom lines have no catalogue copy, so this is required.'
-                    : 'Leave empty to use the catalogue copy.'
-                }
-                placeholder={def?.defaultLabel}
-                value={feature.label ?? ''}
-                onChange={(v) => update({ label: v || undefined })}
-              />
-
-              {isCustom && (
-                <div className="ed-icons" role="group" aria-label="Icon">
-                  {Object.entries(iconCatalog).map(([id, svg]) => (
-                    <button
-                      key={id}
-                      type="button"
-                      className="ed-icon"
-                      data-on={feature.iconId === id || undefined}
-                      onClick={() => update({ iconId: id })}
-                      title={id}
-                      aria-pressed={feature.iconId === id}
-                      dangerouslySetInnerHTML={{ __html: svg }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          )
-        })}
-        <button
-          type="button"
-          className="ed__btn"
-          onClick={() =>
-            patch({ features: [...resolved.features, { featureId: featureCatalogue[0].id }] })
-          }
-        >
+        {resolved.features.map((id, i) => (
+          <div className="ed-row" key={`${id}-${i}`}>
+            <SelectField
+              label={`Feature ${i + 1}`}
+              value={id}
+              options={set.featureCatalog.map((f) => ({
+                value: f.id,
+                label: f.status === 'deprecated' ? `${f.text} (retired)` : f.text,
+              }))}
+              onChange={(v) => patch({ features: resolved.features.map((f, j) => (j === i ? v : f)) })}
+            />
+            <button type="button" className="ed__btn ed__btn--quiet ed__btn--icon" onClick={() => patch({ features: resolved.features.filter((_, j) => j !== i) })} aria-label={`Remove feature ${i + 1}`}>
+              ✕
+            </button>
+          </div>
+        ))}
+        <button type="button" className="ed__btn" onClick={() => patch({ features: [...resolved.features, set.featureCatalog[0].id] })}>
           Add feature
         </button>
       </FieldGroup>
-
     </>
+  )
+}
+
+function OfferFields({
+  set,
+  currency,
+  cadence,
+  offer,
+  onChange,
+}: {
+  set: CardSet
+  currency: string
+  cadence: string
+  offer: ReturnType<CardSetStore['offerFor']>
+  onChange: (patch: Parameters<CardSetStore['updateOffer']>[1]) => void
+}) {
+  if (!offer) {
+    return (
+      <FieldGroup title={`Pricing — ${cadence}`}>
+        <p className="ed-placeholder">
+          Not sold at <strong>{cadence}</strong>. That is a fact about the plan, not a gap — the
+          card does not render in this view.
+        </p>
+      </FieldGroup>
+    )
+  }
+
+  return (
+    <FieldGroup title={`Pricing — ${cadence}, ${currency}`}>
+      <CheckField
+        label={<span className="ed-label-chip">Apply discount</span>}
+        hint="Drives the caption, primary and struck price, the explainer and the CTA area."
+        checked={offer.discount}
+        onChange={(v) => onChange({ discount: v, introPrice: v ? (offer.introPrice ?? offer.standardPrice) : null })}
+      />
+      <NumberField label="Standard price" value={offer.standardPrice} step={0.01} min={0} onChange={(v) => onChange({ standardPrice: v })} />
+      {offer.discount && (
+        <>
+          <NumberField label="Discount price" hint="Used as the primary price while Discount is on." value={offer.introPrice ?? 0} step={0.01} min={0} onChange={(v) => onChange({ introPrice: v })} />
+          <NumberField label="Discount months" value={offer.introMonths} min={1} onChange={(v) => onChange({ introMonths: v })} />
+        </>
+      )}
+
+      <SelectField
+        label="Add-on"
+        hint="Sold on this offer, or bundled into it — never both."
+        value={offer.addOnId ?? (offer.includedAddOnIds[0] ? `included:${offer.includedAddOnIds[0]}` : '')}
+        options={[
+          { value: '', label: 'None' },
+          ...set.addOnCatalog.flatMap((a) => [
+            { value: a.id, label: `${a.title} — sold` },
+            { value: `included:${a.id}`, label: `${a.title} — bundled` },
+          ]),
+        ]}
+        onChange={(v) => {
+          if (!v) return onChange({ addOnId: null, addOnPurchaseType: null, addOnDiscountPercent: null, includedAddOnIds: [] })
+          if (v.startsWith('included:')) {
+            return onChange({ addOnId: null, addOnPurchaseType: null, addOnDiscountPercent: null, includedAddOnIds: [v.slice(9)] })
+          }
+          return onChange({ addOnId: v, addOnPurchaseType: offer.addOnPurchaseType ?? 'one_time_payment', includedAddOnIds: [] })
+        }}
+      />
+      {offer.addOnId && (
+        <SelectField
+          label="Purchase type"
+          value={offer.addOnPurchaseType ?? 'one_time_payment'}
+          options={PURCHASE_TYPES}
+          onChange={(v) => onChange({ addOnPurchaseType: v, addOnDiscountPercent: v === 'discount_code' ? (offer.addOnDiscountPercent ?? 15) : null })}
+        />
+      )}
+      {offer.addOnPurchaseType === 'discount_code' && (
+        <NumberField label="Discount percent" value={offer.addOnDiscountPercent ?? 0} min={1} max={99} onChange={(v) => onChange({ addOnDiscountPercent: v })} />
+      )}
+    </FieldGroup>
   )
 }

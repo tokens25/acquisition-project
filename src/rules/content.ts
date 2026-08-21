@@ -5,118 +5,135 @@
  * computed from another value it lives in `derive.ts`, so an editor cannot
  * author a number that contradicts the one beside it.
  *
- * Source: "Acquisition Card — Rules & Logic", §7 Authored vs derived strings.
+ * Source: "Acquisition Card — Rules & Logic" §7, and the engineering-side
+ * schema it was reconciled with (Tier × CadenceOffer, channel/status,
+ * catalogue lifecycle).
  */
 
-export type AddOnType = 'included' | 'one-time-payment' | 'discount-code'
+export type AddOnPurchaseType = 'one_time_payment' | 'discount_code'
 export type Device = 'mobile' | 'desktop' | 'xl'
 
-export interface AuthoredLogo {
-  /** Bundled badge id, or an external src. */
-  id?: string
-  src?: string
-  alt: string
+/** Direct storefront, or a partner code. Open by design — partners keep appearing. */
+export const DIRECT = 'direct'
+
+/** Assets are never hard-deleted; a retired one still renders, flagged. */
+export type AssetStatus = 'active' | 'deprecated'
+
+export interface CatalogEntry {
+  id: string
+  name: string
+  altText: string
+  status: AssetStatus
 }
 
-export interface AuthoredAddOn {
-  enabled: boolean
-  type: AddOnType
-  /** The add-on's own name — unrelated to the plan (§7). */
+/**
+ * One feature line: an icon and a line of copy, paired once and reused. A tier
+ * holds ordered ids, exactly as it holds logo ids — the pairing is not authored
+ * per tier, so the same capability cannot end up with two different icons.
+ */
+export interface FeatureEntry {
+  id: string
+  iconId: string
+  text: string
+  status: AssetStatus
+}
+
+export interface AddOnEntry {
+  id: string
   title: string
   subtitle: string
+  /** Required when sold as one_time_payment; unused when bundled. */
+  price: number | null
   imageId: string
-  imageSrc: string
-  /** one-time-payment only. Major units; currency comes from the market. */
-  price: number
-  /** discount-code only. */
-  code: string
-  discountPercent: number
 }
 
-/** The fields a market or campaign may override. Sparse by design. */
 /**
- * One feature line: which capability it is, and optionally different wording
- * for this context. The icon is never authored — it belongs to the capability.
+ * A plan, scoped to nothing — market differences are patches, not copies.
+ *
+ * Pricing is deliberately absent: it belongs to (tier × cadence), because the
+ * same plan is sold at different prices depending on how you pay for it, and is
+ * often not sold at some cadences at all.
  */
-export interface AuthoredFeature {
-  /** Catalogue id, or 'custom' for a one-off line. */
-  featureId: string
-  /** Overrides the catalogue's copy here. */
-  label?: string
-  /** Only meaningful for 'custom', which has no catalogue entry to borrow from. */
-  iconId?: string
+export interface Tier {
+  id: string
+  planName: string
+  description: string
+  /** Ordered FeatureEntry ids. */
+  features: string[]
+  /** Ordered logo CatalogEntry ids. */
+  logoTiles: string[]
+  /** Total competitions the plan carries; drives the derived "+N" tile. */
+  logoTotal: number
+  ultimate: boolean
+  displayOrder: number
+
+  /**
+   * Gates the DIRECT storefront only. `legacy` is closed-book to new direct
+   * customers — it does NOT hide the tier from partners, who may still be
+   * actively selling it.
+   */
+  status: 'live' | 'legacy'
+  /** `direct`, or a partner code for a tier that exists only on their storefront. */
+  channel: string
+  /** Only meaningful when channel is `direct`: may partners also carry it? */
+  visibleToPartners: boolean
+
+  overrides: Override[]
 }
 
-export interface CardPatch {
+/**
+ * The join of a tier and a way of paying for it. Sparse by design: a missing
+ * row means "not sold that way", which is a different fact from `discount:
+ * false`. Nothing may invent a row to fill the gap.
+ */
+export interface CadenceOffer {
+  id: string
+  tierId: string
+  cadence: string
+  /** Omitted applies everywhere; a market code narrows it, and wins. */
+  market?: string
+
+  standardPrice: number
+  discount: boolean
+  /** Required when `discount`, and must be below standardPrice. */
+  introPrice: number | null
+  introMonths: number
+
+  /** A sellable add-on. Mutually exclusive with `includedAddOnIds`. */
+  addOnId: string | null
+  addOnPurchaseType: AddOnPurchaseType | null
+  addOnDiscountPercent: number | null
+  /** Add-ons already bundled into this offer — a fact, not a purchase option. */
+  includedAddOnIds: string[]
+}
+
+/** The fields a market or campaign may override on a tier. Sparse by design. */
+export interface TierPatch {
   planName?: string
   description?: string
-  ultimate?: boolean
-  discount?: boolean
-  standardPrice?: number
-  introPrice?: number
-  introMonths?: number
-  installment?: string
-  logos?: AuthoredLogo[]
+  features?: string[]
+  logoTiles?: string[]
   logoTotal?: number
-  addOn?: Partial<AuthoredAddOn>
-  features?: AuthoredFeature[]
+  ultimate?: boolean
+  status?: Tier['status']
+  visibleToPartners?: boolean
 }
 
 /** Where a card is being rendered. Omitted keys match anything. */
 export interface Context {
   market: string
   campaign?: string
+  /** Which storefront — `direct` or a partner code. */
+  channel: string
+  /** Which way of paying is on screen. */
+  cadence: string
 }
 
-/**
- * A sparse difference from the base card.
- *
- * `when` is a selector: omitted keys are wildcards. Overrides are applied in
- * order of specificity — the number of constraints — so a market+campaign
- * override wins over a market one, which wins over the base.
- */
 export interface Override {
   id: string
-  when: Partial<Context>
-  /** Deterministic tiebreak when two overrides have equal specificity. */
+  when: Partial<Pick<Context, 'market' | 'campaign'>>
   priority?: number
-  patch: CardPatch
-}
-
-export interface AuthoredCard {
-  id: string
-
-  /** One value, three surfaces: header, "Get X", "Included in X" (§4). */
-  planName: string
-  /** Full text, never pre-truncated (§7). Truncation is a runtime measurement. */
-  description: string
-
-  /** Switch — drives four outputs (§3). */
-  ultimate: boolean
-  /** Switch — drives five outputs across two components (§3). */
-  discount: boolean
-
-  /** Major units. Currency belongs to the market, not the card. */
-  standardPrice: number
-  /** Primary price while `discount` is on. */
-  introPrice: number
-  /** How long the intro price runs, for the derived explainer. */
-  introMonths: number
-  /** Billing period word, e.g. "month". */
-  installment: string
-
-  /** CMS order is preserved, never sorted client-side (§5). */
-  logos: AuthoredLogo[]
-  /** Total competitions; drives the derived "+{n}" tile. */
-  logoTotal: number
-
-  addOn: AuthoredAddOn
-
-  /** CMS order preserved (§7). The icon comes from the catalogue, never here. */
-  features: AuthoredFeature[]
-
-  /** Differences from the above, per market / campaign. */
-  overrides: Override[]
+  patch: TierPatch
 }
 
 export interface MarketConfig {
@@ -131,16 +148,27 @@ export interface CampaignConfig {
   label: string
 }
 
-/** A set is the unit that S-1, S-2 and S-3 are evaluated over (§2). */
+export interface ChannelConfig {
+  code: string
+  label: string
+}
+
+/** A set is the unit S-1, S-2 and S-3 are evaluated over. */
 export interface CardSet {
   markets: MarketConfig[]
   campaigns: CampaignConfig[]
-  /** Which market / campaign the preview is showing. */
+  channels: ChannelConfig[]
+  cadences: string[]
+
+  logoCatalog: CatalogEntry[]
+  featureCatalog: FeatureEntry[]
+  addOnCatalog: AddOnEntry[]
+
+  tiers: Tier[]
+  offers: CadenceOffer[]
+
   context: Context
-  /** Which journey the preview walks. */
   journeyId: string
-  /** Which step of it is being edited and previewed. */
   stepId: string
   device: Device
-  cards: AuthoredCard[]
 }

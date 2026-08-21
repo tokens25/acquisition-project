@@ -9,11 +9,9 @@ import { RuledCard } from './RuledCard'
  * S-2 · one card wrapping to two lines pulls the whole set to two, capped there.
  * S-3 · every card renders at the tallest card's height.
  *
- * S-3 is pure CSS (stretch). S-2 has to be measured, and measured against the
- * FULL text: each card truncates itself to whatever budget it is given, so
- * asking a rendered card whether it wrapped would only ever confirm the budget
- * it was already handed. One offscreen probe at the real description width
- * answers the question the rule actually asks.
+ * S-3 is CSS (stretch). S-2 is measured against the FULL text: each card
+ * truncates to whatever budget it is given, so asking a rendered card whether
+ * it wrapped only confirms the budget it was handed.
  */
 export function CardSetView({
   set,
@@ -53,8 +51,8 @@ export function CardSetView({
         letterSpacing: style.letterSpacing,
       })
 
-      const anyWraps = cards.some((card) => {
-        probe.textContent = card.description
+      const anyWraps = cards.some(({ tier }) => {
+        probe.textContent = tier.description
         return probe.scrollHeight > lineHeight * 1.4
       })
       setDescriptionLines((prev) => {
@@ -69,13 +67,24 @@ export function CardSetView({
     return () => observer.disconnect()
   }, [cards])
 
+  if (cards.length === 0) {
+    return (
+      <p className="acq-set__empty">
+        Nothing is sold on {context.channel} at {context.cadence} in {context.market}.
+      </p>
+    )
+  }
+
   return (
     <div className="acq-set" ref={ref} data-description-lines={descriptionLines}>
-      {cards.map((card) => (
+      {cards.map(({ tier, offer }) => (
         <RuledCard
-          key={card.id}
-          card={card}
+          key={tier.id}
+          set={set}
+          tier={tier}
+          offer={offer}
           market={market}
+          context={context}
           device={set.device}
           descriptionLines={descriptionLines}
           onMore={onMore}

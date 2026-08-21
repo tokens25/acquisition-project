@@ -130,7 +130,14 @@ export function NumberField({
   onChange,
   step = 1,
   min,
-}: BaseProps & { value: number; onChange: (value: number) => void; step?: number; min?: number }) {
+  max,
+}: BaseProps & {
+  value: number
+  onChange: (value: number) => void
+  step?: number
+  min?: number
+  max?: number
+}) {
   return (
     <label className="ed-field">
       <span className="ed-field__label">{label}</span>
@@ -140,6 +147,7 @@ export function NumberField({
         value={Number.isFinite(value) ? value : ''}
         step={step}
         min={min}
+        max={max}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           const next = Number.parseFloat(e.target.value)
           onChange(Number.isFinite(next) ? next : 0)
