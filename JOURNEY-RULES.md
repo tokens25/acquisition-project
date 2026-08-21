@@ -162,9 +162,28 @@ conditional, not a journey step, so it belongs to that screen's own rules.
 **? Open question 4.** Are there markets where consent must be its own screen
 for legal reasons? That would make it a step and change this rule.
 
+### J-6 · A journey runs where it runs
+
+Not every journey exists everywhere. A partner storefront has its own flow, and
+a market may have its own purchase path.
+
+`Journey.when` selects on market and channel, the same way a step selector and a
+card override already do. Omitted keys are wildcards, so a journey with no
+`when` runs everywhere — which is the common case.
+
+Prefer scoping by **channel**, not market. A storefront belongs to its countries
+(`ChannelConfig.markets`), so a Movistar journey is Spanish by construction.
+Saying `market: 'ES'` as well states the same fact twice, and the two can drift.
+Reach for `market` only when a *direct* journey genuinely differs.
+
+The pickers narrow to match, and a storefront that does not operate in the
+selected market cannot be selected at all. That is deliberate: a PM reviewing
+German content against a Movistar flow would see nothing wrong.
+
 ---
 
 ## 4 · Per-screen draft
+
 
 Each screen gets the card's treatment: what is authored, what is derived, what is
 static, and what is runtime.
