@@ -6,7 +6,7 @@ import type { AddOnPurchaseType, CardSet, Tier, TierPatch } from '../rules/conte
 import { DIRECT } from '../rules/content'
 import { journeysFor, resolveJourney } from '../rules/journey'
 import { journeys } from '../rules/journeys'
-import { marketFor, resolveTier } from '../rules/resolve'
+import { excludedTiers, marketFor, resolveTier } from '../rules/resolve'
 import { summarise, validateAll, validateContext } from '../rules/validate'
 import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
 import { StepPicker } from './StepPicker'
@@ -40,6 +40,12 @@ export function SetEditor({ store }: { store: CardSetStore }) {
   const steps = resolveJourney(journey, context)
   const selectedStep = steps.find((s) => s.id === set.stepId) ?? steps[0]
   const editingPlans = selectedStep?.renderer === 'plans'
+
+  // Tiers the current context does not render, and why. Kept selectable
+  // rather than hidden: the publish gate checks every context, so a failure can
+  // sit on a tier that this one happens not to show — and a tab you cannot see
+  // is a fix you cannot reach.
+  const absent = new Map(excludedTiers(set, context).map((e) => [e.tier.id, e.reason]))
 
   const coverage = summarise(validateAll(set))
   const here = validateContext(set, context)
@@ -151,12 +157,20 @@ export function SetEditor({ store }: { store: CardSetStore }) {
                   className="ed-tab"
                   data-on={openTier === t.id || undefined}
                   data-invalid={hereErrors.some((e) => e.tierId === t.id) || undefined}
+                  data-absent={absent.has(t.id) || undefined}
+                  title={absent.get(t.id)}
                   onClick={() => setOpenTier(t.id)}
                 >
                   {resolveTier(t, context).planName || t.id}
                 </button>
               ))}
             </div>
+            {absent.has(openTier) && (
+              <p className="ed-absent">
+                <strong>{resolveTier(set.tiers.find((t) => t.id === openTier)!, context).planName}</strong>{' '}
+                is not in this set — {absent.get(openTier)}. Edits still apply everywhere it is sold.
+              </p>
+            )}
           </FieldGroup>
 
           {set.tiers

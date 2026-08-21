@@ -487,3 +487,16 @@ select.ed-field__input {
 .ed-stale__btn:hover {
   background: var(--color-surface-container-1);
 }
+
+/* A tier this context does not render. Dashed, as elsewhere, for "real but not
+   here" — still selectable, because a gate failure can sit on it. */
+.ed-tab[data-absent] {
+  border-style: dashed;
+  opacity: 0.6;
+}
+.ed-absent {
+  margin: var(--space-8) 0 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.5;
+}
