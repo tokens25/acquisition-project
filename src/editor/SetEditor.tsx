@@ -16,6 +16,15 @@ import { BASE_MARKET, type CardSetStore } from './useCardSet'
 /** Sentinel for "write a new line here" in the feature picker. */
 const CUSTOM_FEATURE = '__custom__'
 
+/**
+ * Marks a catalogue entry as written on a tier rather than curated.
+ *
+ * Carried in the id because the engine schema's FeatureCatalog is exactly
+ * `{ id, iconId, text }` — a flag alongside them would not survive a round trip
+ * through their importer, and an id does.
+ */
+const CUSTOM_PREFIX = 'feature-custom-'
+
 const PURCHASE_TYPES: { value: AddOnPurchaseType; label: string }[] = [
   { value: 'one_time_payment', label: 'One time payment' },
   { value: 'discount_code', label: 'Discount code' },
@@ -214,14 +223,7 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
         : undefined
 
 
-  /** How many tiers reference a catalogue line, in this context. */
-  const usedBy = (featureId: string) =>
-    set.tiers.filter((t) => resolveTier(t, context).features.includes(featureId)).length
-
-  const updateFeature = (
-    id: string,
-    p: { text?: string; iconId?: string; status?: 'active' | 'deprecated' },
-  ) =>
+  const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
     updateSet({
       featureCatalog: set.featureCatalog.map((f) => (f.id === id ? { ...f, ...p } : f)),
     })
@@ -239,8 +241,8 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
     // edits produce the same ids, so an exported file diffs cleanly.
     const taken = new Set(set.featureCatalog.map((f) => f.id))
     let n = 1
-    while (taken.has(`feature-custom-${n}`)) n += 1
-    const id = `feature-custom-${n}`
+    while (taken.has(`${CUSTOM_PREFIX}${n}`)) n += 1
+    const id = `${CUSTOM_PREFIX}${n}`
 
     updateSet({
       featureCatalog: [
@@ -316,8 +318,20 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
       </FieldGroup>
 
       <FieldGroup title="Features">
+        <SelectField
+          label="Icons"
+          hint="Applies to every tier in the set."
+          value={set.featureIcons ?? 'feature'}
+          options={[
+            { value: 'feature', label: 'Each line’s own icon' },
+            { value: 'check', label: 'Checkmark on every line' },
+            { value: 'hidden', label: 'No icons' },
+          ]}
+          onChange={(v) => updateSet({ featureIcons: v as CardSet['featureIcons'] })}
+        />
         {resolved.features.map((id, i) => {
           const entry = set.featureCatalog.find((f) => f.id === id)
+          const isCustom = Boolean(entry && entry.id.startsWith(CUSTOM_PREFIX))
           const setFeature = (v: string) =>
             patch({ features: resolved.features.map((f, j) => (j === i ? v : f)) })
           return (
@@ -345,18 +359,13 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
                   ✕
                 </button>
               </div>
-              {/* Every line is written here, shared or not. Sending the common
-                  case to a second panel put most edits behind a detour; the
-                  coupling is better named than avoided. */}
-              {entry && (
+              {/* Only a custom line is written here. A catalogue line arrives
+                  with its wording and icon already paired, and editing it from
+                  one tier would rewrite every other tier using it. */}
+              {entry && isCustom && (
                 <div className="ed-feature-inline">
                   <TextField
                     label="Line"
-                    hint={
-                      usedBy(entry.id) > 1
-                        ? `Shared with ${usedBy(entry.id)} tiers — this wording and icon change on all of them.`
-                        : undefined
-                    }
                     value={entry.text}
                     onChange={(v) => updateFeature(entry.id, { text: v })}
                   />
@@ -376,12 +385,6 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
                       </button>
                     ))}
                   </div>
-                  <CheckField
-                    label="Retired"
-                    hint="Keeps the line out of new picks. Tiers already using it keep rendering it."
-                    checked={entry.status === 'deprecated'}
-                    onChange={(v) => updateFeature(entry.id, { status: v ? 'deprecated' : 'active' })}
-                  />
                 </div>
               )}
             </div>

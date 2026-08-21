@@ -5,8 +5,9 @@ import { Icon } from '../Icon'
 import type { Device } from './types'
 
 export interface FeatureProps {
-  /** Raw SVG markup for the leading icon — import the DS icon with `?raw`. */
-  icon: string
+  /** Raw SVG markup for the leading icon — import the DS icon with `?raw`.
+   *  Omitted renders the line with no icon at all; the row simply closes up. */
+  icon?: string
   children: ReactNode
   device?: Device
 }
@@ -15,7 +16,7 @@ export interface FeatureProps {
 export function Feature({ icon, children, device = 'desktop' }: FeatureProps) {
   return (
     <li className="acq-feature" data-device={device}>
-      <Icon svg={icon} size={16} />
+      {icon && <Icon svg={icon} size={16} />}
       <span className="acq-feature__text">{children}</span>
     </li>
   )

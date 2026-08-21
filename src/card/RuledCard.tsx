@@ -24,7 +24,15 @@ export interface RuledCardProps {
  * `deriveCard` produced. A missing catalogue reference renders a placeholder
  * so the layout matches what will land — and blocks publish elsewhere.
  */
+/** The icon a feature row draws, under the set's house style. */
+function featureIcon(mode: CardSet['featureIcons'], iconId: string): string | undefined {
+  if (mode === 'hidden') return undefined
+  if (mode === 'check') return iconArtwork.check
+  return iconArtwork[iconId] ?? iconArtwork.check
+}
+
 export function RuledCard({
+
   set,
   tier,
   offer,
@@ -82,7 +90,7 @@ export function RuledCard({
       features={
         <FeaturesList device={device}>
           {d.features.map((f) => (
-            <Feature key={f.id} icon={iconArtwork[f.iconId] ?? iconArtwork.check} device={device}>
+            <Feature key={f.id} icon={featureIcon(set.featureIcons, f.iconId)} device={device}>
               {f.text}
             </Feature>
           ))}

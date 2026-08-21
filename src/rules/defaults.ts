@@ -137,6 +137,7 @@ export const defaultSet: CardSet = {
 
   context: { market: 'IE', channel: DIRECT, cadence: 'Monthly Flex' },
   journeyId: 'hero-signup',
+  featureIcons: 'feature',
   stepId: 'plans',
   device: 'desktop',
 }

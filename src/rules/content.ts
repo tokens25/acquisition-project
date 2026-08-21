@@ -175,6 +175,14 @@ export interface CardSet {
 
   context: Context
   journeyId: string
+  /**
+   * How every feature line draws its icon.
+   *
+   * `feature` uses the one paired with the line in the catalogue. `check` draws
+   * a tick on every row, and `hidden` draws none — both are set-wide house
+   * styles, which is why they live here and not on a line.
+   */
+  featureIcons?: 'feature' | 'check' | 'hidden'
   stepId: string
   device: Device
 }
