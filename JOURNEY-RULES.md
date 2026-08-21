@@ -245,8 +245,8 @@ without having completed a DAZN account.
 
 Both steps stay in the journey's list, marked skipped, rather than being
 deleted. The rendering is identical either way; what deleting loses is the
-reason. `excludedSteps()` reads back "Sign up: seeded, Account: seeded", which
-is the answer to "why is there no sign-up screen here" without opening Figma.
+reason. The step picker shows them greyed and tagged — "Sign up · seeded" —
+which answers "why is there no sign-up screen here" without opening Figma.
 
 **The first two journeys have identical step lists.** They are drawn twice
 because a free registered user and a paying subscriber see different prices and
