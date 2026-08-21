@@ -39,6 +39,7 @@ const PURCHASE_TYPES: { value: AddOnPurchaseType; label: string }[] = [
  */
 export function SetEditor({ store }: { store: CardSetStore }) {
   const { set, context, editingBase, setContext, updateSet, journey, staleSeed, acceptSeed } = store
+  const { remoteDiffers, takeShared, keepLocal } = store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   // A storefront belongs to its markets, and a journey to its storefront — so
@@ -66,7 +67,24 @@ export function SetEditor({ store }: { store: CardSetStore }) {
 
   return (
     <form className="ed" onSubmit={(e) => e.preventDefault()}>
+      {remoteDiffers && (
+        <div className="ed-stale">
+          <p className="ed-stale__text">
+            The shared content differs from what this browser had saved. Yours is on screen and
+            nothing has been lost — choose which to work from.
+          </p>
+          <div className="ed-stale__actions">
+            <button type="button" className="ed-stale__btn" onClick={takeShared}>
+              Use the shared content
+            </button>
+            <button type="button" className="ed-stale__btn" onClick={keepLocal}>
+              Keep mine
+            </button>
+          </div>
+        </div>
+      )}
       {staleSeed && (
+
         <div className="ed-stale">
           <p className="ed-stale__text">
             This browser’s saved content is older than the content shipped in this build. Errors you

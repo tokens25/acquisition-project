@@ -1,4 +1,6 @@
 import './App.css'
+
+import { useState } from 'react'
 import { StepPreview } from './card/StepPreview'
 import { SetEditor } from './editor/SetEditor'
 import { useCardSet } from './editor/useCardSet'
@@ -12,6 +14,36 @@ import { useCardSet } from './editor/useCardSet'
  */
 export function App() {
   const store = useCardSet()
+  const [publishNote, setPublishNote] = useState<string | null>(null)
+
+  // What the header says about the copy on screen. The three cases are
+  // genuinely different and a person needs to tell them apart: shared and
+  // current, shared with unsaved work, or not shared at all.
+  const remote = store.remote
+  const shared = remote?.kind === 'published' || remote?.kind === 'unpublished'
+  // The file is shared to read but not to write: there is no API to commit it.
+  const fileOnly = remote?.kind === 'file'
+  const sourceLabel = !remote
+    ? 'Checking for shared content…'
+    : remote.kind === 'published'
+      ? store.unpublished
+        ? 'Shared content, with unpublished edits'
+        : 'Shared content, up to date'
+      : remote.kind === 'unpublished'
+        ? 'Nothing published yet — publishing will create it'
+        : remote.kind === 'file'
+          ? store.unpublished
+            ? 'Shared file from the repo, with local edits — export and commit to share them'
+            : 'Shared file from the repo'
+          : 'This browser only — not shared'
+
+  const onPublish = async () => {
+    const message = window.prompt('What changed?', 'content: update plan copy')
+    if (message === null) return
+    const result = await store.publish(message)
+    setPublishNote(result.ok ? 'Published.' : (result.error ?? 'Publish failed.'))
+  }
+
   const { journey } = store
 
   // "IE" is a market code, not something to show a person. Resolve it to the
@@ -36,6 +68,17 @@ export function App() {
         </p>
         </div>
         <div className="page__actions">
+          {shared && (
+            <button
+              type="button"
+              className="page__btn page__btn--primary"
+              onClick={() => void onPublish()}
+              disabled={store.publishing || !store.unpublished}
+              title={store.unpublished ? undefined : 'Nothing to publish — this matches what is published.'}
+            >
+              {store.publishing ? 'Publishing…' : 'Publish'}
+            </button>
+          )}
           <button type="button" className="page__btn" onClick={store.exportJson}>
             Export JSON
           </button>
@@ -56,7 +99,13 @@ export function App() {
             Reset
           </button>
         </div>
-
+        <p
+          className="page__source"
+          data-state={store.unpublished ? 'dirty' : shared || fileOnly ? 'shared' : 'local'}
+        >
+          {sourceLabel}
+          {publishNote && <span className="page__source-note"> · {publishNote}</span>}
+        </p>
       </header>
       {store.importError && (
         <p className="page__error">Import failed: {store.importError}</p>

@@ -7,6 +7,8 @@ import type { Journey } from '../rules/journey'
 import { journeysFor } from '../rules/journey'
 import { journeys } from '../rules/journeys'
 import { findOverride, resolveOffer } from '../rules/resolve'
+import type { RemoteState } from './remote'
+import { loadRemote, publishRemote } from './remote'
 
 const STORAGE_KEY = 'acquisition-card-set-v3'
 
@@ -59,10 +61,10 @@ interface StoredPayload {
   set: unknown
 }
 
-function read(): { set: CardSet; seed: string } {
+function read(): { set: CardSet; seed: string; hadLocal: boolean } {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    if (!stored) return { set: defaultSet, seed: SEED_FINGERPRINT }
+    if (!stored) return { set: defaultSet, seed: SEED_FINGERPRINT, hadLocal: false }
     const parsed: unknown = JSON.parse(stored)
     // A payload saved before the stamp existed is a bare set. It is exactly the
     // case worth flagging, so absence counts as stale rather than as current.
@@ -70,9 +72,9 @@ function read(): { set: CardSet; seed: string } {
     const isWrapped = typeof wrapped?.seed === 'string' && wrapped.set !== undefined
     const raw = isWrapped ? wrapped.set : parsed
     const seed = isWrapped ? wrapped.seed : null
-    return { set: hydrate(raw), seed: seed ?? 'pre-stamp' }
+    return { set: hydrate(raw), seed: seed ?? 'pre-stamp', hadLocal: true }
   } catch {
-    return { set: defaultSet, seed: SEED_FINGERPRINT }
+    return { set: defaultSet, seed: SEED_FINGERPRINT, hadLocal: false }
   }
 }
 
@@ -89,6 +91,16 @@ export interface CardSetStore {
   context: Context
   editingBase: boolean
   setContext: (context: Context) => void
+  /** Where the content on screen came from, and whether it can be published. */
+  remote: RemoteState | null
+  /** Local edits not yet in the published copy. */
+  unpublished: boolean
+  publish: (message: string) => Promise<{ ok: boolean; error?: string; conflict?: boolean }>
+  publishing: boolean
+  /** The shared copy differs from what this browser had. Neither has been lost. */
+  remoteDiffers: boolean
+  takeShared: () => void
+  keepLocal: () => void
   /** Saved content predates the shipped defaults now in the build. */
   staleSeed: boolean
   /** Keep the saved content and stop flagging it as behind the build. */
@@ -117,6 +129,11 @@ export function useCardSet(): CardSetStore {
   // Stamping the current fingerprint instead would mark stale content as fresh
   // the moment the page loaded, and the warning would never be seen twice.
   const [seed, setSeed] = useState(initial.seed)
+  const [remote, setRemote] = useState<RemoteState | null>(null)
+  const [publishedSha, setPublishedSha] = useState<string | null>(null)
+  const [publishedText, setPublishedText] = useState<string | null>(null)
+  const [publishing, setPublishing] = useState(false)
+  const [remoteDiffers, setRemoteDiffers] = useState(false)
   const [importError, setImportError] = useState<string | null>(null)
   const [importNotes, setImportNotes] = useState<string[]>([])
 
@@ -265,6 +282,71 @@ export function useCardSet(): CardSetStore {
     journeysFor(journeys, context)[0] ??
     journeys[0]
 
+  /**
+   * Adopt the shared copy on load — but never over the top of local work.
+   *
+   * A shared surface is the point, so the shared copy is what should normally
+   * be on screen. It must not cost someone their unsaved edits to get there:
+   * this browser's copy is the only place those exist. When the two differ the
+   * local one stays on screen and the difference is offered as a choice, the
+   * same way stale seed content is.
+   */
+  useEffect(() => {
+    let cancelled = false
+    loadRemote().then((state) => {
+      if (cancelled) return
+      setRemote(state)
+      if (state.kind !== 'published' && state.kind !== 'file') return
+
+      // The file has no sha, so it can be read but not written back through
+      // the API — publishing it means committing it.
+      setPublishedSha(state.kind === 'published' ? state.sha : null)
+      const text = JSON.stringify(state.set)
+      setPublishedText(text)
+
+      if (!initial.hadLocal || JSON.stringify(initial.set) === text) {
+        setSet(hydrate(state.set))
+        setSeed(SEED_FINGERPRINT)
+      } else {
+        setRemoteDiffers(true)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [initial])
+
+  /** Take the shared copy, replacing this browser's version. */
+  const takeShared = useCallback(() => {
+    const state = remote
+    if (state?.kind !== 'published' && state?.kind !== 'file') return
+    setSet(hydrate(state.set))
+    setSeed(SEED_FINGERPRINT)
+    setRemoteDiffers(false)
+  }, [remote])
+
+  /** Keep this browser's version; it becomes what would be published. */
+  const keepLocal = useCallback(() => setRemoteDiffers(false), [])
+
+  const publish = useCallback(
+    async (message: string) => {
+      setPublishing(true)
+      const result = await publishRemote(set, publishedSha, message)
+      setPublishing(false)
+      if (!result.ok) return { ok: false, error: result.error, conflict: result.conflict }
+      setPublishedSha(result.sha)
+      setPublishedText(JSON.stringify(set))
+      setRemote({ kind: 'published', sha: result.sha, set })
+      return { ok: true }
+    },
+    [set, publishedSha],
+  )
+
+  // Compared against what was published rather than tracked with a dirty flag:
+  // a flag would survive an edit that was undone, and claim work that is not
+  // there.
+  const unpublished = publishedText !== null && publishedText !== JSON.stringify(set)
+
   const acceptSeed = useCallback(() => setSeed(SEED_FINGERPRINT), [])
   const staleSeed = seed !== SEED_FINGERPRINT
 
@@ -273,6 +355,13 @@ export function useCardSet(): CardSetStore {
     context,
     editingBase,
     setContext,
+    remote,
+    unpublished,
+    publish,
+    publishing,
+    remoteDiffers,
+    takeShared,
+    keepLocal,
     staleSeed,
     acceptSeed,
     journey,

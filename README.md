@@ -103,3 +103,26 @@ npm run code-connect          # publish
 Fonts, icons and team badges are committed under `src/assets`. The badges and
 the add-on thumbnail were exported from the Figma file; the icons come from the
 DAZN icon set and paint with `currentColor`.
+
+## Shared content
+
+Content lives in `public/content/card-set.json`, committed to this repository.
+Everyone who opens the app fetches that file, so a PM and a product owner see
+the same thing without passing a file between them.
+
+Local edits are never overwritten by it. When the two differ the local copy
+stays on screen and the app offers the choice.
+
+**Publishing without any setup** — Export JSON from the editor, replace
+`public/content/card-set.json`, commit. The deploy makes it the shared copy.
+
+**Publishing from the app** — set `GITHUB_TOKEN` on the Vercel project (a token
+with `contents:write` on this repo) and a **Publish** button appears, which
+commits the file for you. Optional overrides: `GITHUB_REPO` (`owner/name`),
+`GITHUB_BRANCH`, `CONTENT_PATH`.
+
+A publish sends the file's sha along with it, so if someone else published
+first the write is refused rather than silently overwriting their work.
+
+`scripts/seed-content-file.sh` regenerates the file from the shipped defaults.
+It discards whatever is published, so it is for a fresh start only.

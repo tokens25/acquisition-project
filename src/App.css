@@ -158,3 +158,26 @@
   color: var(--color-accent-warning-text);
   font-size: var(--font-size-caption-xs);
 }
+
+/* Which copy of the content is on screen, and whether it is published. */
+.page__source {
+  flex-basis: 100%;
+  margin: var(--space-8) 0 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+.page__source[data-state='dirty'] {
+  color: var(--color-accent-warning-text, var(--color-text-secondary));
+}
+.page__source-note {
+  color: var(--color-text-secondary);
+}
+.page__btn--primary {
+  border-color: var(--color-brand-primary);
+  color: var(--color-text-primary);
+}
+.page__btn--primary:disabled {
+  border-color: var(--color-border-full-color-subtle);
+  color: var(--color-text-tertiary);
+  cursor: default;
+}

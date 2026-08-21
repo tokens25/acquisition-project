@@ -1,0 +1,413 @@
+{
+  "markets": [
+    {
+      "code": "IE",
+      "label": "Ireland",
+      "locale": "en-IE",
+      "currency": "EUR"
+    },
+    {
+      "code": "DE",
+      "label": "Germany",
+      "locale": "de-DE",
+      "currency": "EUR"
+    },
+    {
+      "code": "ES",
+      "label": "Spain",
+      "locale": "es-ES",
+      "currency": "EUR"
+    },
+    {
+      "code": "GB",
+      "label": "United Kingdom",
+      "locale": "en-GB",
+      "currency": "GBP"
+    },
+    {
+      "code": "US",
+      "label": "United States",
+      "locale": "en-US",
+      "currency": "USD"
+    }
+  ],
+  "campaigns": [
+    {
+      "code": "wc26",
+      "label": "World Cup 2026"
+    }
+  ],
+  "channels": [
+    {
+      "code": "direct",
+      "label": "Direct"
+    },
+    {
+      "code": "movistar",
+      "label": "Movistar",
+      "markets": [
+        "ES"
+      ]
+    }
+  ],
+  "cadences": [
+    "Monthly Flex",
+    "Instalments Annual",
+    "Annual Upfront"
+  ],
+  "logoCatalog": [
+    {
+      "id": "yankees",
+      "name": "New York Yankees",
+      "altText": "New York Yankees logo",
+      "status": "active"
+    },
+    {
+      "id": "nets",
+      "name": "Brooklyn Nets",
+      "altText": "Brooklyn Nets logo",
+      "status": "active"
+    },
+    {
+      "id": "knicks",
+      "name": "New York Knicks",
+      "altText": "New York Knicks logo",
+      "status": "active"
+    },
+    {
+      "id": "rangers",
+      "name": "New York Rangers",
+      "altText": "New York Rangers logo",
+      "status": "active"
+    },
+    {
+      "id": "devils",
+      "name": "New Jersey Devils",
+      "altText": "New Jersey Devils logo",
+      "status": "active"
+    },
+    {
+      "id": "islanders",
+      "name": "New York Islanders",
+      "altText": "New York Islanders logo",
+      "status": "active"
+    },
+    {
+      "id": "sabres",
+      "name": "Buffalo Sabres",
+      "altText": "Buffalo Sabres logo",
+      "status": "active"
+    }
+  ],
+  "featureCatalog": [
+    {
+      "id": "feature-multiview",
+      "iconId": "multiview",
+      "text": "Watch up to 4 matches at once with multiview",
+      "status": "active"
+    },
+    {
+      "id": "feature-multicam",
+      "iconId": "multicam",
+      "text": "Choose the action you want with Multi camera",
+      "status": "active"
+    },
+    {
+      "id": "feature-hdr",
+      "iconId": "hdr",
+      "text": "Enjoy HDR and Dolby 5.1 surround sound",
+      "status": "active"
+    },
+    {
+      "id": "feature-devices",
+      "iconId": "devices",
+      "text": "Stream on 2 devices in 1 location",
+      "status": "active"
+    },
+    {
+      "id": "feature-download",
+      "iconId": "download",
+      "text": "Download to watch on the go",
+      "status": "active"
+    },
+    {
+      "id": "feature-included",
+      "iconId": "check",
+      "text": "Included with your subscription",
+      "status": "active"
+    },
+    {
+      "id": "feature-annual-saving",
+      "iconId": "discount",
+      "text": "Save with an annual plan",
+      "status": "active"
+    }
+  ],
+  "addOnCatalog": [
+    {
+      "id": "wc26",
+      "title": "FIFA World Cup 2026",
+      "subtitle": "Covering all 104 matches",
+      "price": 19,
+      "imageId": "world-cup"
+    }
+  ],
+  "tiers": [
+    {
+      "description": "Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.",
+      "features": [
+        "feature-multiview",
+        "feature-multicam",
+        "feature-hdr",
+        "feature-devices",
+        "feature-download"
+      ],
+      "logoTiles": [
+        "yankees",
+        "nets",
+        "knicks",
+        "rangers",
+        "devils",
+        "islanders",
+        "sabres"
+      ],
+      "logoTotal": 9,
+      "ultimate": true,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [
+        {
+          "id": "ultimate-es",
+          "when": {
+            "market": "ES"
+          },
+          "patch": {
+            "planName": "Total"
+          }
+        }
+      ],
+      "id": "ultimate",
+      "planName": "Ultimate",
+      "displayOrder": 1
+    },
+    {
+      "description": "Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.",
+      "features": [
+        "feature-multiview",
+        "feature-multicam",
+        "feature-hdr",
+        "feature-devices",
+        "feature-download"
+      ],
+      "logoTiles": [
+        "yankees",
+        "nets",
+        "knicks",
+        "rangers",
+        "devils",
+        "islanders",
+        "sabres"
+      ],
+      "logoTotal": 9,
+      "ultimate": false,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "id": "standard",
+      "planName": "Standard",
+      "displayOrder": 2
+    },
+    {
+      "description": "Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.",
+      "features": [
+        "feature-multiview",
+        "feature-multicam",
+        "feature-hdr",
+        "feature-devices",
+        "feature-download"
+      ],
+      "logoTiles": [
+        "yankees",
+        "nets",
+        "knicks",
+        "rangers",
+        "devils",
+        "islanders",
+        "sabres"
+      ],
+      "logoTotal": 14,
+      "ultimate": false,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "id": "flex",
+      "planName": "Flex",
+      "displayOrder": 3
+    },
+    {
+      "description": "Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.",
+      "features": [
+        "feature-multiview",
+        "feature-multicam",
+        "feature-hdr",
+        "feature-devices",
+        "feature-download"
+      ],
+      "logoTiles": [
+        "yankees",
+        "nets",
+        "knicks",
+        "rangers",
+        "devils",
+        "islanders",
+        "sabres"
+      ],
+      "logoTotal": 12,
+      "ultimate": false,
+      "status": "legacy",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "id": "la-liga-legacy",
+      "planName": "La Liga",
+      "displayOrder": 4
+    }
+  ],
+  "offers": [
+    {
+      "discount": true,
+      "introPrice": 25.99,
+      "introMonths": 3,
+      "addOnId": "wc26",
+      "addOnPurchaseType": "one_time_payment",
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "ultimate-monthly",
+      "tierId": "ultimate",
+      "cadence": "Monthly Flex",
+      "standardPrice": 34.99
+    },
+    {
+      "discount": true,
+      "introPrice": 24.99,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [
+        "wc26"
+      ],
+      "id": "ultimate-instal",
+      "tierId": "ultimate",
+      "cadence": "Instalments Annual",
+      "standardPrice": 29.99
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [
+        "wc26"
+      ],
+      "id": "ultimate-upfront",
+      "tierId": "ultimate",
+      "cadence": "Annual Upfront",
+      "standardPrice": 279.99
+    },
+    {
+      "discount": true,
+      "introPrice": 29.99,
+      "introMonths": 3,
+      "addOnId": "wc26",
+      "addOnPurchaseType": "one_time_payment",
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "ultimate-monthly-de",
+      "tierId": "ultimate",
+      "cadence": "Monthly Flex",
+      "market": "DE",
+      "standardPrice": 39.99
+    },
+    {
+      "discount": true,
+      "introPrice": 22.99,
+      "introMonths": 3,
+      "addOnId": "wc26",
+      "addOnPurchaseType": "one_time_payment",
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "ultimate-monthly-gb",
+      "tierId": "ultimate",
+      "cadence": "Monthly Flex",
+      "market": "GB",
+      "standardPrice": 29.99
+    },
+    {
+      "discount": true,
+      "introPrice": 19.99,
+      "introMonths": 3,
+      "addOnId": "wc26",
+      "addOnPurchaseType": "discount_code",
+      "addOnDiscountPercent": 15,
+      "includedAddOnIds": [],
+      "id": "standard-monthly",
+      "tierId": "standard",
+      "cadence": "Monthly Flex",
+      "standardPrice": 24.99
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "standard-instal",
+      "tierId": "standard",
+      "cadence": "Instalments Annual",
+      "standardPrice": 21.99
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "flex-monthly",
+      "tierId": "flex",
+      "cadence": "Monthly Flex",
+      "standardPrice": 19.99
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "laliga-monthly",
+      "tierId": "la-liga-legacy",
+      "cadence": "Monthly Flex",
+      "standardPrice": 14.99
+    }
+  ],
+  "context": {
+    "market": "IE",
+    "channel": "direct",
+    "cadence": "Monthly Flex"
+  },
+  "journeyId": "hero-signup",
+  "featureIcons": "feature",
+  "stepId": "plans",
+  "device": "desktop"
+}
