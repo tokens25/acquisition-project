@@ -83,10 +83,10 @@ export function App() {
             Export JSON
           </button>
           <label className="page__btn">
-            Import JSON
-            <input
+            Import spreadsheet or JSON
+          <input
               type="file"
-              accept="application/json"
+              accept=".xlsx,application/json"
               hidden
               onChange={(e) => {
                 const file = e.target.files?.[0]

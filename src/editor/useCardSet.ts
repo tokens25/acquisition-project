@@ -3,6 +3,8 @@ import type { CadenceOffer, CardSet, Context, Tier, TierPatch } from '../rules/c
 import { DIRECT } from '../rules/content'
 import { defaultSet } from '../rules/defaults'
 import { adaptEngineContent, isEngineContent } from '../rules/adapt'
+import { readTemplate } from '../rules/sheet'
+import { readWorkbook } from '../rules/xlsx'
 import type { Journey } from '../rules/journey'
 import { journeysFor } from '../rules/journey'
 import { journeys } from '../rules/journeys'
@@ -258,8 +260,25 @@ export function useCardSet(): CardSetStore {
    * recognisable by its `cadenceOffers` key, and is adapted on the way in so
    * their content needs no manual step to reach the renderer.
    */
+  /**
+   * Takes the filled spreadsheet directly, or JSON from either shape.
+   *
+   * The spreadsheet path exists because the alternative was a terminal command
+   * between the person filling the sheet and the app reading it — which meant
+   * the person who owns the content could not load their own work.
+   */
   const importJson = useCallback(async (file: File) => {
     try {
+      if (/\.xlsx$/i.test(file.name)) {
+        const { content, notes } = readTemplate(await readWorkbook(file))
+        if (!isEngineContent(content)) throw new Error('The template produced nothing readable.')
+        const { set: adapted, notes: adapterNotes } = adaptEngineContent(content)
+        setSet(adapted)
+        setImportNotes([...notes, ...adapterNotes])
+        setImportError(null)
+        return
+      }
+
       const parsed: unknown = JSON.parse(await file.text())
       if (isEngineContent(parsed)) {
         const { set: adapted, notes } = adaptEngineContent(parsed)
