@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { CardSet, Context } from '../rules/content'
 import { marketFor, resolveSet } from '../rules/resolve'
 import { RuledCard } from './RuledCard'
@@ -24,6 +24,8 @@ export function CardSetView({
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const probeRef = useRef<HTMLParagraphElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [hasMore, setHasMore] = useState(false)
   const [descriptionLines, setDescriptionLines] = useState<1 | 2>(1)
 
   const cards = useMemo(() => resolveSet(set, context), [set, context])
@@ -67,6 +69,32 @@ export function CardSetView({
     return () => observer.disconnect()
   }, [cards])
 
+  // Whether anything is still to the right. Recomputed on scroll and on resize,
+  // because either can end the overflow — and a fade left showing over the last
+  // card would be a worse lie than no fade at all.
+  const updateMore = useCallback(() => {
+    const row = ref.current
+    if (!row) return
+    const remaining = row.scrollWidth - row.clientWidth - row.scrollLeft
+    setHasMore(remaining > 4)
+  }, [])
+
+  useEffect(() => {
+    const row = ref.current
+    if (!row) return
+    updateMore()
+    // Listened for natively rather than through onScroll: scroll does not
+    // bubble, and React's delegated handler misses a programmatic scrollLeft.
+    row.addEventListener('scroll', updateMore, { passive: true })
+    const observer = new ResizeObserver(updateMore)
+    observer.observe(row)
+    return () => {
+      row.removeEventListener('scroll', updateMore)
+      observer.disconnect()
+    }
+  }, [cards, updateMore])
+
+
   if (cards.length === 0) {
     return (
       <p className="acq-set__empty">
@@ -76,21 +104,27 @@ export function CardSetView({
   }
 
   return (
-    <div className="acq-set" ref={ref} data-description-lines={descriptionLines}>
-      {cards.map(({ tier, offer }) => (
-        <RuledCard
-          key={tier.id}
-          set={set}
-          tier={tier}
-          offer={offer}
-          market={market}
-          context={context}
-          device={set.device}
-          descriptionLines={descriptionLines}
-          onMore={onMore}
-        />
-      ))}
-      <p className="acq-set__probe" ref={probeRef} aria-hidden="true" />
+    <div className="acq-set-scroll" ref={scrollRef} data-more={hasMore || undefined}>
+      <div
+        className="acq-set"
+        ref={ref}
+        data-description-lines={descriptionLines}
+      >
+        {cards.map(({ tier, offer }) => (
+          <RuledCard
+            key={tier.id}
+            set={set}
+            tier={tier}
+            offer={offer}
+            market={market}
+            context={context}
+            device={set.device}
+            descriptionLines={descriptionLines}
+            onMore={onMore}
+          />
+        ))}
+        <p className="acq-set__probe" ref={probeRef} aria-hidden="true" />
+      </div>
     </div>
   )
 }

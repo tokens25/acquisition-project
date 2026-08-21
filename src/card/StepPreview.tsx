@@ -3,6 +3,7 @@ import './journey.css'
 import type { CardSet, Context } from '../rules/content'
 import type { Journey } from '../rules/journey'
 import { knownAt, resolveJourney } from '../rules/journey'
+import { resolveSet } from '../rules/resolve'
 import { CardSetView } from './CardSetView'
 
 /**
@@ -27,6 +28,9 @@ export function StepPreview({
   if (!step) return <p className="jy__note">This journey has no steps in this market.</p>
 
   const position = steps.indexOf(step) + 1
+  // A partner storefront can carry a fourth card, and the row shows three.
+  // Saying the number means a card scrolled out of view is still known about.
+  const planCount = resolveSet(set, context).length
   const inbound = knownAt(journey, context, step.id)
 
   return (
@@ -40,6 +44,9 @@ export function StepPreview({
           step {position} of {steps.length} · entered from “{journey.entry.cta}”
         </span>
         {inbound.length > 0 && <span className="jy__seeds">inbound: {inbound.join(', ')}</span>}
+        {step.renderer === 'plans' && (
+          <span className="jy__meta">{planCount} plans in this set</span>
+        )}
       </p>
 
       {step.renderer === 'plans' ? (

@@ -452,3 +452,38 @@ select.ed-field__input {
   block-size: var(--ed-control-h);
   padding: 0;
 }
+
+/* Saved content is behind the build. A warning, not an error: the content may
+   be perfectly good, it just is not what the repository ships. */
+.ed-stale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-16);
+  border: var(--border-1) solid var(--color-accent-warning-surface, var(--color-border-full-color-default));
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-2);
+}
+.ed-stale__text {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.5;
+}
+.ed-stale__actions {
+  display: flex;
+  gap: var(--space-8);
+}
+.ed-stale__btn {
+  padding: var(--space-6) var(--space-12);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-label-xs);
+  cursor: pointer;
+}
+.ed-stale__btn:hover {
+  background: var(--color-surface-container-1);
+}

@@ -422,3 +422,31 @@
   color: var(--color-text-tertiary);
   font-size: var(--font-size-caption-sm);
 }
+
+/* The row scrolls, and on a wide screen it can end mid-card with no sign that
+   another follows — a partner storefront carries a fourth. The fade is painted
+   on a wrapper so it does not scroll away with the cards, and only while there
+   is more to reach. */
+.acq-set-scroll {
+  position: relative;
+  min-inline-size: 0;
+}
+.acq-set-scroll::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inline-size: var(--space-40);
+  background: linear-gradient(to left, var(--color-surface-container-1), transparent);
+  opacity: 0;
+  transition: opacity 120ms ease;
+  pointer-events: none;
+}
+.acq-set-scroll[data-more]::after {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .acq-set-scroll::after {
+    transition: none;
+  }
+}

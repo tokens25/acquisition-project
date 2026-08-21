@@ -25,7 +25,7 @@ const PURCHASE_TYPES: { value: AddOnPurchaseType; label: string }[] = [
  * cadence it is not sold at has no row at all.
  */
 export function SetEditor({ store }: { store: CardSetStore }) {
-  const { set, context, editingBase, setContext, updateSet, journey } = store
+  const { set, context, editingBase, setContext, updateSet, journey, staleSeed, acceptSeed } = store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   // A storefront belongs to its markets, and a journey to its storefront — so
@@ -47,6 +47,22 @@ export function SetEditor({ store }: { store: CardSetStore }) {
 
   return (
     <form className="ed" onSubmit={(e) => e.preventDefault()}>
+      {staleSeed && (
+        <div className="ed-stale">
+          <p className="ed-stale__text">
+            This browser’s saved content is older than the content shipped in this build. Errors you
+            see here may already be fixed in the repository.
+          </p>
+          <div className="ed-stale__actions">
+            <button type="button" className="ed-stale__btn" onClick={store.reset}>
+              Load shipped content
+            </button>
+            <button type="button" className="ed-stale__btn" onClick={acceptSeed}>
+              Keep mine
+            </button>
+          </div>
+        </div>
+      )}
       <div
         className="ed-gate"
         data-state={coverage.failing.length ? 'blocked' : coverage.warning.length ? 'warn' : 'clear'}

@@ -34,14 +34,48 @@ function hydrate(raw: unknown): CardSet {
   }
 }
 
-function read(): CardSet {
+/**
+ * A fingerprint of the shipped content.
+ *
+ * Saved work lives in localStorage and never reseeds, so a browser that loaded
+ * an older build keeps that build's content for ever — and then reports
+ * failures against data the repository has already fixed. That is expensive to
+ * diagnose, because the code is innocent and looks it.
+ *
+ * Derived rather than hand-bumped: a constant someone has to remember to change
+ * is a constant that eventually says the wrong thing.
+ */
+function fingerprint(value: unknown): string {
+  const text = JSON.stringify(value)
+  let hash = 5381
+  for (let i = 0; i < text.length; i += 1) hash = ((hash << 5) + hash + text.charCodeAt(i)) | 0
+  return (hash >>> 0).toString(36)
+}
+
+const SEED_FINGERPRINT = fingerprint(defaultSet)
+
+interface StoredPayload {
+  seed: string
+  set: unknown
+}
+
+function read(): { set: CardSet; seed: string } {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    return stored ? hydrate(JSON.parse(stored)) : defaultSet
+    if (!stored) return { set: defaultSet, seed: SEED_FINGERPRINT }
+    const parsed: unknown = JSON.parse(stored)
+    // A payload saved before the stamp existed is a bare set. It is exactly the
+    // case worth flagging, so absence counts as stale rather than as current.
+    const wrapped = parsed as Partial<StoredPayload>
+    const isWrapped = typeof wrapped?.seed === 'string' && wrapped.set !== undefined
+    const raw = isWrapped ? wrapped.set : parsed
+    const seed = isWrapped ? wrapped.seed : null
+    return { set: hydrate(raw), seed: seed ?? 'pre-stamp' }
   } catch {
-    return defaultSet
+    return { set: defaultSet, seed: SEED_FINGERPRINT }
   }
 }
+
 
 function selectorFor(context: Context): Partial<Pick<Context, 'market' | 'campaign'>> {
   const when: Partial<Pick<Context, 'market' | 'campaign'>> = {}
@@ -55,6 +89,10 @@ export interface CardSetStore {
   context: Context
   editingBase: boolean
   setContext: (context: Context) => void
+  /** Saved content predates the shipped defaults now in the build. */
+  staleSeed: boolean
+  /** Keep the saved content and stop flagging it as behind the build. */
+  acceptSeed: () => void
   /** The journey that runs in this context — never one that doesn't. */
   journey: Journey
   updateSet: (patch: Partial<CardSet>) => void
@@ -73,17 +111,22 @@ export interface CardSetStore {
 }
 
 export function useCardSet(): CardSetStore {
-  const [set, setSet] = useState<CardSet>(read)
+  const [initial] = useState(read)
+  const [set, setSet] = useState<CardSet>(initial.set)
+  // The seed this content was authored against, carried forward on every write.
+  // Stamping the current fingerprint instead would mark stale content as fresh
+  // the moment the page loaded, and the warning would never be seen twice.
+  const [seed, setSeed] = useState(initial.seed)
   const [importError, setImportError] = useState<string | null>(null)
   const [importNotes, setImportNotes] = useState<string[]>([])
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(set))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ seed, set }))
     } catch {
       // Private mode or a full quota — the page still works, it just won't persist.
     }
-  }, [set])
+  }, [set, seed])
 
   const context = set.context
   const editingBase = isBaseContext(context)
@@ -178,7 +221,10 @@ export function useCardSet(): CardSetStore {
     [context, editingBase],
   )
 
-  const reset = useCallback(() => setSet(defaultSet), [])
+  const reset = useCallback(() => {
+    setSet(defaultSet)
+    setSeed(SEED_FINGERPRINT)
+  }, [])
 
   const exportJson = useCallback(() => {
     const blob = new Blob([JSON.stringify(set, null, 2)], { type: 'application/json' })
@@ -219,11 +265,16 @@ export function useCardSet(): CardSetStore {
     journeysFor(journeys, context)[0] ??
     journeys[0]
 
+  const acceptSeed = useCallback(() => setSeed(SEED_FINGERPRINT), [])
+  const staleSeed = seed !== SEED_FINGERPRINT
+
   return {
     set,
     context,
     editingBase,
     setContext,
+    staleSeed,
+    acceptSeed,
     journey,
 
     updateSet,
