@@ -570,3 +570,10 @@ select.ed-field__input {
   padding: var(--space-8) var(--space-12);
   border-inline-start: var(--border-2) solid var(--color-border-full-color-subtle);
 }
+
+.ed-orphan__text {
+  flex: 1;
+  align-self: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+}

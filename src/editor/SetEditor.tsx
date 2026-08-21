@@ -183,7 +183,7 @@ export function SetEditor({ store }: { store: CardSetStore }) {
               <TierFields key={tier.id} tier={tier} store={store} />
             ))}
 
-          <FeatureCatalogue store={store} />
+          <OrphanFeatures store={store} />
         </>
       )}
     </form>
@@ -218,7 +218,10 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
   const usedBy = (featureId: string) =>
     set.tiers.filter((t) => resolveTier(t, context).features.includes(featureId)).length
 
-  const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
+  const updateFeature = (
+    id: string,
+    p: { text?: string; iconId?: string; status?: 'active' | 'deprecated' },
+  ) =>
     updateSet({
       featureCatalog: set.featureCatalog.map((f) => (f.id === id ? { ...f, ...p } : f)),
     })
@@ -342,14 +345,18 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
                   ✕
                 </button>
               </div>
-              {/* A line only this tier uses can be written here. A shared one
-                  cannot: editing it from one tier would silently rewrite the
-                  others, which is the coupling the catalogue exists to make
-                  visible rather than accidental. */}
-              {entry && usedBy(entry.id) === 1 ? (
+              {/* Every line is written here, shared or not. Sending the common
+                  case to a second panel put most edits behind a detour; the
+                  coupling is better named than avoided. */}
+              {entry && (
                 <div className="ed-feature-inline">
                   <TextField
                     label="Line"
+                    hint={
+                      usedBy(entry.id) > 1
+                        ? `Shared with ${usedBy(entry.id)} tiers — this wording and icon change on all of them.`
+                        : undefined
+                    }
                     value={entry.text}
                     onChange={(v) => updateFeature(entry.id, { text: v })}
                   />
@@ -369,14 +376,13 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
                       </button>
                     ))}
                   </div>
+                  <CheckField
+                    label="Retired"
+                    hint="Keeps the line out of new picks. Tiers already using it keep rendering it."
+                    checked={entry.status === 'deprecated'}
+                    onChange={(v) => updateFeature(entry.id, { status: v ? 'deprecated' : 'active' })}
+                  />
                 </div>
-              ) : (
-                entry && (
-                  <p className="ed-field__inert">
-                    Shared with {usedBy(entry.id)} tiers — change its wording or icon in the Feature
-                    catalogue below.
-                  </p>
-                )
               )}
             </div>
           )
@@ -390,104 +396,54 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
 }
 
 /**
- * The feature catalogue: the icon-and-text pairings a tier picks from.
+ * Feature lines nothing points at any more.
  *
- * Set-level, not market-scoped, and deliberately so — the pairing is decided
- * once so that deleting a line from one tier cannot shift another tier's icons.
- * The cost is that editing here reaches every market, which the note says out
- * loud rather than leaving to be discovered.
+ * Every line is written on the tier that uses it, so there is no standing
+ * catalogue panel — it put the common case behind a detour. What a tier cannot
+ * reach is a line dropped from the last tier that had it: still in the
+ * catalogue, still offered in every picker, authored by nobody. This appears
+ * only when that has happened, and disappears again once it is dealt with.
  */
-function FeatureCatalogue({ store }: { store: CardSetStore }) {
+function OrphanFeatures({ store }: { store: CardSetStore }) {
   const { set, updateSet } = store
 
-  const update = (id: string, patch: Partial<(typeof set.featureCatalog)[number]>) =>
-    updateSet({
-      featureCatalog: set.featureCatalog.map((f) => (f.id === id ? { ...f, ...patch } : f)),
-    })
-
-  const inUse = (id: string) =>
-    set.tiers.some(
-      (t) => t.features.includes(id) || t.overrides.some((o) => o.patch.features?.includes(id)),
-    )
-
+  const orphans = set.featureCatalog.filter(
+    (f) =>
+      !set.tiers.some(
+        (t) => t.features.includes(f.id) || t.overrides.some((o) => o.patch.features?.includes(f.id)),
+      ),
+  )
+  if (orphans.length === 0) return null
 
   return (
-    <FieldGroup title="Feature catalogue">
+    <FieldGroup title="Unused feature lines">
       <p className="ed-field__hint">
-        One icon and one line, paired once and reused. Edits here reach every market and every tier
-        that uses the line.
+        Still offered in the picker, used by no tier. Nothing references them, so removing one
+        cannot leave a tier pointing at a line that is gone.
       </p>
-      {set.featureCatalog.map((feature) => (
-        <div className="ed-feature-entry" key={feature.id}>
-          <TextField
-            label={feature.id}
-            value={feature.text}
-            onChange={(v) => update(feature.id, { text: v })}
-          />
-          <div className="ed-icons" role="group" aria-label={`Icon for ${feature.text}`}>
-            {Object.entries(iconArtwork).map(([iconId, svg]) => (
-              <button
-                key={iconId}
-                type="button"
-                className="ed-icon"
-                data-on={feature.iconId === iconId || undefined}
-                onClick={() => update(feature.id, { iconId })}
-                aria-pressed={feature.iconId === iconId}
-                aria-label={iconId}
-                title={iconId}
-              >
-                <Icon svg={svg} size={16} />
-              </button>
-            ))}
-          </div>
-          {inUse(feature.id) ? (
-            <CheckField
-              label="Retired"
-              hint="Still on a tier — retiring keeps it rendering and flags it, rather than leaving a reference to nothing."
-              checked={feature.status === 'deprecated'}
-              onChange={(v) => update(feature.id, { status: v ? 'deprecated' : 'active' })}
-            />
-          ) : (
-            // Nothing references it, so removing it cannot dangle. A line
-            // written by mistake should not have to be lived with.
-            <button
-              type="button"
-              className="ed__btn ed__btn--quiet"
-              onClick={() =>
-                updateSet({
-                  featureCatalog: set.featureCatalog.filter((f) => f.id !== feature.id),
-                })
-              }
-            >
-              Remove — used by no tier
-            </button>
-          )}
+      {orphans.map((feature) => (
+        <div className="ed-row" key={feature.id}>
+          <span className="ed-feature-icon" aria-hidden="true">
+            <Icon svg={iconArtwork[feature.iconId] ?? iconArtwork.check} size={16} />
+          </span>
+          <span className="ed-orphan__text">{feature.text || feature.id}</span>
+          <button
+            type="button"
+            className="ed__btn ed__btn--quiet"
+            onClick={() =>
+              updateSet({ featureCatalog: set.featureCatalog.filter((f) => f.id !== feature.id) })
+            }
+          >
+            Remove
+          </button>
         </div>
       ))}
-      <button
-        type="button"
-        className="ed__btn"
-        onClick={() =>
-          updateSet({
-            featureCatalog: [
-              ...set.featureCatalog,
-              {
-                id: `feature-${set.featureCatalog.length + 1}`,
-                iconId: 'check',
-                text: 'New feature line',
-                status: 'active' as const,
-              },
-            ],
-          })
-        }
-      >
-        Add to catalogue
-      </button>
     </FieldGroup>
   )
 }
 
 function OfferFields({
+
 
   set,
   currency,
