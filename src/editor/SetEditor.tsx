@@ -13,6 +13,9 @@ import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField }
 import { StepPicker } from './StepPicker'
 import { BASE_MARKET, type CardSetStore } from './useCardSet'
 
+/** Sentinel for "write a new line here" in the feature picker. */
+const CUSTOM_FEATURE = '__custom__'
+
 const PURCHASE_TYPES: { value: AddOnPurchaseType; label: string }[] = [
   { value: 'one_time_payment', label: 'One time payment' },
   { value: 'discount_code', label: 'Discount code' },
@@ -188,7 +191,7 @@ export function SetEditor({ store }: { store: CardSetStore }) {
 }
 
 function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
-  const { set, context, updateTier, updateOffer, offerFor } = store
+  const { set, context, updateTier, updateOffer, offerFor, updateSet } = store
   const resolved = resolveTier(tier, context)
   const market = marketFor(set, context.market)
   const offer = offerFor(tier.id)
@@ -211,7 +214,42 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
         : undefined
 
 
+  /** How many tiers reference a catalogue line, in this context. */
+  const usedBy = (featureId: string) =>
+    set.tiers.filter((t) => resolveTier(t, context).features.includes(featureId)).length
+
+  const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
+    updateSet({
+      featureCatalog: set.featureCatalog.map((f) => (f.id === id ? { ...f, ...p } : f)),
+    })
+
+  /**
+   * Adds a blank line to the catalogue and returns its id.
+   *
+   * A custom line is still a catalogue entry — the engine schema gives a tier a
+   * list of ids and nothing else, so an inline one could not survive an export.
+   * Writing it here and storing it there keeps the authoring where it is wanted
+   * without inventing a shape the renderer cannot read.
+   */
+  const addCustomFeature = () => {
+    // Numbered from what exists rather than stamped with a clock: the same
+    // edits produce the same ids, so an exported file diffs cleanly.
+    const taken = new Set(set.featureCatalog.map((f) => f.id))
+    let n = 1
+    while (taken.has(`feature-custom-${n}`)) n += 1
+    const id = `feature-custom-${n}`
+
+    updateSet({
+      featureCatalog: [
+        ...set.featureCatalog,
+        { id, iconId: 'check', text: '', status: 'active' as const },
+      ],
+    })
+    return id
+  }
+
   const toggleLogo = (id: string) => {
+
     const has = resolved.logoTiles.includes(id)
     patch({
       logoTiles: has ? resolved.logoTiles.filter((l) => l !== id) : [...resolved.logoTiles, id],
@@ -275,31 +313,74 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
       </FieldGroup>
 
       <FieldGroup title="Features">
-        {resolved.features.map((id, i) => (
-          <div className="ed-row" key={`${id}-${i}`}>
-            {/* A select cannot show artwork, and the icon is half of what a
-                feature is. Shown beside the line rather than chosen there —
-                the pairing belongs to the catalogue, not to this tier. */}
-            <span className="ed-feature-icon" aria-hidden="true">
-              <Icon
-                svg={iconArtwork[set.featureCatalog.find((f) => f.id === id)?.iconId ?? 'check'] ?? iconArtwork.check}
-                size={16}
-              />
-            </span>
-            <SelectField
-              label={`Feature ${i + 1}`}
-              value={id}
-              options={set.featureCatalog.map((f) => ({
-                value: f.id,
-                label: f.status === 'deprecated' ? `${f.text} (retired)` : f.text,
-              }))}
-              onChange={(v) => patch({ features: resolved.features.map((f, j) => (j === i ? v : f)) })}
-            />
-            <button type="button" className="ed__btn ed__btn--quiet ed__btn--icon" onClick={() => patch({ features: resolved.features.filter((_, j) => j !== i) })} aria-label={`Remove feature ${i + 1}`}>
-              ✕
-            </button>
-          </div>
-        ))}
+        {resolved.features.map((id, i) => {
+          const entry = set.featureCatalog.find((f) => f.id === id)
+          const setFeature = (v: string) =>
+            patch({ features: resolved.features.map((f, j) => (j === i ? v : f)) })
+          return (
+            <div className="ed-feature-row" key={`${id}-${i}`}>
+              <div className="ed-row">
+                {/* A select cannot show artwork, and the icon is half of what a
+                    feature is. Shown beside the line rather than chosen there —
+                    the pairing belongs to the catalogue, not to this tier. */}
+                <span className="ed-feature-icon" aria-hidden="true">
+                  <Icon svg={iconArtwork[entry?.iconId ?? 'check'] ?? iconArtwork.check} size={16} />
+                </span>
+                <SelectField
+                  label={`Feature ${i + 1}`}
+                  value={id}
+                  options={[
+                    ...set.featureCatalog.map((f) => ({
+                      value: f.id,
+                      label: f.status === 'deprecated' ? `${f.text} (retired)` : f.text,
+                    })),
+                    { value: CUSTOM_FEATURE, label: 'Custom line…' },
+                  ]}
+                  onChange={(v) => (v === CUSTOM_FEATURE ? setFeature(addCustomFeature()) : setFeature(v))}
+                />
+                <button type="button" className="ed__btn ed__btn--quiet ed__btn--icon" onClick={() => patch({ features: resolved.features.filter((_, j) => j !== i) })} aria-label={`Remove feature ${i + 1}`}>
+                  ✕
+                </button>
+              </div>
+              {/* A line only this tier uses can be written here. A shared one
+                  cannot: editing it from one tier would silently rewrite the
+                  others, which is the coupling the catalogue exists to make
+                  visible rather than accidental. */}
+              {entry && usedBy(entry.id) === 1 ? (
+                <div className="ed-feature-inline">
+                  <TextField
+                    label="Line"
+                    value={entry.text}
+                    onChange={(v) => updateFeature(entry.id, { text: v })}
+                  />
+                  <div className="ed-icons" role="group" aria-label="Icon">
+                    {Object.entries(iconArtwork).map(([iconId, svg]) => (
+                      <button
+                        key={iconId}
+                        type="button"
+                        className="ed-icon"
+                        data-on={entry.iconId === iconId || undefined}
+                        onClick={() => updateFeature(entry.id, { iconId })}
+                        aria-pressed={entry.iconId === iconId}
+                        aria-label={iconId}
+                        title={iconId}
+                      >
+                        <Icon svg={svg} size={16} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                entry && (
+                  <p className="ed-field__inert">
+                    Shared with {usedBy(entry.id)} tiers — change its wording or icon in the Feature
+                    catalogue below.
+                  </p>
+                )
+              )}
+            </div>
+          )
+        })}
         <button type="button" className="ed__btn" onClick={() => patch({ features: [...resolved.features, set.featureCatalog[0].id] })}>
           Add feature
         </button>
@@ -324,7 +405,11 @@ function FeatureCatalogue({ store }: { store: CardSetStore }) {
       featureCatalog: set.featureCatalog.map((f) => (f.id === id ? { ...f, ...patch } : f)),
     })
 
-  const inUse = (id: string) => set.tiers.some((t) => t.features.includes(id))
+  const inUse = (id: string) =>
+    set.tiers.some(
+      (t) => t.features.includes(id) || t.overrides.some((o) => o.patch.features?.includes(id)),
+    )
+
 
   return (
     <FieldGroup title="Feature catalogue">
@@ -355,16 +440,28 @@ function FeatureCatalogue({ store }: { store: CardSetStore }) {
               </button>
             ))}
           </div>
-          <CheckField
-            label="Retired"
-            hint={
-              inUse(feature.id)
-                ? 'Still on a tier — retiring flags it rather than removing it.'
-                : 'Keeps the line out of new picks.'
-            }
-            checked={feature.status === 'deprecated'}
-            onChange={(v) => update(feature.id, { status: v ? 'deprecated' : 'active' })}
-          />
+          {inUse(feature.id) ? (
+            <CheckField
+              label="Retired"
+              hint="Still on a tier — retiring keeps it rendering and flags it, rather than leaving a reference to nothing."
+              checked={feature.status === 'deprecated'}
+              onChange={(v) => update(feature.id, { status: v ? 'deprecated' : 'active' })}
+            />
+          ) : (
+            // Nothing references it, so removing it cannot dangle. A line
+            // written by mistake should not have to be lived with.
+            <button
+              type="button"
+              className="ed__btn ed__btn--quiet"
+              onClick={() =>
+                updateSet({
+                  featureCatalog: set.featureCatalog.filter((f) => f.id !== feature.id),
+                })
+              }
+            >
+              Remove — used by no tier
+            </button>
+          )}
         </div>
       ))}
       <button

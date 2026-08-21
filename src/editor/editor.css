@@ -554,3 +554,19 @@ select.ed-field__input {
 .ed-feature-entry:first-of-type {
   border-block-start: 0;
 }
+
+/* A feature row plus, when the line belongs only to this tier, the fields to
+   write it. */
+.ed-feature-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.ed-feature-inline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-inline-start: 36px;
+  padding: var(--space-8) var(--space-12);
+  border-inline-start: var(--border-2) solid var(--color-border-full-color-subtle);
+}
