@@ -160,7 +160,12 @@ export function allContexts(set: CardSet): Context[] {
   const out: Context[] = []
   for (const market of set.markets) {
     for (const channel of set.channels) {
+      // A partner storefront belongs to its markets. Validating Movistar in
+      // Germany does not just waste a check — it invents a context nobody can
+      // reach, and a failure reported there is unfixable by definition.
+      if (channel.markets && !channel.markets.includes(market.code)) continue
       for (const cadence of set.cadences) {
+
         out.push({ market: market.code, channel: channel.code, cadence })
         for (const campaign of set.campaigns) {
           out.push({ market: market.code, channel: channel.code, cadence, campaign: campaign.code })
