@@ -162,7 +162,34 @@ conditional, not a journey step, so it belongs to that screen's own rules.
 **? Open question 4.** Are there markets where consent must be its own screen
 for legal reasons? That would make it a step and change this rule.
 
-### J-8 · A journey runs where it runs
+### J-8 · Step order belongs to the journey, not to the step
+
+Modelling "Logged out new users" (2362:179952) proved this. Starlink asks for
+the ZIP **before** showing plans; the browse-hero and RSN-tile journeys ask for
+it after the account is made. Same step, same screen, different position.
+
+So a journey names its steps in order and `order` is assigned from position.
+Reordering is moving an id in a list — never renumbering, which is the mistake
+the feature list used to make.
+
+This does not loosen J-2: a journey may order its steps freely, but not past a
+runtime gate. Starlink can ask the ZIP early because nothing it needs is gated
+on it; no journey can put Checkout before the account exists.
+
+Two more findings from that section, both of which would have been invented
+wrongly if guessed:
+
+- **Paywall sits after Home**, not before it. Skipping payment still lands you
+  on the product; the block happens on play.
+- **The RSN-tile journey has two entry screens** — the landing page, then the
+  catalogue grid the team tile is pressed from.
+
+Screen counts reconcile against the section: 15 / 16 / 15 / 12, 58 total.
+
+---
+
+### J-9 · A journey runs where it runs
+
 
 Not every journey exists everywhere. A partner storefront has its own flow, and
 a market may have its own purchase path.

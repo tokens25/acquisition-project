@@ -65,12 +65,13 @@ export const families: JourneyFamily[] = [
     figmaSection: '2362:179952',
     userState: 'anonymous',
     variants: [
-      'Regular signup from open browse hero C',
+      'Regular signup from open browse hero CTA',
       'Starlink',
       'Regular signup from an RSN tile',
       'Starlink (second variant)',
     ],
-    note: 'Same user state as landing, different entry surface — browse hero, RSN tile, Starlink.',
+    note:
+      'Same user state as landing, different entry surface — browse hero, RSN tile, Starlink. Modelled in journeys.ts; screen counts reconcile at 15/16/15/12.',
   },
   {
     id: 'logged-in',

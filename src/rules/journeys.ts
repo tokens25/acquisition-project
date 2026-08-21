@@ -196,3 +196,144 @@ journeys.push({
 
 export const signUpJourney = journeys[0]
 
+
+/**
+ * Figma "Logged out new users" (node 2362:179952) — four journeys, 58 screens.
+ *
+ * Same user state as the landing four, so the step vocabulary is reused rather
+ * than reinvented. What differs is the **entry surface** and the **order**:
+ * Starlink asks for the ZIP before showing plans, everyone else asks after the
+ * account is made. That is why a journey owns its step list instead of sharing
+ * one — order is a property of the journey, not of the step.
+ */
+
+/** Screens that appear only in this family. */
+const EXTRA_STEPS: Step[] = [
+  {
+    id: 'browse',
+    name: 'Browse — RSN tile',
+    shortName: 'Browse',
+    figmaFrame: 'v1',
+    renderer: 'stub',
+    order: 0,
+    note:
+      'The catalogue grid a team tile is pressed from. Named "v1" in Figma — worth renaming, since the name is the only thing tying the frame to this step.',
+  },
+  {
+    id: 'unnamed-screen',
+    name: 'Untitled screen',
+    shortName: 'Untitled',
+    figmaFrame: 'Frame 2147228102',
+    renderer: 'stub',
+    order: 0,
+    note:
+      'Frame 2362:247895 holds a single title and nothing else. Modelled so the count reconciles, but it needs a name and content before it means anything.',
+  },
+  {
+    id: 'paywall',
+    name: 'Paywall',
+    shortName: 'Paywall',
+    figmaFrame: 'Paywall',
+    renderer: 'stub',
+    order: 0,
+    note:
+      'Reached after skipping payment: the account exists, the entitlement does not. It sits after Home, not before — the block happens on play, not on entry.',
+  },
+]
+
+const STEP_BY_ID = new Map([...steps(), ...EXTRA_STEPS].map((s) => [s.id, s]))
+
+/**
+ * Build a journey's steps by naming them in order.
+ *
+ * `order` is assigned from position, so reordering is done by moving an id
+ * rather than by renumbering — the same mistake the feature list used to make.
+ */
+function pick(ids: string[], patches: Record<string, Partial<Step>> = {}): Step[] {
+  return ids.map((id, i) => {
+    const base = STEP_BY_ID.get(id)
+    if (!base) throw new Error(`Unknown step id: ${id}`)
+    return { ...base, ...patches[id], order: (i + 1) * 10 }
+  })
+}
+
+function loggedOut(
+  id: string,
+  name: string,
+  entry: Journey['entry'],
+  stepIds: string[],
+  patches?: Record<string, Partial<Step>>,
+): Journey {
+  // No seeds: none of these entries name a plan or a ZIP. A team tile is not a
+  // tier, so even the RSN entry asks the plans question in full.
+  return { id, name, audience: 'anonymous', entry, seeds: [], steps: pick(stepIds, patches) }
+}
+
+journeys.push(
+  loggedOut(
+    'browse-hero-signup',
+    'Logged out — browse hero CTA',
+    {
+      cta: 'Sign up',
+      section: 'Logged out new users',
+      figmaFrame: '2362:231330',
+      figmaSection: '2362:179953',
+    },
+    ['landing', 'plans', 'auth', 'account', 'zip', 'checkout', 'ready', 'home'],
+    {
+      landing: { figmaFrame: 'Anonymous (.sheet-homepage)' },
+      plans: { states: ['default', 'alternate plan selected', 'confirmed'] },
+      zip: { states: ['entry'] },
+    },
+  ),
+  loggedOut(
+    'rsn-tile-signup',
+    'Logged out — RSN tile',
+    {
+      cta: 'Team tile',
+      section: 'Logged out new users',
+      figmaFrame: '2362:231926',
+      figmaSection: '2362:194636',
+    },
+    ['landing', 'browse', 'connect-tv', 'plans', 'auth', 'account', 'zip', 'checkout', 'ready', 'home'],
+    {
+      landing: { figmaFrame: 'Anonymous' },
+      plans: { states: ['default', 'alternate plan selected'] },
+      zip: { states: ['entry'] },
+    },
+  ),
+  loggedOut(
+    'starlink-signup',
+    'Logged out — Starlink',
+    {
+      cta: 'Starlink entry',
+      section: 'Logged out new users',
+      figmaFrame: '2362:241849',
+      figmaSection: '2362:187170',
+    },
+    // ZIP before plans: the Starlink entry resolves region first, then prices.
+    ['landing', 'zip', 'plans', 'auth', 'account', 'checkout', 'ready', 'home'],
+    {
+      landing: { figmaFrame: 'Home of - MSG+' },
+      zip: { states: ['empty', 'teams resolved'] },
+      plans: { states: ['default', 'alternate plan selected'] },
+    },
+  ),
+  loggedOut(
+    'starlink-skip-payment',
+    'Logged out — Starlink, payment skipped',
+    {
+      cta: 'Starlink entry',
+      section: 'Logged out new users',
+      figmaFrame: '2362:246030',
+      figmaSection: '2362:205037',
+    },
+    // No Checkout at all, and Paywall sits *after* Home.
+    ['landing', 'zip', 'plans', 'auth', 'account', 'unnamed-screen', 'home', 'paywall'],
+    {
+      landing: { figmaFrame: 'Home of - MSG+' },
+      zip: { states: ['empty', 'teams resolved'] },
+      plans: { states: ['default', 'alternate plan selected'] },
+    },
+  ),
+)
