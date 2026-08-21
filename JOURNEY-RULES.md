@@ -1,12 +1,56 @@
 # Sign-up journey — rules & logic (DRAFT)
 
-Drafted from Figma [`Landing page journeys`](https://www.figma.com/design/G636wazyXWJgDtBb0MWDza/-Copy-for-Alex---ai-project--MSG--Sign-up-journeys?node-id=2350-75321)
-(node `2350:75321`) and the code in [`src/rules/journey.ts`](src/rules/journey.ts).
+Drafted from the Figma file
+[`MSG+ Sign-up journeys`](https://www.figma.com/design/G636wazyXWJgDtBb0MWDza/-Copy-for-Alex---ai-project--MSG--Sign-up-journeys)
+and the code in [`src/rules/journey.ts`](src/rules/journey.ts).
 
 **Nothing here is agreed** except where marked. The card spec it mirrors states
 *"every rule below was agreed explicitly"* — this document is a first pass for
 you to accept, correct or throw out. Rules marked **?** are ones I could not
 settle from the file alone.
+
+## What is modelled
+
+All five families are now built from the frames rather than summarised. Every
+screen count below was reconciled against its Figma section, and is re-checked
+on each dev boot — the model fails to start if it drifts from the file.
+
+| Family | Section | Journeys | Screens | Shows the card? |
+| --- | --- | --- | --- | --- |
+| Landing page | `2350:75321` | 4 | 65 | yes |
+| Logged out new users | `2362:179952` | 4 | 58 | yes |
+| Logged in DAZN customer | `2362:250798` | 3 | 33 | yes |
+| Migration | `2398:41587` | 4 | 36 | **no** |
+| Adobe TVE | `2518:495931` | 4 | 34 | 1 of 4 |
+| **Total** | | **19** | **226** | |
+
+**7 of the 19 drawn journeys never render the Acquisition card.** Migration
+moves an existing subscription and TVE takes entitlement from a TV provider —
+neither is a purchase. That is worth knowing before anyone plans work in terms
+of "the acquisition flow".
+
+A twentieth journey, `movistar-partner`, is modelled but not in this file: it
+belongs to a partner storefront, not to MSG+.
+
+## The rules
+
+Numbered in the order they were settled, not the order they appear.
+
+| | | |
+| --- | --- | --- |
+| [J-1](#j-1--the-chosen-plan-carries-through-derived-not-re-authored) | The chosen plan carries through | derived, not re-authored |
+| [J-2](#j-2--a-step-may-not-be-reordered-past-its-runtime-gate) | Runtime gates bound reordering | |
+| [J-3](#j-3--regional-steps-follow-entitlement-not-language) | Regional steps follow entitlement | not language |
+| [J-4](#j-4--price-is-shown-by-the-journey-owned-by-billing) | Price is shown by the journey | owned by billing |
+| [J-5](#j-5--consent-is-a-market-rule-inside-a-step-not-a-step) | Consent lives inside a step | |
+| [J-6](#j-6--the-entry-cta-seeds-the-journey) | The entry CTA seeds the journey | |
+| [J-7](#j-7--interrupts-are-not-journeys) | Interrupts are not journeys | |
+| [J-8](#j-8--step-order-belongs-to-the-journey-not-to-the-step) | Step order belongs to the journey | |
+| [J-9](#j-9--identity-is-a-seed-and-absence-is-worth-recording) | Identity is a seed | absence is worth recording |
+| [J-10](#j-10--migration-is-not-acquisition) | Migration is not acquisition | |
+| [J-11](#j-11--entitlement-has-more-than-one-source) | Entitlement has more than one source | |
+| [J-12](#j-12--the-model-may-run-ahead-of-the-file-but-must-say-so) | The model may run ahead of the file | but must say so |
+| [J-13](#j-13--a-journey-runs-where-it-runs) | A journey runs where it runs | |
 
 ---
 
