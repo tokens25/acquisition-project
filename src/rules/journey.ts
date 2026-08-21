@@ -69,6 +69,16 @@ export interface Step {
   requires?: RuntimeCondition[]
   /** States drawn as separate frames in Figma. One step, several states. */
   states?: string[]
+  /**
+   * Agreed, but not yet drawn.
+   *
+   * The model is allowed to run ahead of the file — that is the point of
+   * deciding a journey here rather than in Figma. A proposed step renders and
+   * is editable like any other, but it does not count towards the Figma
+   * reconciliation, so `figmaScreens` keeps meaning "what the section draws"
+   * instead of quietly becoming "whatever we last agreed".
+   */
+  proposed?: boolean
   note?: string
 }
 
@@ -112,15 +122,28 @@ export interface Journey {
 const COUNTING_CONTEXT: Context = { market: 'US', channel: 'direct', cadence: 'Monthly' }
 
 /** Screens a journey renders — states included, seeded steps excluded. */
-export function screenCount(journey: Journey, context: Context = COUNTING_CONTEXT): number {
-  return resolveJourney(journey, context).reduce((n, s) => n + (s.states?.length ?? 1), 0)
+export function screenCount(
+  journey: Journey,
+  context: Context = COUNTING_CONTEXT,
+  { includeProposed = true }: { includeProposed?: boolean } = {},
+): number {
+  return resolveJourney(journey, context)
+    .filter((s) => includeProposed || !s.proposed)
+    .reduce((n, s) => n + (s.states?.length ?? 1), 0)
+}
+
+/** Steps decided here but not yet in the design file. */
+export function proposedSteps(all: Journey[]): { journey: Journey; step: Step }[] {
+  return all.flatMap((j) => j.steps.filter((s) => s.proposed).map((step) => ({ journey: j, step })))
 }
 
 /** Journeys whose modelled screen count no longer matches the Figma section. */
 export function driftFromFigma(all: Journey[]): { id: string; declared: number; actual: number }[] {
   return all.flatMap((j) => {
     if (j.figmaScreens === undefined) return []
-    const actual = screenCount(j)
+    // Compared without proposed steps: drift means the file changed under us,
+    // not that we chose to add something to it.
+    const actual = screenCount(j, COUNTING_CONTEXT, { includeProposed: false })
     return actual === j.figmaScreens ? [] : [{ id: j.id, declared: j.figmaScreens, actual }]
   })
 }

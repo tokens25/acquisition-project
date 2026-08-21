@@ -330,6 +330,20 @@
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
 }
+/* A step decided here but not yet drawn — dashed, so it never reads as final. */
+.ed-step[data-proposed] .ed-step__num {
+  border-style: dashed;
+}
+.ed-step__tag {
+  margin-inline-start: auto;
+  padding: 0 var(--space-6);
+  border: var(--border-1) dashed var(--color-border-full-color-default);
+  border-radius: var(--radius-full);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-label-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12px;
+}
 .ed-step:focus-visible {
   outline: var(--border-2) solid var(--color-brand-primary);
   outline-offset: -2px;

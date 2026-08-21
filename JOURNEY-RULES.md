@@ -264,7 +264,29 @@ and one stray `<line>`. The model is right; the label is not.
 
 ---
 
-### J-12 · A journey runs where it runs
+### J-12 · The model may run ahead of the file, but must say so
+
+`Migration — organic` now ends on a confirmation screen. The other three
+migration journeys confirm before handing over to Home; organic dropped straight
+to Home, which left a migrated subscriber with nothing telling them the move
+worked.
+
+Figma does not draw that screen. Rather than quietly adjusting the declared
+count to match — which would turn `figmaScreens` from "what the section draws"
+into "whatever we last agreed" — a step can be marked `proposed`.
+
+A proposed step renders and is editable like any other, carries a dashed marker
+in the picker so it never reads as final, and is excluded from the Figma
+reconciliation. So the organic journey renders 9 screens, reconciles as 8, and
+the check still passes for the right reason.
+
+`proposedSteps()` lists everything currently ahead of the file — the delta to
+hand back to design.
+
+---
+
+### J-13 · A journey runs where it runs
+
 
 
 

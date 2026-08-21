@@ -31,11 +31,14 @@ export function StepPicker({
             className="ed-step"
             data-on={step.id === selectedId || undefined}
             data-editable={step.renderer === 'plans' || undefined}
+            data-proposed={step.proposed || undefined}
+            title={step.proposed ? 'Agreed here — not yet drawn in Figma' : undefined}
             onClick={() => onSelect(step.id)}
             aria-current={step.id === selectedId ? 'step' : undefined}
           >
             <span className="ed-step__num">{i + 1}</span>
             <span className="ed-step__name">{step.shortName ?? step.name}</span>
+            {step.proposed && <span className="ed-step__tag">proposed</span>}
           </button>
         </li>
       ))}

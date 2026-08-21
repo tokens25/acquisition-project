@@ -581,11 +581,19 @@ journeys.push(
     },
     // The only one that does not start in an email, so the only one that signs
     // in for real. It also ends at Home with no confirmation screen.
-    ['auth', 'reset-password', 'email-start', 'plans', 'account', 'zip', 'home'],
+    ['auth', 'reset-password', 'email-start', 'plans', 'account', 'zip', 'ready', 'home'],
     ['plan', 'tier', 'zip'],
     {
       auth: { shortName: 'Sign in', figmaFrame: 'desktop-sign in or sign up page' },
       account: { states: ['empty', 'filled', 'consent', 'confirmed'] },
+      // Added here, not in Figma. The other three migration journeys confirm
+      // before handing over to Home; organic dropped straight to Home, which
+      // left a migrated subscriber with nothing saying the move worked.
+      ready: {
+        proposed: true,
+        figmaFrame: '— not yet drawn',
+        note: 'Confirmation that the migration completed. Agreed here, ahead of the design file.',
+      },
     },
   ),
 )
