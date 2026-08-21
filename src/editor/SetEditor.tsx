@@ -1,13 +1,14 @@
 import './editor.css'
 
 import { useState } from 'react'
-import { logoArtwork } from '../card/assets'
+import { iconArtwork, logoArtwork } from '../card/assets'
 import type { AddOnPurchaseType, CardSet, Tier, TierPatch } from '../rules/content'
 import { DIRECT } from '../rules/content'
 import { journeysFor, resolveJourney } from '../rules/journey'
 import { journeys } from '../rules/journeys'
 import { excludedTiers, marketFor, resolveTier } from '../rules/resolve'
 import { summarise, validateAll, validateContext } from '../rules/validate'
+import { Icon } from '../components/Icon'
 import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
 import { StepPicker } from './StepPicker'
 import { BASE_MARKET, type CardSetStore } from './useCardSet'
@@ -178,6 +179,8 @@ export function SetEditor({ store }: { store: CardSetStore }) {
             .map((tier) => (
               <TierFields key={tier.id} tier={tier} store={store} />
             ))}
+
+          <FeatureCatalogue store={store} />
         </>
       )}
     </form>
@@ -274,6 +277,15 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
       <FieldGroup title="Features">
         {resolved.features.map((id, i) => (
           <div className="ed-row" key={`${id}-${i}`}>
+            {/* A select cannot show artwork, and the icon is half of what a
+                feature is. Shown beside the line rather than chosen there —
+                the pairing belongs to the catalogue, not to this tier. */}
+            <span className="ed-feature-icon" aria-hidden="true">
+              <Icon
+                svg={iconArtwork[set.featureCatalog.find((f) => f.id === id)?.iconId ?? 'check'] ?? iconArtwork.check}
+                size={16}
+              />
+            </span>
             <SelectField
               label={`Feature ${i + 1}`}
               value={id}
@@ -296,7 +308,90 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
   )
 }
 
+/**
+ * The feature catalogue: the icon-and-text pairings a tier picks from.
+ *
+ * Set-level, not market-scoped, and deliberately so — the pairing is decided
+ * once so that deleting a line from one tier cannot shift another tier's icons.
+ * The cost is that editing here reaches every market, which the note says out
+ * loud rather than leaving to be discovered.
+ */
+function FeatureCatalogue({ store }: { store: CardSetStore }) {
+  const { set, updateSet } = store
+
+  const update = (id: string, patch: Partial<(typeof set.featureCatalog)[number]>) =>
+    updateSet({
+      featureCatalog: set.featureCatalog.map((f) => (f.id === id ? { ...f, ...patch } : f)),
+    })
+
+  const inUse = (id: string) => set.tiers.some((t) => t.features.includes(id))
+
+  return (
+    <FieldGroup title="Feature catalogue">
+      <p className="ed-field__hint">
+        One icon and one line, paired once and reused. Edits here reach every market and every tier
+        that uses the line.
+      </p>
+      {set.featureCatalog.map((feature) => (
+        <div className="ed-feature-entry" key={feature.id}>
+          <TextField
+            label={feature.id}
+            value={feature.text}
+            onChange={(v) => update(feature.id, { text: v })}
+          />
+          <div className="ed-icons" role="group" aria-label={`Icon for ${feature.text}`}>
+            {Object.entries(iconArtwork).map(([iconId, svg]) => (
+              <button
+                key={iconId}
+                type="button"
+                className="ed-icon"
+                data-on={feature.iconId === iconId || undefined}
+                onClick={() => update(feature.id, { iconId })}
+                aria-pressed={feature.iconId === iconId}
+                aria-label={iconId}
+                title={iconId}
+              >
+                <Icon svg={svg} size={16} />
+              </button>
+            ))}
+          </div>
+          <CheckField
+            label="Retired"
+            hint={
+              inUse(feature.id)
+                ? 'Still on a tier — retiring flags it rather than removing it.'
+                : 'Keeps the line out of new picks.'
+            }
+            checked={feature.status === 'deprecated'}
+            onChange={(v) => update(feature.id, { status: v ? 'deprecated' : 'active' })}
+          />
+        </div>
+      ))}
+      <button
+        type="button"
+        className="ed__btn"
+        onClick={() =>
+          updateSet({
+            featureCatalog: [
+              ...set.featureCatalog,
+              {
+                id: `feature-${set.featureCatalog.length + 1}`,
+                iconId: 'check',
+                text: 'New feature line',
+                status: 'active' as const,
+              },
+            ],
+          })
+        }
+      >
+        Add to catalogue
+      </button>
+    </FieldGroup>
+  )
+}
+
 function OfferFields({
+
   set,
   currency,
   cadence,

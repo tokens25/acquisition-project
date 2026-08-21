@@ -532,3 +532,25 @@ select.ed-field__input {
 .ed-step[data-skipped] .ed-step__num {
   border-style: dashed;
 }
+
+/* Feature rows: the icon the picked line brings, beside the picker. */
+.ed-feature-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 28px;
+  block-size: 28px;
+  align-self: end;
+  margin-block-end: var(--space-8);
+  color: var(--color-text-secondary);
+}
+.ed-feature-entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block: var(--space-12);
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.ed-feature-entry:first-of-type {
+  border-block-start: 0;
+}
