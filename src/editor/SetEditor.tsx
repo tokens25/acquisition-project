@@ -272,18 +272,41 @@ function OfferFields({
     )
   }
 
+  /**
+   * A first discount price, for when the box is ticked and none is set yet.
+   *
+   * 20% below standard, which is both a plausible opening offer and — because
+   * a price ending .99 stays .99 at four fifths — never lands on an odd
+   * fraction. Guarded so it can never come back equal to standard, since the
+   * whole point is that ticking a box cannot produce an invalid card.
+   */
+  const firstDiscountPrice = () => {
+    const suggested = Math.round(offer.standardPrice * 80) / 100
+    return suggested < offer.standardPrice ? suggested : 0
+  }
+
   return (
     <FieldGroup title={`Pricing — ${cadence}, ${currency}`}>
       <CheckField
         label={<span className="ed-label-chip">Apply discount</span>}
         hint="Drives the caption, primary and struck price, the explainer and the CTA area."
         checked={offer.discount}
-        onChange={(v) => onChange({ discount: v, introPrice: v ? (offer.introPrice ?? offer.standardPrice) : null })}
+        onChange={(v) =>
+          onChange({ discount: v, introPrice: v ? (offer.introPrice ?? firstDiscountPrice()) : null })
+        }
       />
       <NumberField label="Standard price" value={offer.standardPrice} step={0.01} min={0} onChange={(v) => onChange({ standardPrice: v })} />
       {offer.discount && (
         <>
-          <NumberField label="Discount price" hint="Used as the primary price while Discount is on." value={offer.introPrice ?? 0} step={0.01} min={0} onChange={(v) => onChange({ introPrice: v })} />
+          <NumberField
+            label="Discount price"
+            hint={`Used as the primary price while Discount is on. Must stay below ${offer.standardPrice}.`}
+            value={offer.introPrice ?? 0}
+            step={0.01}
+            min={0}
+            max={offer.standardPrice}
+            onChange={(v) => onChange({ introPrice: v })}
+          />
           <NumberField label="Discount months" value={offer.introMonths} min={1} onChange={(v) => onChange({ introMonths: v })} />
         </>
       )}
