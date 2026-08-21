@@ -92,7 +92,8 @@ export const families: JourneyFamily[] = [
     figmaSection: '2398:41587',
     userState: 'migrating',
     variants: ['No payment method', 'From CRM', 'TVE', 'Organic'],
-    note: 'Existing subscribers being moved. Probably not a purchase journey at all — closer to a confirmation.',
+    note:
+      'Existing subscribers being moved. Confirmed not a purchase journey: the section has no Plans, Zipcode, Create or Checkout frame at all. Modelled in journeys.ts; screen counts reconcile at 9/9/10/8.',
   },
   {
     id: 'tve',

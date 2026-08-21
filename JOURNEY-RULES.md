@@ -211,7 +211,33 @@ what market overrides already do for the card, and it is the same shape.
 
 ---
 
-### J-10 · A journey runs where it runs
+### J-10 · Migration is not acquisition
+
+"Migration journeys" (2398:41587) contains no `Plans`, no `Zipcode`, no
+`Create` and no `Checkout` frame — none, in any of the four. The Acquisition
+card never renders in this family.
+
+That is an absence, which is stronger evidence than a summary would be: nobody
+had to decide these were confirmation flows, the frames simply do not contain a
+purchase. What is being moved is an existing subscription, so the plan, the
+tier and the ZIP arrive already settled — seeded by the migration itself.
+
+**Three of the four begin in an email.** `Subscription start confirmation` is a
+real entry surface, and it means the first thing a migrating subscriber reads is
+content this tool cannot currently edit. If migration copy is ever in scope,
+that email is where it starts, not a screen.
+
+The fourth, `organic`, is the only one that signs in for real, and the only one
+that ends at Home with no confirmation screen.
+
+**? Open question 5.** Who owns the migration email today, and does it need to
+carry the plan name — which would make it the first place a tier's content is
+read, ahead of every screen.
+
+---
+
+### J-11 · A journey runs where it runs
+
 
 
 

@@ -243,7 +243,59 @@ const EXTRA_STEPS: Step[] = [
   },
 ]
 
+/** Screens that appear only in the migration family. */
+const MIGRATION_STEPS: Step[] = [
+  {
+    id: 'email-start',
+    name: 'Subscription start confirmation',
+    shortName: 'Email',
+    figmaFrame: 'Subscription start confirmation (.email-Template)',
+    renderer: 'stub',
+    order: 0,
+    note:
+      'An email, not a screen. Three of the four migration journeys begin here — the user is told their subscription moved, and the link is what starts the flow.',
+  },
+  {
+    id: 'reset-password',
+    name: 'Reset your password',
+    shortName: 'Reset password',
+    figmaFrame: 'desktop - Reset your password',
+    renderer: 'stub',
+    order: 0,
+    note: 'Drawn on desktop in an otherwise mobile section.',
+  },
+  {
+    id: 'add-payment',
+    name: 'Add a payment method',
+    shortName: 'Payment',
+    figmaFrame: 'Payment',
+    renderer: 'stub',
+    order: 0,
+    note: 'For a migrated subscriber who arrives without one on file.',
+  },
+  {
+    id: 'change-payment',
+    name: 'Change payment method',
+    shortName: 'Change payment',
+    figmaFrame: 'change payment method',
+    renderer: 'stub',
+    order: 0,
+    states: ['current', 'replaced'],
+    note: 'A method exists and is being replaced — a different screen from adding one.',
+  },
+  {
+    id: 'tv-provider-login',
+    name: 'TV provider login',
+    shortName: 'Provider login',
+    figmaFrame: 'Connect TV Provider – Login',
+    renderer: 'stub',
+    order: 0,
+    note: 'Entitlement is proved by the TV provider. The Adobe TVE family is built on this screen.',
+  },
+]
+
 /** The product home, as an entry rather than an ending. */
+
 const HOME_ENTRY: Step = {
   id: 'home-entry',
   name: 'Home — inside the product',
@@ -257,7 +309,7 @@ const HOME_ENTRY: Step = {
 }
 
 const STEP_BY_ID = new Map(
-  [...steps(), ...EXTRA_STEPS, HOME_ENTRY].map((s) => [s.id, s]),
+  [...steps(), ...EXTRA_STEPS, ...MIGRATION_STEPS, HOME_ENTRY].map((s) => [s.id, s]),
 )
 
 
@@ -451,6 +503,88 @@ journeys.push(
         note: 'The same marketing sheet the anonymous journeys open on, used here as the bundle upsell.',
       },
       plans: { states: undefined },
+    },
+  ),
+)
+
+/**
+ * Figma "Migration journeys" (node 2398:41587) — four journeys.
+ *
+ * These are not purchase journeys, and the evidence is an absence rather than
+ * an argument: the section contains no `Plans`, no `Zipcode`, no `Create` and
+ * no `Checkout` frame at all. The Acquisition card never renders here. What is
+ * being migrated is an existing subscription, so the plan, the tier and the ZIP
+ * arrive already decided — seeded by the migration itself.
+ *
+ * Three of the four start in an **email**, not in the product. That is a real
+ * entry surface, and it means the first thing a migrating subscriber sees is
+ * content nobody in this tool can currently edit.
+ */
+
+journeys.push(
+  loggedIn(
+    'migration-no-payment',
+    'Migration — no payment method',
+    'migrating',
+    {
+      cta: 'Subscription start confirmation email',
+      section: 'Migration journeys',
+      figmaFrame: '2041:43097',
+      figmaSection: '2033:14750',
+    },
+    ['email-start', 'auth', 'plans', 'account', 'reset-password', 'add-payment', 'zip', 'ready', 'home'],
+    // The email link settles identity; the migration settles what they are on.
+    ['auth', 'plan', 'tier', 'zip'],
+    { account: { states: ['empty', 'filled', 'consent', 'confirmed'] } },
+  ),
+  loggedIn(
+    'migration-crm',
+    'Migration — from CRM',
+    'migrating',
+    {
+      cta: 'Subscription start confirmation email',
+      section: 'Migration journeys',
+      figmaFrame: '2033:14315',
+      figmaSection: '2033:14289',
+    },
+    ['email-start', 'auth', 'plans', 'account', 'change-payment', 'zip', 'ready', 'home'],
+    ['auth', 'plan', 'tier', 'zip'],
+    { account: { states: ['empty', 'filled', 'consent', 'confirmed'] } },
+  ),
+  loggedIn(
+    'migration-tve',
+    'Migration — TVE',
+    'migrating',
+    {
+      cta: 'Subscription start confirmation email',
+      section: 'Migration journeys',
+      figmaFrame: '2041:44720',
+      figmaSection: '2041:44084',
+    },
+    ['email-start', 'auth', 'plans', 'account', 'connect-tv', 'tv-provider-login', 'zip', 'ready', 'home'],
+    ['auth', 'plan', 'tier', 'zip'],
+    {
+      account: { states: ['empty', 'filled', 'consent', 'confirmed'] },
+      'connect-tv': { states: ['option 35', 'option 15'] },
+    },
+  ),
+  loggedIn(
+    'migration-organic',
+    'Migration — organic',
+    'migrating',
+    {
+      cta: 'Sign in',
+      section: 'Migration journeys',
+      figmaFrame: '2033:15206',
+      figmaSection: '2033:15205',
+    },
+    // The only one that does not start in an email, so the only one that signs
+    // in for real. It also ends at Home with no confirmation screen.
+    ['auth', 'reset-password', 'email-start', 'plans', 'account', 'zip', 'home'],
+    ['plan', 'tier', 'zip'],
+    {
+      auth: { shortName: 'Sign in', figmaFrame: 'desktop-sign in or sign up page' },
+      account: { states: ['empty', 'filled', 'consent', 'confirmed'] },
     },
   ),
 )
