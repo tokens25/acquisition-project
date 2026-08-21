@@ -236,7 +236,36 @@ read, ahead of every screen.
 
 ---
 
-### J-11 · A journey runs where it runs
+### J-11 · Entitlement has more than one source
+
+"Adobe TVE" (2518:495931) is the second family with no purchase in it. Three of
+the four journeys contain no `Plans` and no `Checkout` frame: the user proves a
+TV-provider subscription and the entitlement follows. The Acquisition card
+renders in exactly one of the four.
+
+Counting migration, **7 of the 19 drawn journeys never show the card at all.**
+That is worth knowing before anyone plans work in terms of "the acquisition
+flow" — most of the flows in this file are not one.
+
+TVE is also what forced `auth` and `account` apart (J-9). A returning TVE user
+is authenticated by their provider and already has an account; a new one
+authenticates the same way but must still build one — which is why `Create` and
+`Complete Account` appear in the two "new user" journeys and nowhere else in the
+section.
+
+**The counts are now checked, not remembered.** Each journey declares the number
+of screens its Figma section draws, and the dev boot fails if the model no
+longer matches. A step quietly dropped still renders a plausible journey, which
+is the drift hardest to notice by looking.
+
+That check immediately found one error — in the summary card on the TVE section,
+which claims 8 screens for "Existing user with TVE". The section holds 7 screens
+and one stray `<line>`. The model is right; the label is not.
+
+---
+
+### J-12 · A journey runs where it runs
+
 
 
 

@@ -98,6 +98,31 @@ export interface Journey {
    * an unlaunched market, a country with its own purchase flow.
    */
   when?: Partial<Pick<Context, 'market' | 'channel'>>
+  /**
+   * How many screens the Figma section actually contains for this journey.
+   *
+   * Reconciled by hand once, then checked on every dev boot. Without it the
+   * model drifts from the file silently — a step quietly dropped still renders
+   * a plausible-looking journey, which is the failure that is hardest to see.
+   */
+  figmaScreens?: number
+}
+
+/** Reference context for counting: US, direct, so no step is filtered by market. */
+const COUNTING_CONTEXT: Context = { market: 'US', channel: 'direct', cadence: 'Monthly' }
+
+/** Screens a journey renders — states included, seeded steps excluded. */
+export function screenCount(journey: Journey, context: Context = COUNTING_CONTEXT): number {
+  return resolveJourney(journey, context).reduce((n, s) => n + (s.states?.length ?? 1), 0)
+}
+
+/** Journeys whose modelled screen count no longer matches the Figma section. */
+export function driftFromFigma(all: Journey[]): { id: string; declared: number; actual: number }[] {
+  return all.flatMap((j) => {
+    if (j.figmaScreens === undefined) return []
+    const actual = screenCount(j)
+    return actual === j.figmaScreens ? [] : [{ id: j.id, declared: j.figmaScreens, actual }]
+  })
 }
 
 /** Whether a journey runs in this context at all. */

@@ -106,7 +106,8 @@ export const families: JourneyFamily[] = [
       'Existing user with TVE',
       'New user — clicking on MSG+ tile',
     ],
-    note: 'A different auth path. Entitlement comes from the TV provider, not a purchase.',
+    note:
+      'A different auth path. Entitlement comes from the TV provider, not a purchase — three of the four contain no Plans and no Checkout frame. Modelled in journeys.ts; screen counts reconcile at 11/10/7/6.',
   },
 ]
 

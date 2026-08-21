@@ -1,4 +1,5 @@
 import type { Journey, Seed, Step } from './journey'
+import { driftFromFigma } from './journey'
 
 /**
  * Four journeys from Figma "Landing page journeys" (node 2350:75321).
@@ -588,3 +589,144 @@ journeys.push(
     },
   ),
 )
+
+/**
+ * Figma "Adobe TVE" (node 2518:495931) — four journeys.
+ *
+ * A different way of becoming entitled. Three of the four contain no `Plans`
+ * and no `Checkout` frame: the user proves a TV-provider subscription and the
+ * entitlement follows, so there is nothing to choose and nothing to pay. The
+ * Acquisition card renders in exactly one of these four.
+ *
+ * That makes TVE the family where `auth` and `account` had to be two separate
+ * seeds. A returning TVE user is authenticated by their provider and has an
+ * account already; a new one authenticates the same way but must still build a
+ * DAZN account, which is why `Create` and `Complete Account` appear in the two
+ * "new user" journeys and nowhere else.
+ */
+
+journeys.push(
+  loggedIn(
+    'tve-msg-tile',
+    'TVE — new user, MSG+ tile',
+    'anonymous',
+    {
+      cta: 'MSG+ tile',
+      section: 'Adobe TVE',
+      figmaFrame: '2518:497117',
+      figmaSection: '2518:497116',
+    },
+    ['landing', 'paywall', 'auth', 'account', 'connect-tv', 'tv-provider-login', 'plans', 'zip', 'ready', 'home'],
+    ['plan', 'tier', 'zip'],
+    {
+      paywall: { note: 'The trigger — the tile is behind an entitlement the user cannot yet prove.' },
+      account: { states: ['empty', 'filled', 'confirmed'] },
+      'connect-tv': { states: ['option 36', 'option 25'] },
+    },
+  ),
+  loggedIn(
+    'tve-provider-signin',
+    'TVE — new user, sign in with TV provider',
+    'anonymous',
+    {
+      cta: 'Sign in with your TV provider',
+      section: 'Adobe TVE',
+      figmaFrame: '2518:498057',
+      figmaSection: '2518:498056',
+    },
+    // No Paywall: this entry names the intent outright, so nothing blocks first.
+    ['landing', 'auth', 'account', 'connect-tv', 'tv-provider-login', 'plans', 'zip', 'ready', 'home'],
+    ['plan', 'tier', 'zip'],
+    {
+      account: { states: ['empty', 'filled', 'confirmed'] },
+      'connect-tv': { states: ['option 37', 'option 12'] },
+    },
+  ),
+  loggedIn(
+    'tve-existing',
+    'TVE — existing user',
+    'tve-entitled',
+    {
+      cta: 'MSG+ tile',
+      section: 'Adobe TVE',
+      figmaFrame: '2518:498775',
+      figmaSection: '2518:498774',
+    },
+    ['landing', 'paywall', 'auth', 'account', 'connect-tv', 'tv-provider-login', 'plans', 'zip', 'ready', 'home'],
+    ['auth', 'account', 'plan', 'tier', 'zip'],
+    {
+      paywall: { note: 'The trigger. The provider link has lapsed or was never made on this device.' },
+      'connect-tv': { states: ['option 38', 'option 27'] },
+    },
+  ),
+  loggedIn(
+    'tve-msg-purchase',
+    'TVE — existing MSG+ user purchasing YES',
+    'paying-msg',
+    {
+      cta: 'YES Network',
+      section: 'Adobe TVE',
+      figmaFrame: '2518:499495',
+      figmaSection: '2518:499494',
+    },
+    // The only TVE journey with a real purchase — and the only place in this
+    // family the Acquisition card renders. Cadence precedes plans here, which
+    // is backwards from every other journey; see the note on `landing`.
+    ['landing', 'auth', 'account', 'cadence', 'plans', 'zip', 'checkout', 'home'],
+    ['auth', 'account', 'zip'],
+    {
+      landing: {
+        states: ['tall crop', 'short crop'],
+        note:
+          'Two consecutive Anonymous frames, identical but for height. Read as one screen in two crops rather than two steps — this journey is the thinnest in the file and looks unfinished.',
+      },
+      cadence: { figmaFrame: 'choose payment compact', states: undefined },
+      plans: { states: undefined },
+      checkout: { figmaFrame: '03 – Checkout & Payment', states: undefined },
+    },
+  ),
+)
+
+/**
+ * What each Figma section actually draws, reconciled by hand.
+ *
+ * Applied here rather than inline so the numbers sit in one column and can be
+ * re-checked against the file in one pass.
+ */
+const FIGMA_SCREENS: Record<string, number> = {
+  'browse-hero-signup': 15,
+  'hero-signup': 19,
+  'logged-in-free-rsn': 12,
+  'logged-in-paying-rsn': 12,
+  'market-check': 16,
+  'migration-crm': 9,
+  'migration-no-payment': 9,
+  'migration-organic': 8,
+  'migration-tve': 10,
+  'plans-section': 14,
+  'rsn-tile-signup': 16,
+  'rsn-upgrade-bundle': 9,
+  'starlink-signup': 15,
+  'starlink-skip-payment': 12,
+  'tve-existing': 7,
+  'tve-msg-purchase': 6,
+  'tve-msg-tile': 11,
+  'tve-provider-signin': 10,
+  'ultimate-feature': 16,
+}
+
+for (const j of journeys) {
+  const declared = FIGMA_SCREENS[j.id]
+  if (declared !== undefined) j.figmaScreens = declared
+}
+
+// Fails the dev boot rather than rendering a plausible-looking wrong journey.
+if (import.meta.env.DEV) {
+  const drift = driftFromFigma(journeys)
+  if (drift.length > 0) {
+    throw new Error(
+      'Journey model has drifted from Figma: ' +
+        drift.map((d) => `${d.id} declares ${d.declared}, models ${d.actual}`).join('; '),
+    )
+  }
+}
