@@ -27,7 +27,9 @@ export interface RuledCardProps {
 /** The icon a feature row draws, under the set's house style. */
 function featureIcon(mode: CardSet['featureIcons'], iconId: string): string | undefined {
   if (mode === 'hidden') return undefined
-  if (mode === 'check') return iconArtwork.check
+  // The plain DS checkmark, not the circled one — this mode is a tick per
+  // line, not a badge per line.
+  if (mode === 'check') return iconArtwork.checkmark
   return iconArtwork[iconId] ?? iconArtwork.check
 }
 
