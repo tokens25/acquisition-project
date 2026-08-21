@@ -162,7 +162,7 @@ conditional, not a journey step, so it belongs to that screen's own rules.
 **? Open question 4.** Are there markets where consent must be its own screen
 for legal reasons? That would make it a step and change this rule.
 
-### J-6 · A journey runs where it runs
+### J-7 · A journey runs where it runs
 
 Not every journey exists everywhere. A partner storefront has its own flow, and
 a market may have its own purchase path.
