@@ -188,7 +188,31 @@ Screen counts reconcile against the section: 15 / 16 / 15 / 12, 58 total.
 
 ---
 
-### J-9 · A journey runs where it runs
+### J-9 · Identity is a seed, and absence is worth recording
+
+"Logged in DAZN customer" (2362:250798) has no `Create` and no `Complete
+Account` frame anywhere in it. Being signed in is not the anonymous flow with
+different copy — two screens stop existing. The counts show it: 12, 12 and 9
+against the anonymous 15–16.
+
+So `auth` and `account` join `zip`, `tier` and `plan` as seeds. They are two
+seeds rather than one because a TVE user is authenticated by their provider
+without having completed a DAZN account.
+
+Both steps stay in the journey's list, marked skipped, rather than being
+deleted. The rendering is identical either way; what deleting loses is the
+reason. `excludedSteps()` reads back "Sign up: seeded, Account: seeded", which
+is the answer to "why is there no sign-up screen here" without opening Figma.
+
+**The first two journeys have identical step lists.** They are drawn twice
+because a free registered user and a paying subscriber see different prices and
+different upgrade framing — a content difference, not a flow difference. That is
+what market overrides already do for the card, and it is the same shape.
+
+---
+
+### J-10 · A journey runs where it runs
+
 
 
 Not every journey exists everywhere. A partner storefront has its own flow, and

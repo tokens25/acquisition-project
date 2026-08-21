@@ -61,6 +61,7 @@ function steps(): Step[] {
       figmaFrame: 'Create',
       renderer: 'stub',
       order: 40,
+      captures: 'auth',
       requires: ['auth.signedOut'],
       note: 'Skipped entirely when already signed in — confirmed by the logged-in families, which drop it.',
     },
@@ -71,6 +72,7 @@ function steps(): Step[] {
       figmaFrame: 'Complete Account',
       renderer: 'stub',
       order: 50,
+      captures: 'account',
       states: ['empty', 'filled', 'confirmed'],
       requires: ['form.valid'],
       note: 'Name, email, password and consent. Three frames are form states, not steps.',
@@ -237,11 +239,27 @@ const EXTRA_STEPS: Step[] = [
     renderer: 'stub',
     order: 0,
     note:
-      'Reached after skipping payment: the account exists, the entitlement does not. It sits after Home, not before — the block happens on play, not on entry.',
+      'Content behind an entitlement the user does not have. Its position carries the meaning: last in a journey it is a dead end, second it is the trigger that starts one.',
   },
 ]
 
-const STEP_BY_ID = new Map([...steps(), ...EXTRA_STEPS].map((s) => [s.id, s]))
+/** The product home, as an entry rather than an ending. */
+const HOME_ENTRY: Step = {
+  id: 'home-entry',
+  name: 'Home — inside the product',
+  shortName: 'Home',
+  figmaFrame: 'mobile-hero-native',
+  renderer: 'stub',
+  order: 0,
+  requires: ['auth.signedIn'],
+  note:
+    'Where a logged-in journey starts. Deliberately not the same step as `home`: the same frame appears at both ends of these journeys, once without an entitlement and once with, and one id cannot be in two places.',
+}
+
+const STEP_BY_ID = new Map(
+  [...steps(), ...EXTRA_STEPS, HOME_ENTRY].map((s) => [s.id, s]),
+)
+
 
 /**
  * Build a journey's steps by naming them in order.
@@ -334,6 +352,105 @@ journeys.push(
       landing: { figmaFrame: 'Home of - MSG+' },
       zip: { states: ['empty', 'teams resolved'] },
       plans: { states: ['default', 'alternate plan selected'] },
+    },
+  ),
+)
+
+/**
+ * Figma "Logged in DAZN customer" (node 2362:250798) — three journeys.
+ *
+ * The family that proves the seed model. Being signed in is not a variant of
+ * the anonymous flow with different copy: two screens stop existing. `Create`
+ * and `Complete Account` appear nowhere in this section, and the counts confirm
+ * it — 12, 12 and 9 against the anonymous 15–16.
+ *
+ * They are still listed as steps, seeded rather than deleted, so the reason a
+ * screen is absent is readable. Deleting them would leave the same rendering
+ * and lose the fact.
+ *
+ * Note the first two journeys have identical step lists. They are drawn twice
+ * because a free registered user and a paying DAZN user see different prices
+ * and different upgrade framing — a content difference, not a flow difference,
+ * which is exactly what market overrides already handle for the card.
+ */
+
+function loggedIn(
+  id: string,
+  name: string,
+  audience: string,
+  entry: Journey['entry'],
+  stepIds: string[],
+  seeds: Seed[],
+  patches?: Record<string, Partial<Step>>,
+): Journey {
+  return { id, name, audience, entry, seeds, steps: pick(stepIds, patches) }
+}
+
+// Identity is settled before any of these journeys begin.
+const SIGNED_IN: Seed[] = ['auth', 'account']
+
+journeys.push(
+  loggedIn(
+    'logged-in-free-rsn',
+    'Logged in free — RSN tile',
+    'registered-free',
+    {
+      cta: 'Team tile',
+      section: 'Logged in DAZN customer',
+      figmaFrame: '2582:1332014',
+      figmaSection: '2362:250799',
+    },
+    // Paywall is second here, not last: pressing a team tile hits the
+    // entitlement wall, and that is what starts the purchase.
+    ['home-entry', 'paywall', 'connect-tv', 'plans', 'auth', 'account', 'zip', 'checkout', 'ready', 'home'],
+    SIGNED_IN,
+    {
+      paywall: { note: 'The trigger. A free registered user presses an RSN tile and is stopped here.' },
+      'connect-tv': { figmaFrame: 'Connect TV- dual screen-option 32' },
+      plans: { states: ['default', 'alternate plan selected'] },
+      zip: { states: ['entry'] },
+    },
+  ),
+  loggedIn(
+    'logged-in-paying-rsn',
+    'Logged in paying — RSN tile',
+    'paying-dazn',
+    {
+      cta: 'Team tile',
+      section: 'Logged in DAZN customer',
+      figmaFrame: '2582:1332602',
+      figmaSection: '2362:261053',
+    },
+    ['home-entry', 'paywall', 'connect-tv', 'plans', 'auth', 'account', 'zip', 'checkout', 'ready', 'home'],
+    SIGNED_IN,
+    {
+      paywall: { note: 'The trigger. An existing DAZN subscription does not cover the RSN.' },
+      'connect-tv': { figmaFrame: 'Connect TV- dual screen-option 33' },
+      plans: { states: ['default', 'alternate plan selected'] },
+      zip: { states: ['entry'] },
+    },
+  ),
+  loggedIn(
+    'rsn-upgrade-bundle',
+    'RSN lower tier — upgrade to the bundle',
+    'rsn-lower-tier',
+    {
+      cta: 'Upgrade',
+      section: 'Logged in DAZN customer',
+      figmaFrame: '2582:1333190',
+      figmaSection: '2362:271095',
+    },
+    // No Paywall and no Connect TV: this subscriber already has both. The ZIP
+    // is seeded too — an existing RSN subscriber was geo-verified to buy the
+    // tier they are upgrading from.
+    ['home-entry', 'landing', 'plans', 'auth', 'account', 'zip', 'checkout', 'ready', 'home'],
+    [...SIGNED_IN, 'zip'],
+    {
+      landing: {
+        figmaFrame: 'Anonymous (.sheet-homepage)',
+        note: 'The same marketing sheet the anonymous journeys open on, used here as the bundle upsell.',
+      },
+      plans: { states: undefined },
     },
   ),
 )

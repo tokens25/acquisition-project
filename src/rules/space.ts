@@ -83,7 +83,8 @@ export const families: JourneyFamily[] = [
       'Logged in paying DAZN user — signup from an RSN tile',
       'Existing RSN lower tier — upgrading to the bundle',
     ],
-    note: 'Auth is already satisfied, so those steps are seeded away. Upgrade is a different question from purchase.',
+    note:
+      'Auth is already satisfied, so those steps are seeded away. Upgrade is a different question from purchase. Modelled in journeys.ts; screen counts reconcile at 12/12/9.',
   },
   {
     id: 'migration',

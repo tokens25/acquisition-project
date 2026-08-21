@@ -29,8 +29,15 @@ export type RuntimeCondition =
  *
  * Seeded values still flow downstream — the step that would have captured one is
  * skipped, but every later step that reads it behaves as though it was asked.
+ *
+ * `auth` and `account` are the same idea applied to identity: a journey that
+ * starts inside the product already knows who you are, so those two screens are
+ * not drawn. They stay in the step list, marked skipped, because the reason they
+ * are absent is worth reading — and because a TVE user is authenticated without
+ * having completed an account, which is why these are two seeds and not one.
  */
-export type Seed = 'zip' | 'tier' | 'plan'
+export type Seed = 'zip' | 'tier' | 'plan' | 'auth' | 'account'
+
 
 export type StepRenderer = 'plans' | 'stub'
 
