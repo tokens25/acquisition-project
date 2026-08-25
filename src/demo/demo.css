@@ -24,11 +24,15 @@
 }
 /* Two rows. The top one holds the strip and the bar; only the body row
    changes width when the panel collapses, so the bar never moves. */
+/* One chrome bar across the top. The strip used to carry the panel surface on
+   its own, which left a lighter block hanging over a darker preview once the
+   panel collapsed out from under it. The surface belongs to the row. */
 .demo__top {
   display: grid;
   grid-template-columns: calc(360px - var(--border-1)) minmax(0, 1fr);
   align-items: stretch;
   min-block-size: 56px;
+  background: var(--color-surface-container-1);
 }
 /* Flex, not grid. In a grid the track sizes itself to the item, so an
    animated width on the item is overruled by the track it sits in — the rail
@@ -89,7 +93,6 @@
   padding-block: var(--space-8);
   padding-inline: var(--space-20);
   margin-inline: 0;
-  background: var(--color-surface-container-1);
 }
 .demo__mark {
   display: grid;
@@ -172,8 +175,12 @@
 .demo__preview > * {
   flex: none;
 }
-/* The rule sits between the strip and the bar rather than under both, so the
-   panel column reads as continuous from the brand down. */
+/* The rule marks the panel's edge, continuing the border the panel draws below
+   it — so it appears only while there is a panel to divide from. */
+.demo[data-collapsed] .demo__statusbar,
+.demo[data-preview-only] .demo__statusbar {
+  border-inline-start: 0;
+}
 .demo__statusbar {
   display: flex;
   gap: var(--space-8);
