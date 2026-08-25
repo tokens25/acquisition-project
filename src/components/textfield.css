@@ -83,7 +83,7 @@
   transition: font-size 120ms ease, translate 120ms ease;
 }
 .dz-field[data-filled] .dz-field__label,
-.dz-field__input:focus-within .dz-field__label {
+.dz-field__input:not(.dz-field__input--select):focus-within .dz-field__label {
   font-size: var(--font-size-caption-xs);
   letter-spacing: 0.12px;
   line-height: 1.52;
@@ -123,7 +123,7 @@
   color: transparent;
 }
 .dz-field[data-filled] .dz-field__control,
-.dz-field__input:focus-within .dz-field__control {
+.dz-field__input:not(.dz-field__input--select):focus-within .dz-field__control {
   padding-block-start: var(--space-12);
 }
 .dz-field__input[data-multiline] .dz-field__control {
