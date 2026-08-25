@@ -9,6 +9,7 @@ import { Assistant } from '../editor/Assistant'
 import { useCardSet } from '../editor/useCardSet'
 import { planJourney } from '../rules/journey'
 import { summarise, validateAll } from '../rules/validate'
+import { Button } from '../components/Button'
 import { Stage1 } from './Stage1'
 import { Stage2 } from './Stage2'
 import { UserFlow } from './UserFlow'
@@ -25,6 +26,17 @@ import { JourneyFrames } from './JourneyFrames'
 export function DemoApp() {
   const store = useCardSet()
   const [editing, setEditing] = useState(false)
+  const [saveNote, setSaveNote] = useState<string | null>(null)
+
+  // "Save" here means publish. Edits reach localStorage the moment they are
+  // typed, so a button that only closed the panel would be claiming to do
+  // something that already happened.
+  const onSave = async () => {
+    const message = window.prompt('What changed?', 'content: update plan copy')
+    if (message === null) return
+    const result = await store.publish(message)
+    setSaveNote(result.ok ? 'Saved to the shared copy.' : (result.error ?? 'Save failed.'))
+  }
 
   const planned = planJourney(store.journey, store.context)
   const steps = planned.filter((p) => !p.skipped).map((p) => p.step)
@@ -108,7 +120,46 @@ export function DemoApp() {
                 ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`
                 : `Publish ready — ${coverage.total} contexts checked`}
             </span>
+
+            {editing && (
+              <div className="demo__actions">
+                <Button
+                  appearance="primary"
+                  size="md"
+                  iconBefore={<Icon svg={iconArtwork.checkmark} size={20} />}
+                  disabled={!store.unpublished || store.publishing}
+                  title={
+                    store.unpublished
+                      ? 'Publish these edits to the shared copy'
+                      : 'Nothing to save — this matches what is published'
+                  }
+                  onClick={() => void onSave()}
+                >
+                  {store.publishing ? 'Saving…' : 'Save changes'}
+                </Button>
+
+                <Button
+                  appearance="secondary"
+                  size="md"
+                  iconBefore={<Icon svg={iconArtwork.close} size={20} />}
+                  onClick={() => setEditing(false)}
+                >
+                  Exit edit mode
+                </Button>
+
+                <Button
+                  appearance="tertiary"
+                  size="md"
+                  iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
+                  disabled
+                  title="No settings screen yet."
+                >
+                  Settings
+                </Button>
+              </div>
+            )}
           </div>
+          {saveNote && <p className="demo__savenote">{saveNote}</p>}
 
           {editing && step ? (
             <StepPreview journey={store.journey} set={store.set} context={store.context} />

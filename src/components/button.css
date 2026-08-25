@@ -33,11 +33,24 @@
   background: var(--gradient-subscribe);
   color: var(--color-on-brand-gold);
 }
+/* Filled, but on the panel's own ground rather than inverted — the middle
+   weight between the white primary and the transparent tertiary. */
+.dazn-btn--secondary {
+  background: var(--color-surface-container-5);
+  color: var(--color-text-primary);
+}
+.dazn-btn--secondary:hover {
+  background: var(--color-surface-container-4);
+}
 .dazn-btn--tertiary {
   background: transparent;
   color: var(--color-text-primary);
 }
 
+.dazn-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 .dazn-btn:focus-visible {
   outline: var(--border-2) solid var(--color-brand-primary);
   outline-offset: var(--space-2);

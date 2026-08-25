@@ -8,7 +8,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
  * `subscribe` (gold gradient, Ultimate plans), `primary` (white) and
  * `tertiary` (transparent, used for the card footer link).
  */
-export type ButtonAppearance = 'primary' | 'subscribe' | 'tertiary'
+export type ButtonAppearance = 'primary' | 'secondary' | 'subscribe' | 'tertiary'
 export type ButtonSize = 'lg' | 'md'
 
 export interface ButtonProps
@@ -19,6 +19,8 @@ export interface ButtonProps
   /** Stretch to the full width of the container. */
   block?: boolean
   iconAfter?: ReactNode
+  /** Leading icon — the toolbar buttons put theirs before the label. */
+  iconBefore?: ReactNode
   children?: ReactNode
 }
 
@@ -27,6 +29,7 @@ export function Button({
   size = 'lg',
   block = false,
   iconAfter,
+  iconBefore,
   className,
   children,
   ...rest
@@ -43,6 +46,7 @@ export function Button({
 
   return (
     <button type="button" className={cls} {...rest}>
+      {iconBefore}
       <span className="dazn-btn__label">{children}</span>
       {iconAfter}
     </button>

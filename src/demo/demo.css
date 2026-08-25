@@ -382,3 +382,21 @@
 .demo__reset:hover {
   color: var(--color-text-primary);
 }
+
+/* Edit-mode actions, sharing the status bar with the publish gate: status on
+   the left, actions on the right, as the design lays them out. */
+.demo__statusbar {
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.demo__actions {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+}
+.demo__savenote {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+}
