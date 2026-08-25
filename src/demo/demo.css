@@ -611,3 +611,28 @@
     transition: none;
   }
 }
+
+/* A feature row: the picker, the line when it is a custom one, and a way out. */
+.demo__feature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block-end: var(--space-12);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.demo__feature:last-of-type {
+  border-block-end: 0;
+}
+.demo__feature-remove {
+  align-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-tertiary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  cursor: pointer;
+}
+.demo__feature-remove:hover {
+  color: var(--color-accent-error-text);
+}

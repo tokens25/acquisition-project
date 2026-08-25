@@ -6,6 +6,16 @@ import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
+import { logoArtwork } from '../card/assets'
+
+/** Sentinel for "write a new line here" in the feature picker. */
+const CUSTOM_FEATURE = '__custom__'
+const CUSTOM_PREFIX = 'feature-custom-'
+
+const PURCHASE_TYPES = [
+  { value: 'one_time_payment' as const, label: 'One time payment' },
+  { value: 'discount_code' as const, label: 'Discount code' },
+]
 
 /**
  * Stage two: one step of the journey, one plan at a time.
@@ -19,7 +29,7 @@ import { excludedTiers, resolveTier } from '../rules/resolve'
  * one made the number look absolute when it never is.
  */
 export function Stage2({ store }: { store: CardSetStore }) {
-  const { set, context, setContext, updateTier, updateOffer, offerFor } = store
+  const { set, context, setContext, updateTier, updateOffer, offerFor, updateSet } = store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   const absent = new Map(excludedTiers(set, context).map((e) => [e.tier.id, e.reason]))
@@ -30,7 +40,37 @@ export function Stage2({ store }: { store: CardSetStore }) {
   const offer = offerFor(tier.id)
   const market = set.markets.find((m) => m.code === context.market)
 
+  const patchTier = (p: Parameters<typeof updateTier>[1]) => updateTier(tier.id, p)
+
+  const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
+    updateSet({
+      featureCatalog: set.featureCatalog.map((f) => (f.id === id ? { ...f, ...p } : f)),
+    })
+
+  /** Adds a blank catalogue line and returns its id — see the first interface. */
+  const addCustomFeature = () => {
+    const taken = new Set(set.featureCatalog.map((f) => f.id))
+    let n = 1
+    while (taken.has(`${CUSTOM_PREFIX}${n}`)) n += 1
+    const id = `${CUSTOM_PREFIX}${n}`
+    updateSet({
+      featureCatalog: [
+        ...set.featureCatalog,
+        { id, iconId: 'check', text: '', status: 'active' as const },
+      ],
+    })
+    return id
+  }
+
+  const toggleLogo = (id: string) =>
+    patchTier({
+      logoTiles: resolved.logoTiles.includes(id)
+        ? resolved.logoTiles.filter((l) => l !== id)
+        : [...resolved.logoTiles, id],
+    })
+
   return (
+
     <>
       <section className="demo__group">
         <h3 className="demo__group-title">Tiers</h3>
@@ -144,6 +184,144 @@ export function Stage2({ store }: { store: CardSetStore }) {
           </p>
         )}
       </section>
+
+      {/* Add-on lives on the offer, like the prices — the same benefit can be
+          sold at one cadence and bundled at another. */}
+      <section className="demo__group">
+        <h3 className="demo__group-title">Add-on</h3>
+        {offer ? (
+          <>
+            <SelectField
+              label="Type"
+              helpText="Sold on this offer, or bundled into it — never both."
+              value={offer.addOnId ?? (offer.includedAddOnIds[0] ? `included:${offer.includedAddOnIds[0]}` : '')}
+              options={[
+                { value: '', label: 'None' },
+                ...set.addOnCatalog.flatMap((a) => [
+                  { value: a.id, label: `${a.title} — sold` },
+                  { value: `included:${a.id}`, label: `${a.title} — bundled` },
+                ]),
+              ]}
+              onChange={(v) => {
+                if (!v) {
+                  updateOffer(tier.id, { addOnId: null, addOnPurchaseType: null, addOnDiscountPercent: null, includedAddOnIds: [] })
+                  return
+                }
+                if (v.startsWith('included:')) {
+                  updateOffer(tier.id, { addOnId: null, addOnPurchaseType: null, addOnDiscountPercent: null, includedAddOnIds: [v.slice(9)] })
+                  return
+                }
+                updateOffer(tier.id, { addOnId: v, addOnPurchaseType: offer.addOnPurchaseType ?? 'one_time_payment', includedAddOnIds: [] })
+              }}
+            />
+            {offer.addOnId && (
+              <SelectField
+                label="Purchase type"
+                value={offer.addOnPurchaseType ?? 'one_time_payment'}
+                options={PURCHASE_TYPES}
+                onChange={(v) =>
+                  updateOffer(tier.id, {
+                    addOnPurchaseType: v,
+                    addOnDiscountPercent: v === 'discount_code' ? (offer.addOnDiscountPercent ?? 15) : null,
+                  })
+                }
+              />
+            )}
+            {offer.addOnPurchaseType === 'discount_code' && (
+              <TextField
+                label="Discount percent"
+                type="number"
+                min={1}
+                max={99}
+                value={String(offer.addOnDiscountPercent ?? '')}
+                onChange={(v) => updateOffer(tier.id, { addOnDiscountPercent: Number(v) })}
+              />
+            )}
+          </>
+        ) : (
+          <p className="ed-placeholder">No offer at this cadence, so nothing to attach one to.</p>
+        )}
+      </section>
+
+      <section className="demo__group">
+        <h3 className="demo__group-title">Competitions</h3>
+        <div className="ed-logos" role="group" aria-label="Competition logos">
+          {set.logoCatalog.map((logo) => {
+            const on = resolved.logoTiles.includes(logo.id)
+            return (
+              <button
+                key={logo.id}
+                type="button"
+                className="ed-logo"
+                data-on={on || undefined}
+                aria-pressed={on}
+                title={logo.name}
+                onClick={() => toggleLogo(logo.id)}
+              >
+                <img src={logoArtwork[logo.id]} alt={logo.altText} />
+              </button>
+            )
+          })}
+        </div>
+        <p className="tg__hint">Shown in the order picked.</p>
+        <TextField
+          label="Total number of competitions"
+          type="number"
+          min={0}
+          value={String(resolved.logoTotal)}
+          onChange={(v) => patchTier({ logoTotal: Number(v) })}
+          helpText="Drives the derived “+N” tile."
+        />
+      </section>
+
+      <section className="demo__group">
+        <h3 className="demo__group-title">Features</h3>
+        {resolved.features.map((id, i) => {
+          const entry = set.featureCatalog.find((f) => f.id === id)
+          const isCustom = Boolean(entry && entry.id.startsWith(CUSTOM_PREFIX))
+          const setFeature = (v: string) =>
+            patchTier({ features: resolved.features.map((f, j) => (j === i ? v : f)) })
+          return (
+            <div className="demo__feature" key={`${id}-${i}`}>
+              <SelectField
+                label={`Feature ${i + 1}`}
+                value={id}
+                options={[
+                  ...set.featureCatalog.map((f) => ({
+                    value: f.id,
+                    label: f.status === 'deprecated' ? `${f.text} (retired)` : f.text || f.id,
+                  })),
+                  { value: CUSTOM_FEATURE, label: 'Custom line…' },
+                ]}
+                onChange={(v) => (v === CUSTOM_FEATURE ? setFeature(addCustomFeature()) : setFeature(v))}
+              />
+              {entry && isCustom && (
+                <TextField
+                  label="Line"
+                  value={entry.text}
+                  onChange={(v) => updateFeature(entry.id, { text: v })}
+                  helpText="Written here, stored in the catalogue so it can be reused."
+                />
+              )}
+              <button
+                type="button"
+                className="demo__feature-remove"
+                onClick={() => patchTier({ features: resolved.features.filter((_, j) => j !== i) })}
+              >
+                Remove
+              </button>
+            </div>
+          )
+        })}
+        <button
+          type="button"
+          className="demo__reset"
+          onClick={() => patchTier({ features: [...resolved.features, set.featureCatalog[0].id] })}
+        >
+          Add feature
+        </button>
+      </section>
+
     </>
   )
 }
