@@ -1,5 +1,13 @@
-/* The redesigned interface. Two stages in one 360px panel, preview beside it. */
+/* The redesigned interface. Two stages in one 360px panel, preview beside it.
+
+   No page padding: the panel is a full-height rail against the window edge and
+   the preview runs to the other one. `.page` keeps its padding for the first
+   interface, whose header and panes are laid out around it. */
+.demo {
+  padding: 0;
+}
 .demo .page__split {
+
   display: grid;
   grid-template-columns: 360px minmax(0, 1fr);
   gap: 0;
