@@ -11,7 +11,8 @@
 .demo__top {
   display: grid;
   grid-template-columns: calc(360px - var(--border-1)) minmax(0, 1fr);
-  align-items: center;
+  align-items: stretch;
+  min-block-size: 56px;
 }
 .demo__body {
   display: grid;
@@ -34,14 +35,18 @@
 /* Menu_item_sub, 229:2122 — a 48px row, 8/20 padding, one hairline beneath.
    The mark and the title are one group on the left; the label sits apart on
    the right, which is why this is space-between rather than a single gap. */
+/* Fills its grid cell rather than sitting 48px tall inside it, and carries
+   the panel's surface — so the strip and the column below it are one shape,
+   whether the panel is open or shut. */
 .demo__brand {
   display: flex;
   gap: var(--space-8);
   align-items: center;
-  block-size: 48px;
+  block-size: 100%;
   padding-block: var(--space-8);
   padding-inline: var(--space-20);
   margin-inline: 0;
+  background: var(--color-surface-container-1);
 }
 .demo__mark {
   display: grid;
