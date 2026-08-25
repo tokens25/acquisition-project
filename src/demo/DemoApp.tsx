@@ -138,6 +138,16 @@ export function DemoApp() {
                 <Button
                   appearance="tertiary"
                   size="md"
+                  iconBefore={<Icon svg={iconArtwork.download} size={20} />}
+                  title="Downloads the content as this app stores it — not yet the shape the rule engine reads."
+                  onClick={store.exportJson}
+                >
+                  Export JSON
+                </Button>
+
+                <Button
+                  appearance="tertiary"
+                  size="md"
                   iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
                   disabled
                   title="No settings screen yet."
