@@ -80,6 +80,8 @@ export function DemoApp() {
       data-preview-only={previewOnly || undefined}
       data-collapsed={collapsed || undefined}
     >
+      {collapsed && brand}
+
       <div className="page__split">
         <div className="demo__panel">
           {!collapsed && brand}
@@ -139,7 +141,6 @@ export function DemoApp() {
 
         <div className="demo__preview">
           <div className="demo__statusbar">
-            {collapsed && brand}
             <span className="demo__gate" data-state={coverage.failing.length ? 'blocked' : 'clear'}>
               {coverage.failing.length
                 ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`

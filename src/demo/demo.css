@@ -453,13 +453,9 @@
 .demo[data-collapsed] .demo__panel {
   display: none;
 }
-.demo__statusbar .demo__brand {
-  flex: none;
-  block-size: auto;
-  margin: 0;
-  padding-inline: 0;
-  padding-block: 0;
-  border-block-end: 0;
-  padding-inline-end: var(--space-16);
-  border-inline-end: var(--border-1) solid var(--color-border-full-color-subtle);
+/* Collapsed, it is the same strip in a different place: a full-width row above
+   the split. Only the negative margin goes, which existed to cancel the
+   panel's padding and has nothing to cancel out here. */
+.demo > .demo__brand {
+  margin-inline: 0;
 }
