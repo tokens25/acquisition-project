@@ -175,12 +175,8 @@
 .demo__preview > * {
   flex: none;
 }
-/* The rule marks the panel's edge, continuing the border the panel draws below
-   it — so it appears only while there is a panel to divide from. */
-.demo[data-collapsed] .demo__statusbar,
-.demo[data-preview-only] .demo__statusbar {
-  border-inline-start: 0;
-}
+/* The rule stays in both states: it is the brand strip's right edge as much as
+   the panel's, and the strip is still there when the panel is not. */
 .demo__statusbar {
   display: flex;
   gap: var(--space-8);
