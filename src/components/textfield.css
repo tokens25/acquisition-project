@@ -165,3 +165,13 @@
     transition: none;
   }
 }
+
+/* The select sits on the same shell. Its own arrow cannot be sized or inset,
+   so it is removed and the DS chevron rendered as the trailing element. */
+.dz-field__control--select {
+  appearance: none;
+  cursor: pointer;
+}
+.dz-field__control--select:disabled {
+  cursor: not-allowed;
+}

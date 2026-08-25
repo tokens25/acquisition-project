@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
@@ -92,23 +93,13 @@ export function Stage2({ store }: { store: CardSetStore }) {
         <h3 className="demo__group-title">
           Pricing{market ? ` — ${market.currency}` : ''}
         </h3>
-        <label className="ed-field">
-          <span className="ed-field__label">How to pay</span>
-          <select
-            className="ed-field__input"
-            value={context.cadence}
-            onChange={(e) => setContext({ ...context, cadence: e.target.value })}
-          >
-            {set.cadences.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-          <span className="ed-field__hint">
-            The prices below are this cadence only. A plan with no offer here is not sold this way.
-          </span>
-        </label>
+        <SelectField
+          label="How to pay"
+          value={context.cadence}
+          options={set.cadences.map((c) => ({ value: c, label: c }))}
+          onChange={(v) => setContext({ ...context, cadence: v })}
+          helpText="The prices below are this cadence only. A plan with no offer here is not sold this way."
+        />
 
         {offer ? (
           <>

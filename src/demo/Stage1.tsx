@@ -2,7 +2,7 @@ import type { CardSetStore } from '../editor/useCardSet'
 import { DIRECT } from '../rules/content'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
 import { journeys } from '../rules/journeys'
-import { SelectField } from '../editor/Field'
+import { SelectField } from '../components/SelectField'
 
 /**
  * Stage one: the situation being authored for.
@@ -34,7 +34,7 @@ export function Stage1({ store }: { store: CardSetStore }) {
     <>
       <SelectField
         label="Market"
-        hint={
+        helpText={
           context.market === '*'
             ? 'Editing the base — changes reach every market.'
             : `Editing ${context.market}'s difference from the base.`
@@ -49,7 +49,7 @@ export function Stage1({ store }: { store: CardSetStore }) {
 
       <SelectField
         label="Storefront"
-        hint={
+        helpText={
           context.channel === DIRECT
             ? 'Direct sells live plans only.'
             : 'Partners also carry direct plans flagged visible to them, legacy or not.'
@@ -68,7 +68,7 @@ export function Stage1({ store }: { store: CardSetStore }) {
 
       <SelectField
         label="Entry point"
-        hint="Where they arrived from. Narrowed by user status — a migrating subscriber never arrives from Upgrade."
+        helpText="Where they arrived from. Narrowed by user status — a migrating subscriber never arrives from Upgrade."
         value={entryCta}
         options={entries.map((e) => ({ value: e, label: e }))}
         onChange={(v) => pick(status, v)}
@@ -80,7 +80,7 @@ export function Stage1({ store }: { store: CardSetStore }) {
       {matches.length > 1 && (
         <SelectField
           label="Which one"
-          hint={`This situation covers ${matches.length} journeys. They differ after the entry.`}
+          helpText={`This situation covers ${matches.length} journeys. They differ after the entry.`}
           value={journey.id}
           options={matches.map((j) => ({ value: j.id, label: j.name }))}
           onChange={(v) => updateSet({ journeyId: v })}
