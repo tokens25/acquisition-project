@@ -51,7 +51,8 @@ export function DemoApp() {
           {editing ? (
             <>
               <button type="button" className="demo__back" onClick={() => setEditing(false)}>
-                ‹ {store.journey.name} — {step?.shortName ?? step?.name}
+                <Icon svg={iconArtwork['chevron-left']} size={20} />
+                {store.journey.name} — {step?.shortName ?? step?.name}
               </button>
               <p className="demo__scope">
                 {store.context.market === '*' ? 'Base — all markets' : store.context.market} ·{' '}

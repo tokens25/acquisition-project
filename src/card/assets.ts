@@ -1,6 +1,7 @@
 import checkCircleIcon from '../assets/icons/action-check-circle.svg?raw'
 import checkmarkIcon from '../assets/icons/action-checkmark.svg?raw'
 import chevronDownIcon from '../assets/icons/nav-chevron-down-md.svg?raw'
+import chevronLeftIcon from '../assets/icons/nav-chevron-left-md.svg?raw'
 import editIcon from '../assets/icons/action-edit.svg?raw'
 import uploadIcon from '../assets/icons/actions-upload.svg?raw'
 import devicesIcon from '../assets/icons/action-device-switch.svg?raw'
@@ -52,6 +53,7 @@ export const iconArtwork: Record<string, string> = {
   checkmark: checkmarkIcon,
   'chevron-down': chevronDownIcon,
   edit: editIcon,
+  'chevron-left': chevronLeftIcon,
   upload: uploadIcon,
   discount: discountIcon,
   gift: giftIcon,

@@ -1,0 +1,101 @@
+/* RadioButton, from the stage-two panel: 24px box, 20px ring at (2,2), 10px
+   centre at (7,7). Both ring and centre are text-primary when on. */
+.tg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.tg__row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  cursor: pointer;
+}
+/* Kept in the layout rather than display:none, so it stays focusable and the
+   mark can respond to :focus-visible. */
+.tg__input {
+  position: absolute;
+  inline-size: 24px;
+  block-size: 24px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.tg__mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 24px;
+  block-size: 24px;
+}
+.tg__mark::before {
+  content: '';
+  inline-size: 20px;
+  block-size: 20px;
+  border: var(--border-2) solid var(--color-border-full-color-strong);
+  border-radius: var(--radius-full);
+  transition: border-color 120ms ease;
+}
+.tg__mark::after {
+  content: '';
+  position: absolute;
+  inline-size: 10px;
+  block-size: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-text-primary);
+  scale: 0;
+  transition: scale 120ms ease;
+}
+.tg__input:checked ~ .tg__mark::before {
+  border-color: var(--color-text-primary);
+}
+.tg__input:checked ~ .tg__mark::after {
+  scale: 1;
+}
+.tg__input:focus-visible ~ .tg__mark::before {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+.tg__leading {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 20px;
+  block-size: 20px;
+  margin-inline-end: calc(var(--space-8) * -1);
+}
+.tg__label {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-button-lg);
+}
+/* Brand gradient, right to left as the component's transform specifies. */
+.tg__label[data-tone='ultimate'] {
+  background-image: linear-gradient(
+    to left,
+    var(--color-brand-tertiary),
+    var(--color-brand-secondary)
+  );
+  background-clip: text;
+  color: transparent;
+}
+.tg__label[data-tone='success'] {
+  color: var(--color-accent-success-text);
+}
+.tg__leading:has(+ .tg__label[data-tone='success']) {
+  color: var(--color-accent-success-text);
+}
+.tg__hint {
+  margin: 0;
+  padding-inline-start: 36px;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.52;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tg__mark::before,
+  .tg__mark::after {
+    transition: none;
+  }
+}

@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
+import { ToggleField } from '../components/ToggleField'
+import { iconArtwork } from '../card/assets'
+import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
 
@@ -62,18 +65,13 @@ export function Stage2({ store }: { store: CardSetStore }) {
           readOnly
           helpText="Set by the Ultimate treatment below."
         />
-        <label className="ed-field ed-field--check">
-          <input
-            className="ed-field__check"
-            type="checkbox"
-            checked={resolved.ultimate}
-            onChange={(e) => updateTier(tier.id, { ultimate: e.target.checked })}
-          />
-          <span>
-            <span className="ed-field__label">Ultimate treatment</span>
-            <span className="ed-field__hint">Gold stroke, badge and CTA — max one per set.</span>
-          </span>
-        </label>
+        <ToggleField
+          label="Ultimate Treatment"
+          tone="ultimate"
+          checked={resolved.ultimate}
+          onChange={(v) => updateTier(tier.id, { ultimate: v })}
+          hint="Gold stroke, badge and CTA — max one per set."
+        />
         <TextField
           label="Plan name"
           value={resolved.planName}
@@ -103,24 +101,20 @@ export function Stage2({ store }: { store: CardSetStore }) {
 
         {offer ? (
           <>
-            <label className="ed-field ed-field--check">
-              <input
-                className="ed-field__check"
-                type="checkbox"
-                checked={offer.discount}
-                onChange={(e) =>
-                  updateOffer(tier.id, {
-                    discount: e.target.checked,
-                    introPrice: e.target.checked
-                      ? (offer.introPrice ?? Math.round(offer.standardPrice * 80) / 100)
-                      : null,
-                  })
-                }
-              />
-              <span>
-                <span className="ed-label-chip">Apply discount</span>
-              </span>
-            </label>
+            <ToggleField
+              label="Apply discount"
+              tone="success"
+              leading={<Icon svg={iconArtwork.discount} size={20} />}
+              checked={offer.discount}
+              onChange={(v) =>
+                updateOffer(tier.id, {
+                  discount: v,
+                  introPrice: v
+                    ? (offer.introPrice ?? Math.round(offer.standardPrice * 80) / 100)
+                    : null,
+                })
+              }
+            />
             <TextField
               label="Standard price"
               type="number"
