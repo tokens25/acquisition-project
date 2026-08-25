@@ -12,7 +12,6 @@
   display: grid;
   grid-template-columns: calc(360px - var(--border-1)) minmax(0, 1fr);
   align-items: center;
-  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
 }
 .demo__body {
   display: grid;
@@ -119,12 +118,15 @@
   min-inline-size: 0;
   padding: var(--space-16) var(--space-24);
 }
+/* The rule sits between the strip and the bar rather than under both, so the
+   panel column reads as continuous from the brand down. */
 .demo__statusbar {
   display: flex;
   gap: var(--space-8);
   align-items: center;
   justify-content: space-between;
   padding: var(--space-8) var(--space-24);
+  border-inline-start: var(--border-1) solid var(--color-border-full-color-subtle);
 }
 .demo__gate {
   padding: var(--space-8) var(--space-16);
