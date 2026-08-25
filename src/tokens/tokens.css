@@ -4,6 +4,22 @@
  * Extracted: DAZN brand, Dark + Light themes.
  *
  * Dark is the default (:root). Light overrides live under [data-theme="light"].
+ *
+ * KNOWN GAP — the type ramps are responsive in Figma and flat here.
+ *
+ * A DS type style such as Body/short paragraph carries three values
+ * (16 | 18 | 18 for mobile | tablet | desktop). This export kept only the
+ * desktop step, so --font-size-body-default is 18px and there is no 16
+ * anywhere. Anything built from a spec drawn at the narrow breakpoint
+ * therefore renders one step large.
+ *
+ * Two places already carry the design's number as a literal because of it:
+ *   components/textfield.css   field value and resting label   16px  (body)
+ *   demo/demo.css              panel title                     20px  (heading h6)
+ *
+ * Re-exporting with the breakpoint values would replace both with tokens.
+ * Until then, prefer the literal with a comment over the wrong token.
+
  * Non-color tokens (spacing, radius, typography) are theme-agnostic and live in :root.
  *
  * Naming: --color-<group>-<role>...  mirrors the semantic token tree

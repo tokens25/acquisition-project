@@ -23,7 +23,36 @@ import { defaultSet } from './defaults'
  * (`tier_vito_es`), so the same plan in two countries is two unrelated rows —
  * there is nothing to fold into a base plus differences, and pretending
  * otherwise would invent a relationship the data does not claim.
+ *
+ * ── Where their template and this renderer disagree ──────────────
+ *
+ * From their Content Editor Template cheat sheet. None of these break the
+ * import; all three surface the day someone compares the two outputs, so they
+ * are recorded here rather than rediscovered.
+ *
+ * 1. `display_order` — the cheat sheet calls it "authored, but not yet wired
+ *    into the engine's sort — a known, parked gap". This renderer does sort by
+ *    it (resolveSet). Same content, different card order. Ours matches what the
+ *    column claims; theirs is the gap.
+ *
+ * 2. Nothing carries the total-competitions count. Their `logo_tiles_count` is
+ *    auto and read-only — it counts the ids in `logo_tiles` — so a plan showing
+ *    five logos reports 5. The card's "+N" tile is derived from how many
+ *    competitions the plan actually carries (9 for Ultimate), a different
+ *    number that is not in the template at all. An import cannot produce "+N"
+ *    from their sheet, and the card under-reports the plan. `Tier.logoTotal`
+ *    is authored here to fill that gap.
+ *
+ * 3. `ultimate` — their rule is "exactly one tier per country may be TRUE".
+ *    S-1 here is one per *rendered set*: market x storefront x cadence. Both
+ *    catch the same failures today; they diverge the moment a partner wants a
+ *    different flagship from direct, which theirs forbids and ours allows.
+ *
+ * Useful, and not obvious from the data: `tier_code` is the real OvpSKU for
+ * Spain's rows, so those ids trace back to billing. A reverse adapter must
+ * preserve them exactly.
  */
+
 
 interface EngineTier {
   id: string
