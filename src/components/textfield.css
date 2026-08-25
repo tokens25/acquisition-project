@@ -1,0 +1,167 @@
+/* Form/TextField — DS 4758:68049.
+
+   Every value below comes from the component set: 56px shell, 16px inline
+   padding, radius/10, 1px border, 4px gap to the help text. The state colours
+   were read off the variants rather than guessed —
+
+     default        border/full-color/strong   surface/default
+     hover, focus   border/full-color/inverse  surface/container-2 when focused
+     disabled       border/full-color/default  surface/container-3
+     read only      border/full-color/subtle   surface/container-2
+     error          accent/error/border        surface/default
+
+   State is left to the browser. Figma draws hover and focus as variants
+   because it has no other way to; CSS has :hover and :focus-visible, and
+   re-implementing them in React would be strictly worse. */
+
+.dz-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 100%;
+}
+
+.dz-field__input {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  block-size: 56px;
+  padding-inline: var(--space-16);
+  border: var(--border-1) solid var(--color-border-full-color-strong);
+  border-radius: var(--radius-10);
+  background: var(--color-surface-default);
+}
+.dz-field__input[data-multiline] {
+  block-size: auto;
+  padding-block: var(--space-12);
+  align-items: start;
+}
+
+.dz-field__input:hover:not(:has(:disabled)):not(:has([readonly])) {
+  border-color: var(--color-border-full-color-inverse);
+}
+.dz-field__input:has(:focus) {
+  border-color: var(--color-border-full-color-inverse);
+  background: var(--color-surface-container-2);
+}
+/* Keyboard focus keeps the DS treatment and adds a ring, which the variants
+   cannot express but every keyboard user needs. */
+.dz-field__input:has(:focus-visible) {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+.dz-field__input:has(:disabled) {
+  border-color: var(--color-border-full-color-default);
+  background: var(--color-surface-container-3);
+}
+.dz-field__input:has([readonly]) {
+  border-color: var(--color-border-full-color-subtle);
+  background: var(--color-surface-container-2);
+}
+.dz-field[data-error] .dz-field__input {
+  border-color: var(--color-accent-error-border);
+}
+
+/* The label floats over the control, so the body is the positioning context. */
+.dz-field__body {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-inline-size: 0;
+}
+
+.dz-field__label {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-body-default);
+  line-height: normal;
+  pointer-events: none;
+  transition: font-size 120ms ease, translate 120ms ease;
+}
+.dz-field[data-filled] .dz-field__label,
+.dz-field__input:has(:focus) .dz-field__label {
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.12px;
+  line-height: 1.52;
+  translate: 0 -22px;
+}
+.dz-field__input[data-multiline] .dz-field__label {
+  inset-block-start: 0;
+  translate: 0 0;
+}
+
+.dz-field__control {
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body-default);
+  line-height: normal;
+  text-overflow: ellipsis;
+}
+.dz-field__control:focus {
+  outline: none;
+}
+.dz-field__control:disabled {
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+/* Empty and unfocused, the label occupies the line — so the control must not
+   also claim it, or the two overlap. */
+.dz-field:not([data-filled]) .dz-field__input:not(:has(:focus)) .dz-field__control {
+  color: transparent;
+}
+.dz-field[data-filled] .dz-field__control,
+.dz-field__input:has(:focus) .dz-field__control {
+  padding-block-start: var(--space-12);
+}
+.dz-field__input[data-multiline] .dz-field__control {
+  padding-block-start: var(--space-20);
+  resize: vertical;
+}
+
+.dz-field__leading {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 20px;
+  block-size: 20px;
+  color: var(--color-text-secondary);
+}
+.dz-field__trailing {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 24px;
+  block-size: 24px;
+  color: var(--color-text-secondary);
+}
+
+.dz-field__help {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  margin: 0;
+  padding-inline: var(--space-4);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.12px;
+  line-height: 1.52;
+}
+.dz-field[data-error] .dz-field__help {
+  color: var(--color-accent-error-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dz-field__label {
+    transition: none;
+  }
+}

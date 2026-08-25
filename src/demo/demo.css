@@ -191,3 +191,25 @@
   text-transform: uppercase;
   letter-spacing: 0.12px;
 }
+
+/* Field groups in stage two. More space above a title than below it, so a
+   group reads as a group rather than as one long column of inputs. */
+.demo__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding-block-start: var(--space-20);
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.demo__group:first-of-type {
+  border-block-start: 0;
+  padding-block-start: 0;
+}
+.demo__group-title {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+}

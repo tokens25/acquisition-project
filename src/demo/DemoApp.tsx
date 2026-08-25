@@ -8,6 +8,7 @@ import { useCardSet } from '../editor/useCardSet'
 import { planJourney } from '../rules/journey'
 import { summarise, validateAll } from '../rules/validate'
 import { Stage1 } from './Stage1'
+import { Stage2 } from './Stage2'
 import { JourneyFrames } from './JourneyFrames'
 
 /**
@@ -49,10 +50,9 @@ export function DemoApp() {
                 {store.context.market === '*' ? 'Base — all markets' : store.context.market} ·{' '}
                 {store.context.channel} · {store.context.cadence}
               </p>
-              <p className="ed-placeholder">
-                Stage two fields land here next. Editing still works at <a href="/">the current
-                interface</a>.
-              </p>
+              <div className="demo__fields">
+                <Stage2 store={store} />
+              </div>
             </>
           ) : (
             <>
