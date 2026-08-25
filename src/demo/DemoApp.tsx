@@ -183,6 +183,12 @@ export function DemoApp() {
                 {store.context.market === '*' ? 'Base — all markets' : store.context.market} ·{' '}
                 {store.context.channel} · {store.context.cadence}
               </p>
+              {/* Above the fields, not below them: the questions worth asking
+                  here are about the copy being written, and an assistant found
+                  after scrolling past six field groups is an assistant nobody
+                  asks. */}
+              <Assistant store={store} />
+
               <div className="demo__fields">
                 <Stage2 store={store} />
               </div>
