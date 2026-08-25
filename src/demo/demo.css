@@ -3,8 +3,24 @@
    No page padding: the panel is a full-height rail against the window edge and
    the preview runs to the other one. `.page` keeps its padding for the first
    interface, whose header and panes are laid out around it. */
+/* The window is the frame: the bar is fixed, and the two panes below it
+   scroll independently. Sizing the column in flex rather than against a
+   hardcoded bar height means the bar can change without the panes overflowing
+   past the viewport. */
 .demo {
+  display: flex;
+  flex-direction: column;
+  block-size: 100vh;
+  min-block-size: 0;
   padding: 0;
+  overflow: hidden;
+}
+.demo__top {
+  flex: none;
+}
+.demo__body {
+  flex: 1;
+  min-block-size: 0;
 }
 /* Two rows. The top one holds the strip and the bar; only the body row
    changes width when the panel collapses, so the bar never moves. */
@@ -18,7 +34,9 @@
   display: grid;
   grid-template-columns: 360px minmax(0, 1fr);
   gap: 0;
-  align-items: start;
+  /* stretch, not start — the panes need the row's full height to scroll
+     inside rather than growing the page. */
+  align-items: stretch;
 }
 .demo[data-collapsed] .demo__body {
   grid-template-columns: minmax(0, 1fr);
@@ -30,7 +48,9 @@
   padding: var(--space-16) var(--space-20) var(--space-24);
   border-inline-end: var(--border-1) solid var(--color-border-full-color-subtle);
   background: var(--color-surface-container-1);
-  min-block-size: 100vh;
+  block-size: 100%;
+  min-block-size: 0;
+  overflow-y: auto;
 }
 /* Menu_item_sub, 229:2122 — a 48px row, 8/20 padding, one hairline beneath.
    The mark and the title are one group on the left; the label sits apart on
@@ -121,7 +141,9 @@
   flex-direction: column;
   gap: var(--space-16);
   min-inline-size: 0;
+  block-size: 100%;
   padding: var(--space-16) var(--space-24);
+  overflow-y: auto;
 }
 /* The rule sits between the strip and the bar rather than under both, so the
    panel column reads as continuous from the brand down. */
