@@ -400,3 +400,12 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption-xs);
 }
+
+/* Preview only: the panel goes, the preview takes the width. Hidden rather
+   than unmounted so the form keeps its state and scroll position. */
+.demo[data-preview-only] .page__split {
+  grid-template-columns: minmax(0, 1fr);
+}
+.demo[data-preview-only] .demo__panel {
+  display: none;
+}

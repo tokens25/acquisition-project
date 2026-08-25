@@ -27,6 +27,7 @@ export function DemoApp() {
   const store = useCardSet()
   const [editing, setEditing] = useState(false)
   const [saveNote, setSaveNote] = useState<string | null>(null)
+  const [previewOnly, setPreviewOnly] = useState(false)
 
   // "Save" here means publish. Edits reach localStorage the moment they are
   // typed, so a button that only closed the panel would be claiming to do
@@ -49,7 +50,7 @@ export function DemoApp() {
   }
 
   return (
-    <main className="page demo">
+    <main className="page demo" data-preview-only={previewOnly || undefined}>
       <div className="page__split">
         <div className="demo__panel">
           <header className="demo__brand">
@@ -120,6 +121,31 @@ export function DemoApp() {
                 ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`
                 : `Publish ready — ${coverage.total} contexts checked`}
             </span>
+
+            {!editing && (
+              <div className="demo__actions">
+                <Button
+                  appearance="secondary"
+                  size="md"
+                  iconBefore={<Icon svg={iconArtwork.preview} size={20} />}
+                  aria-pressed={previewOnly}
+                  title={previewOnly ? 'Show the panel again' : 'Hide the panel and fill the width'}
+                  onClick={() => setPreviewOnly((v) => !v)}
+                >
+                  {previewOnly ? 'Show panel' : 'Preview'}
+                </Button>
+
+                <Button
+                  appearance="tertiary"
+                  size="md"
+                  iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
+                  disabled
+                  title="No settings screen yet."
+                >
+                  Settings
+                </Button>
+              </div>
+            )}
 
             {editing && (
               <div className="demo__actions">

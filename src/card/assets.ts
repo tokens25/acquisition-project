@@ -2,6 +2,7 @@ import checkCircleIcon from '../assets/icons/action-check-circle.svg?raw'
 import checkmarkIcon from '../assets/icons/action-checkmark.svg?raw'
 import chevronDownIcon from '../assets/icons/nav-chevron-down-md.svg?raw'
 import closeIcon from '../assets/icons/action-close-md.svg?raw'
+import eyeIcon from '../assets/icons/action-password-show.svg?raw'
 import chevronLeftIcon from '../assets/icons/nav-chevron-left-md.svg?raw'
 import settingsIcon from '../assets/icons/nav-settings.svg?raw'
 import editIcon from '../assets/icons/action-edit.svg?raw'
@@ -57,6 +58,7 @@ export const iconArtwork: Record<string, string> = {
   edit: editIcon,
   'chevron-left': chevronLeftIcon,
   close: closeIcon,
+  preview: eyeIcon,
   settings: settingsIcon,
   upload: uploadIcon,
   discount: discountIcon,
