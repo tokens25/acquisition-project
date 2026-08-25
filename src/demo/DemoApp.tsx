@@ -11,6 +11,8 @@ import { planJourney } from '../rules/journey'
 import { summarise, validateAll } from '../rules/validate'
 import { Stage1 } from './Stage1'
 import { Stage2 } from './Stage2'
+import { UserFlow } from './UserFlow'
+import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
 
 /**
@@ -61,10 +63,39 @@ export function DemoApp() {
             </>
           ) : (
             <>
+              {/* First action in the panel, because nothing below it means
+                  anything until content is loaded. */}
+              <label className="demo__upload">
+                <Icon svg={iconArtwork.upload} size={24} />
+                Upload Spreadsheet or JSON
+                <input
+                  type="file"
+                  accept=".json,application/json,.xlsx"
+                  hidden
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) void store.importJson(file)
+                    e.target.value = ''
+                  }}
+                />
+              </label>
+              {store.importError && <p className="demo__error">{store.importError}</p>}
+
               <Assistant store={store} />
+
               <div className="demo__fields">
                 <Stage1 store={store} />
               </div>
+
+              <UserFlow
+                planned={planned}
+                selectedId={step?.id ?? ''}
+                onOpen={openStep}
+              />
+
+              <button type="button" className="demo__reset" onClick={store.reset}>
+                Reset progress
+              </button>
             </>
           )}
         </div>

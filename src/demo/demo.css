@@ -235,3 +235,139 @@
   letter-spacing: 0.12px;
   text-transform: uppercase;
 }
+
+/* Upload — Button/CTA, 48px, radius 8, full width of the panel. The label and
+   icon are text-primary; the surface is the lightest container so the button
+   reads as the panel's one primary action. */
+.demo__upload {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: center;
+  block-size: 48px;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-5);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.demo__upload:hover {
+  background: var(--color-surface-container-4);
+}
+.demo__upload:focus-within {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+.demo__error {
+  margin: 0;
+  color: var(--color-accent-error-text);
+  font-size: var(--font-size-caption-xs);
+}
+
+/* ── User flow ─────────────────────────────────────────────── */
+.uf {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.uf__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+}
+.uf__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.uf__item {
+  display: flex;
+  flex-direction: column;
+}
+/* The dotted run between rows, aligned to the middle of the dot. */
+.uf__link {
+  inline-size: 0;
+  block-size: 12px;
+  margin-inline-start: 11px;
+  border-inline-start: var(--border-2) dotted var(--color-border-full-color-default);
+}
+.uf__row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  block-size: 40px;
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-6);
+}
+.uf__row[data-on] {
+  background: var(--color-surface-container-2);
+}
+.uf__row[data-skipped] {
+  opacity: 0.5;
+}
+.uf__dot {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 20px;
+  block-size: 20px;
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-full);
+  color: var(--color-text-inverse);
+}
+.uf__dot[data-done] {
+  border-color: var(--color-accent-success-surface);
+  background: var(--color-accent-success-surface);
+}
+.uf__name {
+  flex: 1;
+  min-inline-size: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+.uf__row[data-on] .uf__name {
+  color: var(--color-text-primary);
+}
+.uf__tag {
+  flex: none;
+  padding-inline: var(--space-6);
+  border: var(--border-1) dashed var(--color-border-full-color-default);
+  border-radius: var(--radius-full);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-label-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12px;
+}
+.uf__edit {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 32px;
+  block-size: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+}
+.uf__edit:hover {
+  background: var(--color-surface-container-3);
+  color: var(--color-text-primary);
+}
+
+.demo__reset {
+  padding-block: var(--space-12);
+  border: 0;
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+  background: none;
+  color: var(--color-text-tertiary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-sm);
+  cursor: pointer;
+}
+.demo__reset:hover {
+  color: var(--color-text-primary);
+}
