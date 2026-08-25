@@ -27,7 +27,7 @@
    the right, which is why this is space-between rather than a single gap. */
 .demo__brand {
   display: flex;
-  gap: var(--space-16);
+  gap: var(--space-8);
   align-items: center;
   block-size: 48px;
   padding-block: var(--space-8);
@@ -41,15 +41,18 @@
   flex: none;
   inline-size: 32px;
   block-size: 32px;
+  /* 16px to the title, 8px onward — the mark, the name and the label read as
+     one group rather than three evenly spaced things. */
+  margin-inline-end: var(--space-8);
   color: var(--color-text-primary);
 }
 .demo__title {
-  /* 20px in the design — the mobile step of the h6 ramp, which this token file
-     only ships at its desktop value. */
+  /* 20px, from the design. It is the mobile step of the h6 ramp and this token
+     file only ships the desktop step (22px), so the value is literal until the
+     ramp is complete. */
   margin: 0;
-  margin-inline-end: auto;
   color: var(--color-text-primary);
-  font-size: var(--font-size-heading-h6);
+  font-size: 20px;
   font-weight: var(--font-weight-bold);
   line-height: 1.32;
 }
@@ -424,6 +427,8 @@
   display: grid;
   place-items: center;
   flex: none;
+  /* Pushed to the far edge — it acts on the panel, not on the name. */
+  margin-inline-start: auto;
   inline-size: 24px;
   block-size: 24px;
   padding: 0;
