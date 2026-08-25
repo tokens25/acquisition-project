@@ -52,6 +52,12 @@
   min-block-size: 0;
   overflow-y: auto;
 }
+/* A flex column with a fixed height shrinks its children to fit rather than
+   overflowing — which squeezed the assistant into the tiers and the fields
+   into each other. Nothing in the panel shrinks; the panel scrolls instead. */
+.demo__panel > * {
+  flex: none;
+}
 /* Menu_item_sub, 229:2122 — a 48px row, 8/20 padding, one hairline beneath.
    The mark and the title are one group on the left; the label sits apart on
    the right, which is why this is space-between rather than a single gap. */
@@ -144,6 +150,9 @@
   block-size: 100%;
   padding: var(--space-16) var(--space-24);
   overflow-y: auto;
+}
+.demo__preview > * {
+  flex: none;
 }
 /* The rule sits between the strip and the bar rather than under both, so the
    panel column reads as continuous from the brand down. */
