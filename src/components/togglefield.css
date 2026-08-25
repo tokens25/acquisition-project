@@ -6,6 +6,7 @@
   gap: var(--space-4);
 }
 .tg__row {
+  position: relative;
   display: flex;
   gap: var(--space-12);
   align-items: center;
@@ -22,6 +23,7 @@
   cursor: pointer;
 }
 .tg__mark {
+  position: relative;
   display: grid;
   place-items: center;
   flex: none;
