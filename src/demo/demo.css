@@ -453,9 +453,17 @@
 .demo[data-collapsed] .demo__panel {
   display: none;
 }
-/* Collapsed, it is the same strip in a different place: a full-width row above
-   the split. Only the negative margin goes, which existed to cancel the
-   panel's padding and has nothing to cancel out here. */
+/* Collapsed, it is the same strip in a different place: a row above the split,
+   still the panel's width so the control does not move. A toggle that jumps to
+   the other side of the window when pressed cannot be pressed twice without
+   looking for it again.
+
+   Only the negative margin goes, which existed to cancel the panel's padding
+   and has nothing to cancel out here. */
 .demo > .demo__brand {
+  /* The open panel is a 360px column minus its 1px right border, so the strip
+     inside it is 359 wide. Matching that here is what keeps the control on the
+     same pixel through a toggle. */
+  inline-size: calc(360px - var(--border-1));
   margin-inline: 0;
 }
