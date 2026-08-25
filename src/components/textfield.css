@@ -115,8 +115,12 @@
   cursor: not-allowed;
 }
 /* Empty and unfocused, the label occupies the line — so the control must not
-   also claim it, or the two overlap. */
-.dz-field:not([data-filled]) .dz-field__input:not(:has(:focus)) .dz-field__control {
+   also claim it, or the two overlap. Selects are exempt: they always hold a
+   value, so hiding it leaves a field that looks blank while holding a real
+   answer. */
+.dz-field:not([data-filled])
+  .dz-field__input:not(:has(:focus)):not(:has(select))
+  .dz-field__control {
   color: transparent;
 }
 .dz-field[data-filled] .dz-field__control,
@@ -174,4 +178,45 @@
 }
 .dz-field__control--select:disabled {
   cursor: not-allowed;
+}
+
+/* ── Select ────────────────────────────────────────────────────
+   The native control fills the shell instead of sitting inside it. A select
+   sized to its text leaves the shell's padding and the chevron dead — 42% of
+   the field in the first build — and a dropdown you cannot open by clicking
+   its own chevron is the sort of thing nobody reports and everybody notices. */
+.dz-field__input--select {
+  position: relative;
+  display: block;
+  padding-inline: 0;
+}
+.dz-field--select .dz-field__label--select {
+  position: absolute;
+  inset-block-start: 9px;
+  inset-inline-start: var(--space-16);
+  inset-inline-end: auto;
+  translate: none;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.12px;
+  line-height: 1.52;
+  pointer-events: none;
+}
+.dz-field--select .dz-field__control--select {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  padding-inline: var(--space-16);
+  /* Room for the chevron so a long option never runs under it. */
+  padding-inline-end: calc(24px + var(--space-8) + var(--space-16));
+  padding-block-start: var(--space-20);
+  color: var(--color-text-primary);
+}
+.dz-field--select .dz-field__trailing--select {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--space-16);
+  translate: 0 -50%;
+  pointer-events: none;
 }

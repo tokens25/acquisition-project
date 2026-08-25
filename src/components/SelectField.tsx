@@ -45,29 +45,31 @@ export function SelectField<T extends string>({
   // A select always shows something, so the label always floats — there is no
   // empty state to fall back to the way a text input has.
   return (
-    <div className="dz-field" data-filled data-error={error || undefined}>
-      <div className="dz-field__input">
-        <span className="dz-field__body">
-          <label className="dz-field__label" htmlFor={id}>
-            {label}
-          </label>
-          <select
-            id={id}
-            className="dz-field__control dz-field__control--select"
-            value={value}
-            disabled={disabled}
-            aria-invalid={error || undefined}
-            onChange={(e) => onChange(e.target.value as T)}
-          >
-            {options.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </span>
+    <div className="dz-field dz-field--select" data-error={error || undefined}>
+      {/* The control fills the shell rather than sitting inside it, so the
+          whole 56px is clickable — including the chevron, which a native
+          select would otherwise leave dead. Label and chevron are painted over
+          it and take no pointer events. */}
+      <div className="dz-field__input dz-field__input--select">
+        <label className="dz-field__label dz-field__label--select" htmlFor={id}>
+          {label}
+        </label>
+        <select
+          id={id}
+          className="dz-field__control dz-field__control--select"
+          value={value}
+          disabled={disabled}
+          aria-invalid={error || undefined}
+          onChange={(e) => onChange(e.target.value as T)}
+        >
+          {options.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
 
-        <span className="dz-field__trailing" aria-hidden="true">
+        <span className="dz-field__trailing dz-field__trailing--select" aria-hidden="true">
           <Icon svg={iconArtwork['chevron-down']} size={24} />
         </span>
       </div>
