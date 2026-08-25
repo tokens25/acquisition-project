@@ -2,7 +2,9 @@ import '../App.css'
 import './demo.css'
 
 import { useState } from 'react'
+import daznLogo from '../assets/brand/logo-dazn.svg?raw'
 import { StepPreview } from '../card/StepPreview'
+import { Icon } from '../components/Icon'
 import { Assistant } from '../editor/Assistant'
 import { useCardSet } from '../editor/useCardSet'
 import { planJourney } from '../rules/journey'
@@ -37,7 +39,10 @@ export function DemoApp() {
       <div className="page__split">
         <div className="demo__panel">
           <header className="demo__brand">
-            <span className="demo__title">Acquisition model</span>
+            <span className="demo__mark">
+              <Icon svg={daznLogo} size={24} />
+            </span>
+            <h1 className="demo__title">Acquisition model</h1>
             <span className="demo__beta">BETA</span>
           </header>
 

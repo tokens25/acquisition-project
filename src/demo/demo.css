@@ -14,27 +14,49 @@
   background: var(--color-surface-container-1);
   min-block-size: 100vh;
 }
+/* Menu_item_sub, 229:2122 — a 48px row, 8/20 padding, one hairline beneath.
+   The mark and the title are one group on the left; the label sits apart on
+   the right, which is why this is space-between rather than a single gap. */
 .demo__brand {
   display: flex;
-  gap: var(--space-8);
+  gap: var(--space-16);
   align-items: center;
-  justify-content: space-between;
-  padding-block: var(--space-16);
-  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
-  margin-inline: calc(var(--space-20) * -1);
+  block-size: 48px;
+  padding-block: var(--space-8);
   padding-inline: var(--space-20);
+  margin-inline: calc(var(--space-20) * -1);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.demo__mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 32px;
+  block-size: 32px;
+  color: var(--color-text-primary);
 }
 .demo__title {
+  /* 20px in the design — the mobile step of the h6 ramp, which this token file
+     only ships at its desktop value. */
+  margin: 0;
+  margin-inline-end: auto;
   color: var(--color-text-primary);
-  font-size: var(--font-size-caption-sm);
+  font-size: var(--font-size-heading-h6);
   font-weight: var(--font-weight-bold);
+  line-height: 1.32;
 }
+/* Label/Feature — outlined in brand, but the word itself stays text-primary.
+   Only the ring is yellow. */
 .demo__beta {
-  padding: var(--space-2) var(--space-8);
+  flex: none;
+  padding-inline: var(--space-6);
   border: var(--border-1) solid var(--color-brand-primary);
   border-radius: var(--radius-full);
-  color: var(--color-brand-primary);
+  color: var(--color-text-primary);
   font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  line-height: 18px;
 }
 .demo__fields {
   display: flex;
