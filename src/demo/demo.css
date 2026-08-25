@@ -444,26 +444,18 @@
   scale: -1 1;
 }
 
-/* Closed: the column goes and the preview takes the width. The brand strip
-   moves into the top bar rather than vanishing — it carries the control that
-   would open the panel again. */
-.demo[data-collapsed] .page__split {
-  grid-template-columns: minmax(0, 1fr);
-}
-.demo[data-collapsed] .demo__panel {
-  display: none;
-}
-/* Collapsed, it is the same strip in a different place: a row above the split,
-   still the panel's width so the control does not move. A toggle that jumps to
-   the other side of the window when pressed cannot be pressed twice without
-   looking for it again.
+/* Closed: the panel empties to its header strip and the column stays. Nothing
+   moves — not the strip, not the control on it, and not the preview beside it.
 
-   Only the negative margin goes, which existed to cancel the panel's padding
-   and has nothing to cancel out here. */
-.demo > .demo__brand {
-  /* The open panel is a 360px column minus its 1px right border, so the strip
-     inside it is 359 wide. Matching that here is what keeps the control on the
-     same pixel through a toggle. */
-  inline-size: calc(360px - var(--border-1));
-  margin-inline: 0;
+   The alternative was to drop the column and let the preview take the width,
+   which reads better on a wide screen but slides the whole right-hand side
+   sideways every time the panel is touched. Stability won. */
+.demo[data-collapsed] .demo__panel {
+  min-block-size: 0;
+  gap: 0;
+  padding-block-end: 0;
+  background: none;
+}
+.demo[data-collapsed] .demo__panel > *:not(.demo__brand) {
+  display: none;
 }

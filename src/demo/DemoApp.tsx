@@ -80,11 +80,9 @@ export function DemoApp() {
       data-preview-only={previewOnly || undefined}
       data-collapsed={collapsed || undefined}
     >
-      {collapsed && brand}
-
       <div className="page__split">
         <div className="demo__panel">
-          {!collapsed && brand}
+          {brand}
 
           {editing ? (
             <>
