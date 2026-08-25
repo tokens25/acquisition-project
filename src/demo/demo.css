@@ -6,18 +6,28 @@
 .demo {
   padding: 0;
 }
-.demo .page__split {
-
+/* Two rows. The top one holds the strip and the bar; only the body row
+   changes width when the panel collapses, so the bar never moves. */
+.demo__top {
+  display: grid;
+  grid-template-columns: calc(360px - var(--border-1)) minmax(0, 1fr);
+  align-items: center;
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.demo__body {
   display: grid;
   grid-template-columns: 360px minmax(0, 1fr);
   gap: 0;
   align-items: start;
 }
+.demo[data-collapsed] .demo__body {
+  grid-template-columns: minmax(0, 1fr);
+}
 .demo__panel {
   display: flex;
   flex-direction: column;
   gap: var(--space-16);
-  padding: 0 var(--space-20) var(--space-24);
+  padding: var(--space-16) var(--space-20) var(--space-24);
   border-inline-end: var(--border-1) solid var(--color-border-full-color-subtle);
   background: var(--color-surface-container-1);
   min-block-size: 100vh;
@@ -32,8 +42,7 @@
   block-size: 48px;
   padding-block: var(--space-8);
   padding-inline: var(--space-20);
-  margin-inline: calc(var(--space-20) * -1);
-  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+  margin-inline: 0;
 }
 .demo__mark {
   display: grid;
@@ -109,12 +118,13 @@
   gap: var(--space-16);
   min-inline-size: 0;
   padding: var(--space-16) var(--space-24);
-  position: sticky;
-  inset-block-start: 0;
 }
 .demo__statusbar {
   display: flex;
   gap: var(--space-8);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-8) var(--space-24);
 }
 .demo__gate {
   padding: var(--space-8) var(--space-16);
@@ -414,7 +424,7 @@
 
 /* Preview only: the panel goes, the preview takes the width. Hidden rather
    than unmounted so the form keeps its state and scroll position. */
-.demo[data-preview-only] .page__split {
+.demo[data-preview-only] .demo__body {
   grid-template-columns: minmax(0, 1fr);
 }
 .demo[data-preview-only] .demo__panel {
@@ -444,18 +454,8 @@
   scale: -1 1;
 }
 
-/* Closed: the panel empties to its header strip and the column stays. Nothing
-   moves — not the strip, not the control on it, and not the preview beside it.
-
-   The alternative was to drop the column and let the preview take the width,
-   which reads better on a wide screen but slides the whole right-hand side
-   sideways every time the panel is touched. Stability won. */
+/* Closed: the panel goes and the body row gives its width to the preview. The
+   bar above is its own row, so it stays exactly where it was. */
 .demo[data-collapsed] .demo__panel {
-  min-block-size: 0;
-  gap: 0;
-  padding-block-end: 0;
-  background: none;
-}
-.demo[data-collapsed] .demo__panel > *:not(.demo__brand) {
   display: none;
 }

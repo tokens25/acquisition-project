@@ -50,7 +50,81 @@ export function DemoApp() {
     setEditing(true)
   }
 
+  // Which set of actions the bar carries. Stage one offers ways to look at and
+  // take the content away; edit mode offers ways to commit or leave.
+  const actions = editing ? (
+    <div className="demo__actions">
+      <Button
+        appearance="primary"
+        size="md"
+        iconBefore={<Icon svg={iconArtwork.checkmark} size={20} />}
+        disabled={!store.unpublished || store.publishing}
+        title={
+          store.unpublished
+            ? 'Publish these edits to the shared copy'
+            : 'Nothing to save — this matches what is published'
+        }
+        onClick={() => void onSave()}
+      >
+        {store.publishing ? 'Saving…' : 'Save changes'}
+      </Button>
+
+      <Button
+        appearance="secondary"
+        size="md"
+        iconBefore={<Icon svg={iconArtwork.close} size={20} />}
+        onClick={() => setEditing(false)}
+      >
+        Exit edit mode
+      </Button>
+
+      <Button
+        appearance="tertiary"
+        size="md"
+        iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
+        disabled
+        title="No settings screen yet."
+      >
+        Settings
+      </Button>
+    </div>
+  ) : (
+    <div className="demo__actions">
+      <Button
+        appearance="secondary"
+        size="md"
+        iconBefore={<Icon svg={iconArtwork.preview} size={20} />}
+        aria-pressed={previewOnly}
+        title={previewOnly ? 'Show the panel again' : 'Hide the panel and fill the width'}
+        onClick={() => setPreviewOnly((v) => !v)}
+      >
+        {previewOnly ? 'Show panel' : 'Preview'}
+      </Button>
+
+      <Button
+        appearance="tertiary"
+        size="md"
+        iconBefore={<Icon svg={iconArtwork.download} size={20} />}
+        title="Downloads the content as this app stores it — not yet the shape the rule engine reads."
+        onClick={store.exportJson}
+      >
+        Export JSON
+      </Button>
+
+      <Button
+        appearance="tertiary"
+        size="md"
+        iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
+        disabled
+        title="No settings screen yet."
+      >
+        Settings
+      </Button>
+    </div>
+  )
+
   // The brand strip carries the collapse control, so it has to survive the
+
   // collapse — it moves into the top bar rather than disappearing with the
   // panel it closes.
   const brand = (
@@ -80,9 +154,24 @@ export function DemoApp() {
       data-preview-only={previewOnly || undefined}
       data-collapsed={collapsed || undefined}
     >
-      <div className="page__split">
+      {/* The bar spans the window and never moves. Collapsing the panel
+          resizes the row beneath it, so the preview opens leftward without
+          dragging the status of the whole set along with it. */}
+      <div className="demo__top">
+        {brand}
+        <div className="demo__statusbar">
+          <span className="demo__gate" data-state={coverage.failing.length ? 'blocked' : 'clear'}>
+            {coverage.failing.length
+              ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`
+              : `Publish ready — ${coverage.total} contexts checked`}
+          </span>
+          {actions}
+        </div>
+      </div>
+      {saveNote && <p className="demo__savenote">{saveNote}</p>}
+
+      <div className="demo__body">
         <div className="demo__panel">
-          {brand}
 
           {editing ? (
             <>
@@ -138,87 +227,6 @@ export function DemoApp() {
         </div>
 
         <div className="demo__preview">
-          <div className="demo__statusbar">
-            <span className="demo__gate" data-state={coverage.failing.length ? 'blocked' : 'clear'}>
-              {coverage.failing.length
-                ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`
-                : `Publish ready — ${coverage.total} contexts checked`}
-            </span>
-
-            {!editing && (
-              <div className="demo__actions">
-                <Button
-                  appearance="secondary"
-                  size="md"
-                  iconBefore={<Icon svg={iconArtwork.preview} size={20} />}
-                  aria-pressed={previewOnly}
-                  title={previewOnly ? 'Show the panel again' : 'Hide the panel and fill the width'}
-                  onClick={() => setPreviewOnly((v) => !v)}
-                >
-                  {previewOnly ? 'Show panel' : 'Preview'}
-                </Button>
-
-                <Button
-                  appearance="tertiary"
-                  size="md"
-                  iconBefore={<Icon svg={iconArtwork.download} size={20} />}
-                  title="Downloads the content as this app stores it — not yet the shape the rule engine reads."
-                  onClick={store.exportJson}
-                >
-                  Export JSON
-                </Button>
-
-                <Button
-                  appearance="tertiary"
-                  size="md"
-                  iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
-                  disabled
-                  title="No settings screen yet."
-                >
-                  Settings
-                </Button>
-              </div>
-            )}
-
-            {editing && (
-              <div className="demo__actions">
-                <Button
-                  appearance="primary"
-                  size="md"
-                  iconBefore={<Icon svg={iconArtwork.checkmark} size={20} />}
-                  disabled={!store.unpublished || store.publishing}
-                  title={
-                    store.unpublished
-                      ? 'Publish these edits to the shared copy'
-                      : 'Nothing to save — this matches what is published'
-                  }
-                  onClick={() => void onSave()}
-                >
-                  {store.publishing ? 'Saving…' : 'Save changes'}
-                </Button>
-
-                <Button
-                  appearance="secondary"
-                  size="md"
-                  iconBefore={<Icon svg={iconArtwork.close} size={20} />}
-                  onClick={() => setEditing(false)}
-                >
-                  Exit edit mode
-                </Button>
-
-                <Button
-                  appearance="tertiary"
-                  size="md"
-                  iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
-                  disabled
-                  title="No settings screen yet."
-                >
-                  Settings
-                </Button>
-              </div>
-            )}
-          </div>
-          {saveNote && <p className="demo__savenote">{saveNote}</p>}
 
           {editing && step ? (
             <StepPreview journey={store.journey} set={store.set} context={store.context} />
