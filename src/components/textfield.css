@@ -40,15 +40,14 @@
 .dz-field__input:hover:not(:has(:disabled)):not(:has([readonly])) {
   border-color: var(--color-border-full-color-inverse);
 }
-.dz-field__input:has(:focus) {
-  border-color: var(--color-border-full-color-inverse);
+/* Focus is one yellow edge, not a white border with a ring outside it. The
+   border carries the state itself; a box-shadow of the same colour thickens it
+   to 2px so it reads as a focus indicator rather than a hairline, without the
+   1px reflow that changing border-width would cause. */
+.dz-field__input:focus-within {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 var(--border-1) var(--color-brand-primary);
   background: var(--color-surface-container-2);
-}
-/* Keyboard focus keeps the DS treatment and adds a ring, which the variants
-   cannot express but every keyboard user needs. */
-.dz-field__input:has(:focus-visible) {
-  outline: var(--border-2) solid var(--color-brand-primary);
-  outline-offset: 2px;
 }
 .dz-field__input:has(:disabled) {
   border-color: var(--color-border-full-color-default);
@@ -84,7 +83,7 @@
   transition: font-size 120ms ease, translate 120ms ease;
 }
 .dz-field[data-filled] .dz-field__label,
-.dz-field__input:has(:focus) .dz-field__label {
+.dz-field__input:focus-within .dz-field__label {
   font-size: var(--font-size-caption-xs);
   letter-spacing: 0.12px;
   line-height: 1.52;
@@ -119,12 +118,12 @@
    value, so hiding it leaves a field that looks blank while holding a real
    answer. */
 .dz-field:not([data-filled])
-  .dz-field__input:not(:has(:focus)):not(:has(select))
+  .dz-field__input:not(:focus-within):not(:has(select))
   .dz-field__control {
   color: transparent;
 }
 .dz-field[data-filled] .dz-field__control,
-.dz-field__input:has(:focus) .dz-field__control {
+.dz-field__input:focus-within .dz-field__control {
   padding-block-start: var(--space-12);
 }
 .dz-field__input[data-multiline] .dz-field__control {
