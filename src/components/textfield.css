@@ -77,7 +77,11 @@
   inset-block-start: 50%;
   translate: 0 -50%;
   color: var(--color-text-tertiary);
-  font-size: var(--font-size-body-default);
+  /* 16px, per the component. Body is a responsive ramp — 16 | 18 | 18 — and
+     this token file ships only its desktop step, so the field would render a
+     size larger than the design everywhere. Literal until the ramp is
+     complete. */
+  font-size: 16px;
   line-height: normal;
   pointer-events: none;
   transition: font-size 120ms ease, translate 120ms ease;
@@ -102,7 +106,7 @@
   background: none;
   color: var(--color-text-primary);
   font-family: var(--font-family);
-  font-size: var(--font-size-body-default);
+  font-size: 16px;
   line-height: normal;
   text-overflow: ellipsis;
 }
