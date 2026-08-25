@@ -24,15 +24,15 @@
 }
 /* Two rows. The top one holds the strip and the bar; only the body row
    changes width when the panel collapses, so the bar never moves. */
-/* One chrome bar across the top. The strip used to carry the panel surface on
-   its own, which left a lighter block hanging over a darker preview once the
-   panel collapsed out from under it. The surface belongs to the row. */
+/* Each half of the bar carries the surface of the column beneath it: the strip
+   continues the panel, the status bar continues the preview. Collapse the panel
+   and the strip has nothing to continue, so it takes the preview's surface too
+   and the whole bar becomes one ground. */
 .demo__top {
   display: grid;
   grid-template-columns: calc(360px - var(--border-1)) minmax(0, 1fr);
   align-items: stretch;
   min-block-size: 56px;
-  background: var(--color-surface-container-1);
 }
 /* Flex, not grid. In a grid the track sizes itself to the item, so an
    animated width on the item is overruled by the track it sits in — the rail
@@ -93,6 +93,12 @@
   padding-block: var(--space-8);
   padding-inline: var(--space-20);
   margin-inline: 0;
+  background: var(--color-surface-container-1);
+  transition: background-color 240ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.demo[data-collapsed] .demo__brand,
+.demo[data-preview-only] .demo__brand {
+  background: var(--color-surface-default);
 }
 .demo__mark {
   display: grid;
@@ -184,6 +190,7 @@
   justify-content: space-between;
   padding: var(--space-8) var(--space-24);
   border-inline-start: var(--border-1) solid var(--color-border-full-color-subtle);
+  background: var(--color-surface-default);
 }
 .demo__gate {
   padding: var(--space-8) var(--space-16);
@@ -595,6 +602,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .demo__rail {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo__brand {
     transition: none;
   }
 }
