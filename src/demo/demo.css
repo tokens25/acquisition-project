@@ -409,3 +409,44 @@
 .demo[data-preview-only] .demo__panel {
   display: none;
 }
+
+/* Collapse — nav-panel-collapse at the right of the header, mirrored when the
+   panel is shut so the arrow always points where the panel will go. */
+.demo__collapse {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 24px;
+  block-size: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.demo__collapse:hover {
+  color: var(--color-text-primary);
+}
+.demo[data-collapsed] .demo__collapse {
+  scale: -1 1;
+}
+
+/* Closed: the column goes and the preview takes the width. The brand strip
+   moves into the top bar rather than vanishing — it carries the control that
+   would open the panel again. */
+.demo[data-collapsed] .page__split {
+  grid-template-columns: minmax(0, 1fr);
+}
+.demo[data-collapsed] .demo__panel {
+  display: none;
+}
+.demo__statusbar .demo__brand {
+  flex: none;
+  block-size: auto;
+  margin: 0;
+  padding-inline: 0;
+  padding-block: 0;
+  border-block-end: 0;
+  padding-inline-end: var(--space-16);
+  border-inline-end: var(--border-1) solid var(--color-border-full-color-subtle);
+}

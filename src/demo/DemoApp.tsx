@@ -28,6 +28,7 @@ export function DemoApp() {
   const [editing, setEditing] = useState(false)
   const [saveNote, setSaveNote] = useState<string | null>(null)
   const [previewOnly, setPreviewOnly] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
 
   // "Save" here means publish. Edits reach localStorage the moment they are
   // typed, so a button that only closed the panel would be claiming to do
@@ -49,17 +50,39 @@ export function DemoApp() {
     setEditing(true)
   }
 
+  // The brand strip carries the collapse control, so it has to survive the
+  // collapse — it moves into the top bar rather than disappearing with the
+  // panel it closes.
+  const brand = (
+    <header className="demo__brand">
+      <span className="demo__mark">
+        <Icon svg={daznLogo} size={24} />
+      </span>
+      <h1 className="demo__title">Acquisition model</h1>
+      <span className="demo__beta">BETA</span>
+      <button
+        type="button"
+        className="demo__collapse"
+        aria-expanded={!collapsed}
+        aria-label={collapsed ? 'Open the panel' : 'Close the panel'}
+        title={collapsed ? 'Open the panel' : 'Close the panel'}
+        onClick={() => setCollapsed((v) => !v)}
+      >
+        <Icon svg={iconArtwork['panel-collapse']} size={24} />
+      </button>
+    </header>
+  )
+
   return (
-    <main className="page demo" data-preview-only={previewOnly || undefined}>
+
+    <main
+      className="page demo"
+      data-preview-only={previewOnly || undefined}
+      data-collapsed={collapsed || undefined}
+    >
       <div className="page__split">
         <div className="demo__panel">
-          <header className="demo__brand">
-            <span className="demo__mark">
-              <Icon svg={daznLogo} size={24} />
-            </span>
-            <h1 className="demo__title">Acquisition model</h1>
-            <span className="demo__beta">BETA</span>
-          </header>
+          {!collapsed && brand}
 
           {editing ? (
             <>
@@ -116,6 +139,7 @@ export function DemoApp() {
 
         <div className="demo__preview">
           <div className="demo__statusbar">
+            {collapsed && brand}
             <span className="demo__gate" data-state={coverage.failing.length ? 'blocked' : 'clear'}>
               {coverage.failing.length
                 ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`
