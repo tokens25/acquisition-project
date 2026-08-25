@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { App } from './App'
 import { DemoApp } from './demo/DemoApp'
+import { Index } from './Index'
 
 /**
  * Two interfaces, one deployment.
  *
- * `/` stays the interface people already have links to; `/demo` is the
- * redesign. Keeping both means the new one can be shown and argued with
+ * `/` is an index of both; `/demo` is the two-stage redesign and `/demo2` the
+ * first iteration. Keeping both means the new one can be shown and argued with
  * before it replaces anything, which is the whole reason for a second route
  * rather than a branch nobody can open.
  *
@@ -22,5 +23,7 @@ export function Routes() {
     return () => window.removeEventListener('popstate', onPop)
   }, [])
 
-  return path === '/demo' ? <DemoApp /> : <App />
+  if (path === '/demo') return <DemoApp />
+  if (path === '/demo2') return <App />
+  return <Index />
 }
