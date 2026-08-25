@@ -171,6 +171,7 @@ export function DemoApp() {
       {saveNote && <p className="demo__savenote">{saveNote}</p>}
 
       <div className="demo__body">
+        <div className="demo__rail">
         <div className="demo__panel">
 
           {editing ? (
@@ -230,6 +231,7 @@ export function DemoApp() {
               </button>
             </>
           )}
+        </div>
         </div>
 
         <div className="demo__preview">

@@ -30,21 +30,38 @@
   align-items: stretch;
   min-block-size: 56px;
 }
+/* Flex, not grid. In a grid the track sizes itself to the item, so an
+   animated width on the item is overruled by the track it sits in — the rail
+   stayed at 360 however it was told otherwise. In flex the rail's width is its
+   own. */
 .demo__body {
-  display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
-  gap: 0;
-  /* stretch, not start — the panes need the row's full height to scroll
-     inside rather than growing the page. */
+  display: flex;
   align-items: stretch;
 }
-.demo[data-collapsed] .demo__body {
-  grid-template-columns: minmax(0, 1fr);
+
+/* The rail's width animates and the panel inside keeps its 360, clipped — so
+   the form slides out of view rather than reflowing to nothing on the way.
+
+   Physical `width`, not the logical `inline-size` used everywhere else here: a
+   transition on inline-size never completes, it pins the from-value and the
+   rail simply never moves. Two earlier attempts failed for that reason before
+   it was the property rather than the layout at fault. */
+.demo__rail {
+  flex: none;
+  width: 360px;
+  min-width: 0;
+  overflow: hidden;
+  transition: width 240ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.demo[data-collapsed] .demo__rail,
+.demo[data-preview-only] .demo__rail {
+  width: 0;
 }
 .demo__panel {
   display: flex;
   flex-direction: column;
   gap: var(--space-16);
+  inline-size: 360px;
   padding: var(--space-16) var(--space-20) var(--space-24);
   border-inline-end: var(--border-1) solid var(--color-border-full-color-subtle);
   background: var(--color-surface-container-1);
@@ -144,6 +161,7 @@
 
 .demo__preview {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-16);
   min-inline-size: 0;
@@ -462,12 +480,6 @@
 
 /* Preview only: the panel goes, the preview takes the width. Hidden rather
    than unmounted so the form keeps its state and scroll position. */
-.demo[data-preview-only] .demo__body {
-  grid-template-columns: minmax(0, 1fr);
-}
-.demo[data-preview-only] .demo__panel {
-  display: none;
-}
 
 /* Collapse — nav-panel-collapse at the right of the header, mirrored when the
    panel is shut so the arrow always points where the panel will go. */
@@ -492,11 +504,8 @@
   scale: -1 1;
 }
 
-/* Closed: the panel goes and the body row gives its width to the preview. The
-   bar above is its own row, so it stays exactly where it was. */
-.demo[data-collapsed] .demo__panel {
-  display: none;
-}
+/* Closed, the rail is a zero-width track. The panel is still there, just off
+   the edge of it — which is what lets it slide back rather than reappearing. */
 
 /* ── Scrollbars ────────────────────────────────────────────────
    The OS bars are the loudest thing on the screen — a white slab under a row
@@ -577,6 +586,12 @@
   .demo .as__list,
   .demo .acq-set,
   .demo .dz-field__control {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo__rail {
     transition: none;
   }
 }
