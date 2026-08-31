@@ -48,11 +48,15 @@ export function JourneyFrames({
    * mobile tile shows one card in a portrait frame and the desktop tile shows
    * the row.
    */
+  // The phone is 375 x 812, so the thumbnail is that shape exactly rather than
+  // a rounded 9:16 — height derived from width so the two never drift apart.
+  const PHONE = { width: 375, height: 812 }
   const frame =
     set.device === 'mobile'
-      ? // A phone: portrait, so height binds and the box is narrower than the
-        // tile. 375 is the viewport the cards lay out in.
-        { box: { width: 100, height: 178 }, viewport: 375 }
+      ? {
+          box: { width: 72, height: Math.round((72 * PHONE.height) / PHONE.width) },
+          viewport: PHONE.width,
+        }
       : // A desktop window: width binds, 16:10.
         { box: { width: 152, height: 95 }, viewport: 1100 }
   const thumbScale = frame.box.width / frame.viewport
