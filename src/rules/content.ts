@@ -176,6 +176,14 @@ export interface CardSet {
   context: Context
   journeyId: string
   /**
+   * Step order per journey, when it differs from the one drawn in Figma.
+   *
+   * Only journeys that have been reordered appear here, so an absent key means
+   * "as drawn" rather than "unknown" — and resetting is deleting, not restoring
+   * a copy of the default that could itself go stale.
+   */
+  stepOrder?: Record<string, string[]>
+  /**
    * How every feature line draws its icon.
    *
    * `feature` uses the one paired with the line in the catalogue. `check` draws

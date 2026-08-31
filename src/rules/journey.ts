@@ -161,7 +161,38 @@ export function journeysFor(all: Journey[], context: Context): Journey[] {
   return all.filter((j) => journeyApplies(j, context))
 }
 
+/**
+ * A journey with its steps in the order the set says, if it says anything.
+ *
+ * Ids the journey does not have are ignored and ids the order omits keep their
+ * relative position at the end, so an order recorded before a step was added or
+ * renamed degrades to a partial ordering rather than losing steps.
+ *
+ * `order` is renumbered from position, per J-8: reordering is moving an id, not
+ * renumbering by hand.
+ */
+export function applyStepOrder(journey: Journey, order?: string[]): Journey {
+  if (!order || order.length === 0) return journey
+  const rank = new Map(order.map((id, i) => [id, i]))
+  const steps = journey.steps
+    .slice()
+    .sort((a, b) => (rank.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (rank.get(b.id) ?? Number.MAX_SAFE_INTEGER))
+    .map((step, i) => ({ ...step, order: (i + 1) * 10 }))
+  return { ...journey, steps }
+}
+
+/** Whether this journey runs in an order other than the one Figma draws. */
+export function isReordered(journey: Journey, order?: string[]): boolean {
+  if (!order || order.length === 0) return false
+  const drawn = journey.steps
+    .slice()
+    .sort((a, b) => a.order - b.order)
+    .map((s) => s.id)
+  return drawn.join('|') !== order.filter((id) => drawn.includes(id)).join('|')
+}
+
 export interface ResolvedStep {
+
   step: Step
   /** Null when the step is included. */
   skipped: SkipReason | null

@@ -243,6 +243,9 @@ export function DemoApp() {
               planned={planned}
               selectedId={step?.id ?? ''}
               onOpen={openStep}
+              onReorder={(ids) => store.setStepOrder(store.journey.id, ids)}
+              reordered={store.reordered}
+              onResetOrder={() => store.setStepOrder(store.journey.id, [])}
             />
           )}
         </div>

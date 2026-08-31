@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { ResolvedStep } from '../rules/journey'
 
 /**
@@ -16,11 +17,43 @@ export function JourneyFrames({
   planned,
   selectedId,
   onOpen,
+  onReorder,
+  reordered,
+  onResetOrder,
 }: {
   planned: ResolvedStep[]
   selectedId: string
   onOpen: (stepId: string) => void
+  /** Called with the full step order after a move. */
+  onReorder?: (stepIds: string[]) => void
+  reordered?: boolean
+  onResetOrder?: () => void
 }) {
+  const [dragging, setDragging] = useState<string | null>(null)
+  const [over, setOver] = useState<{ id: string; after: boolean } | null>(null)
+
+  const ids = planned.map((p) => p.step.id)
+
+  /** Move `id` to sit before or after `target`, and hand back the new order. */
+  const move = (id: string, target: string, after: boolean) => {
+    if (!onReorder || id === target) return
+    const rest = ids.filter((s) => s !== id)
+    const at = rest.indexOf(target)
+    if (at < 0) return
+    rest.splice(after ? at + 1 : at, 0, id)
+    onReorder(rest)
+  }
+
+  /** Alt + arrow nudges a step one place, so this works without a pointer. */
+  const nudge = (id: string, delta: number) => {
+    if (!onReorder) return
+    const from = ids.indexOf(id)
+    const to = from + delta
+    if (from < 0 || to < 0 || to >= ids.length) return
+    const next = ids.slice()
+    next.splice(to, 0, next.splice(from, 1)[0])
+    onReorder(next)
+  }
   // Numbering is assigned before render rather than counted during it: only
   // screens that render take a number, so a skipped step consumes none and the
   // last tile's number equals the journey's declared screen count.
@@ -48,11 +81,66 @@ export function JourneyFrames({
     <div className="jf">
       <p className="jf__caption">
         {screens} screens across {running} steps
+        {onReorder && <span className="jf__hint"> · drag a step to reorder, or alt + ← →</span>}
+        {reordered && (
+          <>
+            <span className="jf__reordered">reordered</span>
+            <button type="button" className="jf__reset" onClick={onResetOrder}>
+              Reset to the Figma order
+            </button>
+          </>
+        )}
       </p>
 
       <div className="jf__row">
         {groups.map(({ step, skipped, tiles }) => (
-          <section className="jf__step" key={step.id} data-skipped={skipped ?? undefined}>
+          <section
+            className="jf__step"
+            key={step.id}
+            data-skipped={skipped ?? undefined}
+            data-dragging={dragging === step.id || undefined}
+            data-drop={over?.id === step.id ? (over.after ? 'after' : 'before') : undefined}
+            draggable={Boolean(onReorder)}
+            tabIndex={onReorder ? 0 : undefined}
+            onDragStart={(e) => {
+              setDragging(step.id)
+              e.dataTransfer.effectAllowed = 'move'
+              e.dataTransfer.setData('text/plain', step.id)
+            }}
+            onDragEnd={() => {
+              setDragging(null)
+              setOver(null)
+            }}
+            onDragOver={(e) => {
+              if (!dragging || dragging === step.id) return
+              e.preventDefault()
+              e.dataTransfer.dropEffect = 'move'
+              // Which half of the target the pointer is over decides which side
+              // it lands on — the same gesture reads as insert-before on the
+              // left and insert-after on the right.
+              const box = e.currentTarget.getBoundingClientRect()
+              setOver({ id: step.id, after: e.clientX > box.left + box.width / 2 })
+            }}
+            onDragLeave={() => setOver((o) => (o?.id === step.id ? null : o))}
+            onDrop={(e) => {
+              e.preventDefault()
+              const id = e.dataTransfer.getData('text/plain') || dragging
+              if (id) move(id, step.id, over?.after ?? false)
+              setDragging(null)
+              setOver(null)
+            }}
+            onKeyDown={(e) => {
+              if (!e.altKey) return
+              if (e.key === 'ArrowLeft') {
+                e.preventDefault()
+                nudge(step.id, -1)
+              }
+              if (e.key === 'ArrowRight') {
+                e.preventDefault()
+                nudge(step.id, 1)
+              }
+            }}
+          >
             <h3 className="jf__step-name">
               {step.shortName ?? step.name}
               {!skipped && tiles.length > 1 && (

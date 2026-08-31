@@ -6,7 +6,7 @@ import { adaptEngineContent, isEngineContent } from '../rules/adapt'
 import { readTemplate } from '../rules/sheet'
 import { readWorkbook } from '../rules/xlsx'
 import type { Journey } from '../rules/journey'
-import { journeysFor } from '../rules/journey'
+import { applyStepOrder, isReordered, journeysFor } from '../rules/journey'
 import { journeys } from '../rules/journeys'
 import { findOverride, resolveOffer } from '../rules/resolve'
 import type { RemoteState } from './remote'
@@ -109,6 +109,10 @@ export interface CardSetStore {
   acceptSeed: () => void
   /** The journey that runs in this context — never one that doesn't. */
   journey: Journey
+  /** Reorder a journey's steps; an empty list clears the override. */
+  setStepOrder: (journeyId: string, stepIds: string[]) => void
+  /** This journey runs in an order other than the one Figma draws. */
+  reordered: boolean
   updateSet: (patch: Partial<CardSet>) => void
   /** Writes to the base tier, or to this context's override. */
   updateTier: (id: string, patch: TierPatch) => void
@@ -296,10 +300,14 @@ export function useCardSet(): CardSetStore {
 
   // Resolved here, not in each consumer: the editor and the preview must agree
   // on which journey is on screen, and two copies of this line would drift.
-  const journey =
+  const chosen =
     journeysFor(journeys, context).find((j) => j.id === set.journeyId) ??
     journeysFor(journeys, context)[0] ??
     journeys[0]
+  // Applied once, here, so the rail, the frames and the preview all walk the
+  // same sequence rather than each re-deriving it.
+  const journey = applyStepOrder(chosen, set.stepOrder?.[chosen.id])
+  const reordered = isReordered(chosen, set.stepOrder?.[chosen.id])
 
   /**
    * Adopt the shared copy on load — but never over the top of local work.
@@ -366,6 +374,15 @@ export function useCardSet(): CardSetStore {
   // there.
   const unpublished = publishedText !== null && publishedText !== JSON.stringify(set)
 
+  const setStepOrder = useCallback((journeyId: string, stepIds: string[]) => {
+    setSet((prev) => {
+      const next = { ...(prev.stepOrder ?? {}) }
+      if (stepIds.length === 0) delete next[journeyId]
+      else next[journeyId] = stepIds
+      return { ...prev, stepOrder: next }
+    })
+  }, [])
+
   const acceptSeed = useCallback(() => setSeed(SEED_FINGERPRINT), [])
   const staleSeed = seed !== SEED_FINGERPRINT
 
@@ -384,6 +401,8 @@ export function useCardSet(): CardSetStore {
     staleSeed,
     acceptSeed,
     journey,
+    setStepOrder,
+    reordered,
 
     updateSet,
     updateTier,

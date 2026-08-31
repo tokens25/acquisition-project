@@ -636,3 +636,64 @@
 .demo__feature-remove:hover {
   color: var(--color-accent-error-text);
 }
+
+/* ── Reordering the journey ─────────────────────────────────── */
+
+.jf__step[draggable='true'] {
+  cursor: grab;
+}
+.jf__step[data-dragging] {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+/* The drop line sits in the gap, on the side the pointer is nearer — so the
+   gesture reads as "insert here" rather than "swap with this". */
+.jf__step[data-drop] {
+  position: relative;
+}
+.jf__step[data-drop]::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inline-size: var(--border-2);
+  border-radius: var(--radius-full);
+  background: var(--color-brand-primary);
+}
+.jf__step[data-drop='before']::after {
+  inset-inline-start: calc(var(--space-12) * -1);
+}
+.jf__step[data-drop='after']::after {
+  inset-inline-end: calc(var(--space-12) * -1);
+}
+.jf__step:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: var(--space-4);
+}
+
+.jf__hint {
+  color: var(--color-text-tertiary);
+}
+.jf__reordered {
+  margin-inline-start: var(--space-8);
+  padding-inline: var(--space-6);
+  border: var(--border-1) dashed var(--color-brand-primary);
+  border-radius: var(--radius-full);
+  color: var(--color-brand-primary);
+  font-size: var(--font-size-label-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12px;
+}
+.jf__reset {
+  margin-inline-start: var(--space-8);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-tertiary);
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.jf__reset:hover {
+  color: var(--color-text-primary);
+}
