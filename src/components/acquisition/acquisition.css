@@ -25,6 +25,16 @@
   font-family: var(--font-family);
   color: var(--color-text-primary);
 }
+/* DS Device=Mobile: a 280 card with 20 of padding, not the desktop 343 with
+   24. Without this the card fills a phone viewport edge to edge and the next
+   card never peeks — which is how a horizontally scrolling row tells you it
+   scrolls. */
+.acq-card[data-device='mobile'] {
+  max-inline-size: 284px; /* 240 content + 40 padding + 4 edge */
+}
+.acq-card[data-device='mobile'] .acq-card__body {
+  padding: var(--space-20);
+}
 .acq-card[data-device='xl'] {
   max-inline-size: 384px;
 }

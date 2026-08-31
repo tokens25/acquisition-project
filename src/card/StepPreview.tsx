@@ -50,7 +50,9 @@ export function StepPreview({
       </p>
 
       {step.renderer === 'plans' ? (
-        <CardSetView set={set} context={context} />
+        <div className="jy__viewport" data-device={set.device}>
+          <CardSetView set={set} context={context} />
+        </div>
       ) : (
         <div className="jy__stub jy__stub--solo">
           <p className="jy__frame">{step.figmaFrame}</p>

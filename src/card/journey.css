@@ -138,3 +138,20 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 .jy__meta {
   color: var(--color-text-tertiary);
 }
+
+/* The screen the cards are rendered inside.
+
+   On desktop the row simply runs the width of the pane, as a desktop page
+   does. On mobile it is bounded to a phone's viewport, so the card is 280 in a
+   375 screen and the next one peeks — the layout people will actually see,
+   rather than mobile type at desktop width. */
+.jy__viewport[data-device='mobile'] {
+  inline-size: 375px;
+  padding-inline: var(--space-16);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-18);
+  background: var(--color-surface-default);
+}
+.jy__viewport[data-device='mobile'] .acq-set {
+  gap: var(--space-12);
+}
