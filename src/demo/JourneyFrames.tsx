@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { CardSetView } from '../card/CardSetView'
+import type { CardSet, Context } from '../rules/content'
 import type { ResolvedStep } from '../rules/journey'
 
 /**
@@ -17,6 +19,8 @@ export function JourneyFrames({
   planned,
   selectedId,
   onOpen,
+  set,
+  context,
   onReorder,
   reordered,
   onResetOrder,
@@ -24,6 +28,9 @@ export function JourneyFrames({
   planned: ResolvedStep[]
   selectedId: string
   onOpen: (stepId: string) => void
+  /** For the thumbnails — the steps that have a component render it for real. */
+  set: CardSet
+  context: Context
   /** Called with the full step order after a move. */
   onReorder?: (stepIds: string[]) => void
   reordered?: boolean
@@ -33,6 +40,24 @@ export function JourneyFrames({
   const [over, setOver] = useState<{ id: string; after: boolean } | null>(null)
 
   const ids = planned.map((p) => p.step.id)
+
+  /**
+   * The thumbnail is the screen it depicts, at the device's own proportions —
+   * not the desktop row squeezed into a phone-shaped box. Both the frame's
+   * aspect and the viewport the cards lay out in follow the device, so the
+   * mobile tile shows one card in a portrait frame and the desktop tile shows
+   * the row.
+   */
+  const frame =
+    set.device === 'mobile'
+      ? // A phone: portrait, so height binds and the box is narrower than the
+        // tile. 375 is the viewport the cards lay out in.
+        { box: { width: 100, height: 178 }, viewport: 375 }
+      : // A desktop window: width binds, 16:10.
+        { box: { width: 152, height: 95 }, viewport: 1100 }
+  const thumbScale = frame.box.width / frame.viewport
+
+
 
   /** Move `id` to sit before or after `target`, and hand back the new order. */
   const move = (id: string, target: string, after: boolean) => {
@@ -162,11 +187,33 @@ export function JourneyFrames({
                   onClick={() => onOpen(step.id)}
                 >
                   <span className="jf__num">{number ?? '—'}</span>
-                  <span className="jf__frame">{step.figmaFrame ?? step.name}</span>
-                  {state && <span className="jf__state">{state}</span>}
-                  {step.renderer === 'plans' && !skipped && (
-                    <span className="jf__live">renders</span>
+
+                  {/* Only the plans step has a component, so only it can show
+                      the real thing. The rest name their Figma frame — a
+                      drawn thumbnail would be a picture of a screen this app
+                      cannot actually produce. */}
+                  {step.renderer === 'plans' && !skipped ? (
+                    <span
+                      className="jf__thumb"
+                      style={{ inlineSize: frame.box.width, blockSize: frame.box.height }}
+                      aria-hidden="true"
+                    >
+                      <span
+                        className="jf__thumb-scale"
+                        style={{
+                          inlineSize: frame.viewport,
+                          transform: 'scale(' + thumbScale + ')',
+                        }}
+                      >
+                        <CardSetView set={set} context={context} />
+                      </span>
+
+                    </span>
+                  ) : (
+                    <span className="jf__frame">{step.figmaFrame ?? step.name}</span>
                   )}
+
+                  {state && <span className="jf__state">{state}</span>}
                 </button>
               ))}
             </div>

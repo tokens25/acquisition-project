@@ -697,3 +697,34 @@
 .jf__reset:hover {
   color: var(--color-text-primary);
 }
+
+/* ── Screen thumbnails ──────────────────────────────────────────
+   The plans step renders the live card set, shrunk to fit the tile. Not a
+   picture of it — the same components, the same rules, the same content, so a
+   description edited in the panel changes here too.
+
+   1100px is the set at full size (three 347 cards and two 24 gaps, with room
+   for a fourth on a partner storefront); 0.138 brings that to the tile's 152
+   of inner width. */
+.jf__thumb {
+  display: grid;
+  /* Top-aligned, the way a browser thumbnail is: a tall set loses its footer
+     rather than its header, so the plan names, prices and CTAs — the part that
+     makes it recognisable — are always the part you see.
+
+     aspect-ratio is set per device in the component, so the box is the shape of
+     the screen rather than a fixed crop of it. */
+  place-items: start;
+  flex: none;
+  align-self: center;
+  overflow: hidden;
+  border-radius: var(--radius-6);
+  background: var(--color-surface-default);
+}
+.jf__thumb-scale {
+  display: block;
+  /* width and scale come from the device, in the component */
+  padding: var(--space-16);
+  transform-origin: top left;
+  pointer-events: none;
+}
