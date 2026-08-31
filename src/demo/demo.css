@@ -1,4 +1,4 @@
-/* The redesigned interface. Two stages in one 360px panel, preview beside it.
+/* The redesigned interface. Two views in one 360px panel, preview beside it.
 
    No page padding: the panel is a full-height rail against the window edge and
    the preview runs to the other one. `.page` keeps its padding for the first
@@ -161,7 +161,7 @@
   color: var(--color-brand-primary);
 }
 /* The situation, kept in view while editing — every field below is scoped by
-   it, and stage one is no longer on screen to say so. */
+   it, and the default view is no longer on screen to say so. */
 .demo__scope {
   margin: 0;
   color: var(--color-text-tertiary);
@@ -312,7 +312,7 @@
   letter-spacing: 0.12px;
 }
 
-/* Field groups in stage two. More space above a title than below it, so a
+/* Field groups in the edit view. More space above a title than below it, so a
    group reads as a group rather than as one long column of inputs. */
 .demo__group {
   display: flex;

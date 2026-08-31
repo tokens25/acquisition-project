@@ -18,17 +18,17 @@ const PURCHASE_TYPES = [
 ]
 
 /**
- * Stage two: one step of the journey, one plan at a time.
+ * The edit view's form: one step of the journey, one plan at a time.
  *
  * Fields are the DS Form/TextField rather than the hand-rolled inputs the
  * first interface used — the design mocks it with real component instances, so
  * the code should use the real component.
  *
- * Cadence sits in this stage, beside the prices it qualifies. Typing 34.99 is
- * typing it *for Monthly Flex*, and putting that three screens away in stage
- * one made the number look absolute when it never is.
+ * Cadence sits in the edit view, beside the prices it qualifies. Typing 34.99 is
+ * typing it *for Monthly Flex*, and putting that three screens away in the default
+ * view made the number look absolute when it never is.
  */
-export function Stage2({ store }: { store: CardSetStore }) {
+export function EditPanel({ store }: { store: CardSetStore }) {
   const { set, context, setContext, updateTier, updateOffer, offerFor, updateSet } = store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
@@ -73,7 +73,7 @@ export function Stage2({ store }: { store: CardSetStore }) {
 
     <>
       <section className="demo__group">
-        <h3 className="demo__group-title">Tiers</h3>
+        <h3 className="demo__group-title">Plans</h3>
         <div className="ed-tabs">
           {set.tiers.map((t) => (
             <button
@@ -192,7 +192,7 @@ export function Stage2({ store }: { store: CardSetStore }) {
         {offer ? (
           <>
             <SelectField
-              label="Type"
+              label="Add-on"
               helpText="Sold on this offer, or bundled into it — never both."
               value={offer.addOnId ?? (offer.includedAddOnIds[0] ? `included:${offer.includedAddOnIds[0]}` : '')}
               options={[
@@ -216,7 +216,7 @@ export function Stage2({ store }: { store: CardSetStore }) {
             />
             {offer.addOnId && (
               <SelectField
-                label="Purchase type"
+                label="How it is paid for"
                 value={offer.addOnPurchaseType ?? 'one_time_payment'}
                 options={PURCHASE_TYPES}
                 onChange={(v) =>
@@ -297,7 +297,7 @@ export function Stage2({ store }: { store: CardSetStore }) {
               />
               {entry && isCustom && (
                 <TextField
-                  label="Line"
+                  label="Line text"
                   value={entry.text}
                   onChange={(v) => updateFeature(entry.id, { text: v })}
                   helpText="Written here, stored in the catalogue so it can be reused."

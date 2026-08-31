@@ -1,192 +1,337 @@
 # Naming — how to point at any part of the tool
 
-A shared vocabulary. Say the **Name** and I know exactly what you mean; the
-**Code** column is where it lives, so nothing gets misidentified.
+Say the **Name** and I know exactly what you mean. **Where** is the class or
+label it actually carries in the code.
 
-Names are lower case in prose. "Make the **step tile** taller" is unambiguous;
-"make the tile taller" is not, because there are three kinds.
+> Generated from the feedback console (`feedback-console.html`, also served at
+> `/feedback.html`). Change the areas there and regenerate — hand-editing this
+> file lets the two drift apart, which is how I end up working from the wrong one.
 
----
+## The three tabs
 
-## 0 · Routes
+| Tab | Holds |
+| --- | --- |
+| **Default view** | What you see before opening a step: the situation dropdowns, the user flow, the journey tiles, and Preview · Export JSON · Settings |
+| **Edit view** | What you see once a step is open: breadcrumb, scope, six field groups, the single-screen preview, and Save changes · Exit edit mode · Settings |
+| **Archive** | The frame and the shared kit — shell, design system, routes |
 
-| Name | URL | What it is |
-| --- | --- | --- |
-| **index** | `/` | The front door — two links, nothing else |
-| **demo 1** | `/demo` | The two-stage interface. Default subject of any request |
-| **demo 2** | `/demo2` | The first iteration, kept for comparison |
+The assistant and the card appear under both working tabs, since they show in each.
 
-Unqualified requests mean **demo 1**. Say "in demo 2" if you mean the old one.
-
----
-
-## 1 · Shell — the frame everything sits in
-
-| Name | Code | What it is |
-| --- | --- | --- |
-| **top bar** | `.demo__top` | The full-width row across the top. Never scrolls |
-| **brand strip** | `.demo__brand` | Left half of the top bar: mark, title, beta chip, collapse control |
-| **mark** | `.demo__mark` | The DAZN logo |
-| **product title** | `.demo__title` | "Acquisition model" |
-| **beta chip** | `.demo__beta` | The outlined BETA label |
-| **collapse control** | `.demo__collapse` | The panel open/close button at the strip's right edge |
-| **status bar** | `.demo__statusbar` | Right half of the top bar: gate on the left, actions on the right |
-| **publish gate** | `.demo__gate` | "Publish ready — 36 contexts checked" |
-| **action buttons** | `.demo__actions` | The button group at the far right |
-| **body** | `.demo__body` | Everything below the top bar |
-| **rail** | `.demo__rail` | The sliding track that holds the panel. What animates on collapse |
-| **panel** | `.demo__panel` | The 360px left column. Scrolls independently |
-| **preview pane** | `.demo__preview` | The right column. Scrolls independently |
-
-## 2 · Action buttons
-
-Named individually — they differ by stage.
-
-| Name | Where | Does |
-| --- | --- | --- |
-| **preview button** | stage 1 | Hides the panel, gives the width to the preview |
-| **export button** | stage 1 | Downloads the content as JSON |
-| **settings button** | both | Disabled — no settings screen exists |
-| **save button** | stage 2 | Publishes to the shared copy |
-| **exit button** | stage 2 | Leaves edit mode |
+Unqualified requests mean **demo 1** at `/demo`.
 
 ---
 
-## 3 · Panel, stage one
+## Default view — Panel
 
-The panel before you open a step. Top to bottom:
+*Default view* — The left column when you are not editing a step. It asks which situation you are writing content for.
 
-| Name | Code | What it is |
+| Name | Where | What it is |
 | --- | --- | --- |
-| **upload button** | `.demo__upload` | "Upload Spreadsheet or JSON" |
-| **assistant** | `.as` | The whole assistant block |
-| **assistant prompts** | `.as__empty button` | The three suggestion chips |
-| **assistant input** | `.as__input` | The ask box |
-| **proposal card** | `.as__proposal` | A returned set of changes, with its apply button |
-| **context fields** | `.demo__fields` | The five dropdowns as a group |
-| **user flow** | `.uf` | The step list with its heading |
-| **flow row** | `.uf__row` | One step in that list |
-| **flow dot** | `.uf__dot` | The status circle |
-| **flow edit button** | `.uf__edit` | The pencil |
-| **reset progress** | `.demo__reset` | The link at the foot |
+| **upload button** | `.demo__upload` | Says "Upload Spreadsheet or JSON". Loads content in from a file. It sits first because nothing under it means anything until there is content. |
+| **import error** | `.demo__error` | Red text under the upload button when a file cannot be read. |
+| **context fields** | `.demo__fields` | The dropdowns as a set. Four of them normally, five when your answers describe more than one journey. |
+| **market** | `dropdown 1` | Which country you are writing for — or "Base", meaning the shared content every country starts from. The help text under it tells you which of the two you are doing. |
+| **storefront** | `dropdown 2` | Whether you are selling directly or through a partner like Movistar. Only partners that actually operate in the chosen country are listed. |
+| **user status** | `dropdown 3` | Who is buying: someone logged out, an existing customer, someone being migrated, or a TVE user. This choice decides which family of journeys you get. |
+| **entry point** | `dropdown 4` | Where they clicked in from. Narrowed by the answer above — someone being migrated never arrives from an Upgrade button. |
+| **which journey** | `dropdown 5` | Only appears when your four answers describe more than one journey, and lets you pick between them. Most combinations describe exactly one, so most of the time you never see it. |
+| **user flow** | `.uf` | The journey written out as a numbered list. It is the same information as the tiles on the right, and they share a selection — clicking either opens the same step. |
+| **flow heading** | `.uf__title` | The words "User flow:" above the list. |
+| **flow list** | `.uf__list` | The numbered list itself. |
+| **flow row** | `.uf__row` | One step in the list. Highlights when selected, and dims when the journey skips it. |
+| **flow dot** | `.uf__dot` | The circle at the left of a row. It holds a tick when that step has fields you can actually edit — today only Subscription does, and the list says so rather than pretending otherwise. |
+| **flow name** | `.uf__name` | The step name. |
+| **flow skip tag** | `.uf__tag` | A small "seeded" or "not here" on steps this journey skips. "Seeded" means the entry point already answered that question; "not here" means the step does not exist in this journey. |
+| **flow edit button** | `.uf__edit` | The pencil that opens a step. Only on steps that have something to edit. |
+| **flow connector** | `.uf__link` | The short line drawn between one row and the next, so the list reads as a sequence. |
+| **reset progress** | `.demo__reset` | The link at the bottom. Throws away your local edits and reloads the content the app shipped with. |
 
-### The five context fields
+## Default view — Preview
 
-Name them by their label: **market**, **storefront**, **user status**,
-**entry point**, **which one**.
+*Default view* — The right column when you are not editing. Shows the whole journey at once.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **frames block** | `.jf` | The journey overview as a whole. |
+| **row caption** | `.jf__caption` | The line above the tiles: how many screens across how many steps. |
+| **drag hint** | `.jf__hint` | The reminder that you can drag a step sideways to reorder it, or hold alt and use the arrow keys. |
+| **reordered chip** | `.jf__reordered` | A small marker that appears once your order no longer matches the order drawn in Figma. |
+| **reset order** | `.jf__reset` | Puts the steps back into the Figma order. |
+| **frames row** | `.jf__row` | The row of screens that scrolls sideways. |
+| **step group** | `.jf__step` | One step together with all its screens. This is the block you drag when reordering. |
+| **step label** | `.jf__step-name` | The step name above its screens. |
+| **state count** | `.jf__states` | Says "· 3 states" when a step is drawn more than one way. |
+| **skip tag** | `.jf__tag` | A "seeded" or "not here" marker explaining why a step shows nothing. |
+| **tiles strip** | `.jf__tiles` | The screens belonging to one step, side by side. |
+| **step tile** | `.jf__tile` | One screen. Click it to edit that step. |
+| **tile number** | `.jf__num` | Where that screen falls in the flow. A dash when the step is skipped. |
+| **thumbnail** | `.jf__thumb` | A live miniature of the real screen, built from your actual content. Sized to the proportions of a 375 by 812 phone. |
+| **frame name** | `.jf__frame` | The Figma frame name, shown on screens that have not been built yet. |
+| **state label** | `.jf__state` | Which version of the screen this tile is — "default", "alternate plan selected". |
+
+## Default view — Action buttons
+
+*Default view* — The three buttons at the top right when you are not editing a step.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **preview button** | `button 1 · secondary` | Hides the panel so the preview fills the window. Press it again — it now says "Show panel" — to bring the panel back. |
+| **export button** | `button 2 · tertiary` | Says "Export JSON". Downloads all the content as a file. Worth knowing: this is the shape this app stores, not yet the shape the live rule engine reads. |
+| **settings button** | `button 3 · tertiary` | Greyed out and does nothing — there is no settings screen yet. This is the only button that appears in both views, and it is third in both. |
+
+## Edit view — Panel
+
+*Edit view* — The left column once you have opened a step. Six groups of fields, all scoped to one country, one storefront and one way of paying.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **breadcrumb** | `.demo__back` | The line at the top with a back arrow, the journey name and the step name. The whole line is clickable and takes you back. |
+| **scope line** | `.demo__scope` | Reads like "Spain · direct · Monthly Flex". It tells you exactly what the fields below apply to — the same field holds a different value in a different country or at a different cadence. |
+| **field group** | `.demo__group` | One titled block of fields. There are six of them. |
+| **group title** | `.demo__group-title` | The heading on a group. Pricing adds the currency to its heading. |
+| **plans group** | `group 1 · Plans` | Which plan you are editing. |
+| **header group** | `group 2 · Header` | The words at the top of the card. |
+| **pricing group** | `group 3 · Pricing` | What it costs and how you pay. |
+| **add-on group** | `group 4 · Add-on` | An extra product attached to the plan. |
+| **competitions group** | `group 5 · Competitions` | Which competition logos show on the card. |
+| **features group** | `group 6 · Features` | The bullet list of what you get. |
+
+## Edit view — Plans group
+
+*Edit view* — Group 1. Picks which plan the rest of the panel is about.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **plan tabs** | `.ed-tabs` | The row of plan names you switch between. Not a setting — it chooses which plan the whole panel below is editing. |
+| **plan tab** | `.ed-tab` | One plan name. Dimmed when that plan is not sold in the situation you picked, and hovering it tells you why. |
+| **plan not sold note** | `.ed-absent` | Appears when you are looking at a plan this situation does not sell. It says why, and reassures you that your edits still apply everywhere the plan does sell. |
+| **no plans message** | `.ed-placeholder · plans` | What the panel says instead of a form when the content has no plans at all. |
+
+## Edit view — Header group
+
+*Edit view* — Group 2. The words at the top of the card.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **badge field** | `Badge` | Shows "Best experience" and is read-only — you cannot type in it. It fills in by itself when you turn on Ultimate treatment below. |
+| **ultimate toggle** | `Ultimate Treatment` | The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it. |
+| **plan name field** | `Plan name` | The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label. |
+| **description field** | `Description` | The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to. |
+
+## Edit view — Pricing group
+
+*Edit view* — Group 3. What it costs. Every price here belongs to one way of paying.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **cadence field** | `How to pay` | Monthly Flex, Instalments Annual, or Annual Upfront. Changing it changes which prices you are editing — a plan with no price here simply is not sold that way. |
+| **apply discount toggle** | `Apply discount` | Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change. |
+| **standard price field** | `Standard price` | The normal price, in the currency of the country you picked. |
+| **discount price field** | `Discount price` | The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount. |
+| **not sold at this cadence** | `.ed-placeholder · pricing` | Replaces the price fields when this plan is not sold at the chosen cadence. It says plainly that this is a fact about the plan, not something missing that you need to fill in. |
+
+## Edit view — Add-on group
+
+*Edit view* — Group 4. An extra product attached to this price.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **add-on field** | `Add-on` | Which extra product goes with this plan, and whether it is sold separately or included in the price. Each add-on appears twice in the list, once as "sold" and once as "bundled" — it can never be both. |
+| **paid-for field** | `How it is paid for` | Only when the add-on is sold rather than bundled. Either a one-off payment, or a discount code the customer redeems. |
+| **discount percent field** | `Discount percent` | Only when the add-on is sold with a discount code. How much off, as a number between 1 and 99. |
+| **no offer note** | `.ed-placeholder · add-on` | Replaces the add-on fields when the plan has no price at this cadence, since there is nothing to attach an add-on to. |
+
+## Edit view — Competitions group
+
+*Edit view* — Group 5. Which competition logos appear on the card.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **logo picker** | `.ed-logos` | The grid of competition logos you click to switch on and off. |
+| **logo button** | `.ed-logo` | One competition. Hovering shows its name. |
+| **logo order hint** | `.tg__hint` | The reminder that logos appear on the card in the order you clicked them. |
+| **competitions total field** | `Total number of competitions` | How many competitions the plan carries in total, which is usually more than the logos shown. The card works out the "+5" tile from this number minus the logos on display. |
+
+## Edit view — Features group
+
+*Edit view* — Group 6. The bullet list of what you get.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **feature row** | `.demo__feature` | One line of the list, with its picker and — when the line is a custom one — the box to type it in. |
+| **feature picker** | `Feature 1, 2, 3…` | Choose a line from the shared library, or pick "Custom line…" at the bottom to write a new one. Retired lines are still listed, marked "(retired)", so old content keeps working. |
+| **line text field** | `Line text` | Where you type a custom line. What you write is saved into the shared library, so it can be reused on other plans. |
+| **remove feature** | `.demo__feature-remove` | Takes that line off this plan. It stays in the library. |
+| **add feature** | `Add feature` | Adds another line to the list. |
+
+## Edit view — Preview
+
+*Edit view* — The right column once you have opened a step. Shows just that one screen.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **step preview** | `.jy` | The step preview as a whole. |
+| **entry line** | `.jy__entry` | The line of context above the screen. |
+| **step name** | `.jy__step-name` | Which step you are looking at. |
+| **step meta** | `.jy__meta` | Where this step sits in the flow, what the customer clicked to get here, and how many plans are in the set. |
+| **inbound seeds** | `.jy__seeds` | What the entry point already decided before the customer got here — so you know which questions this screen no longer has to ask. |
+| **viewport** | `.jy__viewport` | The frame the real screen renders inside. Sized to a 375-wide phone when the set is a mobile one. |
+| **placeholder screen** | `.jy__placeholder` | What you see instead of a real screen when that step has not been built yet. It tells you everything known about the screen so far. |
+| **placeholder frame name** | `.jy__frame` | The name of the Figma frame this screen will be built from. |
+| **placeholder states** | `.jy__states` | The different versions this screen is drawn in. |
+| **placeholder gates** | `.jy__requires` | The conditions the real product checks before showing this screen. |
+| **placeholder note** | `.jy__note` | A free note about the screen. The same style also carries the message when a journey has no steps in the chosen country. |
+| **placeholder warning** | `.jy__todo` | The line reading "Placeholder — this screen isn’t built yet." |
+
+## Edit view — Action buttons
+
+*Edit view* — The buttons at the top right once you have opened a step. Settings sits third here too.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **save button** | `button 1 · primary` | Says "Save changes". Asks you what changed, then publishes to the shared copy. Greyed out when there is nothing new to save, and reads "Saving…" while it works. Your typing is kept locally the whole time — this button is about sharing it, not about not losing it. |
+| **exit button** | `button 2 · secondary` | Says "Exit edit mode". Closes the step and goes back to the journey overview. It does not discard anything. |
+
+## Assistant
+
+*Both views* — Sits above the fields in both views. Switched off until an API key is set, and it never changes anything on its own.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **assistant** | `.as` | The whole assistant block. |
+| **assistant head** | `.as__head` | Its title and the line under it. |
+| **assistant title** | `.as__title` | Reads "Assistant", or "Assistant · off" when there is no key. |
+| **assistant hint** | `.as__hint` | The short explanation under the title. |
+| **assistant off note** | `.as__off` | What it shows instead of a conversation when there is no key. |
+| **assistant list** | `.as__list` | The conversation so far. Scrolls on its own. |
+| **assistant prompts** | `.as__empty` | Three suggested questions, shown before you have asked anything. |
+| **assistant turn** | `.as__turn` | One message, yours or its. |
+| **proposal card** | `.as__proposal` | A set of changes it is suggesting. Nothing happens until you press apply. |
+| **proposal summary** | `.as__proposal-summary` | Its one-line description of what it is proposing. |
+| **proposal changes** | `.as__changes` | The changes themselves — which country each applies to, and the new value. |
+| **apply button** | `.as__apply` | Writes the proposal into your content. Greys out once used, so you cannot apply the same thing twice. |
+| **assistant compose** | `.as__compose` | The row where you type. |
+| **assistant input** | `.as__input` | The box you type your question into. |
+| **send button** | `.as__send` | Greyed out while it is thinking, and while the box is empty. |
+
+## The card
+
+*Both views* — The plan card itself. This is what renders in the preview and inside every thumbnail.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **set scroller** | `.acq-set-scroll` | The scrolling wrapper around the row of cards, for when they do not all fit. |
+| **card set** | `.acq-set` | The row of cards. It measures all of them and gives them one shared description height and one shared card height, so they line up. |
+| **card** | `.acq-card` | One plan card. Gains a gold outline when it is the Ultimate one. |
+| **badge** | `.acq-card__eyebrow` | The "BEST EXPERIENCE" label on the top edge. Comes from the Ultimate toggle, and only one card in a set can have it. |
+| **card body** | `.acq-card__body` | Everything inside the card except the footer. |
+| **card header** | `.acq-card-header` | The plan name and description together. |
+| **plan name** | `.acq-card-header__title` | The name at the top. Gets the gold treatment on the Ultimate card. |
+| **description** | `.acq-card-header__description` | The paragraph. Measured against the other cards and cut to the shared height. |
+| **more button** | `.acq-card-header__more` | The "… more" link, which only appears when the description is too long to fit. |
+| **card divider** | `.acq-card__divider` | The line between the header and the price. |
+| **pricing** | `.acq-pricing` | The whole price block. |
+| **price caption** | `.acq-pricing__caption` | The small "Starts at" above the number. |
+| **price** | `.acq-pricing__price` | The number people actually read. |
+| **crossed price** | `.acq-pricing__crossed` | The struck-through standard price, shown only when there is a discount. |
+| **price explainer** | `.acq-pricing__extra` | The sentence under the price explaining the offer. |
+| **instalment line** | `.acq-pricing__installment` | The line spelling out the monthly instalment on an annual plan. |
+| **plan CTA** | `.acq-plan-cta` | The savings line and the Get button together as one block. |
+| **savings ribbon** | `.acq-plan-cta__eyebrow` | The "Save up to €108 / year" line. Worked out from the two prices, not typed. |
+| **get button** | `.acq-plan-cta__stack` | The button that starts the purchase. Gold on the Ultimate card. |
+| **logo tiles** | `.acq-logo-tiles` | The row of competition logos, in the order they were picked. |
+| **logo tile** | `.acq-logo-tiles__tile` | One competition logo. |
+| **overflow tile** | `.acq-logo-tiles__tile--overflow` | The "+5" tile. Worked out from the total you entered minus the logos on show — not something you pick. |
+| **add-on panel** | `.acq-addon` | The block advertising the extra product. |
+| **features list** | `.acq-features` | The bullet list as a block. |
+| **card feature row** | `.acq-feature` | One bullet: an icon and a line of text. |
+| **feature text** | `.acq-feature__text` | The words of one bullet. |
+| **card footer** | `.acq-card__footer` | The "All features & content" bar across the bottom, edge to edge. |
+
+## The card — add-on panel
+
+*Both views* — The inside of the add-on block on the card.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **add-on artwork** | `.acq-addon__image` | The picture of the add-on. |
+| **add-on title** | `.acq-addon__title` | Its name. |
+| **add-on subtitle** | `.acq-addon__subtitle` | The line under the name. |
+| **add-on status** | `.acq-addon__status` | How it is offered. Three versions: included in the price, a payment, or a discount code — and the styling differs for each. |
+| **add-on divider** | `.acq-addon__divider` | The line inside the block. |
+| **add-on footer** | `.acq-addon__footer` | The bottom row of the block. |
+
+## The card — rare states
+
+*Both views* — Two things the card set does that are easy to forget exist.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **empty set message** | `.acq-set__empty` | What shows when there are no cards to draw at all. |
+| **measuring probe** | `.acq-set__probe` | An invisible copy of the text used to measure how tall things need to be, before the real cards are drawn. You never see it, but it is why the cards line up. |
+
+## Shell
+
+*Archive* — The frame around everything. Looks the same whichever view you are in.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **page** | `.page.demo` | The outermost wrapper. Carries the flags for panel-hidden and panel-collapsed, so anything that should react to those hangs off it. |
+| **top bar** | `.demo__top` | The strip across the very top. Stays put while everything below it scrolls. |
+| **brand strip** | `.demo__brand` | The left half of the top bar. It sits above the panel, and changes background to match whichever column is underneath it. |
+| **mark** | `.demo__mark` | The DAZN logo. |
+| **product title** | `.demo__title` | The words "Acquisition model". |
+| **beta chip** | `.demo__beta` | The small outlined BETA label next to the title. |
+| **collapse control** | `.demo__collapse` | The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips. |
+| **status bar** | `.demo__statusbar` | The right half of the top bar. Tells you whether you can publish, and holds the buttons. |
+| **publish gate** | `.demo__gate` | Says either "Publish ready" with the number of situations checked, or "Publish blocked" with how many are failing. It checks every market and storefront combination, not just the one you are looking at. |
+| **action buttons** | `.demo__actions` | The group of three buttons at the far right. Which three you get depends on the view. |
+| **save note** | `.demo__savenote` | A one-line message under the top bar confirming a save worked, or explaining why it did not. Only appears after you have saved. |
+| **body** | `.demo__body` | Everything under the top bar: the left column and the right column side by side. |
+| **rail** | `.demo__rail` | The track the panel slides inside. This is the thing that actually shrinks when you collapse — the panel keeps its width and gets clipped. |
+| **panel** | `.demo__panel` | The 360px left column. Scrolls on its own, and its contents change completely between the two views. |
+| **preview pane** | `.demo__preview` | The right column, showing what you are building. Scrolls on its own, and widens to fill the space when the panel is collapsed. |
+
+## Design system
+
+*Archive* — Shared components. Change one and it changes everywhere it is used.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **text field** | `.dz-field` | The standard text box. 56 tall, with the label floating up when you type in it. |
+| **select field** | `.dz-field--select` | The dropdown. Same box with an arrow; its label sits up top permanently rather than floating. |
+| **toggle field** | `ToggleField` | The on/off switch, used for Ultimate treatment and Apply discount. It comes in tones — gold for Ultimate, green for discount. |
+| **field label** | `.dz-field__label` | The label inside a field. |
+| **help text** | `.dz-field__help` | The explanatory line under a field. |
+| **button** | `.dazn-btn` | The button. Four looks — primary, secondary, subscribe, tertiary — and two heights. |
+| **icon** | `.dazn-icon` | Any icon from the design system. Takes its colour from the text around it. |
+
+## Routes
+
+*Archive* — Three pages. If you do not say which, I will assume demo 1.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **index** | `/` | The front door. Two links and nothing else. |
+| **demo 1** | `/demo` | The tool. Everything below lives here. |
+| **demo 2** | `/demo2` | The old first attempt, kept only so we can compare. It has its own components, which are not listed here. |
 
 ---
 
-## 4 · Panel, stage two
-
-The panel once a step is open.
-
-| Name | Code | What it is |
-| --- | --- | --- |
-| **breadcrumb** | `.demo__back` | The back chevron and journey — step line |
-| **scope line** | `.demo__scope` | "IE · direct · Monthly Flex" |
-| **field group** | `.demo__group` | One titled section |
-| **group title** | `.demo__group-title` | Its heading |
-| **feature row** | `.demo__feature` | One feature picker, plus its line when custom |
-
-### The field groups
-
-Name them by their title: **tiers**, **header**, **pricing**, **add-on**,
-**competitions**, **features**.
-
-**Tier pills** are the row inside the tiers group.
-
----
-
-## 5 · Preview — journey overview
-
-What the preview pane shows in stage one.
-
-| Name | Code | What it is |
-| --- | --- | --- |
-| **frames row** | `.jf__row` | The horizontally scrolling row of everything |
-| **row caption** | `.jf__caption` | "16 screens across 9 steps", the drag hint, the reordered chip |
-| **step group** | `.jf__step` | One step and all its screens. What you drag |
-| **step label** | `.jf__step-name` | Its name, state count and skip tag |
-| **step tile** | `.jf__tile` | One screen |
-| **tile number** | `.jf__num` | Its position in the flow |
-| **thumbnail** | `.jf__thumb` | The rendered screen inside a tile |
-| **frame name** | `.jf__frame` | The Figma frame, on tiles with no component |
-| **state label** | `.jf__state` | "default", "alternate plan selected" |
-| **skip tag** | `.jf__tag` | "seeded" / "not here" |
-| **reordered chip** | `.jf__reordered` | Shown when the order differs from Figma |
-
-## 6 · Preview — step view
-
-What the preview pane shows in stage two.
-
-| Name | Code | What it is |
-| --- | --- | --- |
-| **step meta** | `.jy__meta` | "step 2 of 9 · entered from…" |
-| **viewport** | `.jy__viewport` | The screen the cards render inside. A phone on mobile |
-| **stub** | `.jy__stub` | What a step with no component shows |
-
----
-
-## 7 · The card
-
-Top to bottom. These are the DS component names, so they match Figma.
-
-| Name | Code | Figma |
-| --- | --- | --- |
-| **card** | `.acq-card` | AcquisitionCard |
-| **badge** | `.acq-card__eyebrow` | Label/badge/Left — "BEST EXPERIENCE" |
-| **card header** | `.acq-card-header` | CardHeader — plan name and description |
-| **plan name** | `.acq-card-header__title` | |
-| **description** | `.acq-card-header__description` | Including its "… more" |
-| **card divider** | `.acq-card__divider` | Divider |
-| **pricing** | `.acq-pricing` | Pricing — "Starts at", price, struck price, explainer |
-| **plan CTA** | `.acq-plan-cta` | CTA 1 — the savings ribbon and the Get button together |
-| **savings ribbon** | `.acq-plan-cta__eyebrow` | "Save up to €108 / year" |
-| **logo tiles** | `.acq-logo-tiles` | Subscription Plan Logo Tile |
-| **overflow tile** | `.acq-logo-tiles__tile--overflow` | The "+5" |
-| **add-on panel** | `.acq-addon` | AddOn/Panel |
-| **features list** | `.acq-features` | FeaturesList |
-| **feature row** | `.acq-feature` | One line and its icon |
-| **card footer** | `.acq-card__footer` | Button/CTA — "All features & content" |
-| **card set** | `.acq-set` | The row of cards |
-
-> **feature row** appears twice — in the panel and on the card. Say **panel
-> feature row** or **card feature row** if it is not obvious from context.
-
----
-
-## 8 · Design-system components
-
-Shared, used in several places. Changing one changes everywhere.
-
-| Name | Code | Notes |
-| --- | --- | --- |
-| **text field** | `TextField` / `.dz-field` | DS Form/TextField, floating label |
-| **select field** | `SelectField` / `.dz-field--select` | Same shell, chevron, native select |
-| **field label** | `.dz-field__label` | Floats on fill |
-| **help text** | `.dz-field__help` | Below a field |
-| **button** | `Button` / `.dazn-btn` | Appearances: primary, secondary, subscribe, tertiary |
-| **icon** | `Icon` / `.dazn-icon` | Renders a DS SVG with currentColor |
-
----
-
-## 9 · Concepts, not elements
-
-Words for things with no single element.
+## Concepts, not elements
 
 | Name | Means |
 | --- | --- |
-| **context** | Market × storefront × cadence — what the editor is scoped to |
-| **base** | The market-independent content, before differences |
-| **override** | One market's difference from the base |
+| **context** | A country, a storefront and a way of paying together — what the edit view is scoped to |
+| **base** | The shared content every country starts from, before its own differences |
+| **override** | One country's difference from the base |
 | **journey** | An ordered list of steps, chosen by user status and entry point |
-| **step** | One screen of a journey. May have several states |
-| **state** | One drawing of a step — "default", "alternate plan selected" |
-| **seeded** | A step skipped because the entry already knows its answer |
-| **offer** | A price for one plan at one cadence in one market |
+| **step** | One screen of a journey. May be drawn in several states |
+| **state** | One version of a step — "default", "alternate plan selected" |
+| **seeded** | A step skipped because the entry point already answered it |
+| **offer** | A price for one plan, at one cadence, in one country |
 | **cadence** | How you pay — Monthly Flex, Instalments Annual, Annual Upfront |
-| **tier / plan** | Interchangeable. "Plan" in UI copy, "tier" in the data |
+| **plan** | What the customer picks. A *tier* in the data, a *plan* everywhere in the interface |
 | **catalogue** | The reusable lists: features, logos, add-ons, icons |
 | **publish gate** | The check across every context that blocks publishing |
 
@@ -194,18 +339,18 @@ Words for things with no single element.
 
 ## How to phrase a request
 
-Good — resolves to one thing:
+Good — resolves to exactly one thing:
 
 > Make the **step label** bold.
 > The **savings ribbon** should sit above the **plan CTA**, not inside it.
 > **Storefront** needs a help text.
-> In **demo 2**, the **publish gate** is the wrong green.
+> In the **edit view**, the **plan tabs** are too tall.
 
-Ambiguous — I will ask:
+Ambiguous — I will have to ask:
 
 > Make the title bigger. *(product title, plan name, group title, step label?)*
-> The button is too small. *(there are nine)*
-> Fix the spacing in the panel. *(which group?)*
+> The button is too small. *(there are more than twenty)*
+> Fix the spacing in the panel. *(which view, which group?)*
 
-If a name for something is missing here, say what it does and where it is and
-I will name it, add it to this table, and use that name from then on.
+If something has no name here, say what it does and where it is. I will name it,
+add it to the console, and use that name from then on.

@@ -38,7 +38,7 @@
   font-weight: var(--font-weight-bold);
 }
 
-.jy__stub {
+.jy__placeholder {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -113,7 +113,7 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   letter-spacing: 0.06em;
 }
 
-.jy__stub--solo {
+.jy__placeholder--solo {
   max-inline-size: 420px;
   min-block-size: 420px;
 }

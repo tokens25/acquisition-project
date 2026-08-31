@@ -54,7 +54,7 @@ export function StepPreview({
           <CardSetView set={set} context={context} />
         </div>
       ) : (
-        <div className="jy__stub jy__stub--solo">
+        <div className="jy__placeholder jy__placeholder--solo">
           <p className="jy__frame">{step.figmaFrame}</p>
           {step.states && (
             <p className="jy__states">

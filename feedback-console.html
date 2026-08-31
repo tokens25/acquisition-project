@@ -1,0 +1,1198 @@
+<title>Acquisition Feedback Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  /* DAZN's own tokens — the subject's palette, not an invented one. */
+  :root {
+    --ground: #ffffff;
+    --raised: #f5f7f8;
+    --sunk: #e9edf0;
+    --line: #cdd5da;
+    --line-soft: #e9edf0;
+    --ink: #080e12;
+    --ink-mid: #3f4c55;
+    --ink-soft: #626e78;
+    --accent: #c8ce00;
+    --accent-ink: #080e12;
+    --wire: #b3bec6;
+    --now: #c2410c;
+    --next: #1e8a4a;
+    --idea: #4f5bd5;
+    --font: 'Archivo', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #080e12; --raised: #0c1216; --sunk: #10171b;
+      --line: #21292e; --line-soft: #161d22;
+      --ink: #fafbfc; --ink-mid: #bcc5cb; --ink-soft: #76828c;
+      --accent: #f7ff1a; --accent-ink: #080e12; --wire: #384249;
+      --now: #ff9166; --next: #79e99c; --idea: #a9b1ff;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #080e12; --raised: #0c1216; --sunk: #10171b;
+    --line: #21292e; --line-soft: #161d22;
+    --ink: #fafbfc; --ink-mid: #bcc5cb; --ink-soft: #76828c;
+    --accent: #f7ff1a; --accent-ink: #080e12; --wire: #384249;
+    --now: #ff9166; --next: #79e99c; --idea: #a9b1ff;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0 0 88px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1340px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Masthead ─────────────────────────────────────── */
+  .top {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--ground);
+    border-bottom: 1px solid var(--line);
+  }
+  .top__inner {
+    display: flex; flex-direction: column; gap: 12px;
+    max-width: 1340px; margin: 0 auto; padding: 16px 24px 12px;
+  }
+  .top__line { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .top__note { margin: 0; color: var(--ink-soft); font-size: 13px; }
+
+  .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .search {
+    flex: 1 1 240px; min-width: 190px;
+    padding: 8px 11px;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: var(--raised); color: var(--ink);
+    font-family: var(--font); font-size: 13.5px;
+  }
+  .search::placeholder { color: var(--ink-soft); }
+  .search:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+
+  .jump { display: flex; gap: 5px; flex-wrap: wrap; }
+  .jump a {
+    padding: 4px 9px;
+    border: 1px solid var(--line); border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+    color: var(--ink-mid); text-decoration: none; white-space: nowrap;
+  }
+  .jump a:hover { background: var(--sunk); color: var(--ink); }
+  .jump a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ── View tabs ────────────────────────────────────── */
+  .tabs { display: flex; gap: 8px; }
+  .tab {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 9px 14px;
+    border: 1px solid var(--line); border-radius: 8px;
+    background: transparent; color: var(--ink-soft);
+    font-family: var(--font); cursor: pointer;
+  }
+  .tab:hover { background: var(--sunk); color: var(--ink); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tab__label { font-size: 14px; font-weight: 700; letter-spacing: -0.005em; }
+  .tab__note { font-size: 11.5px; color: var(--ink-soft); }
+  .tab__badge {
+    font-family: var(--mono); font-size: 11px;
+    font-variant-numeric: tabular-nums; color: var(--ink-soft);
+  }
+  .tab__badge:empty { display: none; }
+  .tab[aria-selected='true'] {
+    background: var(--sunk);
+    color: var(--ink);
+    border-color: var(--ink-soft);
+    box-shadow: inset 0 -3px 0 -1px var(--accent);
+  }
+  .tab[aria-selected='true'] .tab__note { color: var(--ink-mid); }
+  .tab[aria-selected='true'] .tab__badge { color: var(--ink); }
+
+  /* ── Sections ─────────────────────────────────────── */
+  section { margin-top: 26px; scroll-margin-top: calc(var(--head-h, 168px) + 20px); }
+  section[hidden] { display: none; }
+
+  .sec-head {
+    position: sticky; top: var(--head-h, 168px); z-index: 10;
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 10px 0 8px;
+    background: var(--ground);
+    border: none; border-bottom: 1px solid var(--line);
+    color: var(--ink); font-family: var(--font);
+    text-align: left; cursor: pointer;
+  }
+  .sec-head:hover .sec-head__title { color: var(--ink-mid); }
+  .sec-head:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sec-head__chev {
+    flex: none; width: 9px; height: 9px;
+    border-right: 1.6px solid var(--ink-soft);
+    border-bottom: 1.6px solid var(--ink-soft);
+    transform: rotate(45deg) translate(-1px, -1px);
+    transition: transform 130ms ease;
+  }
+  section.shut .sec-head__chev { transform: rotate(-45deg) translate(-1px, 1px); }
+  .sec-head__title {
+    margin: 0; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .sec-head__count { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); }
+  .sec-head__count b { color: var(--next); font-weight: 500; }
+
+  .sec-head__shared {
+    padding: 2px 7px;
+    border: 1px solid var(--line); border-radius: 999px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  .jump a[data-shared] { border-style: dashed; }
+
+  .sec-blurb {
+    margin: 7px 0 0;
+    padding-left: 14px;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+  }
+  section.shut .row, section.shut .addrow, section.shut .sec-blurb { display: none; }
+
+  /* ── Rows ─────────────────────────────────────────── */
+  .row {
+    display: grid;
+    grid-template-columns: 172px 128px minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 18px; align-items: start;
+    padding: 14px 0 14px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    position: relative;
+  }
+  .row[hidden] { display: none; }
+  .row::before {
+    content: ''; position: absolute;
+    left: 0; top: 14px; bottom: 14px;
+    width: 3px; border-radius: 2px; background: transparent;
+  }
+  .row[data-note]::before { background: var(--ink-soft); }
+  .row[data-note][data-pri="now"]::before { background: var(--now); }
+  .row[data-note][data-pri="next"]::before { background: var(--next); }
+  .row[data-note][data-pri="idea"]::before { background: var(--idea); }
+
+  .name { font-weight: 600; font-size: 14px; letter-spacing: -0.005em; }
+  .anchor {
+    display: block; margin-top: 3px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-soft); word-break: break-all;
+  }
+  .what { color: var(--ink-mid); font-size: 13.5px; line-height: 1.55; }
+
+  /* ── The wireframe column ─────────────────────────── */
+  .vis {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--raised);
+  }
+  .vis .w { fill: none; stroke: var(--wire); stroke-width: 0.9; }
+  .vis .on-fill { fill: var(--accent); stroke: none; }
+  .vis .on-wash { fill: var(--accent); opacity: 0.22; stroke: none; }
+  .vis .on-edge { fill: none; stroke: var(--accent); stroke-width: 1.6; }
+  .vis-none {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 54px; padding: 6px;
+    border: 1px dashed var(--line); border-radius: 6px;
+    color: var(--ink-soft); font-size: 11px; text-align: center;
+  }
+
+  .cell { display: flex; flex-direction: column; gap: 7px; }
+  textarea {
+    width: 100%; min-height: 44px; padding: 9px 11px;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: var(--raised); color: var(--ink);
+    font-family: var(--font); font-size: 13.5px; line-height: 1.5;
+    resize: none; overflow: hidden;
+  }
+  textarea::placeholder { color: var(--ink-soft); opacity: 0.75; }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+
+  .pri { display: flex; gap: 5px; }
+  .row:not([data-note]) .pri { visibility: hidden; }
+  .pri button {
+    padding: 2px 9px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: transparent; color: var(--ink-soft);
+    font-family: var(--font); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.03em; cursor: pointer;
+  }
+  .pri button:hover { color: var(--ink); }
+  .pri button[aria-pressed="true"] { border-color: currentColor; }
+  .pri button[data-p="now"][aria-pressed="true"]  { color: var(--now); }
+  .pri button[data-p="next"][aria-pressed="true"] { color: var(--next); }
+  .pri button[data-p="idea"][aria-pressed="true"] { color: var(--idea); }
+  .pri button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .drop {
+    border: none; background: transparent; color: var(--ink-soft);
+    font-size: 11px; cursor: pointer; padding: 2px 0;
+    text-align: left; font-family: var(--font);
+  }
+  .drop:hover { color: var(--now); }
+
+  .empty { padding: 40px 0; color: var(--ink-soft); font-size: 14px; }
+  .empty[hidden] { display: none; }
+  .addrow { padding: 16px 0 0 14px; }
+
+  /* ── Action bar ───────────────────────────────────── */
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    background: var(--raised); border-top: 1px solid var(--line);
+  }
+  .bar__inner {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    max-width: 1340px; margin: 0 auto; padding: 12px 24px;
+  }
+  .tally {
+    font-family: var(--mono); font-size: 12.5px;
+    color: var(--ink-soft); font-variant-numeric: tabular-nums;
+  }
+  .tally b { font-weight: 500; color: var(--ink); }
+  .tally .c-now { color: var(--now); }
+  .tally .c-next { color: var(--next); }
+  .tally .c-idea { color: var(--idea); }
+  .spacer { flex: 1; }
+  .toast { font-family: var(--mono); font-size: 12px; color: var(--next); }
+
+  button.act {
+    padding: 8px 14px;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: transparent; color: var(--ink);
+    font-family: var(--font); font-size: 13.5px; font-weight: 600;
+    cursor: pointer;
+  }
+  button.act:hover { background: var(--sunk); }
+  button.act:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.act[aria-pressed="true"] { background: var(--sunk); border-color: var(--ink-soft); }
+  button.act.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button.act.primary:hover { filter: brightness(0.93); }
+  button.act.quiet { border-color: transparent; color: var(--ink-soft); font-weight: 500; }
+  button.act.quiet:hover { color: var(--ink); background: transparent; }
+
+  @media (max-width: 1100px) {
+    .row { grid-template-columns: 150px 116px minmax(0, 1fr); }
+    .row .cell { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .row { grid-template-columns: 110px minmax(0, 1fr); gap: 12px; }
+    .row .what { grid-column: 1 / -1; }
+    .sec-head { top: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .sec-head__chev { transition: none; } }
+</style>
+
+<header class="top">
+  <div class="top__inner">
+    <div class="top__line">
+      <h1>Acquisition Feedback Console</h1>
+      <p class="top__note">Find the area, say what should change, mark how soon. Copy when you are done.</p>
+    </div>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Which view"></nav>
+    <div class="controls">
+      <input class="search" id="q" type="search" placeholder="Filter by name, code or description — e.g. thumb, .acq-card, chevron" aria-label="Filter areas">
+      <button class="act" id="onlynoted" aria-pressed="false">Only noted</button>
+      <button class="act" id="foldall">Collapse all</button>
+      <nav class="jump" id="jump" aria-label="Jump to section"></nav>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="sheet"></main>
+<p class="wrap empty" id="noresults" hidden>Nothing matches that filter.</p>
+
+<div class="bar">
+  <div class="bar__inner">
+    <span class="tally" id="tally">Nothing noted yet</span>
+    <span class="toast" id="toast"></span>
+    <span class="spacer"></span>
+    <button class="act quiet" id="clear">Clear all</button>
+    <button class="act primary" id="copy">Copy feedback</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Wireframes ────────────────────────────────────────
+  // One map per region, read off the components themselves. Every part is drawn
+  // faint and the row's own part is lit, so the picture shows the thing AND
+  // where it sits. `furn` is context that has no row of its own here.
+  var MAPS = {
+    routes: { vb: '0 0 100 42', parts: {
+      'index': [4,6,28,30], 'demo 1': [36,6,28,30], 'demo 2': [68,6,28,30]
+    }},
+    shell: { vb: '0 0 160 104', parts: {
+      'page': [0,0,160,104],
+      'top bar': [0,0,160,16], 'brand strip': [0,0,60,16], 'mark': [4,4,8,8],
+      'product title': [15,5,24,6], 'beta chip': [41,5,10,6], 'collapse control': [52,4,6,8],
+      'status bar': [60,0,100,16], 'publish gate': [63,5,32,6], 'action buttons': [100,4,56,8],
+      'save note': [0,18,160,5], 'body': [0,25,160,79], 'rail': [0,25,60,79],
+      'panel': [2,27,56,75], 'preview pane': [60,25,100,79]
+    }},
+    actionsDefault: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
+      'preview button': [6,6,32,11], 'export button': [42,6,42,11], 'settings button': [88,6,26,11]
+    }},
+    actionsEdit: { vb: '0 0 120 22', furn: [[0,0,120,22],[98,6,18,11]], parts: {
+      'save button': [4,6,42,11], 'exit button': [50,6,44,11]
+    }},
+    panelDefault: { vb: '0 0 80 142', furn: [[6,26,68,26]], parts: {
+      'upload button': [6,5,68,12], 'import error': [6,19,68,5],
+      'context fields': [6,57,68,38],
+      'market': [6,57,68,6], 'storefront': [6,65,68,6], 'user status': [6,73,68,6],
+      'entry point': [6,81,68,6], 'which journey': [6,89,68,6],
+      'user flow': [6,99,68,32], 'flow heading': [6,99,26,4], 'flow list': [6,105,68,26],
+      'flow row': [8,105,64,9], 'flow dot': [10,107,5,5], 'flow name': [17,108,26,4],
+      'flow skip tag': [46,108,10,4], 'flow edit button': [64,107,6,6], 'flow connector': [11,115,1.5,3],
+      'reset progress': [6,134,24,4]
+    }},
+    panelEdit: { vb: '0 0 80 150', furn: [[6,22,68,18]], parts: {
+      'breadcrumb': [6,5,52,7], 'scope line': [6,15,44,4],
+      'field group': [6,44,68,16], 'group title': [6,44,26,4],
+      'plans group': [6,44,68,16], 'header group': [6,64,68,16],
+      'pricing group': [6,84,68,16], 'add-on group': [6,104,68,14],
+      'competitions group': [6,122,68,12], 'features group': [6,138,68,10]
+    }},
+    groupPlans: { vb: '0 0 80 44', parts: {
+      'plan tabs': [4,4,72,10], 'plan tab': [4,4,24,10],
+      'plan not sold note': [4,18,72,8], 'no plans message': [4,30,72,8]
+    }},
+    groupHeader: { vb: '0 0 80 76', parts: {
+      'badge field': [4,4,72,14], 'ultimate toggle': [4,21,72,12],
+      'plan name field': [4,36,72,14], 'description field': [4,53,72,20]
+    }},
+    groupPricing: { vb: '0 0 80 82', parts: {
+      'cadence field': [4,4,72,14], 'apply discount toggle': [4,21,72,12],
+      'standard price field': [4,36,72,14], 'discount price field': [4,53,72,14],
+      'not sold at this cadence': [4,70,72,9]
+    }},
+    groupAddon: { vb: '0 0 80 66', parts: {
+      'add-on field': [4,4,72,14], 'paid-for field': [4,21,72,14],
+      'discount percent field': [4,38,72,14], 'no offer note': [4,55,72,8]
+    }},
+    groupComps: { vb: '0 0 80 54', parts: {
+      'logo picker': [4,4,72,22], 'logo button': [4,4,10,10],
+      'logo order hint': [4,29,44,4], 'competitions total field': [4,36,72,14]
+    }},
+    groupFeatures: { vb: '0 0 80 56', parts: {
+      'feature row': [4,4,72,34], 'feature picker': [6,6,68,14],
+      'line text field': [6,21,68,10], 'remove feature': [56,33,16,4],
+      'add feature': [4,44,24,6]
+    }},
+    assistant: { vb: '0 0 80 70', parts: {
+      'assistant': [0,0,80,70], 'assistant head': [4,4,72,10], 'assistant title': [6,5,26,4],
+      'assistant hint': [6,10,60,3], 'assistant list': [4,16,72,34],
+      'assistant prompts': [6,18,68,14], 'assistant off note': [6,18,68,10],
+      'assistant turn': [6,18,68,8], 'proposal card': [6,28,68,18],
+      'proposal summary': [8,30,60,4], 'proposal changes': [8,35,60,8], 'apply button': [8,44,20,5],
+      'assistant compose': [4,53,72,13], 'assistant input': [6,55,54,9], 'send button': [62,55,12,9]
+    }},
+    overview: { vb: '0 0 160 96', parts: {
+      'frames block': [0,0,160,96], 'row caption': [4,4,60,5], 'drag hint': [66,4,38,5],
+      'reordered chip': [106,4,22,5], 'reset order': [130,4,18,5],
+      'frames row': [0,12,160,82], 'step group': [5,15,48,76],
+      'step label': [7,17,22,5], 'state count': [30,17,9,5], 'skip tag': [41,17,9,5],
+      'tiles strip': [7,24,44,64], 'step tile': [8,25,20,62], 'tile number': [9,26,5,4],
+      'thumbnail': [9,31,18,46], 'frame name': [9,79,18,3], 'state label': [9,83,18,3]
+    }},
+    stepview: { vb: '0 0 160 96', parts: {
+      'step preview': [0,0,160,96], 'entry line': [6,5,100,12], 'step name': [6,5,26,5],
+      'step meta': [34,5,40,5], 'inbound seeds': [6,11,50,4],
+      'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
+      'placeholder frame name': [50,26,60,5], 'placeholder states': [50,33,60,4],
+      'placeholder gates': [50,39,60,10], 'placeholder note': [50,51,60,4],
+      'placeholder warning': [50,57,60,4]
+    }},
+    card: { vb: '0 0 70 136', parts: {
+      'set scroller': [0,0,70,136], 'card set': [1,1,68,134], 'card': [4,4,62,128],
+      'badge': [4,4,28,8], 'card body': [8,14,54,110],
+      'card header': [10,16,50,22], 'plan name': [10,16,34,6], 'description': [10,25,50,13],
+      'more button': [10,34,14,4], 'card divider': [10,42,50,1.5],
+      'pricing': [10,47,50,19], 'price caption': [10,47,20,4], 'price': [10,52,26,7],
+      'crossed price': [38,53,14,5], 'price explainer': [10,60,40,3], 'instalment line': [10,63,40,3],
+      'plan CTA': [10,68,50,17], 'savings ribbon': [10,68,50,5], 'get button': [10,74,50,11],
+      'logo tiles': [10,88,50,10], 'logo tile': [10,88,9,10], 'overflow tile': [51,88,9,10],
+      'add-on panel': [10,101,50,11],
+      'features list': [10,115,50,10], 'card feature row': [10,115,50,4], 'feature text': [17,115,43,4],
+      'card footer': [4,125,62,7]
+    }},
+    cardAddon: { vb: '0 0 60 40', parts: {
+      'add-on artwork': [4,4,12,12], 'add-on title': [19,5,30,5], 'add-on subtitle': [19,11,26,4],
+      'add-on status': [4,20,30,5], 'add-on divider': [4,27,52,1.5], 'add-on footer': [4,31,52,5]
+    }},
+    cardStates: { vb: '0 0 70 40', parts: {
+      'empty set message': [4,4,62,14], 'measuring probe': [4,22,62,14]
+    }},
+    ds: { vb: '0 0 90 84', parts: {
+      'text field': [6,5,78,15], 'field label': [10,7,22,4], 'select field': [6,24,78,15],
+      'icon': [74,29,6,6], 'toggle field': [6,43,78,13], 'help text': [10,59,42,4],
+      'button': [6,66,32,10]
+    }}
+  };
+  // ── Areas ─────────────────────────────────────────────
+  // Read off the components. [id, title, view, blurb, rows] — view is which
+  // tab it appears under; 'both' shows in each.
+  var AREAS = [
+    ['panel-default', 'Panel', 'default', 'The left column when you are not editing a step. It asks which situation you are writing content for.', [
+      ['upload button', '.demo__upload', 'Says "Upload Spreadsheet or JSON". Loads content in from a file. It sits first because nothing under it means anything until there is content.', 'panelDefault'],
+      ['import error', '.demo__error', 'Red text under the upload button when a file cannot be read.', 'panelDefault'],
+      ['context fields', '.demo__fields', 'The dropdowns as a set. Four of them normally, five when your answers describe more than one journey.', 'panelDefault'],
+      ['market', 'dropdown 1', 'Which country you are writing for — or "Base", meaning the shared content every country starts from. The help text under it tells you which of the two you are doing.', 'panelDefault'],
+      ['storefront', 'dropdown 2', 'Whether you are selling directly or through a partner like Movistar. Only partners that actually operate in the chosen country are listed.', 'panelDefault'],
+      ['user status', 'dropdown 3', 'Who is buying: someone logged out, an existing customer, someone being migrated, or a TVE user. This choice decides which family of journeys you get.', 'panelDefault'],
+      ['entry point', 'dropdown 4', 'Where they clicked in from. Narrowed by the answer above — someone being migrated never arrives from an Upgrade button.', 'panelDefault'],
+      ['which journey', 'dropdown 5', 'Only appears when your four answers describe more than one journey, and lets you pick between them. Most combinations describe exactly one, so most of the time you never see it.', 'panelDefault'],
+      ['user flow', '.uf', 'The journey written out as a numbered list. It is the same information as the tiles on the right, and they share a selection — clicking either opens the same step.', 'panelDefault'],
+      ['flow heading', '.uf__title', 'The words "User flow:" above the list.', 'panelDefault'],
+      ['flow list', '.uf__list', 'The numbered list itself.', 'panelDefault'],
+      ['flow row', '.uf__row', 'One step in the list. Highlights when selected, and dims when the journey skips it.', 'panelDefault'],
+      ['flow dot', '.uf__dot', 'The circle at the left of a row. It holds a tick when that step has fields you can actually edit — today only Subscription does, and the list says so rather than pretending otherwise.', 'panelDefault'],
+      ['flow name', '.uf__name', 'The step name.', 'panelDefault'],
+      ['flow skip tag', '.uf__tag', 'A small "seeded" or "not here" on steps this journey skips. "Seeded" means the entry point already answered that question; "not here" means the step does not exist in this journey.', 'panelDefault'],
+      ['flow edit button', '.uf__edit', 'The pencil that opens a step. Only on steps that have something to edit.', 'panelDefault'],
+      ['flow connector', '.uf__link', 'The short line drawn between one row and the next, so the list reads as a sequence.', 'panelDefault'],
+      ['reset progress', '.demo__reset', 'The link at the bottom. Throws away your local edits and reloads the content the app shipped with.', 'panelDefault'],
+    ]],
+    ['preview-default', 'Preview', 'default', 'The right column when you are not editing. Shows the whole journey at once.', [
+      ['frames block', '.jf', 'The journey overview as a whole.', 'overview'],
+      ['row caption', '.jf__caption', 'The line above the tiles: how many screens across how many steps.', 'overview'],
+      ['drag hint', '.jf__hint', 'The reminder that you can drag a step sideways to reorder it, or hold alt and use the arrow keys.', 'overview'],
+      ['reordered chip', '.jf__reordered', 'A small marker that appears once your order no longer matches the order drawn in Figma.', 'overview'],
+      ['reset order', '.jf__reset', 'Puts the steps back into the Figma order.', 'overview'],
+      ['frames row', '.jf__row', 'The row of screens that scrolls sideways.', 'overview'],
+      ['step group', '.jf__step', 'One step together with all its screens. This is the block you drag when reordering.', 'overview'],
+      ['step label', '.jf__step-name', 'The step name above its screens.', 'overview'],
+      ['state count', '.jf__states', 'Says "· 3 states" when a step is drawn more than one way.', 'overview'],
+      ['skip tag', '.jf__tag', 'A "seeded" or "not here" marker explaining why a step shows nothing.', 'overview'],
+      ['tiles strip', '.jf__tiles', 'The screens belonging to one step, side by side.', 'overview'],
+      ['step tile', '.jf__tile', 'One screen. Click it to edit that step.', 'overview'],
+      ['tile number', '.jf__num', 'Where that screen falls in the flow. A dash when the step is skipped.', 'overview'],
+      ['thumbnail', '.jf__thumb', 'A live miniature of the real screen, built from your actual content. Sized to the proportions of a 375 by 812 phone.', 'overview'],
+      ['frame name', '.jf__frame', 'The Figma frame name, shown on screens that have not been built yet.', 'overview'],
+      ['state label', '.jf__state', 'Which version of the screen this tile is — "default", "alternate plan selected".', 'overview'],
+    ]],
+    ['actions-default', 'Action buttons', 'default', 'The three buttons at the top right when you are not editing a step.', [
+      ['preview button', 'button 1 · secondary', 'Hides the panel so the preview fills the window. Press it again — it now says "Show panel" — to bring the panel back.', 'actionsDefault'],
+      ['export button', 'button 2 · tertiary', 'Says "Export JSON". Downloads all the content as a file. Worth knowing: this is the shape this app stores, not yet the shape the live rule engine reads.', 'actionsDefault'],
+      ['settings button', 'button 3 · tertiary', 'Greyed out and does nothing — there is no settings screen yet. This is the only button that appears in both views, and it is third in both.', 'actionsDefault'],
+    ]],
+    ['panel-edit', 'Panel', 'edit', 'The left column once you have opened a step. Six groups of fields, all scoped to one country, one storefront and one way of paying.', [
+      ['breadcrumb', '.demo__back', 'The line at the top with a back arrow, the journey name and the step name. The whole line is clickable and takes you back.', 'panelEdit'],
+      ['scope line', '.demo__scope', 'Reads like "Spain · direct · Monthly Flex". It tells you exactly what the fields below apply to — the same field holds a different value in a different country or at a different cadence.', 'panelEdit'],
+      ['field group', '.demo__group', 'One titled block of fields. There are six of them.', 'panelEdit'],
+      ['group title', '.demo__group-title', 'The heading on a group. Pricing adds the currency to its heading.', 'panelEdit'],
+      ['plans group', 'group 1 · Plans', 'Which plan you are editing.', 'panelEdit'],
+      ['header group', 'group 2 · Header', 'The words at the top of the card.', 'panelEdit'],
+      ['pricing group', 'group 3 · Pricing', 'What it costs and how you pay.', 'panelEdit'],
+      ['add-on group', 'group 4 · Add-on', 'An extra product attached to the plan.', 'panelEdit'],
+      ['competitions group', 'group 5 · Competitions', 'Which competition logos show on the card.', 'panelEdit'],
+      ['features group', 'group 6 · Features', 'The bullet list of what you get.', 'panelEdit'],
+    ]],
+    ['group-plans', 'Plans group', 'edit', 'Group 1. Picks which plan the rest of the panel is about.', [
+      ['plan tabs', '.ed-tabs', 'The row of plan names you switch between. Not a setting — it chooses which plan the whole panel below is editing.', 'groupPlans'],
+      ['plan tab', '.ed-tab', 'One plan name. Dimmed when that plan is not sold in the situation you picked, and hovering it tells you why.', 'groupPlans'],
+      ['plan not sold note', '.ed-absent', 'Appears when you are looking at a plan this situation does not sell. It says why, and reassures you that your edits still apply everywhere the plan does sell.', 'groupPlans'],
+      ['no plans message', '.ed-placeholder · plans', 'What the panel says instead of a form when the content has no plans at all.', 'groupPlans'],
+    ]],
+    ['group-header', 'Header group', 'edit', 'Group 2. The words at the top of the card.', [
+      ['badge field', 'Badge', 'Shows "Best experience" and is read-only — you cannot type in it. It fills in by itself when you turn on Ultimate treatment below.', 'groupHeader'],
+      ['ultimate toggle', 'Ultimate Treatment', 'The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it.', 'groupHeader'],
+      ['plan name field', 'Plan name', 'The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label.', 'groupHeader'],
+      ['description field', 'Description', 'The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to.', 'groupHeader'],
+    ]],
+    ['group-pricing', 'Pricing group', 'edit', 'Group 3. What it costs. Every price here belongs to one way of paying.', [
+      ['cadence field', 'How to pay', 'Monthly Flex, Instalments Annual, or Annual Upfront. Changing it changes which prices you are editing — a plan with no price here simply is not sold that way.', 'groupPricing'],
+      ['apply discount toggle', 'Apply discount', 'Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change.', 'groupPricing'],
+      ['standard price field', 'Standard price', 'The normal price, in the currency of the country you picked.', 'groupPricing'],
+      ['discount price field', 'Discount price', 'The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount.', 'groupPricing'],
+      ['not sold at this cadence', '.ed-placeholder · pricing', 'Replaces the price fields when this plan is not sold at the chosen cadence. It says plainly that this is a fact about the plan, not something missing that you need to fill in.', 'groupPricing'],
+    ]],
+    ['group-addon', 'Add-on group', 'edit', 'Group 4. An extra product attached to this price.', [
+      ['add-on field', 'Add-on', 'Which extra product goes with this plan, and whether it is sold separately or included in the price. Each add-on appears twice in the list, once as "sold" and once as "bundled" — it can never be both.', 'groupAddon'],
+      ['paid-for field', 'How it is paid for', 'Only when the add-on is sold rather than bundled. Either a one-off payment, or a discount code the customer redeems.', 'groupAddon'],
+      ['discount percent field', 'Discount percent', 'Only when the add-on is sold with a discount code. How much off, as a number between 1 and 99.', 'groupAddon'],
+      ['no offer note', '.ed-placeholder · add-on', 'Replaces the add-on fields when the plan has no price at this cadence, since there is nothing to attach an add-on to.', 'groupAddon'],
+    ]],
+    ['group-comps', 'Competitions group', 'edit', 'Group 5. Which competition logos appear on the card.', [
+      ['logo picker', '.ed-logos', 'The grid of competition logos you click to switch on and off.', 'groupComps'],
+      ['logo button', '.ed-logo', 'One competition. Hovering shows its name.', 'groupComps'],
+      ['logo order hint', '.tg__hint', 'The reminder that logos appear on the card in the order you clicked them.', 'groupComps'],
+      ['competitions total field', 'Total number of competitions', 'How many competitions the plan carries in total, which is usually more than the logos shown. The card works out the "+5" tile from this number minus the logos on display.', 'groupComps'],
+    ]],
+    ['group-features', 'Features group', 'edit', 'Group 6. The bullet list of what you get.', [
+      ['feature row', '.demo__feature', 'One line of the list, with its picker and — when the line is a custom one — the box to type it in.', 'groupFeatures'],
+      ['feature picker', 'Feature 1, 2, 3…', 'Choose a line from the shared library, or pick "Custom line…" at the bottom to write a new one. Retired lines are still listed, marked "(retired)", so old content keeps working.', 'groupFeatures'],
+      ['line text field', 'Line text', 'Where you type a custom line. What you write is saved into the shared library, so it can be reused on other plans.', 'groupFeatures'],
+      ['remove feature', '.demo__feature-remove', 'Takes that line off this plan. It stays in the library.', 'groupFeatures'],
+      ['add feature', 'Add feature', 'Adds another line to the list.', 'groupFeatures'],
+    ]],
+    ['preview-edit', 'Preview', 'edit', 'The right column once you have opened a step. Shows just that one screen.', [
+      ['step preview', '.jy', 'The step preview as a whole.', 'stepview'],
+      ['entry line', '.jy__entry', 'The line of context above the screen.', 'stepview'],
+      ['step name', '.jy__step-name', 'Which step you are looking at.', 'stepview'],
+      ['step meta', '.jy__meta', 'Where this step sits in the flow, what the customer clicked to get here, and how many plans are in the set.', 'stepview'],
+      ['inbound seeds', '.jy__seeds', 'What the entry point already decided before the customer got here — so you know which questions this screen no longer has to ask.', 'stepview'],
+      ['viewport', '.jy__viewport', 'The frame the real screen renders inside. Sized to a 375-wide phone when the set is a mobile one.', 'stepview'],
+      ['placeholder screen', '.jy__placeholder', 'What you see instead of a real screen when that step has not been built yet. It tells you everything known about the screen so far.', 'stepview'],
+      ['placeholder frame name', '.jy__frame', 'The name of the Figma frame this screen will be built from.', 'stepview'],
+      ['placeholder states', '.jy__states', 'The different versions this screen is drawn in.', 'stepview'],
+      ['placeholder gates', '.jy__requires', 'The conditions the real product checks before showing this screen.', 'stepview'],
+      ['placeholder note', '.jy__note', 'A free note about the screen. The same style also carries the message when a journey has no steps in the chosen country.', 'stepview'],
+      ['placeholder warning', '.jy__todo', 'The line reading "Placeholder — this screen isn’t built yet."', 'stepview'],
+    ]],
+    ['actions-edit', 'Action buttons', 'edit', 'The buttons at the top right once you have opened a step. Settings sits third here too.', [
+      ['save button', 'button 1 · primary', 'Says "Save changes". Asks you what changed, then publishes to the shared copy. Greyed out when there is nothing new to save, and reads "Saving…" while it works. Your typing is kept locally the whole time — this button is about sharing it, not about not losing it.', 'actionsEdit'],
+      ['exit button', 'button 2 · secondary', 'Says "Exit edit mode". Closes the step and goes back to the journey overview. It does not discard anything.', 'actionsEdit'],
+    ]],
+    ['assistant', 'Assistant', 'both', 'Sits above the fields in both views. Switched off until an API key is set, and it never changes anything on its own.', [
+      ['assistant', '.as', 'The whole assistant block.', 'assistant'],
+      ['assistant head', '.as__head', 'Its title and the line under it.', 'assistant'],
+      ['assistant title', '.as__title', 'Reads "Assistant", or "Assistant · off" when there is no key.', 'assistant'],
+      ['assistant hint', '.as__hint', 'The short explanation under the title.', 'assistant'],
+      ['assistant off note', '.as__off', 'What it shows instead of a conversation when there is no key.', 'assistant'],
+      ['assistant list', '.as__list', 'The conversation so far. Scrolls on its own.', 'assistant'],
+      ['assistant prompts', '.as__empty', 'Three suggested questions, shown before you have asked anything.', 'assistant'],
+      ['assistant turn', '.as__turn', 'One message, yours or its.', 'assistant'],
+      ['proposal card', '.as__proposal', 'A set of changes it is suggesting. Nothing happens until you press apply.', 'assistant'],
+      ['proposal summary', '.as__proposal-summary', 'Its one-line description of what it is proposing.', 'assistant'],
+      ['proposal changes', '.as__changes', 'The changes themselves — which country each applies to, and the new value.', 'assistant'],
+      ['apply button', '.as__apply', 'Writes the proposal into your content. Greys out once used, so you cannot apply the same thing twice.', 'assistant'],
+      ['assistant compose', '.as__compose', 'The row where you type.', 'assistant'],
+      ['assistant input', '.as__input', 'The box you type your question into.', 'assistant'],
+      ['send button', '.as__send', 'Greyed out while it is thinking, and while the box is empty.', 'assistant'],
+    ]],
+    ['card', 'The card', 'both', 'The plan card itself. This is what renders in the preview and inside every thumbnail.', [
+      ['set scroller', '.acq-set-scroll', 'The scrolling wrapper around the row of cards, for when they do not all fit.', 'card'],
+      ['card set', '.acq-set', 'The row of cards. It measures all of them and gives them one shared description height and one shared card height, so they line up.', 'card'],
+      ['card', '.acq-card', 'One plan card. Gains a gold outline when it is the Ultimate one.', 'card'],
+      ['badge', '.acq-card__eyebrow', 'The "BEST EXPERIENCE" label on the top edge. Comes from the Ultimate toggle, and only one card in a set can have it.', 'card'],
+      ['card body', '.acq-card__body', 'Everything inside the card except the footer.', 'card'],
+      ['card header', '.acq-card-header', 'The plan name and description together.', 'card'],
+      ['plan name', '.acq-card-header__title', 'The name at the top. Gets the gold treatment on the Ultimate card.', 'card'],
+      ['description', '.acq-card-header__description', 'The paragraph. Measured against the other cards and cut to the shared height.', 'card'],
+      ['more button', '.acq-card-header__more', 'The "… more" link, which only appears when the description is too long to fit.', 'card'],
+      ['card divider', '.acq-card__divider', 'The line between the header and the price.', 'card'],
+      ['pricing', '.acq-pricing', 'The whole price block.', 'card'],
+      ['price caption', '.acq-pricing__caption', 'The small "Starts at" above the number.', 'card'],
+      ['price', '.acq-pricing__price', 'The number people actually read.', 'card'],
+      ['crossed price', '.acq-pricing__crossed', 'The struck-through standard price, shown only when there is a discount.', 'card'],
+      ['price explainer', '.acq-pricing__extra', 'The sentence under the price explaining the offer.', 'card'],
+      ['instalment line', '.acq-pricing__installment', 'The line spelling out the monthly instalment on an annual plan.', 'card'],
+      ['plan CTA', '.acq-plan-cta', 'The savings line and the Get button together as one block.', 'card'],
+      ['savings ribbon', '.acq-plan-cta__eyebrow', 'The "Save up to €108 / year" line. Worked out from the two prices, not typed.', 'card'],
+      ['get button', '.acq-plan-cta__stack', 'The button that starts the purchase. Gold on the Ultimate card.', 'card'],
+      ['logo tiles', '.acq-logo-tiles', 'The row of competition logos, in the order they were picked.', 'card'],
+      ['logo tile', '.acq-logo-tiles__tile', 'One competition logo.', 'card'],
+      ['overflow tile', '.acq-logo-tiles__tile--overflow', 'The "+5" tile. Worked out from the total you entered minus the logos on show — not something you pick.', 'card'],
+      ['add-on panel', '.acq-addon', 'The block advertising the extra product.', 'card'],
+      ['features list', '.acq-features', 'The bullet list as a block.', 'card'],
+      ['card feature row', '.acq-feature', 'One bullet: an icon and a line of text.', 'card'],
+      ['feature text', '.acq-feature__text', 'The words of one bullet.', 'card'],
+      ['card footer', '.acq-card__footer', 'The "All features & content" bar across the bottom, edge to edge.', 'card'],
+    ]],
+    ['card-addon', 'The card — add-on panel', 'both', 'The inside of the add-on block on the card.', [
+      ['add-on artwork', '.acq-addon__image', 'The picture of the add-on.', 'cardAddon'],
+      ['add-on title', '.acq-addon__title', 'Its name.', 'cardAddon'],
+      ['add-on subtitle', '.acq-addon__subtitle', 'The line under the name.', 'cardAddon'],
+      ['add-on status', '.acq-addon__status', 'How it is offered. Three versions: included in the price, a payment, or a discount code — and the styling differs for each.', 'cardAddon'],
+      ['add-on divider', '.acq-addon__divider', 'The line inside the block.', 'cardAddon'],
+      ['add-on footer', '.acq-addon__footer', 'The bottom row of the block.', 'cardAddon'],
+    ]],
+    ['card-states', 'The card — rare states', 'both', 'Two things the card set does that are easy to forget exist.', [
+      ['empty set message', '.acq-set__empty', 'What shows when there are no cards to draw at all.', 'cardStates'],
+      ['measuring probe', '.acq-set__probe', 'An invisible copy of the text used to measure how tall things need to be, before the real cards are drawn. You never see it, but it is why the cards line up.', 'cardStates'],
+    ]],
+    ['shell', 'Shell', 'archive', 'The frame around everything. Looks the same whichever view you are in.', [
+      ['page', '.page.demo', 'The outermost wrapper. Carries the flags for panel-hidden and panel-collapsed, so anything that should react to those hangs off it.', 'shell'],
+      ['top bar', '.demo__top', 'The strip across the very top. Stays put while everything below it scrolls.', 'shell'],
+      ['brand strip', '.demo__brand', 'The left half of the top bar. It sits above the panel, and changes background to match whichever column is underneath it.', 'shell'],
+      ['mark', '.demo__mark', 'The DAZN logo.', 'shell'],
+      ['product title', '.demo__title', 'The words "Acquisition model".', 'shell'],
+      ['beta chip', '.demo__beta', 'The small outlined BETA label next to the title.', 'shell'],
+      ['collapse control', '.demo__collapse', 'The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips.', 'shell'],
+      ['status bar', '.demo__statusbar', 'The right half of the top bar. Tells you whether you can publish, and holds the buttons.', 'shell'],
+      ['publish gate', '.demo__gate', 'Says either "Publish ready" with the number of situations checked, or "Publish blocked" with how many are failing. It checks every market and storefront combination, not just the one you are looking at.', 'shell'],
+      ['action buttons', '.demo__actions', 'The group of three buttons at the far right. Which three you get depends on the view.', 'shell'],
+      ['save note', '.demo__savenote', 'A one-line message under the top bar confirming a save worked, or explaining why it did not. Only appears after you have saved.', 'shell'],
+      ['body', '.demo__body', 'Everything under the top bar: the left column and the right column side by side.', 'shell'],
+      ['rail', '.demo__rail', 'The track the panel slides inside. This is the thing that actually shrinks when you collapse — the panel keeps its width and gets clipped.', 'shell'],
+      ['panel', '.demo__panel', 'The 360px left column. Scrolls on its own, and its contents change completely between the two views.', 'shell'],
+      ['preview pane', '.demo__preview', 'The right column, showing what you are building. Scrolls on its own, and widens to fill the space when the panel is collapsed.', 'shell'],
+    ]],
+    ['ds', 'Design system', 'archive', 'Shared components. Change one and it changes everywhere it is used.', [
+      ['text field', '.dz-field', 'The standard text box. 56 tall, with the label floating up when you type in it.', 'ds'],
+      ['select field', '.dz-field--select', 'The dropdown. Same box with an arrow; its label sits up top permanently rather than floating.', 'ds'],
+      ['toggle field', 'ToggleField', 'The on/off switch, used for Ultimate treatment and Apply discount. It comes in tones — gold for Ultimate, green for discount.', 'ds'],
+      ['field label', '.dz-field__label', 'The label inside a field.', 'ds'],
+      ['help text', '.dz-field__help', 'The explanatory line under a field.', 'ds'],
+      ['button', '.dazn-btn', 'The button. Four looks — primary, secondary, subscribe, tertiary — and two heights.', 'ds'],
+      ['icon', '.dazn-icon', 'Any icon from the design system. Takes its colour from the text around it.', 'ds'],
+    ]],
+    ['routes', 'Routes', 'archive', 'Three pages. If you do not say which, I will assume demo 1.', [
+      ['index', '/', 'The front door. Two links and nothing else.', 'routes'],
+      ['demo 1', '/demo', 'The tool. Everything below lives here.', 'routes'],
+      ['demo 2', '/demo2', 'The old first attempt, kept only so we can compare. It has its own components, which are not listed here.', 'routes'],
+    ]],
+  ];
+
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function rect(r, cls) {
+    var el = document.createElementNS(SVGNS, 'rect');
+    el.setAttribute('x', r[0]); el.setAttribute('y', r[1]);
+    el.setAttribute('width', r[2]); el.setAttribute('height', r[3]);
+    el.setAttribute('rx', '1.5');
+    el.setAttribute('class', cls);
+    return el;
+  }
+  function wireframe(mapId, part) {
+    var map = MAPS[mapId];
+    if (!map || !map.parts[part]) return null;
+    var svg = document.createElementNS(SVGNS, 'svg');
+    svg.setAttribute('viewBox', map.vb);
+    svg.setAttribute('class', 'vis');
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Where ' + part + ' sits');
+    (map.furn || []).forEach(function (f) { svg.appendChild(rect(f, 'w')); });
+    Object.keys(map.parts).forEach(function (k) {
+      if (k !== part) svg.appendChild(rect(map.parts[k], 'w'));
+    });
+    var r = map.parts[part];
+    // Big regions get a wash and an edge; small ones read better filled solid.
+    if (r[2] * r[3] > 1400) {
+      svg.appendChild(rect(r, 'on-wash'));
+      svg.appendChild(rect(r, 'on-edge'));
+    } else {
+      svg.appendChild(rect(r, 'on-fill'));
+    }
+    return svg;
+  }
+
+  var CUSTOM_ID = 'custom';
+  var TABS = [
+    { id: 'default', label: 'Default view', note: 'Before you open a step' },
+    { id: 'edit', label: 'Edit view', note: 'Once a step is open' },
+    { id: 'archive', label: 'Archive', note: 'The frame, and the shared bits' }
+  ];
+  var KEY = 'acq-feedback-v4';
+  var PRIS = ['now', 'next', 'idea'];
+  var PRI_LABEL = { now: 'Now', next: 'Next', idea: 'Idea' };
+  // Sections that sit in both tabs open closed, so each tab lands on its own work.
+  var SHARED_SHUT = ['assistant', 'card', 'card-addon', 'card-states'];
+
+  var store = { notes: {}, pri: {}, custom: [], shut: null, tab: 'default' };
+  try {
+    var raw = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (raw && raw.notes) {
+      store = {
+        notes: raw.notes || {}, pri: raw.pri || {}, custom: raw.custom || [],
+        shut: raw.shut || {}, tab: ['edit', 'archive'].indexOf(raw.tab) >= 0 ? raw.tab : 'default'
+      };
+    } else {
+      // Carry notes forward from earlier versions of this page.
+      var old = JSON.parse(localStorage.getItem('acq-feedback-v3') ||
+                           localStorage.getItem('acq-feedback-v2') || 'null');
+      if (old && old.notes) { store.notes = old.notes; store.pri = old.pri || {}; store.custom = old.custom || []; }
+      else {
+        var v1 = JSON.parse(localStorage.getItem('acq-feedback-v1') || 'null');
+        if (v1) store.notes = v1;
+      }
+    }
+  } catch (e) { /* private mode, or nothing saved */ }
+  if (!store.shut) {
+    store.shut = {};
+    SHARED_SHUT.forEach(function (id) { store.shut[id] = true; });
+  }
+
+  var sheet = document.getElementById('sheet');
+  var jump = document.getElementById('jump');
+  var tabsEl = document.getElementById('tabs');
+  var tally = document.getElementById('tally');
+  var toast = document.getElementById('toast');
+  var noresults = document.getElementById('noresults');
+  var search = document.getElementById('q');
+  var onlyBtn = document.getElementById('onlynoted');
+  var foldBtn = document.getElementById('foldall');
+  var onlyNoted = false;
+  var toastTimer;
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) { /* private mode */ }
+  }
+  function say(msg) {
+    toast.textContent = msg;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.textContent = ''; }, 2800);
+  }
+  function noted(name) { return (store.notes[name] || '').trim(); }
+  function grow(ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+  function esc(s) { return s.replace(/"/g, '\\"'); }
+
+  function groups() {
+    return AREAS.concat([[CUSTOM_ID, 'Your own', 'both',
+      'Anything with no name yet. Say what it does and where, and I will name it.',
+      store.custom.map(function (c) {
+        return [c.name, c.anchor || 'added by you', c.what || '', null];
+      })]]);
+  }
+  function inTab(g, tab) {
+    if (g[2] === tab) return true;
+    return g[2] === 'both' && tab !== 'archive';
+  }
+  /** How a section is titled outside the tabs — in the copy, where there is no tab. */
+  function fullTitle(g) {
+    if (g[2] === 'default') return 'Default view — ' + g[1];
+    if (g[2] === 'edit') return 'Edit view — ' + g[1];
+    return g[1];
+  }
+
+  // ── Tabs ──────────────────────────────────────────────
+  function buildTabs() {
+    tabsEl.textContent = '';
+    TABS.forEach(function (t) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'tab';
+      b.dataset.tab = t.id;
+      b.setAttribute('aria-selected', store.tab === t.id ? 'true' : 'false');
+
+      var label = document.createElement('span');
+      label.className = 'tab__label';
+      label.textContent = t.label;
+      var note = document.createElement('span');
+      note.className = 'tab__note';
+      note.textContent = t.note;
+      var badge = document.createElement('span');
+      badge.className = 'tab__badge';
+      badge.dataset.for = t.id;
+
+      b.appendChild(label); b.appendChild(note); b.appendChild(badge);
+      b.addEventListener('click', function () {
+        if (store.tab === t.id) return;
+        store.tab = t.id;
+        save();
+        render();
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      });
+      tabsEl.appendChild(b);
+    });
+  }
+
+  // ── Render ────────────────────────────────────────────
+  function buildRow(name, anchor, what, mapId, isCustom) {
+    var el = document.createElement('div');
+    el.className = 'row';
+    el.dataset.hay = (name + ' ' + anchor + ' ' + what).toLowerCase();
+    el.dataset.name = name;
+
+    var c1 = document.createElement('div');
+    c1.className = 'name';
+    c1.textContent = name;
+    var a = document.createElement('code');
+    a.className = 'anchor';
+    a.textContent = anchor;
+    c1.appendChild(a);
+
+    var c2 = document.createElement('div');
+    var art = mapId ? wireframe(mapId, name) : null;
+    if (art) c2.appendChild(art);
+    else {
+      var none = document.createElement('div');
+      none.className = 'vis-none';
+      none.textContent = 'no map yet';
+      c2.appendChild(none);
+    }
+
+    var c3 = document.createElement('div');
+    c3.className = 'what';
+    c3.textContent = what;
+
+    var c4 = document.createElement('div');
+    c4.className = 'cell';
+
+    var ta = document.createElement('textarea');
+    ta.rows = 1;
+    ta.placeholder = 'What should change here?';
+    ta.value = store.notes[name] || '';
+    ta.setAttribute('aria-label', 'Feedback for ' + name);
+
+    var pri = document.createElement('div');
+    pri.className = 'pri';
+    PRIS.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.p = p;
+      b.textContent = PRI_LABEL[p];
+      b.setAttribute('aria-label', PRI_LABEL[p] + ' — ' + name);
+      b.addEventListener('click', function () {
+        if (store.pri[name] === p) delete store.pri[name];
+        else store.pri[name] = p;
+        paintRow(el, name, pri);
+        save();
+        recount();
+      });
+      pri.appendChild(b);
+    });
+
+    ta.addEventListener('input', function () {
+      store.notes[name] = ta.value;
+      grow(ta);
+      paintRow(el, name, pri);
+      save();
+      recount();
+      if (onlyNoted) applyFilter();
+    });
+
+    c4.appendChild(ta);
+    c4.appendChild(pri);
+
+    if (isCustom) {
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'drop';
+      del.textContent = 'Remove this area';
+      del.addEventListener('click', function () {
+        store.custom = store.custom.filter(function (c) { return c.name !== name; });
+        delete store.notes[name];
+        delete store.pri[name];
+        save();
+        render();
+      });
+      c4.appendChild(del);
+    }
+
+    el.appendChild(c1); el.appendChild(c2); el.appendChild(c3); el.appendChild(c4);
+    paintRow(el, name, pri);
+    requestAnimationFrame(function () { grow(ta); });
+    return el;
+  }
+
+  function paintRow(el, name, pri) {
+    if (noted(name)) el.setAttribute('data-note', '');
+    else el.removeAttribute('data-note');
+    if (store.pri[name]) el.setAttribute('data-pri', store.pri[name]);
+    else el.removeAttribute('data-pri');
+    Array.prototype.forEach.call(pri.children, function (b) {
+      b.setAttribute('aria-pressed', store.pri[name] === b.dataset.p ? 'true' : 'false');
+    });
+  }
+
+  function render() {
+    sheet.textContent = '';
+    jump.textContent = '';
+    Array.prototype.forEach.call(tabsEl.children, function (b) {
+      b.setAttribute('aria-selected', b.dataset.tab === store.tab ? 'true' : 'false');
+    });
+
+    groups().filter(function (g) { return inTab(g, store.tab); }).forEach(function (group) {
+      var id = group[0], title = group[1], view = group[2], blurb = group[3], rows = group[4];
+      var isCustom = id === CUSTOM_ID;
+      var domId = 'sec-' + id;
+
+      var sec = document.createElement('section');
+      sec.id = domId;
+      sec.dataset.sec = id;
+      sec.dataset.view = view;
+      if (store.shut[id]) sec.className = 'shut';
+
+      var head = document.createElement('button');
+      head.type = 'button';
+      head.className = 'sec-head';
+      head.setAttribute('aria-expanded', store.shut[id] ? 'false' : 'true');
+
+      var chev = document.createElement('span');
+      chev.className = 'sec-head__chev';
+      var h2 = document.createElement('h2');
+      h2.className = 'sec-head__title';
+      h2.textContent = title;
+      var count = document.createElement('span');
+      count.className = 'sec-head__count';
+      count.dataset.for = id;
+
+      head.appendChild(chev); head.appendChild(h2);
+      if (view === 'both') {
+        var shared = document.createElement('span');
+        shared.className = 'sec-head__shared';
+        shared.textContent = 'both views';
+        head.appendChild(shared);
+      }
+      head.appendChild(count);
+      head.addEventListener('click', function () {
+        var shut = !sec.classList.contains('shut');
+        sec.classList.toggle('shut', shut);
+        head.setAttribute('aria-expanded', shut ? 'false' : 'true');
+        if (shut) store.shut[id] = true; else delete store.shut[id];
+        save();
+        syncFoldButton();
+      });
+      sec.appendChild(head);
+
+      if (blurb) {
+        var p = document.createElement('p');
+        p.className = 'sec-blurb';
+        p.textContent = blurb;
+        sec.appendChild(p);
+      }
+
+      rows.forEach(function (r) {
+        sec.appendChild(buildRow(r[0], r[1], r[2], r[3], isCustom));
+      });
+
+      if (isCustom) {
+        var wrap = document.createElement('div');
+        wrap.className = 'addrow';
+        var add = document.createElement('button');
+        add.type = 'button';
+        add.className = 'act';
+        add.textContent = 'Add an area';
+        add.addEventListener('click', function () {
+          var nm = prompt('What is it called? If it has no name yet, describe it and I will name it.');
+          if (!nm || !nm.trim()) return;
+          nm = nm.trim();
+          if (store.custom.some(function (c) { return c.name === nm; })) { say('That one is already listed'); return; }
+          var where = prompt('Where is it? A selector, a screen, or just "top right of the panel".') || 'added by you';
+          store.custom.push({ name: nm, anchor: where.trim(), what: '' });
+          delete store.shut[CUSTOM_ID];
+          save();
+          render();
+          var t = sheet.querySelector('[data-name="' + esc(nm) + '"] textarea');
+          if (t) t.focus();
+        });
+        wrap.appendChild(add);
+        sec.appendChild(wrap);
+      }
+
+      sheet.appendChild(sec);
+
+      var link = document.createElement('a');
+      link.href = '#' + domId;
+      link.textContent = title;
+      if (view === 'both') link.dataset.shared = '';
+      link.addEventListener('click', function () {
+        sec.classList.remove('shut');
+        head.setAttribute('aria-expanded', 'true');
+        delete store.shut[id];
+        save();
+        syncFoldButton();
+      });
+      jump.appendChild(link);
+    });
+
+    recount();
+    syncFoldButton();
+    applyFilter();
+  }
+
+  function syncFoldButton() {
+    var open = 0;
+    Array.prototype.forEach.call(sheet.querySelectorAll('section'), function (s) {
+      if (!s.classList.contains('shut')) open++;
+    });
+    foldBtn.textContent = open === 0 ? 'Expand all' : 'Collapse all';
+  }
+
+  foldBtn.addEventListener('click', function () {
+    var expanding = foldBtn.textContent === 'Expand all';
+    Array.prototype.forEach.call(sheet.querySelectorAll('section'), function (s) {
+      s.classList.toggle('shut', !expanding);
+      s.querySelector('.sec-head').setAttribute('aria-expanded', expanding ? 'true' : 'false');
+      if (expanding) delete store.shut[s.dataset.sec]; else store.shut[s.dataset.sec] = true;
+    });
+    save();
+    syncFoldButton();
+  });
+
+  // ── Counts ────────────────────────────────────────────
+  function recount() {
+    var counts = { now: 0, next: 0, idea: 0, none: 0 };
+    var total = 0;
+    var perTab = { default: 0, edit: 0, archive: 0 };
+
+    groups().forEach(function (group) {
+      var n = 0;
+      group[4].forEach(function (r) {
+        if (!noted(r[0])) return;
+        n++; total++;
+        counts[store.pri[r[0]] || 'none']++;
+      });
+      if (n) {
+        if (group[2] === 'both') { perTab.default += n; perTab.edit += n; }
+        else perTab[group[2]] += n;
+      }
+      var el = sheet.querySelector('[data-for="' + group[0] + '"]');
+      if (!el) return;
+      el.textContent = group[4].length + (group[4].length === 1 ? ' area' : ' areas');
+      if (n) {
+        var b = document.createElement('b');
+        b.textContent = ' · ' + n + ' noted';
+        el.appendChild(b);
+      }
+    });
+
+    TABS.forEach(function (t) {
+      var el = tabsEl.querySelector('[data-for="' + t.id + '"]');
+      if (el) el.textContent = perTab[t.id] ? String(perTab[t.id]) : '';
+    });
+
+    tally.textContent = '';
+    if (!total) { tally.textContent = 'Nothing noted yet'; return; }
+    var b0 = document.createElement('b');
+    b0.textContent = total + ' noted';
+    tally.appendChild(b0);
+    [['now', 'c-now'], ['next', 'c-next'], ['idea', 'c-idea']].forEach(function (p) {
+      if (!counts[p[0]]) return;
+      var s = document.createElement('span');
+      s.className = p[1];
+      s.textContent = '   ' + counts[p[0]] + ' ' + PRI_LABEL[p[0]].toLowerCase();
+      tally.appendChild(s);
+    });
+    if (counts.none) {
+      var s2 = document.createElement('span');
+      s2.textContent = '   ' + counts.none + ' unmarked';
+      tally.appendChild(s2);
+    }
+  }
+
+  // ── Filtering ─────────────────────────────────────────
+  function matches(row, q) {
+    return (!q || row.dataset.hay.indexOf(q) !== -1) &&
+           (!onlyNoted || row.hasAttribute('data-note'));
+  }
+
+  function applyFilter() {
+    var q = search.value.trim().toLowerCase();
+    var filtering = !!q || onlyNoted;
+    var shown = 0;
+
+    Array.prototype.forEach.call(sheet.querySelectorAll('section'), function (sec) {
+      var vis = 0;
+      Array.prototype.forEach.call(sec.querySelectorAll('.row'), function (row) {
+        var ok = matches(row, q);
+        row.hidden = !ok;
+        if (ok) vis++;
+      });
+      // A filter always beats a folded section — matches must be reachable.
+      if (filtering) sec.classList.toggle('shut', vis === 0);
+      else sec.classList.toggle('shut', !!store.shut[sec.dataset.sec]);
+      var keepEmpty = sec.dataset.sec === CUSTOM_ID && !filtering;
+      sec.hidden = vis === 0 && !keepEmpty;
+      shown += vis;
+    });
+
+    // Say how many hits are waiting in the tab you are not looking at.
+    TABS.forEach(function (t) {
+      var el = tabsEl.querySelector('[data-for="' + t.id + '"]');
+      if (!el) return;
+      if (!filtering) return;
+      if (t.id === store.tab) { el.textContent = String(shown); return; }
+      var n = 0;
+      groups().filter(function (g) { return inTab(g, t.id); }).forEach(function (g) {
+        g[4].forEach(function (r) {
+          var hay = (r[0] + ' ' + r[1] + ' ' + r[2]).toLowerCase();
+          var ok = (!q || hay.indexOf(q) !== -1) && (!onlyNoted || noted(r[0]));
+          if (ok) n++;
+        });
+      });
+      el.textContent = n ? String(n) : '';
+    });
+    if (!filtering) recount();
+
+    noresults.hidden = shown > 0;
+  }
+
+  search.addEventListener('input', applyFilter);
+  search.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { search.value = ''; applyFilter(); }
+  });
+  onlyBtn.addEventListener('click', function () {
+    onlyNoted = !onlyNoted;
+    onlyBtn.setAttribute('aria-pressed', onlyNoted ? 'true' : 'false');
+    applyFilter();
+  });
+
+  // ── Copy ──────────────────────────────────────────────
+  // Always exports every note, from both tabs — the tab is a way to look at the
+  // table, not a way to cut down what you send me.
+  document.getElementById('copy').addEventListener('click', function () {
+    var all = [];
+    groups().forEach(function (group) {
+      group[4].forEach(function (r) {
+        if (!noted(r[0])) return;
+        all.push({
+          section: fullTitle(group), name: r[0], anchor: r[1],
+          pri: store.pri[r[0]] || null,
+          text: store.notes[r[0]].trim().replace(/\s+/g, ' ')
+        });
+      });
+    });
+    if (!all.length) { say('Nothing noted yet'); return; }
+
+    var lines = [];
+    function block(items, heading) {
+      lines.push(heading);
+      var last = null;
+      items.forEach(function (x) {
+        if (x.section !== last) { lines.push('### ' + x.section); last = x.section; }
+        lines.push('- **' + x.name + '** (`' + x.anchor + '`) — ' + x.text);
+      });
+      lines.push('');
+    }
+
+    if (all.some(function (x) { return x.pri; })) {
+      [['now', '## Do first'], ['next', '## Then'], ['idea', '## Ideas, no rush'], [null, '## Unmarked']]
+        .forEach(function (g) {
+          var items = all.filter(function (x) { return x.pri === g[0]; });
+          if (items.length) block(items, g[1]);
+        });
+    } else {
+      var last = null;
+      all.forEach(function (x) {
+        if (x.section !== last) { lines.push('## ' + x.section); last = x.section; }
+        lines.push('- **' + x.name + '** (`' + x.anchor + '`) — ' + x.text);
+      });
+    }
+
+    var text = 'Feedback on the acquisition tool — ' + all.length +
+               (all.length === 1 ? ' area' : ' areas') + ':\n\n' + lines.join('\n').trim();
+
+    navigator.clipboard.writeText(text).then(
+      function () { say('Copied ' + all.length + ' from both tabs'); },
+      function () { say('Copy blocked by the browser; select the text by hand'); }
+    );
+  });
+
+  document.getElementById('clear').addEventListener('click', function () {
+    if (!confirm('Clear every note on this page, in both tabs? Areas you added stay.')) return;
+    store.notes = {};
+    store.pri = {};
+    save();
+    render();
+    say('Cleared');
+  });
+
+  function sizeHead() {
+    var top = document.querySelector('.top');
+    if (top) document.documentElement.style.setProperty('--head-h', top.offsetHeight + 'px');
+  }
+  window.addEventListener('resize', sizeHead);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeHead);
+
+  buildTabs();
+  render();
+  sizeHead();
+})();
+</script>

@@ -72,7 +72,7 @@ export function JourneyView({
 
 function StepStub({ step, known }: { step: Step; known: string[] }) {
   return (
-    <div className="jy__stub">
+    <div className="jy__placeholder">
       {step.figmaFrame && <p className="jy__frame">{step.figmaFrame}</p>}
       {known.length > 0 && <p className="jy__known">Inbound: {known.join(', ')}</p>}
       {step.states && (

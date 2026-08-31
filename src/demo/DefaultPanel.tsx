@@ -5,13 +5,13 @@ import { journeys } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
 
 /**
- * Stage one: the situation being authored for.
+ * The default view's fields: the situation being authored for.
  *
  * Four questions, in the order they narrow each other — where it is sold, on
  * whose storefront, to whom, and from where they arrived. The last two pick a
  * journey without anyone having to know journeys have names.
  */
-export function Stage1({ store }: { store: CardSetStore }) {
+export function DefaultPanel({ store }: { store: CardSetStore }) {
   const { set, context, setContext, updateSet, journey } = store
 
   const channelsHere = set.channels.filter(
@@ -79,7 +79,7 @@ export function Stage1({ store }: { store: CardSetStore }) {
           stays three questions rather than four. */}
       {matches.length > 1 && (
         <SelectField
-          label="Which one"
+          label="Which journey"
           helpText={`This situation covers ${matches.length} journeys. They differ after the entry.`}
           value={journey.id}
           options={matches.map((j) => ({ value: j.id, label: j.name }))}

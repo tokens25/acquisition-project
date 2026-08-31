@@ -10,8 +10,8 @@ import { useCardSet } from '../editor/useCardSet'
 import { planJourney } from '../rules/journey'
 import { summarise, validateAll } from '../rules/validate'
 import { Button } from '../components/Button'
-import { Stage1 } from './Stage1'
-import { Stage2 } from './Stage2'
+import { DefaultPanel } from './DefaultPanel'
+import { EditPanel } from './EditPanel'
 import { UserFlow } from './UserFlow'
 import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
@@ -19,8 +19,8 @@ import { JourneyFrames } from './JourneyFrames'
 /**
  * The redesigned interface, at /demo.
  *
- * Two stages rather than one long form. Stage one asks which situation is
- * being authored for; stage two edits one step of the journey that answers.
+ * Two views rather than one long form. The default view asks which situation is
+ * being authored for; the edit view edits one step of the journey that answers.
  * The old interface stays at / until this one earns the swap.
  */
 export function DemoApp() {
@@ -50,7 +50,7 @@ export function DemoApp() {
     setEditing(true)
   }
 
-  // Which set of actions the bar carries. Stage one offers ways to look at and
+  // Which set of actions the bar carries. The default view offers ways to look at and
   // take the content away; edit mode offers ways to commit or leave.
   const actions = editing ? (
     <div className="demo__actions">
@@ -191,7 +191,7 @@ export function DemoApp() {
               <Assistant store={store} />
 
               <div className="demo__fields">
-                <Stage2 store={store} />
+                <EditPanel store={store} />
               </div>
             </>
           ) : (
@@ -217,7 +217,7 @@ export function DemoApp() {
               <Assistant store={store} />
 
               <div className="demo__fields">
-                <Stage1 store={store} />
+                <DefaultPanel store={store} />
               </div>
 
               <UserFlow
