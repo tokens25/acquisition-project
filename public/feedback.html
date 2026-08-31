@@ -65,33 +65,13 @@
     border-bottom: 1px solid var(--line);
   }
   .top__inner {
-    display: flex; flex-direction: column; gap: 12px;
+    display: flex; flex-direction: column; gap: 14px;
     max-width: 1340px; margin: 0 auto; padding: 16px 24px 12px;
   }
   .top__line { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
   h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
   .top__note { margin: 0; color: var(--ink-soft); font-size: 13px; }
 
-  .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .search {
-    flex: 1 1 240px; min-width: 190px;
-    padding: 8px 11px;
-    border: 1px solid var(--line); border-radius: 7px;
-    background: var(--raised); color: var(--ink);
-    font-family: var(--font); font-size: 13.5px;
-  }
-  .search::placeholder { color: var(--ink-soft); }
-  .search:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
-
-  .jump { display: flex; gap: 5px; flex-wrap: wrap; }
-  .jump a {
-    padding: 4px 9px;
-    border: 1px solid var(--line); border-radius: 999px;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
-    color: var(--ink-mid); text-decoration: none; white-space: nowrap;
-  }
-  .jump a:hover { background: var(--sunk); color: var(--ink); }
-  .jump a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ── View tabs ────────────────────────────────────── */
   .tabs { display: flex; gap: 8px; }
@@ -156,7 +136,6 @@
     font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
     text-transform: uppercase; color: var(--ink-soft);
   }
-  .jump a[data-shared] { border-style: dashed; }
 
   .sec-blurb {
     margin: 7px 0 0;
@@ -245,8 +224,6 @@
   }
   .drop:hover { color: var(--now); }
 
-  .empty { padding: 40px 0; color: var(--ink-soft); font-size: 14px; }
-  .empty[hidden] { display: none; }
   .addrow { padding: 16px 0 0 14px; }
 
   /* ── Action bar ───────────────────────────────────── */
@@ -303,17 +280,10 @@
       <p class="top__note">Find the area, say what should change, mark how soon. Copy when you are done.</p>
     </div>
     <nav class="tabs" id="tabs" role="tablist" aria-label="Which view"></nav>
-    <div class="controls">
-      <input class="search" id="q" type="search" placeholder="Filter by name, code or description — e.g. thumb, .acq-card, chevron" aria-label="Filter areas">
-      <button class="act" id="onlynoted" aria-pressed="false">Only noted</button>
-      <button class="act" id="foldall">Collapse all</button>
-      <nav class="jump" id="jump" aria-label="Jump to section"></nav>
-    </div>
   </div>
 </header>
 
 <main class="wrap" id="sheet"></main>
-<p class="wrap empty" id="noresults" hidden>Nothing matches that filter.</p>
 
 <div class="bar">
   <div class="bar__inner">
@@ -691,16 +661,15 @@
   var KEY = 'acq-feedback-v4';
   var PRIS = ['now', 'next', 'idea'];
   var PRI_LABEL = { now: 'Now', next: 'Next', idea: 'Idea' };
-  // Sections that sit in both tabs open closed, so each tab lands on its own work.
-  var SHARED_SHUT = ['assistant', 'card', 'card-addon', 'card-states'];
+  var open = {};
 
-  var store = { notes: {}, pri: {}, custom: [], shut: null, tab: 'default' };
+  var store = { notes: {}, pri: {}, custom: [], tab: 'default' };
   try {
     var raw = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (raw && raw.notes) {
       store = {
         notes: raw.notes || {}, pri: raw.pri || {}, custom: raw.custom || [],
-        shut: raw.shut || {}, tab: ['edit', 'archive'].indexOf(raw.tab) >= 0 ? raw.tab : 'default'
+        tab: ['edit', 'archive'].indexOf(raw.tab) >= 0 ? raw.tab : 'default'
       };
     } else {
       // Carry notes forward from earlier versions of this page.
@@ -713,21 +682,11 @@
       }
     }
   } catch (e) { /* private mode, or nothing saved */ }
-  if (!store.shut) {
-    store.shut = {};
-    SHARED_SHUT.forEach(function (id) { store.shut[id] = true; });
-  }
 
   var sheet = document.getElementById('sheet');
-  var jump = document.getElementById('jump');
   var tabsEl = document.getElementById('tabs');
   var tally = document.getElementById('tally');
   var toast = document.getElementById('toast');
-  var noresults = document.getElementById('noresults');
-  var search = document.getElementById('q');
-  var onlyBtn = document.getElementById('onlynoted');
-  var foldBtn = document.getElementById('foldall');
-  var onlyNoted = false;
   var toastTimer;
 
   function save() {
@@ -854,7 +813,6 @@
       paintRow(el, name, pri);
       save();
       recount();
-      if (onlyNoted) applyFilter();
     });
 
     c4.appendChild(ta);
@@ -893,7 +851,6 @@
 
   function render() {
     sheet.textContent = '';
-    jump.textContent = '';
     Array.prototype.forEach.call(tabsEl.children, function (b) {
       b.setAttribute('aria-selected', b.dataset.tab === store.tab ? 'true' : 'false');
     });
@@ -907,12 +864,12 @@
       sec.id = domId;
       sec.dataset.sec = id;
       sec.dataset.view = view;
-      if (store.shut[id]) sec.className = 'shut';
+      if (!open[id]) sec.className = 'shut';
 
       var head = document.createElement('button');
       head.type = 'button';
       head.className = 'sec-head';
-      head.setAttribute('aria-expanded', store.shut[id] ? 'false' : 'true');
+      head.setAttribute('aria-expanded', open[id] ? 'true' : 'false');
 
       var chev = document.createElement('span');
       chev.className = 'sec-head__chev';
@@ -935,9 +892,7 @@
         var shut = !sec.classList.contains('shut');
         sec.classList.toggle('shut', shut);
         head.setAttribute('aria-expanded', shut ? 'false' : 'true');
-        if (shut) store.shut[id] = true; else delete store.shut[id];
-        save();
-        syncFoldButton();
+        if (shut) delete open[id]; else open[id] = true;
       });
       sec.appendChild(head);
 
@@ -966,7 +921,7 @@
           if (store.custom.some(function (c) { return c.name === nm; })) { say('That one is already listed'); return; }
           var where = prompt('Where is it? A selector, a screen, or just "top right of the panel".') || 'added by you';
           store.custom.push({ name: nm, anchor: where.trim(), what: '' });
-          delete store.shut[CUSTOM_ID];
+          open[CUSTOM_ID] = true;
           save();
           render();
           var t = sheet.querySelector('[data-name="' + esc(nm) + '"] textarea');
@@ -978,43 +933,10 @@
 
       sheet.appendChild(sec);
 
-      var link = document.createElement('a');
-      link.href = '#' + domId;
-      link.textContent = title;
-      if (view === 'both') link.dataset.shared = '';
-      link.addEventListener('click', function () {
-        sec.classList.remove('shut');
-        head.setAttribute('aria-expanded', 'true');
-        delete store.shut[id];
-        save();
-        syncFoldButton();
-      });
-      jump.appendChild(link);
     });
 
     recount();
-    syncFoldButton();
-    applyFilter();
   }
-
-  function syncFoldButton() {
-    var open = 0;
-    Array.prototype.forEach.call(sheet.querySelectorAll('section'), function (s) {
-      if (!s.classList.contains('shut')) open++;
-    });
-    foldBtn.textContent = open === 0 ? 'Expand all' : 'Collapse all';
-  }
-
-  foldBtn.addEventListener('click', function () {
-    var expanding = foldBtn.textContent === 'Expand all';
-    Array.prototype.forEach.call(sheet.querySelectorAll('section'), function (s) {
-      s.classList.toggle('shut', !expanding);
-      s.querySelector('.sec-head').setAttribute('aria-expanded', expanding ? 'true' : 'false');
-      if (expanding) delete store.shut[s.dataset.sec]; else store.shut[s.dataset.sec] = true;
-    });
-    save();
-    syncFoldButton();
-  });
 
   // ── Counts ────────────────────────────────────────────
   function recount() {
@@ -1066,63 +988,6 @@
       tally.appendChild(s2);
     }
   }
-
-  // ── Filtering ─────────────────────────────────────────
-  function matches(row, q) {
-    return (!q || row.dataset.hay.indexOf(q) !== -1) &&
-           (!onlyNoted || row.hasAttribute('data-note'));
-  }
-
-  function applyFilter() {
-    var q = search.value.trim().toLowerCase();
-    var filtering = !!q || onlyNoted;
-    var shown = 0;
-
-    Array.prototype.forEach.call(sheet.querySelectorAll('section'), function (sec) {
-      var vis = 0;
-      Array.prototype.forEach.call(sec.querySelectorAll('.row'), function (row) {
-        var ok = matches(row, q);
-        row.hidden = !ok;
-        if (ok) vis++;
-      });
-      // A filter always beats a folded section — matches must be reachable.
-      if (filtering) sec.classList.toggle('shut', vis === 0);
-      else sec.classList.toggle('shut', !!store.shut[sec.dataset.sec]);
-      var keepEmpty = sec.dataset.sec === CUSTOM_ID && !filtering;
-      sec.hidden = vis === 0 && !keepEmpty;
-      shown += vis;
-    });
-
-    // Say how many hits are waiting in the tab you are not looking at.
-    TABS.forEach(function (t) {
-      var el = tabsEl.querySelector('[data-for="' + t.id + '"]');
-      if (!el) return;
-      if (!filtering) return;
-      if (t.id === store.tab) { el.textContent = String(shown); return; }
-      var n = 0;
-      groups().filter(function (g) { return inTab(g, t.id); }).forEach(function (g) {
-        g[4].forEach(function (r) {
-          var hay = (r[0] + ' ' + r[1] + ' ' + r[2]).toLowerCase();
-          var ok = (!q || hay.indexOf(q) !== -1) && (!onlyNoted || noted(r[0]));
-          if (ok) n++;
-        });
-      });
-      el.textContent = n ? String(n) : '';
-    });
-    if (!filtering) recount();
-
-    noresults.hidden = shown > 0;
-  }
-
-  search.addEventListener('input', applyFilter);
-  search.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { search.value = ''; applyFilter(); }
-  });
-  onlyBtn.addEventListener('click', function () {
-    onlyNoted = !onlyNoted;
-    onlyBtn.setAttribute('aria-pressed', onlyNoted ? 'true' : 'false');
-    applyFilter();
-  });
 
   // ── Copy ──────────────────────────────────────────────
   // Always exports every note, from both tabs — the tab is a way to look at the
