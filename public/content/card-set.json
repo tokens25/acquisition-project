@@ -57,9 +57,9 @@
     }
   ],
   "cadences": [
-    "Monthly Flex",
-    "Instalments Annual",
-    "Annual Upfront"
+    "Monthly",
+    "Yearly Instalments",
+    "Yearly"
   ],
   "logoCatalog": [
     {
@@ -265,7 +265,7 @@
       "includedAddOnIds": [],
       "id": "ultimate-monthly",
       "tierId": "ultimate",
-      "cadence": "Monthly Flex",
+      "cadence": "Monthly",
       "standardPrice": 34.99
     },
     {
@@ -280,7 +280,7 @@
       ],
       "id": "ultimate-instal",
       "tierId": "ultimate",
-      "cadence": "Instalments Annual",
+      "cadence": "Yearly Instalments",
       "standardPrice": 29.99
     },
     {
@@ -295,7 +295,7 @@
       ],
       "id": "ultimate-upfront",
       "tierId": "ultimate",
-      "cadence": "Annual Upfront",
+      "cadence": "Yearly",
       "standardPrice": 279.99
     },
     {
@@ -308,7 +308,7 @@
       "includedAddOnIds": [],
       "id": "ultimate-monthly-de",
       "tierId": "ultimate",
-      "cadence": "Monthly Flex",
+      "cadence": "Monthly",
       "market": "DE",
       "standardPrice": 39.99
     },
@@ -322,7 +322,7 @@
       "includedAddOnIds": [],
       "id": "ultimate-monthly-gb",
       "tierId": "ultimate",
-      "cadence": "Monthly Flex",
+      "cadence": "Monthly",
       "market": "GB",
       "standardPrice": 29.99
     },
@@ -336,7 +336,7 @@
       "includedAddOnIds": [],
       "id": "standard-monthly",
       "tierId": "standard",
-      "cadence": "Monthly Flex",
+      "cadence": "Monthly",
       "standardPrice": 24.99
     },
     {
@@ -349,7 +349,7 @@
       "includedAddOnIds": [],
       "id": "standard-instal",
       "tierId": "standard",
-      "cadence": "Instalments Annual",
+      "cadence": "Yearly Instalments",
       "standardPrice": 21.99
     },
     {
@@ -362,14 +362,14 @@
       "includedAddOnIds": [],
       "id": "flex-monthly",
       "tierId": "flex",
-      "cadence": "Monthly Flex",
+      "cadence": "Monthly",
       "standardPrice": 19.99
     }
   ],
   "context": {
     "market": "MSG+",
     "channel": "direct",
-    "cadence": "Monthly Flex"
+    "cadence": "Monthly"
   },
   "journeyId": "hero-signup",
   "featureIcons": "feature",

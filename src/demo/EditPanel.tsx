@@ -26,7 +26,7 @@ const PURCHASE_TYPES = [
  * the code should use the real component.
  *
  * Cadence sits in the edit view, beside the prices it qualifies. Typing 34.99 is
- * typing it *for Monthly Flex*, and putting that three screens away in the default
+ * typing it *for Monthly*, and putting that three screens away in the default
  * view made the number look absolute when it never is.
  */
 export function EditPanel({ store }: { store: CardSetStore }) {

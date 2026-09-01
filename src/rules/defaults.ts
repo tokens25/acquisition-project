@@ -6,7 +6,7 @@ import { DIRECT } from './content'
  * that price them, three cadences, and a partner storefront alongside direct.
  */
 
-const CADENCES = ['Monthly Flex', 'Instalments Annual', 'Annual Upfront']
+const CADENCES = ['Monthly', 'Yearly Instalments', 'Yearly']
 
 const logoCatalog = [
   { id: 'yankees', name: 'New York Yankees', altText: 'New York Yankees logo', status: 'active' as const },
@@ -112,24 +112,24 @@ export const defaultSet: CardSet = {
 
   offers: [
     // Ultimate — sold every way.
-    offer({ id: 'ultimate-monthly', tierId: 'ultimate', cadence: 'Monthly Flex', standardPrice: 34.99, discount: true, introPrice: 25.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
-    offer({ id: 'ultimate-instal', tierId: 'ultimate', cadence: 'Instalments Annual', standardPrice: 29.99, discount: true, introPrice: 24.99, includedAddOnIds: ['wc26'] }),
-    offer({ id: 'ultimate-upfront', tierId: 'ultimate', cadence: 'Annual Upfront', standardPrice: 279.99, includedAddOnIds: ['wc26'] }),
-    offer({ id: 'ultimate-monthly-de', tierId: 'ultimate', cadence: 'Monthly Flex', market: 'DE', standardPrice: 39.99, discount: true, introPrice: 29.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
-    offer({ id: 'ultimate-monthly-gb', tierId: 'ultimate', cadence: 'Monthly Flex', market: 'GB', standardPrice: 29.99, discount: true, introPrice: 22.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
+    offer({ id: 'ultimate-monthly', tierId: 'ultimate', cadence: 'Monthly', standardPrice: 34.99, discount: true, introPrice: 25.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
+    offer({ id: 'ultimate-instal', tierId: 'ultimate', cadence: 'Yearly Instalments', standardPrice: 29.99, discount: true, introPrice: 24.99, includedAddOnIds: ['wc26'] }),
+    offer({ id: 'ultimate-upfront', tierId: 'ultimate', cadence: 'Yearly', standardPrice: 279.99, includedAddOnIds: ['wc26'] }),
+    offer({ id: 'ultimate-monthly-de', tierId: 'ultimate', cadence: 'Monthly', market: 'DE', standardPrice: 39.99, discount: true, introPrice: 29.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
+    offer({ id: 'ultimate-monthly-gb', tierId: 'ultimate', cadence: 'Monthly', market: 'GB', standardPrice: 29.99, discount: true, introPrice: 22.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
 
-    // Standard — no annual upfront anywhere. A missing row, not a false flag.
-    offer({ id: 'standard-monthly', tierId: 'standard', cadence: 'Monthly Flex', standardPrice: 24.99, discount: true, introPrice: 19.99, addOnId: 'wc26', addOnPurchaseType: 'discount_code', addOnDiscountPercent: 15 }),
-    offer({ id: 'standard-instal', tierId: 'standard', cadence: 'Instalments Annual', standardPrice: 21.99 }),
+    // Standard — not sold Yearly anywhere. A missing row, not a false flag.
+    offer({ id: 'standard-monthly', tierId: 'standard', cadence: 'Monthly', standardPrice: 24.99, discount: true, introPrice: 19.99, addOnId: 'wc26', addOnPurchaseType: 'discount_code', addOnDiscountPercent: 15 }),
+    offer({ id: 'standard-instal', tierId: 'standard', cadence: 'Yearly Instalments', standardPrice: 21.99 }),
 
     // Flex — monthly only.
-    offer({ id: 'flex-monthly', tierId: 'flex', cadence: 'Monthly Flex', standardPrice: 19.99 }),
+    offer({ id: 'flex-monthly', tierId: 'flex', cadence: 'Monthly', standardPrice: 19.99 }),
   ],
 
   // MSG+ is where the work is, so it is where a reset lands. It is also the
   // only market that runs the ZIP check, so the default flow is the whole
   // flow rather than one with a step missing.
-  context: { market: 'MSG+', channel: DIRECT, cadence: 'Monthly Flex' },
+  context: { market: 'MSG+', channel: DIRECT, cadence: 'Monthly' },
   journeyId: 'hero-signup',
   featureIcons: 'feature',
   stepId: 'plans',
