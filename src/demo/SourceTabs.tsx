@@ -36,7 +36,11 @@ export function SourceTabs({
           {/* Inline rather than the DS Icon: that component offers 16, 20 and
               24, and the pill's sparkle is 13. Inlining also lets the glyph
               take the pill's colour through currentColor. */}
-          <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: aiSparkle }} />
+          <span
+            className="ai-pill__mark"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: aiSparkle }}
+          />
           <span>AI</span>
         </button>
         <button

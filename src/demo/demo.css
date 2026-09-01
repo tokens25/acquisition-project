@@ -925,6 +925,7 @@
 .ai-pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-4);
   padding: var(--space-4) var(--space-10);
   border: 1px solid transparent;
@@ -948,8 +949,18 @@
   line-height: 1.5;
   letter-spacing: 0.04em;
 }
+/* The wrapper is a flex box, not a block: an inline svg sits on a text
+   baseline, so the wrapper grew to 21 for a 16px glyph and left the sparkle
+   two and a half pixels above the pill's centre. */
+.ai-pill__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
 /* 16 to the text's 12 — the ratio the pill is drawn at, 13 to 10. */
 .ai-pill svg {
+  display: block;
   flex-shrink: 0;
   inline-size: 16px;
   block-size: 16px;

@@ -376,7 +376,7 @@
     groupHeader: { vb: '0 0 80 78', parts: {
       'badge field': [4,4,72,14], 'ultimate toggle': [4,21,72,12],
       'plan name field': [4,36,72,14],
-      'AI pill': [52,52,10,5], 'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
+      'AI pill': [52,52,10,5], 'AI sparkle': [53,53,3,3], 'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
     }},
     groupPricing: { vb: '0 0 80 118', parts: {
       'cadence field': [4,4,72,14], 'apply discount toggle': [4,21,72,12],
@@ -552,6 +552,7 @@
       ['ultimate toggle', 'Highlighted Tier', 'The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it.', 'groupHeader'],
       ['plan name field', 'Tier name', 'The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label.', 'groupHeader'],
       ['AI pill', '.ai-pill', 'The AI half of the source tabs — the product’s own pill, with the sparkle and the yellow-to-purple gradient edge. Two stacked backgrounds make that edge: a flat fill clipped to the padding box, the gradient clipped to the border box, showing through a transparent 1px border. Unselected it dims rather than changing shape.', 'groupHeader'],
+      ['AI sparkle', '.ai-pill__mark', 'The four-point glyph inside the AI pill. A flex box rather than a plain wrapper, so the icon centres instead of resting on a text baseline.', 'groupHeader'],
       ['source tabs', '.ed-source', 'Two tabs hard right above a copy field: AI or Custom. Used twice — over the Description and over the Price explainer. Custom is the default, and it is what copy written before the choice existed counts as. Choosing AI hands that field to the assistant and makes it read-only here.', 'groupHeader'],
       ['description field', 'Description', 'The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to.', 'groupHeader'],
     ]],
