@@ -261,14 +261,18 @@
   display: flex;
   gap: var(--space-8);
 }
+/* One screen at the size the design file draws it. The number and the state
+   label sit over the screen rather than above and below it, so the whole 788
+   belongs to the artwork — a tile that gave sixty of them to chrome would no
+   longer be the screen it claims to show. */
 .jf__tile {
-  display: flex;
+  position: relative;
+  display: block;
   flex: none;
-  flex-direction: column;
-  gap: var(--space-6);
-  inline-size: 176px;
-  block-size: 248px;
-  padding: var(--space-12);
+  inline-size: 375px;
+  block-size: 788px;
+  padding: 0;
+  overflow: hidden;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-12);
   background: var(--color-surface-container-1);
@@ -277,6 +281,18 @@
   font-size: var(--font-size-caption-xs);
   text-align: start;
   cursor: pointer;
+}
+
+/* The exported Figma frame. Taller frames — Checkout is 1321 — are fitted to
+   the tile rather than cropped, since a cropped checkout loses the payment
+   rows that are the reason to look at it. */
+.jf__art {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+  object-position: top center;
+  user-select: none;
 }
 .jf__tile:disabled {
   cursor: default;
@@ -287,22 +303,38 @@
 .jf__tile[data-editable] {
   background: var(--color-surface-container-2);
 }
+/* Over the screen, not above it. Both chips carry their own ground so they
+   stay readable against whatever the frame happens to put behind them. */
 .jf__num {
+  position: absolute;
+  inset-block-start: var(--space-8);
+  inset-inline-start: var(--space-8);
+  z-index: 1;
   display: grid;
   place-items: center;
-  inline-size: 20px;
-  block-size: 20px;
+  inline-size: 24px;
+  block-size: 24px;
   border: var(--border-1) solid var(--color-border-full-color-default);
   border-radius: var(--radius-full);
-  color: var(--color-text-tertiary);
+  background: var(--color-surface-container-1);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-label-xs);
 }
 .jf__frame {
+  display: block;
+  padding: var(--space-12);
   color: var(--color-text-primary);
   line-height: 1.4;
 }
 .jf__state {
-  color: var(--color-text-tertiary);
+  position: absolute;
+  inset-block-end: var(--space-8);
+  inset-inline-start: var(--space-8);
+  z-index: 1;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-1);
+  color: var(--color-text-secondary);
 }
 .jf__live {
   margin-block-start: auto;
@@ -680,9 +712,10 @@
      the screen rather than a fixed crop of it. */
   place-items: start;
   flex: none;
-  align-self: center;
+  /* The live render fills its tile the same way an exported frame does, so
+     Subscription and the Figma screens beside it are the same size. */
+  align-self: start;
   overflow: hidden;
-  border-radius: var(--radius-6);
   background: var(--color-surface-default);
 }
 .jf__thumb-scale {

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
+import { artworkFor } from '../card/flowArtwork'
 import type { CardSet, Context } from '../rules/content'
 import type { ResolvedStep } from '../rules/journey'
 
@@ -48,17 +49,17 @@ export function JourneyFrames({
    * mobile tile shows one card in a portrait frame and the desktop tile shows
    * the row.
    */
-  // The phone is 375 x 812, so the thumbnail is that shape exactly rather than
-  // a rounded 9:16 — height derived from width so the two never drift apart.
-  const PHONE = { width: 375, height: 812 }
+  // A tile is one screen at the size the design file draws it: 375 x 788. On
+  // mobile that means no scaling at all — the card set renders at its real
+  // width beside Figma frames exported at theirs, so the two are directly
+  // comparable instead of one being a shrunken approximation of the other.
+  const TILE = { width: 375, height: 788 }
   const frame =
     set.device === 'mobile'
-      ? {
-          box: { width: 72, height: Math.round((72 * PHONE.height) / PHONE.width) },
-          viewport: PHONE.width,
-        }
-      : // A desktop window: width binds, 16:10.
-        { box: { width: 152, height: 95 }, viewport: 1100 }
+      ? { box: { width: TILE.width, height: TILE.height }, viewport: TILE.width }
+      : // A desktop window does not fit a phone-shaped tile, so it is scaled
+        // to the same box rather than given one of its own.
+        { box: { width: TILE.width, height: TILE.height }, viewport: 1100 }
   const thumbScale = frame.box.width / frame.viewport
 
 
@@ -192,10 +193,11 @@ export function JourneyFrames({
                 >
                   <span className="jf__num">{number ?? '—'}</span>
 
-                  {/* Only the plans step has a component, so only it can show
-                      the real thing. The rest name their Figma frame — a
-                      drawn thumbnail would be a picture of a screen this app
-                      cannot actually produce. */}
+                  {/* Three cases, and the difference between them is the
+                      point. Subscription renders live, so it moves when the
+                      content moves. The others show their Figma frame, which
+                      does not move — that is what marks a screen as still to
+                      be built. A step with neither falls back to its name. */}
                   {step.renderer === 'plans' && !skipped ? (
                     <span
                       className="jf__thumb"
@@ -213,6 +215,14 @@ export function JourneyFrames({
                       </span>
 
                     </span>
+                  ) : artworkFor(step.id, state) ? (
+                    <img
+                      className="jf__art"
+                      src={artworkFor(step.id, state)}
+                      alt=""
+                      loading="lazy"
+                      draggable={false}
+                    />
                   ) : (
                     <span className="jf__frame">{step.figmaFrame ?? step.name}</span>
                   )}

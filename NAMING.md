@@ -66,7 +66,8 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **tile number** | `.jf__num` | Where that screen falls in the flow. A dash when the step is skipped. |
 | **thumbnail** | `.jf__thumb` | A live miniature of the real screen, built from your actual content. Sized to the proportions of a 375 by 812 phone. |
 | **thumbnail scaler** | `.jf__thumb-scale` | The layer inside the thumbnail that shrinks the screen. The screen renders at full size and this scales it down, so the miniature is the real thing rather than a separate small version that could drift from it. |
-| **frame name** | `.jf__frame` | The Figma frame name, shown on screens that have not been built yet. |
+| **screen artwork** | `.jf__art` | The screen exported from Figma, shown on steps that have not been built yet. It is a picture, so it does not change when you edit content — that is how you tell a built screen from one still to come. Taller frames like Checkout are fitted to the tile rather than cropped. |
+| **frame name** | `.jf__frame` | The Figma frame name. The last resort, for a screen with neither a component nor an exported frame. |
 | **state label** | `.jf__state` | Which version of the screen this tile is — "default", "alternate plan selected". |
 
 ## Default view — Action buttons

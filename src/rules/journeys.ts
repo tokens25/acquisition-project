@@ -1,5 +1,6 @@
 import type { Journey, Seed, Step } from './journey'
 import { driftFromFigma } from './journey'
+import { orphanedArtwork } from '../card/flowArtwork'
 
 /**
  * Four journeys from Figma "Landing page journeys" (node 2350:75321).
@@ -763,6 +764,17 @@ if (import.meta.env.DEV) {
     throw new Error(
       'Journey model has drifted from Figma: ' +
         drift.map((d) => `${d.id} declares ${d.declared}, models ${d.actual}`).join('; '),
+    )
+  }
+
+  // The exported frames are keyed by step and state. Rename either and the
+  // picture detaches, which shows up as a tile falling back to a filename —
+  // a failure that reads as a decision. Named here instead.
+  const orphans = orphanedArtwork(journeys.flatMap((j) => j.steps))
+  if (orphans.length > 0) {
+    throw new Error(
+      `Flow artwork no step claims: ${orphans.join(', ')}. ` +
+        'Either the step was renamed, or the picture should go.',
     )
   }
 }
