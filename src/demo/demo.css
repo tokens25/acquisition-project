@@ -261,16 +261,18 @@
   display: flex;
   gap: var(--space-8);
 }
-/* One screen at the size the design file draws it. The number and the state
-   label sit over the screen rather than above and below it, so the whole 788
-   belongs to the artwork — a tile that gave sixty of them to chrome would no
-   longer be the screen it claims to show. */
+/* One screen at the shape the design file draws it — 375 x 788 — shown at 280
+   wide, so 588 tall. The number and the state label sit over the screen rather
+   than above and below it, so the whole height belongs to the artwork; a tile
+   that gave part of it to chrome would no longer be the screen it claims to
+   show. Both numbers are derived together in JourneyFrames; change one here
+   and the other there. */
 .jf__tile {
   position: relative;
   display: block;
   flex: none;
-  inline-size: 375px;
-  block-size: 788px;
+  inline-size: 280px;
+  block-size: 588px;
   padding: 0;
   overflow: hidden;
   border: var(--border-1) solid var(--color-border-full-color-subtle);

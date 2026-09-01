@@ -49,16 +49,22 @@ export function JourneyFrames({
    * mobile tile shows one card in a portrait frame and the desktop tile shows
    * the row.
    */
-  // A tile is one screen at the size the design file draws it: 375 x 788. On
-  // mobile that means no scaling at all — the card set renders at its real
-  // width beside Figma frames exported at theirs, so the two are directly
-  // comparable instead of one being a shrunken approximation of the other.
-  const TILE = { width: 375, height: 788 }
+  // A tile is one screen at the shape the design file draws it — 375 x 788 —
+  // shown at 280 wide. The height is derived rather than written down twice,
+  // so narrowing the tile cannot silently change the proportion. The card set
+  // still renders at its real 375 and is scaled into the box, which is what
+  // keeps the live tile and an exported frame the same size beside each other.
+  const FRAME = { width: 375, height: 788 }
+  const TILE_WIDTH = 280
+  const TILE = {
+    width: TILE_WIDTH,
+    height: Math.round((TILE_WIDTH * FRAME.height) / FRAME.width),
+  }
   const frame =
     set.device === 'mobile'
-      ? { box: { width: TILE.width, height: TILE.height }, viewport: TILE.width }
+      ? { box: { width: TILE.width, height: TILE.height }, viewport: FRAME.width }
       : // A desktop window does not fit a phone-shaped tile, so it is scaled
-        // to the same box rather than given one of its own.
+        // into the same box rather than given one of its own.
         { box: { width: TILE.width, height: TILE.height }, viewport: 1100 }
   const thumbScale = frame.box.width / frame.viewport
 
