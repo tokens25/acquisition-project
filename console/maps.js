@@ -22,9 +22,9 @@
       'evaluate button': [74,6,42,11]
     }},
     panelDefault: { vb: '0 0 80 121', furn: [[6,5,68,26]], parts: {
-      'context fields': [6,36,68,38],
-      'market': [6,36,68,6], 'storefront': [6,44,68,6], 'user status': [6,52,68,6],
-      'entry point': [6,60,68,6], 'which journey': [6,68,68,6],
+      'context fields': [6,36,68,30],
+      'market': [6,36,68,6], 'user status': [6,44,68,6],
+      'entry point': [6,52,68,6], 'which journey': [6,60,68,6],
       'user flow': [6,78,68,32], 'flow heading': [6,78,26,4], 'flow list': [6,84,68,26],
       'flow item': [8,83,64,11],
       'flow row': [8,84,64,9], 'flow dot': [10,86,5,5], 'flow name': [17,87,26,4],

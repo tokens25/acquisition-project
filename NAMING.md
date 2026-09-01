@@ -27,12 +27,11 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **context fields** | `.demo__fields` | The dropdowns as a set. Four of them normally, five when your answers describe more than one journey. |
+| **context fields** | `.demo__fields` | The dropdowns as a set. Three of them normally, four when your answers describe more than one journey. |
 | **market** | `dropdown 1` | Which country you are writing for — or "Base", meaning the shared content every country starts from. The help text under it tells you which of the two you are doing. |
-| **storefront** | `dropdown 2` | Whether you are selling directly or through a partner like Movistar. Only partners that actually operate in the chosen country are listed. |
-| **user status** | `dropdown 3` | Who is buying: someone logged out, an existing customer, someone being migrated, or a TVE user. This choice decides which family of journeys you get. |
-| **entry point** | `dropdown 4` | Where they clicked in from. Narrowed by the answer above — someone being migrated never arrives from an Upgrade button. |
-| **which journey** | `dropdown 5` | Only appears when your four answers describe more than one journey, and lets you pick between them. Most combinations describe exactly one, so most of the time you never see it. |
+| **user status** | `dropdown 2` | Who is buying: someone logged out, an existing customer, someone being migrated, or a TVE user. This choice decides which family of journeys you get. |
+| **entry point** | `dropdown 3` | Where they clicked in from. Narrowed by the answer above — someone being migrated never arrives from an Upgrade button. |
+| **which journey** | `dropdown 4` | Only appears when your three answers describe more than one journey, and lets you pick between them. Most combinations describe exactly one, so most of the time you never see it. |
 | **user flow** | `.uf` | The journey written out as a numbered list. It is the same information as the tiles on the right, and they share a selection — clicking either opens the same step. |
 | **flow heading** | `.uf__title` | The words "User flow:" above the list. |
 | **flow list** | `.uf__list` | The numbered list itself. |
