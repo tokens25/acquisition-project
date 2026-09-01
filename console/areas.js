@@ -82,8 +82,8 @@
       ['no plans message', '.ed-placeholder · plans', 'What the panel says instead of a form when the content has no plans at all.', 'groupPlans'],
     ]],
     ['group-header', 'Header group', 'edit', 'Group 2. The words at the top of the card.', [
-      ['badge field', 'Badge', 'Shows "Best experience" and is read-only — you cannot type in it. It fills in by itself when you turn on Ultimate treatment below.', 'groupHeader'],
-      ['ultimate toggle', 'Ultimate Treatment', 'The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it.', 'groupHeader'],
+      ['badge field', 'Badge', 'The words on the badge. Editable — type what it should say. Whether a badge shows at all is still the Highlighted Tier switch’s call, and leaving this empty falls back to “BEST EXPERIENCE” rather than shipping a blank ribbon.', 'groupHeader'],
+      ['ultimate toggle', 'Highlighted Tier', 'The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it.', 'groupHeader'],
       ['plan name field', 'Plan name', 'The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label.', 'groupHeader'],
       ['description field', 'Description', 'The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to.', 'groupHeader'],
     ]],

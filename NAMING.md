@@ -102,12 +102,13 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **breadcrumb** | `.demo__back` | The line at the top with a back arrow, the journey name and the step name. The whole line is clickable and takes you back. |
-| **scope line** | `.demo__scope` | Reads like "Spain · direct · Monthly Flex". It tells you exactly what the fields below apply to — the same field holds a different value in a different country or at a different cadence. |
+| **step heading** | `.demo__head` | The line at the top of the panel: the back arrow and the step title together. |
+| **back arrow** | `.demo__back` | The chevron at the top left. It is the only thing on that line you can click, and it takes you back to the journey. |
+| **step title** | `.demo__step-title` | The name of the step you have open. A heading, not a control — the arrow beside it is what takes you back. |
 | **field group** | `.demo__group` | One titled block of fields. There are six of them. |
 | **group title** | `.demo__group-title` | The heading on a group. Pricing adds the currency to its heading. |
 | **plans group** | `group 1 · Plans` | Which plan you are editing. |
-| **header group** | `group 2 · Header` | The words at the top of the card. |
+| **header group** | `group 2 · Tier Name` | The words at the top of the card. |
 | **pricing group** | `group 3 · Pricing` | What it costs and how you pay. |
 | **add-on group** | `group 4 · Add-on` | An extra product attached to the plan. |
 | **competitions group** | `group 5 · Competitions` | Which competition logos show on the card. |
@@ -130,8 +131,8 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **badge field** | `Badge` | Shows "Best experience" and is read-only — you cannot type in it. It fills in by itself when you turn on Ultimate treatment below. |
-| **ultimate toggle** | `Ultimate Treatment` | The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it. |
+| **badge field** | `Badge` | The words on the badge. Editable — type what it should say. Whether a badge shows at all is still the Highlighted Tier switch’s call, and leaving this empty falls back to “BEST EXPERIENCE” rather than shipping a blank ribbon. |
+| **ultimate toggle** | `Highlighted Tier` | The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it. |
 | **plan name field** | `Plan name` | The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label. |
 | **description field** | `Description` | The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to. |
 

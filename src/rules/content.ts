@@ -65,6 +65,16 @@ export interface Tier {
   /** Total competitions the plan carries; drives the derived "+N" tile. */
   logoTotal: number
   ultimate: boolean
+  /**
+   * The words on the badge. Authored, not derived.
+   *
+   * Whether a badge appears at all is still the highlight switch's to decide —
+   * two badged cards would contradict the rule that one plan is the
+   * recommended one. What it *says* is copy, and copy is written rather than
+   * computed. Left empty it falls back to the standing wording, so clearing
+   * the field cannot ship a blank ribbon.
+   */
+  badge?: string
   displayOrder: number
 
   /**
@@ -115,6 +125,7 @@ export interface TierPatch {
   logoTiles?: string[]
   logoTotal?: number
   ultimate?: boolean
+  badge?: string
   status?: Tier['status']
   visibleToPartners?: boolean
 }

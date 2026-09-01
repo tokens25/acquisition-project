@@ -6,6 +6,7 @@ import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
+import { STATIC } from '../rules/derive'
 import { logoArtwork } from '../card/assets'
 
 /** Sentinel for "write a new line here" in the feature picker. */
@@ -101,11 +102,16 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         <h3 className="demo__group-title">Tier Name</h3>
         <TextField
           label="Badge"
-          value={resolved.ultimate ? 'Best experience' : ''}
-          readOnly
+          value={resolved.badge ?? ''}
+          onChange={(v) => patchTier({ badge: v })}
+          helpText={
+            resolved.ultimate
+              ? `Empty falls back to “${STATIC.badge}”.`
+              : 'Only shows on the highlighted tier.'
+          }
         />
         <ToggleField
-          label="Ultimate Treatment"
+          label="Highlighted Tier"
           tone="ultimate"
           checked={resolved.ultimate}
           onChange={(v) => updateTier(tier.id, { ultimate: v })}

@@ -363,7 +363,7 @@
       'reset progress': [6,113,24,4]
     }},
     panelEdit: { vb: '0 0 80 150', furn: [[6,22,68,18]], parts: {
-      'breadcrumb': [6,5,52,7], 'scope line': [6,15,44,4],
+      'step heading': [6,5,52,7], 'back arrow': [6,5,7,7], 'step title': [16,5,42,7],
       'field group': [6,44,68,16], 'group title': [6,44,26,4],
       'plans group': [6,44,68,16], 'header group': [6,64,68,16],
       'pricing group': [6,84,68,16], 'add-on group': [6,104,68,14],
@@ -526,12 +526,13 @@
       ['export button', 'button 2 · tertiary', 'Says "Export JSON". Downloads all the content as a file. Worth knowing: this is the shape this app stores, not yet the shape the live rule engine reads.', 'actionsDefault'],
     ]],
     ['panel-edit', 'Panel', 'edit', 'The left column once you have opened a step. Six groups of fields, all scoped to one country, one storefront and one way of paying.', [
-      ['breadcrumb', '.demo__back', 'The line at the top with a back arrow, the journey name and the step name. The whole line is clickable and takes you back.', 'panelEdit'],
-      ['scope line', '.demo__scope', 'Reads like "Spain · direct · Monthly Flex". It tells you exactly what the fields below apply to — the same field holds a different value in a different country or at a different cadence.', 'panelEdit'],
+      ['step heading', '.demo__head', 'The line at the top of the panel: the back arrow and the step title together.', 'panelEdit'],
+      ['back arrow', '.demo__back', 'The chevron at the top left. It is the only thing on that line you can click, and it takes you back to the journey.', 'panelEdit'],
+      ['step title', '.demo__step-title', 'The name of the step you have open. A heading, not a control — the arrow beside it is what takes you back.', 'panelEdit'],
       ['field group', '.demo__group', 'One titled block of fields. There are six of them.', 'panelEdit'],
       ['group title', '.demo__group-title', 'The heading on a group. Pricing adds the currency to its heading.', 'panelEdit'],
       ['plans group', 'group 1 · Plans', 'Which plan you are editing.', 'panelEdit'],
-      ['header group', 'group 2 · Header', 'The words at the top of the card.', 'panelEdit'],
+      ['header group', 'group 2 · Tier Name', 'The words at the top of the card.', 'panelEdit'],
       ['pricing group', 'group 3 · Pricing', 'What it costs and how you pay.', 'panelEdit'],
       ['add-on group', 'group 4 · Add-on', 'An extra product attached to the plan.', 'panelEdit'],
       ['competitions group', 'group 5 · Competitions', 'Which competition logos show on the card.', 'panelEdit'],
@@ -544,8 +545,8 @@
       ['no plans message', '.ed-placeholder · plans', 'What the panel says instead of a form when the content has no plans at all.', 'groupPlans'],
     ]],
     ['group-header', 'Header group', 'edit', 'Group 2. The words at the top of the card.', [
-      ['badge field', 'Badge', 'Shows "Best experience" and is read-only — you cannot type in it. It fills in by itself when you turn on Ultimate treatment below.', 'groupHeader'],
-      ['ultimate toggle', 'Ultimate Treatment', 'The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it.', 'groupHeader'],
+      ['badge field', 'Badge', 'The words on the badge. Editable — type what it should say. Whether a badge shows at all is still the Highlighted Tier switch’s call, and leaving this empty falls back to “BEST EXPERIENCE” rather than shipping a blank ribbon.', 'groupHeader'],
+      ['ultimate toggle', 'Highlighted Tier', 'The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it.', 'groupHeader'],
       ['plan name field', 'Plan name', 'The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label.', 'groupHeader'],
       ['description field', 'Description', 'The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to.', 'groupHeader'],
     ]],

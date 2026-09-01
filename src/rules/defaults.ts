@@ -108,16 +108,6 @@ export const defaultSet: CardSet = {
       logoTiles: allLogos,
       logoTotal: 14,
     }),
-    // Closed to new direct customers, but Movistar still sells it — the case
-    // the engineering schema exists to express.
-    tier({
-      id: 'la-liga-legacy',
-      planName: 'La Liga',
-      displayOrder: 4,
-      status: 'legacy',
-      visibleToPartners: true,
-      logoTotal: 12,
-    }),
   ],
 
   offers: [
@@ -134,9 +124,6 @@ export const defaultSet: CardSet = {
 
     // Flex — monthly only.
     offer({ id: 'flex-monthly', tierId: 'flex', cadence: 'Monthly Flex', standardPrice: 19.99 }),
-
-    // The legacy tier is still sold by the partner, monthly.
-    offer({ id: 'laliga-monthly', tierId: 'la-liga-legacy', cadence: 'Monthly Flex', standardPrice: 14.99 }),
   ],
 
   context: { market: 'IE', channel: DIRECT, cadence: 'Monthly Flex' },

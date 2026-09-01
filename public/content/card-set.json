@@ -252,34 +252,6 @@
       "id": "flex",
       "planName": "Flex",
       "displayOrder": 3
-    },
-    {
-      "description": "Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.",
-      "features": [
-        "feature-multiview",
-        "feature-multicam",
-        "feature-hdr",
-        "feature-devices",
-        "feature-download"
-      ],
-      "logoTiles": [
-        "yankees",
-        "nets",
-        "knicks",
-        "rangers",
-        "devils",
-        "islanders",
-        "sabres"
-      ],
-      "logoTotal": 12,
-      "ultimate": false,
-      "status": "legacy",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "id": "la-liga-legacy",
-      "planName": "La Liga",
-      "displayOrder": 4
     }
   ],
   "offers": [
@@ -392,19 +364,6 @@
       "tierId": "flex",
       "cadence": "Monthly Flex",
       "standardPrice": 19.99
-    },
-    {
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 3,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "id": "laliga-monthly",
-      "tierId": "la-liga-legacy",
-      "cadence": "Monthly Flex",
-      "standardPrice": 14.99
     }
   ],
   "context": {
