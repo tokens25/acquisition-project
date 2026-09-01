@@ -115,10 +115,9 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           tone="ultimate"
           checked={resolved.ultimate}
           onChange={(v) => updateTier(tier.id, { ultimate: v })}
-          hint="Gold stroke, badge and CTA — max one per set."
         />
         <TextField
-          label="Plan name"
+          label="Tier name"
           value={resolved.planName}
           onChange={(v) => updateTier(tier.id, { planName: v })}
           helpText="One value — header, CTA and add-on label."
