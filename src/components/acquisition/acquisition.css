@@ -19,8 +19,12 @@
   /* The 2 edge is an inset shadow, not a border. Figma draws it inside the
      frame without taking layout, so a card measures 280 with 240 of content;
      a real border ate 4 of that and left the five 44px logo tiles unable to
-     sit on their 49 pitch. */
-  box-shadow: inset 0 0 0 var(--border-2) transparent;
+     sit on their 49 pitch.
+
+     Literals here and below: these three edges are three different greys in
+     the design and our token export has none of them, so the design's own
+     numbers with a note rather than the nearest wrong token. */
+  box-shadow: inset 0 0 0 var(--border-2) #6a717a;
   background: linear-gradient(
     158.76deg,
     var(--color-surface-container-2) 9%,
@@ -88,7 +92,7 @@
 /* 48 tall, the button and nothing else — Figma's Button/CTA sits directly
    under the body with only the rule between them. */
 .acq-card__footer {
-  border-block-start: var(--border-1) solid var(--color-border-full-color-default);
+  border-block-start: var(--border-1) solid #202327;
   padding-block: var(--space-4);
   padding-inline: 0;
 }
@@ -151,7 +155,9 @@
    .acq-card__divider for the desktop layout, which does have one. */
 .acq-pricing[data-device='mobile'] {
   padding-block-start: var(--space-12);
-  border-block-start: var(--border-1) solid var(--color-border-transparent-default, rgba(136, 144, 152, 0.52));
+  /* #889098 at 52%. It was written as a token with this as the fallback,
+     which never applied — the token exists and resolves to a solid #76828c. */
+  border-block-start: var(--border-1) solid color-mix(in srgb, #889098 52%, transparent);
 }
 .acq-card[data-device='mobile'] .acq-card__divider {
   display: none;
