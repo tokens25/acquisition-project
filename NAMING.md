@@ -178,7 +178,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **row name** | `.ed-comp__name` | The competition name, repeated on the handle so the row still reads when you are dragging it. |
 | **remove competition** | `.ed-comp__remove` | Takes it off this plan. The competition itself stays in the library for other plans. |
 | **competition name field** | `Competition name` | What it is called, on the card and in the popup. It belongs to the competition rather than to this plan, so changing it changes it everywhere that competition appears. |
-| **popup description field** | `Popup description` | The line under the name in the "All features & content" popup. Like the name, it belongs to the competition rather than to this plan. |
+| **competition description field** | `Description` | The line under the name in the "All features & content" popup. Like the name, it belongs to the competition rather than to this plan. |
 | **competitions total field** | `Total number of competitions` | How many competitions the plan carries in total, which is usually more than the logos shown. The card works out the "+5" tile from this number minus the logos on display. |
 
 ## Edit view — Features group

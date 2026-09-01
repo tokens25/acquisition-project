@@ -454,7 +454,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                       onChange={(v) => updateLogo(entry.id, { name: v })}
                     />
                     <TextField
-                      label="Popup description"
+                      label="Description"
                       rows={2}
                       value={entry.blurb ?? ''}
                       onChange={(v) => updateLogo(entry.id, { blurb: v })}
