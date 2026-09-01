@@ -18,6 +18,38 @@ export const STATIC = {
 export const LOGO_SLOTS_PER_ROW = 5
 
 /**
+ * What a cadence reads as beside a price, before anyone writes it.
+ *
+ * A cadence is named for how often you pay — "Monthly" — and a price is
+ * followed by the period itself: "$29.99 /month". Lower-casing the name gets
+ * that wrong for exactly this reason, so the ones that differ are listed.
+ * Anything absent falls through to its own name, which is right for a cadence
+ * whose name is already the period.
+ */
+const UNIT_DEFAULTS: Record<string, string> = {
+  Monthly: 'month',
+}
+
+/**
+ * What reads after the price: "$29.99 /month".
+ *
+ * Written if someone wrote it for this cadence, then the default above, then
+ * the cadence's own name lower-cased — the same string is a proper label in
+ * the panel's picker and running text on the card. Lowered against the
+ * market's locale, so a market whose language cases differently is not forced
+ * through English rules.
+ *
+ * Shared with the panel so the field shows what the card will say.
+ */
+export function priceUnitFor(set: CardSet, cadence: string, locale: string): string {
+  return (
+    set.priceUnits?.[cadence]?.trim() ||
+    UNIT_DEFAULTS[cadence] ||
+    cadence.toLocaleLowerCase(locale)
+  )
+}
+
+/**
  * Whether the add-on shows at all. Off for now.
  *
  * One switch rather than two deletions: the card stops drawing the panel and
@@ -159,17 +191,7 @@ export function deriveCard(
   const { locale, currency } = market
   const money = (amount: number) => formatMoney(amount, locale, currency)
 
-  /**
-   * What reads after the price: "$25.99 /month".
-   *
-   * Written if someone wrote it for this cadence, and otherwise the cadence's
-   * own name lower-cased — the same string is a proper label in the panel's
-   * picker and running text on the card. Lowered against the market's locale,
-   * so a market whose language cases differently is not forced through English
-   * rules.
-   */
-  const priceUnit =
-    set.priceUnits?.[context.cadence]?.trim() || context.cadence.toLocaleLowerCase(locale)
+  const priceUnit = priceUnitFor(set, context.cadence, locale)
   const missingRefs: string[] = []
 
   /* Add-on. A bundled benefit and a sellable one are mutually exclusive; the

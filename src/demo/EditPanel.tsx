@@ -6,7 +6,7 @@ import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
-import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer } from '../rules/derive'
+import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer, priceUnitFor } from '../rules/derive'
 import { formatMoney } from '../rules/money'
 import { logoArtwork } from '../card/assets'
 import { BenefitIcon } from './BenefitIcon'
@@ -92,13 +92,11 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   /**
    * What currently reads after the slash, written or not.
    *
-   * The field shows the effective value rather than an empty box, because the
-   * card is already saying "monthly" and a blank field beside it would read as
+   * The field shows the effective value rather than an empty box: the card is
+   * already saying something, and a blank field beside it would read as
    * "nothing set" when something plainly is.
    */
-  const unit =
-    set.priceUnits?.[context.cadence] ??
-    context.cadence.toLocaleLowerCase(market?.locale ?? 'en')
+  const unit = priceUnitFor(set, context.cadence, market?.locale ?? 'en')
   const money = (amount: number) =>
     market ? formatMoney(amount, market.locale, market.currency) : String(amount)
 
