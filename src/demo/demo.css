@@ -234,11 +234,24 @@
 .jf__step[data-skipped] {
   opacity: 0.45;
 }
+/* Sticks to the left edge while its own step scrolls past, so you can always
+   see which step you are looking at. It sticks within .jf__step, so the next
+   label pushes this one out rather than the two overlapping — and the label
+   leaves with its step rather than hanging over the one after it.
+
+   align-self keeps it from stretching the full width of the group, which
+   would put the name above the second tile instead of the first. */
 .jf__step-name {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 2;
+  align-self: flex-start;
   display: flex;
   gap: var(--space-6);
   align-items: center;
   margin: 0;
+  padding-inline-end: var(--space-8);
+  background: var(--color-surface-default);
   color: var(--color-text-secondary);
   font-size: var(--font-size-label-xs);
   font-weight: var(--font-weight-bold);
