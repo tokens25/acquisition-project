@@ -904,7 +904,7 @@
 .ed-source {
   display: flex;
   justify-content: flex-end;
-  margin-block-end: calc(var(--space-8) * -1);
+  margin-block: 0;
 }
 .ed-tabs--sm .ed-tab {
   padding: var(--space-4) var(--space-10);
