@@ -66,6 +66,13 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **tile number** | `.jf__num` | Where that screen falls in the flow. A dash when the step is skipped. |
 | **thumbnail** | `.jf__thumb` | A live miniature of the real screen, built from your actual content. Sized to the proportions of a 375 by 812 phone. |
 | **thumbnail scaler** | `.jf__thumb-scale` | The layer inside the thumbnail that shrinks the screen. The screen renders at full size and this scales it down, so the miniature is the real thing rather than a separate small version that could drift from it. |
+| **phone status bar** | `.jf__status` | The iOS status bar across the top of a tile — the iOS/android component from Figma, drawn at the tile’s scale. Static, so it holds still while the screen scrolls beneath it; each frame’s own status bar is clipped off the export and this one drawn in its place. |
+| **status time** | `.jf__status-time` | The clock. Always 9:41, as the design has it. |
+| **notch spacer** | `.jf__status-island` | The gap the Dynamic Island sits in. It draws nothing and reserves 124px, which is why the clock sits left of centre rather than in the middle. |
+| **status levels** | `.jf__status-levels` | The signal, wifi and battery group at the right. |
+| **signal icon** | `.jf__status-cell` | Cellular bars, exported from the component. |
+| **wifi icon** | `.jf__status-wifi` | Wifi, exported from the component. |
+| **battery icon** | `.jf__status-battery` | Battery, exported from the component. |
 | **browser chrome** | `.jf__chrome` | The Safari address bar at the foot of a tile — the .Safari, iOS component from Figma, drawn at the tile’s scale so it is the design’s own geometry rather than an approximation. It is pinned rather than left in the picture, so it holds still while the screen scrolls behind it; each frame’s own bar is clipped off and this one drawn in its place. |
 | **chrome button** | `.jf__chrome-btn` | One of the two round 44px buttons either side of the address — back on the left, menu on the right. |
 | **address pill** | `.jf__url` | The rounded bar holding the site icon, the domain and the reload arrow. |

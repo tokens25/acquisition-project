@@ -5,6 +5,9 @@ import { Icon } from '../components/Icon'
 import { iconArtwork } from '../card/assets'
 import reloadIcon from '../assets/browser/reload.svg'
 import siteSettingsIcon from '../assets/browser/site-settings.svg'
+import cellularIcon from '../assets/browser/status-cellular.svg'
+import wifiIcon from '../assets/browser/status-wifi.svg'
+import batteryIcon from '../assets/browser/status-battery.svg'
 import type { CardSet, Context } from '../rules/content'
 import type { ResolvedStep } from '../rules/journey'
 
@@ -205,6 +208,20 @@ export function JourneyFrames({
                 >
                   <span className="jf__num">{number ?? '—'}</span>
 
+                  {/* iOS/android — node 586:26748, at the tile's scale. Static
+                      at the top the way the address bar is static at the foot,
+                      so both hold still while the page scrolls between them.
+                      Each frame's own status bar is clipped off the export. */}
+                  <span className="jf__status" style={{ zoom: thumbScale }} aria-hidden="true">
+                    <span className="jf__status-time">9:41</span>
+                    <span className="jf__status-island" />
+                    <span className="jf__status-levels">
+                      <img className="jf__status-cell" src={cellularIcon} alt="" />
+                      <img className="jf__status-wifi" src={wifiIcon} alt="" />
+                      <img className="jf__status-battery" src={batteryIcon} alt="" />
+                    </span>
+                  </span>
+
                   {/* The design first, then the live render, then the name.
                       A step with an exported frame shows it, so the row reads
                       as the flow as drawn — including Subscription, whose new
@@ -237,10 +254,19 @@ export function JourneyFrames({
                       <span
                         className="jf__page"
                         style={{
-                          blockSize: Math.round((art.height - art.chrome) * thumbScale),
+                          blockSize: Math.round(
+                            (art.height - art.status - art.chrome) * thumbScale,
+                          ),
                         }}
                       >
-                        <img className="jf__art" src={art.src} alt="" loading="lazy" draggable={false} />
+                        <img
+                          className="jf__art"
+                          style={{ marginBlockStart: -Math.round(art.status * thumbScale) }}
+                          src={art.src}
+                          alt=""
+                          loading="lazy"
+                          draggable={false}
+                        />
                       </span>
                     ) : (
                       <span className="jf__frame">{step.figmaFrame ?? step.name}</span>

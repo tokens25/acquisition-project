@@ -31,6 +31,15 @@ export interface FlowFrame {
    * and clipped, and the tile draws its own at the top.
    */
   chrome: number
+  /**
+   * The iOS status bar baked into the top of the export.
+   *
+   * Clipped for the same reason as the bar at the foot: the tile draws its own,
+   * pinned, so it holds still while the page scrolls. 40 on every frame in the
+   * Flow section, which all use the same iOS/android component; the two Plans
+   * frames carry a 54-tall .status-bar instead.
+   */
+  status: number
 }
 
 /**
@@ -56,21 +65,21 @@ export const flowArtwork: Record<string, FlowFrame> = {
   // Section 1, node 586:26732. The two frames are the same screen with the
   // tabs on Standard and on Ultimate — the price and the feature list follow
   // the tab, which is why they are two states of one step and not two steps.
-  'plans/standard': { src: plansStandard, height: 812, chrome: 54 },
-  'plans/ultimate': { src: plansUltimate, height: 812, chrome: 54 },
-  cadence: { src: cadence, height: 788, chrome: 54 },
-  auth: { src: login, height: 820, chrome: 90 },
-  'account/empty': { src: accountEmpty, height: 866, chrome: 90 },
-  'account/filled': { src: accountFilled, height: 959, chrome: 90 },
-  'account/confirmed': { src: accountConfirmed, height: 959, chrome: 90 },
-  'zip/default': { src: zipDefault, height: 788, chrome: 90 },
-  'zip/edit': { src: zipEdit, height: 788, chrome: 90 },
-  'zip/edit results': { src: zipEditResults, height: 788, chrome: 90 },
-  'checkout/empty': { src: checkoutEmpty, height: 1321, chrome: 90 },
-  'checkout/filled': { src: checkoutFilled, height: 1321, chrome: 90 },
-  'checkout/payment process': { src: checkoutPaymentProcess, height: 1321, chrome: 90 },
-  'checkout/payment verified': { src: checkoutPaymentVerified, height: 1321, chrome: 90 },
-  ready: { src: confirmation, height: 812, chrome: 90 },
+  'plans/standard': { src: plansStandard, height: 812, chrome: 54, status: 54 },
+  'plans/ultimate': { src: plansUltimate, height: 812, chrome: 54, status: 54 },
+  cadence: { src: cadence, height: 788, chrome: 54, status: 40 },
+  auth: { src: login, height: 820, chrome: 90, status: 40 },
+  'account/empty': { src: accountEmpty, height: 866, chrome: 90, status: 40 },
+  'account/filled': { src: accountFilled, height: 959, chrome: 90, status: 40 },
+  'account/confirmed': { src: accountConfirmed, height: 959, chrome: 90, status: 40 },
+  'zip/default': { src: zipDefault, height: 788, chrome: 90, status: 40 },
+  'zip/edit': { src: zipEdit, height: 788, chrome: 90, status: 40 },
+  'zip/edit results': { src: zipEditResults, height: 788, chrome: 90, status: 40 },
+  'checkout/empty': { src: checkoutEmpty, height: 1321, chrome: 90, status: 40 },
+  'checkout/filled': { src: checkoutFilled, height: 1321, chrome: 90, status: 40 },
+  'checkout/payment process': { src: checkoutPaymentProcess, height: 1321, chrome: 90, status: 40 },
+  'checkout/payment verified': { src: checkoutPaymentVerified, height: 1321, chrome: 90, status: 40 },
+  ready: { src: confirmation, height: 812, chrome: 90, status: 40 },
 }
 
 /**

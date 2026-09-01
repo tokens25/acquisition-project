@@ -73,9 +73,12 @@
       'address pill': [14,81,8,4], 'site settings icon': [14.5,82,1.5,2],
       'address text': [17,82,3,2], 'reload icon': [20,82,1.5,2],
       'browser menu': [23,81,4,4],
-      'screen': [8,26,20,54],
-      'thumbnail': [8,26,20,54], 'thumbnail scaler': [9,27,18,52],
-      'page clip': [8,26,20,54], 'screen artwork': [8,26,20,62],
+      'phone status bar': [8,25,20,4], 'status time': [9,26,3,2], 'notch spacer': [14,26,8,2],
+      'status levels': [23,26,4,2], 'signal icon': [23,26,1.2,2],
+      'wifi icon': [24.4,26,1.2,2], 'battery icon': [25.8,26,1.6,2],
+      'screen': [8,30,20,50],
+      'thumbnail': [8,30,20,50], 'thumbnail scaler': [9,31,18,48],
+      'page clip': [8,30,20,50], 'screen artwork': [8,30,20,58],
       'frame name': [9,79,18,3], 'state label': [9,83,18,3]
     }},
     stepview: { vb: '0 0 160 96', parts: {
