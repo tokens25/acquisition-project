@@ -93,8 +93,18 @@
   line-height: 1.52;
   translate: 0 -22px;
 }
+/* A multiline field keeps its label at the top of the box rather than floating
+   it over the edge — the box is padded to make room, so there is nowhere to
+   float to and nothing gained by moving. */
 .dz-field__input[data-multiline] .dz-field__label {
   inset-block-start: 0;
+  translate: 0 0;
+}
+/* Focus must not undo that. The float rule above carries :focus-within, which
+   outranks the plain multiline rule, so the label jumped 22px clear of the box
+   the moment the field was clicked. Matching that specificity and coming after
+   it pins the label where it belongs. */
+.dz-field__input[data-multiline]:focus-within .dz-field__label {
   translate: 0 0;
 }
 
