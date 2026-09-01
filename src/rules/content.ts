@@ -251,6 +251,18 @@ export interface CardSet {
    */
   featureIcons?: 'feature' | 'check' | 'hidden'
   /**
+   * What follows the slash after a price, per cadence — "$29.99 /month".
+   *
+   * Keyed by cadence rather than held on an offer, because it is a fact about
+   * how you pay and not about what a particular plan costs: every price at a
+   * cadence reads the same way, and writing it per offer is how one plan ends
+   * up saying "/month" beside another saying "/monthly".
+   *
+   * Absent means the cadence's own name, lower-cased — so nothing has to be
+   * written until something needs to read differently from how it is listed.
+   */
+  priceUnits?: Record<string, string>
+  /**
    * Kept with the content rather than in the page, because it is a fact about
    * this content and not about this browser tab: reloading does not un-ask for
    * a review, and editing after asking drops it back to `draft` rather than

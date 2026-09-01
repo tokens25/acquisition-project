@@ -160,14 +160,16 @@ export function deriveCard(
   const money = (amount: number) => formatMoney(amount, locale, currency)
 
   /**
-   * The cadence as it reads after a price: "$25.99 /monthly".
+   * What reads after the price: "$25.99 /month".
    *
-   * Lower case here rather than in the data, because the same string is a
-   * proper label in the panel's dropdown and running text on the card. Lowered
-   * against the market's locale, so a market whose language cases differently
-   * is not forced through English rules.
+   * Written if someone wrote it for this cadence, and otherwise the cadence's
+   * own name lower-cased — the same string is a proper label in the panel's
+   * picker and running text on the card. Lowered against the market's locale,
+   * so a market whose language cases differently is not forced through English
+   * rules.
    */
-  const priceUnit = context.cadence.toLocaleLowerCase(locale)
+  const priceUnit =
+    set.priceUnits?.[context.cadence]?.trim() || context.cadence.toLocaleLowerCase(locale)
   const missingRefs: string[] = []
 
   /* Add-on. A bundled benefit and a sellable one are mutually exclusive; the

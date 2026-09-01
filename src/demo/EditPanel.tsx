@@ -7,6 +7,7 @@ import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
 import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer } from '../rules/derive'
+import { formatMoney } from '../rules/money'
 import { logoArtwork } from '../card/assets'
 import { BenefitIcon } from './BenefitIcon'
 import { IconPicker } from './IconPicker'
@@ -87,6 +88,19 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const resolved = resolveTier(tier, context)
   const offer = offerFor(tier.id)
   const market = set.markets.find((m) => m.code === context.market)
+
+  /**
+   * What currently reads after the slash, written or not.
+   *
+   * The field shows the effective value rather than an empty box, because the
+   * card is already saying "monthly" and a blank field beside it would read as
+   * "nothing set" when something plainly is.
+   */
+  const unit =
+    set.priceUnits?.[context.cadence] ??
+    context.cadence.toLocaleLowerCase(market?.locale ?? 'en')
+  const money = (amount: number) =>
+    market ? formatMoney(amount, market.locale, market.currency) : String(amount)
 
   const patchTier = (p: Parameters<typeof updateTier>[1]) => updateTier(tier.id, p)
 
@@ -222,8 +236,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         <h3 className="demo__group-title">
           Pricing{market ? ` — ${market.currency}` : ''}
         </h3>
+        {/* Which of the plan's prices everything below edits. Named for what
+            picking one shows you, since that is the only thing it does. */}
         <SelectField
-          label="How to pay"
+          label="Price for"
           value={context.cadence}
           options={set.cadences.map((c) => ({ value: c, label: c }))}
           onChange={(v) => setContext({ ...context, cadence: v })}
@@ -232,6 +248,26 @@ export function EditPanel({ store }: { store: CardSetStore }) {
 
         {offer ? (
           <>
+            <TextField
+              label="Full price"
+              type="number"
+              step={0.01}
+              min={0}
+              value={String(offer.standardPrice ?? '')}
+              onChange={(v) => updateOffer(tier.id, { standardPrice: Number(v) })}
+            />
+            {/* Everything after the slash. It belongs to the cadence rather
+                than to this plan, so writing it here writes it for every plan
+                priced this way — which is the point: they cannot then disagree
+                about what "monthly" is called. */}
+            <TextField
+              label="How to pay"
+              value={unit}
+              onChange={(v) =>
+                updateSet({ priceUnits: { ...set.priceUnits, [context.cadence]: v } })
+              }
+              helpText={`Reads as ${money(offer.standardPrice)}/${unit || '…'} on the card.`}
+            />
             <ToggleField
               label="Apply discount"
               tone="success"
@@ -245,14 +281,6 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                     : null,
                 })
               }
-            />
-            <TextField
-              label="Full price"
-              type="number"
-              step={0.01}
-              min={0}
-              value={String(offer.standardPrice ?? '')}
-              onChange={(v) => updateOffer(tier.id, { standardPrice: Number(v) })}
             />
             {offer.discount && (
               <TextField

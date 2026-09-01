@@ -140,6 +140,9 @@ export const defaultSet: CardSet = {
   context: { market: 'MSG+', channel: DIRECT, cadence: 'Monthly' },
   journeyId: 'hero-signup',
   featureIcons: 'feature',
+  // The tiles read "/month", not "/monthly" — the cadence is listed as Monthly
+  // and reads as month beside a price. Written once here, for every plan.
+  priceUnits: { Monthly: 'month' },
   review: 'draft',
   stepId: 'plans',
   // The size the tiles are drawn at: "Preview_standard_tiers" is three cards

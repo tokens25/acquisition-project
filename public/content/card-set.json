@@ -271,6 +271,9 @@
   },
   "journeyId": "hero-signup",
   "featureIcons": "feature",
+  "priceUnits": {
+    "Monthly": "month"
+  },
   "review": "draft",
   "stepId": "plans",
   "device": "mobile"

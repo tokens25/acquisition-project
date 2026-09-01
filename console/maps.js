@@ -47,12 +47,13 @@
       'plan name field': [4,36,72,14],
       'AI pill': [52,52,10,5], 'AI sparkle': [53,53,3,3], 'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
     }},
-    groupPricing: { vb: '0 0 80 118', parts: {
-      'cadence field': [4,4,72,14], 'apply discount toggle': [4,21,72,12],
-      'standard price field': [4,36,72,14], 'discount price field': [4,53,72,14],
-      'button field': [4,70,72,14],
-      'price explainer field': [4,88,72,16],
-      'not sold at this cadence': [4,106,72,9]
+    groupPricing: { vb: '0 0 80 136', parts: {
+      'cadence field': [4,4,72,14], 'standard price field': [4,21,72,14],
+      'price unit field': [4,38,72,14], 'apply discount toggle': [4,55,72,12],
+      'discount price field': [4,70,72,14],
+      'button field': [4,87,72,14],
+      'price explainer field': [4,104,72,16],
+      'not sold at this cadence': [4,122,72,9]
     }},
     groupAddon: { vb: '0 0 80 66', parts: {
       'add-on field': [4,4,72,14], 'paid-for field': [4,21,72,14],
