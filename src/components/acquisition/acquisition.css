@@ -18,7 +18,7 @@
   border: var(--border-2) solid transparent;
   border-radius: var(--radius-18);
   background: linear-gradient(
-    155deg,
+    158.76deg,
     var(--color-surface-container-2) 9%,
     var(--color-surface-default) 59%
   );
@@ -30,7 +30,9 @@
    card never peeks — which is how a horizontally scrolling row tells you it
    scrolls. */
 .acq-card[data-device='mobile'] {
-  max-inline-size: 284px; /* 240 content + 40 padding + 4 edge */
+  max-inline-size: 284px; /* 240 content + 40 padding + 4 border. Figma's 280 is
+     the content box — its stroke is drawn inside without taking layout, so CSS
+     needs the extra 4 or the five 44px logo tiles no longer fit their row. */
 }
 .acq-card[data-device='mobile'] .acq-card__body {
   padding: var(--space-20);
@@ -43,17 +45,19 @@
   border-color: var(--color-brand-tertiary);
 }
 
+/* Label/badge/Left — a pixel past the corner, so the card's own border does
+   not show through beneath it. That is how the component sits. */
 .acq-card__eyebrow {
   position: absolute;
   inset-block-start: 0;
   inset-inline-end: 0;
   z-index: 1;
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-2);
   align-items: center;
-  block-size: 20px;
+  block-size: 16px;
   margin: 0;
-  padding-inline: var(--space-12);
+  padding-inline: var(--space-8);
   border-start-end-radius: var(--radius-18);
   border-end-start-radius: var(--radius-18);
   background: var(--gradient-subscribe);
@@ -89,7 +93,8 @@
 .acq-card-header {
   display: flex;
   flex-direction: column;
-  gap: var(--space-12);
+  gap: var(--space-4);
+  padding-block-end: var(--space-12);
 }
 
 .acq-card-header__title {
@@ -98,8 +103,10 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.32;
 }
+/* Heading/h5 is a 20|22|24 ramp and the token file only ships its desktop
+   step, so the mobile card carries the design's own number. */
 .acq-card-header[data-device='mobile'] .acq-card-header__title {
-  font-size: var(--font-size-button-lg);
+  font-size: 20px;
 }
 .acq-card-header[data-device='xl'] .acq-card-header__title {
   font-size: var(--font-size-heading-h5);
@@ -134,6 +141,16 @@
 
 /* ── Pricing ───────────────────────────────────────────────── */
 
+/* The rule above the price belongs to this block, not to a separate element —
+   .RSN/Pricing carries it as its own border-top. The card still renders an
+   .acq-card__divider for the desktop layout, which does have one. */
+.acq-pricing[data-device='mobile'] {
+  padding-block-start: var(--space-12);
+  border-block-start: var(--border-1) solid var(--color-border-transparent-default, rgba(136, 144, 152, 0.52));
+}
+.acq-card[data-device='mobile'] .acq-card__divider {
+  display: none;
+}
 .acq-pricing {
   display: flex;
   flex-direction: column;
@@ -159,8 +176,9 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.32;
 }
+/* Heading/h4 is a 24|26|28 ramp, same story as the title above. */
 .acq-pricing[data-device='mobile'] .acq-pricing__price {
-  font-size: var(--font-size-heading-h6);
+  font-size: 24px;
 }
 .acq-pricing[data-device='xl'] .acq-pricing__price {
   font-size: var(--font-size-display-5);
@@ -203,16 +221,24 @@
 
 /* ── LogoTiles ─────────────────────────────────────────────── */
 
+/* Five 44px tiles to a row, spread edge to edge across the 240 of content —
+   which puts 5px between them. Wrapping rather than a fixed grid, so a sixth
+   logo starts a second row instead of squeezing the first, the way the two-row
+   card in the design does. */
 .acq-logo-tiles {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: var(--space-8);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: space-between;
+  align-content: flex-start;
   margin: 0;
-  padding: var(--space-12) 0;
+  padding: var(--space-12) 0 var(--space-4);
   list-style: none;
 }
 .acq-logo-tiles__tile {
-  aspect-ratio: 1;
+  flex: none;
+  inline-size: 44px;
+  block-size: 44px;
   overflow: hidden;
   border-radius: var(--radius-8);
 }
@@ -345,7 +371,7 @@
   flex-direction: column;
   gap: var(--space-8);
   margin: 0;
-  padding: var(--space-12) 0 0;
+  padding: var(--space-12) 0;
   list-style: none;
 }
 .acq-feature {

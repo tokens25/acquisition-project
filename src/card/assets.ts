@@ -5,6 +5,7 @@ import closeIcon from '../assets/icons/action-close-md.svg?raw'
 import eyeIcon from '../assets/icons/action-password-show.svg?raw'
 import panelIcon from '../assets/icons/nav-panel-collapse.svg?raw'
 import chevronLeftIcon from '../assets/icons/nav-chevron-left-md.svg?raw'
+import chevronRightIcon from '../assets/icons/nav-chevron-right-md.svg?raw'
 import settingsIcon from '../assets/icons/nav-settings.svg?raw'
 import editIcon from '../assets/icons/action-edit.svg?raw'
 import uploadIcon from '../assets/icons/actions-upload.svg?raw'
@@ -58,6 +59,7 @@ export const iconArtwork: Record<string, string> = {
   'chevron-down': chevronDownIcon,
   edit: editIcon,
   'chevron-left': chevronLeftIcon,
+  'chevron-right': chevronRightIcon,
   close: closeIcon,
   preview: eyeIcon,
   'panel-collapse': panelIcon,
