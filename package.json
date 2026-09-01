@@ -12,7 +12,9 @@
     "storybook": "storybook dev -p 6007",
     "build-storybook": "storybook build",
     "code-connect": "figma connect publish",
-    "code-connect:check": "figma connect"
+    "code-connect:check": "figma connect",
+    "console": "node scripts/build-console.mjs",
+    "console:check": "node scripts/build-console.mjs --check"
   },
   "dependencies": {
     "react": "^19.2.4",

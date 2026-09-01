@@ -1,0 +1,332 @@
+<title>Acquisition Feedback Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  /* DAZN's own tokens — the subject's palette, not an invented one. */
+  :root {
+    --ground: #ffffff;
+    --raised: #f5f7f8;
+    --sunk: #e9edf0;
+    --line: #cdd5da;
+    --line-soft: #e9edf0;
+    --ink: #080e12;
+    --ink-mid: #3f4c55;
+    --ink-soft: #626e78;
+    --accent: #c8ce00;
+    --accent-ink: #080e12;
+    --wire: #b3bec6;
+    --now: #c2410c;
+    --next: #1e8a4a;
+    --idea: #4f5bd5;
+    --font: 'Archivo', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #080e12; --raised: #0c1216; --sunk: #10171b;
+      --line: #21292e; --line-soft: #161d22;
+      --ink: #fafbfc; --ink-mid: #bcc5cb; --ink-soft: #76828c;
+      --accent: #f7ff1a; --accent-ink: #080e12; --wire: #384249;
+      --now: #ff9166; --next: #79e99c; --idea: #a9b1ff;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #080e12; --raised: #0c1216; --sunk: #10171b;
+    --line: #21292e; --line-soft: #161d22;
+    --ink: #fafbfc; --ink-mid: #bcc5cb; --ink-soft: #76828c;
+    --accent: #f7ff1a; --accent-ink: #080e12; --wire: #384249;
+    --now: #ff9166; --next: #79e99c; --idea: #a9b1ff;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0 0 88px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1340px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Masthead ─────────────────────────────────────── */
+  .top {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--ground);
+    border-bottom: 1px solid var(--line);
+  }
+  .top__inner {
+    display: flex; flex-direction: column; gap: 14px;
+    max-width: 1340px; margin: 0 auto; padding: 16px 24px 12px;
+  }
+  .top__line { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .top__note { margin: 0; color: var(--ink-soft); font-size: 13px; }
+  .lede__link { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+  .lede__link:hover { color: var(--accent-ink); background: var(--accent); }
+
+
+  /* ── View tabs ────────────────────────────────────── */
+  .tabs { display: flex; gap: 8px; }
+  .tab {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 9px 14px;
+    border: 1px solid var(--line); border-radius: 8px;
+    background: transparent; color: var(--ink-soft);
+    font-family: var(--font); cursor: pointer;
+  }
+  .tab:hover { background: var(--sunk); color: var(--ink); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tab__label { font-size: 14px; font-weight: 700; letter-spacing: -0.005em; }
+  .tab__note { font-size: 11.5px; color: var(--ink-soft); }
+  .tab__badge {
+    font-family: var(--mono); font-size: 11px;
+    font-variant-numeric: tabular-nums; color: var(--ink-soft);
+  }
+  .tab__badge:empty { display: none; }
+  .tab[aria-selected='true'] {
+    background: var(--sunk);
+    color: var(--ink);
+    border-color: var(--ink-soft);
+    box-shadow: inset 0 -3px 0 -1px var(--accent);
+  }
+  .tab[aria-selected='true'] .tab__note { color: var(--ink-mid); }
+  .tab[aria-selected='true'] .tab__badge { color: var(--ink); }
+
+  /* ── Sections ─────────────────────────────────────── */
+  section { margin-top: 26px; scroll-margin-top: calc(var(--head-h, 168px) + 20px); }
+  section[hidden] { display: none; }
+
+  .sec-head {
+    position: sticky; top: var(--head-h, 168px); z-index: 10;
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 10px 0 8px;
+    background: var(--ground);
+    border: none; border-bottom: 1px solid var(--line);
+    color: var(--ink); font-family: var(--font);
+    text-align: left; cursor: pointer;
+  }
+  .sec-head:hover .sec-head__title { color: var(--ink-mid); }
+  .sec-head:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sec-head__chev {
+    flex: none; width: 9px; height: 9px;
+    border-right: 1.6px solid var(--ink-soft);
+    border-bottom: 1.6px solid var(--ink-soft);
+    transform: rotate(45deg) translate(-1px, -1px);
+    transition: transform 130ms ease;
+  }
+  section.shut .sec-head__chev { transform: rotate(-45deg) translate(-1px, 1px); }
+  .sec-head__title {
+    margin: 0; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .sec-head__count { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); }
+  .sec-head__count b { color: var(--next); font-weight: 500; }
+
+  .sec-head__shared {
+    padding: 2px 7px;
+    border: 1px solid var(--line); border-radius: 999px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+
+  .sec-blurb {
+    margin: 7px 0 0;
+    padding-left: 14px;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+  }
+  section.shut .row, section.shut .addrow, section.shut .sec-blurb { display: none; }
+
+  /* ── Rows ─────────────────────────────────────────── */
+  .row {
+    display: grid;
+    grid-template-columns: 172px 128px minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 18px; align-items: start;
+    padding: 14px 0 14px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    position: relative;
+  }
+  .row[hidden] { display: none; }
+  .row::before {
+    content: ''; position: absolute;
+    left: 0; top: 14px; bottom: 14px;
+    width: 3px; border-radius: 2px; background: transparent;
+  }
+  .row[data-note]::before { background: var(--ink-soft); }
+  .row[data-note][data-pri="now"]::before { background: var(--now); }
+  .row[data-note][data-pri="next"]::before { background: var(--next); }
+  .row[data-note][data-pri="idea"]::before { background: var(--idea); }
+
+  .name { font-weight: 600; font-size: 14px; letter-spacing: -0.005em; }
+  .anchor {
+    display: block; margin-top: 3px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-soft); word-break: break-all;
+  }
+  .what { color: var(--ink-mid); font-size: 13.5px; line-height: 1.55; }
+
+  /* ── The wireframe column ─────────────────────────── */
+  .vis {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--raised);
+  }
+  .vis .w { fill: none; stroke: var(--wire); stroke-width: 0.9; }
+  .vis .on-fill { fill: var(--accent); stroke: none; }
+  .vis .on-wash { fill: var(--accent); opacity: 0.22; stroke: none; }
+  .vis .on-edge { fill: none; stroke: var(--accent); stroke-width: 1.6; }
+  .vis-none {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 54px; padding: 6px;
+    border: 1px dashed var(--line); border-radius: 6px;
+    color: var(--ink-soft); font-size: 11px; text-align: center;
+  }
+
+  .cell { display: flex; flex-direction: column; gap: 7px; }
+  textarea {
+    width: 100%; min-height: 44px; padding: 9px 11px;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: var(--raised); color: var(--ink);
+    font-family: var(--font); font-size: 13.5px; line-height: 1.5;
+    resize: none; overflow: hidden;
+  }
+  textarea::placeholder { color: var(--ink-soft); opacity: 0.75; }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+
+  .pri { display: flex; gap: 5px; }
+  .row:not([data-note]) .pri { visibility: hidden; }
+  .pri button {
+    padding: 2px 9px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: transparent; color: var(--ink-soft);
+    font-family: var(--font); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.03em; cursor: pointer;
+  }
+  .pri button:hover { color: var(--ink); }
+  .pri button[aria-pressed="true"] { border-color: currentColor; }
+  .pri button[data-p="now"][aria-pressed="true"]  { color: var(--now); }
+  .pri button[data-p="next"][aria-pressed="true"] { color: var(--next); }
+  .pri button[data-p="idea"][aria-pressed="true"] { color: var(--idea); }
+  .pri button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* The foot is always there. Hiding Send until a row had text made the page
+     look like it had no send buttons at all, which is the opposite of the
+     point — so Send stays visible and goes dim instead. */
+  .cell__foot { display: flex; align-items: center; gap: 8px; }
+  .send {
+    padding: 3px 11px;
+    border: 1px solid var(--accent); border-radius: 999px;
+    background: transparent; color: var(--ink);
+    font-family: var(--font); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.03em; cursor: pointer;
+  }
+  .send:hover { background: var(--accent); color: var(--accent-ink); }
+  .send:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .send[disabled] { opacity: 0.4; cursor: default; }
+  .send[disabled]:hover { background: transparent; color: var(--ink); }
+
+  .sent {
+    margin: 0;
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.5;
+    color: var(--ink-soft); white-space: pre-wrap;
+  }
+  .sent:empty { display: none; }
+  #allstatus { margin: 20px auto 4px; }
+  .sent[data-state='run'] { color: var(--ink-mid); }
+  .sent[data-state='ok'] { color: var(--next); }
+  .sent[data-state='err'] { color: var(--now); }
+
+  .drop {
+    border: none; background: transparent; color: var(--ink-soft);
+    font-size: 11px; cursor: pointer; padding: 2px 0;
+    text-align: left; font-family: var(--font);
+  }
+  .drop:hover { color: var(--now); }
+
+  .addrow { padding: 16px 0 0 14px; }
+
+  /* ── Action bar ───────────────────────────────────── */
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    background: var(--raised); border-top: 1px solid var(--line);
+  }
+  .bar__inner {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    max-width: 1340px; margin: 0 auto; padding: 12px 24px;
+  }
+  .tally {
+    font-family: var(--mono); font-size: 12.5px;
+    color: var(--ink-soft); font-variant-numeric: tabular-nums;
+  }
+  .tally b { font-weight: 500; color: var(--ink); }
+  .tally .c-now { color: var(--now); }
+  .tally .c-next { color: var(--next); }
+  .tally .c-idea { color: var(--idea); }
+  .spacer { flex: 1; }
+  .toast { font-family: var(--mono); font-size: 12px; color: var(--next); }
+
+  button.act {
+    padding: 8px 14px;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: transparent; color: var(--ink);
+    font-family: var(--font); font-size: 13.5px; font-weight: 600;
+    cursor: pointer;
+  }
+  button.act:hover { background: var(--sunk); }
+  button.act:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.act[aria-pressed="true"] { background: var(--sunk); border-color: var(--ink-soft); }
+  button.act.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button.act.primary:hover { filter: brightness(0.93); }
+  button.act.quiet { border-color: transparent; color: var(--ink-soft); font-weight: 500; }
+  button.act.quiet:hover { color: var(--ink); background: transparent; }
+
+  @media (max-width: 1100px) {
+    .row { grid-template-columns: 150px 116px minmax(0, 1fr); }
+    .row .cell { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .row { grid-template-columns: 110px minmax(0, 1fr); gap: 12px; }
+    .row .what { grid-column: 1 / -1; }
+    .sec-head { top: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .sec-head__chev { transition: none; } }
+</style>
+
+<header class="top">
+  <div class="top__inner">
+    <div class="top__line">
+      <h1>Acquisition Feedback Console</h1>
+      <p class="top__note" id="lede">Find the area, say what should change, mark how soon.</p>
+    </div>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Which view"></nav>
+  </div>
+</header>
+
+<main class="wrap" id="sheet"></main>
+<p class="wrap sent" id="allstatus"></p>
+
+<div class="bar">
+  <div class="bar__inner">
+    <span class="tally" id="tally">Nothing noted yet</span>
+    <span class="toast" id="toast"></span>
+    <span class="spacer"></span>
+    <button class="act quiet" id="clear">Clear all</button>
+    <button class="act" id="copy">Copy feedback</button>
+    <button class="act primary" id="sendall" hidden>Send all to Claude</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
