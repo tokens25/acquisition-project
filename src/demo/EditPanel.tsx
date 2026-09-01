@@ -223,7 +223,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
               }
             />
             <TextField
-              label="Standard price"
+              label="Full price"
               type="number"
               step={0.01}
               min={0}

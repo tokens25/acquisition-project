@@ -145,7 +145,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | --- | --- | --- |
 | **cadence field** | `How to pay` | Monthly Flex, Instalments Annual, or Annual Upfront. Changing it changes which prices you are editing — a plan with no price here simply is not sold that way. |
 | **apply discount toggle** | `Apply discount` | Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change. |
-| **standard price field** | `Standard price` | The normal price, in the currency of the country you picked. |
+| **standard price field** | `Full price` | The undiscounted price, in the currency of the country you picked. |
 | **discount price field** | `Discount price` | The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount. |
 | **not sold at this cadence** | `.ed-placeholder · pricing` | Replaces the price fields when this plan is not sold at the chosen cadence. It says plainly that this is a fact about the plan, not something missing that you need to fill in. |
 
