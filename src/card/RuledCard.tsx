@@ -65,7 +65,7 @@ export function RuledCard({
         caption: d.priceCaption ?? '',
         price: d.primaryPrice,
         crossedPrice: d.struckPrice ?? undefined,
-        installment: context.cadence,
+        installment: d.priceUnit,
         extraInfo: d.explainer ?? undefined,
       }}
       ctaLabel={d.ctaLabel}
