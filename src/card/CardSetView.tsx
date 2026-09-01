@@ -40,7 +40,21 @@ export function CardSetView({
    * preview and `.acq-card` clips its own overflow — a scrim rendered inside a
    * card would stop at the card's edge.
    */
-  const [details, setDetails] = useState<Omit<PlanDetailsProps, 'onClose'> | null>(null)
+  const [details, setDetails] = useState<
+    (Omit<PlanDetailsProps, 'onClose' | 'anchor'> & { cardIndex: number }) | null
+  >(null)
+
+  /**
+   * The card the open dialog belongs to, so it can place itself over it.
+   *
+   * Looked up on demand by position in the row rather than held as a
+   * reference: the row re-renders while the dialog is open — the panel beside
+   * it is what people are editing — and a stored node would be the old one.
+   */
+  const anchor = useCallback(() => {
+    if (!details) return null
+    return ref.current?.querySelectorAll<HTMLElement>('.acq-card')[details.cardIndex] ?? null
+  }, [details])
 
   const cards = useMemo(() => resolveSet(set, context), [set, context])
   const market = marketFor(set, context.market)
@@ -125,7 +139,7 @@ export function CardSetView({
           ref={ref}
           data-description-lines={descriptionLines}
         >
-          {cards.map(({ tier, offer }) => (
+          {cards.map(({ tier, offer }, cardIndex) => (
             <RuledCard
               key={tier.id}
               set={set}
@@ -135,13 +149,17 @@ export function CardSetView({
               context={context}
               device={set.device}
               descriptionLines={descriptionLines}
-              onOpenDetails={interactive ? setDetails : undefined}
+              onOpenDetails={
+                interactive ? (d) => setDetails({ ...d, cardIndex }) : undefined
+              }
             />
           ))}
           <p className="acq-set__probe" ref={probeRef} aria-hidden="true" />
         </div>
       </div>
-      {details && <PlanDetails {...details} onClose={() => setDetails(null)} />}
+      {details && (
+        <PlanDetails {...details} anchor={anchor} onClose={() => setDetails(null)} />
+      )}
     </div>
   )
 }

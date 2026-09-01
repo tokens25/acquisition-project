@@ -542,6 +542,13 @@
   font-family: var(--font-family);
 }
 
+/* Placed over the card it was opened from — three cards are on screen at once,
+   and a dialog centred on the row would not say which one you clicked. `left`
+   and `top` are written by the component from measured rectangles. */
+.acq-details__dialog[data-anchored] {
+  position: absolute;
+}
+
 .acq-details__close {
   position: absolute;
   z-index: 1;

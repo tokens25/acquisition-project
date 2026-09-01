@@ -1,6 +1,6 @@
 import './acquisition.css'
 
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import closeIcon from '../../assets/icons/action-close-md.svg?raw'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
@@ -32,7 +32,26 @@ export interface PlanDetailsProps {
   ultimate?: boolean
   competitions: PlanDetailsCompetition[]
   features: PlanDetailsFeature[]
+  /**
+   * The card this was opened from, looked up when the dialog needs to place
+   * itself. A function rather than the element, because the row scrolls and
+   * re-renders underneath — asking each time is cheaper than keeping a
+   * reference that can go stale.
+   */
+  anchor?: () => HTMLElement | null
   onClose: () => void
+}
+
+/**
+ * Keeps a dialog inside the preview when its card is scrolled half out of it.
+ *
+ * No margin: the dialog is narrower than the card and `max-` caps it to the
+ * preview, so an in-view card always centres exactly. A margin here would push
+ * the first card's dialog off its own centre, which is the one thing this
+ * placement exists to get right.
+ */
+function fit(start: number, size: number, extent: number) {
+  return Math.max(0, Math.min(start, extent - size))
 }
 
 /**
@@ -48,6 +67,9 @@ export interface PlanDetailsProps {
  * It sizes itself to the preview it overlays rather than to the browser: at
  * 343 × 600 inside a 375 frame, that is the design's own geometry, and a card
  * set previewed at phone scale is the only place the dialog appears.
+ *
+ * And it opens over its own card. Three cards are on screen at once, so a
+ * dialog centred on the row would leave you working out which one you clicked.
  */
 export function PlanDetails({
   title,
@@ -56,11 +78,50 @@ export function PlanDetails({
   ultimate = false,
   competitions,
   features,
+  anchor,
   onClose,
 }: PlanDetailsProps) {
   const [tab, setTab] = useState<'content' | 'features'>('content')
   const headingId = useId()
   const closeRef = useRef<HTMLButtonElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  /** Offset from the overlay's top-left, once the card has been measured. */
+  const [box, setBox] = useState<{ left: number; top: number } | null>(null)
+
+  useLayoutEffect(() => {
+    const root = rootRef.current
+    const dialog = dialogRef.current
+    if (!root || !dialog || !anchor) return
+
+    const place = () => {
+      const card = anchor()
+      if (!card) return
+      const host = root.getBoundingClientRect()
+      const c = card.getBoundingClientRect()
+      // Physical left/top, not logical: the overlay is pinned to all four
+      // edges, so its origin is the top-left corner in either direction, and
+      // the rectangles being measured are physical too.
+      setBox({
+        left: fit(c.left - host.left + (c.width - dialog.offsetWidth) / 2, dialog.offsetWidth, host.width),
+        top: fit(c.top - host.top + (c.height - dialog.offsetHeight) / 2, dialog.offsetHeight, host.height),
+      })
+    }
+
+    place()
+    // The row scrolls sideways under the dialog, and the panel beside it can
+    // resize the preview — either moves the card the dialog is pinned to.
+    const row = anchor()?.closest('.acq-set')
+    row?.addEventListener('scroll', place, { passive: true })
+    const observer = new ResizeObserver(place)
+    observer.observe(root)
+    window.addEventListener('resize', place)
+    return () => {
+      row?.removeEventListener('scroll', place)
+      observer.disconnect()
+      window.removeEventListener('resize', place)
+    }
+  }, [anchor])
 
   // Escape closes it. Bound to the document because the dialog opens without
   // focus having moved into it yet, and a keydown on the card behind should
@@ -75,7 +136,7 @@ export function PlanDetails({
   }, [onClose])
 
   return (
-    <div className="acq-details">
+    <div className="acq-details" ref={rootRef}>
       {/* The scrim is the dismiss target as well as the dim: clicking beside a
           dialog closes it everywhere else, and a bare div would not say so. */}
       <button
@@ -85,7 +146,17 @@ export function PlanDetails({
         tabIndex={-1}
         onClick={onClose}
       />
-      <div className="acq-details__dialog" role="dialog" aria-modal="true" aria-labelledby={headingId}>
+      <div
+        className="acq-details__dialog"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={headingId}
+        // Until the card is measured it centres on the overlay, which is where
+        // it belongs when there is no card to open from.
+        data-anchored={box ? '' : undefined}
+        style={box ? { left: box.left, top: box.top } : undefined}
+      >
         <button
           type="button"
           className="acq-details__close"
