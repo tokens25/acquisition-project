@@ -159,27 +159,40 @@ function run(prompt: string): Promise<Response> {
 
     child.on('close', (code) => {
       const seconds = Math.round((Date.now() - started) / 1000)
-      if (code !== 0) {
-        return finish({ error: err.trim() || `claude exited with code ${code}.`, seconds }, 500)
-      }
+
+      // Parse stdout before looking at the exit code. A run that fails —
+      // expired credentials, a refused tool — still prints its JSON and exits
+      // non-zero, and that JSON holds the only useful sentence. Reporting the
+      // exit code instead would say "exited with code 1" and throw the reason
+      // away.
+      let parsed:
+        | { result?: string; is_error?: boolean; total_cost_usd?: number; num_turns?: number }
+        | null = null
       try {
-        const parsed = JSON.parse(out) as {
-          result?: string
-          is_error?: boolean
-          total_cost_usd?: number
-          num_turns?: number
+        parsed = JSON.parse(out)
+      } catch {
+        parsed = null
+      }
+
+      if (parsed) {
+        const message = (parsed.result ?? '').trim()
+        if (parsed.is_error) {
+          return finish({ error: message || `claude exited with code ${code}.`, seconds }, 502)
         }
-        finish({
-          ok: !parsed.is_error,
-          result: parsed.result ?? '',
+        return finish({
+          ok: true,
+          result: message,
           cost: parsed.total_cost_usd ?? null,
           turns: parsed.num_turns ?? null,
           seconds,
         })
-      } catch {
-        // Non-JSON on stdout means it failed before the run proper started.
-        finish({ ok: true, result: out.trim(), seconds })
       }
+
+      if (code !== 0) {
+        return finish({ error: err.trim() || `claude exited with code ${code}.`, seconds }, 500)
+      }
+      // Zero exit with unparseable stdout: pass it through rather than guess.
+      finish({ ok: true, result: out.trim(), seconds })
     })
 
     child.stdin.write(prompt)
