@@ -902,7 +902,10 @@
 .jf__thumb-scale {
   display: block;
   /* width and scale come from the device, in the component */
-  padding: var(--space-16);
+  /* No padding. The screens inside carry their own — the plan row its 16, a
+     flow screen its 24 — and a second inset here pushed them off the tile's
+     edges where every exported frame beside them starts at theirs. */
+  padding: 0;
   /* zoom scales the box too, so no origin correction is needed. */
   pointer-events: none;
 }
