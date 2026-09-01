@@ -367,7 +367,7 @@
     }
   ],
   "context": {
-    "market": "IE",
+    "market": "MSG+",
     "channel": "direct",
     "cadence": "Monthly Flex"
   },

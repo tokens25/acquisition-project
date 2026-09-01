@@ -126,7 +126,10 @@ export const defaultSet: CardSet = {
     offer({ id: 'flex-monthly', tierId: 'flex', cadence: 'Monthly Flex', standardPrice: 19.99 }),
   ],
 
-  context: { market: 'IE', channel: DIRECT, cadence: 'Monthly Flex' },
+  // MSG+ is where the work is, so it is where a reset lands. It is also the
+  // only market that runs the ZIP check, so the default flow is the whole
+  // flow rather than one with a step missing.
+  context: { market: 'MSG+', channel: DIRECT, cadence: 'Monthly Flex' },
   journeyId: 'hero-signup',
   featureIcons: 'feature',
   stepId: 'plans',

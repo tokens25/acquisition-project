@@ -120,14 +120,12 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           label="Tier name"
           value={resolved.planName}
           onChange={(v) => updateTier(tier.id, { planName: v })}
-          helpText="One value — header, CTA and add-on label."
         />
         <TextField
           label="Description"
           value={resolved.description}
           onChange={(v) => updateTier(tier.id, { description: v })}
           rows={4}
-          helpText="Enter full text. Never pre-truncate — the card measures and adds “… more”."
         />
       </section>
 
