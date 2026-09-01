@@ -71,6 +71,8 @@
   .top__line { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
   h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
   .top__note { margin: 0; color: var(--ink-soft); font-size: 13px; }
+  .lede__link { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+  .lede__link:hover { color: var(--accent-ink); background: var(--accent); }
 
 
   /* ── View tabs ────────────────────────────────────── */
@@ -1224,7 +1226,7 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
         live = Boolean(d && d.available);
-        if (!live) return;
+        if (!live) { offline(); return; }
         document.getElementById('sendall').hidden = false;
         document.getElementById('copy').classList.remove('primary');
         Array.prototype.forEach.call(document.querySelectorAll('.send'), function (b) {
@@ -1236,7 +1238,26 @@
         }
         sizeHead();
       })
-      .catch(function () { live = false; });
+      .catch(function () { live = false; offline(); });
+  }
+
+  /**
+   * Says why there are no send buttons.
+   *
+   * Opened as a file:// or as a published artifact there is no dev server to
+   * reach, and silently hiding the buttons reads as "this feature is missing"
+   * rather than "you are on the wrong copy".
+   */
+  function offline() {
+    var lede = document.getElementById('lede');
+    if (!lede) return;
+    lede.textContent = 'Find the area, say what should change, then copy it over. ';
+    var a = document.createElement('a');
+    a.href = 'http://localhost:5173/feedback.html';
+    a.textContent = 'Open the localhost copy to send straight to Claude.';
+    a.className = 'lede__link';
+    lede.appendChild(a);
+    sizeHead();
   }
 
   buildTabs();
