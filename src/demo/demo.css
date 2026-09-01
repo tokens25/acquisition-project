@@ -790,6 +790,6 @@
   display: block;
   /* width and scale come from the device, in the component */
   padding: var(--space-16);
-  transform-origin: top left;
+  /* zoom scales the box too, so no origin correction is needed. */
   pointer-events: none;
 }

@@ -44,13 +44,6 @@ export function JourneyFrames({
 
   const ids = planned.map((p) => p.step.id)
 
-  /**
-   * The thumbnail is the screen it depicts, at the device's own proportions —
-   * not the desktop row squeezed into a phone-shaped box. Both the frame's
-   * aspect and the viewport the cards lay out in follow the device, so the
-   * mobile tile shows one card in a portrait frame and the desktop tile shows
-   * the row.
-   */
   // A tile is one screen at the shape the design file draws it — 375 x 788 —
   // shown at 280 wide. The height is derived rather than written down twice,
   // so narrowing the tile cannot silently change the proportion. The card set
@@ -62,13 +55,20 @@ export function JourneyFrames({
     width: TILE_WIDTH,
     height: Math.round((TILE_WIDTH * FRAME.height) / FRAME.width),
   }
-  const frame =
-    set.device === 'mobile'
-      ? { box: { width: TILE.width, height: TILE.height }, viewport: FRAME.width }
-      : // A desktop window does not fit a phone-shaped tile, so it is scaled
-        // into the same box rather than given one of its own.
-        { box: { width: TILE.width, height: TILE.height }, viewport: 1100 }
+  const frame = { box: { width: TILE.width, height: TILE.height }, viewport: FRAME.width }
   const thumbScale = frame.box.width / frame.viewport
+
+  /**
+   * The tile is a phone, so the card set renders as one.
+   *
+   * Every other screen in the row is a 375 x 788 phone frame exported from
+   * Figma. Letting Subscription follow the set's own device put a 1100-wide
+   * desktop row in a phone-shaped tile — three cards squeezed to a quarter
+   * size with most of the tile left empty, and the one live screen looking
+   * nothing like the twelve beside it. The edit view still honours the set's
+   * device; this is the frames row, and the frames row is a phone flow.
+   */
+  const phoneSet = set.device === 'mobile' ? set : { ...set, device: 'mobile' as const }
 
 
 
@@ -215,14 +215,15 @@ export function JourneyFrames({
                   <span className="jf__screen">
                     {step.renderer === 'plans' && !skipped ? (
                       <span className="jf__thumb" aria-hidden="true">
+                        {/* zoom, not transform: a transform shrinks what is
+                            drawn but not the box it occupies, so the tile
+                            reserved the card set's full unscaled height and
+                            left a few hundred pixels of nothing below it. */}
                         <span
                           className="jf__thumb-scale"
-                          style={{
-                            inlineSize: frame.viewport,
-                            transform: 'scale(' + thumbScale + ')',
-                          }}
+                          style={{ inlineSize: frame.viewport, zoom: thumbScale }}
                         >
-                          <CardSetView set={set} context={context} />
+                          <CardSetView set={phoneSet} context={context} />
                         </span>
                       </span>
                     ) : art ? (
