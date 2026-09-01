@@ -126,6 +126,6 @@
     dsToggle: { vb: '0 0 90 34', parts: {
       'toggle block': [2,2,86,30], 'toggle row': [6,6,78,22], 'toggle leading': [9,11,10,12],
       'toggle label': [23,14,32,7], 'toggle switch': [60,11,20,12],
-      'toggle input': [60,11,20,12], 'toggle knob': [71,12,8,10], 'toggle mark': [63,14,5,6]
+      'toggle knob': [71,12,8,10]
     }}
   };

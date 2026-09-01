@@ -215,9 +215,7 @@
       ['toggle row', '.tg__row', 'The clickable line: icon, label, and the switch itself.', 'dsToggle'],
       ['toggle leading', '.tg__leading', 'The slot for an icon before the label.', 'dsToggle'],
       ['toggle label', '.tg__label', 'The words naming what the switch does.', 'dsToggle'],
-      ['toggle input', '.tg__input', 'The real checkbox, kept invisible but focusable so the keyboard and screen readers still work.', 'dsToggle'],
-      ['toggle mark', '.tg__mark', 'The tick drawn when it is on.', 'dsToggle'],
-      ['toggle switch', '.dazn-toggle', 'The sliding track people actually see.', 'dsToggle'],
+      ['toggle switch', '.dazn-toggle', 'The DS switch itself, at the right of the row. A button with role=switch, so it is one control rather than a hidden checkbox behind a drawn mark.', 'dsToggle'],
       ['toggle knob', '.dazn-toggle__knob', 'The circle that slides across it.', 'dsToggle'],
     ]],
     ['routes', 'Routes', 'archive', 'Three pages. If you do not say which, I will assume demo 1.', [

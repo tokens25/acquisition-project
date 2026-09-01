@@ -329,9 +329,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **toggle row** | `.tg__row` | The clickable line: icon, label, and the switch itself. |
 | **toggle leading** | `.tg__leading` | The slot for an icon before the label. |
 | **toggle label** | `.tg__label` | The words naming what the switch does. |
-| **toggle input** | `.tg__input` | The real checkbox, kept invisible but focusable so the keyboard and screen readers still work. |
-| **toggle mark** | `.tg__mark` | The tick drawn when it is on. |
-| **toggle switch** | `.dazn-toggle` | The sliding track people actually see. |
+| **toggle switch** | `.dazn-toggle` | The DS switch itself, at the right of the row. A button with role=switch, so it is one control rather than a hidden checkbox behind a drawn mark. |
 | **toggle knob** | `.dazn-toggle__knob` | The circle that slides across it. |
 
 ## Routes
