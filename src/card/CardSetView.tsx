@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { PlanDetails, type PlanDetailsProps } from '../components/acquisition'
+import { isWholeInView } from '../components/acquisition/viewport'
 import type { CardSet, Context } from '../rules/content'
 import { marketFor, resolveSet } from '../rules/resolve'
 import { RuledCard } from './RuledCard'
@@ -54,6 +55,20 @@ export function CardSetView({
   const anchor = useCallback(() => {
     if (!details) return null
     return ref.current?.querySelectorAll<HTMLElement>('.acq-card')[details.cardIndex] ?? null
+  }, [details])
+
+  /**
+   * Which cards are on screen whole, by position in the row.
+   *
+   * The dialog opens over its card, so a card only half in view would put half
+   * a dialog against the edge of the preview. Rather than place it somewhere it
+   * does not belong, the control waits until the card it points at is all there.
+   */
+  const [whole, setWhole] = useState<boolean[]>([])
+  // Read inside listeners, which outlive the render that registered them.
+  const detailsRef = useRef(details)
+  useEffect(() => {
+    detailsRef.current = details
   }, [details])
 
   const cards = useMemo(() => resolveSet(set, context), [set, context])
@@ -122,6 +137,36 @@ export function CardSetView({
     }
   }, [cards, updateMore])
 
+  /** Re-reads which cards are wholly on screen, and closes a dialog whose is not. */
+  const measureWhole = useCallback(() => {
+    const row = ref.current
+    if (!interactive || !row) return
+    const next = Array.from(row.querySelectorAll<HTMLElement>('.acq-card')).map(isWholeInView)
+    setWhole((prev) =>
+      prev.length === next.length && prev.every((v, i) => v === next[i]) ? prev : next,
+    )
+    // A card scrolled out from under its own dialog leaves the dialog pointing
+    // at nothing, so it closes with the card.
+    const open = detailsRef.current
+    if (open && next[open.cardIndex] === false) setDetails(null)
+  }, [interactive])
+
+  // Measured before paint, so a card that is already half out never offers the
+  // control even for a frame. Scroll is captured on the document because it
+  // does not bubble, and both the row and the pane around it move the cards.
+  useLayoutEffect(() => {
+    measureWhole()
+    document.addEventListener('scroll', measureWhole, { capture: true, passive: true })
+    window.addEventListener('resize', measureWhole)
+    const row = ref.current
+    const observer = new ResizeObserver(measureWhole)
+    if (row) observer.observe(row)
+    return () => {
+      document.removeEventListener('scroll', measureWhole, { capture: true })
+      window.removeEventListener('resize', measureWhole)
+      observer.disconnect()
+    }
+  }, [cards, measureWhole])
 
   if (cards.length === 0) {
     return (
@@ -152,6 +197,7 @@ export function CardSetView({
               onOpenDetails={
                 interactive ? (d) => setDetails({ ...d, cardIndex }) : undefined
               }
+              detailsBlocked={interactive && whole[cardIndex] !== true}
             />
           ))}
           <p className="acq-set__probe" ref={probeRef} aria-hidden="true" />

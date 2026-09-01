@@ -21,6 +21,12 @@ export interface RuledCardProps {
    * re-derived would be a second chance to disagree with the tile.
    */
   onOpenDetails?: (details: Omit<PlanDetailsProps, 'onClose'>) => void
+  /**
+   * The dialog opens over this card, so it can only open while the whole card
+   * is on screen. Separate from having no handler at all, which means the card
+   * is a picture and should not offer the control in the first place.
+   */
+  detailsBlocked?: boolean
 }
 
 /**
@@ -49,6 +55,7 @@ export function RuledCard({
   device,
   descriptionLines,
   onOpenDetails,
+  detailsBlocked = false,
 }: RuledCardProps) {
   const d = deriveCard(set, tier, offer, market, context)
 
@@ -60,7 +67,7 @@ export function RuledCard({
 
   // Title, description and CTA are the card's own; the competitions are the
   // full list rather than the ten the tile fits, which is what the dialog is for.
-  const openDetails = onOpenDetails
+  const openDetails = onOpenDetails && !detailsBlocked
     ? () =>
         onOpenDetails({
           title: d.headerText,
@@ -130,6 +137,7 @@ export function RuledCard({
       }
       footerLabel={d.footerLabel}
       onFooterClick={openDetails}
+      footerDisabled={detailsBlocked}
     />
   )
 }

@@ -4,6 +4,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import closeIcon from '../../assets/icons/action-close-md.svg?raw'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
+import { visibleBand } from './viewport'
 
 export interface PlanDetailsCompetition {
   id: string
@@ -55,38 +56,6 @@ function fit(start: number, size: number, min: number, max: number) {
   return Math.max(min, Math.min(start, max - size))
 }
 
-/**
- * The part of the overlay that is actually on screen.
- *
- * A card is 695 tall and the preview pane scrolls, so on a short window most
- * of a card can be below the fold — and a dialog centred on the card would
- * then open off screen. Every clipping ancestor is intersected in, so the
- * dialog is placed against what you can see rather than against the row's
- * full height. Returned in the overlay's own coordinates.
- */
-function visibleBand(root: HTMLElement) {
-  const host = root.getBoundingClientRect()
-  let top = host.top
-  let bottom = host.bottom
-  let left = host.left
-  let right = host.right
-  for (let el = root.parentElement; el; el = el.parentElement) {
-    const { overflowX, overflowY } = getComputedStyle(el)
-    if (overflowX === 'visible' && overflowY === 'visible') continue
-    const b = el.getBoundingClientRect()
-    top = Math.max(top, b.top)
-    bottom = Math.min(bottom, b.bottom)
-    left = Math.max(left, b.left)
-    right = Math.min(right, b.right)
-  }
-  return {
-    host,
-    top: top - host.top,
-    bottom: bottom - host.top,
-    left: left - host.left,
-    right: right - host.left,
-  }
-}
 
 /**
  * PlanDetails — the "All features & content" dialog.

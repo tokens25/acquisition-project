@@ -38,6 +38,8 @@ export interface AcquisitionCardProps {
 
   footerLabel?: string
   onFooterClick?: () => void
+  /** Shows the footer control as unavailable rather than absent. */
+  footerDisabled?: boolean
 
   device?: Device
   className?: string
@@ -68,6 +70,7 @@ export function AcquisitionCard({
   features,
   footerLabel,
   onFooterClick,
+  footerDisabled = false,
   device = 'desktop',
   className,
 }: AcquisitionCardProps) {
@@ -116,10 +119,14 @@ export function AcquisitionCard({
 
       {footerLabel && (
         <footer className="acq-card__footer">
+          {/* Asked for explicitly rather than inferred from the handler: a card
+              rendered as a picture has no handler either, and should not look
+              like a control someone has switched off. */}
           <Button
             appearance="tertiary"
             size="md"
             block
+            disabled={footerDisabled}
             onClick={onFooterClick}
             iconAfter={<Icon svg={chevronRightIcon} size={20} />}
           >
