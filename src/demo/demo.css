@@ -286,38 +286,85 @@
   cursor: pointer;
 }
 
-/* The address bar, at the foot of the tile — where iOS puts it and where every
-   frame in the section draws it. Pinned rather than left in the picture, so it
-   holds still while the page scrolls behind it. */
+/* .Safari, iOS — node 583:23478.
+
+   Written at the component's own 375-wide geometry and scaled by the tile's
+   zoom, so these are the design's numbers rather than numbers chosen to look
+   like it at 280. Height comes out at 16 + 44 + 30 = 90, which is the height
+   the frames reserve for it.
+
+   The literals are iOS chrome, not DAZN UI — there is no token for a system
+   browser's 8% white pill, and reaching for the nearest DAZN one would make it
+   a DAZN component, which it is not. */
 .jf__chrome {
   position: relative;
   z-index: 1;
   display: flex;
   flex: none;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px 30px;
+  background: linear-gradient(to top, #060606, rgba(6, 6, 6, 0));
+  color: #ffffff;
+}
+.jf__chrome-btn {
+  display: flex;
+  flex: none;
   align-items: center;
-  gap: var(--space-8);
-  padding: var(--space-8) var(--space-12);
-  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
-  background: var(--color-surface-container-2);
-  color: var(--color-text-tertiary);
+  justify-content: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 42px 0 rgba(0, 0, 0, 0.1);
 }
 .jf__url {
-  flex: 1;
-  min-inline-size: 0;
-  padding: var(--space-4) var(--space-12);
-  border-radius: var(--radius-full);
-  background: var(--color-surface-container-3, var(--color-surface-default));
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-caption-xs);
+  position: relative;
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  min-inline-size: 1px;
+  block-size: 44px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 42px 0 rgba(0, 0, 0, 0.1);
+}
+/* Both icons are absolute, as the component draws them: the domain is centred
+   in the whole pill rather than in the space the icons leave, so a longer name
+   stays centred instead of drifting. */
+.jf__url-icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 15px;
+  inline-size: 15px;
+  block-size: 18px;
+  transform: translateY(-50%);
+}
+.jf__url-reload {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 13.24px;
+  inline-size: 14.757px;
+  block-size: 17.982px;
+  transform: translateY(-50%);
+}
+.jf__url-text {
+  inline-size: 100%;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: normal;
   text-align: center;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
+/* The ellipsis is an SF Symbol, so there is no asset to export — three dots at
+   the symbol's own size is the closest honest stand-in. */
 .jf__dots {
-  flex: none;
-  font-size: var(--font-size-caption-xs);
-  letter-spacing: 0.5px;
+  font-size: 23px;
+  font-weight: 350;
+  line-height: 0.5;
+  letter-spacing: -1px;
 }
 
 /* The page above the chrome, taking every pixel the address bar does not. A

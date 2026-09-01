@@ -3,6 +3,8 @@ import { CardSetView } from '../card/CardSetView'
 import { artworkFor } from '../card/flowArtwork'
 import { Icon } from '../components/Icon'
 import { iconArtwork } from '../card/assets'
+import reloadIcon from '../assets/browser/reload.svg'
+import siteSettingsIcon from '../assets/browser/site-settings.svg'
 import type { CardSet, Context } from '../rules/content'
 import type { ResolvedStep } from '../rules/journey'
 
@@ -243,15 +245,22 @@ export function JourneyFrames({
                     )}
                   </span>
 
-                  {/* The address bar, at the foot where iOS puts it and where
-                      every frame in the section draws it. Pinned rather than
-                      left in the picture, so it stays put while the page
-                      scrolls behind it — which is what the real browser does
-                      and what the flat export cannot. */}
-                  <span className="jf__chrome" aria-hidden="true">
-                    <Icon svg={iconArtwork['chevron-left']} size={16} />
-                    <span className="jf__url">dazn.com</span>
-                    <span className="jf__dots">•••</span>
+                  {/* .Safari, iOS — node 583:23478, drawn at the tile's scale
+                      so it is the component's own 375-wide geometry rather
+                      than an approximation of it. At the foot where iOS puts
+                      it and where every frame in the section draws it, and
+                      pinned rather than left in the picture, so it holds still
+                      while the page scrolls behind it. */}
+                  <span className="jf__chrome" style={{ zoom: thumbScale }} aria-hidden="true">
+                    <span className="jf__chrome-btn">
+                      <Icon svg={iconArtwork['chevron-left']} size={20} />
+                    </span>
+                    <span className="jf__url">
+                      <img className="jf__url-icon" src={siteSettingsIcon} alt="" />
+                      <span className="jf__url-text">dazn.com</span>
+                      <img className="jf__url-reload" src={reloadIcon} alt="" />
+                    </span>
+                    <span className="jf__chrome-btn jf__dots">•••</span>
                   </span>
 
                   {state && <span className="jf__state">{state}</span>}
