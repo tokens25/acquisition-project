@@ -273,7 +273,9 @@
   flex-direction: column;
   flex: none;
   inline-size: 280px;
-  block-size: 588px;
+  /* block-size comes from the component — it is derived from the tallest
+     single-screen frame so those screens fit without scrolling, and writing it
+     here as well would let the two disagree. */
   padding: 0;
   overflow: hidden;
   border: var(--border-1) solid var(--color-border-full-color-subtle);

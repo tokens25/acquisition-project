@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
-import { artworkFor } from '../card/flowArtwork'
+import { artworkFor, flowArtwork } from '../card/flowArtwork'
 import { Icon } from '../components/Icon'
 import { iconArtwork } from '../card/assets'
 import reloadIcon from '../assets/browser/reload.svg'
@@ -54,14 +54,35 @@ export function JourneyFrames({
   // so narrowing the tile cannot silently change the proportion. The card set
   // still renders at its real 375 and is scaled into the box, which is what
   // keeps the live tile and an exported frame the same size beside each other.
-  const FRAME = { width: 375, height: 788 }
+  const FRAME = { width: 375 }
   const TILE_WIDTH = 280
+  const thumbScale = TILE_WIDTH / FRAME.width
+
+  /**
+   * Tall enough that a screen is a screen.
+   *
+   * The tile replaces each frame's own chrome with one status bar and one
+   * address bar, and those are not the heights the frames reserved — a 54-tall
+   * Safari bar becomes a 90-tall one. Sizing the tile off a frame's total
+   * height therefore left every single-screen design a few dozen pixels short,
+   * so Cadence and Confirmation scrolled to show their last 20px. That is not
+   * scrolling, it is a tile that does not fit its own contents.
+   *
+   * So the height is derived from the tallest page among the frames that are
+   * one screen rather than a long form. Account setup and Checkout are longer
+   * than a phone screen by design and still scroll, which is the distinction
+   * worth keeping.
+   */
+  const ONE_SCREEN = 812
+  const pages = Object.values(flowArtwork)
+    .filter((f) => f.height <= ONE_SCREEN)
+    .map((f) => (f.height - f.status - f.chrome) * thumbScale)
+  const CHROME = { status: 40 * thumbScale, address: 90 * thumbScale }
   const TILE = {
     width: TILE_WIDTH,
-    height: Math.round((TILE_WIDTH * FRAME.height) / FRAME.width),
+    height: Math.ceil(CHROME.status + Math.max(...pages, 0) + CHROME.address) + 2,
   }
   const frame = { box: { width: TILE.width, height: TILE.height }, viewport: FRAME.width }
-  const thumbScale = frame.box.width / frame.viewport
 
   /**
    * The tile is a phone, so the card set renders as one.
@@ -215,6 +236,7 @@ export function JourneyFrames({
                 <button
                   type="button"
                   className="jf__tile"
+                  style={{ blockSize: TILE.height }}
                   data-on={step.id === selectedId || undefined}
                   data-editable={step.renderer === 'plans' || undefined}
                   disabled={Boolean(skipped)}
