@@ -144,6 +144,15 @@
   padding-block-start: var(--space-20);
   resize: vertical;
 }
+/* And it keeps that padding when focused. The rule above carries
+   :focus-within and outranks the multiline one, so clicking in dropped the
+   padding from 20 to 12 and the text jumped 8px up under its own label. Same
+   fault as the label's, one property along — a single-line field floats its
+   label out of the way and reclaims the space, and a multiline field has no
+   space to reclaim because the label never left. */
+.dz-field__input[data-multiline]:focus-within .dz-field__control {
+  padding-block-start: var(--space-20);
+}
 
 .dz-field__leading {
   display: grid;
