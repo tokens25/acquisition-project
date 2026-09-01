@@ -12,6 +12,7 @@ import { logoArtwork } from '../card/assets'
 import { BenefitIcon } from './BenefitIcon'
 import { IconPicker } from './IconPicker'
 import { SourceTabs } from './SourceTabs'
+import { FieldGroup } from './FieldGroup'
 import { MarkedField } from '../components/FieldMark'
 import { cadenceKey, tierKey } from '../rules/pipeline'
 
@@ -101,6 +102,13 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const unit = priceUnitFor(set, context.cadence, market?.locale ?? 'en')
   const money = (amount: number) =>
     market ? formatMoney(amount, market.locale, market.currency) : String(amount)
+  /** "$" — the sign the card will draw, so the field reads like the card. */
+  const currency = market
+    ? new Intl.NumberFormat(market.locale, { style: 'currency', currency: market.currency })
+        .formatToParts(0)
+        .find((part) => part.type === 'currency')?.value
+    : undefined
+  const currencyMark = currency ? <span className="ed-currency">{currency}</span> : undefined
 
   const patchTier = (p: Parameters<typeof updateTier>[1]) => updateTier(tier.id, p)
 
@@ -163,8 +171,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   return (
 
     <>
-      <section className="demo__group">
-        <h3 className="demo__group-title">Plans</h3>
+      <FieldGroup title="Plans">
         <div className="ed-tabs">
           {set.tiers.map((t) => (
             <button
@@ -186,10 +193,9 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             still apply everywhere it is sold.
           </p>
         )}
-      </section>
+      </FieldGroup>
 
-      <section className="demo__group">
-        <h3 className="demo__group-title">Tier</h3>
+      <FieldGroup title="Tier">
         <TextField
           label="Badge"
           value={resolved.badge ?? ''}
@@ -233,17 +239,15 @@ export function EditPanel({ store }: { store: CardSetStore }) {
               : undefined
           }
         />
-      </section>
+      </FieldGroup>
 
-      <section className="demo__group">
-        <h3 className="demo__group-title">
-          Pricing{market ? ` — ${market.currency}` : ''}
-        </h3>
+      <FieldGroup title={market ? `Pricing — ${market.currency}` : 'Pricing'}>
         {offer ? (
           <>
             <TextField
               label="Full price"
               type="number"
+              leading={currencyMark}
               step={0.01}
               min={0}
               value={String(offer.standardPrice ?? '')}
@@ -281,6 +285,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
               <TextField
                 label="Discount price"
                 type="number"
+                leading={currencyMark}
                 step={0.01}
                 min={0}
                 max={offer.standardPrice}
@@ -363,15 +368,14 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             gap — the card does not render in this view.
           </p>
         )}
-      </section>
+      </FieldGroup>
 
       {/* Add-on lives on the offer, like the prices — the same benefit can be
           sold at one cadence and bundled at another. Hidden for now behind the
           same switch the card reads, so the form cannot offer a field whose
           effect the card is not drawing. */}
       {SHOW_ADDON && (
-      <section className="demo__group">
-        <h3 className="demo__group-title">Add-on</h3>
+      <FieldGroup title="Add-on">
         {offer ? (
           <>
             <SelectField
@@ -424,11 +428,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         ) : (
           <p className="ed-placeholder">No offer at this cadence, so nothing to attach one to.</p>
         )}
-      </section>
+      </FieldGroup>
       )}
 
-      <section className="demo__group">
-        <h3 className="demo__group-title">Competitions</h3>
+      <FieldGroup title="Competitions">
         {/* One under the other, in the order they appear on the card. The old
             grid could say which competitions were on the plan but not what
             order they sat in, and the popup needs a name and a line for each
@@ -529,7 +532,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         )}
         <button
           type="button"
-          className="demo__reset"
+          className="ed-add"
           disabled={!unusedLogo}
           onClick={() =>
             unusedLogo && patchTier({ logoTiles: [...resolved.logoTiles, unusedLogo.id] })
@@ -545,10 +548,9 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           pipelineKey={tierKey(tier.id, 'competitions.total')}
           onChange={(v) => patchTier({ logoTotal: Number(v) })}
         />
-      </section>
+      </FieldGroup>
 
-      <section className="demo__group">
-        <h3 className="demo__group-title">Benefits</h3>
+      <FieldGroup title="Benefits">
         {resolved.features.map((id, i) => {
           const entry = set.featureCatalog.find((f) => f.id === id)
           const isCustom = Boolean(entry && entry.id.startsWith(CUSTOM_PREFIX))
@@ -603,7 +605,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             going quiet, so a full list does not read as a broken control. */}
         <button
           type="button"
-          className="demo__reset"
+          className="ed-add"
           disabled={resolved.features.length >= MAX_BENEFITS}
           onClick={() => patchTier({ features: [...resolved.features, set.featureCatalog[0].id] })}
         >
@@ -611,7 +613,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             ? `Add benefit — ${MAX_BENEFITS} is the most a card shows`
             : 'Add benefit'}
         </button>
-      </section>
+      </FieldGroup>
 
     </>
   )

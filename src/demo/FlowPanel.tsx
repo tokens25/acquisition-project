@@ -1,5 +1,6 @@
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
+import { FieldGroup } from './FieldGroup'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { FlowContent } from '../rules/flow'
 import { defaultFlow } from '../rules/flow'
@@ -37,8 +38,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
     const l = flow.landing
     return (
       <>
-        <section className="demo__group">
-          <h3 className="demo__group-title">Top bar</h3>
+        <FieldGroup title="Top bar">
           <TextField
             label="First button"
             value={l.navExplore}
@@ -51,10 +51,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'landing.navSignUp'}
             onChange={(v) => patch('landing', { navSignUp: v })}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Over the picture</h3>
+        <FieldGroup title="Over the picture">
           <TextField
             label="Heading"
             value={l.title}
@@ -68,10 +67,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('landing', { body: v })}
             rows={4}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Buttons</h3>
+        <FieldGroup title="Buttons">
           <TextField label="Button" value={l.cta} pipelineKey={'landing.cta'} onChange={(v) => patch('landing', { cta: v })} />
           <TextField
             label="Second button"
@@ -79,7 +77,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'landing.altCta'}
             onChange={(v) => patch('landing', { altCta: v })}
           />
-        </section>
+        </FieldGroup>
       </>
     )
   }
@@ -88,13 +86,11 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
     const c = flow.cadence
     return (
       <>
-        <section className="demo__group">
-          <h3 className="demo__group-title">Screen</h3>
+        <FieldGroup title="Screen">
           {navTitle('cadence', c.navTitle)}
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Ways to pay</h3>
+        <FieldGroup title="Ways to pay">
           {c.options.map((option, i) => {
             const write = (next: Partial<typeof option>) =>
               patch('cadence', {
@@ -143,10 +139,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             options={c.options.map((o) => ({ value: o.id, label: o.title }))}
             onChange={(v) => patch('cadence', { selected: v })}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Bottom of the screen</h3>
+        <FieldGroup title="Bottom of the screen">
           <TextField
             label="Button"
             value={c.cta}
@@ -160,7 +155,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('cadence', { footnote: v })}
             rows={2}
           />
-        </section>
+        </FieldGroup>
       </>
     )
   }
@@ -169,8 +164,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
     const a = flow.auth
     return (
       <>
-        <section className="demo__group">
-          <h3 className="demo__group-title">Screen</h3>
+        <FieldGroup title="Screen">
           {navTitle('auth', a.navTitle)}
           <TextField label="Heading" value={a.title} pipelineKey={'auth.title'} onChange={(v) => patch('auth', { title: v })} />
           <TextField
@@ -180,10 +174,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('auth', { subtitle: v })}
             rows={2}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Notice</h3>
+        <FieldGroup title="Notice">
           <TextField
             label="Notice heading"
             value={a.noticeTitle}
@@ -197,10 +190,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('auth', { noticeBody: v })}
             rows={2}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Sign in</h3>
+        <FieldGroup title="Sign in">
           <TextField
             label="Email field"
             value={a.emailLabel}
@@ -234,7 +226,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
               }
             />
           ))}
-        </section>
+        </FieldGroup>
       </>
     )
   }
@@ -243,13 +235,11 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
     const a = flow.account
     return (
       <>
-        <section className="demo__group">
-          <h3 className="demo__group-title">Screen</h3>
+        <FieldGroup title="Screen">
           {navTitle('account', a.navTitle)}
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Name</h3>
+        <FieldGroup title="Name">
           <TextField
             label="Section heading"
             value={a.nameHeading}
@@ -280,10 +270,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'account.lastNameValue'}
             onChange={(v) => patch('account', { lastNameValue: v })}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Email</h3>
+        <FieldGroup title="Email">
           <TextField
             label="Section heading"
             value={a.emailHeading}
@@ -302,10 +291,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'account.emailValue'}
             onChange={(v) => patch('account', { emailValue: v })}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Password</h3>
+        <FieldGroup title="Password">
           <TextField
             label="Section heading"
             value={a.passwordHeading}
@@ -342,10 +330,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
               }
             />
           ))}
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Marketing consent</h3>
+        <FieldGroup title="Marketing consent">
           <TextField
             label="Section heading"
             value={a.notifyHeading}
@@ -365,10 +352,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'account.consentNote'}
             onChange={(v) => patch('account', { consentNote: v })}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Buttons</h3>
+        <FieldGroup title="Buttons">
           <TextField label="Button" value={a.cta} pipelineKey={'account.cta'} onChange={(v) => patch('account', { cta: v })} />
           <TextField
             label="Button while working"
@@ -377,7 +363,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('account', { workingCta: v })}
             helpText="What it says on the confirmed screen, while the account is being made."
           />
-        </section>
+        </FieldGroup>
       </>
     )
   }
@@ -386,8 +372,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
     const z = flow.zip
     return (
       <>
-        <section className="demo__group">
-          <h3 className="demo__group-title">Screen</h3>
+        <FieldGroup title="Screen">
           {navTitle('zip', z.navTitle)}
           <TextField
             label="Heading"
@@ -402,10 +387,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('zip', { body: v })}
             rows={4}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">ZIP code</h3>
+        <FieldGroup title="ZIP code">
           <TextField
             label="Field"
             value={z.fieldLabel}
@@ -425,10 +409,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('zip', { resultsLabel: v })}
             helpText="Only on the results screen. Figma still carries a placeholder here."
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Buttons</h3>
+        <FieldGroup title="Buttons">
           <TextField label="Button" value={z.cta} pipelineKey={'zip.cta'} onChange={(v) => patch('zip', { cta: v })} />
           <TextField
             label="Divider"
@@ -442,7 +425,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'zip.altCta'}
             onChange={(v) => patch('zip', { altCta: v })}
           />
-        </section>
+        </FieldGroup>
       </>
     )
   }
@@ -451,8 +434,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
     const c = flow.checkout
     return (
       <>
-        <section className="demo__group">
-          <h3 className="demo__group-title">Screen</h3>
+        <FieldGroup title="Screen">
           {navTitle('checkout', c.navTitle)}
           <TextField
             label="Note at the top"
@@ -461,10 +443,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('checkout', { note: v })}
             rows={2}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">What you are buying</h3>
+        <FieldGroup title="What you are buying">
           <TextField
             label="Summary title"
             value={c.summaryTitle}
@@ -513,10 +494,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('checkout', { renewalNote: v })}
             rows={3}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">How to pay</h3>
+        <FieldGroup title="How to pay">
           <TextField
             label="Cards option"
             value={c.cardsLabel}
@@ -566,10 +546,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'checkout.paypalLabel'}
             onChange={(v) => patch('checkout', { paypalLabel: v })}
           />
-        </section>
+        </FieldGroup>
 
-        <section className="demo__group">
-          <h3 className="demo__group-title">Small print and buttons</h3>
+        <FieldGroup title="Small print and buttons">
           <TextField
             label="Legal text"
             value={c.legal}
@@ -595,7 +574,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'checkout.promoLabel'}
             onChange={(v) => patch('checkout', { promoLabel: v })}
           />
-        </section>
+        </FieldGroup>
       </>
     )
   }
@@ -603,8 +582,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
   const r = flow.ready
   return (
     <>
-      <section className="demo__group">
-        <h3 className="demo__group-title">Screen</h3>
+      <FieldGroup title="Screen">
         {navTitle('ready', r.navTitle)}
         <TextField label="Heading" value={r.title} pipelineKey={'ready.title'} onChange={(v) => patch('ready', { title: v })} rows={2} />
         <TextField
@@ -614,10 +592,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
           onChange={(v) => patch('ready', { body: v })}
           rows={3}
         />
-      </section>
+      </FieldGroup>
 
-      <section className="demo__group">
-        <h3 className="demo__group-title">Buttons</h3>
+      <FieldGroup title="Buttons">
         <TextField label="Button" value={r.cta} pipelineKey={'ready.cta'} onChange={(v) => patch('ready', { cta: v })} />
         <TextField
           label="Second button"
@@ -625,7 +602,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
           pipelineKey={'ready.altCta'}
           onChange={(v) => patch('ready', { altCta: v })}
         />
-      </section>
+      </FieldGroup>
     </>
   )
 }

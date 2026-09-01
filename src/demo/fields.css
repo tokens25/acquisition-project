@@ -1,0 +1,326 @@
+/* ── The edit panel's fields ────────────────────────────────────────────
+   A 360px column that can carry thirty fields. The DS TextField is drawn for
+   a product form with a handful, at 56px and 16px type; here the same
+   component runs at 48px with 14px type — its states, label float and focus
+   unchanged, only the scale. Everything that is a field takes the same shell
+   (text, select, toggle, picker), repeated items sit in one kind of outline
+   card, and groups fold under a title that stays put while they scroll. */
+
+:root {
+  --ed-shell: 48px;
+  --ed-radius: var(--radius-8);
+  --ed-fill: var(--color-surface-container-2);
+  --ed-line: var(--color-border-full-color-default);
+  --ed-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.demo__fields {
+  gap: 0;
+}
+
+/* ── Groups ── */
+.fg {
+  display: flex;
+  flex-direction: column;
+}
+.fg + .fg {
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.fg__head {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  margin-inline: calc(-1 * var(--space-20));
+  padding: var(--space-10) var(--space-20);
+  background: color-mix(in srgb, var(--color-surface-container-1) 94%, transparent);
+  backdrop-filter: blur(8px);
+}
+.fg__toggle {
+  display: flex;
+  flex: 1;
+  gap: var(--space-6);
+  align-items: center;
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-align: start;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+.fg__toggle:hover {
+  color: var(--color-text-primary);
+}
+.fg__toggle:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.fg__chevron {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--color-text-tertiary);
+  transition: transform 220ms var(--ed-ease);
+}
+.fg:not([data-open]) .fg__chevron {
+  transform: rotate(-90deg);
+}
+.fg__title {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fg__body {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 240ms var(--ed-ease);
+}
+.fg:not([data-open]) .fg__body {
+  grid-template-rows: 0fr;
+}
+.fg__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  min-block-size: 0;
+  padding-block: var(--space-2) var(--space-16);
+}
+.fg__inner[data-clip] {
+  overflow: hidden;
+}
+.fg:not([data-open]) .fg__inner {
+  visibility: hidden;
+  transition: visibility 0s 240ms;
+}
+
+/* ── Text and select fields at editor density ── */
+.demo__fields .dz-field__input {
+  block-size: var(--ed-shell);
+  padding-inline: var(--space-12);
+  border-color: var(--ed-line);
+  border-radius: var(--ed-radius);
+  background: var(--ed-fill);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.demo__fields .dz-field__input[data-multiline] {
+  padding-block: var(--space-10);
+}
+.demo__fields .dz-field__input:hover:not(:has(:disabled)):not(:has([readonly])) {
+  border-color: var(--color-border-full-color-strong);
+}
+.demo__fields .dz-field__input:focus-within {
+  border-color: var(--color-brand-primary);
+  background: var(--ed-fill);
+}
+.demo__fields .dz-field__input:has([readonly]) {
+  border-color: var(--color-border-full-color-subtle);
+  background: transparent;
+}
+.demo__fields .dz-field__label {
+  font-size: 14px;
+}
+.demo__fields .dz-field[data-filled] .dz-field__label,
+.demo__fields .dz-field__input:not(.dz-field__input--select):focus-within .dz-field__label {
+  font-size: 11px;
+  translate: 0 -18px;
+}
+.demo__fields .dz-field__input[data-multiline] .dz-field__label,
+.demo__fields .dz-field__input[data-multiline]:focus-within .dz-field__label {
+  font-size: 11px;
+  translate: 0 0;
+}
+.demo__fields .dz-field__control {
+  font-size: 14px;
+  line-height: 1.3;
+}
+.demo__fields .dz-field[data-filled] .dz-field__control,
+.demo__fields .dz-field__input:not(.dz-field__input--select):focus-within .dz-field__control {
+  padding-block-start: 14px;
+}
+.demo__fields .dz-field__input[data-multiline] .dz-field__control,
+.demo__fields .dz-field__input[data-multiline]:focus-within .dz-field__control {
+  padding-block-start: var(--space-16);
+  line-height: 1.4;
+  resize: none;
+  overflow: hidden;
+}
+.demo__fields .dz-field--select .dz-field__label--select {
+  inset-block-start: 7px;
+  inset-inline-start: var(--space-12);
+  font-size: 11px;
+}
+.demo__fields .dz-field--select .dz-field__control--select {
+  padding-inline: var(--space-12);
+  padding-inline-end: calc(24px + var(--space-8) + var(--space-12));
+  padding-block-start: var(--space-16);
+}
+.demo__fields .dz-field--select .dz-field__trailing--select {
+  inset-inline-end: var(--space-12);
+}
+.demo__fields .dz-field__leading {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+.demo__fields .dz-field__help,
+.demo__fields .tg__hint,
+.demo__fields .fm-note {
+  padding-inline: var(--space-12);
+  font-size: 11.5px;
+}
+.ed-currency {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Toggles take the same shell ── */
+.demo__fields .tg__row {
+  min-block-size: var(--ed-shell);
+  padding-inline: var(--space-12);
+  border: var(--border-1) solid var(--ed-line);
+  border-radius: var(--ed-radius);
+  background: var(--ed-fill);
+  transition: border-color 160ms ease;
+}
+.demo__fields .tg__row:hover {
+  border-color: var(--color-border-full-color-strong);
+}
+.demo__fields .tg__label {
+  font-size: 14px;
+}
+
+/* ── Who writes the copy: label left, the pills right ── */
+.demo__fields .ed-source {
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-12);
+  padding-inline: var(--space-4);
+}
+.ed-source__label {
+  min-inline-size: 0;
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+}
+
+/* ── The benefit picker on the same shell ── */
+.demo__fields .ed-pick__label {
+  padding-inline: var(--space-4);
+  font-size: 11.5px;
+}
+.demo__fields .ed-pick__value {
+  min-block-size: var(--ed-shell);
+  padding-inline: var(--space-12);
+  border-color: var(--ed-line);
+  border-radius: var(--ed-radius);
+  background: var(--ed-fill);
+  font-size: 14px;
+  transition: border-color 160ms ease;
+}
+.demo__fields .ed-pick__value:hover {
+  border-color: var(--color-border-full-color-strong);
+}
+
+/* ── Repeated items: one kind of card ── */
+.demo__fields .demo__feature,
+.demo__fields .ed-comp {
+  gap: var(--space-8);
+  padding: var(--space-10);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-10);
+  background: transparent;
+}
+.demo__fields .demo__feature {
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.demo__fields .demo__feature-remove,
+.demo__fields .ed-comp__remove {
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+  transition: color 160ms ease;
+}
+.demo__fields .demo__feature-remove {
+  align-self: end;
+  padding: var(--space-2) var(--space-4);
+}
+.demo__fields .ed-comps {
+  gap: var(--space-8);
+}
+.demo__fields .ed-comp__head {
+  padding-inline: var(--space-2);
+}
+
+/* ── Adding an item: a dashed row that says what it adds ── */
+.ed-add {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+  justify-content: center;
+  block-size: 40px;
+  padding: 0 var(--space-12);
+  border: var(--border-1) dashed var(--ed-line);
+  border-radius: var(--ed-radius);
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background-color 160ms ease;
+}
+.ed-add::before {
+  content: '+';
+  font-size: 15px;
+  line-height: 1;
+}
+.ed-add:hover:not(:disabled) {
+  border-color: var(--color-text-secondary);
+  background: var(--ed-fill);
+  color: var(--color-text-primary);
+}
+.ed-add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ed-add:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+/* ── Notes between fields ── */
+.demo__fields .ed-placeholder,
+.demo__fields .ed-absent {
+  margin: 0;
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--ed-radius);
+  background: var(--ed-fill);
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fg__body,
+  .fg__chevron,
+  .fg__toggle,
+  .demo__fields .dz-field__input,
+  .demo__fields .tg__row,
+  .demo__fields .ed-pick__value,
+  .ed-add {
+    transition: none;
+  }
+}

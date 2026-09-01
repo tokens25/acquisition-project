@@ -4,7 +4,7 @@ import { FieldMarkNote } from './FieldMark'
 import { useFieldMark } from './fieldMarks'
 
 import type { ChangeEvent, ReactNode } from 'react'
-import { useId } from 'react'
+import { useEffect, useId, useRef } from 'react'
 
 /**
  * Form/TextField — DS component set 4758:68049.
@@ -68,6 +68,17 @@ export function TextField({
   const filled = value !== '' && value !== undefined && value !== null
   const mark = useFieldMark(pipelineKey)
 
+  // A multiline field is as tall as its text and never shorter than two
+  // lines — `rows` says how much a screen expects, not how much empty box to
+  // draw. Set to auto first so it can shrink back when text is deleted.
+  const area = useRef<HTMLTextAreaElement>(null)
+  useEffect(() => {
+    const el = area.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${el.scrollHeight}px`
+  }, [value, rows])
+
   const shared = {
     id,
     className: 'dz-field__control',
@@ -95,7 +106,7 @@ export function TextField({
             {label}
           </label>
           {rows ? (
-            <textarea {...shared} rows={rows} />
+            <textarea {...shared} rows={Math.min(rows, 2)} ref={area} />
           ) : (
             <input {...shared} type={type} step={step} min={min} max={max} />
           )}

@@ -4,7 +4,7 @@
 
 .dz-field[data-changed] .dz-field__input,
 .fm-wrap[data-changed] .dz-field__input,
-.fm-wrap[data-changed] > :first-child > .ip__button {
+.fm-wrap[data-changed] .ed-pick__value {
   border-color: var(--color-accent-warning-text);
   box-shadow: inset 3px 0 0 var(--color-accent-warning-text);
   transition: border-color 200ms ease, box-shadow 200ms ease;

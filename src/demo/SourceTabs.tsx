@@ -25,6 +25,7 @@ export function SourceTabs({
 }) {
   return (
     <div className="ed-source">
+      <span className="ed-source__label">{label}</span>
       <div className="ed-tabs ed-tabs--sm" role="group" aria-label={label}>
         <button
           type="button"
