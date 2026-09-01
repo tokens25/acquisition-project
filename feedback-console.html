@@ -217,6 +217,31 @@
   .pri button[data-p="idea"][aria-pressed="true"] { color: var(--idea); }
   .pri button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+  .cell__foot { display: flex; align-items: center; gap: 8px; }
+  .row:not([data-note]) .cell__foot { visibility: hidden; }
+  .send {
+    padding: 3px 11px;
+    border: 1px solid var(--accent); border-radius: 999px;
+    background: transparent; color: var(--ink);
+    font-family: var(--font); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.03em; cursor: pointer;
+  }
+  .send:hover { background: var(--accent); color: var(--accent-ink); }
+  .send:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .send[disabled] { opacity: 0.4; cursor: default; }
+  .send[disabled]:hover { background: transparent; color: var(--ink); }
+
+  .sent {
+    margin: 0;
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.5;
+    color: var(--ink-soft); white-space: pre-wrap;
+  }
+  .sent:empty { display: none; }
+  #allstatus { margin: 20px auto 4px; }
+  .sent[data-state='run'] { color: var(--ink-mid); }
+  .sent[data-state='ok'] { color: var(--next); }
+  .sent[data-state='err'] { color: var(--now); }
+
   .drop {
     border: none; background: transparent; color: var(--ink-soft);
     font-size: 11px; cursor: pointer; padding: 2px 0;
@@ -277,13 +302,14 @@
   <div class="top__inner">
     <div class="top__line">
       <h1>Acquisition Feedback Console</h1>
-      <p class="top__note">Find the area, say what should change, mark how soon. Copy when you are done.</p>
+      <p class="top__note" id="lede">Find the area, say what should change, mark how soon.</p>
     </div>
     <nav class="tabs" id="tabs" role="tablist" aria-label="Which view"></nav>
   </div>
 </header>
 
 <main class="wrap" id="sheet"></main>
+<p class="wrap sent" id="allstatus"></p>
 
 <div class="bar">
   <div class="bar__inner">
@@ -291,7 +317,8 @@
     <span class="toast" id="toast"></span>
     <span class="spacer"></span>
     <button class="act quiet" id="clear">Clear all</button>
-    <button class="act primary" id="copy">Copy feedback</button>
+    <button class="act" id="copy">Copy feedback</button>
+    <button class="act primary" id="sendall" hidden>Send all to Claude</button>
   </div>
 </div>
 
@@ -688,6 +715,9 @@
   var tally = document.getElementById('tally');
   var toast = document.getElementById('toast');
   var toastTimer;
+  /** Set by the boot probe. null until we know; false when there is no dev server. */
+  var live = null;
+  var busy = false;
 
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) { /* private mode */ }
@@ -700,6 +730,67 @@
   function noted(name) { return (store.notes[name] || '').trim(); }
   function grow(ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
   function esc(s) { return s.replace(/"/g, '\\"'); }
+
+  /**
+   * Sends one instruction to Claude Code running in this checkout.
+   *
+   * Only possible when the page is served by the dev server — the published
+   * artifact cannot reach localhost, which is why the buttons hide themselves
+   * rather than failing when pressed.
+   */
+  function ask(body, statusEl, btn) {
+    if (busy) { setStatus(statusEl, 'err', 'Claude is already working on something.'); return; }
+    busy = true;
+    setBusy(true);
+
+    var started = Date.now();
+    var tick = setInterval(function () {
+      setStatus(statusEl, 'run', 'working… ' + Math.round((Date.now() - started) / 1000) + 's');
+    }, 1000);
+    setStatus(statusEl, 'run', 'working… 0s');
+
+    fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok || res.d.error) {
+          setStatus(statusEl, 'err', res.d.error || 'Something went wrong.');
+          return;
+        }
+        var bits = [];
+        if (res.d.seconds != null) bits.push(res.d.seconds + 's');
+        if (res.d.turns != null) bits.push(res.d.turns + ' turns');
+        if (res.d.cost != null) bits.push('$' + Number(res.d.cost).toFixed(3));
+        var head = 'done · ' + bits.join(' · ');
+        var reply = (res.d.result || '').trim();
+        setStatus(statusEl, res.d.ok === false ? 'err' : 'ok', reply ? head + '\n' + reply : head);
+      })
+      .catch(function (e) {
+        setStatus(statusEl, 'err', 'Could not reach the dev server. ' + e.message);
+      })
+      .then(function () {
+        clearInterval(tick);
+        busy = false;
+        setBusy(false);
+        if (btn) btn.focus();
+      });
+  }
+
+  function setStatus(el, state, text) {
+    if (!el) return;
+    el.dataset.state = state;
+    el.textContent = text;
+  }
+
+  /** While a run is in flight, nothing else may start one. */
+  function setBusy(on) {
+    Array.prototype.forEach.call(document.querySelectorAll('.send, #sendall'), function (b) {
+      b.disabled = on;
+    });
+  }
 
   function groups() {
     return AREAS.concat([[CUSTOM_ID, 'Your own', 'both',
@@ -752,7 +843,7 @@
   }
 
   // ── Render ────────────────────────────────────────────
-  function buildRow(name, anchor, what, mapId, isCustom) {
+  function buildRow(name, anchor, what, mapId, isCustom, sectionTitle) {
     var el = document.createElement('div');
     el.className = 'row';
     el.dataset.hay = (name + ' ' + anchor + ' ' + what).toLowerCase();
@@ -815,8 +906,37 @@
       recount();
     });
 
+    var foot = document.createElement('div');
+    foot.className = 'cell__foot';
+    foot.appendChild(pri);
+    var gap = document.createElement('span');
+    gap.className = 'spacer';
+    foot.appendChild(gap);
+
+    var status = document.createElement('p');
+    status.className = 'sent';
+
+    var send = document.createElement('button');
+    send.type = 'button';
+    send.className = 'send';
+    send.textContent = 'Send';
+    send.title = 'Send this note to Claude Code, working in this checkout';
+    send.hidden = !live;
+    send.addEventListener('click', function () {
+      var text = (store.notes[name] || '').trim();
+      if (!text) { setStatus(status, 'err', 'Write something first.'); return; }
+      ask({ prompt: text, name: name, anchor: anchor, section: sectionTitle }, status, send);
+    });
+    foot.appendChild(send);
+
+    // Cmd/Ctrl + Enter sends, so a note can go without reaching for the mouse.
+    ta.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); send.click(); }
+    });
+
     c4.appendChild(ta);
-    c4.appendChild(pri);
+    c4.appendChild(foot);
+    c4.appendChild(status);
 
     if (isCustom) {
       var del = document.createElement('button');
@@ -904,7 +1024,7 @@
       }
 
       rows.forEach(function (r) {
-        sec.appendChild(buildRow(r[0], r[1], r[2], r[3], isCustom));
+        sec.appendChild(buildRow(r[0], r[1], r[2], r[3], isCustom, fullTitle(group)));
       });
 
       if (isCustom) {
@@ -989,10 +1109,10 @@
     }
   }
 
-  // ── Copy ──────────────────────────────────────────────
-  // Always exports every note, from both tabs — the tab is a way to look at the
-  // table, not a way to cut down what you send me.
-  document.getElementById('copy').addEventListener('click', function () {
+  // ── Gathering every note ──────────────────────────────
+  // Always takes every note, from all three tabs — a tab is a way to look at
+  // the table, not a way to cut down what gets sent.
+  function assemble() {
     var all = [];
     groups().forEach(function (group) {
       group[4].forEach(function (r) {
@@ -1004,7 +1124,7 @@
         });
       });
     });
-    if (!all.length) { say('Nothing noted yet'); return; }
+    if (!all.length) return null;
 
     var lines = [];
     function block(items, heading) {
@@ -1031,13 +1151,35 @@
       });
     }
 
-    var text = 'Feedback on the acquisition tool — ' + all.length +
-               (all.length === 1 ? ' area' : ' areas') + ':\n\n' + lines.join('\n').trim();
+    return {
+      count: all.length,
+      text: 'Feedback on the acquisition tool — ' + all.length +
+            (all.length === 1 ? ' area' : ' areas') + ':\n\n' + lines.join('\n').trim()
+    };
+  }
 
-    navigator.clipboard.writeText(text).then(
-      function () { say('Copied ' + all.length + ' from both tabs'); },
+  document.getElementById('copy').addEventListener('click', function () {
+    var got = assemble();
+    if (!got) { say('Nothing noted yet'); return; }
+    navigator.clipboard.writeText(got.text).then(
+      function () { say('Copied ' + got.count + ' from all tabs'); },
       function () { say('Copy blocked by the browser; select the text by hand'); }
     );
+  });
+
+  // ── Send all ──────────────────────────────────────────
+  // One run carrying the whole pass, in the order the priorities set. Sending
+  // note by note would start a fresh agent per row, and they would undo each
+  // other where two notes touch the same file.
+  document.getElementById('sendall').addEventListener('click', function () {
+    var got = assemble();
+    var status = document.getElementById('allstatus');
+    if (!got) { setStatus(status, 'err', 'Nothing noted yet.'); return; }
+    if (!confirm('Send all ' + got.count + ' notes to Claude? It will edit files in this checkout, and commit nothing.')) return;
+    ask({
+      prompt: got.text + '\n\nWork through these in the order given. NAMING.md maps every' +
+              ' component name to where it lives. Keep the build passing, and do not commit.'
+    }, status, null);
   });
 
   document.getElementById('clear').addEventListener('click', function () {
@@ -1056,8 +1198,37 @@
   window.addEventListener('resize', sizeHead);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeHead);
 
+  /**
+   * Is there a dev server behind this page?
+   *
+   * Served from Vite, /api/claude answers and the send buttons appear. Opened
+   * as a published artifact, the request cannot leave the sandbox, so they stay
+   * hidden and Copy feedback remains the way out. Neither case is an error, so
+   * neither says anything alarming.
+   */
+  function probe() {
+    fetch('/api/claude', { method: 'GET' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        live = Boolean(d && d.available);
+        if (!live) return;
+        document.getElementById('sendall').hidden = false;
+        document.getElementById('copy').classList.remove('primary');
+        Array.prototype.forEach.call(document.querySelectorAll('.send'), function (b) {
+          b.hidden = false;
+        });
+        var lede = document.getElementById('lede');
+        if (lede) {
+          lede.textContent = 'Find the area, say what should change, then send it straight to Claude.';
+        }
+        sizeHead();
+      })
+      .catch(function () { live = false; });
+  }
+
   buildTabs();
   render();
   sizeHead();
+  probe();
 })();
 </script>
