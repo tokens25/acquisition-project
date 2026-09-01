@@ -43,15 +43,49 @@ export interface PlanDetailsProps {
 }
 
 /**
- * Keeps a dialog inside the preview when its card is scrolled half out of it.
+ * Keeps the dialog inside a band when its card runs past the end of it.
  *
  * No margin: the dialog is narrower than the card and `max-` caps it to the
- * preview, so an in-view card always centres exactly. A margin here would push
- * the first card's dialog off its own centre, which is the one thing this
- * placement exists to get right.
+ * preview, so a card fully on screen always centres exactly. A margin here
+ * would push the first card's dialog off its own centre, which is the one
+ * thing this placement exists to get right. `min` wins the tie, so a band
+ * shorter than the dialog pins it to the near edge rather than the far one.
  */
-function fit(start: number, size: number, extent: number) {
-  return Math.max(0, Math.min(start, extent - size))
+function fit(start: number, size: number, min: number, max: number) {
+  return Math.max(min, Math.min(start, max - size))
+}
+
+/**
+ * The part of the overlay that is actually on screen.
+ *
+ * A card is 695 tall and the preview pane scrolls, so on a short window most
+ * of a card can be below the fold — and a dialog centred on the card would
+ * then open off screen. Every clipping ancestor is intersected in, so the
+ * dialog is placed against what you can see rather than against the row's
+ * full height. Returned in the overlay's own coordinates.
+ */
+function visibleBand(root: HTMLElement) {
+  const host = root.getBoundingClientRect()
+  let top = host.top
+  let bottom = host.bottom
+  let left = host.left
+  let right = host.right
+  for (let el = root.parentElement; el; el = el.parentElement) {
+    const { overflowX, overflowY } = getComputedStyle(el)
+    if (overflowX === 'visible' && overflowY === 'visible') continue
+    const b = el.getBoundingClientRect()
+    top = Math.max(top, b.top)
+    bottom = Math.min(bottom, b.bottom)
+    left = Math.max(left, b.left)
+    right = Math.min(right, b.right)
+  }
+  return {
+    host,
+    top: top - host.top,
+    bottom: bottom - host.top,
+    left: left - host.left,
+    right: right - host.left,
+  }
 }
 
 /**
@@ -105,29 +139,54 @@ export function PlanDetails({
     const place = () => {
       const card = anchor()
       if (!card) return
-      const host = root.getBoundingClientRect()
+      const band = visibleBand(root)
       const c = card.getBoundingClientRect()
       // Physical left/top, not logical: the overlay is pinned to all four
       // edges, so its origin is the top-left corner in either direction, and
       // the rectangles being measured are physical too.
-      const frame = { left: c.left - host.left, top: c.top - host.top, width: c.width, height: c.height }
-      setBox({
+      const frame = {
+        left: c.left - band.host.left,
+        top: c.top - band.host.top,
+        width: c.width,
+        height: c.height,
+      }
+      // A dialog taller than what is on screen would open with its heading or
+      // its button cut off, so the band caps its height. Written straight to
+      // the element and read back, not routed through state: the cap decides
+      // the height the placement below is about to centre, and a React round
+      // trip would place this pass against the height from the last one.
+      root.style.setProperty('--acq-details-band', `${band.bottom - band.top}px`)
+      const { offsetWidth: w, offsetHeight: h } = dialog
+
+      // Centred on the card, then held inside what is on screen — so a card
+      // whose middle is below the fold still opens where you can read it.
+      const next = {
         card: frame,
-        left: fit(frame.left + (c.width - dialog.offsetWidth) / 2, dialog.offsetWidth, host.width),
-        top: fit(frame.top + (c.height - dialog.offsetHeight) / 2, dialog.offsetHeight, host.height),
-      })
+        left: fit(frame.left + (c.width - w) / 2, w, band.left, band.right),
+        top: fit(frame.top + (c.height - h) / 2, h, band.top, band.bottom),
+      }
+      setBox((prev) =>
+        prev &&
+        prev.left === next.left &&
+        prev.top === next.top &&
+        prev.card.left === next.card.left &&
+        prev.card.top === next.card.top &&
+        prev.card.width === next.card.width &&
+        prev.card.height === next.card.height
+          ? prev
+          : next,
+      )
     }
 
     place()
-    // The row scrolls sideways under the dialog, and the panel beside it can
-    // resize the preview — either moves the card the dialog is pinned to.
-    const row = anchor()?.closest('.acq-set')
-    row?.addEventListener('scroll', place, { passive: true })
+    // Captured on the document: scroll does not bubble, and both the row under
+    // the dialog and the pane around it can move the card it is pinned to.
+    document.addEventListener('scroll', place, { capture: true, passive: true })
     const observer = new ResizeObserver(place)
     observer.observe(root)
     window.addEventListener('resize', place)
     return () => {
-      row?.removeEventListener('scroll', place)
+      document.removeEventListener('scroll', place, { capture: true })
       observer.disconnect()
       window.removeEventListener('resize', place)
     }

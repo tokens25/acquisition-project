@@ -545,7 +545,10 @@
   min-inline-size: 0;
   max-inline-size: calc(100% - var(--space-32));
   block-size: 600px;
-  max-block-size: calc(100% - var(--space-32));
+  /* The visible band wins when the preview is scrolled and most of a card
+     sits below the fold — a dialog taller than what is on screen would open
+     with its heading or its button cut off. */
+  max-block-size: min(calc(100% - var(--space-32)), var(--acq-details-band, 100%));
   overflow: hidden;
   border-radius: var(--radius-18);
   background:
