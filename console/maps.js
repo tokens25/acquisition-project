@@ -31,7 +31,7 @@
       'reset progress': [6,113,24,4]
     }},
     panelEdit: { vb: '0 0 80 150', furn: [[6,22,68,18]], parts: {
-      'breadcrumb': [6,5,52,7], 'scope line': [6,15,44,4],
+      'step heading': [6,5,52,7], 'back arrow': [6,5,7,7], 'step title': [16,5,42,7],
       'field group': [6,44,68,16], 'group title': [6,44,26,4],
       'plans group': [6,44,68,16], 'header group': [6,64,68,16],
       'pricing group': [6,84,68,16], 'add-on group': [6,104,68,14],

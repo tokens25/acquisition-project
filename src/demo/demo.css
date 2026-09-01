@@ -139,33 +139,33 @@
   flex-direction: column;
   gap: var(--space-16);
 }
-/* Breadcrumb, 225:46697 — a 20px chevron 4px clear of the label, which is bold
-   and white. The chevron is the DS icon rather than a typographic guillemet,
-   which never matched it at any size. */
-.demo__back {
+/* The step's heading, 225:46697 — a 20px chevron 4px clear of the title, which
+   is bold and white. Only the chevron is the control now, so the hover belongs
+   to it rather than to the whole line. */
+.demo__head {
   display: flex;
   gap: var(--space-4);
   align-items: center;
-  align-self: start;
+}
+.demo__back {
+  display: flex;
+  align-items: center;
   padding: 0;
   border: 0;
   background: none;
   color: var(--color-text-primary);
-  font-family: inherit;
-  font-size: var(--font-size-button-lg);
-  font-weight: var(--font-weight-bold);
-  text-align: start;
   cursor: pointer;
 }
 .demo__back:hover {
   color: var(--color-brand-primary);
 }
-/* The situation, kept in view while editing — every field below is scoped by
-   it, and the default view is no longer on screen to say so. */
-.demo__scope {
+/* The same size and weight the breadcrumb carried, so dropping the trail
+   changes what the line says without changing how the panel is set. */
+.demo__step-title {
   margin: 0;
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-caption-xs);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
 }
 
 .demo__preview {

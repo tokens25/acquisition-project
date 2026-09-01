@@ -155,14 +155,22 @@ export function DemoApp() {
 
           {editing ? (
             <>
-              <button type="button" className="demo__back" onClick={() => setEditing(false)}>
-                <Icon svg={iconArtwork['chevron-left']} size={20} />
-                {store.journey.name} — {step?.shortName ?? step?.name}
-              </button>
-              <p className="demo__scope">
-                {store.context.market === '*' ? 'Base — all markets' : store.context.market} ·{' '}
-                {store.context.channel} · {store.context.cadence}
-              </p>
+              {/* The arrow is the way back, and only the arrow. The trail it
+                  used to carry — journey name, then step name — said where you
+                  were twice over, when the panel below already only makes sense
+                  for one step. What is left is the step's own title, which is
+                  a heading rather than a control. */}
+              <div className="demo__head">
+                <button
+                  type="button"
+                  className="demo__back"
+                  onClick={() => setEditing(false)}
+                  aria-label="Back to the journey"
+                >
+                  <Icon svg={iconArtwork['chevron-left']} size={20} />
+                </button>
+                <h2 className="demo__step-title">{step?.shortName ?? step?.name}</h2>
+              </div>
               <div className="demo__fields">
                 <EditPanel store={store} />
               </div>

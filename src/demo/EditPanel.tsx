@@ -98,12 +98,11 @@ export function EditPanel({ store }: { store: CardSetStore }) {
       </section>
 
       <section className="demo__group">
-        <h3 className="demo__group-title">Header</h3>
+        <h3 className="demo__group-title">Tier Name</h3>
         <TextField
           label="Badge"
           value={resolved.ultimate ? 'Best experience' : ''}
           readOnly
-          helpText="Set by the Ultimate treatment below."
         />
         <ToggleField
           label="Ultimate Treatment"
