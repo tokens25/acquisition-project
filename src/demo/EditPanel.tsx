@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -33,6 +33,37 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const { set, context, setContext, updateTier, updateOffer, offerFor, updateSet } = store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
+  /**
+   * Why the assistant cannot write, when it cannot.
+   *
+   * Asked once, before any tier is chosen, so the hook order does not depend
+   * on whether this set has plans. Null means it is available — the AI tab
+   * then says who is writing rather than why nobody is.
+   */
+  const [assistant, setAssistant] = useState<string | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/assistant', { headers: { accept: 'application/json' } })
+      .then((r) =>
+        r.headers.get('content-type')?.includes('json')
+          ? (r.json() as Promise<{ configured?: boolean; reason?: string }>)
+          : Promise.reject(new Error('No assistant route on this deployment.')),
+      )
+      .then((b) => {
+        if (!cancelled && !b.configured) {
+          setAssistant(b.reason ?? 'The assistant is not set up on this deployment.')
+        }
+      })
+      .catch((e: unknown) => {
+        if (!cancelled) {
+          setAssistant(e instanceof Error ? e.message : 'The assistant is unavailable here.')
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const absent = new Map(excludedTiers(set, context).map((e) => [e.tier.id, e.reason]))
   const tier = set.tiers.find((t) => t.id === openTier) ?? set.tiers[0]
   if (!tier) return <p className="ed-placeholder">This set has no plans.</p>
@@ -42,6 +73,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const market = set.markets.find((m) => m.code === context.market)
 
   const patchTier = (p: Parameters<typeof updateTier>[1]) => updateTier(tier.id, p)
+
+  // Absent means custom: copy written before this choice existed was written
+  // by hand, and defaulting the other way would relabel it as generated.
+  const source = resolved.descriptionSource ?? 'custom'
 
   const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
     updateSet({
@@ -121,11 +156,41 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           value={resolved.planName}
           onChange={(v) => updateTier(tier.id, { planName: v })}
         />
+        {/* Who writes this copy. The tabs sit above the field and to the
+            right, so the field keeps its own full width. */}
+        <div className="ed-source">
+          <div className="ed-tabs ed-tabs--sm" role="group" aria-label="Description source">
+            <button
+              type="button"
+              className="ed-tab"
+              data-on={source === 'ai' || undefined}
+              aria-pressed={source === 'ai'}
+              onClick={() => patchTier({ descriptionSource: 'ai' })}
+            >
+              AI
+            </button>
+            <button
+              type="button"
+              className="ed-tab"
+              data-on={source === 'custom' || undefined}
+              aria-pressed={source === 'custom'}
+              onClick={() => patchTier({ descriptionSource: 'custom' })}
+            >
+              Custom
+            </button>
+          </div>
+        </div>
         <TextField
           label="Description"
           value={resolved.description}
           onChange={(v) => updateTier(tier.id, { description: v })}
           rows={4}
+          readOnly={source === 'ai'}
+          helpText={
+            source === 'ai'
+              ? (assistant ?? 'Written by the assistant. Switch to Custom to edit it here.')
+              : undefined
+          }
         />
       </section>
 

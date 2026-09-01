@@ -85,6 +85,7 @@
       ['badge field', 'Badge', 'The words on the badge. Editable — type what it should say. Whether a badge shows at all is still the Highlighted Tier switch’s call, and leaving this empty falls back to “BEST EXPERIENCE” rather than shipping a blank ribbon.', 'groupHeader'],
       ['ultimate toggle', 'Highlighted Tier', 'The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it.', 'groupHeader'],
       ['plan name field', 'Tier name', 'The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label.', 'groupHeader'],
+      ['description source', '.ed-source', 'Two tabs above the Description field, hard right: AI or Custom. Custom is the default, and it is what content written before this choice existed counts as. Choosing AI hands the copy to the assistant and makes the field read-only here.', 'groupHeader'],
       ['description field', 'Description', 'The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to.', 'groupHeader'],
     ]],
     ['group-pricing', 'Pricing group', 'edit', 'Group 3. What it costs. Every price here belongs to one way of paying.', [

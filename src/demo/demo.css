@@ -898,3 +898,15 @@
   /* zoom scales the box too, so no origin correction is needed. */
   pointer-events: none;
 }
+
+/* The description's source tabs: above the field and hard right, so the field
+   keeps its full width and the choice reads as a property of what follows. */
+.ed-source {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-end: calc(var(--space-8) * -1);
+}
+.ed-tabs--sm .ed-tab {
+  padding: var(--space-4) var(--space-10);
+  font-size: var(--font-size-caption-xs);
+}

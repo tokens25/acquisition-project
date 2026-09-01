@@ -75,6 +75,14 @@ export interface Tier {
    * the field cannot ship a blank ribbon.
    */
   badge?: string
+  /**
+   * Who writes the description — a person, or the assistant.
+   *
+   * Stored per tier because it is a decision about this plan's copy, not a
+   * preference of whoever has the panel open. Absent means custom: content
+   * written before the choice existed was written by hand.
+   */
+  descriptionSource?: 'ai' | 'custom'
   displayOrder: number
 
   /**
@@ -126,6 +134,7 @@ export interface TierPatch {
   logoTotal?: number
   ultimate?: boolean
   badge?: string
+  descriptionSource?: Tier['descriptionSource']
   status?: Tier['status']
   visibleToPartners?: boolean
 }

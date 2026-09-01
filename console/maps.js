@@ -41,9 +41,10 @@
       'plan tabs': [4,4,72,10], 'plan tab': [4,4,24,10],
       'plan not sold note': [4,18,72,8], 'no plans message': [4,30,72,8]
     }},
-    groupHeader: { vb: '0 0 80 76', parts: {
+    groupHeader: { vb: '0 0 80 78', parts: {
       'badge field': [4,4,72,14], 'ultimate toggle': [4,21,72,12],
-      'plan name field': [4,36,72,14], 'description field': [4,53,72,20]
+      'plan name field': [4,36,72,14],
+      'description source': [52,52,24,5], 'description field': [4,59,72,14]
     }},
     groupPricing: { vb: '0 0 80 82', parts: {
       'cadence field': [4,4,72,14], 'apply discount toggle': [4,21,72,12],
