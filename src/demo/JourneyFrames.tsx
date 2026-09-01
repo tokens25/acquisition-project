@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { artworkFor } from '../card/flowArtwork'
+import { Icon } from '../components/Icon'
+import { iconArtwork } from '../card/assets'
 import type { CardSet, Context } from '../rules/content'
 import type { ResolvedStep } from '../rules/journey'
 
@@ -187,7 +189,9 @@ export function JourneyFrames({
             </h3>
 
             <div className="jf__tiles">
-              {tiles.map(({ state, number }, i) => (
+              {tiles.map(({ state, number }, i) => {
+                const art = artworkFor(step.id, state)
+                return (
                 <button
                   type="button"
                   className="jf__tile"
@@ -199,43 +203,58 @@ export function JourneyFrames({
                 >
                   <span className="jf__num">{number ?? '—'}</span>
 
+                  {/* The address bar. Drawn here rather than left in the
+                      artwork because iOS puts it at the foot of the screen,
+                      while a window on a canvas reads as a window when its
+                      chrome is on top. */}
+                  <span className="jf__chrome" aria-hidden="true">
+                    <Icon svg={iconArtwork['chevron-left']} size={16} />
+                    <span className="jf__url">dazn.com</span>
+                    <span className="jf__dots">•••</span>
+                  </span>
+
                   {/* Three cases, and the difference between them is the
                       point. Subscription renders live, so it moves when the
                       content moves. The others show their Figma frame, which
                       does not move — that is what marks a screen as still to
                       be built. A step with neither falls back to its name. */}
-                  {step.renderer === 'plans' && !skipped ? (
-                    <span
-                      className="jf__thumb"
-                      style={{ inlineSize: frame.box.width, blockSize: frame.box.height }}
-                      aria-hidden="true"
-                    >
+                  {/* The live render takes its width from the tile rather than
+                      from the box, so it lines up with an exported frame beside
+                      it instead of overhanging by the border. */}
+                  <span className="jf__screen">
+                    {step.renderer === 'plans' && !skipped ? (
+                      <span className="jf__thumb" aria-hidden="true">
+                        <span
+                          className="jf__thumb-scale"
+                          style={{
+                            inlineSize: frame.viewport,
+                            transform: 'scale(' + thumbScale + ')',
+                          }}
+                        >
+                          <CardSetView set={set} context={context} />
+                        </span>
+                      </span>
+                    ) : art ? (
+                      // The picture keeps its own chrome at the bottom, so the
+                      // page is clipped to everything above it. Height is the
+                      // frame's, less that bar, at the tile's scale.
                       <span
-                        className="jf__thumb-scale"
+                        className="jf__page"
                         style={{
-                          inlineSize: frame.viewport,
-                          transform: 'scale(' + thumbScale + ')',
+                          blockSize: Math.round((art.height - art.chrome) * thumbScale),
                         }}
                       >
-                        <CardSetView set={set} context={context} />
+                        <img className="jf__art" src={art.src} alt="" loading="lazy" draggable={false} />
                       </span>
-
-                    </span>
-                  ) : artworkFor(step.id, state) ? (
-                    <img
-                      className="jf__art"
-                      src={artworkFor(step.id, state)}
-                      alt=""
-                      loading="lazy"
-                      draggable={false}
-                    />
-                  ) : (
-                    <span className="jf__frame">{step.figmaFrame ?? step.name}</span>
-                  )}
+                    ) : (
+                      <span className="jf__frame">{step.figmaFrame ?? step.name}</span>
+                    )}
+                  </span>
 
                   {state && <span className="jf__state">{state}</span>}
                 </button>
-              ))}
+                )
+              })}
             </div>
           </section>
         ))}

@@ -66,7 +66,12 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **tile number** | `.jf__num` | Where that screen falls in the flow. A dash when the step is skipped. |
 | **thumbnail** | `.jf__thumb` | A live miniature of the real screen, built from your actual content. Sized to the proportions of a 375 by 812 phone. |
 | **thumbnail scaler** | `.jf__thumb-scale` | The layer inside the thumbnail that shrinks the screen. The screen renders at full size and this scales it down, so the miniature is the real thing rather than a separate small version that could drift from it. |
-| **screen artwork** | `.jf__art` | The screen exported from Figma, shown on steps that have not been built yet. It is a picture, so it does not change when you edit content — that is how you tell a built screen from one still to come. Taller frames like Checkout are fitted to the tile rather than cropped. |
+| **browser chrome** | `.jf__chrome` | The address bar across the top of a tile, so it reads as a browser window. iOS actually puts it at the foot of the screen and the Figma frames are drawn that way, so the exported bar is clipped off the bottom and this one drawn on top instead. |
+| **address pill** | `.jf__url` | The rounded "dazn.com" in the middle of the bar. |
+| **browser menu** | `.jf__dots` | The three dots at the right of the bar. |
+| **screen** | `.jf__screen` | Everything below the address bar. A screen taller than the tile scrolls here rather than shrinking to fit — Checkout is 1321 tall, and fitting it would make the payment rows too small to read. |
+| **page clip** | `.jf__page` | Holds the exported picture and crops the Safari bar off its foot. Its height is the frame’s own height less that bar, at the tile’s scale, so it is set per screen rather than in the stylesheet. |
+| **screen artwork** | `.jf__art` | The screen exported from Figma, shown on steps that have not been built yet. Full tile width, natural height. It is a picture, so it does not change when you edit content — that is how you tell a built screen from one still to come. |
 | **frame name** | `.jf__frame` | The Figma frame name. The last resort, for a screen with neither a component nor an exported frame. |
 | **state label** | `.jf__state` | Which version of the screen this tile is — "default", "alternate plan selected". |
 

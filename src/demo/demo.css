@@ -269,7 +269,8 @@
    and the other there. */
 .jf__tile {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   flex: none;
   inline-size: 280px;
   block-size: 588px;
@@ -285,15 +286,72 @@
   cursor: pointer;
 }
 
-/* The exported Figma frame. Taller frames — Checkout is 1321 — are fitted to
-   the tile rather than cropped, since a cropped checkout loses the payment
-   rows that are the reason to look at it. */
+/* The address bar, pinned to the top of the tile. iOS draws it at the foot of
+   the screen and the exported frames are drawn that way too, but a window on a
+   canvas only reads as a window when its chrome is on top. */
+.jf__chrome {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-12);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-tertiary);
+}
+.jf__url {
+  flex: 1;
+  min-inline-size: 0;
+  padding: var(--space-4) var(--space-12);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-3, var(--color-surface-default));
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jf__dots {
+  flex: none;
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.5px;
+}
+
+/* The page below the chrome. A frame taller than the tile scrolls here rather
+   than being shrunk to fit — Checkout is 1321 tall, and fitting it would make
+   the payment rows, the reason to look at it, too small to read. */
+.jf__screen {
+  display: block;
+  flex: 1;
+  min-block-size: 0;
+  inline-size: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--color-surface-default);
+  scrollbar-width: none;
+}
+.jf__screen::-webkit-scrollbar {
+  display: none;
+}
+
+/* Clips the .Safari, iOS bar baked into the foot of every export. Its height
+   is the frame's own, less that bar, at the tile's scale — set inline, since
+   the frames differ. */
+.jf__page {
+  display: block;
+  inline-size: 100%;
+  overflow: hidden;
+}
+
+/* Full width, natural height. Width binds and the height follows, so the page
+   is never squashed — if it does not fit, .jf__screen scrolls. */
 .jf__art {
   display: block;
   inline-size: 100%;
-  block-size: 100%;
-  object-fit: contain;
-  object-position: top center;
+  block-size: auto;
   user-select: none;
 }
 .jf__tile:disabled {
@@ -717,6 +775,7 @@
   /* The live render fills its tile the same way an exported frame does, so
      Subscription and the Figma screens beside it are the same size. */
   align-self: start;
+  inline-size: 100%;
   overflow: hidden;
   background: var(--color-surface-default);
 }
