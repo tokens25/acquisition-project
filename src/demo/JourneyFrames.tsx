@@ -203,22 +203,13 @@ export function JourneyFrames({
                 >
                   <span className="jf__num">{number ?? '—'}</span>
 
-                  {/* The address bar. Drawn here rather than left in the
-                      artwork because iOS puts it at the foot of the screen,
-                      while a window on a canvas reads as a window when its
-                      chrome is on top. */}
-                  <span className="jf__chrome" aria-hidden="true">
-                    <Icon svg={iconArtwork['chevron-left']} size={16} />
-                    <span className="jf__url">dazn.com</span>
-                    <span className="jf__dots">•••</span>
-                  </span>
-
                   {/* Three cases, and the difference between them is the
                       point. Subscription renders live, so it moves when the
                       content moves. The others show their Figma frame, which
                       does not move — that is what marks a screen as still to
-                      be built. A step with neither falls back to its name. */}
-                  {/* The live render takes its width from the tile rather than
+                      be built. A step with neither falls back to its name.
+
+                      The live render takes its width from the tile rather than
                       from the box, so it lines up with an exported frame beside
                       it instead of overhanging by the border. */}
                   <span className="jf__screen">
@@ -249,6 +240,17 @@ export function JourneyFrames({
                     ) : (
                       <span className="jf__frame">{step.figmaFrame ?? step.name}</span>
                     )}
+                  </span>
+
+                  {/* The address bar, at the foot where iOS puts it and where
+                      every frame in the section draws it. Pinned rather than
+                      left in the picture, so it stays put while the page
+                      scrolls behind it — which is what the real browser does
+                      and what the flat export cannot. */}
+                  <span className="jf__chrome" aria-hidden="true">
+                    <Icon svg={iconArtwork['chevron-left']} size={16} />
+                    <span className="jf__url">dazn.com</span>
+                    <span className="jf__dots">•••</span>
                   </span>
 
                   {state && <span className="jf__state">{state}</span>}

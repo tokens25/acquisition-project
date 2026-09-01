@@ -69,10 +69,10 @@
       'frames row': [0,12,160,82], 'step group': [5,15,48,76],
       'step label': [7,17,22,5], 'state count': [30,17,9,5], 'skip tag': [41,17,9,5],
       'tiles strip': [7,24,44,64], 'step tile': [8,25,20,62], 'tile number': [9,26,5,4],
-      'browser chrome': [8,25,20,5], 'address pill': [11,26,12,3], 'browser menu': [24,26,3,3],
-      'screen': [8,30,20,53],
-      'thumbnail': [8,30,20,53], 'thumbnail scaler': [9,31,18,51],
-      'page clip': [8,30,20,53], 'screen artwork': [8,30,20,60],
+      'browser chrome': [8,81,20,5], 'address pill': [11,82,12,3], 'browser menu': [24,82,3,3],
+      'screen': [8,26,20,54],
+      'thumbnail': [8,26,20,54], 'thumbnail scaler': [9,27,18,52],
+      'page clip': [8,26,20,54], 'screen artwork': [8,26,20,62],
       'frame name': [9,79,18,3], 'state label': [9,83,18,3]
     }},
     stepview: { vb: '0 0 160 96', parts: {
