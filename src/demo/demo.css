@@ -150,11 +150,19 @@
 .demo__back {
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 0 var(--space-10) 0 0;
   border: 0;
   background: none;
   color: var(--color-text-primary);
   cursor: pointer;
+}
+/* 30, set here rather than through the Icon's size prop: that offers 16, 20
+   and 24, and the arrow wants a bigger target than any of them. The element
+   carries its own `--icon-size` inline, which a rule on an ancestor cannot
+   beat, so the box is set directly. */
+.demo__back .dazn-icon {
+  inline-size: 30px;
+  block-size: 30px;
 }
 .demo__back:hover {
   color: var(--color-brand-primary);
