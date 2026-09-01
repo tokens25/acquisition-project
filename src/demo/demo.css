@@ -1233,3 +1233,10 @@
   color: var(--color-text-tertiary);
   font-size: var(--font-size-caption-xs);
 }
+
+/* Handed over and not yours to act on — amber rather than the green of
+   "ready", which would say the opposite of waiting. */
+.demo__gate[data-state='waiting'] {
+  background: var(--color-accent-warning-surface-1);
+  color: var(--color-accent-warning-text);
+}

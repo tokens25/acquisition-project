@@ -14,6 +14,24 @@ import { loadRemote, publishRemote } from './remote'
 
 const STORAGE_KEY = 'acquisition-card-set-v3'
 
+/**
+ * Keys that say where you are, not what the content says.
+ *
+ * Changing one of these must not withdraw a review: opening another step is
+ * not an edit, and neither is asking for the review in the first place.
+ */
+const NAVIGATION = new Set<string>(['stepId', 'journeyId', 'context', 'review', 'stepOrder'])
+
+/**
+ * Sends content back to draft when it changes under a standing review.
+ *
+ * "Waiting for product & UX approval" over copy edited since the ask is worse
+ * than no status at all — it is the reviewer being told the wrong thing.
+ */
+function withdrawn(set: CardSet): Partial<CardSet> | null {
+  return set.review && set.review !== 'draft' ? { review: 'draft' } : null
+}
+
 /** Market value meaning "the base tier, before any market difference". */
 export const BASE_MARKET = '*'
 
@@ -185,18 +203,24 @@ export function useCardSet(): CardSetStore {
   }, [])
 
   const updateSet = useCallback((patch: Partial<CardSet>) => {
-    setSet((prev) => ({ ...prev, ...patch }))
+    const edits = Object.keys(patch).some((k) => !NAVIGATION.has(k))
+    setSet((prev) => ({ ...prev, ...patch, ...(edits ? withdrawn(prev) : null) }))
   }, [])
 
   const updateTier = useCallback((id: string, patch: TierPatch) => {
     setSet((prev) => {
       const ctx = prev.context
       if (isBaseContext(ctx)) {
-        return { ...prev, tiers: prev.tiers.map((t) => (t.id === id ? { ...t, ...patch } : t)) }
+        return {
+          ...prev,
+          ...withdrawn(prev),
+          tiers: prev.tiers.map((t) => (t.id === id ? { ...t, ...patch } : t)),
+        }
       }
       const when = selectorFor(ctx)
       return {
         ...prev,
+        ...withdrawn(prev),
         tiers: prev.tiers.map((t) => {
           if (t.id !== id) return t
           const existing = findOverride(t, ctx)
@@ -232,6 +256,7 @@ export function useCardSet(): CardSetStore {
       if (alreadyScoped) {
         return {
           ...prev,
+          ...withdrawn(prev),
           offers: prev.offers.map((o) => (o.id === target.id ? { ...o, ...patch } : o)),
         }
       }
@@ -241,7 +266,7 @@ export function useCardSet(): CardSetStore {
         id: `${target.id}-${scopeMarket ?? 'all'}`,
         market: scopeMarket,
       }
-      return { ...prev, offers: [...prev.offers, forked] }
+      return { ...prev, ...withdrawn(prev), offers: [...prev.offers, forked] }
     })
   }, [])
 

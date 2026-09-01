@@ -18,7 +18,8 @@
       'preview button': [8,6,48,11], 'export button': [62,6,50,11]
     }},
     actionsEdit: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
-      'save button': [8,6,50,11], 'exit button': [64,6,48,11]
+      'ready for review button': [4,6,36,11], 'approved button': [43,6,28,11],
+      'evaluate button': [74,6,42,11]
     }},
     panelDefault: { vb: '0 0 80 121', furn: [[6,5,68,26]], parts: {
       'context fields': [6,36,68,38],

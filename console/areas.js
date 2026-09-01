@@ -151,9 +151,10 @@
       ['placeholder note', '.jy__note', 'A free note about the screen. The same style also carries the message when a journey has no steps in the chosen country.', 'stepview'],
       ['placeholder warning', '.jy__todo', 'The line reading "Placeholder — this screen isn’t built yet."', 'stepview'],
     ]],
-    ['actions-edit', 'Action buttons', 'edit', 'The buttons at the top right once you have opened a step. Settings sits third here too.', [
-      ['save button', 'button 1 · primary', 'Says "Save changes". Asks you what changed, then publishes to the shared copy. Greyed out when there is nothing new to save, and reads "Saving…" while it works. Your typing is kept locally the whole time — this button is about sharing it, not about not losing it.', 'actionsEdit'],
-      ['exit button', 'button 2 · secondary', 'Says "Exit edit mode". Closes the step and goes back to the journey overview. It does not discard anything.', 'actionsEdit'],
+    ['actions-edit', 'Action buttons', 'edit', 'The buttons at the top right once you have opened a step. They are the review, in the order it happens: hand it over, then have it approved. Whichever one is live is the solid button; the step behind it drops back to a plain one rather than disappearing, so you can still see where you are in the sequence. To leave a step, use the arrow at the top of the panel.', [
+      ['ready for review button', 'button 1 · Ready for review', 'Hands the content to product and UX. Switched off until every situation passes its rules — the gate to the left says how many are still failing — and switched off again once you have asked, since you cannot ask twice.', 'actionsEdit'],
+      ['approved button', 'button 2 · Approved', 'Records that product and UX said yes, and publishes to the shared copy at the same time. Only available while the content is with them.', 'actionsEdit'],
+      ['evaluate button', 'button 3 · Evaluate performance', 'The AI coach. Not connected to anything yet, so it is switched off and says so rather than answering a click with nothing.', 'actionsEdit'],
     ]],
     ['card', 'The card', 'both', 'The plan card itself. This is what renders in the preview and inside every thumbnail.', [
       ['preview area', '.acq-preview', 'The box the cards sit in. It is also what the "All features & content" popup covers — the popup is sized to the phone, not to your browser window.', 'card'],
@@ -234,7 +235,7 @@
       ['beta chip', '.demo__beta', 'The small outlined BETA label next to the title.', 'shell'],
       ['collapse control', '.demo__collapse', 'The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips.', 'shell'],
       ['status bar', '.demo__statusbar', 'The right half of the top bar. Tells you whether you can publish, and holds the buttons.', 'shell'],
-      ['publish gate', '.demo__gate', 'Says either "Publish ready" with the number of situations checked, or "Publish blocked" with how many are failing. It checks every market and storefront combination, not just the one you are looking at.', 'shell'],
+      ['publish gate', '.demo__gate', 'Where the content stands, in four states: "Not ready for review" in red with how many situations are failing; "Ready for review" in green with how many were checked; "Waiting for product & UX approval" in amber once you have handed it over; and "Approved" in green after they say yes. It checks every market and storefront combination, not just the one you are looking at.', 'shell'],
       ['action buttons', '.demo__actions', 'The button group at the far right. Two in each view, and which two depends on the view.', 'shell'],
       ['save note', '.demo__savenote', 'A one-line message under the top bar confirming a save worked, or explaining why it did not. Only appears after you have saved.', 'shell'],
       ['body', '.demo__body', 'Everything under the top bar: the left column and the right column side by side.', 'shell'],

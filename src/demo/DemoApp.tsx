@@ -2,6 +2,7 @@ import '../App.css'
 import './demo.css'
 
 import { useState } from 'react'
+import aiSparkle from '../assets/icons/ai-sparkle.svg?raw'
 import daznLogo from '../assets/brand/logo-dazn.svg?raw'
 import { StepPreview } from '../card/StepPreview'
 import { Icon } from '../components/Icon'
@@ -29,14 +30,18 @@ export function DemoApp() {
   const [previewOnly, setPreviewOnly] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
 
-  // "Save" here means publish. Edits reach localStorage the moment they are
-  // typed, so a button that only closed the panel would be claiming to do
-  // something that already happened.
-  const onSave = async () => {
-    const message = window.prompt('What changed?', 'content: update plan copy')
-    if (message === null) return
-    const result = await store.publish(message)
-    setSaveNote(result.ok ? 'Saved to the shared copy.' : (result.error ?? 'Save failed.'))
+  /**
+   * Approval is also the moment the content goes to the shared copy.
+   *
+   * Publishing used to be its own button. Removing it without moving the act
+   * anywhere would have left the shared copy permanently behind, so it lands
+   * here, at the point somebody says the content is right — with a fixed
+   * message rather than the prompt the button used to raise.
+   */
+  const onApprove = async () => {
+    store.updateSet({ review: 'approved' })
+    const result = await store.publish('content: approved')
+    setSaveNote(result.ok ? 'Approved and published to the shared copy.' : (result.error ?? 'Approved, but publishing failed.'))
   }
 
   const planned = planJourney(store.journey, store.context)
@@ -49,32 +54,83 @@ export function DemoApp() {
     setEditing(true)
   }
 
-  // Which set of actions the bar carries. The default view offers ways to look at and
-  // take the content away; edit mode offers ways to commit or leave.
+  /**
+   * Which set of actions the bar carries.
+   *
+   * Edit mode is a review flow: hand it over, then have it approved. Neither
+   * can be asked for while the rules are failing, so both start switched off
+   * and the gate beside them says what is missing. The one that is live is the
+   * primary; the step behind it drops to third level rather than disappearing,
+   * so the sequence stays readable from where you are in it.
+   *
+   * Leaving edit mode is the arrow at the top of the panel, which was always
+   * the way back — the button here said it a second time.
+   */
+  const review = store.set.review ?? 'draft'
+  const rulesMet = coverage.failing.length === 0
+
+  /**
+   * What the gate says, and the colour it says it in.
+   *
+   * Failing rules come first whatever the review state: content that has
+   * stopped validating is the thing to know about, and the review is already
+   * withdrawn by the edit that broke it.
+   */
+  const gate = !rulesMet
+    ? {
+        state: 'blocked' as const,
+        text: `Not ready for review — ${coverage.failing.length} of ${coverage.total} contexts failing`,
+      }
+    : review === 'in-review'
+      ? { state: 'waiting' as const, text: 'Waiting for product & UX approval' }
+      : review === 'approved'
+        ? { state: 'clear' as const, text: `Approved — ${coverage.total} contexts checked` }
+        : { state: 'clear' as const, text: `Ready for review — ${coverage.total} contexts checked` }
+
   const actions = editing ? (
     <div className="demo__actions">
       <Button
-        appearance="primary"
+        appearance={review === 'draft' ? 'primary' : 'tertiary'}
         size="md"
         iconBefore={<Icon svg={iconArtwork.checkmark} size={20} />}
-        disabled={!store.unpublished || store.publishing}
+        disabled={!rulesMet || review !== 'draft'}
         title={
-          store.unpublished
-            ? 'Publish these edits to the shared copy'
-            : 'Nothing to save — this matches what is published'
+          !rulesMet
+            ? `${coverage.failing.length} of ${coverage.total} contexts still fail — fix those first`
+            : review === 'draft'
+              ? 'Hand this to product and UX'
+              : 'Already with product and UX'
         }
-        onClick={() => void onSave()}
+        onClick={() => store.updateSet({ review: 'in-review' })}
       >
-        {store.publishing ? 'Saving…' : 'Save changes'}
+        Ready for review
       </Button>
 
       <Button
-        appearance="secondary"
+        appearance={review === 'in-review' ? 'primary' : 'tertiary'}
         size="md"
-        iconBefore={<Icon svg={iconArtwork.close} size={20} />}
-        onClick={() => setEditing(false)}
+        iconBefore={<Icon svg={iconArtwork.check} size={20} />}
+        disabled={review !== 'in-review' || store.publishing}
+        title={
+          review === 'in-review'
+            ? 'Record the approval and publish to the shared copy'
+            : 'Available once the content is with product and UX'
+        }
+        onClick={() => void onApprove()}
       >
-        Exit edit mode
+        {store.publishing ? 'Publishing…' : 'Approved'}
+      </Button>
+
+      {/* Not wired to anything yet, and says so rather than answering a click
+          with nothing. */}
+      <Button
+        appearance="tertiary"
+        size="md"
+        iconBefore={<Icon svg={aiSparkle} size={20} />}
+        disabled
+        title="Not connected yet"
+      >
+        Evaluate performance
       </Button>
     </div>
   ) : (
@@ -139,10 +195,10 @@ export function DemoApp() {
       <div className="demo__top">
         {brand}
         <div className="demo__statusbar">
-          <span className="demo__gate" data-state={coverage.failing.length ? 'blocked' : 'clear'}>
-            {coverage.failing.length
-              ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`
-              : `Publish ready — ${coverage.total} contexts checked`}
+          {/* The gate reports where the content stands, which in edit mode is
+              a step in the review rather than a verdict on publishing. */}
+          <span className="demo__gate" data-state={gate.state}>
+            {gate.text}
           </span>
           {actions}
         </div>

@@ -94,12 +94,21 @@ export async function publishRemote(
       commit?: string
       error?: string
       conflict?: boolean
+      configured?: boolean
+      reason?: string
     }
     if (!res.ok || !body.sha || !body.commit) {
+      // The route answers 200 with { configured: false } when it has no token,
+      // so reporting the status alone said "returned 200" — true, and no use
+      // to anyone. Its own reason says what is missing.
+      const unconfigured =
+        body.configured === false
+          ? `Nothing was published — ${body.reason ?? 'the content store is not set up here.'}`
+          : null
       return {
         ok: false,
         conflict: Boolean(body.conflict) || res.status === 409,
-        error: body.error ?? `The content store returned ${res.status}.`,
+        error: body.error ?? unconfigured ?? `The content store returned ${res.status}.`,
       }
     }
     return { ok: true, sha: body.sha, commit: body.commit }

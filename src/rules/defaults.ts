@@ -140,6 +140,7 @@ export const defaultSet: CardSet = {
   context: { market: 'MSG+', channel: DIRECT, cadence: 'Monthly' },
   journeyId: 'hero-signup',
   featureIcons: 'feature',
+  review: 'draft',
   stepId: 'plans',
   // The size the tiles are drawn at: "Preview_standard_tiers" is three cards
   // of 280, which is the component's Device=Mobile — its 20 of padding, its

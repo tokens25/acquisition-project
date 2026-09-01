@@ -210,6 +210,15 @@ export interface ChannelConfig {
 }
 
 /** A set is the unit S-1, S-2 and S-3 are evaluated over. */
+/**
+ * How far this content has got through review.
+ *
+ * `draft` — being written; nothing has been asked of anyone.
+ * `in-review` — handed to product and UX, waiting on them.
+ * `approved` — they said yes.
+ */
+export type ReviewState = 'draft' | 'in-review' | 'approved'
+
 export interface CardSet {
   markets: MarketConfig[]
   campaigns: CampaignConfig[]
@@ -241,6 +250,13 @@ export interface CardSet {
    * styles, which is why they live here and not on a line.
    */
   featureIcons?: 'feature' | 'check' | 'hidden'
+  /**
+   * Kept with the content rather than in the page, because it is a fact about
+   * this content and not about this browser tab: reloading does not un-ask for
+   * a review, and editing after asking drops it back to `draft` rather than
+   * leaving an approval standing over copy nobody approved.
+   */
+  review?: ReviewState
   stepId: string
   device: Device
 }
