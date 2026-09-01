@@ -273,15 +273,16 @@ Unqualified requests mean **demo 1** at `/demo`.
 | --- | --- | --- |
 | **popup** | `.acq-details` | The popup as a whole — the dimming layer and the panel together. |
 | **dimming layer** | `.acq-details__scrim` | The dark wash over the cards behind. Clicking it closes the popup, as does Escape. |
-| **popup panel** | `.acq-details__dialog` | The panel itself, 343 by 600 — the size it is drawn at in Figma, sitting inside a 375 wide phone. |
-| **close button** | `.acq-details__close` | The X in the top right corner. |
-| **popup scroller** | `.acq-details__scroll` | Everything above the button scrolls; the button itself stays put. |
+| **popup panel** | `.acq-details__dialog` | The panel itself, 600 tall and 4 clear of the card down each side — the proportions it is drawn at in Figma. It shrinks if the window is too short to show all of it. |
+| **close button** | `.acq-details__close` | The X in the top right corner. The circle you see is 24; the part that answers a click is the 48 square around it. |
+| **popup body** | `.acq-details__body` | Everything above the button. It does not scroll — only the list inside it does. |
+| **popup head** | `.acq-details__head` | The plan name, description and tabs as one block. It stays put while the list scrolls under it. |
 | **popup intro** | `.acq-details__intro` | The plan name and description at the top. |
 | **popup title** | `.acq-details__title` | The plan name. The same one the card shows. |
 | **popup description** | `.acq-details__description` | The description in full. The card cuts it to fit and adds "… more"; here it is whole, exactly as you typed it. |
 | **popup tabs** | `.acq-details__tabs` | The Content / Features switch. |
 | **popup tab** | `.acq-details__tab` | One of the two tabs. The selected one carries a lighter background. |
-| **popup list** | `.acq-details__list` | Whichever list the selected tab shows. |
+| **popup list** | `.acq-details__list` | Whichever list the selected tab shows. The only part of the popup that scrolls, and it runs under the button rather than stopping above it. |
 | **competition row** | `.acq-details__row` | One competition: its badge, its name and a line about it. |
 | **competition badge** | `.acq-details__logo` | The 64 by 64 logo. Larger than the one on the card, which is 44. |
 | **competition copy** | `.acq-details__copy` | The name and the line under it, stacked beside the badge. |

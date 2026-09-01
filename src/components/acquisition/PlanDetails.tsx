@@ -200,42 +200,50 @@ export function PlanDetails({
           ref={closeRef}
           aria-label="Close"
         >
-          <Icon svg={closeIcon} size={16} />
+          {/* At the icon's own size. The DS glyph is drawn with a wide margin
+              inside its 24 box, so scaling the box down leaves a cross too
+              small for the button it sits in. */}
+          <Icon svg={closeIcon} size={24} />
         </button>
 
-        <div className="acq-details__scroll">
-          <div className="acq-details__intro">
-            <h2 className="acq-details__title" id={headingId}>
-              {title}
-            </h2>
-            {/* In full. The card measures and trims; this is the place the whole
-                thing is meant to be readable. */}
-            <p className="acq-details__description">{description}</p>
+        <div className="acq-details__body">
+          <div className="acq-details__head">
+            <div className="acq-details__intro">
+              <h2 className="acq-details__title" id={headingId}>
+                {title}
+              </h2>
+              {/* In full. The card measures and trims; this is the place the
+                  whole thing is meant to be readable. */}
+              <p className="acq-details__description">{description}</p>
+            </div>
+
+            <div className="acq-details__tabs" role="tablist" aria-label="Plan details">
+              <button
+                type="button"
+                className="acq-details__tab"
+                role="tab"
+                aria-selected={tab === 'content'}
+                data-on={tab === 'content' || undefined}
+                onClick={() => setTab('content')}
+              >
+                Content
+              </button>
+              <button
+                type="button"
+                className="acq-details__tab"
+                role="tab"
+                aria-selected={tab === 'features'}
+                data-on={tab === 'features' || undefined}
+                onClick={() => setTab('features')}
+              >
+                Features
+              </button>
+            </div>
           </div>
 
-          <div className="acq-details__tabs" role="tablist" aria-label="Plan details">
-            <button
-              type="button"
-              className="acq-details__tab"
-              role="tab"
-              aria-selected={tab === 'content'}
-              data-on={tab === 'content' || undefined}
-              onClick={() => setTab('content')}
-            >
-              Content
-            </button>
-            <button
-              type="button"
-              className="acq-details__tab"
-              role="tab"
-              aria-selected={tab === 'features'}
-              data-on={tab === 'features' || undefined}
-              onClick={() => setTab('features')}
-            >
-              Features
-            </button>
-          </div>
-
+          {/* The list is the only thing that scrolls — the plan's name, its
+              description and the tabs stay put, and the list runs under the
+              pinned button exactly as the design draws it. */}
           {tab === 'content' ? (
             <ul className="acq-details__list">
               {competitions.map((c) => (

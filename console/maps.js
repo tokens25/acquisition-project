@@ -110,7 +110,8 @@
     }},
     cardDetails: { vb: '0 0 70 122', parts: {
       'popup': [0,0,70,122], 'dimming layer': [0,0,70,122], 'popup panel': [4,4,62,114],
-      'close button': [58,7,5,5], 'popup scroller': [4,4,62,98],
+      'close button': [56,4,10,10], 'popup body': [4,4,62,98],
+      'popup head': [7,10,56,29],
       'popup intro': [7,10,56,16], 'popup title': [7,10,20,6], 'popup description': [7,18,56,8],
       'popup tabs': [7,29,56,10], 'popup tab': [8,30,27,8],
       'popup list': [7,43,56,58],

@@ -488,11 +488,12 @@
 }
 
 /* ── PlanDetails — "All features & content" ─────────────────── */
+/* Figma: 🚀 Acquisition for ai → "Popup" (node 613:26094), 343 × 600. */
 
 /* The dialog belongs to the preview it overlays, not to the browser window:
-   Figma draws it at 343 inside a 375 frame, and a fixed full-viewport modal
-   would sit over the editor panel too. `.acq-preview` is the positioned box
-   the scrim fills. */
+   Figma draws it inside a phone frame, and a fixed full-viewport modal would
+   sit over the editor panel too. `.acq-preview` is the positioned box the
+   scrim fills. */
 .acq-preview {
   position: relative;
   min-inline-size: 0;
@@ -532,14 +533,12 @@
   background: color-mix(in srgb, var(--color-fill-scrim) 72%, transparent);
 }
 
-/* Inset 16 from the card's own edges, which is the design's geometry: it
-   draws the dialog at 343 inside a 375 frame. 600 tall, capped to what is
-   actually on screen. */
+/* 4 clear of the card's edges, 600 tall, capped to what is on screen. */
 .acq-details__dialog {
   position: relative;
   display: flex;
   flex-direction: column;
-  inline-size: calc(var(--acq-details-card-width, 375px) - 2 * var(--space-16));
+  inline-size: calc(var(--acq-details-card-width, 375px) - 2 * var(--space-4));
   /* A grid item's automatic minimum is its min-content width, which the 64px
      badges push past — without it the max- caps below never apply and a narrow
      preview is overflowed rather than fitted. */
@@ -570,31 +569,51 @@
   position: absolute;
 }
 
+/* Figma `close btn`: a 48 frame with 12 of padding around a 24 button. The
+   frame is the hit area, the circle is what you see. */
 .acq-details__close {
   position: absolute;
   z-index: 1;
-  inset-block-start: var(--space-12);
-  inset-inline-end: var(--space-12);
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-48);
+  block-size: var(--space-48);
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+.acq-details__close > .dazn-icon {
   display: grid;
   place-items: center;
   inline-size: var(--space-24);
   block-size: var(--space-24);
-  border: 0;
   border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--color-fill-overlay-3) 24%, transparent);
-  color: var(--color-text-primary);
-  cursor: pointer;
+  /* DS semantic/base/surface/neutral. Absent from our token export, so the
+     design's own value with a note rather than the nearest wrong token. */
+  background: color-mix(in srgb, #3d4549 88%, transparent);
 }
 
-/* Section header (24) + the details section's own 16 of inline padding. */
-.acq-details__scroll {
+/* 24 of it is the section header the close button sits in; 16 down each side.
+   No padding at the foot — the list runs under the pinned button, which is
+   how the design draws it. */
+.acq-details__body {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: var(--space-24);
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  padding: var(--space-24) var(--space-16);
+  min-block-size: 0;
+  padding: var(--space-24) var(--space-16) 0;
+}
+
+/* Figma `Product info` — the name, the description and the tabs, 16 apart. */
+.acq-details__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
 }
 
 .acq-details__intro {
@@ -617,16 +636,20 @@
   line-height: 1.5;
 }
 
-/* Segmented control: a 2px transparent-soft edge around two 40px tabs. */
+/* Segmented control, 48 tall with two 40 tabs inside 4 of padding.
+   The 2 stroke is an inset shadow, not a border: Figma draws it inside the
+   frame without taking layout, and a real border would eat half the padding
+   and leave the tabs 2 from the edge instead of 4. */
 .acq-details__tabs {
   display: flex;
+  flex: none;
   gap: var(--space-4);
   align-items: center;
   block-size: var(--space-48);
   padding: var(--space-4);
-  border: var(--border-2) solid
-    color-mix(in srgb, var(--color-text-bright) 10%, transparent);
   border-radius: var(--radius-12);
+  box-shadow: inset 0 0 0 var(--border-2)
+    color-mix(in srgb, var(--color-text-bright) 10%, transparent);
 }
 .acq-details__tab {
   flex: 1;
@@ -634,21 +657,28 @@
   block-size: var(--space-40);
   border: 0;
   border-radius: var(--radius-8);
+  padding: var(--space-10) var(--space-8);
   background: transparent;
   color: var(--color-text-primary);
   font-family: inherit;
   font-size: var(--font-size-button-lg);
   font-weight: var(--font-weight-bold);
+  line-height: 1;
   cursor: pointer;
 }
 .acq-details__tab[data-on] {
   background: color-mix(in srgb, var(--color-text-bright) 10%, transparent);
 }
 
+/* The only thing that scrolls. */
 .acq-details__list {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-20);
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -660,6 +690,7 @@
 
 .acq-details__row {
   display: flex;
+  flex: none;
   gap: var(--space-16);
   align-items: center;
 }
@@ -689,6 +720,7 @@
   color: var(--color-text-primary);
   font-size: var(--font-size-button-lg);
   font-weight: var(--font-weight-bold);
+  line-height: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -700,6 +732,7 @@
 
 .acq-details__feature {
   display: flex;
+  flex: none;
   gap: var(--space-8);
   align-items: center;
   block-size: var(--space-20);
@@ -718,7 +751,8 @@
   font-size: var(--font-size-caption-sm);
 }
 
-/* Pinned rather than scrolled: the CTA is the reason the dialog opened. */
+/* 81 tall: 16, a 48 button, 16, and the rule above it. Pinned rather than
+   scrolled — the CTA is the reason the dialog opened. */
 .acq-details__footer {
   flex: none;
   padding: var(--space-16);
