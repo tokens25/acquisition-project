@@ -532,23 +532,24 @@
   background: color-mix(in srgb, var(--color-fill-scrim) 72%, transparent);
 }
 
-/* 343 × 600 — the design's own frame. `max-` on both axes so a preview
-   narrower or shorter than a phone still shows the whole dialog. */
+/* Inset 16 from the card's own edges, which is the design's geometry: it
+   draws the dialog at 343 inside a 375 frame. 600 tall, capped to what is
+   actually on screen. */
 .acq-details__dialog {
   position: relative;
   display: flex;
   flex-direction: column;
-  inline-size: 343px;
+  inline-size: calc(var(--acq-details-card-width, 375px) - 2 * var(--space-16));
   /* A grid item's automatic minimum is its min-content width, which the 64px
-     badges push past 343 — without it the max- caps below never apply and a
-     narrow preview is overflowed rather than fitted. */
+     badges push past — without it the max- caps below never apply and a narrow
+     preview is overflowed rather than fitted. */
   min-inline-size: 0;
-  max-inline-size: calc(100% - var(--space-32));
+  max-inline-size: var(--acq-details-band-inline, 100%);
   block-size: 600px;
   /* The visible band wins when the preview is scrolled and most of a card
      sits below the fold — a dialog taller than what is on screen would open
      with its heading or its button cut off. */
-  max-block-size: min(calc(100% - var(--space-32)), var(--acq-details-band, 100%));
+  max-block-size: min(calc(100% - var(--space-32)), var(--acq-details-band-block, 100%));
   overflow: hidden;
   border-radius: var(--radius-18);
   background:

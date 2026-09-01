@@ -1,6 +1,6 @@
 import './acquisition.css'
 
-import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import closeIcon from '../../assets/icons/action-close-md.svg?raw'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
@@ -121,15 +121,11 @@ export function PlanDetails({
   const rootRef = useRef<HTMLDivElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
   /**
-   * Where things go once the card has been measured, all relative to the
-   * overlay's top-left: `left`/`top` place the dialog, `card` is the rectangle
-   * the dim covers.
+   * Where the dialog goes once the card has been measured, relative to the
+   * overlay's top-left. The card's own rectangle goes to CSS as custom
+   * properties instead — the dim and the dialog's width are both drawn from it.
    */
-  const [box, setBox] = useState<{
-    left: number
-    top: number
-    card: { left: number; top: number; width: number; height: number }
-  } | null>(null)
+  const [box, setBox] = useState<{ left: number; top: number } | null>(null)
 
   useLayoutEffect(() => {
     const root = rootRef.current
@@ -150,31 +146,32 @@ export function PlanDetails({
         width: c.width,
         height: c.height,
       }
-      // A dialog taller than what is on screen would open with its heading or
-      // its button cut off, so the band caps its height. Written straight to
-      // the element and read back, not routed through state: the cap decides
-      // the height the placement below is about to centre, and a React round
-      // trip would place this pass against the height from the last one.
-      root.style.setProperty('--acq-details-band', `${band.bottom - band.top}px`)
+      // Written straight to the element and read back, not routed through
+      // state: these decide the size the placement below is about to centre,
+      // and a React round trip would place this pass against the last pass's
+      // size. The card rectangle is here too so the dim and the width come
+      // from one write rather than half from each side.
+      const vars: Record<string, number> = {
+        '--acq-details-card-left': frame.left,
+        '--acq-details-card-top': frame.top,
+        '--acq-details-card-width': frame.width,
+        '--acq-details-card-height': frame.height,
+        '--acq-details-band-inline': band.right - band.left,
+        '--acq-details-band-block': band.bottom - band.top,
+      }
+      for (const [name, value] of Object.entries(vars)) {
+        root.style.setProperty(name, `${value}px`)
+      }
       const { offsetWidth: w, offsetHeight: h } = dialog
 
       // Centred on the card, then held inside what is on screen — so a card
       // whose middle is below the fold still opens where you can read it.
       const next = {
-        card: frame,
         left: fit(frame.left + (c.width - w) / 2, w, band.left, band.right),
         top: fit(frame.top + (c.height - h) / 2, h, band.top, band.bottom),
       }
       setBox((prev) =>
-        prev &&
-        prev.left === next.left &&
-        prev.top === next.top &&
-        prev.card.left === next.card.left &&
-        prev.card.top === next.card.top &&
-        prev.card.width === next.card.width &&
-        prev.card.height === next.card.height
-          ? prev
-          : next,
+        prev && prev.left === next.left && prev.top === next.top ? prev : next,
       )
     }
 
@@ -205,23 +202,7 @@ export function PlanDetails({
   }, [onClose])
 
   return (
-    <div
-      className="acq-details"
-      ref={rootRef}
-      // The card's rectangle, for the dim to paint itself over. Handed to CSS
-      // rather than styled here, so the shape stays with the rest of the
-      // overlay's styling instead of half in each place.
-      style={
-        box
-          ? ({
-              '--acq-details-card-left': `${box.card.left}px`,
-              '--acq-details-card-top': `${box.card.top}px`,
-              '--acq-details-card-width': `${box.card.width}px`,
-              '--acq-details-card-height': `${box.card.height}px`,
-            } as CSSProperties)
-          : undefined
-      }
-    >
+    <div className="acq-details" ref={rootRef}>
       {/* The scrim is the dismiss target as well as the dim: clicking beside a
           dialog closes it everywhere else, and a bare div would not say so.
           It stays full size for that; the dim itself is drawn over the card. */}
