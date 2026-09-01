@@ -387,15 +387,21 @@
   color: var(--color-text-primary);
   line-height: 1.4;
 }
+/* Opposite the number, at the top. It used to sit bottom-left, which is where
+   the address bar's back chevron now is — the two overlapped. */
 .jf__state {
   position: absolute;
-  inset-block-end: var(--space-8);
-  inset-inline-start: var(--space-8);
-  z-index: 1;
+  inset-block-start: var(--space-8);
+  inset-inline-end: var(--space-8);
+  z-index: 2;
+  max-inline-size: 60%;
   padding: var(--space-4) var(--space-8);
   border-radius: var(--radius-full);
   background: var(--color-surface-container-1);
   color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .jf__live {
   margin-block-start: auto;
