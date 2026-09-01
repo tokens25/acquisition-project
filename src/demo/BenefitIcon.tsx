@@ -18,12 +18,9 @@ import type { FeatureEntry } from '../rules/content'
 export function BenefitIcon({
   entry,
   onPick,
-  assistant,
 }: {
   entry: FeatureEntry
   onPick: (iconId: string) => void
-  /** Why the assistant cannot answer, or null when it can. */
-  assistant: string | null
 }) {
   const [busy, setBusy] = useState(false)
   const [note, setNote] = useState<string | null>(null)
@@ -64,11 +61,15 @@ export function BenefitIcon({
     <div className="ed-icons">
       <div className="ed-icons__head">
         <span className="ed-icons__label">Icon</span>
+        {/* Not gated on whether the API key is set. Without one the question
+            goes to the signed-in CLI instead, and a button that greys itself
+            out on a laptop reads as broken rather than as unconfigured — if
+            neither can answer, the note below says which. */}
         <button
           type="button"
           className="ai-pill"
-          disabled={busy || Boolean(assistant)}
-          title={assistant ?? 'Ask the assistant which icon suits this line'}
+          disabled={busy}
+          title="Ask Claude which icon suits this line"
           onClick={suggest}
         >
           <span

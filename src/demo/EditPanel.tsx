@@ -535,7 +535,6 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                   <BenefitIcon
                     entry={entry}
                     onPick={(iconId) => updateFeature(entry.id, { iconId })}
-                    assistant={assistant}
                   />
                 </>
               )}
