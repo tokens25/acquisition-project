@@ -34,8 +34,14 @@ function steps(): Step[] {
       order: 20,
       captures: 'plan',
       narrowedBy: 'tier',
-      states: ['default', 'alternate plan selected'],
-      note: 'The Acquisition card set. Skipped when the CTA already named a plan.',
+      states: ['standard', 'ultimate'],
+      note:
+        'Section 1, node 586:26732. A .status-bar and .header-component-mobile over a ' +
+        'tabs control, then payment-options: three Cards 280 wide in a scroller, each ' +
+        'Header2 / divider / Price2 / Button2 / Logos / Features and a Whats included ' +
+        'button. The tabs are the two states — Standard and Ultimate change the price ' +
+        'and the feature list, and Ultimate adds Multiview and a gold Label on its card. ' +
+        'Skipped when the CTA already named a plan.',
     },
     // ── Everything below is the "Flow" section, node 583:23442 ────────────
     // Thirteen frames, six steps. The names, states and component inventories

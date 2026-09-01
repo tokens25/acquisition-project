@@ -1,3 +1,5 @@
+import plansStandard from '../assets/flow/plans-standard.png'
+import plansUltimate from '../assets/flow/plans-ultimate.png'
 import cadence from '../assets/flow/cadence.png'
 import login from '../assets/flow/login.png'
 import accountEmpty from '../assets/flow/account-empty.png'
@@ -51,6 +53,11 @@ export interface FlowFrame {
  * Source: Figma "Flow", node 583:23442.
  */
 export const flowArtwork: Record<string, FlowFrame> = {
+  // Section 1, node 586:26732. The two frames are the same screen with the
+  // tabs on Standard and on Ultimate — the price and the feature list follow
+  // the tab, which is why they are two states of one step and not two steps.
+  'plans/standard': { src: plansStandard, height: 812, chrome: 54 },
+  'plans/ultimate': { src: plansUltimate, height: 812, chrome: 54 },
   cadence: { src: cadence, height: 788, chrome: 54 },
   auth: { src: login, height: 820, chrome: 90 },
   'account/empty': { src: accountEmpty, height: 866, chrome: 90 },

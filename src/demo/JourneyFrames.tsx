@@ -205,17 +205,19 @@ export function JourneyFrames({
                 >
                   <span className="jf__num">{number ?? '—'}</span>
 
-                  {/* Three cases, and the difference between them is the
-                      point. Subscription renders live, so it moves when the
-                      content moves. The others show their Figma frame, which
-                      does not move — that is what marks a screen as still to
-                      be built. A step with neither falls back to its name.
+                  {/* The design first, then the live render, then the name.
+                      A step with an exported frame shows it, so the row reads
+                      as the flow as drawn — including Subscription, whose new
+                      design is not what the card component renders yet. The
+                      live render is still the whole point of the tool, and it
+                      is still what the edit view shows; the row is the flow,
+                      the edit view is the thing being built.
 
                       The live render takes its width from the tile rather than
                       from the box, so it lines up with an exported frame beside
                       it instead of overhanging by the border. */}
                   <span className="jf__screen">
-                    {step.renderer === 'plans' && !skipped ? (
+                    {step.renderer === 'plans' && !skipped && !art ? (
                       <span className="jf__thumb" aria-hidden="true">
                         {/* zoom, not transform: a transform shrinks what is
                             drawn but not the box it occupies, so the tile
