@@ -150,9 +150,10 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    375 viewport showing one and a sliver of the next, which is the shopper's
    view and not the editor's. The row still scrolls when the panel leaves less
    room than the three of them need. */
+/* No outline. The screens carry their own edges, and a second one drawn
+   around them read as part of the design rather than as the pane holding it. */
 .jy__viewport[data-device='mobile'] {
   padding: var(--space-16);
-  border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-18);
   background: var(--color-surface-default);
 }
