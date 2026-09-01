@@ -15,10 +15,10 @@
       'panel': [2,27,56,75], 'preview pane': [60,25,100,79]
     }},
     actionsDefault: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
-      'preview button': [6,6,32,11], 'export button': [42,6,42,11], 'settings button': [88,6,26,11]
+      'preview button': [8,6,48,11], 'export button': [62,6,50,11]
     }},
-    actionsEdit: { vb: '0 0 120 22', furn: [[0,0,120,22],[98,6,18,11]], parts: {
-      'save button': [4,6,42,11], 'exit button': [50,6,44,11]
+    actionsEdit: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
+      'save button': [8,6,50,11], 'exit button': [64,6,48,11]
     }},
     panelDefault: { vb: '0 0 80 121', furn: [[6,5,68,26]], parts: {
       'context fields': [6,36,68,38],

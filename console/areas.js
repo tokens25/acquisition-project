@@ -58,10 +58,9 @@
       ['frame name', '.jf__frame', 'The Figma frame name. The last resort, for a screen with neither a component nor an exported frame.', 'overview'],
       ['state label', '.jf__state', 'Which version of the screen a tile is — “standard”, “ultimate”. Sits under the tile rather than over it, where it covered the design it was labelling.', 'overview'],
     ]],
-    ['actions-default', 'Action buttons', 'default', 'The three buttons at the top right when you are not editing a step.', [
+    ['actions-default', 'Action buttons', 'default', 'Two buttons at the top right when you are not editing a step.', [
       ['preview button', 'button 1 · secondary', 'Hides the panel so the preview fills the window. Press it again — it now says "Show panel" — to bring the panel back.', 'actionsDefault'],
       ['export button', 'button 2 · tertiary', 'Says "Export JSON". Downloads all the content as a file. Worth knowing: this is the shape this app stores, not yet the shape the live rule engine reads.', 'actionsDefault'],
-      ['settings button', 'button 3 · tertiary', 'Greyed out and does nothing — there is no settings screen yet. This is the only button that appears in both views, and it is third in both.', 'actionsDefault'],
     ]],
     ['panel-edit', 'Panel', 'edit', 'The left column once you have opened a step. Six groups of fields, all scoped to one country, one storefront and one way of paying.', [
       ['breadcrumb', '.demo__back', 'The line at the top with a back arrow, the journey name and the step name. The whole line is clickable and takes you back.', 'panelEdit'],
@@ -186,7 +185,7 @@
       ['collapse control', '.demo__collapse', 'The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips.', 'shell'],
       ['status bar', '.demo__statusbar', 'The right half of the top bar. Tells you whether you can publish, and holds the buttons.', 'shell'],
       ['publish gate', '.demo__gate', 'Says either "Publish ready" with the number of situations checked, or "Publish blocked" with how many are failing. It checks every market and storefront combination, not just the one you are looking at.', 'shell'],
-      ['action buttons', '.demo__actions', 'The group of three buttons at the far right. Which three you get depends on the view.', 'shell'],
+      ['action buttons', '.demo__actions', 'The button group at the far right. Two in each view, and which two depends on the view.', 'shell'],
       ['save note', '.demo__savenote', 'A one-line message under the top bar confirming a save worked, or explaining why it did not. Only appears after you have saved.', 'shell'],
       ['body', '.demo__body', 'Everything under the top bar: the left column and the right column side by side.', 'shell'],
       ['rail', '.demo__rail', 'The track the panel slides inside. This is the thing that actually shrinks when you collapse — the panel keeps its width and gets clipped.', 'shell'],

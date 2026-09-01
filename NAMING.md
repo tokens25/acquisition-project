@@ -89,13 +89,12 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 ## Default view — Action buttons
 
-*Default view* — The three buttons at the top right when you are not editing a step.
+*Default view* — Two buttons at the top right when you are not editing a step.
 
 | Name | Where | What it is |
 | --- | --- | --- |
 | **preview button** | `button 1 · secondary` | Hides the panel so the preview fills the window. Press it again — it now says "Show panel" — to bring the panel back. |
 | **export button** | `button 2 · tertiary` | Says "Export JSON". Downloads all the content as a file. Worth knowing: this is the shape this app stores, not yet the shape the live rule engine reads. |
-| **settings button** | `button 3 · tertiary` | Greyed out and does nothing — there is no settings screen yet. This is the only button that appears in both views, and it is third in both. |
 
 ## Edit view — Panel
 
@@ -285,7 +284,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **collapse control** | `.demo__collapse` | The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips. |
 | **status bar** | `.demo__statusbar` | The right half of the top bar. Tells you whether you can publish, and holds the buttons. |
 | **publish gate** | `.demo__gate` | Says either "Publish ready" with the number of situations checked, or "Publish blocked" with how many are failing. It checks every market and storefront combination, not just the one you are looking at. |
-| **action buttons** | `.demo__actions` | The group of three buttons at the far right. Which three you get depends on the view. |
+| **action buttons** | `.demo__actions` | The button group at the far right. Two in each view, and which two depends on the view. |
 | **save note** | `.demo__savenote` | A one-line message under the top bar confirming a save worked, or explaining why it did not. Only appears after you have saved. |
 | **body** | `.demo__body` | Everything under the top bar: the left column and the right column side by side. |
 | **rail** | `.demo__rail` | The track the panel slides inside. This is the thing that actually shrinks when you collapse — the panel keeps its width and gets clipped. |

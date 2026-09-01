@@ -76,16 +76,6 @@ export function DemoApp() {
       >
         Exit edit mode
       </Button>
-
-      <Button
-        appearance="tertiary"
-        size="md"
-        iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
-        disabled
-        title="No settings screen yet."
-      >
-        Settings
-      </Button>
     </div>
   ) : (
     <div className="demo__actions">
@@ -108,16 +98,6 @@ export function DemoApp() {
         onClick={store.exportJson}
       >
         Export JSON
-      </Button>
-
-      <Button
-        appearance="tertiary"
-        size="md"
-        iconBefore={<Icon svg={iconArtwork.settings} size={20} />}
-        disabled
-        title="No settings screen yet."
-      >
-        Settings
       </Button>
     </div>
   )
