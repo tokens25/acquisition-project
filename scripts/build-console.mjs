@@ -34,6 +34,11 @@ const PARTS = ['console/page.head.html', 'console/maps.js', 'console/areas.js', 
  * Demo 2 is deliberately absent — it is the old interface, kept only for
  * comparison, and listing its parts would double the table with things nobody
  * is going to change.
+ *
+ * The assistant falls under that same rule for now: it is hidden in demo 1 and
+ * renders only in demo 2, so the console has nothing to point at. The
+ * component and its styles are untouched — put `src/editor/Assistant.tsx` back
+ * in this list when demo 1 shows it again, and the check will ask for the rows.
  */
 const SCANNED = [
   'src/demo/DemoApp.tsx',
@@ -43,7 +48,6 @@ const SCANNED = [
   'src/demo/JourneyFrames.tsx',
   'src/card/StepPreview.tsx',
   'src/card/CardSetView.tsx',
-  'src/editor/Assistant.tsx',
   'src/components/TextField.tsx',
   'src/components/SelectField.tsx',
   'src/components/ToggleField.tsx',
@@ -172,8 +176,8 @@ function drift({ AREAS }, inCode) {
   /**
    * A modifier belongs to the thing it modifies.
    *
-   * `.as--off` is the assistant with no key and `.acq-addon__status--code` is
-   * one of three ways a status prints. Demanding a row each would bury the
+   * `.acq-addon__status--code` is one of three ways a status prints, and
+   * `.acq-addon__status--payment` another. Demanding a row each would bury the
    * table in variants, so a modifier counts as covered when its base is.
    */
   const covered = (cls) => anchored.has(cls) || anchored.has(cls.split('--')[0])
@@ -220,7 +224,7 @@ function writeNaming({ AREAS }) {
     '| **Edit view** | Once a step is open: breadcrumb, scope, six field groups, the single-screen preview, and Save changes · Exit edit mode · Settings |',
     '| **Archive** | The frame and the shared kit — shell, design system, routes |',
     '',
-    'The assistant and the card appear under both working tabs, since they show in each.',
+    'The card appears under both working tabs, since it shows in each.',
     '',
     'Unqualified requests mean **demo 1** at `/demo`.',
     '',

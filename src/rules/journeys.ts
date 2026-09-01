@@ -36,90 +36,91 @@ function steps(): Step[] {
       states: ['default', 'alternate plan selected'],
       note: 'The Acquisition card set. Skipped when the CTA already named a plan.',
     },
+    // ── Everything below is the "Flow" section, node 583:23442 ────────────
+    // Thirteen frames, six steps. The names, states and component inventories
+    // are read off that section rather than paraphrased, so a rename in Figma
+    // surfaces here as a difference instead of a judgement call.
     {
       id: 'cadence',
-      name: 'Choose how to pay',
-      shortName: 'How to pay',
-      figmaFrame: 'Plans (payment-options)',
+      name: 'Cadence',
+      shortName: 'Cadence',
+      figmaFrame: 'Cadence',
       renderer: 'stub',
       order: 30,
-      states: ['pay now', 'pay monthly'],
-      note: 'Billing cadence — annual up-front versus monthly.',
-    },
-    {
-      id: 'connect-tv',
-      name: 'Connect TV — dual screen',
-      shortName: 'Connect TV',
-      figmaFrame: 'Connect TV- dual screen-option',
-      renderer: 'stub',
-      order: 35,
-      note: 'TV pairing. Found in the RSN-tile and logged-in journeys, not in the landing four.',
+      note:
+        'Select_BillingCycle holds two BillingCycle/Cards and a Button/CTA, then an ' +
+        'actions-info line naming the DMAs the plan covers. One frame, not two — the ' +
+        'section draws the choice once rather than a frame per option.',
     },
     {
       id: 'auth',
-      name: 'Log in or sign up',
-      shortName: 'Sign up',
-      figmaFrame: 'Create',
+      name: 'Login',
+      shortName: 'Login',
+      figmaFrame: 'Login',
       renderer: 'stub',
       order: 40,
       captures: 'auth',
       requires: ['auth.signedOut'],
-      note: 'Skipped entirely when already signed in — confirmed by the logged-in families, which drop it.',
+      note:
+        'Logos/Platforms, Title and user message payments, then Form/TextField and ' +
+        'Button/CTA, then a Divider over three .Button/Payment. Skipped entirely when ' +
+        'already signed in — the logged-in families drop it.',
     },
     {
       id: 'account',
-      name: 'Finish signing up',
-      shortName: 'Account',
-      figmaFrame: 'Complete Account',
+      name: 'Account setup',
+      shortName: 'Account setup',
+      figmaFrame: 'Account setup',
       renderer: 'stub',
       order: 50,
       captures: 'account',
       states: ['empty', 'filled', 'confirmed'],
       requires: ['form.valid'],
-      note: 'Name, email, password and consent. Three frames are form states, not steps.',
+      note:
+        'Four groups — div your name (Form), div email (Form/TextField), div password ' +
+        '(Form/PasswordField) and div get notified (Consent toggle). Filled and ' +
+        'confirmed open the password field from 56 to 161, where its .Validation list ' +
+        'shows three rules. Three frames are form states, not steps.',
     },
     {
       id: 'zip',
-      name: 'Confirm your ZIP code',
-      shortName: 'ZIP code',
-      figmaFrame: 'Zipcode',
+      name: 'Zip code verification',
+      shortName: 'Zip code',
+      figmaFrame: 'Zip code verification',
       renderer: 'stub',
       order: 60,
       when: { market: 'US' },
       captures: 'zip',
-      states: ['empty', 'entered', 'teams resolved'],
+      states: ['default', 'edit', 'edit results'],
       requires: ['geo.zipKnown'],
-      note: 'US only — regional blackouts and team availability depend on it.',
+      note:
+        'Heading and copy, a Form/TextField, a Button/CTA, then a Divider and a second ' +
+        'Button/CTA. Edit results adds ten .RSN/Logo grid NY in two rows — the teams ' +
+        'the code unlocked. US only.',
     },
     {
       id: 'checkout',
-      name: 'Checkout and payment',
+      name: 'Checkout',
       shortName: 'Checkout',
       figmaFrame: 'Checkout',
       renderer: 'stub',
       order: 70,
-      states: ['summary', 'card entered', 'processing', 'paid'],
+      states: ['empty', 'filled', 'payment process', 'payment verified'],
       note:
-        'Order summary plus payment. Owned in-house (Q8), though the card fields themselves are normally the payment provider embed.',
+        'PurchaseSummary/card over .summry heading desktop and four ' +
+        'PaymenySammury/List_items, then .payment_card holding three .payment.list.iteam ' +
+        '— each a RadioButton, a label and .logos-payment-methods with a "+4" overflow ' +
+        '— around .structure_payment details, and .Redeem_promo_code at the foot.',
     },
     {
       id: 'ready',
-      name: 'Ready to watch',
-      shortName: 'Ready',
-      figmaFrame: 'Credit card - zip code verified',
+      name: 'Confirmation screen',
+      shortName: 'Confirmation',
+      figmaFrame: 'Confirmation screen',
       renderer: 'stub',
       order: 80,
       requires: ['payment.succeeded'],
-      note: 'Confirmation, with the teams the ZIP unlocked.',
-    },
-    {
-      id: 'home',
-      name: 'Home',
-      shortName: 'Home',
-      figmaFrame: 'mobile-hero-native',
-      renderer: 'stub',
-      order: 90,
-      note: 'The product itself — outside the acquisition journey.',
+      note: 'Navigation over a single User feedback loop. The end of the flow.',
     },
   ]
 }
@@ -212,6 +213,28 @@ export const signUpJourney = journeys[0]
 
 /** Screens that appear only in this family. */
 const EXTRA_STEPS: Step[] = [
+  // Both of these used to sit in the shared list, which put them in the landing
+  // journeys as well — and connect-tv's own note said it did not belong there.
+  // The Flow section settles it: it draws neither, so neither is part of the
+  // flow. They stay reachable by id for the journeys that do list them.
+  {
+    id: 'connect-tv',
+    name: 'Connect TV — dual screen',
+    shortName: 'Connect TV',
+    figmaFrame: 'Connect TV- dual screen-option',
+    renderer: 'stub',
+    order: 35,
+    note: 'TV pairing. In the RSN-tile and logged-in journeys, not in the landing four.',
+  },
+  {
+    id: 'home',
+    name: 'Home',
+    shortName: 'Home',
+    figmaFrame: 'mobile-hero-native',
+    renderer: 'stub',
+    order: 90,
+    note: 'The product itself — outside the acquisition journey, which is why the Flow section stops before it.',
+  },
   {
     id: 'browse',
     name: 'Browse — RSN tile',
@@ -703,15 +726,20 @@ journeys.push(
  */
 const FIGMA_SCREENS: Record<string, number> = {
   'browse-hero-signup': 15,
-  'hero-signup': 19,
+  // The four landing journeys each drop 3 against their old numbers, and the
+  // arithmetic is the same in all four: Cadence is one frame in the Flow
+  // section where the old model gave it two states, and connect-tv and home
+  // are not drawn there at all. Their opening screens still come from their own
+  // sections; only the shared tail moved to 583:23442.
+  'hero-signup': 16,
   'logged-in-free-rsn': 12,
   'logged-in-paying-rsn': 12,
-  'market-check': 16,
+  'market-check': 13,
   'migration-crm': 9,
   'migration-no-payment': 9,
   'migration-organic': 8,
   'migration-tve': 10,
-  'plans-section': 14,
+  'plans-section': 11,
   'rsn-tile-signup': 16,
   'rsn-upgrade-bundle': 9,
   'starlink-signup': 15,
@@ -720,7 +748,7 @@ const FIGMA_SCREENS: Record<string, number> = {
   'tve-msg-purchase': 6,
   'tve-msg-tile': 11,
   'tve-provider-signin': 10,
-  'ultimate-feature': 16,
+  'ultimate-feature': 13,
 }
 
 for (const j of journeys) {

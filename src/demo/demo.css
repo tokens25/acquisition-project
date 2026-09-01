@@ -334,35 +334,6 @@
   text-transform: uppercase;
 }
 
-/* Upload — Button/CTA, 48px, radius 8, full width of the panel. The label and
-   icon are text-primary; the surface is the lightest container so the button
-   reads as the panel's one primary action. */
-.demo__upload {
-  display: flex;
-  gap: var(--space-8);
-  align-items: center;
-  justify-content: center;
-  block-size: 48px;
-  border-radius: var(--radius-8);
-  background: var(--color-surface-container-5);
-  color: var(--color-text-primary);
-  font-size: var(--font-size-button-lg);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
-}
-.demo__upload:hover {
-  background: var(--color-surface-container-4);
-}
-.demo__upload:focus-within {
-  outline: var(--border-2) solid var(--color-brand-primary);
-  outline-offset: 2px;
-}
-.demo__error {
-  margin: 0;
-  color: var(--color-accent-error-text);
-  font-size: var(--font-size-caption-xs);
-}
-
 /* ── User flow ─────────────────────────────────────────────── */
 .uf {
   display: flex;
@@ -528,7 +499,6 @@
 .demo__panel,
 .demo__preview,
 .demo .jf__row,
-.demo .as__list,
 .demo .acq-set,
 .demo .dz-field__control {
   scrollbar-width: thin;
@@ -541,7 +511,6 @@
 .demo__preview:focus-within,
 .demo .jf__row:hover,
 .demo .jf__row:focus-within,
-.demo .as__list:hover,
 .demo .acq-set:hover,
 .demo .dz-field__control:hover,
 .demo .dz-field__control:focus {
@@ -552,7 +521,6 @@
 .demo__panel::-webkit-scrollbar,
 .demo__preview::-webkit-scrollbar,
 .demo .jf__row::-webkit-scrollbar,
-.demo .as__list::-webkit-scrollbar,
 .demo .acq-set::-webkit-scrollbar,
 .demo .dz-field__control::-webkit-scrollbar {
   inline-size: 8px;
@@ -561,7 +529,6 @@
 .demo__panel::-webkit-scrollbar-track,
 .demo__preview::-webkit-scrollbar-track,
 .demo .jf__row::-webkit-scrollbar-track,
-.demo .as__list::-webkit-scrollbar-track,
 .demo .acq-set::-webkit-scrollbar-track,
 .demo .dz-field__control::-webkit-scrollbar-track {
   background: transparent;
@@ -569,7 +536,6 @@
 .demo__panel::-webkit-scrollbar-thumb,
 .demo__preview::-webkit-scrollbar-thumb,
 .demo .jf__row::-webkit-scrollbar-thumb,
-.demo .as__list::-webkit-scrollbar-thumb,
 .demo .acq-set::-webkit-scrollbar-thumb,
 .demo .dz-field__control::-webkit-scrollbar-thumb {
   border-radius: var(--radius-full);
@@ -582,7 +548,6 @@
 .demo__preview:focus-within::-webkit-scrollbar-thumb,
 .demo .jf__row:hover::-webkit-scrollbar-thumb,
 .demo .jf__row:focus-within::-webkit-scrollbar-thumb,
-.demo .as__list:hover::-webkit-scrollbar-thumb,
 .demo .acq-set:hover::-webkit-scrollbar-thumb,
 .demo .dz-field__control:hover::-webkit-scrollbar-thumb,
 .demo .dz-field__control:focus::-webkit-scrollbar-thumb {
@@ -593,7 +558,6 @@
   .demo__panel,
   .demo__preview,
   .demo .jf__row,
-  .demo .as__list,
   .demo .acq-set,
   .demo .dz-field__control {
     transition: none;

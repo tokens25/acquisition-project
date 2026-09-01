@@ -20,16 +20,15 @@
     actionsEdit: { vb: '0 0 120 22', furn: [[0,0,120,22],[98,6,18,11]], parts: {
       'save button': [4,6,42,11], 'exit button': [50,6,44,11]
     }},
-    panelDefault: { vb: '0 0 80 142', furn: [[6,26,68,26]], parts: {
-      'upload button': [6,5,68,12], 'import error': [6,19,68,5],
-      'context fields': [6,57,68,38],
-      'market': [6,57,68,6], 'storefront': [6,65,68,6], 'user status': [6,73,68,6],
-      'entry point': [6,81,68,6], 'which journey': [6,89,68,6],
-      'user flow': [6,99,68,32], 'flow heading': [6,99,26,4], 'flow list': [6,105,68,26],
-      'flow item': [8,104,64,11],
-      'flow row': [8,105,64,9], 'flow dot': [10,107,5,5], 'flow name': [17,108,26,4],
-      'flow skip tag': [46,108,10,4], 'flow edit button': [64,107,6,6], 'flow connector': [11,115,1.5,3],
-      'reset progress': [6,134,24,4]
+    panelDefault: { vb: '0 0 80 121', furn: [[6,5,68,26]], parts: {
+      'context fields': [6,36,68,38],
+      'market': [6,36,68,6], 'storefront': [6,44,68,6], 'user status': [6,52,68,6],
+      'entry point': [6,60,68,6], 'which journey': [6,68,68,6],
+      'user flow': [6,78,68,32], 'flow heading': [6,78,26,4], 'flow list': [6,84,68,26],
+      'flow item': [8,83,64,11],
+      'flow row': [8,84,64,9], 'flow dot': [10,86,5,5], 'flow name': [17,87,26,4],
+      'flow skip tag': [46,87,10,4], 'flow edit button': [64,86,6,6], 'flow connector': [11,94,1.5,3],
+      'reset progress': [6,113,24,4]
     }},
     panelEdit: { vb: '0 0 80 150', furn: [[6,22,68,18]], parts: {
       'breadcrumb': [6,5,52,7], 'scope line': [6,15,44,4],
@@ -63,16 +62,6 @@
       'feature row': [4,4,72,34], 'feature picker': [6,6,68,14],
       'line text field': [6,21,68,10], 'remove feature': [56,33,16,4],
       'add feature': [4,44,24,6]
-    }},
-    assistant: { vb: '0 0 80 70', parts: {
-      'assistant': [0,0,80,70], 'assistant head': [4,4,72,10], 'assistant title': [6,5,26,4],
-      'assistant hint': [6,10,60,3], 'assistant list': [4,16,72,34],
-      'assistant prompts': [6,18,68,14], 'assistant off note': [6,18,68,10],
-      'assistant turn': [6,18,68,8], 'turn text': [8,20,50,4], 'proposal card': [6,28,68,18],
-      'proposal summary': [8,30,60,4], 'proposal changes': [8,35,60,8],
-      'change scope': [10,36,20,3], 'change value': [10,40,46,3], 'apply button': [8,44,20,5],
-      'thinking note': [6,48,20,3], 'assistant error': [30,48,26,3],
-      'assistant compose': [4,53,72,13], 'assistant input': [6,55,54,9], 'send button': [62,55,12,9]
     }},
     overview: { vb: '0 0 160 96', parts: {
       'frames block': [0,0,160,96], 'row caption': [4,4,60,5], 'drag hint': [66,4,38,5],

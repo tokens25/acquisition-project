@@ -3,8 +3,6 @@
   // tab it appears under; 'both' shows in each.
   var AREAS = [
     ['panel-default', 'Panel', 'default', 'The left column when you are not editing a step. It asks which situation you are writing content for.', [
-      ['upload button', '.demo__upload', 'Says "Upload Spreadsheet or JSON". Loads content in from a file. It sits first because nothing under it means anything until there is content.', 'panelDefault'],
-      ['import error', '.demo__error', 'Red text under the upload button when a file cannot be read.', 'panelDefault'],
       ['context fields', '.demo__fields', 'The dropdowns as a set. Four of them normally, five when your answers describe more than one journey.', 'panelDefault'],
       ['market', 'dropdown 1', 'Which country you are writing for — or "Base", meaning the shared content every country starts from. The help text under it tells you which of the two you are doing.', 'panelDefault'],
       ['storefront', 'dropdown 2', 'Whether you are selling directly or through a partner like Movistar. Only partners that actually operate in the chosen country are listed.', 'panelDefault'],
@@ -114,28 +112,6 @@
     ['actions-edit', 'Action buttons', 'edit', 'The buttons at the top right once you have opened a step. Settings sits third here too.', [
       ['save button', 'button 1 · primary', 'Says "Save changes". Asks you what changed, then publishes to the shared copy. Greyed out when there is nothing new to save, and reads "Saving…" while it works. Your typing is kept locally the whole time — this button is about sharing it, not about not losing it.', 'actionsEdit'],
       ['exit button', 'button 2 · secondary', 'Says "Exit edit mode". Closes the step and goes back to the journey overview. It does not discard anything.', 'actionsEdit'],
-    ]],
-    ['assistant', 'Assistant', 'both', 'Sits above the fields in both views. Switched off until an API key is set, and it never changes anything on its own.', [
-      ['assistant', '.as', 'The whole assistant block.', 'assistant'],
-      ['assistant head', '.as__head', 'Its title and the line under it.', 'assistant'],
-      ['assistant title', '.as__title', 'Reads "Assistant", or "Assistant · off" when there is no key.', 'assistant'],
-      ['assistant hint', '.as__hint', 'The short explanation under the title.', 'assistant'],
-      ['assistant off note', '.as__off', 'What it shows instead of a conversation when there is no key.', 'assistant'],
-      ['assistant list', '.as__list', 'The conversation so far. Scrolls on its own.', 'assistant'],
-      ['assistant prompts', '.as__empty', 'Three suggested questions, shown before you have asked anything.', 'assistant'],
-      ['assistant turn', '.as__turn', 'One message, yours or its.', 'assistant'],
-      ['turn text', '.as__text', 'The words of one message.', 'assistant'],
-      ['thinking note', '.as__busy', 'The "Thinking…" line while it works.', 'assistant'],
-      ['assistant error', '.as__error', 'What it says when the request failed.', 'assistant'],
-      ['proposal card', '.as__proposal', 'A set of changes it is suggesting. Nothing happens until you press apply.', 'assistant'],
-      ['proposal summary', '.as__proposal-summary', 'Its one-line description of what it is proposing.', 'assistant'],
-      ['proposal changes', '.as__changes', 'The changes themselves — which country each applies to, and the new value.', 'assistant'],
-      ['change scope', '.as__scope', 'Which country or plan one proposed change applies to. Without it a proposal reads as if it changed everything.', 'assistant'],
-      ['change value', '.as__value', 'The new text a proposed change would write.', 'assistant'],
-      ['apply button', '.as__apply', 'Writes the proposal into your content. Greys out once used, so you cannot apply the same thing twice.', 'assistant'],
-      ['assistant compose', '.as__compose', 'The row where you type.', 'assistant'],
-      ['assistant input', '.as__input', 'The box you type your question into.', 'assistant'],
-      ['send button', '.as__send', 'Greyed out while it is thinking, and while the box is empty.', 'assistant'],
     ]],
     ['card', 'The card', 'both', 'The plan card itself. This is what renders in the preview and inside every thumbnail.', [
       ['set scroller', '.acq-set-scroll', 'The scrolling wrapper around the row of cards, for when they do not all fit.', 'card'],

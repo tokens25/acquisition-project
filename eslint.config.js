@@ -6,7 +6,15 @@ import tseslint from 'typescript-eslint'
 import { globalIgnores } from 'eslint/config'
 
 export default tseslint.config([
-  globalIgnores(['dist', 'storybook-static', 'src/**/*.figma.ts']),
+  // console/ holds the four pieces of one HTML page, not four modules — app.js
+  // is the inside of an IIFE and ends mid-file. `npm run console` assembles and
+  // syntax-checks them; parsing the fragments alone can only ever fail.
+  globalIgnores([
+    'dist',
+    'storybook-static',
+    'src/**/*.figma.ts',
+    'console/**',
+  ]),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

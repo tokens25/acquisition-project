@@ -15,7 +15,7 @@ label it actually carries in the code.
 | **Edit view** | Once a step is open: breadcrumb, scope, six field groups, the single-screen preview, and Save changes · Exit edit mode · Settings |
 | **Archive** | The frame and the shared kit — shell, design system, routes |
 
-The assistant and the card appear under both working tabs, since they show in each.
+The card appears under both working tabs, since it shows in each.
 
 Unqualified requests mean **demo 1** at `/demo`.
 
@@ -27,8 +27,6 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **upload button** | `.demo__upload` | Says "Upload Spreadsheet or JSON". Loads content in from a file. It sits first because nothing under it means anything until there is content. |
-| **import error** | `.demo__error` | Red text under the upload button when a file cannot be read. |
 | **context fields** | `.demo__fields` | The dropdowns as a set. Four of them normally, five when your answers describe more than one journey. |
 | **market** | `dropdown 1` | Which country you are writing for — or "Base", meaning the shared content every country starts from. The help text under it tells you which of the two you are doing. |
 | **storefront** | `dropdown 2` | Whether you are selling directly or through a partner like Movistar. Only partners that actually operate in the chosen country are listed. |
@@ -193,33 +191,6 @@ Unqualified requests mean **demo 1** at `/demo`.
 | --- | --- | --- |
 | **save button** | `button 1 · primary` | Says "Save changes". Asks you what changed, then publishes to the shared copy. Greyed out when there is nothing new to save, and reads "Saving…" while it works. Your typing is kept locally the whole time — this button is about sharing it, not about not losing it. |
 | **exit button** | `button 2 · secondary` | Says "Exit edit mode". Closes the step and goes back to the journey overview. It does not discard anything. |
-
-## Assistant
-
-*Both views* — Sits above the fields in both views. Switched off until an API key is set, and it never changes anything on its own.
-
-| Name | Where | What it is |
-| --- | --- | --- |
-| **assistant** | `.as` | The whole assistant block. |
-| **assistant head** | `.as__head` | Its title and the line under it. |
-| **assistant title** | `.as__title` | Reads "Assistant", or "Assistant · off" when there is no key. |
-| **assistant hint** | `.as__hint` | The short explanation under the title. |
-| **assistant off note** | `.as__off` | What it shows instead of a conversation when there is no key. |
-| **assistant list** | `.as__list` | The conversation so far. Scrolls on its own. |
-| **assistant prompts** | `.as__empty` | Three suggested questions, shown before you have asked anything. |
-| **assistant turn** | `.as__turn` | One message, yours or its. |
-| **turn text** | `.as__text` | The words of one message. |
-| **thinking note** | `.as__busy` | The "Thinking…" line while it works. |
-| **assistant error** | `.as__error` | What it says when the request failed. |
-| **proposal card** | `.as__proposal` | A set of changes it is suggesting. Nothing happens until you press apply. |
-| **proposal summary** | `.as__proposal-summary` | Its one-line description of what it is proposing. |
-| **proposal changes** | `.as__changes` | The changes themselves — which country each applies to, and the new value. |
-| **change scope** | `.as__scope` | Which country or plan one proposed change applies to. Without it a proposal reads as if it changed everything. |
-| **change value** | `.as__value` | The new text a proposed change would write. |
-| **apply button** | `.as__apply` | Writes the proposal into your content. Greys out once used, so you cannot apply the same thing twice. |
-| **assistant compose** | `.as__compose` | The row where you type. |
-| **assistant input** | `.as__input` | The box you type your question into. |
-| **send button** | `.as__send` | Greyed out while it is thinking, and while the box is empty. |
 
 ## The card
 

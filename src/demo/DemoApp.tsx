@@ -5,7 +5,6 @@ import { useState } from 'react'
 import daznLogo from '../assets/brand/logo-dazn.svg?raw'
 import { StepPreview } from '../card/StepPreview'
 import { Icon } from '../components/Icon'
-import { Assistant } from '../editor/Assistant'
 import { useCardSet } from '../editor/useCardSet'
 import { planJourney } from '../rules/journey'
 import { summarise, validateAll } from '../rules/validate'
@@ -184,38 +183,12 @@ export function DemoApp() {
                 {store.context.market === '*' ? 'Base — all markets' : store.context.market} ·{' '}
                 {store.context.channel} · {store.context.cadence}
               </p>
-              {/* Above the fields, not below them: the questions worth asking
-                  here are about the copy being written, and an assistant found
-                  after scrolling past six field groups is an assistant nobody
-                  asks. */}
-              <Assistant store={store} />
-
               <div className="demo__fields">
                 <EditPanel store={store} />
               </div>
             </>
           ) : (
             <>
-              {/* First action in the panel, because nothing below it means
-                  anything until content is loaded. */}
-              <label className="demo__upload">
-                <Icon svg={iconArtwork.upload} size={24} />
-                Upload Spreadsheet or JSON
-                <input
-                  type="file"
-                  accept=".json,application/json,.xlsx"
-                  hidden
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) void store.importJson(file)
-                    e.target.value = ''
-                  }}
-                />
-              </label>
-              {store.importError && <p className="demo__error">{store.importError}</p>}
-
-              <Assistant store={store} />
-
               <div className="demo__fields">
                 <DefaultPanel store={store} />
               </div>
