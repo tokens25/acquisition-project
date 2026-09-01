@@ -155,6 +155,15 @@ export interface CadenceOffer {
    * discount again.
    */
   ctaStyle?: 'plain' | 'saving-amount' | 'saving-percent'
+  /**
+   * What the button says, written out.
+   *
+   * Wins over the wording `ctaStyle` would build, because a person who has
+   * typed something meant it. Empty falls back to that wording, so clearing
+   * the field cannot ship a blank button — and the menu of savings is a way
+   * of filling this in, not a second place the answer lives.
+   */
+  ctaLabel?: string
 }
 
 /** The fields a market or campaign may override on a tier. Sparse by design. */

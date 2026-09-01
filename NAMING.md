@@ -145,12 +145,12 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **cadence field** | `Price for` | Monthly, Yearly Instalments or Yearly. Changing it changes which of the plan’s prices you are editing — a plan with no price here simply is not sold that way. |
 | **standard price field** | `Full price` | The undiscounted price, in the currency of the country you picked. |
-| **price unit field** | `How to pay` | Everything after the slash — the “monthly” in “$29.99/monthly”. It belongs to the way of paying rather than to this plan, so what you write here reads the same on every plan priced that way. Leave it and it uses the name of the cadence itself, in lower case. |
+| **price unit field** | `Price per` | Everything after the slash — the “month” in “$29.99/month”. It belongs to the way of paying rather than to this plan, so what you write here reads the same on every plan priced that way. Leave it and it uses the name of the cadence itself, in lower case. |
 | **apply discount toggle** | `Apply discount` | Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change. |
 | **discount price field** | `Discount price` | The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount. |
-| **button field** | `Button` | What the card’s button says. Three forms: the plain “Get Ultimate”, or that plus the saving as money or as a percentage. The menu is labelled with the button each option produces rather than naming a setting. Only appears where there is a discount — the saving is what the other two forms are for. |
+| **button field** | `Button` | What the card’s button says, written out. It sits under the price explainer and is not part of the discount — every plan has a button. Leave it empty and it falls back to “Get” and the plan’s name. |
+| **button savings menu** | `Add the saving` | Only with a discount, because only then is there a saving to name. It offers the plain wording and the two that add the saving, as money or as a percentage, each shown as the button it produces. Picking one writes it into the Button field above, where you can then edit it. |
 | **price explainer field** | `Price explainer` | The sentence under the price — “For the first 3 months, then $34.99/monthly”. Only appears where there is a discount to explain. Editable, with the same AI or Custom choice as the Description; empty falls back to the sentence built from the intro months, the full price and the cadence. |
 | **not sold at this cadence** | `.ed-placeholder · pricing` | Replaces the price fields when this plan is not sold at the chosen cadence. It says plainly that this is a fact about the plan, not something missing that you need to fill in. |
 

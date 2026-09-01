@@ -43,7 +43,7 @@ const PURCHASE_TYPES = [
  * view made the number look absolute when it never is.
  */
 export function EditPanel({ store }: { store: CardSetStore }) {
-  const { set, context, setContext, updateTier, updateOffer, offerFor, updateSet } = store
+  const { set, context, updateTier, updateOffer, offerFor, updateSet } = store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   /** The competition being dragged, and the row it is currently over. */
@@ -234,16 +234,6 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         <h3 className="demo__group-title">
           Pricing{market ? ` — ${market.currency}` : ''}
         </h3>
-        {/* Which of the plan's prices everything below edits. Named for what
-            picking one shows you, since that is the only thing it does. */}
-        <SelectField
-          label="Price for"
-          value={context.cadence}
-          options={set.cadences.map((c) => ({ value: c, label: c }))}
-          onChange={(v) => setContext({ ...context, cadence: v })}
-          helpText="The prices below are this cadence only. A plan with no offer here is not sold this way."
-        />
-
         {offer ? (
           <>
             <TextField
@@ -259,7 +249,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 priced this way — which is the point: they cannot then disagree
                 about what "monthly" is called. */}
             <TextField
-              label="How to pay"
+              label="Price per"
               value={unit}
               onChange={(v) =>
                 updateSet({ priceUnits: { ...set.priceUnits, [context.cadence]: v } })
@@ -293,23 +283,6 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 helpText={`Must stay below ${offer.standardPrice}.`}
               />
             )}
-            {/* The button. Options are labelled with the button they make, so
-                the menu shows the result rather than naming a setting. Only
-                offered where there is a discount — the saving is what the two
-                extra forms are for. */}
-            {offer.discount && market && (
-              <SelectField
-                label="Button"
-                value={offer.ctaStyle ?? 'plain'}
-                options={(['plain', 'saving-amount', 'saving-percent'] as const).map((style) => ({
-                  value: style,
-                  label: ctaLabelFor(resolved.planName, { ...offer, ctaStyle: style }, market),
-                }))}
-                onChange={(v) =>
-                  updateOffer(tier.id, { ctaStyle: v as 'plain' | 'saving-amount' | 'saving-percent' })
-                }
-              />
-            )}
             {/* The sentence under the price. Only where there is a discount to
                 explain — an undiscounted price needs no footnote. */}
             {offer.discount && (
@@ -334,6 +307,44 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                   }
                 />
               </>
+            )}
+            {/* The button's words, written out. It is not part of the discount:
+                every plan has a button, and only the wordings that mention a
+                saving need one. */}
+            <TextField
+              label="Button"
+              value={offer.ctaLabel ?? ''}
+              onChange={(v) => updateOffer(tier.id, { ctaLabel: v })}
+              helpText={
+                market
+                  ? `Empty falls back to “${ctaLabelFor(resolved.planName, { ...offer, ctaStyle: 'plain' }, market)}”.`
+                  : undefined
+              }
+            />
+            {/* With a discount there is a saving to name, so the wordings that
+                name it are offered. Picking one writes it into the field above
+                rather than setting a mode — the field stays the one place the
+                button's words live, and they can be edited afterwards. */}
+            {offer.discount && market && (
+              <SelectField
+                label="Add the saving"
+                value={offer.ctaLabel ?? ''}
+                options={[
+                  ...(offer.ctaLabel &&
+                  !(['plain', 'saving-amount', 'saving-percent'] as const).some(
+                    (style) =>
+                      ctaLabelFor(resolved.planName, { ...offer, ctaStyle: style }, market) ===
+                      offer.ctaLabel,
+                  )
+                    ? [{ value: offer.ctaLabel, label: offer.ctaLabel }]
+                    : []),
+                  ...(['plain', 'saving-amount', 'saving-percent'] as const).map((style) => {
+                    const label = ctaLabelFor(resolved.planName, { ...offer, ctaStyle: style }, market)
+                    return { value: label, label }
+                  }),
+                ]}
+                onChange={(v) => updateOffer(tier.id, { ctaLabel: v })}
+              />
             )}
           </>
         ) : (

@@ -287,7 +287,7 @@ export function deriveCard(
       : null,
 
     headerText: tier.planName,
-    ctaLabel: ctaLabelFor(tier.planName, offer, market),
+    ctaLabel: offer.ctaLabel?.trim() || ctaLabelFor(tier.planName, offer, market),
     addOnIncludedLabel: `Included in ${tier.planName}`,
 
     logoRows,
