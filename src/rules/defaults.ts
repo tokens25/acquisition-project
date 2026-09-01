@@ -76,6 +76,10 @@ export const defaultSet: CardSet = {
     { code: 'ES', label: 'Spain', locale: 'es-ES', currency: 'EUR' },
     { code: 'GB', label: 'United Kingdom', locale: 'en-GB', currency: 'GBP' },
     { code: 'US', label: 'United States', locale: 'en-US', currency: 'USD' },
+    // The regional sports network sits alongside the countries rather than
+    // inside one: it is sold as its own market, and the ZIP check runs here for
+    // the same reason it runs in the US — regional blackouts.
+    { code: 'MSG+', label: 'MSG+', locale: 'en-US', currency: 'USD' },
   ],
   campaigns: [{ code: 'wc26', label: 'World Cup 2026' }],
   channels: [
