@@ -62,8 +62,9 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **state count** | `.jf__states` | Says "· 3 states" when a step is drawn more than one way. |
 | **skip tag** | `.jf__tag` | A "seeded" or "not here" marker explaining why a step shows nothing. |
 | **tiles strip** | `.jf__tiles` | The screens belonging to one step, side by side. |
+| **tile cell** | `.jf__cell` | One tile and the caption under it, kept together so the caption tracks the screen it names. |
 | **step tile** | `.jf__tile` | One screen. Click it to edit that step. |
-| **tile number** | `.jf__num` | Where that screen falls in the flow. A dash when the step is skipped. |
+| **tile number** | `.jf__num` | Where the step falls in the flow, beside its name. A step drawn three ways occupies three numbers and shows the span — 6–8 — so the last number in the row still equals the journey’s screen count. |
 | **thumbnail** | `.jf__thumb` | A live miniature of the real screen, built from your actual content. Sized to the proportions of a 375 by 812 phone. |
 | **thumbnail scaler** | `.jf__thumb-scale` | The layer inside the thumbnail that shrinks the screen. The screen renders at full size and this scales it down, so the miniature is the real thing rather than a separate small version that could drift from it. |
 | **phone status bar** | `.jf__status` | The iOS status bar across the top of a tile — the iOS/android component from Figma, drawn at the tile’s scale. Static, so it holds still while the screen scrolls beneath it; each frame’s own status bar is clipped off the export and this one drawn in its place. |
@@ -84,7 +85,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **page clip** | `.jf__page` | Holds the exported picture and crops the Safari bar off its foot. Its height is the frame’s own height less that bar, at the tile’s scale, so it is set per screen rather than in the stylesheet. |
 | **screen artwork** | `.jf__art` | The screen exported from Figma, shown on steps that have not been built yet. Full tile width, natural height. It is a picture, so it does not change when you edit content — that is how you tell a built screen from one still to come. |
 | **frame name** | `.jf__frame` | The Figma frame name. The last resort, for a screen with neither a component nor an exported frame. |
-| **state label** | `.jf__state` | Which version of the screen this tile is — "default", "alternate plan selected". |
+| **state label** | `.jf__state` | Which version of the screen a tile is — “standard”, “ultimate”. Sits under the tile rather than over it, where it covered the design it was labelling. |
 
 ## Default view — Action buttons
 

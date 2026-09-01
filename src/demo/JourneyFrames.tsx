@@ -120,6 +120,15 @@ export function JourneyFrames({
   const screens = before(planned.length)
   const running = groups.filter((g) => !g.skipped).length
 
+  /** "5" for one screen, "5–7" for a step drawn three ways, "—" for a skip. */
+  const numbering = (tiles: { number: number | null }[]) => {
+    const ns = tiles.map((t) => t.number).filter((n): n is number => n !== null)
+    if (ns.length === 0) return '—'
+    const first = ns[0]
+    const last = ns[ns.length - 1]
+    return first === last ? String(first) : `${first}–${last}`
+  }
+
   return (
     <div className="jf">
       <p className="jf__caption">
@@ -185,6 +194,11 @@ export function JourneyFrames({
             }}
           >
             <h3 className="jf__step-name">
+              {/* The step's position in the flow, beside its name rather than
+                  over each screen. A step drawn in three states occupies three
+                  numbers, so it shows the span — the last number in the row
+                  still equals the journey's screen count. */}
+              <span className="jf__num">{numbering(tiles)}</span>
               {step.shortName ?? step.name}
               {!skipped && tiles.length > 1 && (
                 <span className="jf__states"> · {tiles.length} states</span>
@@ -194,20 +208,18 @@ export function JourneyFrames({
             </h3>
 
             <div className="jf__tiles">
-              {tiles.map(({ state, number }, i) => {
+              {tiles.map(({ state }, i) => {
                 const art = artworkFor(step.id, state)
                 return (
+                <div className="jf__cell" key={i}>
                 <button
                   type="button"
                   className="jf__tile"
-                  key={i}
                   data-on={step.id === selectedId || undefined}
                   data-editable={step.renderer === 'plans' || undefined}
                   disabled={Boolean(skipped)}
                   onClick={() => onOpen(step.id)}
                 >
-                  <span className="jf__num">{number ?? '—'}</span>
-
                   {/* iOS/android — node 586:26748, at the tile's scale. Static
                       at the top the way the address bar is static at the foot,
                       so both hold still while the page scrolls between them.
@@ -291,8 +303,13 @@ export function JourneyFrames({
                     <span className="jf__chrome-btn jf__dots">•••</span>
                   </span>
 
-                  {state && <span className="jf__state">{state}</span>}
                 </button>
+
+                {/* Under the tile, not over the screen. A caption naming which
+                    version this is belongs beside the picture rather than on
+                    top of it, where it covered the design it was labelling. */}
+                {state && <span className="jf__state">{state}</span>}
+                </div>
                 )
               })}
             </div>

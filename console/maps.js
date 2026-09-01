@@ -68,7 +68,8 @@
       'reordered chip': [106,4,22,5], 'reset order': [130,4,18,5],
       'frames row': [0,12,160,82], 'step group': [5,15,48,76],
       'step label': [7,17,22,5], 'state count': [30,17,9,5], 'skip tag': [41,17,9,5],
-      'tiles strip': [7,24,44,64], 'step tile': [8,25,20,62], 'tile number': [9,26,5,4],
+      'tiles strip': [7,24,44,68], 'tile cell': [8,25,20,68], 'step tile': [8,25,20,62],
+      'tile number': [7,17,5,5],
       'browser chrome': [8,80,20,6], 'chrome button': [9,81,4,4],
       'address pill': [14,81,8,4], 'site settings icon': [14.5,82,1.5,2],
       'address text': [17,82,3,2], 'reload icon': [20,82,1.5,2],
@@ -79,7 +80,7 @@
       'screen': [8,30,20,50],
       'thumbnail': [8,30,20,50], 'thumbnail scaler': [9,31,18,48],
       'page clip': [8,30,20,50], 'screen artwork': [8,30,20,58],
-      'frame name': [9,79,18,3], 'state label': [9,83,18,3]
+      'frame name': [9,79,18,3], 'state label': [8,89,20,4]
     }},
     stepview: { vb: '0 0 160 96', parts: {
       'step preview': [0,0,160,96], 'entry line': [6,5,100,12], 'step name': [6,5,26,5],

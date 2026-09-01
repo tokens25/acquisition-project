@@ -400,7 +400,8 @@
       'reordered chip': [106,4,22,5], 'reset order': [130,4,18,5],
       'frames row': [0,12,160,82], 'step group': [5,15,48,76],
       'step label': [7,17,22,5], 'state count': [30,17,9,5], 'skip tag': [41,17,9,5],
-      'tiles strip': [7,24,44,64], 'step tile': [8,25,20,62], 'tile number': [9,26,5,4],
+      'tiles strip': [7,24,44,68], 'tile cell': [8,25,20,68], 'step tile': [8,25,20,62],
+      'tile number': [7,17,5,5],
       'browser chrome': [8,80,20,6], 'chrome button': [9,81,4,4],
       'address pill': [14,81,8,4], 'site settings icon': [14.5,82,1.5,2],
       'address text': [17,82,3,2], 'reload icon': [20,82,1.5,2],
@@ -411,7 +412,7 @@
       'screen': [8,30,20,50],
       'thumbnail': [8,30,20,50], 'thumbnail scaler': [9,31,18,48],
       'page clip': [8,30,20,50], 'screen artwork': [8,30,20,58],
-      'frame name': [9,79,18,3], 'state label': [9,83,18,3]
+      'frame name': [9,79,18,3], 'state label': [8,89,20,4]
     }},
     stepview: { vb: '0 0 160 96', parts: {
       'step preview': [0,0,160,96], 'entry line': [6,5,100,12], 'step name': [6,5,26,5],
@@ -495,8 +496,9 @@
       ['state count', '.jf__states', 'Says "· 3 states" when a step is drawn more than one way.', 'overview'],
       ['skip tag', '.jf__tag', 'A "seeded" or "not here" marker explaining why a step shows nothing.', 'overview'],
       ['tiles strip', '.jf__tiles', 'The screens belonging to one step, side by side.', 'overview'],
+      ['tile cell', '.jf__cell', 'One tile and the caption under it, kept together so the caption tracks the screen it names.', 'overview'],
       ['step tile', '.jf__tile', 'One screen. Click it to edit that step.', 'overview'],
-      ['tile number', '.jf__num', 'Where that screen falls in the flow. A dash when the step is skipped.', 'overview'],
+      ['tile number', '.jf__num', 'Where the step falls in the flow, beside its name. A step drawn three ways occupies three numbers and shows the span — 6–8 — so the last number in the row still equals the journey’s screen count.', 'overview'],
       ['thumbnail', '.jf__thumb', 'A live miniature of the real screen, built from your actual content. Sized to the proportions of a 375 by 812 phone.', 'overview'],
       ['thumbnail scaler', '.jf__thumb-scale', 'The layer inside the thumbnail that shrinks the screen. The screen renders at full size and this scales it down, so the miniature is the real thing rather than a separate small version that could drift from it.', 'overview'],
       ['phone status bar', '.jf__status', 'The iOS status bar across the top of a tile — the iOS/android component from Figma, drawn at the tile’s scale. Static, so it holds still while the screen scrolls beneath it; each frame’s own status bar is clipped off the export and this one drawn in its place.', 'overview'],
@@ -517,7 +519,7 @@
       ['page clip', '.jf__page', 'Holds the exported picture and crops the Safari bar off its foot. Its height is the frame’s own height less that bar, at the tile’s scale, so it is set per screen rather than in the stylesheet.', 'overview'],
       ['screen artwork', '.jf__art', 'The screen exported from Figma, shown on steps that have not been built yet. Full tile width, natural height. It is a picture, so it does not change when you edit content — that is how you tell a built screen from one still to come.', 'overview'],
       ['frame name', '.jf__frame', 'The Figma frame name. The last resort, for a screen with neither a component nor an exported frame.', 'overview'],
-      ['state label', '.jf__state', 'Which version of the screen this tile is — "default", "alternate plan selected".', 'overview'],
+      ['state label', '.jf__state', 'Which version of the screen a tile is — “standard”, “ultimate”. Sits under the tile rather than over it, where it covered the design it was labelling.', 'overview'],
     ]],
     ['actions-default', 'Action buttons', 'default', 'The three buttons at the top right when you are not editing a step.', [
       ['preview button', 'button 1 · secondary', 'Hides the panel so the preview fills the window. Press it again — it now says "Show panel" — to bring the panel back.', 'actionsDefault'],

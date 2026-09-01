@@ -465,22 +465,22 @@
 .jf__tile[data-editable] {
   background: var(--color-surface-container-2);
 }
-/* Over the screen, not above it. Both chips carry their own ground so they
-   stay readable against whatever the frame happens to put behind them. */
+/* Beside the step's name, not over its screens. A step drawn three ways shows
+   the span it occupies, so the chip stays one thing however many tiles follow
+   it — and the artwork underneath is left alone. */
 .jf__num {
-  position: absolute;
-  inset-block-start: var(--space-8);
-  inset-inline-start: var(--space-8);
-  z-index: 1;
-  display: grid;
+  display: inline-grid;
   place-items: center;
-  inline-size: 24px;
-  block-size: 24px;
+  flex: none;
+  min-inline-size: 20px;
+  block-size: 20px;
+  padding-inline: var(--space-6);
   border: var(--border-1) solid var(--color-border-full-color-default);
   border-radius: var(--radius-full);
-  background: var(--color-surface-container-1);
   color: var(--color-text-secondary);
   font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-regular);
+  font-variant-numeric: tabular-nums;
 }
 .jf__frame {
   display: block;
@@ -488,18 +488,20 @@
   color: var(--color-text-primary);
   line-height: 1.4;
 }
-/* Opposite the number, at the top. It used to sit bottom-left, which is where
-   the address bar's back chevron now is — the two overlapped. */
+/* One tile and the caption naming it. */
+.jf__cell {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+/* Under the tile rather than over the screen, where it covered the design it
+   was there to label. */
 .jf__state {
-  position: absolute;
-  inset-block-start: var(--space-8);
-  inset-inline-end: var(--space-8);
-  z-index: 2;
-  max-inline-size: 60%;
-  padding: var(--space-4) var(--space-8);
-  border-radius: var(--radius-full);
-  background: var(--color-surface-container-1);
-  color: var(--color-text-secondary);
+  max-inline-size: 100%;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
