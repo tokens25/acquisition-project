@@ -45,6 +45,7 @@ const SCANNED = [
   'src/demo/DefaultPanel.tsx',
   'src/demo/EditPanel.tsx',
   'src/demo/UserFlow.tsx',
+  'src/demo/SourceTabs.tsx',
   'src/demo/JourneyFrames.tsx',
   'src/card/StepPreview.tsx',
   'src/card/CardSetView.tsx',

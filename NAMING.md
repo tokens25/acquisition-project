@@ -134,6 +134,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **badge field** | `Badge` | The words on the badge. Editable — type what it should say. Whether a badge shows at all is still the Highlighted Tier switch’s call, and leaving this empty falls back to “BEST EXPERIENCE” rather than shipping a blank ribbon. |
 | **ultimate toggle** | `Highlighted Tier` | The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it. |
 | **plan name field** | `Tier name` | The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label. |
+| **AI pill** | `.ai-pill` | The AI half of the source tabs — the product’s own pill, with the sparkle and the yellow-to-purple gradient edge. Two stacked backgrounds make that edge: a flat fill clipped to the padding box, the gradient clipped to the border box, showing through a transparent 1px border. Unselected it dims rather than changing shape. |
 | **source tabs** | `.ed-source` | Two tabs hard right above a copy field: AI or Custom. Used twice — over the Description and over the Price explainer. Custom is the default, and it is what copy written before the choice existed counts as. Choosing AI hands that field to the assistant and makes it read-only here. |
 | **description field** | `Description` | The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to. |
 

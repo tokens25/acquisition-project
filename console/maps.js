@@ -44,7 +44,7 @@
     groupHeader: { vb: '0 0 80 78', parts: {
       'badge field': [4,4,72,14], 'ultimate toggle': [4,21,72,12],
       'plan name field': [4,36,72,14],
-      'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
+      'AI pill': [52,52,10,5], 'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
     }},
     groupPricing: { vb: '0 0 80 118', parts: {
       'cadence field': [4,4,72,14], 'apply discount toggle': [4,21,72,12],

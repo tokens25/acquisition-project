@@ -910,3 +910,66 @@
   padding: var(--space-4) var(--space-10);
   font-size: var(--font-size-caption-xs);
 }
+
+/* The AI pill, from the product.
+
+   Two stacked backgrounds do the gradient edge: a flat fill clipped to the
+   padding box covers the inside, and the gradient clipped to the border box
+   shows only through a 1px transparent border. One element, no pseudo, no
+   second layer to keep in sync. */
+.ai-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  block-size: 18px;
+  padding-inline: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background:
+    linear-gradient(#080e12, #080e12) padding-box,
+    linear-gradient(
+      110deg,
+      #fffa00 0%,
+      #ffaa00 30%,
+      rgba(207, 20, 248, 0.65) 70%,
+      rgba(144, 80, 255, 0.45) 100%
+    ) border-box;
+  color: #f4e5d3;
+  cursor: pointer;
+  transition: transform 150ms, filter 150ms, opacity 150ms;
+}
+.ai-pill span {
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+.ai-pill svg {
+  flex-shrink: 0;
+}
+.ai-pill:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+.ai-pill:active {
+  transform: scale(0.95);
+}
+.ai-pill:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+/* Unselected it stands back rather than changing shape — the gradient edge is
+   what the control is, so dimming says "not this one" without disguising it. */
+.ai-pill:not([data-on]) {
+  opacity: 0.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-pill {
+    transition: filter 150ms, opacity 150ms;
+  }
+  .ai-pill:hover,
+  .ai-pill:active {
+    transform: none;
+  }
+}

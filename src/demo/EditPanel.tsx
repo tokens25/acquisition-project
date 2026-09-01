@@ -8,6 +8,7 @@ import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
 import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer } from '../rules/derive'
 import { logoArtwork } from '../card/assets'
+import { SourceTabs } from './SourceTabs'
 
 /** Sentinel for "write a new line here" in the feature picker. */
 const CUSTOM_FEATURE = '__custom__'
@@ -159,28 +160,11 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         />
         {/* Who writes this copy. The tabs sit above the field and to the
             right, so the field keeps its own full width. */}
-        <div className="ed-source">
-          <div className="ed-tabs ed-tabs--sm" role="group" aria-label="Description source">
-            <button
-              type="button"
-              className="ed-tab"
-              data-on={source === 'ai' || undefined}
-              aria-pressed={source === 'ai'}
-              onClick={() => patchTier({ descriptionSource: 'ai' })}
-            >
-              AI
-            </button>
-            <button
-              type="button"
-              className="ed-tab"
-              data-on={source === 'custom' || undefined}
-              aria-pressed={source === 'custom'}
-              onClick={() => patchTier({ descriptionSource: 'custom' })}
-            >
-              Custom
-            </button>
-          </div>
-        </div>
+        <SourceTabs
+          value={source}
+          onChange={(v) => patchTier({ descriptionSource: v })}
+          label="Description source"
+        />
         <TextField
           label="Description"
           value={resolved.description}
@@ -265,28 +249,11 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 explain — an undiscounted price needs no footnote. */}
             {offer.discount && (
               <>
-                <div className="ed-source">
-                  <div className="ed-tabs ed-tabs--sm" role="group" aria-label="Explainer source">
-                    <button
-                      type="button"
-                      className="ed-tab"
-                      data-on={explainerSource === 'ai' || undefined}
-                      aria-pressed={explainerSource === 'ai'}
-                      onClick={() => updateOffer(tier.id, { explainerSource: 'ai' })}
-                    >
-                      AI
-                    </button>
-                    <button
-                      type="button"
-                      className="ed-tab"
-                      data-on={explainerSource === 'custom' || undefined}
-                      aria-pressed={explainerSource === 'custom'}
-                      onClick={() => updateOffer(tier.id, { explainerSource: 'custom' })}
-                    >
-                      Custom
-                    </button>
-                  </div>
-                </div>
+                <SourceTabs
+                  value={explainerSource}
+                  onChange={(v) => updateOffer(tier.id, { explainerSource: v })}
+                  label="Explainer source"
+                />
                 <TextField
                   label="Price explainer"
                   value={offer.explainer ?? ''}
