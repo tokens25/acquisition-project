@@ -977,9 +977,21 @@
   outline-offset: 2px;
 }
 /* Unselected it stands back rather than changing shape — the gradient edge is
-   what the control is, so dimming says "not this one" without disguising it. */
-.ai-pill:not([data-on]) {
+   what the control is, so dimming says "not this one" without disguising it.
+   Scoped to the tab pair: standing back only means something against a chosen
+   sibling, and the same pill used as a plain button has none, so unscoped this
+   rule left every one of those looking switched off. */
+.ed-tabs .ai-pill:not([data-on]) {
   opacity: 0.45;
+}
+/* Working, not unavailable — it comes back on its own. */
+.ai-pill:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.ai-pill:disabled:hover {
+  transform: none;
+  filter: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
