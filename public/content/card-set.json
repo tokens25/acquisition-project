@@ -29,6 +29,12 @@
       "label": "United States",
       "locale": "en-US",
       "currency": "USD"
+    },
+    {
+      "code": "MSG+",
+      "label": "MSG+",
+      "locale": "en-US",
+      "currency": "USD"
     }
   ],
   "campaigns": [

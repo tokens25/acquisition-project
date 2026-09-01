@@ -55,6 +55,16 @@ export interface Step {
   /** Selector — omitted keys are wildcards, as card overrides work. */
   when?: Partial<Context>
   /**
+   * The markets a step runs in, when there is more than one.
+   *
+   * `when.market` holds a single value, which suits a step belonging to one
+   * country. The ZIP check belongs to a product rather than a country — it runs
+   * wherever regional blackouts do, which is every market carrying the RSN —
+   * so it names its markets instead. Same shape as `ChannelConfig.markets`,
+   * which already means exactly this.
+   */
+  markets?: string[]
+  /**
    * The value this step exists to capture. When the journey's entry seeds it,
    * the step is skipped — but the value is still present for later steps.
    */
@@ -210,6 +220,9 @@ export function planJourney(journey: Journey, context: Context): ResolvedStep[] 
     .sort((a, b) => a.order - b.order)
     .map((step) => {
       const narrowed = Boolean(step.narrowedBy && journey.seeds.includes(step.narrowedBy))
+      if (step.markets && !step.markets.includes(context.market)) {
+        return { step, skipped: 'not-applicable' as const, narrowed }
+      }
       if (step.when) {
         const { market, campaign } = step.when
         if (market !== undefined && market !== context.market) {

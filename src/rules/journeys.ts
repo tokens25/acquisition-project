@@ -96,14 +96,16 @@ function steps(): Step[] {
       figmaFrame: 'Zip code verification',
       renderer: 'stub',
       order: 60,
-      when: { market: 'US' },
+      markets: ['US', 'MSG+'],
       captures: 'zip',
       states: ['default', 'edit', 'edit results'],
       requires: ['geo.zipKnown'],
       note:
         'Heading and copy, a Form/TextField, a Button/CTA, then a Divider and a second ' +
         'Button/CTA. Edit results adds ten .RSN/Logo grid NY in two rows — the teams ' +
-        'the code unlocked. US only.',
+        'the code unlocked. Runs wherever regional blackouts do, which is the US and ' +
+        'MSG+ — a property of the product rather than of one country, which is why it ' +
+        'names its markets rather than gating on a single one.',
     },
     {
       id: 'checkout',
