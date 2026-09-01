@@ -504,6 +504,9 @@
   inset: 0;
   display: grid;
   place-items: center;
+  /* A card scrolled half out of the row would otherwise let its dim spill
+     past the preview and over the panel beside it. */
+  overflow: hidden;
 }
 
 .acq-details__scrim {
@@ -511,8 +514,22 @@
   inset: 0;
   border: 0;
   padding: 0;
-  background: color-mix(in srgb, var(--color-fill-scrim) 72%, transparent);
+  background: none;
   cursor: default;
+}
+/* The dim covers the one card the dialog belongs to, the way the design dims
+   the single phone frame it sits in — the other cards stay readable beside it.
+   The button behind stays full size, so clicking anywhere still dismisses.
+   Physical left/top: the rectangle handed in was measured that way. */
+.acq-details__scrim::after {
+  content: '';
+  position: absolute;
+  left: var(--acq-details-card-left, 0);
+  top: var(--acq-details-card-top, 0);
+  inline-size: var(--acq-details-card-width, 100%);
+  block-size: var(--acq-details-card-height, 100%);
+  border-radius: var(--radius-18);
+  background: color-mix(in srgb, var(--color-fill-scrim) 72%, transparent);
 }
 
 /* 343 × 600 — the design's own frame. `max-` on both axes so a preview

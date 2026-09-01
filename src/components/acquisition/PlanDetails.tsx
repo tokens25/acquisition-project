@@ -1,6 +1,6 @@
 import './acquisition.css'
 
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import closeIcon from '../../assets/icons/action-close-md.svg?raw'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
@@ -86,8 +86,16 @@ export function PlanDetails({
   const closeRef = useRef<HTMLButtonElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
-  /** Offset from the overlay's top-left, once the card has been measured. */
-  const [box, setBox] = useState<{ left: number; top: number } | null>(null)
+  /**
+   * Where things go once the card has been measured, all relative to the
+   * overlay's top-left: `left`/`top` place the dialog, `card` is the rectangle
+   * the dim covers.
+   */
+  const [box, setBox] = useState<{
+    left: number
+    top: number
+    card: { left: number; top: number; width: number; height: number }
+  } | null>(null)
 
   useLayoutEffect(() => {
     const root = rootRef.current
@@ -102,9 +110,11 @@ export function PlanDetails({
       // Physical left/top, not logical: the overlay is pinned to all four
       // edges, so its origin is the top-left corner in either direction, and
       // the rectangles being measured are physical too.
+      const frame = { left: c.left - host.left, top: c.top - host.top, width: c.width, height: c.height }
       setBox({
-        left: fit(c.left - host.left + (c.width - dialog.offsetWidth) / 2, dialog.offsetWidth, host.width),
-        top: fit(c.top - host.top + (c.height - dialog.offsetHeight) / 2, dialog.offsetHeight, host.height),
+        card: frame,
+        left: fit(frame.left + (c.width - dialog.offsetWidth) / 2, dialog.offsetWidth, host.width),
+        top: fit(frame.top + (c.height - dialog.offsetHeight) / 2, dialog.offsetHeight, host.height),
       })
     }
 
@@ -136,9 +146,26 @@ export function PlanDetails({
   }, [onClose])
 
   return (
-    <div className="acq-details" ref={rootRef}>
+    <div
+      className="acq-details"
+      ref={rootRef}
+      // The card's rectangle, for the dim to paint itself over. Handed to CSS
+      // rather than styled here, so the shape stays with the rest of the
+      // overlay's styling instead of half in each place.
+      style={
+        box
+          ? ({
+              '--acq-details-card-left': `${box.card.left}px`,
+              '--acq-details-card-top': `${box.card.top}px`,
+              '--acq-details-card-width': `${box.card.width}px`,
+              '--acq-details-card-height': `${box.card.height}px`,
+            } as CSSProperties)
+          : undefined
+      }
+    >
       {/* The scrim is the dismiss target as well as the dim: clicking beside a
-          dialog closes it everywhere else, and a bare div would not say so. */}
+          dialog closes it everywhere else, and a bare div would not say so.
+          It stays full size for that; the dim itself is drawn over the card. */}
       <button
         type="button"
         className="acq-details__scrim"
