@@ -7,6 +7,8 @@ import cadenceRadioOff from '../../assets/flow/cadence-radio-off.svg?raw'
 import cadenceRadioOn from '../../assets/flow/cadence-radio-on.svg?raw'
 import icInfoFill from '../../assets/flow/ic-info-fill.svg?raw'
 import daznRubik from '../../assets/flow/logo-dazn-rubik.svg?raw'
+import daznVector from '../../assets/flow/logo-dazn-vector.svg?raw'
+import landingHero from '../../assets/flow/landing-hero.png'
 import navSchedule from '../../assets/flow/nav-schedule.svg?raw'
 import radioIdle from '../../assets/flow/radio-idle.svg?raw'
 import radioSelected from '../../assets/flow/radio-selected.svg?raw'
@@ -22,6 +24,7 @@ import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type {
   AccountScreen,
+  LandingScreen,
   AuthScreen,
   CadenceScreen,
   CheckoutScreen,
@@ -120,13 +123,51 @@ function Cta({
   quiet,
 }: {
   children: ReactNode
-  appearance?: 'tertiary' | 'outline' | 'pressed'
+  appearance?: 'tertiary' | 'outline' | 'pressed' | 'subscribe'
   quiet?: boolean
 }) {
   return (
     <span className="fl__cta" data-appearance={appearance} data-quiet={quiet ? '' : undefined}>
       {children}
     </span>
+  )
+}
+
+/* ── Landing ───────────────────────────────────────────────── */
+
+/**
+ * The entry point, and the only screen with no back arrow.
+ *
+ * Its bar carries the brand and two buttons instead of a title, and the hero
+ * runs under everything with three gradients over it — the copy sits on the
+ * picture rather than under it, which is why the frame is one layered box
+ * instead of a header over a body.
+ */
+export function LandingFlowScreen({ content }: { content: LandingScreen }) {
+  return (
+    <div className="fl fl-landing">
+      <img className="fl-landing__hero" src={landingHero} alt="" />
+      <span className="fl-landing__wash" aria-hidden="true" />
+      <header className="fl-landing__nav">
+        <Mark svg={daznVector} size={32} />
+        <span className="fl-landing__nav-ctas">
+          <span className="fl-landing__nav-cta">{content.navExplore}</span>
+          <span className="fl-landing__nav-cta" data-appearance="secondary">
+            {content.navSignUp}
+          </span>
+        </span>
+      </header>
+      <div className="fl-landing__block">
+        <div className="fl-landing__copy">
+          <h3 className="fl-landing__title">{content.title}</h3>
+          <p className="fl-landing__body">{content.body}</p>
+        </div>
+        <div className="fl-landing__ctas">
+          <Cta appearance="subscribe">{content.cta}</Cta>
+          <Cta>{content.altCta}</Cta>
+        </div>
+      </div>
+    </div>
   )
 }
 

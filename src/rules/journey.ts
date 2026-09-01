@@ -47,6 +47,7 @@ export type Seed = 'zip' | 'tier' | 'plan' | 'auth' | 'account'
  */
 export type StepRenderer =
   | 'plans'
+  | 'landing'
   | 'cadence'
   | 'auth'
   | 'account'

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
+import { FlowStep } from '../card/FlowStep'
 import { artworkFor, flowArtwork } from '../card/flowArtwork'
 import { Icon } from '../components/Icon'
 import { iconArtwork } from '../card/assets'
@@ -268,7 +269,7 @@ export function JourneyFrames({
                       from the box, so it lines up with an exported frame beside
                       it instead of overhanging by the border. */}
                   <span className="jf__screen">
-                    {step.renderer === 'plans' && !skipped && !art ? (
+                    {step.renderer !== 'stub' && !skipped && !art ? (
                       <span className="jf__thumb" aria-hidden="true">
                         {/* zoom, not transform: a transform shrinks what is
                             drawn but not the box it occupies, so the tile
@@ -278,7 +279,11 @@ export function JourneyFrames({
                           className="jf__thumb-scale"
                           style={{ inlineSize: frame.viewport, zoom: thumbScale }}
                         >
-                          <CardSetView set={phoneSet} context={context} interactive={false} />
+                          {step.renderer === 'plans' ? (
+                            <CardSetView set={phoneSet} context={context} interactive={false} />
+                          ) : (
+                            <FlowStep step={step} state={state ?? 'default'} set={set} />
+                          )}
                         </span>
                       </span>
                     ) : art ? (

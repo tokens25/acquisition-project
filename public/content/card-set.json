@@ -272,6 +272,14 @@
   "journeyId": "hero-signup",
   "featureIcons": "feature",
   "flow": {
+    "landing": {
+      "navExplore": "Explore",
+      "navSignUp": "Sign up",
+      "title": "MSG+ on DAZN",
+      "body": "Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ",
+      "cta": "Sign up",
+      "altCta": "Sign in with your TV provider"
+    },
     "cadence": {
       "navTitle": "Choose your subscription",
       "options": [

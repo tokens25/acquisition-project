@@ -20,7 +20,7 @@ function steps(): Step[] {
       name: 'Landing',
       shortName: 'Landing',
       figmaFrame: 'MSG+ - Landing page - Mobile',
-      renderer: 'stub',
+      renderer: 'landing',
       order: 10,
       requires: ['auth.signedOut'],
       note: 'The entry point. Which CTA is pressed here decides the journey.',

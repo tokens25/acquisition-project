@@ -228,6 +228,24 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **screen button** | `.fl__cta` | A button on a journey screen. White by default; plain text for a second, quieter action; grey while something is happening. |
 | **screen divider** | `.fl__divider` | A rule with a word in the middle of it, usually “or”. |
 
+## Edit view — Landing screen
+
+*Edit view* — The entry point, and the only screen with no back arrow. Its bar carries the brand and two buttons instead of a title, and the copy sits on the picture rather than under it. Which button is pressed here decides the journey.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **landing screen** | `.fl-landing` | The whole screen, layered: the picture, the wash over it, the bar and the copy. |
+| **landing picture** | `.fl-landing__hero` | The hero. Wider than the frame and pushed left, which is the crop the design uses — the players sit where they do rather than centred. |
+| **landing wash** | `.fl-landing__wash` | Three gradients over the picture: the top darkened so the bar reads, the right edge weighted, and the foot taken to solid so the copy reads. |
+| **landing bar** | `.fl-landing__nav` | The bar at the top: the brand at one end, two buttons at the other. |
+| **landing bar buttons** | `.fl-landing__nav-ctas` | The two buttons as a pair. |
+| **landing bar button** | `.fl-landing__nav-cta` | One of them. The first is white, the second grey. |
+| **landing block** | `.fl-landing__block` | The copy and the buttons at the foot, 343 wide. |
+| **landing copy** | `.fl-landing__copy` | The heading and the line under it. |
+| **landing heading** | `.fl-landing__title` | The big line. |
+| **landing body** | `.fl-landing__body` | The paragraph under it. |
+| **landing buttons** | `.fl-landing__ctas` | The gold button and the white one under it. |
+
 ## Edit view — Cadence screen
 
 *Edit view* — Group 1 of the flow. Which way of paying you choose.

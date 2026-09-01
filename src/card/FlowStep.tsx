@@ -6,6 +6,7 @@ import {
   AuthFlowScreen,
   CadenceFlowScreen,
   CheckoutFlowScreen,
+  LandingFlowScreen,
   ReadyFlowScreen,
   ZipFlowScreen,
 } from '../components/flow/FlowScreens'
@@ -32,6 +33,8 @@ export function FlowStep({
   const flow = set.flow ?? defaultFlow
 
   switch (step.renderer) {
+    case 'landing':
+      return <LandingFlowScreen content={flow.landing ?? defaultFlow.landing} />
     case 'cadence':
       return <CadenceFlowScreen content={flow.cadence ?? defaultFlow.cadence} />
     case 'auth':

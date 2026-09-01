@@ -32,6 +32,52 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
     />
   )
 
+  if (step.renderer === 'landing') {
+    const l = flow.landing
+    return (
+      <>
+        <section className="demo__group">
+          <h3 className="demo__group-title">Top bar</h3>
+          <TextField
+            label="First button"
+            value={l.navExplore}
+            onChange={(v) => patch('landing', { navExplore: v })}
+          />
+          <TextField
+            label="Second button"
+            value={l.navSignUp}
+            onChange={(v) => patch('landing', { navSignUp: v })}
+          />
+        </section>
+
+        <section className="demo__group">
+          <h3 className="demo__group-title">Over the picture</h3>
+          <TextField
+            label="Heading"
+            value={l.title}
+            onChange={(v) => patch('landing', { title: v })}
+          />
+          <TextField
+            label="Under the heading"
+            value={l.body}
+            onChange={(v) => patch('landing', { body: v })}
+            rows={4}
+          />
+        </section>
+
+        <section className="demo__group">
+          <h3 className="demo__group-title">Buttons</h3>
+          <TextField label="Button" value={l.cta} onChange={(v) => patch('landing', { cta: v })} />
+          <TextField
+            label="Second button"
+            value={l.altCta}
+            onChange={(v) => patch('landing', { altCta: v })}
+          />
+        </section>
+      </>
+    )
+  }
+
   if (step.renderer === 'cadence') {
     const c = flow.cadence
     return (

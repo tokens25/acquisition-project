@@ -444,6 +444,15 @@
       'field pair': [8,36,64,22],
       'screen button': [8,62,64,10], 'screen divider': [8,76,64,5]
     }},
+    flowLanding: { vb: '0 0 80 120', parts: {
+      'landing screen': [4,2,72,116], 'landing picture': [4,8,72,60],
+      'landing wash': [4,2,72,116],
+      'landing bar': [4,2,72,10], 'landing bar buttons': [40,3,34,8],
+      'landing bar button': [40,3,16,8],
+      'landing block': [7,74,66,42], 'landing copy': [7,74,66,18],
+      'landing heading': [7,74,66,7], 'landing body': [7,83,66,9],
+      'landing buttons': [7,96,66,20]
+    }},
     flowCadence: { vb: '0 0 80 100', parts: {
       'ways to pay': [4,4,72,74],
       'pay options': [4,4,72,50], 'pay option': [4,4,72,23],
@@ -718,6 +727,19 @@
       ['field pair', '.fl__group', 'Two fields sharing one outer rounding — first and last name, for instance.', 'flowShared'],
       ['screen button', '.fl__cta', 'A button on a journey screen. White by default; plain text for a second, quieter action; grey while something is happening.', 'flowShared'],
       ['screen divider', '.fl__divider', 'A rule with a word in the middle of it, usually \u201cor\u201d.', 'flowShared'],
+    ]],
+    ['flow-landing', 'Landing screen', 'edit', 'The entry point, and the only screen with no back arrow. Its bar carries the brand and two buttons instead of a title, and the copy sits on the picture rather than under it. Which button is pressed here decides the journey.', [
+      ['landing screen', '.fl-landing', 'The whole screen, layered: the picture, the wash over it, the bar and the copy.', 'flowLanding'],
+      ['landing picture', '.fl-landing__hero', 'The hero. Wider than the frame and pushed left, which is the crop the design uses — the players sit where they do rather than centred.', 'flowLanding'],
+      ['landing wash', '.fl-landing__wash', 'Three gradients over the picture: the top darkened so the bar reads, the right edge weighted, and the foot taken to solid so the copy reads.', 'flowLanding'],
+      ['landing bar', '.fl-landing__nav', 'The bar at the top: the brand at one end, two buttons at the other.', 'flowLanding'],
+      ['landing bar buttons', '.fl-landing__nav-ctas', 'The two buttons as a pair.', 'flowLanding'],
+      ['landing bar button', '.fl-landing__nav-cta', 'One of them. The first is white, the second grey.', 'flowLanding'],
+      ['landing block', '.fl-landing__block', 'The copy and the buttons at the foot, 343 wide.', 'flowLanding'],
+      ['landing copy', '.fl-landing__copy', 'The heading and the line under it.', 'flowLanding'],
+      ['landing heading', '.fl-landing__title', 'The big line.', 'flowLanding'],
+      ['landing body', '.fl-landing__body', 'The paragraph under it.', 'flowLanding'],
+      ['landing buttons', '.fl-landing__ctas', 'The gold button and the white one under it.', 'flowLanding'],
     ]],
     ['flow-cadence', 'Cadence screen', 'edit', 'Group 1 of the flow. Which way of paying you choose.', [
       ['ways to pay', '.fl-cadence', 'The two options and the button under them.', 'flowCadence'],

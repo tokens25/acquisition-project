@@ -112,6 +112,15 @@
       'field pair': [8,36,64,22],
       'screen button': [8,62,64,10], 'screen divider': [8,76,64,5]
     }},
+    flowLanding: { vb: '0 0 80 120', parts: {
+      'landing screen': [4,2,72,116], 'landing picture': [4,8,72,60],
+      'landing wash': [4,2,72,116],
+      'landing bar': [4,2,72,10], 'landing bar buttons': [40,3,34,8],
+      'landing bar button': [40,3,16,8],
+      'landing block': [7,74,66,42], 'landing copy': [7,74,66,18],
+      'landing heading': [7,74,66,7], 'landing body': [7,83,66,9],
+      'landing buttons': [7,96,66,20]
+    }},
     flowCadence: { vb: '0 0 80 100', parts: {
       'ways to pay': [4,4,72,74],
       'pay options': [4,4,72,50], 'pay option': [4,4,72,23],

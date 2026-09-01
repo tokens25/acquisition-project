@@ -127,7 +127,20 @@ export interface ReadyScreen {
   logos: string[]
 }
 
+export interface LandingScreen {
+  /** The two buttons in the bar at the top. */
+  navExplore: string
+  navSignUp: string
+  title: string
+  body: string
+  /** The gold one. */
+  cta: string
+  /** The white one under it. */
+  altCta: string
+}
+
 export interface FlowContent {
+  landing: LandingScreen
   cadence: CadenceScreen
   auth: AuthScreen
   account: AccountScreen
@@ -138,6 +151,15 @@ export interface FlowContent {
 
 /** Copied from the node, including the placeholder Figma itself carries. */
 export const defaultFlow: FlowContent = {
+  landing: {
+    navExplore: 'Explore',
+    navSignUp: 'Sign up',
+    title: 'MSG+ on DAZN',
+    body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
+    cta: 'Sign up',
+    altCta: 'Sign in with your TV provider',
+  },
+
   cadence: {
     navTitle: 'Choose your subscription',
     options: [
@@ -261,7 +283,7 @@ export const defaultFlow: FlowContent = {
 }
 
 /** The screens, in the order the Figma section lays them out. */
-export const FLOW_STEPS = ['cadence', 'auth', 'account', 'zip', 'checkout', 'ready'] as const
+export const FLOW_STEPS = ['landing', 'cadence', 'auth', 'account', 'zip', 'checkout', 'ready'] as const
 export type FlowStepId = (typeof FLOW_STEPS)[number]
 
 /** Whether a step id is one of the flow screens this file describes. */
