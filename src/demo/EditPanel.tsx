@@ -6,7 +6,7 @@ import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
-import { STATIC, defaultExplainer } from '../rules/derive'
+import { STATIC, ctaLabelFor, defaultExplainer } from '../rules/derive'
 import { logoArtwork } from '../card/assets'
 
 /** Sentinel for "write a new line here" in the feature picker. */
@@ -242,6 +242,23 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 value={String(offer.introPrice ?? '')}
                 onChange={(v) => updateOffer(tier.id, { introPrice: Number(v) })}
                 helpText={`Must stay below ${offer.standardPrice}.`}
+              />
+            )}
+            {/* The button. Options are labelled with the button they make, so
+                the menu shows the result rather than naming a setting. Only
+                offered where there is a discount — the saving is what the two
+                extra forms are for. */}
+            {offer.discount && market && (
+              <SelectField
+                label="Button"
+                value={offer.ctaStyle ?? 'plain'}
+                options={(['plain', 'saving-amount', 'saving-percent'] as const).map((style) => ({
+                  value: style,
+                  label: ctaLabelFor(resolved.planName, { ...offer, ctaStyle: style }, market),
+                }))}
+                onChange={(v) =>
+                  updateOffer(tier.id, { ctaStyle: v as 'plain' | 'saving-amount' | 'saving-percent' })
+                }
               />
             )}
             {/* The sentence under the price. Only where there is a discount to

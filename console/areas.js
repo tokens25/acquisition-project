@@ -93,6 +93,7 @@
       ['apply discount toggle', 'Apply discount', 'Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change.', 'groupPricing'],
       ['standard price field', 'Full price', 'The undiscounted price, in the currency of the country you picked.', 'groupPricing'],
       ['discount price field', 'Discount price', 'The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount.', 'groupPricing'],
+      ['button field', 'Button', 'What the card’s button says. Three forms: the plain “Get Ultimate”, or that plus the saving as money or as a percentage. The menu is labelled with the button each option produces rather than naming a setting. Only appears where there is a discount — the saving is what the other two forms are for.', 'groupPricing'],
       ['price explainer field', 'Price explainer', 'The sentence under the price — “For the first 3 months, then $34.99/monthly”. Only appears where there is a discount to explain. Editable, with the same AI or Custom choice as the Description; empty falls back to the sentence built from the intro months, the full price and the cadence.', 'groupPricing'],
       ['not sold at this cadence', '.ed-placeholder · pricing', 'Replaces the price fields when this plan is not sold at the chosen cadence. It says plainly that this is a fact about the plan, not something missing that you need to fill in.', 'groupPricing'],
     ]],

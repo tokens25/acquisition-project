@@ -18,6 +18,35 @@ export const STATIC = {
 export const LOGO_SLOTS_PER_ROW = 5
 
 /**
+ * What the button says.
+ *
+ * Exported so the panel can label its options with the button they produce —
+ * "Get Ultimate and save $9.00" rather than "saving-amount". Building the same
+ * strings twice would let the menu describe a button the card does not render.
+ *
+ * A saving style needs a discount and an intro price to have a number; without
+ * one it falls back to plain rather than announcing a saving of nothing.
+ */
+export function ctaLabelFor(
+  planName: string,
+  offer: Pick<CadenceOffer, 'discount' | 'standardPrice' | 'introPrice' | 'ctaStyle'>,
+  market: MarketConfig,
+): string {
+  const plain = `Get ${planName}`
+  const { discount, standardPrice, introPrice } = offer
+  if (!discount || introPrice === null || standardPrice <= 0) return plain
+
+  const saved = Math.max(0, standardPrice - introPrice)
+  if (offer.ctaStyle === 'saving-amount') {
+    return `${plain} and save ${formatMoney(saved, market.locale, market.currency)}`
+  }
+  if (offer.ctaStyle === 'saving-percent') {
+    return `${plain} and save ${Math.round((saved / standardPrice) * 100)}%`
+  }
+  return plain
+}
+
+/**
  * The sentence under a discounted price, when nobody has written one.
  *
  * Exported because the panel shows it as what an empty field falls back to,
@@ -199,7 +228,7 @@ export function deriveCard(
       : null,
 
     headerText: tier.planName,
-    ctaLabel: `Get ${tier.planName}`,
+    ctaLabel: ctaLabelFor(tier.planName, offer, market),
     addOnIncludedLabel: `Included in ${tier.planName}`,
 
     logoRows,

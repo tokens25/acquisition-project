@@ -135,6 +135,17 @@ export interface CadenceOffer {
   explainer?: string
   /** Who writes it — a person, or the assistant. Absent means custom. */
   explainerSource?: 'ai' | 'custom'
+
+  /**
+   * What the button says beyond the plan's name.
+   *
+   * `plain` is "Get Ultimate". The other two append the saving this offer
+   * makes, as money or as a percentage. Both need a discount to have anything
+   * to say, so without one they read as plain rather than as a promise of
+   * nothing — the choice is remembered, it just has no effect until there is a
+   * discount again.
+   */
+  ctaStyle?: 'plain' | 'saving-amount' | 'saving-percent'
 }
 
 /** The fields a market or campaign may override on a tier. Sparse by design. */
