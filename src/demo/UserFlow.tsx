@@ -28,7 +28,7 @@ export function UserFlow({
 
       <ol className="uf__list">
         {planned.map(({ step, skipped }, i) => {
-          const editable = step.renderer === 'plans' && !skipped
+          const editable = step.renderer !== 'stub' && !skipped
           return (
             <li className="uf__item" key={step.id}>
               {i > 0 && <span className="uf__link" aria-hidden="true" />}

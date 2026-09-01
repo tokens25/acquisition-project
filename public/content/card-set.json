@@ -271,6 +271,142 @@
   },
   "journeyId": "hero-signup",
   "featureIcons": "feature",
+  "flow": {
+    "cadence": {
+      "navTitle": "Choose your subscription",
+      "options": [
+        {
+          "id": "upfront",
+          "title": "Pay now",
+          "note": "One upfront payment. Renews annually.",
+          "price": "$279.99",
+          "unit": "year",
+          "badge": "MOST Popular"
+        },
+        {
+          "id": "monthly",
+          "title": "Pay monthly",
+          "note": "Auto renews each month. Cancel any time. ",
+          "price": "$29.99",
+          "unit": "month",
+          "badge": ""
+        }
+      ],
+      "selected": "upfront",
+      "cta": "Continue",
+      "footnote": "Available across the New York and Buffalo DMAs."
+    },
+    "auth": {
+      "navTitle": "Choose your subscription",
+      "title": "Log in or sign up for free",
+      "subtitle": "Get access to live sports, highlights, shows, News, Scores and much more. ",
+      "noticeTitle": "Current or previous Gotham subscriber? ",
+      "noticeBody": "You can sign up with the same email address",
+      "emailLabel": "Email address",
+      "emailValue": "",
+      "cta": "Confirm and continue",
+      "dividerLabel": "or",
+      "providers": [
+        {
+          "id": "apple",
+          "label": "Continue with Apple"
+        },
+        {
+          "id": "google",
+          "label": "Continue with Google"
+        },
+        {
+          "id": "facebook",
+          "label": "Continue with Facebook"
+        }
+      ]
+    },
+    "account": {
+      "navTitle": "Finish signing up",
+      "nameHeading": "Your name",
+      "firstNameLabel": "First name",
+      "firstNameValue": "John",
+      "lastNameLabel": "Last name",
+      "lastNameValue": "Doe",
+      "emailHeading": "Email",
+      "emailLabel": "Email address",
+      "emailValue": "John.doe@email.com",
+      "passwordHeading": "Password",
+      "passwordLabel": "Password",
+      "passwordValue": "Dazn1234",
+      "rulesTitle": "Your password must contain",
+      "rules": [
+        "Upper and lower case letters",
+        "At least one number",
+        "At least 6 characters (8 for stronger password)"
+      ],
+      "notifyHeading": "Get notified",
+      "consentBody": "Send me offers, events and more from DAZN via SMS or calls. You can stop messages by switching the toggle to “off“ or via your profile marketing preferences",
+      "consentNote": "You can adjust these settings later in My account",
+      "cta": "Confirm and continue",
+      "workingCta": "Creating your account"
+    },
+    "zip": {
+      "navTitle": "Confirm your ZIP Code",
+      "heading": "Check everything looks right",
+      "body": "We use your ZIP Code to work out which local teams and games you can watch. If it's not right, change it here and we'll update what's available.",
+      "fieldLabel": "Enter ZIP Code",
+      "fieldValue": "01001",
+      "cta": "Confirm and continue",
+      "dividerLabel": "or",
+      "altCta": "Log in with TV provider",
+      "resultsLabel": "djsnsjndsajnn"
+    },
+    "checkout": {
+      "navTitle": "Choose your subscription",
+      "note": "Your payment is encrypted and you can change how you pay at any time.",
+      "summaryTitle": "MSG+",
+      "changeCta": "Change",
+      "lines": [
+        {
+          "label": "Pay now",
+          "value": "$279.99",
+          "unit": "month"
+        },
+        {
+          "label": "Today you pay",
+          "value": "$279.99"
+        },
+        {
+          "label": "Next payment on 11/01/2026",
+          "value": "$279.99",
+          "schedule": true
+        }
+      ],
+      "renewalNote": "Your plan will automatically renew on 01/10/2027 unless you turn off auto-renew in My Account.",
+      "cardsLabel": "Credit & Debit Cards",
+      "cardsOverflow": "+4",
+      "cardNumberLabel": "Card number",
+      "expiryLabel": "Expiry date",
+      "cvcLabel": "CVC",
+      "nameOnCardLabel": "Name on card",
+      "legal": "By signing up you agree that your subscription starts immediately and that you have read and agree to our Terms of Use, Privacy Policy and Cookie Notice. Your subscription auto-renews unless you cancel before the end of the minimum term by selecting 'Cancel Subscription' in MyAccount.",
+      "payCta": "Pay now",
+      "secureCta": "Secure checkout",
+      "googlePayLabel": "Google Pay",
+      "paypalLabel": "Paypal",
+      "promoLabel": "Redeem promo code"
+    },
+    "ready": {
+      "navTitle": "Choose your subscription",
+      "title": "You’re ready to watch MSG+ on DAZN.",
+      "body": "Watch Knicks, Rangers, Islanders, Devils, Sabres and more. all in one place.",
+      "cta": "Open DAZN app",
+      "altCta": "Continue in browser",
+      "logos": [
+        "knicks",
+        "rangers",
+        "islanders",
+        "devils",
+        "sabres"
+      ]
+    }
+  },
   "review": "draft",
   "stepId": "plans",
   "device": "mobile"

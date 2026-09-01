@@ -12,6 +12,7 @@ import { summarise, validateAll } from '../rules/validate'
 import { Button } from '../components/Button'
 import { DefaultPanel } from './DefaultPanel'
 import { EditPanel } from './EditPanel'
+import { FlowPanel } from './FlowPanel'
 import { UserFlow } from './UserFlow'
 import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
@@ -227,8 +228,15 @@ export function DemoApp() {
                 </button>
                 <h2 className="demo__step-title">{step?.shortName ?? step?.name}</h2>
               </div>
+              {/* The panel follows the step. A flow screen is copy from
+                  end to end, and the card set's groups would have nothing to
+                  say about it. */}
               <div className="demo__fields">
-                <EditPanel store={store} />
+                {step && step.renderer !== 'plans' && step.renderer !== 'stub' ? (
+                  <FlowPanel store={store} step={step} />
+                ) : (
+                  <EditPanel store={store} />
+                )}
               </div>
             </>
           ) : (

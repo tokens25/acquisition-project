@@ -10,6 +10,8 @@
  * catalogue lifecycle).
  */
 
+import type { FlowContent } from './flow'
+
 export type AddOnPurchaseType = 'one_time_payment' | 'discount_code'
 export type Device = 'mobile' | 'desktop' | 'xl'
 
@@ -262,6 +264,14 @@ export interface CardSet {
    * written until something needs to read differently from how it is listed.
    */
   priceUnits?: Record<string, string>
+  /**
+   * The words on the screens after the plan picker.
+   *
+   * A separate shape rather than more fields here: a plan and a checkout page
+   * are different kinds of content, and folding one into the other would put
+   * a nav title beside a price.
+   */
+  flow?: FlowContent
   /**
    * Kept with the content rather than in the page, because it is a fact about
    * this content and not about this browser tab: reloading does not un-ask for

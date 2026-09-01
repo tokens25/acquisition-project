@@ -159,3 +159,24 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 .jy__viewport[data-device='mobile'] .acq-set {
   gap: var(--space-16);
 }
+
+/* Every state of one step, side by side — the shape the Figma section takes,
+   and the shape the plans step already takes for its three cards. */
+.jy__screens {
+  display: flex;
+  gap: var(--space-16);
+  align-items: flex-start;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.jy__screen {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.jy__screen-name {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  text-align: center;
+}

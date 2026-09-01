@@ -1,5 +1,6 @@
 import type { CadenceOffer, CardSet, Tier } from './content'
 import { DIRECT } from './content'
+import { defaultFlow } from './flow'
 
 /**
  * A starting set shaped like the real thing: tiers separate from the offers
@@ -140,6 +141,7 @@ export const defaultSet: CardSet = {
   context: { market: 'MSG+', channel: DIRECT, cadence: 'Monthly' },
   journeyId: 'hero-signup',
   featureIcons: 'feature',
+  flow: defaultFlow,
   review: 'draft',
   stepId: 'plans',
   // The size the tiles are drawn at: "Preview_standard_tiers" is three cards

@@ -101,13 +101,80 @@
       'page clip': [8,30,20,50], 'screen artwork': [8,30,20,58],
       'frame name': [9,79,18,3], 'state label': [8,89,20,4]
     }},
+
+    flowShared: { vb: '0 0 80 120', parts: {
+      'screen frame': [4,4,72,112], 'screen header': [4,4,72,10],
+      'screen back arrow': [6,5,7,7], 'screen title': [22,6,36,5], 'screen brand': [66,5,7,7],
+      'screen body': [4,16,72,100],
+      'screen field': [8,20,64,12], 'field row': [8,20,64,12],
+      'field contents': [14,22,44,8], 'field name': [14,22,24,3], 'field value': [14,26,30,4],
+      'field mark': [64,24,5,5],
+      'field pair': [8,36,64,22],
+      'screen button': [8,62,64,10], 'screen divider': [8,76,64,5]
+    }},
+    flowCadence: { vb: '0 0 80 100', parts: {
+      'ways to pay': [4,4,72,74],
+      'pay options': [4,4,72,50], 'pay option': [4,4,72,23],
+      'option radio': [7,8,6,6], 'option text': [16,7,50,17],
+      'option name': [16,7,22,4], 'option note': [16,12,44,3], 'option price': [16,17,26,6],
+      'option amount': [16,17,14,6], 'option unit': [32,19,8,4],
+      'option ribbon': [50,2,26,5],
+      'cadence footnote': [4,84,72,6]
+    }},
+    flowAuth: { vb: '0 0 80 120', parts: {
+      'login screen': [4,2,72,116],
+      'login mark': [36,2,8,8],
+      'login title block': [4,13,72,14], 'login heading': [4,13,72,6], 'login subheading': [4,21,72,6],
+      'login notice': [4,30,72,14], 'notice heading': [7,33,66,4], 'notice body': [12,38,61,4],
+      'login form': [4,48,72,68],
+      'provider buttons': [4,80,72,36], 'provider button': [4,80,72,10]
+    }},
+    flowAccount: { vb: '0 0 80 132', parts: {
+      'account screen': [4,2,72,128],
+      'account fields': [4,2,72,112],
+      'account section': [4,2,72,22], 'account section heading': [4,2,26,4],
+      'password checklist': [4,62,72,18], 'checklist heading': [4,62,34,4],
+      'checklist rule': [4,68,60,4],
+      'consent box': [4,86,72,20], 'consent text': [8,90,48,12],
+      'consent switch': [60,93,12,7], 'consent knob': [66,94,5,5],
+      'consent note': [4,108,52,4]
+    }},
+    flowZip: { vb: '0 0 80 116', parts: {
+      'zip screen': [4,2,72,112],
+      'zip intro': [4,2,72,20], 'zip heading': [4,2,72,6], 'zip body': [4,10,72,12],
+      'zip results': [4,42,72,30], 'zip results heading': [4,42,30,4],
+      'zip team grid': [4,50,72,22], 'zip team': [4,50,12,12]
+    }},
+    flowCheckout: { vb: '0 0 80 180', parts: {
+      'checkout screen': [4,2,72,176],
+      'checkout note': [4,2,72,6],
+      'purchase summary': [4,12,72,46],
+      'summary heading': [4,12,72,10], 'summary title': [7,14,20,5], 'change button': [58,14,15,6],
+      'summary line': [4,24,72,8], 'line label': [7,26,30,4], 'line amount': [58,26,15,4],
+      'line unit': [68,26,5,4],
+      'renewal note': [4,48,72,8],
+      'payment card': [4,62,72,104],
+      'payment option': [7,64,66,8], 'payment option name': [7,64,34,8],
+      'payment marks': [50,65,23,6], 'more cards chip': [66,65,7,5],
+      'card details': [7,74,66,72], 'field pair row': [7,88,66,10],
+      'legal text': [7,100,66,14], 'option spacer': [7,150,66,3],
+      'promo row': [4,170,72,8], 'promo label': [10,172,40,4]
+    }},
+    flowReady: { vb: '0 0 80 90', parts: {
+      'confirmation screen': [4,6,72,78],
+      'confirmation content': [4,6,72,44],
+      'team circles': [16,6,48,14], 'team circle': [16,6,12,12],
+      'confirmation heading': [4,24,72,12], 'confirmation body': [4,38,72,10],
+      'confirmation buttons': [4,58,72,24]
+    }},
     stepview: { vb: '0 0 160 96', parts: {
       'step preview': [0,0,160,96], 'entry line': [6,5,100,12], 'step name': [6,5,26,5],
       'step meta': [34,5,40,5], 'inbound seeds': [6,11,50,4],
       'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
       'placeholder frame name': [50,26,60,5], 'placeholder states': [50,33,60,4],
       'placeholder gates': [50,39,60,10], 'placeholder note': [50,51,60,4],
-      'placeholder warning': [50,57,60,4]
+      'placeholder warning': [50,57,60,4],
+      'state row': [46,22,68,74], 'one state': [46,22,20,74], 'state name': [46,92,20,4]
     }},
     card: { vb: '0 0 70 136', parts: {
       'preview area': [0,0,70,136], 'set scroller': [0,0,70,136],

@@ -39,7 +39,21 @@ export type RuntimeCondition =
 export type Seed = 'zip' | 'tier' | 'plan' | 'auth' | 'account'
 
 
-export type StepRenderer = 'plans' | 'stub'
+/**
+ * Which component draws a step.
+ *
+ * 'stub' is a step that has no screen yet and says so. Everything else names
+ * a screen that is built, and is editable in the panel for that reason.
+ */
+export type StepRenderer =
+  | 'plans'
+  | 'cadence'
+  | 'auth'
+  | 'account'
+  | 'zip'
+  | 'checkout'
+  | 'ready'
+  | 'stub'
 
 /** Why a step isn't in the resolved journey. */
 export type SkipReason = 'seeded' | 'not-applicable'

@@ -207,12 +207,151 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **remove benefit** | `.demo__feature-remove` | Takes that line off this plan. It stays in the library. |
 | **add benefit** | `Add benefit` | Adds another line. It switches off at five and says so, rather than going quiet. |
 
+## Edit view — Journey screens — shared parts
+
+*Edit view* — The pieces every screen after the plan picker is built from. A screen shows only what sits between the phone’s status bar and the browser’s address bar: those two belong to the device, and the frame in the overview draws them around this.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **screen frame** | `.fl` | One journey screen, 375 wide — the width the design draws them at. |
+| **screen header** | `.fl__header` | The bar under the status bar: back arrow, title, DAZN mark, and the gold rule under it that shows how far through the journey you are. |
+| **screen back arrow** | `.fl__back` | The chevron at the left of the header. |
+| **screen title** | `.fl__title` | The centred title. Editable per screen — it is the only thing in the header that changes. |
+| **screen brand** | `.fl__brand` | The DAZN mark at the right of the header. |
+| **screen body** | `.fl__body` | Everything under the header, with 16 down each side and 24 top and bottom. |
+| **screen field** | `.fl__field` | A text field at rest, 56 tall. With something typed it shows the name above the value; empty, the name sits where the value would. |
+| **field name** | `.fl__field-label` | What the field is called. |
+| **field value** | `.fl__field-value` | What has been typed into it. |
+| **field row** | `.fl__field-row` | The row inside a field that carries a mark beside the text. |
+| **field contents** | `.fl__field-body` | The name and value stacked, so they read as one thing beside any marks. |
+| **field mark** | `.fl__field-icon` | An icon at either end of a field. |
+| **field pair** | `.fl__group` | Two fields sharing one outer rounding — first and last name, for instance. |
+| **screen button** | `.fl__cta` | A button on a journey screen. White by default; plain text for a second, quieter action; grey while something is happening. |
+| **screen divider** | `.fl__divider` | A rule with a word in the middle of it, usually “or”. |
+
+## Edit view — Cadence screen
+
+*Edit view* — Group 1 of the flow. Which way of paying you choose.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **ways to pay** | `.fl-cadence` | The two options and the button under them. |
+| **pay options** | `.fl-cadence__options` | The options as a stack. |
+| **pay option** | `.fl-cadence__option` | One way of paying. The chosen one carries a gold edge. |
+| **option radio** | `.fl-cadence__radio` | The circle showing which one is chosen. |
+| **option text** | `.fl-cadence__text` | The name, the note and the price together. |
+| **option name** | `.fl-cadence__name` | What the option is called. Painted gold on the chosen one. |
+| **option note** | `.fl-cadence__note` | The grey line under the name. |
+| **option price** | `.fl-cadence__price` | The amount and how often you pay it. |
+| **option amount** | `.fl-cadence__amount` | The number. |
+| **option unit** | `.fl-cadence__unit` | What follows the slash — “year”, “month”. |
+| **option ribbon** | `.fl-cadence__badge` | The gold corner ribbon. Empty text draws no ribbon. |
+| **cadence footnote** | `.fl-cadence__footnote` | The line with the information mark under the button. |
+
+## Edit view — Login screen
+
+*Edit view* — Group 2 of the flow. Signing in, or signing up.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **login screen** | `.fl-auth` | The whole screen under the header. |
+| **login mark** | `.fl-auth__mark` | The DAZN mark at the top. |
+| **login title block** | `.fl-auth__title` | The heading and the line under it. |
+| **login heading** | `.fl-auth__heading` | The big line. |
+| **login subheading** | `.fl-auth__sub` | The grey line under it. |
+| **login notice** | `.fl-auth__notice` | The grey box for people who already have an account. |
+| **notice heading** | `.fl-auth__notice-title` | The bold line in the box, with its information mark. |
+| **notice body** | `.fl-auth__notice-body` | The line under it. |
+| **login form** | `.fl-auth__form` | The email field, the button, the divider and the provider buttons. |
+| **provider buttons** | `.fl-auth__providers` | Apple, Google and Facebook as a stack. |
+| **provider button** | `.fl-auth__provider` | One provider button, with that provider’s own mark. |
+
+## Edit view — Account setup screen
+
+*Edit view* — Group 3 of the flow, drawn three ways: empty, filled, and confirmed. The checklist under the password appears once there is a password to check.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **account screen** | `.fl-account` | The whole screen under the header. |
+| **account fields** | `.fl-account__fields` | The four sections stacked. |
+| **account section** | `.fl-account__block` | One section: its heading and the fields under it. |
+| **account section heading** | `.fl-account__heading` | The bold line over a section. |
+| **password checklist** | `.fl-account__rules` | What the password has to contain. Only on the filled and confirmed screens. |
+| **checklist heading** | `.fl-account__rules-title` | The line over the rules. |
+| **checklist rule** | `.fl-account__rule` | One rule, with its tick. |
+| **consent box** | `.fl-account__consent` | The bordered box holding the marketing text and its switch. |
+| **consent text** | `.fl-account__consent-body` | The marketing wording. |
+| **consent switch** | `.fl-account__switch` | The green toggle. |
+| **consent knob** | `.fl-account__knob` | The white circle inside it. |
+| **consent note** | `.fl-account__note` | The line under the box. |
+
+## Edit view — ZIP code screen
+
+*Edit view* — Group 4 of the flow, drawn three ways: default, edit, and edit results. The teams appear only on the results screen.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **zip screen** | `.fl-zip` | The whole screen under the header. |
+| **zip intro** | `.fl-zip__intro` | The heading and the paragraph under it. |
+| **zip heading** | `.fl-zip__heading` | The big line. |
+| **zip body** | `.fl-zip__body` | The paragraph explaining what the ZIP code is for. |
+| **zip results** | `.fl-zip__results` | The teams the ZIP code resolves to. |
+| **zip results heading** | `.fl-zip__results-label` | The line over the teams. Figma still carries a placeholder here rather than copy. |
+| **zip team grid** | `.fl-zip__grid` | The teams, five to a row. |
+| **zip team** | `.fl-zip__logo` | One team badge, 59 square. They come from the same library the cards use, so this screen cannot show a team the cards do not carry. |
+
+## Edit view — Checkout screen
+
+*Edit view* — Group 5 of the flow, drawn four ways: empty, filled, payment process, and payment verified.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **checkout screen** | `.fl-checkout` | The whole screen under the header. |
+| **checkout note** | `.fl-checkout__note` | The line at the top about encryption. |
+| **purchase summary** | `.fl-checkout__summary` | The bordered card showing what is being bought. |
+| **summary heading** | `.fl-checkout__summary-head` | The plan name and the Change button. |
+| **summary title** | `.fl-checkout__summary-title` | The plan name. |
+| **change button** | `.fl-checkout__change` | The small button beside it. |
+| **summary line** | `.fl-checkout__line` | One row of the summary: a label and an amount. |
+| **line label** | `.fl-checkout__line-label` | The left half. Rows about a date carry a calendar mark and read quieter. |
+| **line amount** | `.fl-checkout__line-value` | The right half. |
+| **line unit** | `.fl-checkout__line-unit` | What follows the slash on a row that has one. |
+| **renewal note** | `.fl-checkout__renewal` | The small print at the foot of the summary. |
+| **payment card** | `.fl-checkout__methods` | The bordered card holding the ways to pay. |
+| **payment option** | `.fl-checkout__method` | One way to pay: its radio, its name, and the marks for it. |
+| **payment option name** | `.fl-checkout__method-name` | The radio and the name together. |
+| **payment marks** | `.fl-checkout__marks` | The card or wallet logos at the right of a row. |
+| **more cards chip** | `.fl-checkout__overflow` | The “+4” after the card marks. |
+| **card details** | `.fl-checkout__details` | The card fields, the small print and the pay button, under the cards option. |
+| **field pair row** | `.fl-checkout__pair` | Expiry date and CVC side by side. |
+| **legal text** | `.fl-checkout__legal` | The terms under the fields. |
+| **option spacer** | `.fl-checkout__spacer` | The gap the design leaves between two of the payment rows. |
+| **promo row** | `.fl-checkout__promo` | The bordered row at the bottom. |
+| **promo label** | `.fl-checkout__promo-label` | What it says. |
+
+## Edit view — Confirmation screen
+
+*Edit view* — Group 6 of the flow. The last screen before the app.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **confirmation screen** | `.fl-ready` | The whole screen under the header, centred in what is left of it. |
+| **confirmation content** | `.fl-ready__content` | The circles, the heading and the line under it. |
+| **team circles** | `.fl-ready__logos` | The row of overlapping team badges. |
+| **team circle** | `.fl-ready__logo` | One badge. The middle one is drawn larger, which is what makes the row read as a group. |
+| **confirmation heading** | `.fl-ready__title` | The big line. |
+| **confirmation body** | `.fl-ready__body` | The line under it. |
+| **confirmation buttons** | `.fl-ready__ctas` | The two buttons at the bottom. |
+
 ## Edit view — Preview
 
 *Edit view* — The right column once you have opened a step. Shows just that one screen.
 
 | Name | Where | What it is |
 | --- | --- | --- |
+| **state row** | `.jy__screens` | The step’s states side by side — the same shape the plan picker takes for its three cards, and the shape the Figma section lays them out in. It scrolls sideways when there are more than fit. |
+| **one state** | `.jy__screen` | One state: the screen and the name under it. |
+| **state name** | `.jy__screen-name` | Which state this one is — empty, filled, confirmed, and so on. |
 | **step preview** | `.jy` | The step preview as a whole. |
 | **entry line** | `.jy__entry` | The line of context above the screen. |
 | **step name** | `.jy__step-name` | Which step you are looking at. |

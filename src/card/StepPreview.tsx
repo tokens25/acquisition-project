@@ -5,6 +5,7 @@ import type { Journey } from '../rules/journey'
 import { knownAt, resolveJourney } from '../rules/journey'
 import { resolveSet } from '../rules/resolve'
 import { CardSetView } from './CardSetView'
+import { FlowStep } from './FlowStep'
 
 /**
  * Preview of the one step being edited, not the whole journey.
@@ -52,6 +53,19 @@ export function StepPreview({
       {step.renderer === 'plans' ? (
         <div className="jy__viewport" data-device={set.device}>
           <CardSetView set={set} context={context} />
+        </div>
+      ) : step.renderer !== 'stub' ? (
+        /* Every state the step is drawn in, side by side — the same shape the
+           plans step takes, and the same shape the Figma section lays out. */
+        <div className="jy__viewport" data-device={set.device}>
+          <div className="jy__screens">
+            {(step.states ?? ['default']).map((state) => (
+              <div className="jy__screen" key={state}>
+                <FlowStep step={step} state={state} set={set} />
+                <span className="jy__screen-name">{state}</span>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <div className="jy__placeholder jy__placeholder--solo">
