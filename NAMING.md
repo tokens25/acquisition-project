@@ -170,7 +170,6 @@ Unqualified requests mean **demo 1** at `/demo`.
 | --- | --- | --- |
 | **logo picker** | `.ed-logos` | The grid of competition logos you click to switch on and off. |
 | **logo button** | `.ed-logo` | One competition. Hovering shows its name. |
-| **logo order hint** | `.tg__hint` | The reminder that logos appear on the card in the order you clicked them. |
 | **competitions total field** | `Total number of competitions` | How many competitions the plan carries in total, which is usually more than the logos shown. The card works out the "+5" tile from this number minus the logos on display. |
 
 ## Edit view — Features group
@@ -334,6 +333,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **toggle label** | `.tg__label` | The words naming what the switch does. |
 | **toggle switch** | `.dazn-toggle` | The DS switch itself, at the right of the row. A button with role=switch, so it is one control rather than a hidden checkbox behind a drawn mark. |
 | **toggle knob** | `.dazn-toggle__knob` | The circle that slides across it. |
+| **toggle hint** | `.tg__hint` | An optional line under a toggle explaining what it does. Nothing passes one at the moment, so it renders nowhere — the slot is still part of the component. |
 
 ## Routes
 

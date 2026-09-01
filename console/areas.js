@@ -106,7 +106,6 @@
     ['group-comps', 'Competitions group', 'edit', 'Group 5. Which competition logos appear on the card.', [
       ['logo picker', '.ed-logos', 'The grid of competition logos you click to switch on and off.', 'groupComps'],
       ['logo button', '.ed-logo', 'One competition. Hovering shows its name.', 'groupComps'],
-      ['logo order hint', '.tg__hint', 'The reminder that logos appear on the card in the order you clicked them.', 'groupComps'],
       ['competitions total field', 'Total number of competitions', 'How many competitions the plan carries in total, which is usually more than the logos shown. The card works out the "+5" tile from this number minus the logos on display.', 'groupComps'],
     ]],
     ['group-features', 'Features group', 'edit', 'Group 6. The bullet list of what you get.', [
@@ -220,6 +219,7 @@
       ['toggle label', '.tg__label', 'The words naming what the switch does.', 'dsToggle'],
       ['toggle switch', '.dazn-toggle', 'The DS switch itself, at the right of the row. A button with role=switch, so it is one control rather than a hidden checkbox behind a drawn mark.', 'dsToggle'],
       ['toggle knob', '.dazn-toggle__knob', 'The circle that slides across it.', 'dsToggle'],
+      ['toggle hint', '.tg__hint', 'An optional line under a toggle explaining what it does. Nothing passes one at the moment, so it renders nowhere — the slot is still part of the component.', 'dsToggle'],
     ]],
     ['routes', 'Routes', 'archive', 'Three pages. If you do not say which, I will assume demo 1.', [
       ['index', '/', 'The front door. Two links and nothing else.', 'routes'],

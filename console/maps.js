@@ -59,7 +59,7 @@
     }},
     groupComps: { vb: '0 0 80 54', parts: {
       'logo picker': [4,4,72,22], 'logo button': [4,4,10,10],
-      'logo order hint': [4,29,44,4], 'competitions total field': [4,36,72,14]
+      'competitions total field': [4,30,72,14]
     }},
     groupFeatures: { vb: '0 0 80 56', parts: {
       'feature row': [4,4,72,34], 'feature picker': [6,6,68,14],
@@ -126,9 +126,9 @@
       'field control': [20,6,48,22], 'field input': [22,9,44,16],
       'field trailing': [72,11,10,12]
     }},
-    dsToggle: { vb: '0 0 90 34', parts: {
+    dsToggle: { vb: '0 0 90 44', parts: {
       'toggle block': [2,2,86,30], 'toggle row': [6,6,78,22], 'toggle leading': [9,11,10,12],
       'toggle label': [23,14,32,7], 'toggle switch': [60,11,20,12],
-      'toggle knob': [71,12,8,10]
+      'toggle knob': [71,12,8,10], 'toggle hint': [6,34,54,5]
     }}
   };

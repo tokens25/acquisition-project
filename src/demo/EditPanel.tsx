@@ -394,7 +394,6 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             )
           })}
         </div>
-        <p className="tg__hint">Shown in the order picked.</p>
         <TextField
           label="Total number of competitions"
           type="number"
