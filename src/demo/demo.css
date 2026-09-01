@@ -917,12 +917,16 @@
    padding box covers the inside, and the gradient clipped to the border box
    shows only through a 1px transparent border. One element, no pseudo, no
    second layer to keep in sync. */
+/* Sized to sit level with the Custom tab beside it rather than to the pill's
+   own 18. The product draws it at 18 with 10px text; here it is a peer of a
+   26-tall tab, and two controls in one group reading as different sizes is
+   worse than a few pixels off the source. The sparkle grows with the text so
+   the proportion the pill was drawn at survives the scaling. */
 .ai-pill {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  block-size: 18px;
-  padding-inline: 6px 8px;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-10);
   border: 1px solid transparent;
   border-radius: 9999px;
   background:
@@ -939,13 +943,16 @@
   transition: transform 150ms, filter 150ms, opacity 150ms;
 }
 .ai-pill span {
-  font-size: 10px;
+  font-size: var(--font-size-caption-xs);
   font-weight: 800;
-  line-height: 1;
+  line-height: 1.5;
   letter-spacing: 0.04em;
 }
+/* 16 to the text's 12 — the ratio the pill is drawn at, 13 to 10. */
 .ai-pill svg {
   flex-shrink: 0;
+  inline-size: 16px;
+  block-size: 16px;
 }
 .ai-pill:hover {
   transform: scale(1.05);
