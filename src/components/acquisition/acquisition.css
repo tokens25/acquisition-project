@@ -225,18 +225,21 @@
    which puts 5px between them. Wrapping rather than a fixed grid, so a sixth
    logo starts a second row instead of squeezing the first, the way the two-row
    card in the design does. */
+/* Five columns of 44, always — the pitch the design draws, where a 240 row
+   puts them at 0, 49, 98, 147 and 196. A wrapping flex row spread a partial
+   row edge to edge instead: a plan carrying two competitions pushed one to
+   each side of the card rather than leaving them side by side. The columns
+   take the spreading, so a short row still starts at the first of them. */
 .acq-logo-tiles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+  display: grid;
+  grid-template-columns: repeat(5, 44px);
   justify-content: space-between;
-  align-content: flex-start;
+  row-gap: 5px;
   margin: 0;
   padding: var(--space-12) 0 var(--space-4);
   list-style: none;
 }
 .acq-logo-tiles__tile {
-  flex: none;
   inline-size: 44px;
   block-size: 44px;
   overflow: hidden;

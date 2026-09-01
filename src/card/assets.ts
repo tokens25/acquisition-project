@@ -16,6 +16,8 @@ import multiCamIcon from '../assets/icons/actions-multi-cam.svg?raw'
 import giftIcon from '../assets/icons/settings-gift.svg?raw'
 import hdrIcon from '../assets/icons/features-hdr.svg?raw'
 import multiviewIcon from '../assets/icons/features-multiview.svg?raw'
+import contentIcon from '../assets/icons/actions-content.svg?raw'
+import videoIcon from '../assets/icons/action-interface-video.svg?raw'
 import valueIcon from '../assets/icons/value.svg?raw'
 import addOnImage from '../assets/addon-world-cup-2026.png'
 import devilsLogo from '../assets/logos/team-devils.png'
@@ -50,6 +52,8 @@ export const imageArtwork: Record<string, string> = {
 
 export const iconArtwork: Record<string, string> = {
   multiview: multiviewIcon,
+  content: contentIcon,
+  video: videoIcon,
   multicam: multiCamIcon,
   hdr: hdrIcon,
   devices: devicesIcon,
@@ -78,6 +82,8 @@ export const iconArtwork: Record<string, string> = {
  * picker would only invite the mistake.
  */
 export const BENEFIT_ICON_IDS = [
+  'content',
+  'video',
   'multiview',
   'multicam',
   'hdr',
@@ -92,6 +98,8 @@ export const BENEFIT_ICON_IDS = [
 
 /** What each one means, for the picker's tooltip and the assistant's prompt. */
 export const BENEFIT_ICON_LABELS: Record<string, string> = {
+  content: 'Content — live and on demand',
+  video: 'Shows and on demand video',
   multiview: 'Multiview — several streams at once',
   multicam: 'Multi camera — choose the angle',
   hdr: 'HDR and surround sound',

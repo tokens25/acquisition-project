@@ -114,45 +114,27 @@
   ],
   "featureCatalog": [
     {
-      "id": "feature-multiview",
-      "iconId": "multiview",
-      "text": "Watch up to 4 matches at once with multiview",
+      "id": "benefit-local-games",
+      "iconId": "content",
+      "text": "Get every local game live & on-demand",
       "status": "active"
     },
     {
-      "id": "feature-multicam",
-      "iconId": "multicam",
-      "text": "Choose the action you want with Multi camera",
+      "id": "benefit-original-shows",
+      "iconId": "video",
+      "text": "Original shows and on demand content",
       "status": "active"
     },
     {
-      "id": "feature-hdr",
-      "iconId": "hdr",
-      "text": "Enjoy HDR and Dolby 5.1 surround sound",
-      "status": "active"
-    },
-    {
-      "id": "feature-devices",
+      "id": "benefit-devices",
       "iconId": "devices",
-      "text": "Stream on 2 devices in 1 location",
+      "text": "Stream on 2 devices in 1 locations",
       "status": "active"
     },
     {
-      "id": "feature-download",
+      "id": "benefit-download",
       "iconId": "download",
       "text": "Download to watch on the go",
-      "status": "active"
-    },
-    {
-      "id": "feature-included",
-      "iconId": "check",
-      "text": "Included with your subscription",
-      "status": "active"
-    },
-    {
-      "id": "feature-annual-saving",
-      "iconId": "discount",
-      "text": "Save with an annual plan",
       "status": "active"
     }
   ],
@@ -167,186 +149,108 @@
   ],
   "tiers": [
     {
-      "description": "Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.",
+      "description": "Every local Knicks, Rangers, Devils, Islanders and Sabres game",
       "features": [
-        "feature-multiview",
-        "feature-multicam",
-        "feature-hdr",
-        "feature-devices",
-        "feature-download"
+        "benefit-local-games",
+        "benefit-original-shows",
+        "benefit-devices",
+        "benefit-download"
       ],
       "logoTiles": [
-        "yankees",
-        "nets",
         "knicks",
         "rangers",
         "devils",
         "islanders",
         "sabres"
       ],
-      "logoTotal": 9,
+      "logoTotal": 5,
+      "ultimate": false,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "id": "msg-plus",
+      "planName": "MSG+",
+      "displayOrder": 1
+    },
+    {
+      "description": "Everything in MSG+ and YES, all in one plan.",
+      "features": [
+        "benefit-local-games",
+        "benefit-original-shows",
+        "benefit-devices",
+        "benefit-download"
+      ],
+      "logoTiles": [
+        "knicks",
+        "yankees",
+        "rangers",
+        "nets",
+        "devils",
+        "islanders",
+        "sabres"
+      ],
+      "logoTotal": 7,
       "ultimate": true,
       "status": "live",
       "channel": "direct",
       "visibleToPartners": true,
-      "overrides": [
-        {
-          "id": "ultimate-es",
-          "when": {
-            "market": "ES"
-          },
-          "patch": {
-            "planName": "Total"
-          }
-        }
-      ],
-      "id": "ultimate",
-      "planName": "Ultimate",
-      "displayOrder": 1
-    },
-    {
-      "description": "Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.",
-      "features": [
-        "feature-multiview",
-        "feature-multicam",
-        "feature-hdr",
-        "feature-devices",
-        "feature-download"
-      ],
-      "logoTiles": [
-        "yankees",
-        "nets",
-        "knicks",
-        "rangers",
-        "devils",
-        "islanders",
-        "sabres"
-      ],
-      "logoTotal": 9,
-      "ultimate": false,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
       "overrides": [],
-      "id": "standard",
-      "planName": "Standard",
+      "id": "gotham-bundle",
+      "planName": "Gotham Bundle",
       "displayOrder": 2
     },
     {
-      "description": "Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.",
+      "description": "Every local Yankees and Nets game",
       "features": [
-        "feature-multiview",
-        "feature-multicam",
-        "feature-hdr",
-        "feature-devices",
-        "feature-download"
+        "benefit-local-games",
+        "benefit-original-shows",
+        "benefit-devices",
+        "benefit-download"
       ],
       "logoTiles": [
         "yankees",
-        "nets",
-        "knicks",
-        "rangers",
-        "devils",
-        "islanders",
-        "sabres"
+        "nets"
       ],
-      "logoTotal": 14,
+      "logoTotal": 2,
       "ultimate": false,
       "status": "live",
       "channel": "direct",
       "visibleToPartners": true,
       "overrides": [],
-      "id": "flex",
-      "planName": "Flex",
+      "id": "yes",
+      "planName": "YES",
       "displayOrder": 3
     }
   ],
   "offers": [
     {
-      "discount": true,
-      "introPrice": 25.99,
+      "discount": false,
+      "introPrice": null,
       "introMonths": 3,
-      "addOnId": "wc26",
-      "addOnPurchaseType": "one_time_payment",
+      "addOnId": null,
+      "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": [],
-      "id": "ultimate-monthly",
-      "tierId": "ultimate",
+      "id": "msg-plus-monthly",
+      "tierId": "msg-plus",
+      "cadence": "Monthly",
+      "standardPrice": 29.99
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "gotham-bundle-monthly",
+      "tierId": "gotham-bundle",
       "cadence": "Monthly",
       "standardPrice": 34.99
     },
     {
-      "discount": true,
-      "introPrice": 24.99,
-      "introMonths": 3,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [
-        "wc26"
-      ],
-      "id": "ultimate-instal",
-      "tierId": "ultimate",
-      "cadence": "Yearly Instalments",
-      "standardPrice": 29.99
-    },
-    {
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 3,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [
-        "wc26"
-      ],
-      "id": "ultimate-upfront",
-      "tierId": "ultimate",
-      "cadence": "Yearly",
-      "standardPrice": 279.99
-    },
-    {
-      "discount": true,
-      "introPrice": 29.99,
-      "introMonths": 3,
-      "addOnId": "wc26",
-      "addOnPurchaseType": "one_time_payment",
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "id": "ultimate-monthly-de",
-      "tierId": "ultimate",
-      "cadence": "Monthly",
-      "market": "DE",
-      "standardPrice": 39.99
-    },
-    {
-      "discount": true,
-      "introPrice": 22.99,
-      "introMonths": 3,
-      "addOnId": "wc26",
-      "addOnPurchaseType": "one_time_payment",
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "id": "ultimate-monthly-gb",
-      "tierId": "ultimate",
-      "cadence": "Monthly",
-      "market": "GB",
-      "standardPrice": 29.99
-    },
-    {
-      "discount": true,
-      "introPrice": 19.99,
-      "introMonths": 3,
-      "addOnId": "wc26",
-      "addOnPurchaseType": "discount_code",
-      "addOnDiscountPercent": 15,
-      "includedAddOnIds": [],
-      "id": "standard-monthly",
-      "tierId": "standard",
-      "cadence": "Monthly",
-      "standardPrice": 24.99
-    },
-    {
       "discount": false,
       "introPrice": null,
       "introMonths": 3,
@@ -354,21 +258,8 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": [],
-      "id": "standard-instal",
-      "tierId": "standard",
-      "cadence": "Yearly Instalments",
-      "standardPrice": 21.99
-    },
-    {
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 3,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "id": "flex-monthly",
-      "tierId": "flex",
+      "id": "yes-monthly",
+      "tierId": "yes",
       "cadence": "Monthly",
       "standardPrice": 19.99
     }

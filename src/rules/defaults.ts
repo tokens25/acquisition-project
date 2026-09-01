@@ -18,35 +18,33 @@ const logoCatalog = [
   { id: 'sabres', name: 'Buffalo Sabres', altText: 'Buffalo Sabres logo', blurb: 'The whole season live, plus classic games on demand all year.', status: 'active' as const },
 ]
 
+/**
+ * The four lines the tiles carry, copied as drawn.
+ *
+ * Figma: "Preview_standard_tiers" (node 540:30052). "1 locations" included —
+ * it is what the design says, and a card is not the place to quietly correct
+ * the copy someone signed off.
+ */
 const featureCatalog = [
-  { id: 'feature-multiview', iconId: 'multiview', text: 'Watch up to 4 matches at once with multiview', status: 'active' as const },
-  { id: 'feature-multicam', iconId: 'multicam', text: 'Choose the action you want with Multi camera', status: 'active' as const },
-  { id: 'feature-hdr', iconId: 'hdr', text: 'Enjoy HDR and Dolby 5.1 surround sound', status: 'active' as const },
-  { id: 'feature-devices', iconId: 'devices', text: 'Stream on 2 devices in 1 location', status: 'active' as const },
-  { id: 'feature-download', iconId: 'download', text: 'Download to watch on the go', status: 'active' as const },
-  { id: 'feature-included', iconId: 'check', text: 'Included with your subscription', status: 'active' as const },
-  { id: 'feature-annual-saving', iconId: 'discount', text: 'Save with an annual plan', status: 'active' as const },
+  { id: 'benefit-local-games', iconId: 'content', text: 'Get every local game live & on-demand', status: 'active' as const },
+  { id: 'benefit-original-shows', iconId: 'video', text: 'Original shows and on demand content', status: 'active' as const },
+  { id: 'benefit-devices', iconId: 'devices', text: 'Stream on 2 devices in 1 locations', status: 'active' as const },
+  { id: 'benefit-download', iconId: 'download', text: 'Download to watch on the go', status: 'active' as const },
 ]
 
 const addOnCatalog = [
   { id: 'wc26', title: 'FIFA World Cup 2026', subtitle: 'Covering all 104 matches', price: 19, imageId: 'world-cup' },
 ]
 
-const allLogos = logoCatalog.map((l) => l.id)
+/** All three tiles draw the same four lines. */
+const allBenefits = featureCatalog.map((f) => f.id)
 
 function tier(t: Partial<Tier> & { id: string; planName: string; displayOrder: number }): Tier {
   return {
-    description:
-      'Every game from the Premier League, Serie A and LaLiga, plus every round of the Champions League, live and on demand wherever you are.',
-    features: [
-      'feature-multiview',
-      'feature-multicam',
-      'feature-hdr',
-      'feature-devices',
-      'feature-download',
-    ],
-    logoTiles: allLogos,
-    logoTotal: 9,
+    description: '',
+    features: allBenefits,
+    logoTiles: [],
+    logoTotal: 0,
     ultimate: false,
     status: 'live',
     channel: DIRECT,
@@ -92,38 +90,48 @@ export const defaultSet: CardSet = {
   featureCatalog,
   addOnCatalog,
 
+  /**
+   * The three tiles, as drawn.
+   *
+   * Figma: "Preview_standard_tiers" (node 540:30052) — MSG+, Gotham Bundle,
+   * YES, in that order. Anything the tiles do not show is left empty rather
+   * than filled with something plausible: no badge text on the two plain
+   * plans, no discount, no explainer, no add-on.
+   */
   tiers: [
     tier({
-      id: 'ultimate',
-      planName: 'Ultimate',
+      id: 'msg-plus',
+      planName: 'MSG+',
       displayOrder: 1,
-      ultimate: true,
-      overrides: [{ id: 'ultimate-es', when: { market: 'ES' }, patch: { planName: 'Total' } }],
+      description: 'Every local Knicks, Rangers, Devils, Islanders and Sabres game',
+      logoTiles: ['knicks', 'rangers', 'devils', 'islanders', 'sabres'],
+      logoTotal: 5,
     }),
-    tier({ id: 'standard', planName: 'Standard', displayOrder: 2 }),
     tier({
-      id: 'flex',
-      planName: 'Flex',
+      id: 'gotham-bundle',
+      planName: 'Gotham Bundle',
+      displayOrder: 2,
+      ultimate: true,
+      description: 'Everything in MSG+ and YES, all in one plan.',
+      logoTiles: ['knicks', 'yankees', 'rangers', 'nets', 'devils', 'islanders', 'sabres'],
+      logoTotal: 7,
+    }),
+    tier({
+      id: 'yes',
+      planName: 'YES',
       displayOrder: 3,
-      logoTiles: allLogos,
-      logoTotal: 14,
+      description: 'Every local Yankees and Nets game',
+      logoTiles: ['yankees', 'nets'],
+      logoTotal: 2,
     }),
   ],
 
+  // One price each, at the cadence the tiles are drawn at. No discount: the
+  // tiles show a single price with nothing struck through beside it.
   offers: [
-    // Ultimate — sold every way.
-    offer({ id: 'ultimate-monthly', tierId: 'ultimate', cadence: 'Monthly', standardPrice: 34.99, discount: true, introPrice: 25.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
-    offer({ id: 'ultimate-instal', tierId: 'ultimate', cadence: 'Yearly Instalments', standardPrice: 29.99, discount: true, introPrice: 24.99, includedAddOnIds: ['wc26'] }),
-    offer({ id: 'ultimate-upfront', tierId: 'ultimate', cadence: 'Yearly', standardPrice: 279.99, includedAddOnIds: ['wc26'] }),
-    offer({ id: 'ultimate-monthly-de', tierId: 'ultimate', cadence: 'Monthly', market: 'DE', standardPrice: 39.99, discount: true, introPrice: 29.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
-    offer({ id: 'ultimate-monthly-gb', tierId: 'ultimate', cadence: 'Monthly', market: 'GB', standardPrice: 29.99, discount: true, introPrice: 22.99, addOnId: 'wc26', addOnPurchaseType: 'one_time_payment' }),
-
-    // Standard — not sold Yearly anywhere. A missing row, not a false flag.
-    offer({ id: 'standard-monthly', tierId: 'standard', cadence: 'Monthly', standardPrice: 24.99, discount: true, introPrice: 19.99, addOnId: 'wc26', addOnPurchaseType: 'discount_code', addOnDiscountPercent: 15 }),
-    offer({ id: 'standard-instal', tierId: 'standard', cadence: 'Yearly Instalments', standardPrice: 21.99 }),
-
-    // Flex — monthly only.
-    offer({ id: 'flex-monthly', tierId: 'flex', cadence: 'Monthly', standardPrice: 19.99 }),
+    offer({ id: 'msg-plus-monthly', tierId: 'msg-plus', cadence: 'Monthly', standardPrice: 29.99 }),
+    offer({ id: 'gotham-bundle-monthly', tierId: 'gotham-bundle', cadence: 'Monthly', standardPrice: 34.99 }),
+    offer({ id: 'yes-monthly', tierId: 'yes', cadence: 'Monthly', standardPrice: 19.99 }),
   ],
 
   // MSG+ is where the work is, so it is where a reset lands. It is also the

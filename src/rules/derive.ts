@@ -245,7 +245,10 @@ export function deriveCard(
     badgeText: ultimate ? (tier.badge?.trim() || STATIC.badge) : null,
     ctaAppearance: ultimate ? 'subscribe' : 'primary',
 
-    priceCaption: discount ? STATIC.priceCaption : null,
+    // Always. The tiles carry "Starts at" above an undiscounted price too —
+    // it says the price is a floor, which is true whether or not an intro
+    // offer is running.
+    priceCaption: STATIC.priceCaption,
     primaryPrice: money(discount && introPrice !== null ? introPrice : standardPrice),
     struckPrice: discount ? money(standardPrice) : null,
     showExplainer: discount,
