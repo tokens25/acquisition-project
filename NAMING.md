@@ -153,7 +153,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 ## Edit view — Add-on group
 
-*Edit view* — Group 4. An extra product attached to this price.
+*Edit view* — Group 4. An extra product attached to this price. Hidden for now — the group is not in the panel and the panel is not on the card, both off one switch (SHOW_ADDON). The fields and the catalogue are intact underneath.
 
 | Name | Where | What it is |
 | --- | --- | --- |
@@ -250,7 +250,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 ## The card — add-on panel
 
-*Both views* — The inside of the add-on block on the card.
+*Both views* — The inside of the add-on block on the card. Hidden for now, with the rest of the add-on — these are what it draws when it comes back.
 
 | Name | Where | What it is |
 | --- | --- | --- |

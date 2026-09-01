@@ -97,7 +97,7 @@
       ['price explainer field', 'Price explainer', 'The sentence under the price — “For the first 3 months, then $34.99/monthly”. Only appears where there is a discount to explain. Editable, with the same AI or Custom choice as the Description; empty falls back to the sentence built from the intro months, the full price and the cadence.', 'groupPricing'],
       ['not sold at this cadence', '.ed-placeholder · pricing', 'Replaces the price fields when this plan is not sold at the chosen cadence. It says plainly that this is a fact about the plan, not something missing that you need to fill in.', 'groupPricing'],
     ]],
-    ['group-addon', 'Add-on group', 'edit', 'Group 4. An extra product attached to this price.', [
+    ['group-addon', 'Add-on group', 'edit', 'Group 4. An extra product attached to this price. Hidden for now — the group is not in the panel and the panel is not on the card, both off one switch (SHOW_ADDON). The fields and the catalogue are intact underneath.', [
       ['add-on field', 'Add-on', 'Which extra product goes with this plan, and whether it is sold separately or included in the price. Each add-on appears twice in the list, once as "sold" and once as "bundled" — it can never be both.', 'groupAddon'],
       ['paid-for field', 'How it is paid for', 'Only when the add-on is sold rather than bundled. Either a one-off payment, or a discount code the customer redeems.', 'groupAddon'],
       ['discount percent field', 'Discount percent', 'Only when the add-on is sold with a discount code. How much off, as a number between 1 and 99.', 'groupAddon'],
@@ -164,7 +164,7 @@
       ['feature text', '.acq-feature__text', 'The words of one bullet.', 'card'],
       ['card footer', '.acq-card__footer', 'The "All features & content" bar across the bottom, edge to edge.', 'card'],
     ]],
-    ['card-addon', 'The card — add-on panel', 'both', 'The inside of the add-on block on the card.', [
+    ['card-addon', 'The card — add-on panel', 'both', 'The inside of the add-on block on the card. Hidden for now, with the rest of the add-on — these are what it draws when it comes back.', [
       ['add-on content', '.acq-addon__content', 'The artwork and the words together, above the divider.', 'cardAddon'],
       ['add-on artwork', '.acq-addon__image', 'The picture of the add-on.', 'cardAddon'],
       ['add-on text', '.acq-addon__text', 'The title and subtitle stacked beside the artwork.', 'cardAddon'],

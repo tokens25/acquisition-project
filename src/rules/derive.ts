@@ -18,6 +18,19 @@ export const STATIC = {
 export const LOGO_SLOTS_PER_ROW = 5
 
 /**
+ * Whether the add-on shows at all. Off for now.
+ *
+ * One switch rather than two deletions: the card stops drawing the panel and
+ * the panel stops offering the fields, so neither can advertise something the
+ * other has hidden. Everything behind it is intact — the catalogue, the offer
+ * fields, the validation — so turning it back on is this line.
+ *
+ * The logo grid follows on its own: with no add-on there is room for two rows
+ * rather than one, which is what §5 already says and what the design draws.
+ */
+export const SHOW_ADDON = false
+
+/**
  * What the button says.
  *
  * Exported so the panel can label its options with the button they produce —
@@ -155,7 +168,7 @@ export function deriveCard(
   const addOnEntry = addOnId ? findAddOn(set, addOnId) : undefined
   if (addOnId && !addOnEntry) missingRefs.push(`add-on:${addOnId}`)
 
-  const addOn = addOnEntry
+  const addOn = SHOW_ADDON && addOnEntry
     ? {
         id: addOnEntry.id,
         title: addOnEntry.title,

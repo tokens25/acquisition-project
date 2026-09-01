@@ -6,7 +6,7 @@ import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
-import { STATIC, ctaLabelFor, defaultExplainer } from '../rules/derive'
+import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer } from '../rules/derive'
 import { logoArtwork } from '../card/assets'
 
 /** Sentinel for "write a new line here" in the feature picker. */
@@ -313,7 +313,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
       </section>
 
       {/* Add-on lives on the offer, like the prices — the same benefit can be
-          sold at one cadence and bundled at another. */}
+          sold at one cadence and bundled at another. Hidden for now behind the
+          same switch the card reads, so the form cannot offer a field whose
+          effect the card is not drawing. */}
+      {SHOW_ADDON && (
       <section className="demo__group">
         <h3 className="demo__group-title">Add-on</h3>
         {offer ? (
@@ -369,6 +372,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           <p className="ed-placeholder">No offer at this cadence, so nothing to attach one to.</p>
         )}
       </section>
+      )}
 
       <section className="demo__group">
         <h3 className="demo__group-title">Competitions</h3>
