@@ -121,7 +121,75 @@ export default async function handler(request: Request): Promise<Response> {
       messages?: { role: 'user' | 'assistant'; content: string }[]
       set?: unknown
       failing?: string
+      suggestIcon?: { text: string; icons: { id: string; means: string }[] }
     }
+
+    /**
+     * The small ask: which of these icons suits this line?
+     *
+     * Handled before the conversation branch because it is not a conversation
+     * — no set, no proposal, one word back. The choice is constrained to the
+     * ids sent, so the answer is always an icon that exists.
+     */
+    if (body.suggestIcon) {
+      const { text, icons } = body.suggestIcon
+      if (!text?.trim() || !Array.isArray(icons) || icons.length === 0) {
+        return json({ error: 'suggestIcon needs a line and some icons to choose from.' }, 400)
+      }
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: 256,
+          system:
+            'You pick the icon that best matches one line of copy on a sports ' +
+            'streaming subscription card. Answer only by calling pick_icon.',
+          tools: [
+            {
+              name: 'pick_icon',
+              description: 'Choose the icon that best matches the line.',
+              input_schema: {
+                type: 'object' as const,
+                properties: {
+                  iconId: { type: 'string', enum: icons.map((i) => i.id) },
+                  why: { type: 'string', description: 'A few words on the match.' },
+                },
+                required: ['iconId'],
+              },
+            },
+          ],
+          tool_choice: { type: 'tool', name: 'pick_icon' },
+          messages: [
+            {
+              role: 'user',
+              content: `Line: ${text.trim()}\n\nIcons:\n${icons
+                .map((i) => `- ${i.id}: ${i.means}`)
+                .join('\n')}`,
+            },
+          ],
+        }),
+      })
+      if (!res.ok) {
+        return json({ error: `Anthropic returned ${res.status}: ${await res.text()}` }, 502)
+      }
+      const reply = (await res.json()) as {
+        content: { type: string; name?: string; input?: { iconId?: string; why?: string } }[]
+      }
+      const picked = reply.content.find((c) => c.type === 'tool_use' && c.name === 'pick_icon')
+      const iconId = picked?.input?.iconId
+      // A model can only answer with an id from the enum, but the enum is ours
+      // to trust and the response is not — so it is checked either way.
+      if (!iconId || !icons.some((i) => i.id === iconId)) {
+        return json({ error: 'The assistant did not choose one of the icons offered.' }, 502)
+      }
+      return json({ configured: true, iconId, why: picked?.input?.why ?? null })
+    }
+
     if (!Array.isArray(body.messages) || body.messages.length === 0) {
       return json({ error: 'Body must include messages.' }, 400)
     }

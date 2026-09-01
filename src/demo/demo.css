@@ -1089,3 +1089,135 @@
 .ed-comp__remove:hover {
   color: var(--color-accent-error-text);
 }
+
+/* ── Benefits ───────────────────────────────────────────────── */
+
+/* A dropdown whose options carry their icon. Built on the field shell's
+   proportions rather than its markup: the control underneath is a button and
+   a list, not an input, so it cannot share the class. */
+.ed-pick {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.ed-pick__label {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+}
+.ed-pick__value {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  inline-size: 100%;
+  min-block-size: var(--space-48);
+  padding: var(--space-8) var(--space-12);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-1);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-sm);
+  text-align: start;
+  cursor: pointer;
+}
+.ed-pick__value:focus-visible {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: var(--space-2);
+}
+/* The words take the slack so the chevron stays pinned to the end. */
+.ed-pick__text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ed-pick__menu {
+  position: absolute;
+  z-index: 5;
+  inset-block-start: 100%;
+  inset-inline: 0;
+  max-block-size: 260px;
+  overflow-y: auto;
+  margin: var(--space-4) 0 0;
+  padding: var(--space-4);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-3);
+  list-style: none;
+}
+.ed-pick__option {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  inline-size: 100%;
+  padding: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-6);
+  background: none;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-sm);
+  text-align: start;
+  cursor: pointer;
+}
+.ed-pick__option:hover {
+  background: var(--color-surface-container-4);
+}
+.ed-pick__option[data-on] {
+  background: var(--color-surface-container-5);
+}
+/* Held open even when a row has no icon, so the words line up down the list. */
+.ed-pick__mark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-20);
+  block-size: var(--space-20);
+}
+
+.ed-icons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.ed-icons__head {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: space-between;
+}
+.ed-icons__label {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+}
+.ed-icons__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+.ed-icons__option {
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-32);
+  block-size: var(--space-32);
+  padding: 0;
+  border: var(--border-1) solid transparent;
+  border-radius: var(--radius-6);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.ed-icons__option:hover {
+  color: var(--color-text-primary);
+}
+.ed-icons__option[data-on] {
+  border-color: var(--color-brand-primary);
+  color: var(--color-text-primary);
+}
+.ed-icons__note {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}

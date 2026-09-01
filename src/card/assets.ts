@@ -69,3 +69,37 @@ export const iconArtwork: Record<string, string> = {
   gift: giftIcon,
   value: valueIcon,
 }
+
+/**
+ * The icons a benefit line may carry, in the order the picker offers them.
+ *
+ * A subset of `iconArtwork`, which also holds the tool's own chrome — chevrons
+ * and a close cross are not things a plan gives you, and offering them in the
+ * picker would only invite the mistake.
+ */
+export const BENEFIT_ICON_IDS = [
+  'multiview',
+  'multicam',
+  'hdr',
+  'devices',
+  'download',
+  'check',
+  'checkmark',
+  'discount',
+  'gift',
+  'value',
+] as const
+
+/** What each one means, for the picker's tooltip and the assistant's prompt. */
+export const BENEFIT_ICON_LABELS: Record<string, string> = {
+  multiview: 'Multiview — several streams at once',
+  multicam: 'Multi camera — choose the angle',
+  hdr: 'HDR and surround sound',
+  devices: 'Devices and locations',
+  download: 'Download for offline',
+  check: 'Included — circled tick',
+  checkmark: 'Included — plain tick',
+  discount: 'Saving or discount',
+  gift: 'Gift or bonus',
+  value: 'Value or best experience',
+}

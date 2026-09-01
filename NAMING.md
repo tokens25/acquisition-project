@@ -181,17 +181,30 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **competition description field** | `Description` | The line under the name in the "All features & content" popup. Like the name, it belongs to the competition rather than to this plan. |
 | **competitions total field** | `Total number of competitions` | How many competitions the plan carries in total, which is usually more than the logos shown. The card works out the "+5" tile from this number minus the logos on display. |
 
-## Edit view — Features group
+## Edit view — Benefits group
 
-*Edit view* — Group 6. The bullet list of what you get.
+*Edit view* — Group 6. The bullet list of what you get. Five is the most a card shows, so five is the most you can add.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **feature row** | `.demo__feature` | One line of the list, with its picker and — when the line is a custom one — the box to type it in. |
-| **feature picker** | `Feature 1, 2, 3…` | Choose a line from the shared library, or pick "Custom line…" at the bottom to write a new one. Retired lines are still listed, marked "(retired)", so old content keeps working. |
-| **line text field** | `Line text` | Where you type a custom line. What you write is saved into the shared library, so it can be reused on other plans. |
-| **remove feature** | `.demo__feature-remove` | Takes that line off this plan. It stays in the library. |
-| **add feature** | `Add feature` | Adds another line to the list. |
+| **benefit row** | `.demo__feature` | One line of the list, with its picker and — when the line is a custom one — the box to type it in and its icon. |
+| **benefit picker** | `Benefit 1, 2, 3…` | Choose a benefit from the shared library, or "Write a custom benefit…" at the bottom. Every entry shows its icon beside the words, because the icon is half of what tells two similar lines apart. Retired lines are still listed, marked "(retired)", so old content keeps working. |
+| **benefit picker field** | `.ed-pick` | The picker as a whole — its label, the current benefit, and the list when it is open. |
+| **benefit picker label** | `.ed-pick__label` | The words "Benefit 1", "Benefit 2" and so on above the picker. |
+| **benefit picker value** | `.ed-pick__value` | The closed picker, showing the icon and words of the benefit currently chosen. Click it to open the list. |
+| **benefit picker text** | `.ed-pick__text` | The words in the picker. A benefit too long for the row is cut with an ellipsis rather than wrapping. |
+| **benefit picker menu** | `.ed-pick__menu` | The open list of benefits. |
+| **benefit option** | `.ed-pick__option` | One benefit in the open list: its icon, then its words. |
+| **benefit option icon** | `.ed-pick__mark` | The icon slot on the left of each option. It stays there even for the one line with no icon, so the words line up down the list. |
+| **icon chooser label** | `.ed-icons__label` | The word "Icon" above the choices. |
+| **benefit text field** | `Benefit` | Where you type a custom benefit. What you write is saved into the shared library, so it can be reused on other plans. |
+| **icon chooser** | `.ed-icons` | The icon for a custom benefit — only custom ones need it, since a benefit from the library arrives with the icon it was paired with. |
+| **suggest icon** | `.ed-icons__head` | The "Suggest" button beside the word Icon. It asks the assistant which of the icons below suits what you wrote, and picks it. It can only answer with one of them, so the worst it can do is choose wrongly and you click another. |
+| **icon options** | `.ed-icons__row` | The icons you can choose from. The current one carries a yellow outline. |
+| **icon option** | `.ed-icons__option` | One icon. Hovering says what it means. |
+| **suggestion note** | `.ed-icons__note` | What the assistant chose and why, or why it could not. |
+| **remove benefit** | `.demo__feature-remove` | Takes that line off this plan. It stays in the library. |
+| **add benefit** | `Add benefit` | Adds another line. It switches off at five and says so, rather than going quiet. |
 
 ## Edit view — Preview
 

@@ -8,11 +8,22 @@ import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
 import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer } from '../rules/derive'
 import { logoArtwork } from '../card/assets'
+import { BenefitIcon } from './BenefitIcon'
+import { IconPicker } from './IconPicker'
 import { SourceTabs } from './SourceTabs'
 
-/** Sentinel for "write a new line here" in the feature picker. */
+/** Sentinel for "write a new line here" in the benefit picker. */
 const CUSTOM_FEATURE = '__custom__'
 const CUSTOM_PREFIX = 'feature-custom-'
+
+/**
+ * How many benefits a card carries.
+ *
+ * The card is a fixed height against the others in its set, and past five the
+ * list is what gives — so the limit belongs where the lines are chosen rather
+ * than as a surprise when the card is drawn.
+ */
+const MAX_BENEFITS = 5
 
 const PURCHASE_TYPES = [
   { value: 'one_time_payment' as const, label: 'One time payment' },
@@ -488,7 +499,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
       </section>
 
       <section className="demo__group">
-        <h3 className="demo__group-title">Features</h3>
+        <h3 className="demo__group-title">Benefits</h3>
         {resolved.features.map((id, i) => {
           const entry = set.featureCatalog.find((f) => f.id === id)
           const isCustom = Boolean(entry && entry.id.startsWith(CUSTOM_PREFIX))
@@ -496,25 +507,37 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             patchTier({ features: resolved.features.map((f, j) => (j === i ? v : f)) })
           return (
             <div className="demo__feature" key={`${id}-${i}`}>
-              <SelectField
-                label={`Feature ${i + 1}`}
+              {/* The icon is half of what tells two benefits apart, so the menu
+                  shows it beside every line rather than the words alone. */}
+              <IconPicker
+                label={`Benefit ${i + 1}`}
                 value={id}
                 options={[
                   ...set.featureCatalog.map((f) => ({
                     value: f.id,
+                    iconId: f.iconId,
                     label: f.status === 'deprecated' ? `${f.text} (retired)` : f.text || f.id,
                   })),
-                  { value: CUSTOM_FEATURE, label: 'Custom line…' },
+                  { value: CUSTOM_FEATURE, label: 'Write a custom benefit…' },
                 ]}
-                onChange={(v) => (v === CUSTOM_FEATURE ? setFeature(addCustomFeature()) : setFeature(v))}
+                onChange={(v) =>
+                  v === CUSTOM_FEATURE ? setFeature(addCustomFeature()) : setFeature(v)
+                }
               />
               {entry && isCustom && (
-                <TextField
-                  label="Line text"
-                  value={entry.text}
-                  onChange={(v) => updateFeature(entry.id, { text: v })}
-                  helpText="Written here, stored in the catalogue so it can be reused."
-                />
+                <>
+                  <TextField
+                    label="Benefit"
+                    value={entry.text}
+                    onChange={(v) => updateFeature(entry.id, { text: v })}
+                    helpText="Written here, stored in the library so it can be reused."
+                  />
+                  <BenefitIcon
+                    entry={entry}
+                    onPick={(iconId) => updateFeature(entry.id, { iconId })}
+                    assistant={assistant}
+                  />
+                </>
               )}
               <button
                 type="button"
@@ -526,12 +549,17 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             </div>
           )
         })}
+        {/* Five is the card's budget. The button says which it is rather than
+            going quiet, so a full list does not read as a broken control. */}
         <button
           type="button"
           className="demo__reset"
+          disabled={resolved.features.length >= MAX_BENEFITS}
           onClick={() => patchTier({ features: [...resolved.features, set.featureCatalog[0].id] })}
         >
-          Add feature
+          {resolved.features.length >= MAX_BENEFITS
+            ? `Add benefit — ${MAX_BENEFITS} is the most a card shows`
+            : 'Add benefit'}
         </button>
       </section>
 

@@ -65,10 +65,20 @@
       'competition name field': [6,15,68,5], 'competition description field': [6,21,68,8],
       'competitions total field': [4,74,72,14]
     }},
-    groupFeatures: { vb: '0 0 80 56', parts: {
-      'feature row': [4,4,72,34], 'feature picker': [6,6,68,14],
-      'line text field': [6,21,68,10], 'remove feature': [56,33,16,4],
-      'add feature': [4,44,24,6]
+    groupFeatures: { vb: '0 0 80 92', parts: {
+      'benefit row': [4,4,72,72],
+      'benefit picker': [6,6,68,10], 'benefit picker field': [6,6,68,33],
+      'benefit picker label': [6,6,14,3], 'benefit picker value': [6,10,68,6],
+      'benefit picker text': [16,12,50,3],
+      'benefit picker menu': [6,17,68,22], 'benefit option': [8,19,64,5],
+      'benefit option icon': [9,20,3,3],
+      'icon chooser label': [6,55,8,3],
+      'benefit text field': [6,42,68,10],
+      'icon chooser': [6,55,68,18], 'suggest icon': [6,55,68,5],
+      'icon options': [6,62,68,7], 'icon option': [6,62,7,7],
+      'suggestion note': [6,70,50,3],
+      'remove benefit': [56,74,16,4],
+      'add benefit': [4,82,32,6]
     }},
     overview: { vb: '0 0 160 96', parts: {
       'frames block': [0,0,160,96], 'row caption': [4,4,60,5], 'drag hint': [66,4,38,5],
