@@ -17,6 +17,23 @@ export const STATIC = {
 
 export const LOGO_SLOTS_PER_ROW = 5
 
+/**
+ * The sentence under a discounted price, when nobody has written one.
+ *
+ * Exported because the panel shows it as what an empty field falls back to,
+ * and a second copy of this string in the form would drift from the card's the
+ * first time either changed.
+ */
+export function defaultExplainer(
+  offer: Pick<CadenceOffer, 'introMonths' | 'standardPrice'>,
+  market: MarketConfig,
+  cadence: string,
+): string {
+  const unit = cadence.toLocaleLowerCase(market.locale)
+  const price = formatMoney(offer.standardPrice, market.locale, market.currency)
+  return `For the first ${offer.introMonths} months, then ${price}/${unit}`
+}
+
 export interface DerivedFeature {
   iconId: string
   text: string
@@ -172,8 +189,9 @@ export function deriveCard(
     struckPrice: discount ? money(standardPrice) : null,
     showExplainer: discount,
     priceUnit,
+    // Written if someone wrote it, built from the numbers if not.
     explainer: discount
-      ? `For the first ${offer.introMonths} months, then ${money(standardPrice)}/${priceUnit}`
+      ? (offer.explainer?.trim() || defaultExplainer(offer, market, context.cadence))
       : null,
     ctaArea: discount ? 'ButtonLabelEyebrow' : 'Button/CTA',
     savingsLabel: discount

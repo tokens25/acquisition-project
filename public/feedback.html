@@ -376,12 +376,13 @@
     groupHeader: { vb: '0 0 80 78', parts: {
       'badge field': [4,4,72,14], 'ultimate toggle': [4,21,72,12],
       'plan name field': [4,36,72,14],
-      'description source': [52,52,24,5], 'description field': [4,59,72,14]
+      'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
     }},
-    groupPricing: { vb: '0 0 80 82', parts: {
+    groupPricing: { vb: '0 0 80 100', parts: {
       'cadence field': [4,4,72,14], 'apply discount toggle': [4,21,72,12],
       'standard price field': [4,36,72,14], 'discount price field': [4,53,72,14],
-      'not sold at this cadence': [4,70,72,9]
+      'price explainer field': [4,70,72,16],
+      'not sold at this cadence': [4,88,72,9]
     }},
     groupAddon: { vb: '0 0 80 66', parts: {
       'add-on field': [4,4,72,14], 'paid-for field': [4,21,72,14],
@@ -549,7 +550,7 @@
       ['badge field', 'Badge', 'The words on the badge. Editable — type what it should say. Whether a badge shows at all is still the Highlighted Tier switch’s call, and leaving this empty falls back to “BEST EXPERIENCE” rather than shipping a blank ribbon.', 'groupHeader'],
       ['ultimate toggle', 'Highlighted Tier', 'The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it.', 'groupHeader'],
       ['plan name field', 'Tier name', 'The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label.', 'groupHeader'],
-      ['description source', '.ed-source', 'Two tabs above the Description field, hard right: AI or Custom. Custom is the default, and it is what content written before this choice existed counts as. Choosing AI hands the copy to the assistant and makes the field read-only here.', 'groupHeader'],
+      ['source tabs', '.ed-source', 'Two tabs hard right above a copy field: AI or Custom. Used twice — over the Description and over the Price explainer. Custom is the default, and it is what copy written before the choice existed counts as. Choosing AI hands that field to the assistant and makes it read-only here.', 'groupHeader'],
       ['description field', 'Description', 'The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to.', 'groupHeader'],
     ]],
     ['group-pricing', 'Pricing group', 'edit', 'Group 3. What it costs. Every price here belongs to one way of paying.', [
@@ -557,6 +558,7 @@
       ['apply discount toggle', 'Apply discount', 'Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change.', 'groupPricing'],
       ['standard price field', 'Full price', 'The undiscounted price, in the currency of the country you picked.', 'groupPricing'],
       ['discount price field', 'Discount price', 'The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount.', 'groupPricing'],
+      ['price explainer field', 'Price explainer', 'The sentence under the price — “For the first 3 months, then $34.99/monthly”. Only appears where there is a discount to explain. Editable, with the same AI or Custom choice as the Description; empty falls back to the sentence built from the intro months, the full price and the cadence.', 'groupPricing'],
       ['not sold at this cadence', '.ed-placeholder · pricing', 'Replaces the price fields when this plan is not sold at the chosen cadence. It says plainly that this is a fact about the plan, not something missing that you need to fill in.', 'groupPricing'],
     ]],
     ['group-addon', 'Add-on group', 'edit', 'Group 4. An extra product attached to this price.', [

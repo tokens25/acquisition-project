@@ -44,12 +44,13 @@
     groupHeader: { vb: '0 0 80 78', parts: {
       'badge field': [4,4,72,14], 'ultimate toggle': [4,21,72,12],
       'plan name field': [4,36,72,14],
-      'description source': [52,52,24,5], 'description field': [4,59,72,14]
+      'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
     }},
-    groupPricing: { vb: '0 0 80 82', parts: {
+    groupPricing: { vb: '0 0 80 100', parts: {
       'cadence field': [4,4,72,14], 'apply discount toggle': [4,21,72,12],
       'standard price field': [4,36,72,14], 'discount price field': [4,53,72,14],
-      'not sold at this cadence': [4,70,72,9]
+      'price explainer field': [4,70,72,16],
+      'not sold at this cadence': [4,88,72,9]
     }},
     groupAddon: { vb: '0 0 80 66', parts: {
       'add-on field': [4,4,72,14], 'paid-for field': [4,21,72,14],

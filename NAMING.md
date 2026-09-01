@@ -134,7 +134,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **badge field** | `Badge` | The words on the badge. Editable — type what it should say. Whether a badge shows at all is still the Highlighted Tier switch’s call, and leaving this empty falls back to “BEST EXPERIENCE” rather than shipping a blank ribbon. |
 | **ultimate toggle** | `Highlighted Tier` | The switch that makes this the standout plan: gold outline, badge and gold button. Only one plan in a set may have it. |
 | **plan name field** | `Tier name` | The public name of the plan. One value that appears in three places — the card heading, the button, and the add-on label. |
-| **description source** | `.ed-source` | Two tabs above the Description field, hard right: AI or Custom. Custom is the default, and it is what content written before this choice existed counts as. Choosing AI hands the copy to the assistant and makes the field read-only here. |
+| **source tabs** | `.ed-source` | Two tabs hard right above a copy field: AI or Custom. Used twice — over the Description and over the Price explainer. Custom is the default, and it is what copy written before the choice existed counts as. Choosing AI hands that field to the assistant and makes it read-only here. |
 | **description field** | `Description` | The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to. |
 
 ## Edit view — Pricing group
@@ -147,6 +147,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **apply discount toggle** | `Apply discount` | Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change. |
 | **standard price field** | `Full price` | The undiscounted price, in the currency of the country you picked. |
 | **discount price field** | `Discount price` | The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount. |
+| **price explainer field** | `Price explainer` | The sentence under the price — “For the first 3 months, then $34.99/monthly”. Only appears where there is a discount to explain. Editable, with the same AI or Custom choice as the Description; empty falls back to the sentence built from the intro months, the full price and the cadence. |
 | **not sold at this cadence** | `.ed-placeholder · pricing` | Replaces the price fields when this plan is not sold at the chosen cadence. It says plainly that this is a fact about the plan, not something missing that you need to fill in. |
 
 ## Edit view — Add-on group

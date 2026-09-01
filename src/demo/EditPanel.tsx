@@ -6,7 +6,7 @@ import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, resolveTier } from '../rules/resolve'
-import { STATIC } from '../rules/derive'
+import { STATIC, defaultExplainer } from '../rules/derive'
 import { logoArtwork } from '../card/assets'
 
 /** Sentinel for "write a new line here" in the feature picker. */
@@ -77,6 +77,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   // Absent means custom: copy written before this choice existed was written
   // by hand, and defaulting the other way would relabel it as generated.
   const source = resolved.descriptionSource ?? 'custom'
+  const explainerSource = offer?.explainerSource ?? 'custom'
 
   const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
     updateSet({
@@ -242,6 +243,48 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 onChange={(v) => updateOffer(tier.id, { introPrice: Number(v) })}
                 helpText={`Must stay below ${offer.standardPrice}.`}
               />
+            )}
+            {/* The sentence under the price. Only where there is a discount to
+                explain — an undiscounted price needs no footnote. */}
+            {offer.discount && (
+              <>
+                <div className="ed-source">
+                  <div className="ed-tabs ed-tabs--sm" role="group" aria-label="Explainer source">
+                    <button
+                      type="button"
+                      className="ed-tab"
+                      data-on={explainerSource === 'ai' || undefined}
+                      aria-pressed={explainerSource === 'ai'}
+                      onClick={() => updateOffer(tier.id, { explainerSource: 'ai' })}
+                    >
+                      AI
+                    </button>
+                    <button
+                      type="button"
+                      className="ed-tab"
+                      data-on={explainerSource === 'custom' || undefined}
+                      aria-pressed={explainerSource === 'custom'}
+                      onClick={() => updateOffer(tier.id, { explainerSource: 'custom' })}
+                    >
+                      Custom
+                    </button>
+                  </div>
+                </div>
+                <TextField
+                  label="Price explainer"
+                  value={offer.explainer ?? ''}
+                  onChange={(v) => updateOffer(tier.id, { explainer: v })}
+                  rows={2}
+                  readOnly={explainerSource === 'ai'}
+                  helpText={
+                    explainerSource === 'ai'
+                      ? (assistant ?? 'Written by the assistant. Switch to Custom to edit it here.')
+                      : market
+                        ? `Empty falls back to “${defaultExplainer(offer, market, context.cadence)}”.`
+                        : undefined
+                  }
+                />
+              </>
             )}
           </>
         ) : (

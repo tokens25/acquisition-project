@@ -123,6 +123,18 @@ export interface CadenceOffer {
   addOnDiscountPercent: number | null
   /** Add-ons already bundled into this offer — a fact, not a purchase option. */
   includedAddOnIds: string[]
+
+  /**
+   * The sentence under the price. Authored, not derived.
+   *
+   * On the offer rather than the tier because it names this offer's numbers —
+   * the intro months, the price it reverts to, the cadence it reverts at.
+   * Empty falls back to the standing sentence built from those same numbers,
+   * so clearing it cannot leave the price unexplained.
+   */
+  explainer?: string
+  /** Who writes it — a person, or the assistant. Absent means custom. */
+  explainerSource?: 'ai' | 'custom'
 }
 
 /** The fields a market or campaign may override on a tier. Sparse by design. */
