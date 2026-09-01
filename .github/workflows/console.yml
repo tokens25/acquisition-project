@@ -1,0 +1,50 @@
+name: Console
+
+# Keeps the feedback console honest about the app it describes.
+#
+# The console is a table of every named part of the tool, and feedback is
+# written against those names. A component added or renamed without a matching
+# row leaves that feedback nowhere to land — and a stale table is worse than no
+# table, because it reads as authoritative. This is the check that stops it
+# rotting: it fails when a class exists in the code with no row, or a row points
+# at a class that is gone.
+#
+# It also fails when the built page is out of date, since feedback-console.html
+# and public/feedback.html are committed artefacts and a stale one is what
+# actually gets opened.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # No `npm ci`. The build script imports nothing but node:fs, node:path
+      # and node:vm, so installing the project's dependencies would add half a
+      # minute to every run and change nothing about the answer.
+
+      # Drift, both directions. The message names what to add or drop.
+      - name: Console matches the app
+        run: npm run console:check
+
+      # The committed HTML has to be what the sources build to. Without this
+      # someone edits console/areas.js, forgets to rebuild, and the page people
+      # open is the old one — which is exactly the drift this job exists to stop,
+      # just moved one step later.
+      - name: Built page is current
+        run: |
+          npm run console
+          if ! git diff --quiet -- feedback-console.html public/feedback.html NAMING.md; then
+            echo "::error::The built console is behind its sources. Run 'npm run console' and commit the result."
+            git diff --stat -- feedback-console.html public/feedback.html NAMING.md
+            exit 1
+          fi
