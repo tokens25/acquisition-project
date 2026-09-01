@@ -217,8 +217,10 @@
   .pri button[data-p="idea"][aria-pressed="true"] { color: var(--idea); }
   .pri button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+  /* The foot is always there. Hiding Send until a row had text made the page
+     look like it had no send buttons at all, which is the opposite of the
+     point — so Send stays visible and goes dim instead. */
   .cell__foot { display: flex; align-items: center; gap: 8px; }
-  .row:not([data-note]) .cell__foot { visibility: hidden; }
   .send {
     padding: 3px 11px;
     border: 1px solid var(--accent); border-radius: 999px;
@@ -785,10 +787,19 @@
     el.textContent = text;
   }
 
-  /** While a run is in flight, nothing else may start one. */
+  /**
+   * While a run is in flight, nothing else may start one.
+   *
+   * Releasing does not simply enable everything — a row with an empty box was
+   * disabled before the run and must stay that way.
+   */
   function setBusy(on) {
-    Array.prototype.forEach.call(document.querySelectorAll('.send, #sendall'), function (b) {
-      b.disabled = on;
+    var all = document.getElementById('sendall');
+    if (all) all.disabled = on;
+    Array.prototype.forEach.call(document.querySelectorAll('.send'), function (b) {
+      if (on) { b.disabled = true; return; }
+      var row = b.closest('.row');
+      b.disabled = !(row && noted(row.dataset.name));
     });
   }
 
@@ -902,6 +913,7 @@
       store.notes[name] = ta.value;
       grow(ta);
       paintRow(el, name, pri);
+      if (!busy) send.disabled = !ta.value.trim();
       save();
       recount();
     });
@@ -922,6 +934,7 @@
     send.textContent = 'Send';
     send.title = 'Send this note to Claude Code, working in this checkout';
     send.hidden = !live;
+    send.disabled = !(store.notes[name] || '').trim();
     send.addEventListener('click', function () {
       var text = (store.notes[name] || '').trim();
       if (!text) { setStatus(status, 'err', 'Write something first.'); return; }
