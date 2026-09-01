@@ -272,5 +272,5 @@
   "journeyId": "hero-signup",
   "featureIcons": "feature",
   "stepId": "plans",
-  "device": "desktop"
+  "device": "mobile"
 }

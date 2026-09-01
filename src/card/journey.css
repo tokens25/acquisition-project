@@ -145,13 +145,17 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    does. On mobile it is bounded to a phone's viewport, so the card is 280 in a
    375 screen and the next one peeks — the layout people will actually see,
    rather than mobile type at desktop width. */
+/* No phone frame. The step is previewed the way the design presents it —
+   "Preview_standard_tiers" is three 280 tiles 16 apart — rather than inside a
+   375 viewport showing one and a sliver of the next, which is the shopper's
+   view and not the editor's. The row still scrolls when the panel leaves less
+   room than the three of them need. */
 .jy__viewport[data-device='mobile'] {
-  inline-size: 375px;
-  padding-inline: var(--space-16);
+  padding: var(--space-16);
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-18);
   background: var(--color-surface-default);
 }
 .jy__viewport[data-device='mobile'] .acq-set {
-  gap: var(--space-12);
+  gap: var(--space-16);
 }

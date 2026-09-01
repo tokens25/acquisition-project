@@ -39,9 +39,11 @@ export function PlanCta({
             <span>{discountLabel}</span>
           </p>
         )}
+        {/* Figma CTA/1 draws the 40 button on the 280 card and the 48 one
+            on the wider ones. */}
         <Button
           appearance={ultimate ? 'subscribe' : 'primary'}
-          size="lg"
+          size={device === 'mobile' ? 'md' : 'lg'}
           block
           onClick={onClick}
         >

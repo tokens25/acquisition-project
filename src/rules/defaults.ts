@@ -141,5 +141,10 @@ export const defaultSet: CardSet = {
   journeyId: 'hero-signup',
   featureIcons: 'feature',
   stepId: 'plans',
-  device: 'desktop',
+  // The size the tiles are drawn at: "Preview_standard_tiers" is three cards
+  // of 280, which is the component's Device=Mobile — its 20 of padding, its
+  // 20px title and 12px copy, and the pricing rule in place of the divider.
+  // Previewing at Device=Desktop was rendering a variant the design has not
+  // drawn, and stretching the 44px logo tiles off their 49 pitch to do it.
+  device: 'mobile',
 }

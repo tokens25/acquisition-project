@@ -13,10 +13,14 @@
   display: flex;
   flex-direction: column;
   inline-size: 100%;
-  max-inline-size: 347px; /* 295px content + 24px padding + 2px edge */
+  max-inline-size: 345px; /* 295px content + 24px padding + 2px edge */
   overflow: hidden;
-  border: var(--border-2) solid transparent;
   border-radius: var(--radius-18);
+  /* The 2 edge is an inset shadow, not a border. Figma draws it inside the
+     frame without taking layout, so a card measures 280 with 240 of content;
+     a real border ate 4 of that and left the five 44px logo tiles unable to
+     sit on their 49 pitch. */
+  box-shadow: inset 0 0 0 var(--border-2) transparent;
   background: linear-gradient(
     158.76deg,
     var(--color-surface-container-2) 9%,
@@ -30,9 +34,7 @@
    card never peeks — which is how a horizontally scrolling row tells you it
    scrolls. */
 .acq-card[data-device='mobile'] {
-  max-inline-size: 284px; /* 240 content + 40 padding + 4 border. Figma's 280 is
-     the content box — its stroke is drawn inside without taking layout, so CSS
-     needs the extra 4 or the five 44px logo tiles no longer fit their row. */
+  max-inline-size: 280px; /* 240 content + 40 padding, the edge drawn inside */
 }
 .acq-card[data-device='mobile'] .acq-card__body {
   padding: var(--space-20);
@@ -42,7 +44,7 @@
 }
 /* Ultimate — the flagship plan carries the gold edge. */
 .acq-card[data-ultimate] {
-  border-color: var(--color-brand-tertiary);
+  box-shadow: inset 0 0 0 var(--border-2) var(--color-brand-tertiary);
 }
 
 /* Label/badge/Left — a pixel past the corner, so the card's own border does
@@ -83,9 +85,12 @@
   border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
 }
 
+/* 48 tall, the button and nothing else — Figma's Button/CTA sits directly
+   under the body with only the rule between them. */
 .acq-card__footer {
   border-block-start: var(--border-1) solid var(--color-border-full-color-default);
-  padding: var(--space-12) var(--space-8) var(--space-16);
+  padding-block: var(--space-4);
+  padding-inline: 0;
 }
 
 /* ── CardHeader ────────────────────────────────────────────── */
@@ -193,8 +198,9 @@
 
 /* ── PlanCta (ButtonLabelEyebrow) ──────────────────────────── */
 
+/* Figma CTA/1: 8 above and below a 40 button, 56 in all. */
 .acq-plan-cta {
-  padding-block: var(--space-16) var(--space-12);
+  padding-block: var(--space-8);
 }
 .acq-plan-cta__stack {
   display: flex;
@@ -221,10 +227,6 @@
 
 /* ── LogoTiles ─────────────────────────────────────────────── */
 
-/* Five 44px tiles to a row, spread edge to edge across the 240 of content —
-   which puts 5px between them. Wrapping rather than a fixed grid, so a sixth
-   logo starts a second row instead of squeezing the first, the way the two-row
-   card in the design does. */
 /* Five columns of 44, always — the pitch the design draws, where a 240 row
    puts them at 0, 49, 98, 147 and 196. A wrapping flex row spread a partial
    row edge to edge instead: a plan carrying two competitions pushed one to
@@ -369,19 +371,21 @@
 
 /* ── Features ──────────────────────────────────────────────── */
 
+/* Figma FeaturesList: 12 above the first line and nothing below the last —
+   the body's own 20 closes the card. */
 .acq-features {
   display: flex;
   flex-direction: column;
   gap: var(--space-8);
   margin: 0;
-  padding: var(--space-12) 0;
+  padding: var(--space-12) 0 0;
   list-style: none;
 }
+/* A row is its line and no more: 18 at 12/1.52, as drawn. */
 .acq-feature {
   display: flex;
   gap: var(--space-8);
   align-items: center;
-  padding-block: var(--space-2);
 }
 .acq-feature__text {
   white-space: nowrap;
@@ -415,7 +419,9 @@
   scroll-snap-align: start;
 }
 
-/* S-2 · the whole set shares one description height: lines × 21px. */
+/* S-2 · the whole set shares one description height. Measured in `lh` — the
+   element's own line box — because the card is drawn at two type scales and a
+   pixel constant sized for one leaves a gap under the other. */
 .acq-set[data-description-lines='1'] {
   --acq-description-lines: 1;
 }
@@ -423,7 +429,7 @@
   --acq-description-lines: 2;
 }
 .acq-card-header__description {
-  min-block-size: calc(var(--acq-description-lines, 1) * 21px);
+  min-block-size: calc(var(--acq-description-lines, 1) * 1lh);
 }
 /* Off-layout twin used to test candidate strings before committing one. */
 .acq-card-header__probe {
