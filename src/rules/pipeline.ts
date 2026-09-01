@@ -1,10 +1,14 @@
 /**
  * The Market → Dev handoff pipeline.
  *
- * Market writes strings and marks a section ready; Dev implements them and
- * marks it completed. Everything here is pure: the sections and their strings
- * are derived from the card set, the status is derived from the snapshot Dev
- * last acknowledged, and every transition returns a new document.
+ * Market writes strings and marks a page ready; Dev implements them and marks
+ * it completed. Everything here is pure: the sections and their strings are
+ * derived from the card set, the status is derived from the snapshot Dev last
+ * acknowledged, and every transition returns a new document.
+ *
+ * A section is one page of the journey. The subscription page is one section
+ * carrying every plan's strings, grouped by plan — it is marked ready as a
+ * page, the way it ships.
  *
  * Source: "Handoff: Market / Dev pipeline (Figma Dev Mode pattern)" — the
  * README that came with the design reference.
@@ -55,14 +59,14 @@ export interface StringDef {
   label: string
   value: string
   required: boolean
+  /** The plan a string belongs to, on the subscription page. */
+  group?: string
 }
 
 export interface Section {
+  /** The journey step's id. */
   id: string
   label: string
-  group: 'flow' | 'plans'
-  /** The journey step this section is edited on. */
-  stepId: string
   strings: StringDef[]
 }
 
@@ -72,9 +76,23 @@ export const WHO = 'You'
 /** Longest a section's activity is kept. Older events fall off the end. */
 const LOG_LIMIT = 200
 
+/** The step whose section is every plan. */
+export const PLANS = 'plans'
+
+/* ── Keys ────────────────────────────────────────────────────────────── */
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+
+/** `plans.msg-plus.description` */
+export const tierKey = (tierId: string, field: string) => `${PLANS}.${tierId}.${field}`
+
+/** `plans.msg-plus.price.monthly.full` */
+export const cadenceKey = (tierId: string, cadence: string, field: string) =>
+  `${PLANS}.${tierId}.price.${slug(cadence)}.${field}`
+
 /* ── Strings ─────────────────────────────────────────────────────────── */
 
-/** Field names in the flow content that carry copy dev has to implement. */
+/** Field names in the flow content, named the way the edit panel names them. */
 const FLOW_LABELS: Record<string, string> = {
   navTitle: 'Screen title',
   title: 'Heading',
@@ -145,8 +163,6 @@ const humanise = (field: string) =>
   FLOW_LABELS[field] ??
   field.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase())
 
-const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-
 /** Walks one flow screen and lists every string on it, in field order. */
 function flowStrings(prefix: string, screen: Record<string, unknown>): StringDef[] {
   const out: StringDef[] = []
@@ -174,130 +190,145 @@ function flowStrings(prefix: string, screen: Record<string, unknown>): StringDef
  * its own group of keys.
  */
 function tierStrings(set: CardSet, tier: Tier): StringDef[] {
-  const p = `plans.${tier.id}`
+  const group = tier.planName || tier.id
+  const k = (field: string) => tierKey(tier.id, field)
   const out: StringDef[] = [
-    { key: `${p}.badge`, label: 'Badge', value: tier.badge ?? '', required: false },
-    { key: `${p}.name`, label: 'Tier name', value: tier.planName, required: true },
-    { key: `${p}.description`, label: 'Description', value: tier.description, required: true },
+    { key: k('badge'), label: 'Badge', value: tier.badge ?? '', required: false, group },
+    { key: k('name'), label: 'Tier name', value: tier.planName, required: true, group },
+    { key: k('description'), label: 'Description', value: tier.description, required: true, group },
   ]
   tier.features.forEach((id, i) => {
     const entry = set.featureCatalog.find((f) => f.id === id)
     out.push({
-      key: `${p}.features[${i}]`,
+      key: k(`features[${i}]`),
       label: `Benefit ${i + 1}`,
       value: entry?.text ?? id,
       required: false,
+      group,
     })
   })
   tier.logoTiles.forEach((id, i) => {
     const entry = set.logoCatalog.find((l) => l.id === id)
     out.push({
-      key: `${p}.competitions[${i}]`,
+      key: k(`competitions[${i}]`),
       label: `Competition ${i + 1}`,
       value: entry?.name ?? id,
       required: false,
+      group,
     })
   })
   out.push({
-    key: `${p}.competitions.total`,
+    key: k('competitions.total'),
     label: 'Total competitions',
     value: String(tier.logoTotal),
     required: false,
+    group,
   })
   const offers = set.offers
     .filter((o) => o.tierId === tier.id && !o.market)
     .sort((a, b) => set.cadences.indexOf(a.cadence) - set.cadences.indexOf(b.cadence))
   for (const o of offers) {
-    const c = `${p}.price.${slug(o.cadence)}`
-    out.push({ key: `${c}.full`, label: `${o.cadence} · Full price`, value: String(o.standardPrice), required: true })
+    const c = (field: string) => cadenceKey(tier.id, o.cadence, field)
+    out.push({ key: c('full'), label: `${o.cadence} · Full price`, value: String(o.standardPrice), required: true, group })
     out.push({
-      key: `${c}.per`,
+      key: c('per'),
       label: `${o.cadence} · Price per`,
       value: set.priceUnits?.[o.cadence] ?? '',
       required: false,
+      group,
     })
     if (o.discount) {
       out.push({
-        key: `${c}.discount`,
+        key: c('discount'),
         label: `${o.cadence} · Discount price`,
         value: o.introPrice == null ? '' : String(o.introPrice),
         required: false,
+        group,
       })
       out.push({
-        key: `${c}.explainer`,
+        key: c('explainer'),
         label: `${o.cadence} · Price explainer`,
         value: o.explainer ?? '',
         required: false,
+        group,
       })
     }
-    out.push({ key: `${c}.cta`, label: `${o.cadence} · Button`, value: o.ctaLabel ?? '', required: false })
+    out.push({ key: c('cta'), label: `${o.cadence} · Button`, value: o.ctaLabel ?? '', required: false, group })
   }
   return out
 }
 
 /**
- * Every section in the set: one per flow screen, one per plan.
+ * Every section in the set: one per page of the journey.
  *
- * `labels` names the flow sections after their journey steps; without it the
- * step id is used.
+ * `labels` names the sections after their journey steps; without it the step
+ * id is used.
  */
 export function sectionsFor(set: CardSet, labels: Record<string, string> = {}): Section[] {
   const flow = { ...defaultFlow, ...set.flow }
   const out: Section[] = FLOW_STEPS.map((id) => ({
     id,
     label: labels[id] ?? humanise(id),
-    group: 'flow' as const,
-    stepId: id,
     strings: flowStrings(id, flow[id] as unknown as Record<string, unknown>),
   }))
-  for (const tier of [...set.tiers].sort((a, b) => a.displayOrder - b.displayOrder)) {
-    out.push({
-      id: `plans.${tier.id}`,
-      label: tier.planName || tier.id,
-      group: 'plans',
-      stepId: 'plans',
-      strings: tierStrings(set, tier),
-    })
-  }
+  const tiers = [...set.tiers].sort((a, b) => a.displayOrder - b.displayOrder)
+  out.splice(1, 0, {
+    id: PLANS,
+    label: labels[PLANS] ?? 'Subscription',
+    strings: tiers.flatMap((t) => tierStrings(set, t)),
+  })
   return out
 }
-
-export const planSection = (tierId: string) => `plans.${tierId}`
 
 export function valuesOf(section: Section): Record<string, string> {
   return Object.fromEntries(section.strings.map((s) => [s.key, s.value]))
 }
+
+/** "MSG+ · Description", or just "Description" off the subscription page. */
+export const fullLabel = (s: Pick<StringDef, 'label' | 'group'>) =>
+  s.group ? `${s.group} · ${s.label}` : s.label
 
 /* ── Derived status ──────────────────────────────────────────────────── */
 
 export interface Change {
   key: string
   label: string
+  group?: string
   before: string
   after: string
+  /** When the string was last edited — ISO timestamp, when known. */
+  at?: string
 }
 
 /**
  * Every string that differs from what Dev last received.
  *
  * Keys are the union of the snapshot and the current strings, so a line
- * added or removed since counts as much as one rewritten.
+ * added or removed since counts as much as one rewritten. In the order the
+ * strings appear on the page, with removed ones last.
  */
 export function changedKeys(doc: PipelineDoc, section: Section): Change[] {
   const snap = doc.snap[section.id]
   if (!snap) return []
-  const current = valuesOf(section)
-  const labels = new Map(section.strings.map((s) => [s.key, s.label]))
-  const keys = new Set([...Object.keys(snap), ...Object.keys(current)])
   const out: Change[] = []
-  for (const key of keys) {
-    const before = snap[key] ?? ''
-    const after = current[key] ?? ''
-    if (before !== after) {
-      out.push({ key, label: labels.get(key) ?? labelFromKey(key), before, after })
+  const seen = new Set<string>()
+  for (const s of section.strings) {
+    seen.add(s.key)
+    const before = snap[s.key] ?? ''
+    if (before !== s.value) {
+      out.push({ key: s.key, label: s.label, group: s.group, before, after: s.value, at: doc.meta[s.key] })
     }
   }
+  for (const [key, before] of Object.entries(snap)) {
+    if (seen.has(key) || before === '') continue
+    out.push({ key, label: labelFromKey(key), before, after: '', at: doc.meta[key] })
+  }
   return out
+}
+
+/** The same, keyed — for the field that has to show its own change. */
+export function changeMap(doc: PipelineDoc, section: Section): Map<string, Change> {
+  return new Map(changedKeys(doc, section).map((c) => [c.key, c]))
 }
 
 /** A label for a string the section no longer carries, from its key alone. */
@@ -405,7 +436,7 @@ export function recordEdits(
 ): PipelineDoc {
   if (!doc.ready[section.id]) return doc
   const current = valuesOf(section)
-  const labels = new Map(section.strings.map((s) => [s.key, s.label]))
+  const defs = new Map(section.strings.map((s) => [s.key, s]))
   const keys = new Set([...Object.keys(previous), ...Object.keys(current)])
   let next = doc
   const at = now()
@@ -417,7 +448,8 @@ export function recordEdits(
     const snap = { ...(next.snap[section.id] ?? {}) }
     if (snap[key] === undefined) snap[key] = before
     const received = snap[key]
-    const label = labels.get(key) ?? labelFromKey(key)
+    const def = defs.get(key)
+    const label = def ? fullLabel(def) : labelFromKey(key)
 
     const log = [...(next.log[section.id] ?? [])]
     const reverted = after === received

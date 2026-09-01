@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
@@ -13,6 +12,8 @@ import { logoArtwork } from '../card/assets'
 import { BenefitIcon } from './BenefitIcon'
 import { IconPicker } from './IconPicker'
 import { SourceTabs } from './SourceTabs'
+import { MarkedField } from '../components/FieldMark'
+import { cadenceKey, tierKey } from '../rules/pipeline'
 
 /** Sentinel for "write a new line here" in the benefit picker. */
 const CUSTOM_FEATURE = '__custom__'
@@ -43,29 +44,9 @@ const PURCHASE_TYPES = [
  * typing it *for Monthly*, and putting that three screens away in the default
  * view made the number look absolute when it never is.
  */
-export function EditPanel({
-  store,
-  openTier: controlledTier,
-  onOpenTier,
-  heading,
-  tabExtra,
-}: {
-  store: CardSetStore
-  /** Which plan is open, when the parent needs to know it too. */
-  openTier?: string
-  onOpenTier?: (tierId: string) => void
-  /** Sits at the right of the "Plans" title — the open plan's handoff chip. */
-  heading?: ReactNode
-  /** Appended inside each plan tab — its handoff marker. */
-  tabExtra?: (tierId: string) => ReactNode
-}) {
+export function EditPanel({ store }: { store: CardSetStore }) {
   const { set, context, updateTier, updateOffer, offerFor, updateSet } = store
-  const [ownTier, setOwnTier] = useState(set.tiers[0]?.id ?? '')
-  const openTier = controlledTier ?? ownTier
-  const setOpenTier = (id: string) => {
-    setOwnTier(id)
-    onOpenTier?.(id)
-  }
+  const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   /** The competition being dragged, and the row it is currently over. */
   const [dragComp, setDragComp] = useState<string | null>(null)
@@ -183,10 +164,7 @@ export function EditPanel({
 
     <>
       <section className="demo__group">
-        <div className="pl-head-row">
-          <h3 className="demo__group-title">Plans</h3>
-          {heading}
-        </div>
+        <h3 className="demo__group-title">Plans</h3>
         <div className="ed-tabs">
           {set.tiers.map((t) => (
             <button
@@ -199,7 +177,6 @@ export function EditPanel({
               onClick={() => setOpenTier(t.id)}
             >
               {resolveTier(t, context).planName || t.id}
-              {tabExtra?.(t.id)}
             </button>
           ))}
         </div>
@@ -216,6 +193,7 @@ export function EditPanel({
         <TextField
           label="Badge"
           value={resolved.badge ?? ''}
+          pipelineKey={tierKey(tier.id, 'badge')}
           onChange={(v) => patchTier({ badge: v })}
           helpText={
             resolved.ultimate
@@ -232,6 +210,7 @@ export function EditPanel({
         <TextField
           label="Tier name"
           value={resolved.planName}
+          pipelineKey={tierKey(tier.id, 'name')}
           onChange={(v) => updateTier(tier.id, { planName: v })}
         />
         {/* Who writes this copy. The tabs sit above the field and to the
@@ -244,6 +223,7 @@ export function EditPanel({
         <TextField
           label="Description"
           value={resolved.description}
+          pipelineKey={tierKey(tier.id, 'description')}
           onChange={(v) => updateTier(tier.id, { description: v })}
           rows={4}
           readOnly={source === 'ai'}
@@ -267,6 +247,7 @@ export function EditPanel({
               step={0.01}
               min={0}
               value={String(offer.standardPrice ?? '')}
+              pipelineKey={cadenceKey(tier.id, offer.cadence, 'full')}
               onChange={(v) => updateOffer(tier.id, { standardPrice: Number(v) })}
             />
             {/* Everything after the slash. It belongs to the cadence rather
@@ -276,6 +257,7 @@ export function EditPanel({
             <TextField
               label="Price per"
               value={unit}
+              pipelineKey={cadenceKey(tier.id, offer.cadence, 'per')}
               onChange={(v) =>
                 updateSet({ priceUnits: { ...set.priceUnits, [context.cadence]: v } })
               }
@@ -304,6 +286,7 @@ export function EditPanel({
                 max={offer.standardPrice}
                 error={offer.introPrice != null && offer.introPrice >= offer.standardPrice}
                 value={String(offer.introPrice ?? '')}
+                pipelineKey={cadenceKey(tier.id, offer.cadence, 'discount')}
                 onChange={(v) => updateOffer(tier.id, { introPrice: Number(v) })}
                 helpText={`Must stay below ${offer.standardPrice}.`}
               />
@@ -320,6 +303,7 @@ export function EditPanel({
                 <TextField
                   label="Price explainer"
                   value={offer.explainer ?? ''}
+                  pipelineKey={cadenceKey(tier.id, offer.cadence, 'explainer')}
                   onChange={(v) => updateOffer(tier.id, { explainer: v })}
                   rows={2}
                   readOnly={explainerSource === 'ai'}
@@ -339,6 +323,7 @@ export function EditPanel({
             <TextField
               label="Button"
               value={offer.ctaLabel ?? ''}
+              pipelineKey={cadenceKey(tier.id, offer.cadence, 'cta')}
               onChange={(v) => updateOffer(tier.id, { ctaLabel: v })}
               helpText={
                 market
@@ -524,6 +509,7 @@ export function EditPanel({
                     <TextField
                       label="Competition name"
                       value={entry.name}
+                      pipelineKey={tierKey(tier.id, `competitions[${i}]`)}
                       onChange={(v) => updateLogo(entry.id, { name: v })}
                     />
                     <TextField
@@ -556,6 +542,7 @@ export function EditPanel({
           type="number"
           min={0}
           value={String(resolved.logoTotal)}
+          pipelineKey={tierKey(tier.id, 'competitions.total')}
           onChange={(v) => patchTier({ logoTotal: Number(v) })}
         />
       </section>
@@ -571,6 +558,7 @@ export function EditPanel({
             <div className="demo__feature" key={`${id}-${i}`}>
               {/* The icon is half of what tells two benefits apart, so the menu
                   shows it beside every line rather than the words alone. */}
+              <MarkedField pipelineKey={tierKey(tier.id, `features[${i}]`)}>
               <IconPicker
                 label={`Benefit ${i + 1}`}
                 value={id}
@@ -586,6 +574,7 @@ export function EditPanel({
                   v === CUSTOM_FEATURE ? setFeature(addCustomFeature()) : setFeature(v)
                 }
               />
+              </MarkedField>
               {entry && isCustom && (
                 <>
                   <TextField

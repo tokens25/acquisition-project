@@ -4,28 +4,24 @@ import { Icon } from '../components/Icon'
 import type { ResolvedStep } from '../rules/journey'
 
 /**
- * The journey as a list in the panel, mirroring the tiles in the preview.
+ * The journey as a list: one row per step, in order, with the way into each.
  *
- * Two views of one thing, so they share a selection: opening a step here is the
- * same act as opening its tile. What differs is the job — this is the compact
- * index you navigate by, the tiles are the shape you read.
- *
- * The check marks a step with real fields behind it. Today that is Subscription
- * and nothing else, which the list says plainly rather than implying nine
- * editable screens and disappointing eight times.
+ * The rows also carry the handoff — `trailing` draws each step's status chip
+ * (or the button that marks it ready), so the whole journey's standing with
+ * dev is readable from here without opening a screen.
  */
 export function UserFlow({
   planned,
   selectedId,
   onOpen,
-  marker,
+  trailing,
   footnote,
 }: {
   planned: ResolvedStep[]
   selectedId: string
   onOpen: (stepId: string) => void
-  /** Drawn after a step's name — its handoff status, when it has one. */
-  marker?: (stepId: string) => ReactNode
+  /** Drawn between the step's name and its edit button. */
+  trailing?: (stepId: string) => ReactNode
   /** One muted line under the list, for what the list is not showing. */
   footnote?: ReactNode
 }) {
@@ -49,11 +45,12 @@ export function UserFlow({
                 </span>
 
                 <span className="uf__name">{step.shortName ?? step.name}</span>
-                {marker?.(step.id)}
 
                 {skipped && (
                   <span className="uf__tag">{skipped === 'seeded' ? 'seeded' : 'not here'}</span>
                 )}
+
+                {editable && trailing?.(step.id)}
 
                 {editable && (
                   <button

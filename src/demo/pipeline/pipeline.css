@@ -2,7 +2,9 @@
    Everything new the pipeline adds: the mode toggle in the bar, the status
    chip and its dropdown, the list marker and Dev mode's read-only strings.
    Colours come from the foundation tokens: success is "ready", warning is
-   "changed"; the mode segments borrow the brand yellow and that same green. */
+   "changed"; the mode segments borrow the brand yellow and that same green.
+   Motion is short and eased the same way throughout, and off when the
+   viewer asks for less of it. */
 
 :root {
   --pl-ready: var(--color-accent-success-text);
@@ -12,26 +14,45 @@
   /* The yellow is light in both themes, so what sits on it is always dark. */
   --pl-on-yellow: #0d0d0d;
   --pl-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
-}
-
-.pl-mono {
-  font-family: var(--pl-mono);
-  font-size: 11px;
+  --pl-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --pl-fast: 160ms;
+  --pl-med: 220ms;
 }
 
 /* ── Mode toggle ── */
 .pl-mode {
-  display: flex;
+  position: relative;
+  display: grid;
   flex: none;
+  grid-template-columns: 1fr 1fr;
   gap: 2px;
   padding: 3px;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: 9px;
+  isolation: isolate;
+}
+/* The thumb: one element that slides, so the change reads as movement. */
+.pl-mode__thumb {
+  position: absolute;
+  inset: 3px auto 3px 3px;
+  z-index: -1;
+  inline-size: calc(50% - 4px);
+  border-radius: 6px;
+  background: var(--color-brand-primary);
+  transition:
+    transform var(--pl-med) var(--pl-ease),
+    background-color var(--pl-med) var(--pl-ease);
+}
+.pl-mode[data-mode='dev'] .pl-mode__thumb {
+  transform: translateX(calc(100% + 2px));
+  background: var(--pl-ready-fill);
 }
 .pl-mode__seg {
   display: flex;
   gap: 6px;
   align-items: center;
+  justify-content: center;
+  min-inline-size: 72px;
   padding: 5px 12px;
   border: 0;
   border-radius: 6px;
@@ -42,17 +63,15 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.2;
   cursor: pointer;
-  transition: background-color 160ms ease, color 160ms ease;
+  transition: color var(--pl-med) var(--pl-ease);
 }
 .pl-mode__seg:hover {
   color: var(--color-text-primary);
 }
-.pl-mode__seg[data-on] {
-  background: var(--color-brand-primary);
+.pl-mode[data-mode='market'] .pl-mode__seg[data-on] {
   color: var(--pl-on-yellow);
 }
-.pl-mode__seg--dev[data-on] {
-  background: var(--pl-ready-fill);
+.pl-mode[data-mode='dev'] .pl-mode__seg[data-on] {
   color: var(--color-text-inverse);
 }
 .pl-mode__seg:focus-visible {
@@ -62,11 +81,14 @@
 
 /* In Dev the bar's bottom edge turns green — the one piece of chrome that
    changes. An inset shadow rather than a border, so nothing moves. */
+.demo__top {
+  transition: box-shadow var(--pl-med) var(--pl-ease);
+}
 .demo__top[data-mode='dev'] {
   box-shadow: inset 0 -1px 0 var(--pl-ready);
 }
 
-/* ── The glyph shared by the marker, the chip and the button ── */
+/* ── The glyph shared by the chip and the marker ── */
 .pl-glyph {
   display: inline-grid;
   place-items: center;
@@ -75,20 +97,9 @@
   block-size: 18px;
   border-radius: 4px;
   background: currentColor;
-  font-family: var(--pl-mono);
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1;
 }
-.pl-glyph::before {
-  content: '</>';
+.pl-glyph > svg {
   color: var(--color-surface-default);
-}
-.pl-ready__btn .pl-glyph {
-  background: transparent;
-}
-.pl-ready__btn .pl-glyph::before {
-  color: currentColor;
 }
 
 /* ── "Mark ready for dev" ── */
@@ -102,6 +113,7 @@
   min-inline-size: 0;
   color: var(--color-text-tertiary);
   font-size: 11.5px;
+  line-height: 1.3;
   text-align: end;
 }
 .pl-ready__btn {
@@ -109,7 +121,8 @@
   flex: none;
   gap: 6px;
   align-items: center;
-  padding: 5px 11px 5px 7px;
+  block-size: 28px;
+  padding: 0 11px 0 8px;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: 7px;
   background: transparent;
@@ -119,15 +132,25 @@
   font-weight: var(--font-weight-bold);
   line-height: 1;
   cursor: pointer;
-  transition: border-color 160ms ease, color 160ms ease, opacity 160ms ease;
+  transition:
+    border-color var(--pl-fast) ease,
+    color var(--pl-fast) ease,
+    background-color var(--pl-fast) ease,
+    opacity var(--pl-fast) ease;
 }
 .pl-ready__btn:hover:not(:disabled) {
   border-color: var(--pl-ready);
+  background: color-mix(in srgb, var(--pl-ready) 8%, transparent);
   color: var(--pl-ready);
 }
 .pl-ready__btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+.pl-ready[data-compact] .pl-ready__btn {
+  block-size: 24px;
+  padding: 0 9px 0 7px;
+  font-size: 11px;
 }
 
 /* ── Status chip ── */
@@ -136,7 +159,8 @@
   flex: none;
   gap: 6px;
   align-items: center;
-  padding: 4px 9px 4px 5px;
+  block-size: 28px;
+  padding: 0 8px 0 5px;
   border: var(--border-1) solid transparent;
   border-radius: 7px;
   font-family: inherit;
@@ -144,7 +168,12 @@
   font-weight: var(--font-weight-bold);
   line-height: 1;
   cursor: pointer;
-  transition: filter 160ms ease;
+  animation: pl-pulse var(--pl-med) var(--pl-ease);
+  transition:
+    background-color var(--pl-med) var(--pl-ease),
+    color var(--pl-med) var(--pl-ease),
+    border-color var(--pl-med) var(--pl-ease),
+    filter var(--pl-fast) ease;
 }
 .pl-chip:hover {
   filter: brightness(1.12);
@@ -168,8 +197,22 @@
   color: var(--color-text-secondary);
 }
 .pl-chip__chevron {
-  inline-size: 10px;
-  block-size: 10px;
+  display: grid;
+  place-items: center;
+  transition: transform var(--pl-med) var(--pl-ease);
+}
+.pl-chip__chevron[data-open] {
+  transform: rotate(180deg);
+}
+.pl-chip[data-compact] {
+  block-size: 24px;
+  gap: 5px;
+  padding: 0 7px 0 4px;
+  font-size: 11px;
+}
+.pl-chip[data-compact] .pl-glyph {
+  inline-size: 16px;
+  block-size: 16px;
 }
 
 /* ── List marker ── */
@@ -181,10 +224,8 @@
   block-size: 16px;
   border-radius: 4px;
   color: var(--color-surface-default);
-  font-family: var(--pl-mono);
-  font-size: 9px;
-  font-weight: 700;
-  line-height: 1;
+  animation: pl-pulse var(--pl-med) var(--pl-ease);
+  transition: background-color var(--pl-med) var(--pl-ease);
 }
 .pl-marker[data-status='ready'] {
   background: var(--pl-ready);
@@ -194,9 +235,6 @@
 }
 .pl-marker[data-status='done'] {
   background: var(--color-text-tertiary);
-}
-.ed-tab .pl-marker {
-  margin-inline-start: 6px;
 }
 
 /* ── Dropdown ── */
@@ -211,6 +249,8 @@
   color: var(--color-text-primary);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
   font-size: 13px;
+  transform-origin: top right;
+  animation: pl-pop-in var(--pl-fast) var(--pl-ease);
 }
 .pl-pop__title {
   display: flex;
@@ -266,6 +306,7 @@
   justify-content: space-between;
 }
 .pl-change__label {
+  min-inline-size: 0;
   color: var(--color-text-tertiary);
   font-size: 11px;
   font-weight: var(--font-weight-bold);
@@ -303,14 +344,16 @@
   font-weight: var(--font-weight-bold);
   text-align: start;
   cursor: pointer;
+  transition: background-color var(--pl-fast) ease;
 }
 .pl-log__toggle:hover {
   background: var(--color-surface-container-2);
 }
 .pl-log__chevron {
-  inline-size: 10px;
-  block-size: 10px;
-  transition: transform 160ms ease;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-secondary);
+  transition: transform var(--pl-med) var(--pl-ease);
 }
 .pl-log__chevron[data-open] {
   transform: rotate(90deg);
@@ -327,6 +370,7 @@
   list-style: none;
   max-block-size: 220px;
   overflow-y: auto;
+  animation: pl-fade var(--pl-fast) ease;
 }
 .pl-log__event {
   display: grid;
@@ -381,8 +425,10 @@
   font-size: 12px;
   font-weight: var(--font-weight-bold);
   cursor: pointer;
+  transition: color var(--pl-fast) ease, background-color var(--pl-fast) ease;
 }
 .pl-textbtn:hover {
+  background: var(--color-surface-container-2);
   color: var(--color-text-primary);
 }
 .pl-textbtn--danger:hover {
@@ -398,9 +444,19 @@
   font-size: 12px;
   font-weight: var(--font-weight-bold);
   cursor: pointer;
+  transition: filter var(--pl-fast) ease, transform var(--pl-fast) var(--pl-ease);
 }
 .pl-primary:hover {
   filter: brightness(0.9);
+}
+.pl-primary:active {
+  transform: scale(0.98);
+}
+.pl-textbtn:focus-visible,
+.pl-primary:focus-visible,
+.pl-log__toggle:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: -2px;
 }
 
 /* ── Dev mode ── */
@@ -412,9 +468,11 @@
   padding: var(--space-6) var(--space-24);
   color: var(--color-text-tertiary);
   font-size: 11.5px;
+  animation: pl-fade var(--pl-med) ease;
 }
 .pl-devline::before {
   content: '';
+  flex: none;
   inline-size: 6px;
   block-size: 6px;
   border-radius: 50%;
@@ -422,7 +480,7 @@
 }
 .pl-hidden-note {
   margin: 0;
-  padding-block-start: var(--space-8);
+  padding: var(--space-8) var(--space-4) 0;
   color: var(--color-text-tertiary);
   font-size: 11.5px;
 }
@@ -434,6 +492,7 @@
   padding-block: var(--space-24);
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption-sm);
+  animation: pl-fade var(--pl-med) ease;
 }
 .pl-empty small {
   color: var(--color-text-tertiary);
@@ -441,6 +500,23 @@
 }
 
 .pl-strings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+.pl-strings__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.pl-strings__name {
+  margin: 0;
+  padding-block-end: var(--space-4);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-bold);
+}
+.pl-strings__list {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -487,12 +563,15 @@
 }
 .pl-string__value {
   min-inline-size: 0;
+  padding-block: 3px;
   color: var(--color-text-primary);
   font-size: var(--font-size-caption-sm);
+  line-height: 1.4;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 .pl-string__empty {
+  padding-block: 3px;
   color: var(--color-text-tertiary);
   font-size: var(--font-size-caption-sm);
 }
@@ -500,33 +579,47 @@
   color: var(--pl-danger);
 }
 .pl-copy {
+  display: inline-flex;
   flex: none;
-  min-inline-size: 52px;
-  padding: 3px 8px;
+  gap: 5px;
+  align-items: center;
+  block-size: 26px;
+  min-inline-size: 72px;
+  padding: 0 8px;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
-  border-radius: 5px;
+  border-radius: 6px;
   background: transparent;
   color: var(--color-text-secondary);
   font-family: inherit;
   font-size: 11px;
   cursor: pointer;
+  transition:
+    border-color var(--pl-fast) ease,
+    color var(--pl-fast) ease,
+    background-color var(--pl-fast) ease;
 }
 .pl-copy:hover {
   border-color: var(--color-border-full-color-default);
+  background: var(--color-surface-container-2);
   color: var(--color-text-primary);
 }
 .pl-copy[data-copied] {
   border-color: var(--pl-ready);
   color: var(--pl-ready);
 }
+.pl-copy:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 1px;
+}
 
+/* ── Placement ── */
 /* The chip at the right of the step title, whatever the title's width. */
 .pl-head-chip {
   display: flex;
   flex: none;
+  align-items: center;
   margin-inline-start: auto;
 }
-
 /* Room for a chip beside a group title. */
 .pl-head-row {
   display: flex;
@@ -539,12 +632,68 @@
   flex: 1;
   min-inline-size: 0;
 }
+/* In the user-flow rows the chip sits between the name and the pencil. */
+.uf__row .pl-chip,
+.uf__row .pl-ready {
+  margin-inline-start: auto;
+}
+/* On the frames the marker follows the step's name. */
+.jf__step-name .pl-marker {
+  inline-size: 14px;
+  block-size: 14px;
+}
+
+/* ── Motion ── */
+@keyframes pl-pulse {
+  0% {
+    transform: scale(0.96);
+  }
+  60% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes pl-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pl-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
+  .pl-mode__thumb,
   .pl-mode__seg,
+  .demo__top,
   .pl-ready__btn,
   .pl-chip,
-  .pl-log__chevron {
+  .pl-chip__chevron,
+  .pl-marker,
+  .pl-log__chevron,
+  .pl-textbtn,
+  .pl-primary,
+  .pl-copy {
     transition: none;
+  }
+  .pl-chip,
+  .pl-marker,
+  .pl-pop,
+  .pl-log,
+  .pl-devline,
+  .pl-empty {
+    animation: none;
   }
 }

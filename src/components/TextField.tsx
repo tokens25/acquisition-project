@@ -1,5 +1,8 @@
 import './textfield.css'
 
+import { FieldMarkNote } from './FieldMark'
+import { useFieldMark } from './fieldMarks'
+
 import type { ChangeEvent, ReactNode } from 'react'
 import { useId } from 'react'
 
@@ -35,6 +38,11 @@ export interface TextFieldProps {
   /** Renders a textarea that grows, keeping the same shell. */
   rows?: number
   inputId?: string
+  /**
+   * The string's key in the Market → Dev handoff. With one, the field shows
+   * its own change since dev received it, and the way back.
+   */
+  pipelineKey?: string
 }
 
 export function TextField({
@@ -53,10 +61,12 @@ export function TextField({
   max,
   rows,
   inputId,
+  pipelineKey,
 }: TextFieldProps) {
   const generated = useId()
   const id = inputId ?? generated
   const filled = value !== '' && value !== undefined && value !== null
+  const mark = useFieldMark(pipelineKey)
 
   const shared = {
     id,
@@ -71,7 +81,12 @@ export function TextField({
   }
 
   return (
-    <div className="dz-field" data-filled={filled || undefined} data-error={error || undefined}>
+    <div
+      className="dz-field"
+      data-filled={filled || undefined}
+      data-error={error || undefined}
+      data-changed={mark ? '' : undefined}
+    >
       <div className="dz-field__input" data-multiline={rows ? '' : undefined}>
         {leading && <span className="dz-field__leading">{leading}</span>}
 
@@ -90,6 +105,9 @@ export function TextField({
       </div>
 
       {helpText && <p className="dz-field__help">{helpText}</p>}
+      {mark && (
+        <FieldMarkNote mark={mark} onRevert={onChange && !readOnly ? () => onChange(mark.before) : undefined} />
+      )}
     </div>
   )
 }

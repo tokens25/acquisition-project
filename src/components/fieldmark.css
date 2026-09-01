@@ -1,0 +1,87 @@
+/* A field changed since Dev received it: an orange edge on the control and one
+   line under it saying what Dev has. The colour is the same "changed" the
+   page's chip turns, so the field and the chip tell one story. */
+
+.dz-field[data-changed] .dz-field__input,
+.fm-wrap[data-changed] .dz-field__input,
+.fm-wrap[data-changed] > :first-child > .ip__button {
+  border-color: var(--color-accent-warning-text);
+  box-shadow: inset 3px 0 0 var(--color-accent-warning-text);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.fm-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fm-note {
+  display: flex;
+  gap: var(--space-6);
+  align-items: baseline;
+  margin: 0;
+  padding-inline: var(--space-4);
+  color: var(--color-accent-warning-text);
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.12px;
+  line-height: 1.52;
+  animation: fm-in 200ms ease both;
+}
+.fm-note__dot {
+  flex: none;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translateY(-1px);
+}
+.fm-note__text {
+  flex: 1;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.fm-note__was {
+  color: var(--color-text-tertiary);
+}
+.fm-note__undo {
+  flex: none;
+  padding: 0 var(--space-4);
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+.fm-note__undo:hover {
+  color: var(--color-text-primary);
+  text-decoration-color: currentColor;
+}
+.fm-note__undo:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+@keyframes fm-in {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-note {
+    animation: none;
+  }
+}

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { FlowStep } from '../card/FlowStep'
@@ -33,6 +34,7 @@ export function JourneyFrames({
   onReorder,
   reordered,
   onResetOrder,
+  marker,
 }: {
   planned: ResolvedStep[]
   selectedId: string
@@ -44,6 +46,8 @@ export function JourneyFrames({
   onReorder?: (stepIds: string[]) => void
   reordered?: boolean
   onResetOrder?: () => void
+  /** Drawn after a step's name — its handoff status, when it has one. */
+  marker?: (stepId: string) => ReactNode
 }) {
   const [dragging, setDragging] = useState<string | null>(null)
   const [over, setOver] = useState<{ id: string; after: boolean } | null>(null)
@@ -222,6 +226,7 @@ export function JourneyFrames({
                   still equals the journey's screen count. */}
               <span className="jf__num">{numbering(tiles)}</span>
               {step.shortName ?? step.name}
+              {!skipped && marker?.(step.id)}
               {!skipped && tiles.length > 1 && (
                 <span className="jf__states"> · {tiles.length} states</span>
               )}

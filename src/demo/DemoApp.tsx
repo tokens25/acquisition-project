@@ -3,7 +3,6 @@ import './demo.css'
 import './pipeline/pipeline.css'
 
 import { useEffect, useMemo, useState } from 'react'
-import aiSparkle from '../assets/icons/ai-sparkle.svg?raw'
 import daznLogo from '../assets/brand/logo-dazn.svg?raw'
 import { StepPreview } from '../card/StepPreview'
 import { Icon } from '../components/Icon'
@@ -17,8 +16,9 @@ import { FlowPanel } from './FlowPanel'
 import { UserFlow } from './UserFlow'
 import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
-import type { Mode, SectionStatus } from '../rules/pipeline'
-import { planSection } from '../rules/pipeline'
+import type { Mode } from '../rules/pipeline'
+import { changeMap } from '../rules/pipeline'
+import { FieldMarks } from '../components/fieldMarks'
 import { DevStrings } from './pipeline/DevStrings'
 import { ModeToggle } from './pipeline/ModeToggle'
 import { SectionMarker } from './pipeline/SectionMarker'
@@ -35,25 +35,8 @@ import { usePipeline } from './pipeline/usePipeline'
 export function DemoApp() {
   const store = useCardSet()
   const [editing, setEditing] = useState(false)
-  const [saveNote, setSaveNote] = useState<string | null>(null)
   const [previewOnly, setPreviewOnly] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
-  /** The plan open in the edit panel — shared with the handoff chip beside it. */
-  const [openTier, setOpenTier] = useState(store.set.tiers[0]?.id ?? '')
-
-  /**
-   * Approval is also the moment the content goes to the shared copy.
-   *
-   * Publishing used to be its own button. Removing it without moving the act
-   * anywhere would have left the shared copy permanently behind, so it lands
-   * here, at the point somebody says the content is right — with a fixed
-   * message rather than the prompt the button used to raise.
-   */
-  const onApprove = async () => {
-    store.updateSet({ review: 'approved' })
-    const result = await store.publish('content: approved')
-    setSaveNote(result.ok ? 'Approved and published to the shared copy.' : (result.error ?? 'Approved, but publishing failed.'))
-  }
 
   const planned = planJourney(store.journey, store.context)
   const steps = planned.filter((p) => !p.skipped).map((p) => p.step)
@@ -69,39 +52,28 @@ export function DemoApp() {
   const pipe = usePipeline(store, stepLabels)
   const dev = pipe.mode === 'dev'
 
-  const readyTiers = store.set.tiers.filter((t) => pipe.doc.ready[planSection(t.id)])
-  /** Whether a step has anything Dev should see: its own section, or any plan's. */
-  const stepReady = (id: string) =>
-    id === 'plans' ? readyTiers.length > 0 : Boolean(pipe.doc.ready[id])
-  /** The plans step carries one section per plan; its marker shows the one that needs attention. */
-  const plansStatus = (): SectionStatus => {
-    const all = store.set.tiers.map((t) => pipe.status(planSection(t.id)))
-    if (all.includes('changed')) return 'changed'
-    if (all.includes('ready')) return 'ready'
-    if (all.includes('done')) return 'done'
-    return 'draft'
-  }
-  const markerFor = (id: string) => (
-    <SectionMarker status={id === 'plans' ? plansStatus() : pipe.status(id)} />
-  )
-
-  /* Dev sees only what Market has marked ready: the steps in the list, the
-     plans in the set. Market sees everything. */
-  const shown = dev ? planned.filter((p) => stepReady(p.step.id)) : planned
+  /* Dev sees only the pages Market has marked ready. Market sees everything. */
+  const shown = dev ? planned.filter((p) => pipe.doc.ready[p.step.id]) : planned
   const hiddenSteps = planned.length - shown.length
-  const shownSet = dev ? { ...store.set, tiers: readyTiers } : store.set
   const readyCount = Object.keys(pipe.doc.ready).length
 
-  const devTier = readyTiers.some((t) => t.id === openTier) ? openTier : (readyTiers[0]?.id ?? '')
-  const sectionId = !step ? '' : step.renderer === 'plans' ? planSection(dev ? devTier : openTier) : step.id
-  const section = pipe.section(sectionId)
+  const section = step ? pipe.section(step.id) : undefined
+  /** Each field's change since dev received it, for the field to show itself. */
+  const marks = useMemo(
+    () => (dev || !section ? new Map() : changeMap(pipe.doc, section)),
+    [dev, section, pipe.doc],
+  )
+  const chipFor = (id: string) => {
+    const s = pipe.section(id)
+    return s ? <StatusChip section={s} pipe={pipe} compact /> : null
+  }
 
   const switchMode = (mode: Mode) => {
     pipe.setMode(mode)
     // Whatever field had focus loses it: in Dev nothing is editable, and a
     // caret left blinking in a field that no longer exists is a lie.
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
-    if (mode === 'dev' && editing && step && !stepReady(step.id)) setEditing(false)
+    if (mode === 'dev' && editing && step && !pipe.doc.ready[step.id]) setEditing(false)
   }
 
   // Shift+D flips the mode, unless the keystroke is going into a field.
@@ -123,84 +95,19 @@ export function DemoApp() {
   }
 
   /**
-   * Which set of actions the bar carries.
-   *
-   * Edit mode is a review flow: hand it over, then have it approved. Neither
-   * can be asked for while the rules are failing, so both start switched off
-   * and the gate beside them says what is missing. The one that is live is the
-   * primary; the step behind it drops to third level rather than disappearing,
-   * so the sequence stays readable from where you are in it.
-   *
-   * Leaving edit mode is the arrow at the top of the panel, which was always
-   * the way back — the button here said it a second time.
+   * What the gate says, and the colour it says it in: whether every context
+   * the set is sold in still passes the rules.
    */
-  const review = store.set.review ?? 'draft'
-  const rulesMet = coverage.failing.length === 0
-
-  /**
-   * What the gate says, and the colour it says it in.
-   *
-   * Failing rules come first whatever the review state: content that has
-   * stopped validating is the thing to know about, and the review is already
-   * withdrawn by the edit that broke it.
-   */
-  const gate = !rulesMet
-    ? {
-        state: 'blocked' as const,
-        text: `Not ready for review — ${coverage.failing.length} of ${coverage.total} contexts failing`,
-      }
-    : review === 'in-review'
-      ? { state: 'waiting' as const, text: 'Waiting for product & UX approval' }
-      : review === 'approved'
-        ? { state: 'clear' as const, text: `Approved — ${coverage.total} contexts checked` }
-        : { state: 'clear' as const, text: `Ready for review — ${coverage.total} contexts checked` }
+  const gate =
+    coverage.failing.length > 0
+      ? {
+          state: 'blocked' as const,
+          text: `${coverage.failing.length} of ${coverage.total} contexts failing`,
+        }
+      : { state: 'clear' as const, text: `${coverage.total} contexts checked` }
 
   const actions = editing ? (
     <div className="demo__actions">
-      <Button
-        appearance={review === 'draft' ? 'primary' : 'tertiary'}
-        size="md"
-        iconBefore={<Icon svg={iconArtwork.checkmark} size={20} />}
-        disabled={!rulesMet || review !== 'draft'}
-        title={
-          !rulesMet
-            ? `${coverage.failing.length} of ${coverage.total} contexts still fail — fix those first`
-            : review === 'draft'
-              ? 'Hand this to product and UX'
-              : 'Already with product and UX'
-        }
-        onClick={() => store.updateSet({ review: 'in-review' })}
-      >
-        Ready for review
-      </Button>
-
-      <Button
-        appearance={review === 'in-review' ? 'primary' : 'tertiary'}
-        size="md"
-        iconBefore={<Icon svg={iconArtwork.check} size={20} />}
-        disabled={review !== 'in-review' || store.publishing}
-        title={
-          review === 'in-review'
-            ? 'Record the approval and publish to the shared copy'
-            : 'Available once the content is with product and UX'
-        }
-        onClick={() => void onApprove()}
-      >
-        {store.publishing ? 'Publishing…' : 'Approved'}
-      </Button>
-
-      {/* Not wired to anything yet, and says so rather than answering a click
-          with nothing. */}
-      <Button
-        appearance="tertiary"
-        size="md"
-        iconBefore={<Icon svg={aiSparkle} size={20} />}
-        disabled
-        title="Not connected yet"
-      >
-        Evaluate performance
-      </Button>
-
       <ModeToggle mode={pipe.mode} onChange={switchMode} />
     </div>
   ) : (
@@ -275,10 +182,9 @@ export function DemoApp() {
           {actions}
         </div>
       </div>
-      {saveNote && <p className="demo__savenote">{saveNote}</p>}
       {dev && readyCount > 0 && (
         <p className="pl-devline">
-          Dev mode · showing {readyCount} section{readyCount === 1 ? '' : 's'} marked ready for dev
+          Dev mode · showing {readyCount} page{readyCount === 1 ? '' : 's'} marked ready for dev
           · {pipe.sections.length - readyCount} hidden until Market marks them
         </p>
       )}
@@ -304,7 +210,7 @@ export function DemoApp() {
                   <Icon svg={iconArtwork['chevron-left']} size={20} />
                 </button>
                 <h2 className="demo__step-title">{step?.shortName ?? step?.name}</h2>
-                {step && step.renderer !== 'plans' && section && (
+                {section && (
                   <span className="pl-head-chip">
                     <StatusChip section={section} pipe={pipe} />
                   </span>
@@ -315,58 +221,27 @@ export function DemoApp() {
                   say about it. */}
               <div className="demo__fields">
                 {dev ? (
-                  /* Dev reads: every string of the section, its key, and a
-                     button to take it. Nothing here writes. */
-                  section && step ? (
-                    <>
-                      {step.renderer === 'plans' && (
-                        <section className="demo__group">
-                          <h3 className="demo__group-title">Plans</h3>
-                          <div className="ed-tabs">
-                            {readyTiers.map((t) => (
-                              <button
-                                key={t.id}
-                                type="button"
-                                className="ed-tab"
-                                data-on={devTier === t.id || undefined}
-                                onClick={() => setOpenTier(t.id)}
-                              >
-                                {t.planName || t.id}
-                                <SectionMarker status={pipe.status(planSection(t.id))} />
-                              </button>
-                            ))}
-                          </div>
-                          {store.set.tiers.length > readyTiers.length && (
-                            <p className="pl-hidden-note">
-                              {store.set.tiers.length - readyTiers.length} not ready yet · hidden in Dev
-                            </p>
-                          )}
-                        </section>
-                      )}
-                      <section className="demo__group">
-                        <div className="pl-head-row">
-                          <h3 className="demo__group-title">Strings</h3>
-                          {step.renderer === 'plans' && <StatusChip section={section} pipe={pipe} />}
-                        </div>
-                        <DevStrings section={section} />
-                      </section>
-                    </>
+                  /* Dev reads: every string of the page, its key, and a button
+                     to take it. Nothing here writes. */
+                  section ? (
+                    <section className="demo__group">
+                      <h3 className="demo__group-title">Strings</h3>
+                      <DevStrings section={section} />
+                    </section>
                   ) : (
                     <p className="pl-empty">
                       Nothing is marked ready for dev yet.
-                      <small>Sections show up here once Market marks them ready.</small>
+                      <small>Pages show up here once Market marks them ready.</small>
                     </p>
                   )
-                ) : step && step.renderer !== 'plans' && step.renderer !== 'stub' ? (
-                  <FlowPanel store={store} step={step} />
                 ) : (
-                  <EditPanel
-                    store={store}
-                    openTier={openTier}
-                    onOpenTier={setOpenTier}
-                    heading={section && <StatusChip section={section} pipe={pipe} />}
-                    tabExtra={(id) => <SectionMarker status={pipe.status(planSection(id))} />}
-                  />
+                  <FieldMarks.Provider value={marks}>
+                    {step && step.renderer !== 'plans' && step.renderer !== 'stub' ? (
+                      <FlowPanel store={store} step={step} />
+                    ) : (
+                      <EditPanel store={store} />
+                    )}
+                  </FieldMarks.Provider>
                 )}
               </div>
             </>
@@ -379,14 +254,14 @@ export function DemoApp() {
               {dev && readyCount === 0 ? (
                 <p className="pl-empty">
                   Nothing is marked ready for dev yet.
-                  <small>Sections show up here once Market marks them ready.</small>
+                  <small>Pages show up here once Market marks them ready.</small>
                 </p>
               ) : (
                 <UserFlow
                   planned={shown}
                   selectedId={step?.id ?? ''}
                   onOpen={openStep}
-                  marker={markerFor}
+                  trailing={chipFor}
                   footnote={dev && hiddenSteps > 0 ? `${hiddenSteps} not ready yet · hidden in Dev` : undefined}
                 />
               )}
@@ -402,13 +277,14 @@ export function DemoApp() {
         <div className="demo__preview">
 
           {editing && step ? (
-            <StepPreview journey={store.journey} set={shownSet} context={store.context} />
+            <StepPreview journey={store.journey} set={store.set} context={store.context} />
           ) : (
             <JourneyFrames
               planned={shown}
               selectedId={step?.id ?? ''}
               onOpen={openStep}
-              set={shownSet}
+              set={store.set}
+              marker={(id) => <SectionMarker status={pipe.status(id)} />}
               context={store.context}
               onReorder={(ids) => store.setStepOrder(store.journey.id, ids)}
               reordered={store.reordered}
