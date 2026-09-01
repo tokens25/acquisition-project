@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { CadenceOffer, CardSet, Context, Tier, TierPatch } from '../rules/content'
+import type { PipelineDoc } from '../rules/pipeline'
+import { emptyPipeline } from '../rules/pipeline'
 import { DIRECT } from '../rules/content'
 import { defaultSet } from '../rules/defaults'
 import { adaptEngineContent, isEngineContent } from '../rules/adapt'
@@ -20,7 +22,7 @@ const STORAGE_KEY = 'acquisition-card-set-v3'
  * Changing one of these must not withdraw a review: opening another step is
  * not an edit, and neither is asking for the review in the first place.
  */
-const NAVIGATION = new Set<string>(['stepId', 'journeyId', 'context', 'review', 'stepOrder'])
+const NAVIGATION = new Set<string>(['stepId', 'journeyId', 'context', 'review', 'stepOrder', 'pipeline'])
 
 /**
  * Sends content back to draft when it changes under a standing review.
@@ -160,6 +162,8 @@ export interface CardSetStore {
   reset: () => void
   exportJson: () => void
   importJson: (file: File) => Promise<void>
+  /** Advances the handoff pipeline. Not an edit: it never withdraws a review. */
+  updatePipeline: (fn: (doc: PipelineDoc) => PipelineDoc) => void
   importError: string | null
   /** Assumptions the adapter had to make, surfaced rather than swallowed. */
   importNotes: string[]
@@ -287,6 +291,10 @@ export function useCardSet(): CardSetStore {
     },
     [context, editingBase],
   )
+
+  const updatePipeline = useCallback((fn: (doc: PipelineDoc) => PipelineDoc) => {
+    setSet((prev) => ({ ...prev, pipeline: fn(prev.pipeline ?? emptyPipeline()) }))
+  }, [])
 
   const reset = useCallback(() => {
     setSet(defaultSet)
@@ -458,6 +466,7 @@ export function useCardSet(): CardSetStore {
     importJson,
     importError,
     importNotes,
+    updatePipeline,
   }
 }
 

@@ -1,0 +1,550 @@
+/* ── Market / Dev handoff pipeline ─────────────────────────────────────
+   Everything new the pipeline adds: the mode toggle in the bar, the status
+   chip and its dropdown, the list marker and Dev mode's read-only strings.
+   Colours come from the foundation tokens: success is "ready", warning is
+   "changed"; the mode segments borrow the brand yellow and that same green. */
+
+:root {
+  --pl-ready: var(--color-accent-success-text);
+  --pl-ready-fill: var(--color-accent-success-surface);
+  --pl-changed: var(--color-accent-warning-text);
+  --pl-danger: var(--color-accent-error-text);
+  /* The yellow is light in both themes, so what sits on it is always dark. */
+  --pl-on-yellow: #0d0d0d;
+  --pl-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.pl-mono {
+  font-family: var(--pl-mono);
+  font-size: 11px;
+}
+
+/* ── Mode toggle ── */
+.pl-mode {
+  display: flex;
+  flex: none;
+  gap: 2px;
+  padding: 3px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 9px;
+}
+.pl-mode__seg {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+.pl-mode__seg:hover {
+  color: var(--color-text-primary);
+}
+.pl-mode__seg[data-on] {
+  background: var(--color-brand-primary);
+  color: var(--pl-on-yellow);
+}
+.pl-mode__seg--dev[data-on] {
+  background: var(--pl-ready-fill);
+  color: var(--color-text-inverse);
+}
+.pl-mode__seg:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 1px;
+}
+
+/* In Dev the bar's bottom edge turns green — the one piece of chrome that
+   changes. An inset shadow rather than a border, so nothing moves. */
+.demo__top[data-mode='dev'] {
+  box-shadow: inset 0 -1px 0 var(--pl-ready);
+}
+
+/* ── The glyph shared by the marker, the chip and the button ── */
+.pl-glyph {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+  border-radius: 4px;
+  background: currentColor;
+  font-family: var(--pl-mono);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+.pl-glyph::before {
+  content: '</>';
+  color: var(--color-surface-default);
+}
+.pl-ready__btn .pl-glyph {
+  background: transparent;
+}
+.pl-ready__btn .pl-glyph::before {
+  color: currentColor;
+}
+
+/* ── "Mark ready for dev" ── */
+.pl-ready {
+  display: flex;
+  gap: var(--space-10);
+  align-items: center;
+  min-inline-size: 0;
+}
+.pl-ready__hint {
+  min-inline-size: 0;
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+  text-align: end;
+}
+.pl-ready__btn {
+  display: flex;
+  flex: none;
+  gap: 6px;
+  align-items: center;
+  padding: 5px 11px 5px 7px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+.pl-ready__btn:hover:not(:disabled) {
+  border-color: var(--pl-ready);
+  color: var(--pl-ready);
+}
+.pl-ready__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Status chip ── */
+.pl-chip {
+  display: flex;
+  flex: none;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 9px 4px 5px;
+  border: var(--border-1) solid transparent;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  cursor: pointer;
+  transition: filter 160ms ease;
+}
+.pl-chip:hover {
+  filter: brightness(1.12);
+}
+.pl-chip:focus-visible,
+.pl-ready__btn:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 1px;
+}
+.pl-chip[data-status='ready'] {
+  background: color-mix(in srgb, var(--pl-ready) 13%, transparent);
+  color: var(--pl-ready);
+}
+.pl-chip[data-status='changed'] {
+  background: color-mix(in srgb, var(--pl-changed) 13%, transparent);
+  color: var(--pl-changed);
+}
+.pl-chip[data-status='done'] {
+  border-color: var(--color-border-full-color-subtle);
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+.pl-chip__chevron {
+  inline-size: 10px;
+  block-size: 10px;
+}
+
+/* ── List marker ── */
+.pl-marker {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+  border-radius: 4px;
+  color: var(--color-surface-default);
+  font-family: var(--pl-mono);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+.pl-marker[data-status='ready'] {
+  background: var(--pl-ready);
+}
+.pl-marker[data-status='changed'] {
+  background: var(--pl-changed);
+}
+.pl-marker[data-status='done'] {
+  background: var(--color-text-tertiary);
+}
+.ed-tab .pl-marker {
+  margin-inline-start: 6px;
+}
+
+/* ── Dropdown ── */
+.pl-pop {
+  position: fixed;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 10px;
+  background: var(--color-surface-container-1);
+  color: var(--color-text-primary);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
+  font-size: 13px;
+}
+.pl-pop__title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.pl-pop__title strong {
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+}
+.pl-pop__title[data-status='ready'] strong {
+  color: var(--pl-ready);
+}
+.pl-pop__title[data-status='changed'] strong {
+  color: var(--pl-changed);
+}
+.pl-pop__title[data-status='done'] strong {
+  color: var(--color-text-secondary);
+}
+.pl-pop__title span {
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+}
+.pl-pop__same {
+  margin: 0;
+  padding: 12px 14px;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+}
+
+.pl-changes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-block-size: 320px;
+  overflow-y: auto;
+}
+.pl-change {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 14px;
+}
+.pl-change + .pl-change {
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.pl-change__head {
+  display: flex;
+  gap: var(--space-8);
+  align-items: baseline;
+  justify-content: space-between;
+}
+.pl-change__label {
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.pl-change__when {
+  flex: none;
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+}
+.pl-change__old {
+  color: var(--color-text-tertiary);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.pl-change__new {
+  color: var(--color-text-primary);
+  font-size: 13.5px;
+  overflow-wrap: anywhere;
+}
+
+.pl-log__toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  inline-size: 100%;
+  padding: 10px 14px;
+  border: 0;
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: var(--font-weight-bold);
+  text-align: start;
+  cursor: pointer;
+}
+.pl-log__toggle:hover {
+  background: var(--color-surface-container-2);
+}
+.pl-log__chevron {
+  inline-size: 10px;
+  block-size: 10px;
+  transition: transform 160ms ease;
+}
+.pl-log__chevron[data-open] {
+  transform: rotate(90deg);
+}
+.pl-log__count {
+  margin-inline-start: auto;
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+  font-weight: var(--font-weight-regular);
+}
+.pl-log {
+  margin: 0;
+  padding: 4px 14px 10px;
+  list-style: none;
+  max-block-size: 220px;
+  overflow-y: auto;
+}
+.pl-log__event {
+  display: grid;
+  grid-template-columns: 6px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: baseline;
+  padding-block: 4px;
+  font-size: 12px;
+}
+.pl-log__dot {
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: var(--color-text-tertiary);
+  transform: translateY(-1px);
+}
+.pl-log__event[data-tone='ok'] .pl-log__dot {
+  background: var(--pl-ready);
+}
+.pl-log__event[data-tone='warn'] .pl-log__dot {
+  background: var(--pl-changed);
+}
+.pl-log__event[data-tone='faint'] {
+  color: var(--color-text-tertiary);
+}
+.pl-log__event[data-tone='dim'] {
+  color: var(--color-text-secondary);
+}
+.pl-log__text {
+  overflow-wrap: anywhere;
+}
+.pl-log__when {
+  color: var(--color-text-tertiary);
+  font-family: var(--pl-mono);
+  font-size: 10.5px;
+}
+
+.pl-pop__actions {
+  display: flex;
+  gap: var(--space-8);
+  justify-content: flex-end;
+  padding: 10px 12px;
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.pl-textbtn {
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.pl-textbtn:hover {
+  color: var(--color-text-primary);
+}
+.pl-textbtn--danger:hover {
+  color: var(--pl-danger);
+}
+.pl-primary {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.pl-primary:hover {
+  filter: brightness(0.9);
+}
+
+/* ── Dev mode ── */
+.pl-devline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0;
+  padding: var(--space-6) var(--space-24);
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+}
+.pl-devline::before {
+  content: '';
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: var(--pl-ready);
+}
+.pl-hidden-note {
+  margin: 0;
+  padding-block-start: var(--space-8);
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+}
+.pl-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding-block: var(--space-24);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+.pl-empty small {
+  color: var(--color-text-tertiary);
+  font-size: 12px;
+}
+
+.pl-strings {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pl-string {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-block: var(--space-10);
+}
+.pl-string + .pl-string {
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.pl-string__head {
+  display: flex;
+  gap: var(--space-8);
+  align-items: baseline;
+  justify-content: space-between;
+  min-inline-size: 0;
+}
+.pl-string__label {
+  flex: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+}
+.pl-string__key {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--color-text-tertiary);
+  font-family: var(--pl-mono);
+  font-size: 11px;
+  text-align: end;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+}
+.pl-string__row {
+  display: flex;
+  gap: var(--space-8);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.pl-string__value {
+  min-inline-size: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.pl-string__empty {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+}
+.pl-string__empty[data-required] {
+  color: var(--pl-danger);
+}
+.pl-copy {
+  flex: none;
+  min-inline-size: 52px;
+  padding: 3px 8px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.pl-copy:hover {
+  border-color: var(--color-border-full-color-default);
+  color: var(--color-text-primary);
+}
+.pl-copy[data-copied] {
+  border-color: var(--pl-ready);
+  color: var(--pl-ready);
+}
+
+/* The chip at the right of the step title, whatever the title's width. */
+.pl-head-chip {
+  display: flex;
+  flex: none;
+  margin-inline-start: auto;
+}
+
+/* Room for a chip beside a group title. */
+.pl-head-row {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: space-between;
+  min-inline-size: 0;
+}
+.pl-head-row > :first-child {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-mode__seg,
+  .pl-ready__btn,
+  .pl-chip,
+  .pl-log__chevron {
+    transition: none;
+  }
+}

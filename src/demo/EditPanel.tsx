@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
@@ -42,9 +43,29 @@ const PURCHASE_TYPES = [
  * typing it *for Monthly*, and putting that three screens away in the default
  * view made the number look absolute when it never is.
  */
-export function EditPanel({ store }: { store: CardSetStore }) {
+export function EditPanel({
+  store,
+  openTier: controlledTier,
+  onOpenTier,
+  heading,
+  tabExtra,
+}: {
+  store: CardSetStore
+  /** Which plan is open, when the parent needs to know it too. */
+  openTier?: string
+  onOpenTier?: (tierId: string) => void
+  /** Sits at the right of the "Plans" title — the open plan's handoff chip. */
+  heading?: ReactNode
+  /** Appended inside each plan tab — its handoff marker. */
+  tabExtra?: (tierId: string) => ReactNode
+}) {
   const { set, context, updateTier, updateOffer, offerFor, updateSet } = store
-  const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
+  const [ownTier, setOwnTier] = useState(set.tiers[0]?.id ?? '')
+  const openTier = controlledTier ?? ownTier
+  const setOpenTier = (id: string) => {
+    setOwnTier(id)
+    onOpenTier?.(id)
+  }
 
   /** The competition being dragged, and the row it is currently over. */
   const [dragComp, setDragComp] = useState<string | null>(null)
@@ -162,7 +183,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
 
     <>
       <section className="demo__group">
-        <h3 className="demo__group-title">Plans</h3>
+        <div className="pl-head-row">
+          <h3 className="demo__group-title">Plans</h3>
+          {heading}
+        </div>
         <div className="ed-tabs">
           {set.tiers.map((t) => (
             <button
@@ -175,6 +199,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
               onClick={() => setOpenTier(t.id)}
             >
               {resolveTier(t, context).planName || t.id}
+              {tabExtra?.(t.id)}
             </button>
           ))}
         </div>

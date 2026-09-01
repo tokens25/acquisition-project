@@ -1,7 +1,8 @@
 import '../App.css'
 import './demo.css'
+import './pipeline/pipeline.css'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import aiSparkle from '../assets/icons/ai-sparkle.svg?raw'
 import daznLogo from '../assets/brand/logo-dazn.svg?raw'
 import { StepPreview } from '../card/StepPreview'
@@ -16,6 +17,13 @@ import { FlowPanel } from './FlowPanel'
 import { UserFlow } from './UserFlow'
 import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
+import type { Mode, SectionStatus } from '../rules/pipeline'
+import { planSection } from '../rules/pipeline'
+import { DevStrings } from './pipeline/DevStrings'
+import { ModeToggle } from './pipeline/ModeToggle'
+import { SectionMarker } from './pipeline/SectionMarker'
+import { StatusChip } from './pipeline/StatusChip'
+import { usePipeline } from './pipeline/usePipeline'
 
 /**
  * The redesigned interface, at /demo.
@@ -30,6 +38,8 @@ export function DemoApp() {
   const [saveNote, setSaveNote] = useState<string | null>(null)
   const [previewOnly, setPreviewOnly] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
+  /** The plan open in the edit panel — shared with the handoff chip beside it. */
+  const [openTier, setOpenTier] = useState(store.set.tiers[0]?.id ?? '')
 
   /**
    * Approval is also the moment the content goes to the shared copy.
@@ -49,6 +59,63 @@ export function DemoApp() {
   const steps = planned.filter((p) => !p.skipped).map((p) => p.step)
   const step = steps.find((s) => s.id === store.set.stepId) ?? steps[0]
   const coverage = summarise(validateAll(store.set))
+
+  /* ── Market / Dev handoff ──
+     Flow sections are named after their steps, as the journey names them. */
+  const stepLabels = useMemo(
+    () => Object.fromEntries(store.journey.steps.map((s) => [s.id, s.shortName ?? s.name])),
+    [store.journey],
+  )
+  const pipe = usePipeline(store, stepLabels)
+  const dev = pipe.mode === 'dev'
+
+  const readyTiers = store.set.tiers.filter((t) => pipe.doc.ready[planSection(t.id)])
+  /** Whether a step has anything Dev should see: its own section, or any plan's. */
+  const stepReady = (id: string) =>
+    id === 'plans' ? readyTiers.length > 0 : Boolean(pipe.doc.ready[id])
+  /** The plans step carries one section per plan; its marker shows the one that needs attention. */
+  const plansStatus = (): SectionStatus => {
+    const all = store.set.tiers.map((t) => pipe.status(planSection(t.id)))
+    if (all.includes('changed')) return 'changed'
+    if (all.includes('ready')) return 'ready'
+    if (all.includes('done')) return 'done'
+    return 'draft'
+  }
+  const markerFor = (id: string) => (
+    <SectionMarker status={id === 'plans' ? plansStatus() : pipe.status(id)} />
+  )
+
+  /* Dev sees only what Market has marked ready: the steps in the list, the
+     plans in the set. Market sees everything. */
+  const shown = dev ? planned.filter((p) => stepReady(p.step.id)) : planned
+  const hiddenSteps = planned.length - shown.length
+  const shownSet = dev ? { ...store.set, tiers: readyTiers } : store.set
+  const readyCount = Object.keys(pipe.doc.ready).length
+
+  const devTier = readyTiers.some((t) => t.id === openTier) ? openTier : (readyTiers[0]?.id ?? '')
+  const sectionId = !step ? '' : step.renderer === 'plans' ? planSection(dev ? devTier : openTier) : step.id
+  const section = pipe.section(sectionId)
+
+  const switchMode = (mode: Mode) => {
+    pipe.setMode(mode)
+    // Whatever field had focus loses it: in Dev nothing is editable, and a
+    // caret left blinking in a field that no longer exists is a lie.
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+    if (mode === 'dev' && editing && step && !stepReady(step.id)) setEditing(false)
+  }
+
+  // Shift+D flips the mode, unless the keystroke is going into a field.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!e.shiftKey || e.key.toLowerCase() !== 'd' || e.metaKey || e.ctrlKey || e.altKey) return
+      const target = e.target instanceof Element ? e.target : null
+      if (target?.closest('input, textarea, select, [contenteditable="true"]')) return
+      e.preventDefault()
+      switchMode(dev ? 'market' : 'dev')
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
 
   const openStep = (id: string) => {
     store.updateSet({ stepId: id })
@@ -133,6 +200,8 @@ export function DemoApp() {
       >
         Evaluate performance
       </Button>
+
+      <ModeToggle mode={pipe.mode} onChange={switchMode} />
     </div>
   ) : (
     <div className="demo__actions">
@@ -156,6 +225,8 @@ export function DemoApp() {
       >
         Export JSON
       </Button>
+
+      <ModeToggle mode={pipe.mode} onChange={switchMode} />
     </div>
   )
 
@@ -193,7 +264,7 @@ export function DemoApp() {
       {/* The bar spans the window and never moves. Collapsing the panel
           resizes the row beneath it, so the preview opens leftward without
           dragging the status of the whole set along with it. */}
-      <div className="demo__top">
+      <div className="demo__top" data-mode={pipe.mode}>
         {brand}
         <div className="demo__statusbar">
           {/* The gate reports where the content stands, which in edit mode is
@@ -205,6 +276,12 @@ export function DemoApp() {
         </div>
       </div>
       {saveNote && <p className="demo__savenote">{saveNote}</p>}
+      {dev && readyCount > 0 && (
+        <p className="pl-devline">
+          Dev mode · showing {readyCount} section{readyCount === 1 ? '' : 's'} marked ready for dev
+          · {pipe.sections.length - readyCount} hidden until Market marks them
+        </p>
+      )}
 
       <div className="demo__body">
         <div className="demo__rail">
@@ -227,15 +304,69 @@ export function DemoApp() {
                   <Icon svg={iconArtwork['chevron-left']} size={20} />
                 </button>
                 <h2 className="demo__step-title">{step?.shortName ?? step?.name}</h2>
+                {step && step.renderer !== 'plans' && section && (
+                  <span className="pl-head-chip">
+                    <StatusChip section={section} pipe={pipe} />
+                  </span>
+                )}
               </div>
               {/* The panel follows the step. A flow screen is copy from
                   end to end, and the card set's groups would have nothing to
                   say about it. */}
               <div className="demo__fields">
-                {step && step.renderer !== 'plans' && step.renderer !== 'stub' ? (
+                {dev ? (
+                  /* Dev reads: every string of the section, its key, and a
+                     button to take it. Nothing here writes. */
+                  section && step ? (
+                    <>
+                      {step.renderer === 'plans' && (
+                        <section className="demo__group">
+                          <h3 className="demo__group-title">Plans</h3>
+                          <div className="ed-tabs">
+                            {readyTiers.map((t) => (
+                              <button
+                                key={t.id}
+                                type="button"
+                                className="ed-tab"
+                                data-on={devTier === t.id || undefined}
+                                onClick={() => setOpenTier(t.id)}
+                              >
+                                {t.planName || t.id}
+                                <SectionMarker status={pipe.status(planSection(t.id))} />
+                              </button>
+                            ))}
+                          </div>
+                          {store.set.tiers.length > readyTiers.length && (
+                            <p className="pl-hidden-note">
+                              {store.set.tiers.length - readyTiers.length} not ready yet · hidden in Dev
+                            </p>
+                          )}
+                        </section>
+                      )}
+                      <section className="demo__group">
+                        <div className="pl-head-row">
+                          <h3 className="demo__group-title">Strings</h3>
+                          {step.renderer === 'plans' && <StatusChip section={section} pipe={pipe} />}
+                        </div>
+                        <DevStrings section={section} />
+                      </section>
+                    </>
+                  ) : (
+                    <p className="pl-empty">
+                      Nothing is marked ready for dev yet.
+                      <small>Sections show up here once Market marks them ready.</small>
+                    </p>
+                  )
+                ) : step && step.renderer !== 'plans' && step.renderer !== 'stub' ? (
                   <FlowPanel store={store} step={step} />
                 ) : (
-                  <EditPanel store={store} />
+                  <EditPanel
+                    store={store}
+                    openTier={openTier}
+                    onOpenTier={setOpenTier}
+                    heading={section && <StatusChip section={section} pipe={pipe} />}
+                    tabExtra={(id) => <SectionMarker status={pipe.status(planSection(id))} />}
+                  />
                 )}
               </div>
             </>
@@ -245,11 +376,20 @@ export function DemoApp() {
                 <DefaultPanel store={store} />
               </div>
 
-              <UserFlow
-                planned={planned}
-                selectedId={step?.id ?? ''}
-                onOpen={openStep}
-              />
+              {dev && readyCount === 0 ? (
+                <p className="pl-empty">
+                  Nothing is marked ready for dev yet.
+                  <small>Sections show up here once Market marks them ready.</small>
+                </p>
+              ) : (
+                <UserFlow
+                  planned={shown}
+                  selectedId={step?.id ?? ''}
+                  onOpen={openStep}
+                  marker={markerFor}
+                  footnote={dev && hiddenSteps > 0 ? `${hiddenSteps} not ready yet · hidden in Dev` : undefined}
+                />
+              )}
 
               <button type="button" className="demo__reset" onClick={store.reset}>
                 Reset progress
@@ -262,13 +402,13 @@ export function DemoApp() {
         <div className="demo__preview">
 
           {editing && step ? (
-            <StepPreview journey={store.journey} set={store.set} context={store.context} />
+            <StepPreview journey={store.journey} set={shownSet} context={store.context} />
           ) : (
             <JourneyFrames
-              planned={planned}
+              planned={shown}
               selectedId={step?.id ?? ''}
               onOpen={openStep}
-              set={store.set}
+              set={shownSet}
               context={store.context}
               onReorder={(ids) => store.setStepOrder(store.journey.id, ids)}
               reordered={store.reordered}

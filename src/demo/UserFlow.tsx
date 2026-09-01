@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { ResolvedStep } from '../rules/journey'
@@ -17,10 +18,16 @@ export function UserFlow({
   planned,
   selectedId,
   onOpen,
+  marker,
+  footnote,
 }: {
   planned: ResolvedStep[]
   selectedId: string
   onOpen: (stepId: string) => void
+  /** Drawn after a step's name — its handoff status, when it has one. */
+  marker?: (stepId: string) => ReactNode
+  /** One muted line under the list, for what the list is not showing. */
+  footnote?: ReactNode
 }) {
   return (
     <section className="uf">
@@ -42,6 +49,7 @@ export function UserFlow({
                 </span>
 
                 <span className="uf__name">{step.shortName ?? step.name}</span>
+                {marker?.(step.id)}
 
                 {skipped && (
                   <span className="uf__tag">{skipped === 'seeded' ? 'seeded' : 'not here'}</span>
@@ -62,6 +70,7 @@ export function UserFlow({
           )
         })}
       </ol>
+      {footnote && <p className="pl-hidden-note">{footnote}</p>}
     </section>
   )
 }

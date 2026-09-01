@@ -11,6 +11,7 @@
  */
 
 import type { FlowContent } from './flow'
+import type { PipelineDoc } from './pipeline'
 
 export type AddOnPurchaseType = 'one_time_payment' | 'discount_code'
 export type Device = 'mobile' | 'desktop' | 'xl'
@@ -288,6 +289,8 @@ export interface CardSet {
    * leaving an approval standing over copy nobody approved.
    */
   review?: ReviewState
+  /** Where each section stands in the Market → Dev handoff. */
+  pipeline?: PipelineDoc
   stepId: string
   device: Device
 }
