@@ -57,9 +57,13 @@
       'add-on field': [4,4,72,14], 'paid-for field': [4,21,72,14],
       'discount percent field': [4,38,72,14], 'no offer note': [4,55,72,8]
     }},
-    groupComps: { vb: '0 0 80 54', parts: {
-      'logo picker': [4,4,72,22], 'logo button': [4,4,10,10],
-      'competitions total field': [4,30,72,14]
+    groupComps: { vb: '0 0 80 92', parts: {
+      'competitions list': [4,4,72,58],
+      'competition entry': [4,4,72,27], 'drag handle': [6,6,68,7],
+      'position number': [7,7,4,5], 'row logo': [12,6,7,7],
+      'row name': [21,8,38,4], 'remove competition': [62,8,11,4],
+      'competition name field': [6,15,68,5], 'popup description field': [6,21,68,8],
+      'competitions total field': [4,74,72,14]
     }},
     groupFeatures: { vb: '0 0 80 56', parts: {
       'feature row': [4,4,72,34], 'feature picker': [6,6,68,14],

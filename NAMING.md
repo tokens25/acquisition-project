@@ -166,12 +166,19 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 ## Edit view — Competitions group
 
-*Edit view* — Group 5. Which competition logos appear on the card.
+*Edit view* — Group 5. Which competitions the plan carries, in what order, and what the popup says about each one.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **logo picker** | `.ed-logos` | The grid of competition logos you click to switch on and off. |
-| **logo button** | `.ed-logo` | One competition. Hovering shows its name. |
+| **competitions list** | `.ed-comps` | The competitions on this plan, one under the other in the order they sit on the card. |
+| **competition entry** | `.ed-comp` | One competition: its handle at the top, then its name and the line the popup shows. |
+| **drag handle** | `.ed-comp__head` | The strip you drag to move a competition up or down. Only this strip drags, so the fields below it still let you select text. With it focused, alt and the up or down arrow moves it one place. |
+| **position number** | `.ed-comp__pos` | Where it sits in the order. 1 is the first logo on the card. |
+| **row logo** | `.ed-comp__logo` | The artwork, so you can tell the rows apart at a glance. |
+| **row name** | `.ed-comp__name` | The competition name, repeated on the handle so the row still reads when you are dragging it. |
+| **remove competition** | `.ed-comp__remove` | Takes it off this plan. The competition itself stays in the library for other plans. |
+| **competition name field** | `Competition name` | What it is called, on the card and in the popup. It belongs to the competition rather than to this plan, so changing it changes it everywhere that competition appears. |
+| **popup description field** | `Popup description` | The line under the name in the "All features & content" popup. Like the name, it belongs to the competition rather than to this plan. |
 | **competitions total field** | `Total number of competitions` | How many competitions the plan carries in total, which is usually more than the logos shown. The card works out the "+5" tile from this number minus the logos on display. |
 
 ## Edit view — Features group

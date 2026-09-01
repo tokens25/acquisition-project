@@ -105,9 +105,16 @@
       ['discount percent field', 'Discount percent', 'Only when the add-on is sold with a discount code. How much off, as a number between 1 and 99.', 'groupAddon'],
       ['no offer note', '.ed-placeholder · add-on', 'Replaces the add-on fields when the plan has no price at this cadence, since there is nothing to attach an add-on to.', 'groupAddon'],
     ]],
-    ['group-comps', 'Competitions group', 'edit', 'Group 5. Which competition logos appear on the card.', [
-      ['logo picker', '.ed-logos', 'The grid of competition logos you click to switch on and off.', 'groupComps'],
-      ['logo button', '.ed-logo', 'One competition. Hovering shows its name.', 'groupComps'],
+    ['group-comps', 'Competitions group', 'edit', 'Group 5. Which competitions the plan carries, in what order, and what the popup says about each one.', [
+      ['competitions list', '.ed-comps', 'The competitions on this plan, one under the other in the order they sit on the card.', 'groupComps'],
+      ['competition entry', '.ed-comp', 'One competition: its handle at the top, then its name and the line the popup shows.', 'groupComps'],
+      ['drag handle', '.ed-comp__head', 'The strip you drag to move a competition up or down. Only this strip drags, so the fields below it still let you select text. With it focused, alt and the up or down arrow moves it one place.', 'groupComps'],
+      ['position number', '.ed-comp__pos', 'Where it sits in the order. 1 is the first logo on the card.', 'groupComps'],
+      ['row logo', '.ed-comp__logo', 'The artwork, so you can tell the rows apart at a glance.', 'groupComps'],
+      ['row name', '.ed-comp__name', 'The competition name, repeated on the handle so the row still reads when you are dragging it.', 'groupComps'],
+      ['remove competition', '.ed-comp__remove', 'Takes it off this plan. The competition itself stays in the library for other plans.', 'groupComps'],
+      ['competition name field', 'Competition name', 'What it is called, on the card and in the popup. It belongs to the competition rather than to this plan, so changing it changes it everywhere that competition appears.', 'groupComps'],
+      ['popup description field', 'Popup description', 'The line under the name in the "All features & content" popup. Like the name, it belongs to the competition rather than to this plan.', 'groupComps'],
       ['competitions total field', 'Total number of competitions', 'How many competitions the plan carries in total, which is usually more than the logos shown. The card works out the "+5" tile from this number minus the logos on display.', 'groupComps'],
     ]],
     ['group-features', 'Features group', 'edit', 'Group 6. The bullet list of what you get.', [

@@ -34,6 +34,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const { set, context, setContext, updateTier, updateOffer, offerFor, updateSet } = store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
+  /** The competition being dragged, and the row it is currently over. */
+  const [dragComp, setDragComp] = useState<string | null>(null)
+  const [overComp, setOverComp] = useState<{ id: string; after: boolean } | null>(null)
+
   /**
    * Why the assistant cannot write, when it cannot.
    *
@@ -100,12 +104,36 @@ export function EditPanel({ store }: { store: CardSetStore }) {
     return id
   }
 
-  const toggleLogo = (id: string) =>
-    patchTier({
-      logoTiles: resolved.logoTiles.includes(id)
-        ? resolved.logoTiles.filter((l) => l !== id)
-        : [...resolved.logoTiles, id],
-    })
+  /**
+   * The name and the line under it are catalogue values, not tier values.
+   * Two plans carrying the same competition describe it the same way — writing
+   * it per tier is how a set ends up saying two things about one competition.
+   */
+  const updateLogo = (id: string, p: { name?: string; blurb?: string }) =>
+    updateSet({ logoCatalog: set.logoCatalog.map((l) => (l.id === id ? { ...l, ...p } : l)) })
+
+  /** Drops `id` beside `target`. This order is the order on the card. */
+  const moveLogo = (id: string, target: string, after: boolean) => {
+    if (id === target) return
+    const next = resolved.logoTiles.filter((l) => l !== id)
+    const at = next.indexOf(target)
+    if (at < 0) return
+    next.splice(after ? at + 1 : at, 0, id)
+    patchTier({ logoTiles: next })
+  }
+
+  /** One place up or down — the keyboard's version of the same gesture. */
+  const nudgeLogo = (id: string, by: number) => {
+    const from = resolved.logoTiles.indexOf(id)
+    const to = from + by
+    if (from < 0 || to < 0 || to >= resolved.logoTiles.length) return
+    const next = [...resolved.logoTiles]
+    next.splice(to, 0, ...next.splice(from, 1))
+    patchTier({ logoTiles: next })
+  }
+
+  /** The first competition not already on this plan, or nothing left to add. */
+  const unusedLogo = set.logoCatalog.find((l) => !resolved.logoTiles.includes(l.id))
 
   return (
 
@@ -343,31 +371,119 @@ export function EditPanel({ store }: { store: CardSetStore }) {
 
       <section className="demo__group">
         <h3 className="demo__group-title">Competitions</h3>
-        <div className="ed-logos" role="group" aria-label="Competition logos">
-          {set.logoCatalog.map((logo) => {
-            const on = resolved.logoTiles.includes(logo.id)
+        {/* One under the other, in the order they appear on the card. The old
+            grid could say which competitions were on the plan but not what
+            order they sat in, and the popup needs a name and a line for each
+            anyway — neither of which a 40px square has room for. */}
+        <ul className="ed-comps">
+          {resolved.logoTiles.map((id, i) => {
+            const entry = set.logoCatalog.find((l) => l.id === id)
             return (
-              <button
-                key={logo.id}
-                type="button"
-                className="ed-logo"
-                data-on={on || undefined}
-                aria-pressed={on}
-                title={logo.name}
-                onClick={() => toggleLogo(logo.id)}
+              <li
+                className="ed-comp"
+                key={id}
+                data-dragging={dragComp === id || undefined}
+                data-drop={
+                  overComp?.id === id ? (overComp.after ? 'after' : 'before') : undefined
+                }
+                onDragOver={(e) => {
+                  if (!dragComp || dragComp === id) return
+                  e.preventDefault()
+                  e.dataTransfer.dropEffect = 'move'
+                  // Which half the pointer is over decides which side it lands
+                  // on: above the middle inserts before, below it inserts after.
+                  const box = e.currentTarget.getBoundingClientRect()
+                  setOverComp({ id, after: e.clientY > box.top + box.height / 2 })
+                }}
+                onDragLeave={() => setOverComp((o) => (o?.id === id ? null : o))}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  const from = e.dataTransfer.getData('text/plain') || dragComp
+                  if (from) moveLogo(from, id, overComp?.after ?? false)
+                  setDragComp(null)
+                  setOverComp(null)
+                }}
               >
-                <img src={logoArtwork[logo.id]} alt={logo.altText} />
-              </button>
+                {/* Only the strip is the handle. Making the whole row draggable
+                    would fight the text fields inside it for the same gesture. */}
+                <div
+                  className="ed-comp__head"
+                  draggable
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`${entry?.name ?? id} — position ${i + 1} of ${resolved.logoTiles.length}. Alt with the arrow keys moves it.`}
+                  onDragStart={(e) => {
+                    setDragComp(id)
+                    e.dataTransfer.effectAllowed = 'move'
+                    e.dataTransfer.setData('text/plain', id)
+                  }}
+                  onDragEnd={() => {
+                    setDragComp(null)
+                    setOverComp(null)
+                  }}
+                  onKeyDown={(e) => {
+                    if (!e.altKey) return
+                    if (e.key === 'ArrowUp') {
+                      e.preventDefault()
+                      nudgeLogo(id, -1)
+                    }
+                    if (e.key === 'ArrowDown') {
+                      e.preventDefault()
+                      nudgeLogo(id, 1)
+                    }
+                  }}
+                >
+                  <span className="ed-comp__pos">{i + 1}</span>
+                  <img className="ed-comp__logo" src={logoArtwork[id]} alt="" />
+                  <span className="ed-comp__name">{entry?.name || id}</span>
+                  <button
+                    type="button"
+                    className="ed-comp__remove"
+                    onClick={() =>
+                      patchTier({ logoTiles: resolved.logoTiles.filter((l) => l !== id) })
+                    }
+                  >
+                    Remove
+                  </button>
+                </div>
+                {entry && (
+                  <>
+                    <TextField
+                      label="Competition name"
+                      value={entry.name}
+                      onChange={(v) => updateLogo(entry.id, { name: v })}
+                    />
+                    <TextField
+                      label="Popup description"
+                      rows={2}
+                      value={entry.blurb ?? ''}
+                      onChange={(v) => updateLogo(entry.id, { blurb: v })}
+                    />
+                  </>
+                )}
+              </li>
             )
           })}
-        </div>
+        </ul>
+        {resolved.logoTiles.length === 0 && (
+          <p className="ed-placeholder">No competitions on this plan yet.</p>
+        )}
+        <button
+          type="button"
+          className="demo__reset"
+          disabled={!unusedLogo}
+          onClick={() =>
+            unusedLogo && patchTier({ logoTiles: [...resolved.logoTiles, unusedLogo.id] })
+          }
+        >
+          Add competition
+        </button>
         <TextField
           label="Total number of competitions"
           type="number"
           min={0}
           value={String(resolved.logoTotal)}
           onChange={(v) => patchTier({ logoTotal: Number(v) })}
-          helpText="Drives the derived “+N” tile."
         />
       </section>
 
