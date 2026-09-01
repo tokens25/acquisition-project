@@ -1,4 +1,5 @@
 import { AcquisitionCard, Feature, FeaturesList } from '../components/acquisition'
+import type { PlanDetailsProps } from '../components/acquisition'
 import type { CadenceOffer, CardSet, Context, Device, MarketConfig, Tier } from '../rules/content'
 import { deriveCard } from '../rules/derive'
 import { iconArtwork, imageArtwork, logoArtwork } from './assets'
@@ -14,7 +15,12 @@ export interface RuledCardProps {
   device: Device
   /** Shared across the set by S-2. */
   descriptionLines: 1 | 2
-  onMore?: () => void
+  /**
+   * Asks for the "All features & content" dialog, handing over everything it
+   * shows. Built here because this is where the card is derived — a dialog that
+   * re-derived would be a second chance to disagree with the tile.
+   */
+  onOpenDetails?: (details: Omit<PlanDetailsProps, 'onClose'>) => void
 }
 
 /**
@@ -42,7 +48,7 @@ export function RuledCard({
   context,
   device,
   descriptionLines,
-  onMore,
+  onOpenDetails,
 }: RuledCardProps) {
   const d = deriveCard(set, tier, offer, market, context)
 
@@ -52,6 +58,30 @@ export function RuledCard({
     missing: l.state === 'missing' || !logoArtwork[l.id],
   }))
 
+  // Title, description and CTA are the card's own; the competitions are the
+  // full list rather than the ten the tile fits, which is what the dialog is for.
+  const openDetails = onOpenDetails
+    ? () =>
+        onOpenDetails({
+          title: d.headerText,
+          description: tier.description,
+          ctaLabel: d.ctaLabel,
+          ultimate: tier.ultimate,
+          competitions: d.allLogos.map((l) => ({
+            id: l.id,
+            name: l.name,
+            blurb: l.blurb,
+            src: logoArtwork[l.id] ?? '',
+            alt: l.altText,
+          })),
+          features: d.features.map((f) => ({
+            id: f.id,
+            icon: featureIcon(set.featureIcons, f.iconId),
+            text: f.text,
+          })),
+        })
+    : undefined
+
   return (
     <AcquisitionCard
       device={device}
@@ -60,7 +90,7 @@ export function RuledCard({
       title={d.headerText}
       description={tier.description}
       descriptionLines={descriptionLines}
-      onMore={onMore}
+      onMore={openDetails}
       pricing={{
         caption: d.priceCaption ?? '',
         price: d.primaryPrice,
@@ -99,6 +129,7 @@ export function RuledCard({
         </FeaturesList>
       }
       footerLabel={d.footerLabel}
+      onFooterClick={openDetails}
     />
   )
 }

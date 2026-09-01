@@ -220,6 +220,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 | Name | Where | What it is |
 | --- | --- | --- |
+| **preview area** | `.acq-preview` | The box the cards sit in. It is also what the "All features & content" popup covers — the popup is sized to the phone, not to your browser window. |
 | **set scroller** | `.acq-set-scroll` | The scrolling wrapper around the row of cards, for when they do not all fit. |
 | **card set** | `.acq-set` | The row of cards. It measures all of them and gives them one shared description height and one shared card height, so they line up. |
 | **card** | `.acq-card` | One plan card. Gains a gold outline when it is the Ultimate one. |
@@ -263,6 +264,34 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **add-on status** | `.acq-addon__status` | How it is offered. Three versions: included in the price, a payment, or a discount code — and the styling differs for each. |
 | **add-on divider** | `.acq-addon__divider` | The line inside the block. |
 | **add-on footer** | `.acq-addon__footer` | The bottom row of the block. |
+
+## The card — “All features & content” popup
+
+*Both views* — What opens when you click "All features & content" at the bottom of a card, or the "… more" link in its description. Everything on it comes from the card behind it — the same title, the same CTA, the same competitions and feature lines. Two things it shows that the card cannot: the description in full, and every competition, including the ones the card hides behind "+5".
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **popup** | `.acq-details` | The popup as a whole — the dimming layer and the panel together. |
+| **dimming layer** | `.acq-details__scrim` | The dark wash over the cards behind. Clicking it closes the popup, as does Escape. |
+| **popup panel** | `.acq-details__dialog` | The panel itself, 343 by 600 — the size it is drawn at in Figma, sitting inside a 375 wide phone. |
+| **close button** | `.acq-details__close` | The X in the top right corner. |
+| **popup scroller** | `.acq-details__scroll` | Everything above the button scrolls; the button itself stays put. |
+| **popup intro** | `.acq-details__intro` | The plan name and description at the top. |
+| **popup title** | `.acq-details__title` | The plan name. The same one the card shows. |
+| **popup description** | `.acq-details__description` | The description in full. The card cuts it to fit and adds "… more"; here it is whole, exactly as you typed it. |
+| **popup tabs** | `.acq-details__tabs` | The Content / Features switch. |
+| **popup tab** | `.acq-details__tab` | One of the two tabs. The selected one carries a lighter background. |
+| **popup list** | `.acq-details__list` | Whichever list the selected tab shows. |
+| **competition row** | `.acq-details__row` | One competition: its badge, its name and a line about it. |
+| **competition badge** | `.acq-details__logo` | The 64 by 64 logo. Larger than the one on the card, which is 44. |
+| **competition copy** | `.acq-details__copy` | The name and the line under it, stacked beside the badge. |
+| **competition name** | `.acq-details__row-title` | The competition name, taken from the picker on the left. |
+| **competition line** | `.acq-details__row-blurb` | One line about what that competition gives you. It belongs to the competition rather than to the plan, so it reads the same on every plan that carries it. Not editable yet. |
+| **popup features list** | `.acq-details__list--features` | The Features tab: the same lines the card lists, at a larger size. |
+| **popup feature row** | `.acq-details__feature` | One feature line. |
+| **popup feature text** | `.acq-details__feature-text` | The words of one feature line. |
+| **nothing to show** | `.acq-details__empty` | What a tab says when the plan has no competitions, or no feature lines. |
+| **popup footer** | `.acq-details__footer` | The bar pinned to the bottom holding the button. |
 
 ## The card — rare states
 

@@ -23,6 +23,13 @@ export interface CatalogEntry {
   id: string
   name: string
   altText: string
+  /**
+   * One line about what the competition gives you. Only the
+   * "All features & content" dialog has room for it; the card shows the badge
+   * alone. Authored on the catalogue rather than per tier, so the same
+   * competition reads the same way in every plan that carries it.
+   */
+  blurb?: string
   status: AssetStatus
 }
 

@@ -88,6 +88,8 @@ export interface DerivedLogo {
   id: string
   name: string
   altText: string
+  /** Authored on the catalogue entry; absent for most of them. */
+  blurb: string | null
   state: Resolution<unknown>['state']
 }
 
@@ -119,6 +121,14 @@ export interface DerivedCard {
   logos: DerivedLogo[]
   overflowCount: number
   overflowLabel: string | null
+  /**
+   * Every competition the tier carries, uncapped.
+   *
+   * `logos` is what the card has room for and `overflowCount` is what it hides;
+   * the "All features & content" dialog exists to show the rest, so it reads
+   * this instead of the two of them plus a rule for putting them back together.
+   */
+  allLogos: DerivedLogo[]
 
   features: DerivedFeature[]
 
@@ -195,14 +205,23 @@ export function deriveCard(
   const visibleCount = overflows ? logoCapacity - 1 : Math.min(total, logoCapacity)
   const overflowCount = overflows ? total - (logoCapacity - 1) : 0
 
-  const logos: DerivedLogo[] = tier.logoTiles.slice(0, visibleCount).map((id) => {
+  // Resolved once, then sliced: the tile shows what fits and the dialog shows
+  // all of them, and resolving twice would report every missing reference twice.
+  const allLogos: DerivedLogo[] = tier.logoTiles.map((id) => {
     const r = resolveLogo(set, id)
     if (r.state === 'missing') {
       missingRefs.push(`logo:${id}`)
-      return { id, name: id, altText: 'Artwork not available', state: r.state }
+      return { id, name: id, altText: 'Artwork not available', blurb: null, state: r.state }
     }
-    return { id, name: r.entry.name, altText: r.entry.altText, state: r.state }
+    return {
+      id,
+      name: r.entry.name,
+      altText: r.entry.altText,
+      blurb: r.entry.blurb?.trim() || null,
+      state: r.state,
+    }
   })
+  const logos: DerivedLogo[] = allLogos.slice(0, visibleCount)
 
   const features: DerivedFeature[] = tier.features.map((id) => {
     const r = resolveFeature(set, id)
@@ -249,6 +268,7 @@ export function deriveCard(
     logos,
     overflowCount,
     overflowLabel: overflowCount > 0 ? `+${overflowCount}` : null,
+    allLogos,
 
     features,
     addOn,

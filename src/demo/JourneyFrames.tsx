@@ -278,7 +278,7 @@ export function JourneyFrames({
                           className="jf__thumb-scale"
                           style={{ inlineSize: frame.viewport, zoom: thumbScale }}
                         >
-                          <CardSetView set={phoneSet} context={context} />
+                          <CardSetView set={phoneSet} context={context} interactive={false} />
                         </span>
                       </span>
                     ) : art ? (

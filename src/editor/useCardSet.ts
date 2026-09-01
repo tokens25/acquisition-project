@@ -35,7 +35,26 @@ function hydrate(raw: unknown): CardSet {
     ...input,
     context: { ...defaultSet.context, ...input.context },
     tiers: input.tiers.map((t) => ({ ...t, overrides: t.overrides ?? [] })),
+    logoCatalog: withShippedBlurbs(input.logoCatalog),
   }
+}
+
+/**
+ * Fills in a catalogue field the saved copy predates.
+ *
+ * Saved work never reseeds, so a browser that stored its catalogue before
+ * `blurb` existed would show the dialog's competition rows bare for ever. Only
+ * the absent key is filled — an entry that carries a blurb keeps its own, so
+ * this cannot overwrite anything a person wrote.
+ */
+function withShippedBlurbs(stored: CardSet['logoCatalog'] | undefined) {
+  if (!Array.isArray(stored)) return defaultSet.logoCatalog
+  const shipped = new Map(defaultSet.logoCatalog.map((e) => [e.id, e.blurb]))
+  return stored.map((entry) =>
+    entry.blurb === undefined && shipped.has(entry.id)
+      ? { ...entry, blurb: shipped.get(entry.id) }
+      : entry,
+  )
 }
 
 /**

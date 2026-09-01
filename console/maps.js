@@ -94,7 +94,8 @@
       'placeholder warning': [50,57,60,4]
     }},
     card: { vb: '0 0 70 136', parts: {
-      'set scroller': [0,0,70,136], 'card set': [1,1,68,134], 'card': [4,4,62,128],
+      'preview area': [0,0,70,136], 'set scroller': [0,0,70,136],
+      'card set': [1,1,68,134], 'card': [4,4,62,128],
       'badge': [4,4,28,8], 'card body': [8,14,54,110],
       'card header': [10,16,50,22], 'plan name': [10,16,34,6], 'description': [10,25,50,13],
       'more button': [10,34,14,4], 'card divider': [10,42,50,1.5],
@@ -106,6 +107,19 @@
       'add-on panel': [10,101,50,11],
       'features list': [10,115,50,10], 'card feature row': [10,115,50,4], 'feature text': [17,115,43,4],
       'card footer': [4,125,62,7]
+    }},
+    cardDetails: { vb: '0 0 70 122', parts: {
+      'popup': [0,0,70,122], 'dimming layer': [0,0,70,122], 'popup panel': [4,4,62,114],
+      'close button': [58,7,5,5], 'popup scroller': [4,4,62,98],
+      'popup intro': [7,10,56,16], 'popup title': [7,10,20,6], 'popup description': [7,18,56,8],
+      'popup tabs': [7,29,56,10], 'popup tab': [8,30,27,8],
+      'popup list': [7,43,56,58],
+      'competition row': [7,43,56,13], 'competition badge': [7,43,13,13],
+      'competition copy': [22,44,41,11], 'competition name': [22,44,24,4],
+      'competition line': [22,50,41,5],
+      'popup features list': [7,43,56,30], 'popup feature row': [7,43,56,4],
+      'popup feature text': [12,43,51,4],
+      'nothing to show': [7,43,40,5], 'popup footer': [4,104,62,14]
     }},
     cardAddon: { vb: '0 0 60 40', parts: {
       'add-on content': [4,4,52,18], 'add-on artwork': [4,4,12,12],

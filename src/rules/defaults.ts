@@ -9,13 +9,13 @@ import { DIRECT } from './content'
 const CADENCES = ['Monthly', 'Yearly Instalments', 'Yearly']
 
 const logoCatalog = [
-  { id: 'yankees', name: 'New York Yankees', altText: 'New York Yankees logo', status: 'active' as const },
-  { id: 'nets', name: 'Brooklyn Nets', altText: 'Brooklyn Nets logo', status: 'active' as const },
-  { id: 'knicks', name: 'New York Knicks', altText: 'New York Knicks logo', status: 'active' as const },
-  { id: 'rangers', name: 'New York Rangers', altText: 'New York Rangers logo', status: 'active' as const },
-  { id: 'devils', name: 'New Jersey Devils', altText: 'New Jersey Devils logo', status: 'active' as const },
-  { id: 'islanders', name: 'New York Islanders', altText: 'New York Islanders logo', status: 'active' as const },
-  { id: 'sabres', name: 'Buffalo Sabres', altText: 'Buffalo Sabres logo', status: 'active' as const },
+  { id: 'yankees', name: 'New York Yankees', altText: 'New York Yankees logo', blurb: 'Every regular-season game on the network, live and on demand.', status: 'active' as const },
+  { id: 'nets', name: 'Brooklyn Nets', altText: 'Brooklyn Nets logo', blurb: 'All 82 games plus pre- and post-game analysis from Barclays Center.', status: 'active' as const },
+  { id: 'knicks', name: 'New York Knicks', altText: 'New York Knicks logo', blurb: 'The full season live from Madison Square Garden, home and away.', status: 'active' as const },
+  { id: 'rangers', name: 'New York Rangers', altText: 'New York Rangers logo', blurb: 'Every puck drop of the season, with replays available overnight.', status: 'active' as const },
+  { id: 'devils', name: 'New Jersey Devils', altText: 'New Jersey Devils logo', blurb: 'All local broadcasts live, from opening night to game 82.', status: 'active' as const },
+  { id: 'islanders', name: 'New York Islanders', altText: 'New York Islanders logo', blurb: 'Live coverage of every game from UBS Arena and on the road.', status: 'active' as const },
+  { id: 'sabres', name: 'Buffalo Sabres', altText: 'Buffalo Sabres logo', blurb: 'The whole season live, plus classic games on demand all year.', status: 'active' as const },
 ]
 
 const featureCatalog = [
