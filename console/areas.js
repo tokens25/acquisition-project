@@ -68,7 +68,7 @@
       ['field group', '.demo__group', 'One titled block of fields. There are six of them.', 'panelEdit'],
       ['group title', '.demo__group-title', 'The heading on a group. Pricing adds the currency to its heading.', 'panelEdit'],
       ['plans group', 'group 1 · Plans', 'Which plan you are editing.', 'panelEdit'],
-      ['header group', 'group 2 · Tier Name', 'The words at the top of the card.', 'panelEdit'],
+      ['header group', 'group 2 · Tier', 'The words at the top of the card.', 'panelEdit'],
       ['pricing group', 'group 3 · Pricing', 'What it costs and how you pay.', 'panelEdit'],
       ['add-on group', 'group 4 · Add-on', 'An extra product attached to the plan.', 'panelEdit'],
       ['competitions group', 'group 5 · Competitions', 'Which competition logos show on the card.', 'panelEdit'],

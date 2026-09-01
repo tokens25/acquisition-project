@@ -107,7 +107,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **field group** | `.demo__group` | One titled block of fields. There are six of them. |
 | **group title** | `.demo__group-title` | The heading on a group. Pricing adds the currency to its heading. |
 | **plans group** | `group 1 · Plans` | Which plan you are editing. |
-| **header group** | `group 2 · Tier Name` | The words at the top of the card. |
+| **header group** | `group 2 · Tier` | The words at the top of the card. |
 | **pricing group** | `group 3 · Pricing` | What it costs and how you pay. |
 | **add-on group** | `group 4 · Add-on` | An extra product attached to the plan. |
 | **competitions group** | `group 5 · Competitions` | Which competition logos show on the card. |
