@@ -64,13 +64,13 @@
      one to resolve against, and the spacer collapses to nothing. */
   flex: 0 1 calc(40vh - 22px);
 }
-/* As wide as the fields under it, so the two read as one column rather than a
-   wide paragraph with a narrow form beneath it. The words stay ranged left —
-   centring the block is placing it, centring the text would be setting it. */
+/* Wider than the fields under it, and centred on them. The words stay ranged
+   left — centring the block is placing it, centring the text would be setting
+   it. */
 .idx__lede {
   margin: 0 0 var(--space-32);
   inline-size: 100%;
-  max-inline-size: 360px;
+  max-inline-size: 560px;
   color: var(--color-text-secondary);
   font-size: var(--font-size-body-default);
   line-height: 1.55;
