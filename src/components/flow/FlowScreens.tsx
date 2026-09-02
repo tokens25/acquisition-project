@@ -3,8 +3,10 @@ import './flow.css'
 import sparkle from '../../assets/flow/subscription-sparkle.gif'
 import { useFlowInput } from './live'
 import { cadenceSavings } from '../../rules/cadence'
+import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
 import { consentsOf } from '../../rules/consents'
 
+import { Fragment } from 'react'
 import type { ReactNode } from 'react'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
 import badgeCheck from '../../assets/flow/badge-check.svg?raw'
@@ -33,6 +35,7 @@ import type {
   AuthScreen,
   CadenceScreen,
   CheckoutScreen,
+  PayMarks,
   ReadyScreen,
   ZipScreen,
 } from '../../rules/flow'
@@ -553,6 +556,8 @@ export function CheckoutFlowScreen({
   state: 'empty' | 'filled' | 'payment process' | 'payment verified'
 }) {
   const filled = state !== 'empty'
+  const methods = methodsOf(content)
+  const chosen = chosenMethod(content)
   return (
     <Screen title={content.navTitle}>
       <div className="fl-checkout">
@@ -563,11 +568,12 @@ export function CheckoutFlowScreen({
             <p className="fl-checkout__summary-title">{content.summaryTitle}</p>
             <span className="fl-checkout__change">{content.changeCta}</span>
           </div>
-          {content.lines.map((line) => (
+          {linesOf(content).map((line) => (
             <div
               className="fl-checkout__line"
-              key={line.label}
+              key={line.id}
               data-schedule={line.schedule ? '' : undefined}
+              data-offer={line.offer ? '' : undefined}
             >
               <p className="fl-checkout__line-label">
                 {line.schedule && <Mark svg={navSchedule} size={16} />}
@@ -583,18 +589,64 @@ export function CheckoutFlowScreen({
         </div>
 
         <div className="fl-checkout__methods">
-          <div className="fl-checkout__method">
-            <p className="fl-checkout__method-name">
-              <Mark svg={radioSelected} size={24} />
-              {content.cardsLabel}
-            </p>
-            <span className="fl-checkout__marks">
-              <img src={payVisa} alt="" />
-              <img src={payMastercard} alt="" />
-              <span className="fl-checkout__overflow">{content.cardsOverflow}</span>
-            </span>
-          </div>
+          {methods.map((method, i) => {
+            const on = method.id === chosen
+            // The form belongs to the option it is filling in, so it draws
+            // under that one rather than always under the first.
+            const form = on && method.card
+            const last = i === methods.length - 1
+            return (
+              <Fragment key={method.id}>
+                {last && methods.length > 1 && <div className="fl-checkout__spacer" />}
+                <div className="fl-checkout__method" data-tall={!last && !form ? '' : undefined}>
+                  <p className="fl-checkout__method-name">
+                    <Mark svg={on ? radioSelected : radioIdle} size={24} />
+                    {method.label}
+                  </p>
+                  <span className="fl-checkout__marks">
+                    {PAY_MARKS[method.marks].map((src) => (
+                      <img src={src} alt="" key={src} />
+                    ))}
+                    {method.overflow && (
+                      <span className="fl-checkout__overflow">{method.overflow}</span>
+                    )}
+                  </span>
+                </div>
+                {form && <CardForm content={content} filled={filled} state={state} />}
+              </Fragment>
+            )
+          })}
+        </div>
 
+        <div className="fl-checkout__promo">
+          <Icon svg={iconArtwork.gift} size={24} />
+          <p className="fl-checkout__promo-label">{content.promoLabel}</p>
+          <Icon svg={iconArtwork['chevron-right']} size={24} />
+        </div>
+      </div>
+    </Screen>
+  )
+}
+
+/** The artwork each set of marks draws, in order. */
+const PAY_MARKS: Record<PayMarks, string[]> = {
+  cards: [payVisa, payMastercard],
+  gpay: [payGpayMark, payGpayType],
+  paypal: [payPaypal],
+  none: [],
+}
+
+/** The card fields, which open under whichever option is being paid by card. */
+function CardForm({
+  content,
+  filled,
+  state,
+}: {
+  content: CheckoutScreen
+  filled: boolean
+  state: 'empty' | 'filled' | 'payment process' | 'payment verified'
+}) {
+  return (
           <div className="fl-checkout__details">
             <Field
               label={content.cardNumberLabel}
@@ -623,36 +675,6 @@ export function CheckoutFlowScreen({
               {content.secureCta}
             </Cta>
           </div>
-
-          <div className="fl-checkout__method" data-tall="">
-            <p className="fl-checkout__method-name">
-              <Mark svg={radioIdle} size={24} />
-              {content.googlePayLabel}
-            </p>
-            <span className="fl-checkout__marks">
-              <img src={payGpayMark} alt="" />
-              <img src={payGpayType} alt="" />
-            </span>
-          </div>
-          <div className="fl-checkout__spacer" />
-          <div className="fl-checkout__method">
-            <p className="fl-checkout__method-name">
-              <Mark svg={radioIdle} size={24} />
-              {content.paypalLabel}
-            </p>
-            <span className="fl-checkout__marks">
-              <img src={payPaypal} alt="" />
-            </span>
-          </div>
-        </div>
-
-        <div className="fl-checkout__promo">
-          <Icon svg={iconArtwork.gift} size={24} />
-          <p className="fl-checkout__promo-label">{content.promoLabel}</p>
-          <Icon svg={iconArtwork['chevron-right']} size={24} />
-        </div>
-      </div>
-    </Screen>
   )
 }
 

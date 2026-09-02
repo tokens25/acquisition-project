@@ -3,6 +3,7 @@ import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
 import { blankConsent, consentsOf } from '../rules/consents'
+import { blankLine, blankMethod, chosenMethod, linesOf, methodsOf } from '../rules/checkout'
 import { FieldGroup } from './FieldGroup'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { FlowContent } from '../rules/flow'
@@ -552,13 +553,14 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'checkout.changeCta'}
             onChange={(v) => patch('checkout', { changeCta: v })}
           />
-          {c.lines.map((line, i) => {
+          {linesOf(c).map((line, i) => {
+            const all = linesOf(c)
             const write = (next: Partial<typeof line>) =>
               patch('checkout', {
-                lines: c.lines.map((l, j) => (j === i ? { ...l, ...next } : l)),
+                lines: all.map((l, j) => (j === i ? { ...l, ...next } : l)),
               })
             return (
-              <div className="demo__feature" key={i}>
+              <div className="demo__feature" key={line.id}>
                 <TextField
                   label={`Line ${i + 1}`}
                   value={line.label}
@@ -578,9 +580,42 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
                   onChange={(v) => write({ unit: v })}
                   helpText="Empty shows the amount on its own."
                 />
+                {/* Three ways a line can read, named by what each one draws
+                    rather than by the flag it sets. */}
+                <SelectField
+                  label="Reads as"
+                  value={line.offer ? 'offer' : line.schedule ? 'schedule' : 'plain'}
+                  options={[
+                    { value: 'plain', label: 'A plain amount' },
+                    { value: 'offer', label: 'An offer, in gold' },
+                    { value: 'schedule', label: 'What happens next, with a date mark' },
+                  ]}
+                  onChange={(v) =>
+                    write({ offer: v === 'offer', schedule: v === 'schedule' })
+                  }
+                />
+                {/* A summary with nothing in it is not a summary. */}
+                {all.length > 1 && (
+                  <button
+                    type="button"
+                    className="demo__feature-remove"
+                    onClick={() =>
+                      patch('checkout', { lines: all.filter((_, j) => j !== i) })
+                    }
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             )
           })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => patch('checkout', { lines: [...linesOf(c), blankLine(linesOf(c))] })}
+          >
+            Add a line
+          </button>
           <TextField
             label="Renewal note"
             value={c.renewalNote}
@@ -591,19 +626,87 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
         </FieldGroup>
 
         <FieldGroup title="How to pay">
-          <TextField
-            label="Cards option"
-            value={c.cardsLabel}
-            pipelineKey={'checkout.cardsLabel'}
-            onChange={(v) => patch('checkout', { cardsLabel: v })}
+          {methodsOf(c).map((method, i) => {
+            const all = methodsOf(c)
+            const write = (next: Partial<typeof method>) =>
+              patch('checkout', {
+                methods: all.map((m, j) => (j === i ? { ...m, ...next } : m)),
+              })
+            return (
+              <div className="demo__feature" key={method.id}>
+                <TextField
+                  label={`Option ${i + 1}`}
+                  value={method.label}
+                  pipelineKey={`checkout.methods[${i}].label`}
+                  onChange={(v) => write({ label: v })}
+                />
+                {/* The artwork ships with the tool, so this picks between the
+                    sets there are rather than asking for a file. */}
+                <SelectField
+                  label="Marks"
+                  value={method.marks}
+                  options={[
+                    { value: 'cards', label: 'Visa and Mastercard' },
+                    { value: 'gpay', label: 'The Google Pay mark' },
+                    { value: 'paypal', label: 'The PayPal mark' },
+                    { value: 'none', label: 'No marks' },
+                  ]}
+                  onChange={(v) => write({ marks: v as typeof method.marks })}
+                />
+                <TextField
+                  label="Chip after the marks"
+                  value={method.overflow ?? ''}
+                  pipelineKey={`checkout.methods[${i}].overflow`}
+                  onChange={(v) => write({ overflow: v })}
+                  helpText="The “+4” beside the card marks. Empty draws none."
+                />
+                <ToggleField
+                  label="Asks for a card"
+                  checked={method.card ?? false}
+                  onChange={(next: boolean) => write({ card: next })}
+                  hint={
+                    method.card
+                      ? 'The card fields open under it when it is chosen.'
+                      : 'Choosing it opens nothing here.'
+                  }
+                />
+                {all.length > 1 && (
+                  <button
+                    type="button"
+                    className="demo__feature-remove"
+                    onClick={() =>
+                      patch('checkout', {
+                        methods: all.filter((_, j) => j !== i),
+                        chosen:
+                          chosenMethod(c) === method.id
+                            ? (all.find((_, j) => j !== i)?.id ?? '')
+                            : chosenMethod(c),
+                      })
+                    }
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('checkout', { methods: [...methodsOf(c), blankMethod(methodsOf(c))] })
+            }
+          >
+            Add a way to pay
+          </button>
+
+          <SelectField
+            label="Chosen on arrival"
+            value={chosenMethod(c)}
+            options={methodsOf(c).map((m) => ({ value: m.id, label: m.label || 'Untitled' }))}
+            onChange={(v) => patch('checkout', { chosen: v })}
           />
-          <TextField
-            label="Cards chip"
-            value={c.cardsOverflow}
-            pipelineKey={'checkout.cardsOverflow'}
-            onChange={(v) => patch('checkout', { cardsOverflow: v })}
-            helpText="The “+4” beside the card marks."
-          />
+
           <TextField
             label="Card number field"
             value={c.cardNumberLabel}
@@ -627,18 +730,6 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             value={c.nameOnCardLabel}
             pipelineKey={'checkout.nameOnCardLabel'}
             onChange={(v) => patch('checkout', { nameOnCardLabel: v })}
-          />
-          <TextField
-            label="Google Pay option"
-            value={c.googlePayLabel}
-            pipelineKey={'checkout.googlePayLabel'}
-            onChange={(v) => patch('checkout', { googlePayLabel: v })}
-          />
-          <TextField
-            label="PayPal option"
-            value={c.paypalLabel}
-            pipelineKey={'checkout.paypalLabel'}
-            onChange={(v) => patch('checkout', { paypalLabel: v })}
           />
         </FieldGroup>
 

@@ -113,12 +113,39 @@ export interface ZipScreen {
 }
 
 export interface CheckoutLine {
+  /** Absent on lines written before they had one; see `linesOf`. */
+  id?: string
   label: string
   value: string
   /** Rendered after the value, behind a slash: "/month". */
   unit?: string
   /** Draws the calendar mark before the label. */
   schedule?: boolean
+  /**
+   * Draws the line as an offer rather than as a plain amount — a discount, a
+   * free month, anything the summary announces rather than just totals.
+   */
+  offer?: boolean
+}
+
+/**
+ * Which artwork sits at the right of a payment option.
+ *
+ * A named set rather than a list of marks: the artwork ships with the tool, so
+ * what an option can show is a choice between the sets that exist, not a field
+ * someone types into.
+ */
+export type PayMarks = 'cards' | 'gpay' | 'paypal' | 'none'
+
+/** One way to pay, in the list the checkout screen offers. */
+export interface PaymentMethod {
+  id: string
+  label: string
+  marks: PayMarks
+  /** The chip after the marks, as in "+4". Empty draws none. */
+  overflow?: string
+  /** Whether choosing this option opens the card form under it. */
+  card?: boolean
 }
 
 export interface CheckoutScreen {
@@ -128,9 +155,14 @@ export interface CheckoutScreen {
   changeCta: string
   lines: CheckoutLine[]
   renewalNote: string
-  cardsLabel: string
-  /** The "+4" chip after the card marks. */
-  cardsOverflow: string
+  /** The ways to pay, in the order they are offered. */
+  methods?: PaymentMethod[]
+  /** Which one is chosen when the screen opens. */
+  chosen?: string
+  /** Superseded by `methods`; still read from content saved before it. */
+  cardsLabel?: string
+  /** The "+4" chip after the card marks. Superseded by `methods`. */
+  cardsOverflow?: string
   cardNumberLabel: string
   expiryLabel: string
   cvcLabel: string
@@ -138,8 +170,10 @@ export interface CheckoutScreen {
   legal: string
   payCta: string
   secureCta: string
-  googlePayLabel: string
-  paypalLabel: string
+  /** Superseded by `methods`. */
+  googlePayLabel?: string
+  /** Superseded by `methods`. */
+  paypalLabel?: string
   promoLabel: string
 }
 
@@ -287,14 +321,18 @@ export const defaultFlow: FlowContent = {
     summaryTitle: 'MSG+',
     changeCta: 'Change',
     lines: [
-      { label: 'Pay now', value: '$279.99', unit: 'month' },
-      { label: 'Today you pay', value: '$279.99' },
-      { label: 'Next payment on 11/01/2026', value: '$279.99', schedule: true },
+      { id: 'line-1', label: 'Pay now', value: '$279.99', unit: 'month' },
+      { id: 'line-2', label: 'Today you pay', value: '$279.99' },
+      { id: 'line-3', label: 'Next payment on 11/01/2026', value: '$279.99', schedule: true },
     ],
     renewalNote:
       'Your plan will automatically renew on 01/10/2027 unless you turn off auto-renew in My Account.',
-    cardsLabel: 'Credit & Debit Cards',
-    cardsOverflow: '+4',
+    methods: [
+      { id: 'method-1', label: 'Credit & Debit Cards', marks: 'cards', overflow: '+4', card: true },
+      { id: 'method-2', label: 'Google Pay', marks: 'gpay' },
+      { id: 'method-3', label: 'Paypal', marks: 'paypal' },
+    ],
+    chosen: 'method-1',
     cardNumberLabel: 'Card number',
     expiryLabel: 'Expiry date',
     cvcLabel: 'CVC',
@@ -303,8 +341,6 @@ export const defaultFlow: FlowContent = {
       "By signing up you agree that your subscription starts immediately and that you have read and agree to our Terms of Use, Privacy Policy and Cookie Notice. Your subscription auto-renews unless you cancel before the end of the minimum term by selecting 'Cancel Subscription' in MyAccount.",
     payCta: 'Pay now',
     secureCta: 'Secure checkout',
-    googlePayLabel: 'Google Pay',
-    paypalLabel: 'Paypal',
     promoLabel: 'Redeem promo code',
   },
 

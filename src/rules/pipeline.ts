@@ -124,6 +124,9 @@ const FLOW_LABELS: Record<string, string> = {
   options: 'Option',
   rules: 'Rule',
   lines: 'Line',
+  methods: 'Payment option',
+  overflow: 'Chip after the marks',
+  consents: 'Consent',
   nameHeading: 'Name heading',
   firstNameLabel: 'First name field',
   firstNameValue: 'First name shown',
@@ -155,7 +158,7 @@ const FLOW_LABELS: Record<string, string> = {
 }
 
 /** Flow fields that are settings or ids rather than copy. */
-const NOT_COPY = new Set(['id', 'selected', 'logos', 'schedule'])
+const NOT_COPY = new Set(['id', 'selected', 'chosen', 'marks', 'logos', 'schedule', 'offer'])
 
 /** Copy a screen cannot ship without. */
 const FLOW_REQUIRED = new Set(['title', 'heading', 'cta', 'navTitle', 'payCta'])

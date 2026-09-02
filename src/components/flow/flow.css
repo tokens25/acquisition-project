@@ -689,6 +689,11 @@
   color: #afb3b8;
   font-weight: var(--font-weight-regular);
 }
+/* An offer is the summary announcing something rather than adding up, so the
+   amount is the one figure in the box drawn in the brand gold. */
+.fl-checkout__line[data-offer] .fl-checkout__line-value {
+  color: #fbed7d;
+}
 .fl-checkout__line-unit {
   color: #afb3b8;
   font-weight: var(--font-weight-regular);
