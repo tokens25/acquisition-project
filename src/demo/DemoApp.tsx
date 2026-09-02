@@ -3,7 +3,7 @@ import './demo.css'
 import './fields.css'
 import './pipeline/pipeline.css'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import daznLogo from '../assets/brand/logo-dazn.svg?raw'
 import { StepPreview } from '../card/StepPreview'
 import { Icon } from '../components/Icon'
@@ -26,6 +26,19 @@ import { ModeToggle } from './pipeline/ModeToggle'
 import { SectionMarker } from './pipeline/SectionMarker'
 import { StatusChip } from './pipeline/StatusChip'
 import { usePipeline } from './pipeline/usePipeline'
+import { CoachPill } from './coach/CoachPill'
+import { CoachGoalDialog } from './coach/CoachGoalDialog'
+import type { CoachReviewContext } from './coach/brief'
+import { CoachMark } from './coach/CoachMark'
+import { CoachResults } from './coach/CoachResults'
+import { askCoachAi, askCopySuggestions } from './coach/review/ai'
+import type { CopySuggestion } from './coach/review/types'
+import { runCoach } from './coach/review/coach'
+import { patchesFor } from './coach/review/fix'
+import { useCoachHighlight } from './coach/useCoachHighlight'
+import type { Finding } from './coach/review/types'
+import { buildSnapshot } from './coach/review/snapshot'
+import type { Review } from './coach/review/types'
 
 /**
  * The redesigned interface, at /demo.
@@ -39,6 +52,109 @@ export function DemoApp() {
   const [editing, setEditing] = useState(false)
   const [prototype, setPrototype] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
+  const [coachOpen, setCoachOpen] = useState(false)
+
+  const [review, setReview] = useState<Review | null>(null)
+  const [coachView, setCoachView] = useState(false)
+  const [selected, setSelected] = useState<Finding | null>(null)
+  /** What the AI added last time, kept so a re-run after an edit keeps it. */
+  const aiExtra = useRef<Finding[]>([])
+  /** Copy the Copy brain wrote and the Coach judged, by finding id. */
+  const [suggestions, setSuggestions] = useState<Record<string, CopySuggestion>>({})
+  const [copyState, setCopyState] = useState<'idle' | 'pending' | 'done' | 'unavailable' | 'failed'>('idle')
+
+  /** Findings with the suggestions they have earned so far. */
+  const withSuggestions = (r: Review): Review => ({
+    ...r,
+    findings: r.findings.map((f) => (f.suggestion || !suggestions[f.id] ? f : { ...f, suggestion: suggestions[f.id] })),
+  })
+
+  /** Ask the Copy brain for the copy the findings call for, then keep what the Coach approves. */
+  const writeCopyFor = (snapshot: ReturnType<typeof buildSnapshot>, context: CoachReviewContext, findings: Finding[]) => {
+    setCopyState('pending')
+    void askCopySuggestions(snapshot, context, findings.filter((f) => !suggestions[f.id])).then((res) => {
+      if (res.status !== 'done') {
+        setCopyState(res.status)
+        return
+      }
+      setSuggestions((prev) => ({ ...prev, ...res.suggestions }))
+      setCopyState('done')
+    })
+  }
+  useCoachHighlight(selected?.highlight ?? null, [store.set, editing, selected?.id])
+
+  /** Go to the finding's screen and light up the strings it names. */
+  const selectFinding = (f: Finding) => {
+    setSelected(f)
+    if (f.screen !== 'journey') openStep(f.screen)
+  }
+
+  /** Apply the fix through the same store methods the panel uses. */
+  const applyFix = (f: Finding) => {
+    const fix =
+      f.fix ??
+      (f.copyTarget && f.suggestion?.approved
+        ? { label: 'Apply the suggested copy', replace: [{ from: f.copyTarget.path, to: f.suggestion.after }] }
+        : undefined)
+    if (!fix) return
+    const patches = patchesFor(store.set, fix)
+    if (patches.changed === 0) return
+    const setPatch: Partial<typeof store.set> = {}
+    if (patches.flow) setPatch.flow = patches.flow
+    if (patches.featureCatalog) setPatch.featureCatalog = patches.featureCatalog
+    if (Object.keys(setPatch).length) store.updateSet(setPatch)
+    for (const t of patches.tiers) store.updateTier(t.id, t.patch)
+    setSelected(null)
+  }
+
+  // The review follows the content: edit a string, fix a finding, and the
+  // rules run again so what was fixed leaves the list.
+  useEffect(() => {
+    if (!review) return
+    const snapshot = buildSnapshot(store.set, store.journey, store.context, planJourney(store.journey, store.context))
+    setReview((r) => (r ? { ...runCoach(snapshot, r.context, aiExtra.current), at: r.at, ai: r.ai, aiNote: r.aiNote, start: r.start } : r))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [store.set, store.journey, store.context])
+
+  /**
+   * The Coach's review of the whole flow.
+   *
+   * The rules run first and the result is on screen at once — every
+   * contradiction the content proves, scored against the baseline and the
+   * goal. The AI reading follows when a key is set, and is merged through the
+   * same Coach so it meets the same evidence guard.
+   */
+  const reviewWithCoach = (context: CoachReviewContext) => {
+    const snapshot = buildSnapshot(store.set, store.journey, store.context, planned)
+    aiExtra.current = []
+    setSelected(null)
+    setSuggestions({})
+    const first = runCoach(snapshot, context)
+    writeCopyFor(snapshot, context, first.findings)
+    first.start = {
+      health: first.health.overall,
+      alignment: Object.fromEntries(first.alignment.map((a) => [a.goal, a.score])),
+      byCriterion: Object.fromEntries(first.health.byCriterion.map((c) => [c.id, c.score])),
+    }
+    setReview(first)
+    setCoachOpen(false)
+    setEditing(false)
+    // The results live in the left rail, so the rail has to be there: a
+    // review started with the panel closed opens it again. It used to close
+    // the preview-only view as well; Preview opens the prototype now, and
+    // nothing is hiding the rail but the collapse.
+    setCollapsed(false)
+    setCoachView(true)
+    void askCoachAi(snapshot, context, first.findings).then((ai) => {
+      setReview((current) => {
+        if (!current || current.at !== first.at) return current
+        if (ai.status !== 'done') return { ...current, ai: ai.status, aiNote: ai.note }
+        aiExtra.current = ai.findings
+        const merged = runCoach(snapshot, context, ai.findings)
+        return { ...merged, at: current.at, ai: 'done', aiNote: `${ai.findings.length} from the AI, via ${ai.model}.`, start: current.start }
+      })
+    })
+  }
 
   const planned = planJourney(store.journey, store.context)
   const steps = planned.filter((p) => !p.skipped).map((p) => p.step)
@@ -137,7 +253,53 @@ export function DemoApp() {
       </Button>
 
       <ModeToggle mode={pipe.mode} onChange={switchMode} />
+
+      <CoachPill
+        title={review && !coachView ? 'Show the last review' : 'Ask the Coach to review every screen of this journey'}
+        onClick={() => (review && !coachView ? setCoachView(true) : setCoachOpen(true))}
+      >
+        Coach review
+      </CoachPill>
     </div>
+  )
+
+  /**
+   * Real answers for the goals that ask for one, read off this set: its
+   * campaigns and add-ons, the landing page's own promise, the audience cues
+   * the screens already carry. Better than an invented example, and it keeps
+   * the Coach tracing words that exist.
+   */
+  const coachExamples = useMemo(() => {
+    const flow = store.set.flow
+    const first = (text?: string) => (text ?? '').trim().split(/(?<=[.!?])\s/)[0]?.trim() ?? ''
+    const campaigns = store.set.campaigns.map((c) => c.label)
+    const addOns = store.set.addOnCatalog.map((a) => a.title)
+    const discounted = store.set.offers
+      .filter((o) => o.discount && o.introPrice !== null)
+      .map((o) => `${o.introMonths} months at ${o.introPrice}`)
+    return {
+      'acquire-content': [...campaigns, ...addOns],
+      'acquire-audience': [
+        `Logged-out visitors in ${store.context.market}`,
+        first(flow?.auth.noticeTitle).replace(/\?$/, ''),
+        `People arriving from “${store.journey.entry.cta}”`,
+      ].filter(Boolean),
+      'drive-offer': [...addOns, ...discounted],
+      'drive-benefit': [],
+      'maintain-proposition': [flow?.landing.title ?? '', first(flow?.landing.body)].filter(Boolean),
+    }
+  }, [store.set, store.context.market, store.journey])
+
+  const coachDialog = (
+    <CoachGoalDialog
+      open={coachOpen}
+      tiers={[...store.set.tiers].sort((a, b) => a.displayOrder - b.displayOrder).map((t) => ({ id: t.id, name: t.planName }))}
+      teams={store.set.logoCatalog.map((l) => l.name)}
+      features={store.set.featureCatalog.map((f) => f.text)}
+      examples={coachExamples}
+      onClose={() => setCoachOpen(false)}
+      onReview={reviewWithCoach}
+    />
   )
 
   // The brand strip carries the collapse control, so it has to survive the
@@ -181,6 +343,7 @@ export function DemoApp() {
           {actions}
         </div>
       </div>
+      {coachDialog}
       {dev && readyCount > 0 && (
         <p className="pl-devline">
           Dev mode · showing {readyCount} page{readyCount === 1 ? '' : 's'} marked ready for dev
@@ -260,7 +423,12 @@ export function DemoApp() {
                   planned={shown}
                   selectedId={step?.id ?? ''}
                   onOpen={openStep}
-                  trailing={chipFor}
+                  trailing={(id) => (
+                    <>
+                      {review && <CoachMark review={review} screen={id} />}
+                      {chipFor(id)}
+                    </>
+                  )}
                   footnote={dev && hiddenSteps > 0 ? `${hiddenSteps} not ready yet · hidden in Dev` : undefined}
                 />
               )}
@@ -283,7 +451,12 @@ export function DemoApp() {
               selectedId={step?.id ?? ''}
               onOpen={openStep}
               set={store.set}
-              marker={(id) => <SectionMarker status={pipe.status(id)} />}
+              marker={(id) => (
+                <>
+                  <SectionMarker status={pipe.status(id)} />
+                  {review && <CoachMark review={review} screen={id} />}
+                </>
+              )}
               context={store.context}
               onReorder={(ids) => store.setStepOrder(store.journey.id, ids)}
               reordered={store.reordered}
@@ -291,6 +464,24 @@ export function DemoApp() {
             />
           )}
         </div>
+
+        {/* The Coach's findings, beside the screens they are about. A rail of
+            its own on the right, so the panel on the left keeps doing its job
+            and a finding and the screen it names can be seen together. */}
+        {coachView && review && (
+          <aside className="demo__coach" aria-label="Coach review">
+            <CoachResults
+              review={withSuggestions(review)}
+              copyState={copyState}
+              onOpen={openStep}
+              onSelect={selectFinding}
+              onFix={applyFix}
+              selectedId={selected?.id ?? null}
+              onAgain={() => setCoachOpen(true)}
+              onClose={() => setCoachView(false)}
+            />
+          </aside>
+        )}
       </div>
 
       {/* The whole journey, not the part Dev mode is showing: the prototype is

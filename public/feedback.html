@@ -344,7 +344,8 @@
       'product title': [15,5,24,6], 'beta chip': [41,5,10,6], 'collapse control': [52,4,6,8],
       'status bar': [60,0,100,16], 'publish gate': [63,5,32,6], 'action buttons': [100,4,56,8],
       'dev mode line': [0,18,160,5], 'body': [0,25,160,79], 'rail': [0,25,60,79],
-      'panel': [2,27,56,75], 'preview pane': [60,25,100,79]
+      'panel': [2,27,56,75], 'preview pane': [60,25,100,79],
+      'coach rail': [118,27,40,75]
     }},
     prototype: { vb: '0 0 120 192', furn: [[0,0,120,192]], parts: {
       'prototype': [0,0,120,192], 'prototype stage': [22,2,76,186],
@@ -983,6 +984,7 @@
       ['rail', '.demo__rail', 'The track the panel slides inside. This is the thing that actually shrinks when you collapse — the panel keeps its width and gets clipped.', 'shell'],
       ['panel', '.demo__panel', 'The 360px left column. Scrolls on its own, and its contents change completely between the two views.', 'shell'],
       ['preview pane', '.demo__preview', 'The right column, showing what you are building. Scrolls on its own, and widens to fill the space when the panel is collapsed.', 'shell'],
+      ['coach rail', '.demo__coach', 'Where the Coach puts what it found, once a review has run. A column of its own down the right, so the panel on the left keeps doing its job and a finding can be read beside the screen it is about. Absent until you ask for a review.', 'shell'],
     ]],
     ['ds', 'Design system', 'archive', 'Shared components. Change one and it changes everywhere it is used.', [
       ['text field', '.dz-field', 'The standard text box. 56 tall, with the label floating up when you type in it.', 'ds'],

@@ -5,3 +5,6 @@ storybook-static
 .DS_Store
 .vite
 dist-single
+
+# A local, read-only snapshot of the hero project's Coach. Not part of this app.
+/coach/

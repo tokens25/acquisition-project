@@ -389,6 +389,7 @@
       ['rail', '.demo__rail', 'The track the panel slides inside. This is the thing that actually shrinks when you collapse — the panel keeps its width and gets clipped.', 'shell'],
       ['panel', '.demo__panel', 'The 360px left column. Scrolls on its own, and its contents change completely between the two views.', 'shell'],
       ['preview pane', '.demo__preview', 'The right column, showing what you are building. Scrolls on its own, and widens to fill the space when the panel is collapsed.', 'shell'],
+      ['coach rail', '.demo__coach', 'Where the Coach puts what it found, once a review has run. A column of its own down the right, so the panel on the left keeps doing its job and a finding can be read beside the screen it is about. Absent until you ask for a review.', 'shell'],
     ]],
     ['ds', 'Design system', 'archive', 'Shared components. Change one and it changes everywhere it is used.', [
       ['text field', '.dz-field', 'The standard text box. 56 tall, with the label floating up when you type in it.', 'ds'],

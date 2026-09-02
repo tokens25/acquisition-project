@@ -14,6 +14,8 @@ export default tseslint.config([
     'storybook-static',
     'src/**/*.figma.ts',
     'console/**',
+    // coach/ is a frozen snapshot of the hero project's Coach, not part of this app
+    'coach/**',
   ]),
   {
     files: ['**/*.{ts,tsx}'],
