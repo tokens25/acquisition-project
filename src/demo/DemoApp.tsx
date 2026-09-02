@@ -23,6 +23,7 @@ import { changeMap } from '../rules/pipeline'
 import { FieldMarks } from '../components/fieldMarks'
 import { DevStrings } from './pipeline/DevStrings'
 import { ModeToggle } from './pipeline/ModeToggle'
+import { CodeIcon } from './pipeline/icons'
 import { SectionMarker } from './pipeline/SectionMarker'
 import { StatusChip } from './pipeline/StatusChip'
 import { usePipeline } from './pipeline/usePipeline'
@@ -346,8 +347,11 @@ export function DemoApp() {
       {coachDialog}
       {dev && readyCount > 0 && (
         <p className="pl-devline">
-          Dev mode · showing {readyCount} page{readyCount === 1 ? '' : 's'} marked ready for dev
-          · {pipe.sections.length - readyCount} hidden until Market marks them
+          <CodeIcon size={12} />
+          <span>
+            Dev mode · showing {readyCount} page{readyCount === 1 ? '' : 's'} marked ready for
+            dev · {pipe.sections.length - readyCount} hidden until Market marks them
+          </span>
         </p>
       )}
 
