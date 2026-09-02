@@ -240,7 +240,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | --- | --- | --- |
 | **screen frame** | `.fl` | One journey screen, 375 wide — the width the design draws them at. |
 | **screen header** | `.fl__header` | The bar under the status bar: back arrow, title, DAZN mark, and the gold rule under it that shows how far through the journey you are. |
-| **screen back arrow** | `.fl__back` | The chevron at the left of the header. |
+| **screen back arrow** | `.fl__back` | The chevron at the left of the header. In the prototype it goes back a screen, the same as the chevron in the address bar below it; in a tile it is part of the picture. It stays a span rather than a button either way, because a tile is itself a button and one cannot sit inside another. |
 | **screen title** | `.fl__title` | The centred title. Editable per screen — it is the only thing in the header that changes. |
 | **screen brand** | `.fl__brand` | The DAZN mark at the right of the header. |
 | **screen body** | `.fl__body` | Everything under the header, with 16 down each side and 24 top and bottom. |

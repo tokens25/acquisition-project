@@ -181,6 +181,17 @@ export function Prototype({
 
   const tap = (e: ReactMouseEvent) => {
     const el = e.target as HTMLElement
+
+    // The header's back chevron. The screens draw it but cannot wire it: a
+    // tile is itself a button, so the chevron inside one has to stay a span
+    // rather than become a nested button. In a tile it is part of the
+    // picture; here it is the control it looks like, and it goes back the
+    // same one screen the address bar's chevron does.
+    if (el.closest('.fl__back')) {
+      e.preventDefault()
+      go(-1)
+      return
+    }
     // The card is handling this one. Let it, and stay where we are.
     if (el.closest(SCREEN_OWN)) return
     if (el.closest(HOTSPOT)) {
