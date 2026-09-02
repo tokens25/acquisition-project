@@ -1,4 +1,5 @@
 import './progress-screen.css'
+import './preparing.css'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ProgressScreen, type Narration } from './ProgressScreen'

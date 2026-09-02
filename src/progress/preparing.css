@@ -1,0 +1,17 @@
+/* What this product changes about the waiting screen.
+
+   Kept apart from progress-screen.css so the four files that arrived as a kit
+   stay byte-identical and a newer version of it drops in unchanged. Loaded
+   after it, so these win. */
+
+/* The running seconds, read from across a desk rather than found in a corner.
+
+   The kit sets them at 11.5px in its faintest ink, which is right when the
+   screen is a background event and wrong when someone is being shown it. The
+   figures are already tabular, so the count does not jitter as it climbs. */
+.ps-clock {
+  bottom: 18px;
+  right: 24px;
+  font-size: 15px;
+  color: var(--ps-ink-muted);
+}
