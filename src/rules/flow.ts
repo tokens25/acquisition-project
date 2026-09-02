@@ -160,8 +160,11 @@ export interface FlowContent {
 /** Copied from the node, including the placeholder Figma itself carries. */
 export const defaultFlow: FlowContent = {
   landing: {
-    navExplore: 'Explore',
-    navSignUp: 'Sign up',
+    // The first button and the second. The names are what they were when the
+    // first drawing had them the other way round; the panel calls them by
+    // position, which is what they are.
+    navExplore: 'Log in',
+    navSignUp: 'Explore',
     title: 'MSG+ on DAZN',
     body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
     cta: 'Sign up',

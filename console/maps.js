@@ -128,7 +128,8 @@
       'screen button': [8,62,64,10], 'screen divider': [8,76,64,5]
     }},
     flowLanding: { vb: '0 0 80 120', parts: {
-      'landing screen': [4,2,72,116], 'landing picture': [4,8,72,60],
+      'landing screen': [4,2,72,116], 'landing frame': [4,2,72,110],
+      'landing picture': [4,8,72,60],
       'landing wash': [4,2,72,116],
       'landing bar': [4,2,72,10], 'landing bar buttons': [40,3,34,8],
       'landing bar button': [40,3,16,8],

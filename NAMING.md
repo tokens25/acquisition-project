@@ -261,9 +261,10 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **landing screen** | `.fl-landing` | The whole screen, layered: the picture, the wash over it, the bar and the copy. |
-| **landing picture** | `.fl-landing__hero` | The hero. Wider than the frame and pushed left, which is the crop the design uses — the players sit where they do rather than centred. |
-| **landing wash** | `.fl-landing__wash` | Three gradients over the picture: the top darkened so the bar reads, the right edge weighted, and the foot taken to solid so the copy reads. |
+| **landing screen** | `.fl-landing` | The whole screen. The picture does not fill it: a 667 frame sits under the status bar and five of page show beneath, which is the 672 between the bars. |
+| **landing frame** | `.fl-landing__frame` | The 9:16 the picture lives in — 667 tall, holding the bar at its top and the copy at its foot and spacing them apart itself. Its 24 of bottom padding is what sets the copy off the edge, and its 10 of side padding is why the bar, drawn at the full width, reaches past it. |
+| **landing picture** | `.fl-landing__hero` | The hero, cropped by the frame: 133.32 by 148.1 of it, pulled left 13.99 and up 21.16. The design’s own four figures rather than pixels, so the crop holds when the frame is drawn at a tile’s scale. |
+| **landing wash** | `.fl-landing__wash` | One gradient over the picture: solid at the top so the bar reads, clear a fifth down, and back to solid at 74 so the copy has ground under it. |
 | **landing bar** | `.fl-landing__nav` | The bar at the top: the brand at one end, two buttons at the other. |
 | **landing bar buttons** | `.fl-landing__nav-ctas` | The two buttons as a pair. |
 | **landing bar button** | `.fl-landing__nav-cta` | One of them. The first is white, the second grey. |

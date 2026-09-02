@@ -855,47 +855,69 @@
 
 /* One layered box rather than a header over a body: the copy sits on the
    picture, and the bar at the top has no title to centre. */
+/* ── Landing — node 671:25099 ──────────────────────────────── */
+
 .fl-landing {
   position: relative;
-  justify-content: space-between;
   block-size: 100%;
-  min-block-size: 620px;
   overflow: hidden;
 }
-/* The crop the design uses — wider than the frame and pushed left, so the
-   group of players sits where it does rather than centred. */
+/* The 9:16 frame: 667 tall, the picture's own box rather than the screen's.
+   The five it leaves under itself before the browser bar is the page showing
+   through, which is how the design ends the screen — 667 and 5 are the 672
+   between the status bar and the bar at the foot.
+
+   It spaces its two children apart, which is what sets the copy 24 above its
+   own bottom edge rather than a margin doing it. The 10 of side padding is
+   why the top bar, drawn at the full 375, sits proud of it. */
+.fl-landing__frame {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+  block-size: 667px;
+  padding: 0 10px var(--space-24);
+  overflow: hidden;
+  background: #080e12;
+}
+/* The crop, in the frame's own percentages: 133.32 by 148.1 of it, pulled
+   left 13.99 and up 21.16. The design's four figures rather than pixels, so
+   the crop survives the frame being drawn at a tile's scale. */
 .fl-landing__hero {
   position: absolute;
-  inset-block-start: 5.39%;
-  inset-inline-start: -84.32%;
-  inline-size: 268.65%;
-  block-size: 69.83%;
+  inset-block-start: -21.16%;
+  inset-inline-start: -13.99%;
+  inline-size: 133.32%;
+  block-size: 148.1%;
   max-inline-size: none;
   object-fit: cover;
 }
-/* Three passes: the top darkened to hold the bar, the right edge weighted,
-   and the foot taken to solid so the copy reads. */
+/* One pass rather than three: solid at the top, clear a fifth down, and back
+   to solid at 74 so the copy has ground under it. */
 .fl-landing__wash {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, rgb(4, 6, 17) 10.056%, rgba(4, 6, 17, 0) 23.897%),
-    linear-gradient(
-      -90deg,
-      rgba(14, 15, 15, 0) 0%,
-      rgba(14, 15, 15, 0) 32.52%,
-      rgba(14, 15, 15, 0.5) 91.456%,
-      rgba(14, 15, 15, 0.9) 108.4%
-    ),
-    linear-gradient(180deg, rgba(8, 14, 18, 0) 41.927%, rgb(8, 14, 18) 59.23%);
+  background: linear-gradient(
+    180deg,
+    #060606 0%,
+    #060606 0%,
+    rgb(6 6 6 / 0%) 20%,
+    #060606 74.038%
+  );
 }
 
+/* Drawn at the full 375 inside a frame padded by 10, so it reaches past the
+   picture's side padding to the screen's own edges. */
 .fl-landing__nav {
   position: relative;
   display: flex;
   flex: none;
   align-items: center;
   justify-content: space-between;
+  inline-size: 375px;
   block-size: 50px;
   padding-inline: var(--space-16);
 }
@@ -917,20 +939,21 @@
   white-space: nowrap;
 }
 .fl-landing__nav-cta[data-appearance='secondary'] {
-  background: #21262c;
+  background: rgb(195 209 219 / 10%);
   color: #f8f8f8;
 }
 
 /* 343 in a 375 frame, with the browser bar under it. */
+/* 343 in the 375, and no bottom margin of its own — the frame's 24 of padding
+   is what holds it off the foot. */
 .fl-landing__block {
   position: relative;
   display: flex;
+  flex: none;
   flex-direction: column;
   gap: var(--space-16);
   align-items: center;
   inline-size: 343px;
-  margin-inline: auto;
-  padding-block-end: var(--space-12);
 }
 .fl-landing__copy {
   display: flex;

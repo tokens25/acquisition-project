@@ -460,7 +460,8 @@
       'screen button': [8,62,64,10], 'screen divider': [8,76,64,5]
     }},
     flowLanding: { vb: '0 0 80 120', parts: {
-      'landing screen': [4,2,72,116], 'landing picture': [4,8,72,60],
+      'landing screen': [4,2,72,116], 'landing frame': [4,2,72,110],
+      'landing picture': [4,8,72,60],
       'landing wash': [4,2,72,116],
       'landing bar': [4,2,72,10], 'landing bar buttons': [40,3,34,8],
       'landing bar button': [40,3,16,8],
@@ -773,9 +774,10 @@
       ['screen divider', '.fl__divider', 'A rule with a word in the middle of it, usually \u201cor\u201d.', 'flowShared'],
     ]],
     ['flow-landing', 'Landing screen', 'edit', 'The entry point, and the only screen with no back arrow. Its bar carries the brand and two buttons instead of a title, and the copy sits on the picture rather than under it. Which button is pressed here decides the journey.', [
-      ['landing screen', '.fl-landing', 'The whole screen, layered: the picture, the wash over it, the bar and the copy.', 'flowLanding'],
-      ['landing picture', '.fl-landing__hero', 'The hero. Wider than the frame and pushed left, which is the crop the design uses — the players sit where they do rather than centred.', 'flowLanding'],
-      ['landing wash', '.fl-landing__wash', 'Three gradients over the picture: the top darkened so the bar reads, the right edge weighted, and the foot taken to solid so the copy reads.', 'flowLanding'],
+      ['landing screen', '.fl-landing', 'The whole screen. The picture does not fill it: a 667 frame sits under the status bar and five of page show beneath, which is the 672 between the bars.', 'flowLanding'],
+      ['landing frame', '.fl-landing__frame', 'The 9:16 the picture lives in — 667 tall, holding the bar at its top and the copy at its foot and spacing them apart itself. Its 24 of bottom padding is what sets the copy off the edge, and its 10 of side padding is why the bar, drawn at the full width, reaches past it.', 'flowLanding'],
+      ['landing picture', '.fl-landing__hero', 'The hero, cropped by the frame: 133.32 by 148.1 of it, pulled left 13.99 and up 21.16. The design\u2019s own four figures rather than pixels, so the crop holds when the frame is drawn at a tile\u2019s scale.', 'flowLanding'],
+      ['landing wash', '.fl-landing__wash', 'One gradient over the picture: solid at the top so the bar reads, clear a fifth down, and back to solid at 74 so the copy has ground under it.', 'flowLanding'],
       ['landing bar', '.fl-landing__nav', 'The bar at the top: the brand at one end, two buttons at the other.', 'flowLanding'],
       ['landing bar buttons', '.fl-landing__nav-ctas', 'The two buttons as a pair.', 'flowLanding'],
       ['landing bar button', '.fl-landing__nav-cta', 'One of them. The first is white, the second grey.', 'flowLanding'],

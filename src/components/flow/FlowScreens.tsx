@@ -254,25 +254,30 @@ function Cta({
 export function LandingFlowScreen({ content }: { content: LandingScreen }) {
   return (
     <div className="fl fl-landing">
-      <img className="fl-landing__hero" src={landingHero} alt="" />
-      <span className="fl-landing__wash" aria-hidden="true" />
-      <header className="fl-landing__nav">
-        <Mark svg={daznVector} size={32} />
-        <span className="fl-landing__nav-ctas">
-          <span className="fl-landing__nav-cta">{content.navExplore}</span>
-          <span className="fl-landing__nav-cta" data-appearance="secondary">
-            {content.navSignUp}
+      {/* The 9:16 frame — 667 of the 812, between the status bar and the
+          browser bar. The top bar and the copy are laid inside it and spaced
+          apart by it, rather than floating over a full-height backdrop. */}
+      <div className="fl-landing__frame">
+        <img className="fl-landing__hero" src={landingHero} alt="" />
+        <span className="fl-landing__wash" aria-hidden="true" />
+        <header className="fl-landing__nav">
+          <Mark svg={daznVector} size={32} />
+          <span className="fl-landing__nav-ctas">
+            <span className="fl-landing__nav-cta">{content.navExplore}</span>
+            <span className="fl-landing__nav-cta" data-appearance="secondary">
+              {content.navSignUp}
+            </span>
           </span>
-        </span>
-      </header>
-      <div className="fl-landing__block">
-        <div className="fl-landing__copy">
-          <h3 className="fl-landing__title">{content.title}</h3>
-          <p className="fl-landing__body">{content.body}</p>
-        </div>
-        <div className="fl-landing__ctas">
-          <Cta appearance="subscribe">{content.cta}</Cta>
-          <Cta>{content.altCta}</Cta>
+        </header>
+        <div className="fl-landing__block">
+          <div className="fl-landing__copy">
+            <h3 className="fl-landing__title">{content.title}</h3>
+            <p className="fl-landing__body">{content.body}</p>
+          </div>
+          <div className="fl-landing__ctas">
+            <Cta appearance="subscribe">{content.cta}</Cta>
+            <Cta>{content.altCta}</Cta>
+          </div>
         </div>
       </div>
     </div>
