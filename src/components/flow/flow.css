@@ -256,11 +256,23 @@
   border-radius: var(--radius-18);
   text-align: start;
 }
-/* Chosen: a white edge. The radio beside it is already white, and the name
-   stays the white it is unchosen — the edge and the filled dot are what say
-   which one is picked, not a change of colour in the words. */
+/* Chosen: a white edge, and the name stays the white it is unchosen — the
+   edge and the filled dot are what say which one is picked.
+
+   Except on the option being pushed, which is gold throughout: gold edge,
+   gold name. The ribbon is what marks that option, so the ribbon is what
+   turns this on rather than a second thing to keep in step with it. */
 .fl-cadence__option[data-on] {
   border-color: #f8f8f8;
+}
+.fl-cadence__option[data-on][data-promoted] {
+  border-color: #fbed7d;
+}
+.fl-cadence__option[data-on][data-promoted] .fl-cadence__name {
+  background: linear-gradient(270deg, #fbed7d 0%, #f2af3d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .fl-cadence__radio {
   flex: none;

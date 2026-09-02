@@ -304,6 +304,10 @@ export function CadenceFlowScreen({
                 className="fl-cadence__option"
                 key={option.id}
                 data-on={on || undefined}
+                // The ribbon is what marks an option as the one being pushed,
+                // and it is the same option that takes the gold when chosen.
+                // One signal rather than two that could disagree.
+                data-promoted={option.badge ? '' : undefined}
                 // The prototype reads clicks off the screen rather than the
                 // screen calling back, the way it does with the tabs and the
                 // back chevron. This is what tells it which row was hit.

@@ -201,10 +201,10 @@
     ['flow-cadence', 'Cadence screen', 'edit', 'Group 1 of the flow. Which way of paying you choose.', [
       ['ways to pay', '.fl-cadence', 'The two options and the button under them.', 'flowCadence'],
       ['pay options', '.fl-cadence__options', 'The options as a stack.', 'flowCadence'],
-      ['pay option', '.fl-cadence__option', 'One way of paying. The chosen one carries a white edge, and in the prototype clicking one picks it — the choice is the prototype\u2019s rather than the screen\u2019s, because the same screen is a picture in the frames row.', 'flowCadence'],
+      ['pay option', '.fl-cadence__option', 'One way of paying. Chosen, it carries a white edge — or a gold one on the option being pushed, which is the option carrying the ribbon. In the prototype clicking one picks it; the choice is the prototype\u2019s rather than the screen\u2019s, because the same screen is a picture in the frames row.', 'flowCadence'],
       ['option radio', '.fl-cadence__radio', 'The circle showing which one is chosen.', 'flowCadence'],
       ['option text', '.fl-cadence__text', 'The name, the note and the price together.', 'flowCadence'],
-      ['option name', '.fl-cadence__name', 'What the option is called. The same white whether or not it is chosen: the edge and the filled circle are what say which one is picked.', 'flowCadence'],
+      ['option name', '.fl-cadence__name', 'What the option is called. White whether or not it is chosen — the edge and the filled circle are what say which one is picked — except on the option carrying the ribbon, which goes gold when chosen along with its edge.', 'flowCadence'],
       ['option note', '.fl-cadence__note', 'The grey line under the name.', 'flowCadence'],
       ['option price', '.fl-cadence__price', 'The amount and how often you pay it.', 'flowCadence'],
       ['option amount', '.fl-cadence__amount', 'The number.', 'flowCadence'],
