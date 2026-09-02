@@ -57,6 +57,12 @@ export interface AddOnEntry {
   imageId: string
 }
 
+/** One tab over the plan picker. */
+export interface PlanTab {
+  id: string
+  name: string
+}
+
 /**
  * A plan, scoped to nothing — market differences are patches, not copies.
  *
@@ -75,6 +81,14 @@ export interface Tier {
   /** Total competitions the plan carries; drives the derived "+N" tile. */
   logoTotal: number
   ultimate: boolean
+  /**
+   * Which tabs of the plan picker this tier appears under.
+   *
+   * Absent — and empty — means every tab, which is what the design draws and
+   * what every tier written before there were tabs meant. A tab is only worth
+   * adding if the cards can differ between them, and this is how they differ.
+   */
+  tabs?: string[]
   /**
    * The words on the badge. Authored, not derived.
    *
@@ -175,6 +189,7 @@ export interface TierPatch {
   logoTiles?: string[]
   logoTotal?: number
   ultimate?: boolean
+  tabs?: string[]
   badge?: string
   descriptionSource?: Tier['descriptionSource']
   status?: Tier['status']
@@ -252,6 +267,14 @@ export interface CardSet {
 
   tiers: Tier[]
   offers: CadenceOffer[]
+  /**
+   * The tabs over the plan picker.
+   *
+   * Here rather than in `flow` because a tab is a way of dividing the cards,
+   * and the cards live here. Absent means the two the design draws, so content
+   * written before tabs were authored still draws Standard and Ultimate.
+   */
+  planTabs?: PlanTab[]
 
   context: Context
   journeyId: string

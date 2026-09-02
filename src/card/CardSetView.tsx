@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { tierOnTab } from '../rules/tabs'
 import { PlanDetails, type PlanDetailsProps } from '../components/acquisition'
 import { isWholeInView } from '../components/acquisition/viewport'
 import type { CardSet, Context } from '../rules/content'
@@ -20,9 +21,15 @@ export function CardSetView({
   context = set.context,
   interactive = true,
   detailsScope = 'card',
+  tab,
 }: {
   set: CardSet
   context?: Context
+  /**
+   * Which tab of the plan picker is showing. Absent draws every plan, which is
+   * what the edit view and the card row want — there is no tab control there.
+   */
+  tab?: string | null
   /**
    * Whether the cards respond to clicks. The journey thumbnails render the set
    * as a picture — opening a dialog inside a 280px tile that is itself a button
@@ -78,7 +85,12 @@ export function CardSetView({
     detailsRef.current = details
   }, [details])
 
-  const cards = useMemo(() => resolveSet(set, context), [set, context])
+  // A tab shows the plans that say they belong to it; the rest of the tool
+  // shows every plan, because there is no tab control to be on.
+  const cards = useMemo(
+    () => resolveSet(set, context).filter((c) => !tab || tierOnTab(c.tier, tab)),
+    [set, context, tab],
+  )
   const market = marketFor(set, context.market)
 
   useLayoutEffect(() => {

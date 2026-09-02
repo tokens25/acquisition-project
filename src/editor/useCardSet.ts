@@ -155,6 +155,10 @@ export interface CardSetStore {
   updateSet: (patch: Partial<CardSet>) => void
   /** Writes to the base tier, or to this context's override. */
   updateTier: (id: string, patch: TierPatch) => void
+  /** Adds a plan, sold at every cadence, and returns its id. */
+  addTier: () => string
+  /** Removes a plan and everything priced against it. */
+  removeTier: (id: string) => void
   /** Edits the offer pricing this tier at the current cadence and market. */
   updateOffer: (tierId: string, patch: Partial<CadenceOffer>) => void
   offerFor: (tierId: string) => CadenceOffer | null
@@ -209,6 +213,69 @@ export function useCardSet(): CardSetStore {
   const updateSet = useCallback((patch: Partial<CardSet>) => {
     const edits = Object.keys(patch).some((k) => !NAVIGATION.has(k))
     setSet((prev) => ({ ...prev, ...patch, ...(edits ? withdrawn(prev) : null) }))
+  }, [])
+
+  /**
+   * A new plan, and the offers that make it sellable.
+   *
+   * A tier with no offer is not sold at any cadence, which is a real thing to
+   * mean but a strange thing to have just asked for: the card would not appear
+   * anywhere, and adding a plan would look broken. So it starts sold at every
+   * cadence the set carries, at what the plan above it costs, for the author to
+   * price properly.
+   */
+  const addTier = useCallback(() => {
+    const id = `tier-${Date.now().toString(36)}`
+    setSet((prev) => {
+      const last = prev.tiers[prev.tiers.length - 1]
+      const tier: Tier = {
+        id,
+        planName: 'New plan',
+        description: '',
+        features: [],
+        logoTiles: [],
+        logoTotal: 0,
+        ultimate: false,
+        displayOrder: (last?.displayOrder ?? 0) + 10,
+        status: 'live',
+        channel: DIRECT,
+        visibleToPartners: true,
+        overrides: [],
+      }
+      const offers: CadenceOffer[] = prev.cadences.map((cadence) => {
+        const like = prev.offers.find((o) => o.tierId === last?.id && o.cadence === cadence)
+        return {
+          id: `${id}-${cadence.toLowerCase()}`,
+          tierId: id,
+          cadence,
+          standardPrice: like?.standardPrice ?? 0,
+          discount: false,
+          introPrice: null,
+          introMonths: 0,
+          addOnId: null,
+          addOnPurchaseType: null,
+          addOnDiscountPercent: null,
+          includedAddOnIds: [],
+        }
+      })
+      return {
+        ...prev,
+        ...withdrawn(prev),
+        tiers: [...prev.tiers, tier],
+        offers: [...prev.offers, ...offers],
+      }
+    })
+    return id
+  }, [])
+
+  /** The prices go with the plan: an offer for a tier that is gone prices nothing. */
+  const removeTier = useCallback((id: string) => {
+    setSet((prev) => ({
+      ...prev,
+      ...withdrawn(prev),
+      tiers: prev.tiers.filter((t) => t.id !== id),
+      offers: prev.offers.filter((o) => o.tierId !== id),
+    }))
   }, [])
 
   const updateTier = useCallback((id: string, patch: TierPatch) => {
@@ -458,6 +525,8 @@ export function useCardSet(): CardSetStore {
 
     updateSet,
     updateTier,
+    addTier,
+    removeTier,
     updateOffer,
     offerFor,
     overriddenKeys,

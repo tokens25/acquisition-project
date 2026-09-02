@@ -29,6 +29,7 @@ import payPaypal from '../../assets/flow/pay-paypal.png'
 import payVisa from '../../assets/flow/pay-visa.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
+import type { PlanTab } from '../../rules/content'
 import type {
   AccountScreen,
   LandingScreen,
@@ -119,37 +120,35 @@ function Screen({
  * that frame rather than changing this one.
  */
 export function SubscriptionFlowScreen({
+  tabs,
   tab,
   onTab,
   children,
 }: {
-  tab: 'standard' | 'ultimate'
-  onTab?: (tab: 'standard' | 'ultimate') => void
+  tabs: PlanTab[]
+  tab: string
+  onTab?: (tab: string) => void
   children: ReactNode
 }) {
   return (
     <Screen title="Choose your subscription" flush>
       <div className="fl-sub__control">
         <div className="fl-sub__tabs">
-          <button
-            type="button"
-            className="fl-sub__tab"
-            data-on={tab === 'standard' || undefined}
-            aria-pressed={tab === 'standard'}
-            onClick={() => onTab?.('standard')}
-          >
-            Standard
-          </button>
-          <button
-            type="button"
-            className="fl-sub__tab"
-            data-on={tab === 'ultimate' || undefined}
-            aria-pressed={tab === 'ultimate'}
-            onClick={() => onTab?.('ultimate')}
-          >
-            <span className="fl-sub__bolt" aria-hidden="true" />
-            Ultimate
-          </button>
+          {tabs.map((one) => (
+            <button
+              key={one.id}
+              type="button"
+              className="fl-sub__tab"
+              data-on={tab === one.id || undefined}
+              aria-pressed={tab === one.id}
+              onClick={() => onTab?.(one.id)}
+            >
+              {/* The bolt belongs to the Ultimate tab, which is why it follows
+                  the id rather than the name: renaming that tab keeps it. */}
+              {one.id === 'ultimate' && <span className="fl-sub__bolt" aria-hidden="true" />}
+              {one.name}
+            </button>
+          ))}
         </div>
         {/* Sparkle 440X200 — the animation the design runs behind the Ultimate
             tab. Its box is 168 x 48 at the control's top right, and the frame

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { blankTab, tabsOf, tierOnTab } from '../rules/tabs'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -46,7 +47,8 @@ const PURCHASE_TYPES = [
  * view made the number look absolute when it never is.
  */
 export function EditPanel({ store }: { store: CardSetStore }) {
-  const { set, context, updateTier, updateOffer, offerFor, updateSet } = store
+  const { set, context, updateTier, addTier, removeTier, updateOffer, offerFor, updateSet } =
+    store
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   /** The competition being dragged, and the row it is currently over. */
@@ -187,12 +189,65 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          className="ed-add"
+          onClick={() => setOpenTier(addTier())}
+        >
+          Add a plan
+        </button>
         {absent.has(tier.id) && (
           <p className="ed-absent">
             <strong>{resolved.planName}</strong> is not in this set — {absent.get(tier.id)}. Edits
             still apply everywhere it is sold.
           </p>
         )}
+      </FieldGroup>
+
+      <FieldGroup title="Tabs">
+        {tabsOf(set).map((one, i) => {
+          const all = tabsOf(set)
+          return (
+            <div className="demo__feature" key={one.id}>
+              <TextField
+                label={`Tab ${i + 1}`}
+                value={one.name}
+                onChange={(v) =>
+                  updateSet({
+                    planTabs: all.map((t, j) => (j === i ? { ...t, name: v } : t)),
+                  })
+                }
+              />
+              {/* A picker with no tabs is a picker with nothing to pick, so the
+                  last one stays. Removing a tab leaves the plans that were only
+                  on it, which is why they say which tabs they are on rather
+                  than a tab saying which plans it holds. */}
+              {all.length > 1 && (
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() =>
+                    updateSet({
+                      planTabs: all.filter((_, j) => j !== i),
+                      tiers: set.tiers.map((t) =>
+                        t.tabs?.length ? { ...t, tabs: t.tabs.filter((id) => id !== one.id) } : t,
+                      ),
+                    })
+                  }
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          )
+        })}
+        <button
+          type="button"
+          className="ed-add"
+          onClick={() => updateSet({ planTabs: [...tabsOf(set), blankTab(tabsOf(set))] })}
+        >
+          Add a tab
+        </button>
       </FieldGroup>
 
       <FieldGroup title="Tier">
@@ -213,6 +268,27 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           checked={resolved.ultimate}
           onChange={(v) => updateTier(tier.id, { ultimate: v })}
         />
+        {/* Which tabs the card appears under. Nothing ticked means every tab:
+            a plan that is on no tab is sold nowhere, which is what removing it
+            is for. */}
+        {tabsOf(set).length > 1 &&
+          tabsOf(set).map((one) => (
+            <ToggleField
+              key={one.id}
+              label={`Shows on ${one.name}`}
+              checked={tierOnTab(resolved, one.id)}
+              onChange={(on: boolean) => {
+                const showing = tabsOf(set)
+                  .map((t) => t.id)
+                  .filter((id) => (id === one.id ? on : tierOnTab(resolved, id)))
+                updateTier(tier.id, {
+                  // Every tab and no tab both mean the same drawing, so the
+                  // simpler of the two is what gets written.
+                  tabs: showing.length === tabsOf(set).length ? [] : showing,
+                })
+              }}
+            />
+          ))}
         <TextField
           label="Tier name"
           value={resolved.planName}
@@ -239,6 +315,22 @@ export function EditPanel({ store }: { store: CardSetStore }) {
               : undefined
           }
         />
+        {/* A set with no plans has nothing to sell, so the last one stays.
+            Removing takes its prices with it: an offer for a plan that is gone
+            prices nothing. */}
+        {set.tiers.length > 1 && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => {
+              const next = set.tiers.find((t) => t.id !== tier.id)
+              removeTier(tier.id)
+              setOpenTier(next?.id ?? '')
+            }}
+          >
+            Remove this plan
+          </button>
+        )}
       </FieldGroup>
 
       <FieldGroup title={market ? `Pricing — ${market.currency}` : 'Pricing'}>

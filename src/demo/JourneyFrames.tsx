@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
+import { statesOf } from '../rules/tabs'
 import { useEffect, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { FlowStep } from '../card/FlowStep'
@@ -138,14 +139,14 @@ export function JourneyFrames({
   // Numbering is assigned before render rather than counted during it: only
   // screens that render take a number, so a skipped step consumes none and the
   // last tile's number equals the journey's declared screen count.
-  const statesOf = (entry: ResolvedStep) =>
-    entry.skipped ? [null] : (entry.step.states ?? [null])
+  const tilesOf = (entry: ResolvedStep) =>
+    entry.skipped ? [null] : statesOf(entry.step, set)
 
   // Each screen's number is how many render at or before it — derived from the
   // list rather than counted during render, so a skipped step consumes none and
   // the last tile's number equals the journey's declared screen count.
   const before = (index: number) =>
-    planned.slice(0, index).reduce((n, e) => n + (e.skipped ? 0 : statesOf(e).length), 0)
+    planned.slice(0, index).reduce((n, e) => n + (e.skipped ? 0 : tilesOf(e).length), 0)
 
   // Counted across every cell that renders, skips included, so the order they
   // arrive in is the order they sit in.
@@ -153,7 +154,7 @@ export function JourneyFrames({
   const groups = planned.map((entry, index) => ({
     step: entry.step,
     skipped: entry.skipped,
-    tiles: statesOf(entry).map((state, i) => ({
+    tiles: tilesOf(entry).map((state, i) => ({
       state,
       number: entry.skipped ? null : before(index) + i + 1,
       order: seq++,
@@ -322,7 +323,12 @@ export function JourneyFrames({
                           style={{ inlineSize: frame.viewport, zoom: thumbScale }}
                         >
                           {step.renderer === 'plans' ? (
-                            <CardSetView set={phoneSet} context={context} interactive={false} />
+                            <CardSetView
+                              set={phoneSet}
+                              context={context}
+                              interactive={false}
+                              tab={state}
+                            />
                           ) : (
                             <FlowStep step={step} state={state ?? 'default'} set={set} />
                           )}

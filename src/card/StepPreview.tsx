@@ -1,4 +1,5 @@
 import './journey.css'
+import { statesOf } from '../rules/tabs'
 
 import type { CardSet, Context } from '../rules/content'
 import type { Journey } from '../rules/journey'
@@ -59,9 +60,9 @@ export function StepPreview({
            plans step takes, and the same shape the Figma section lays out. */
         <div className="jy__viewport" data-device={set.device}>
           <div className="jy__screens">
-            {(step.states ?? ['default']).map((state) => (
+            {statesOf(step, set).map((state) => (
               <div className="jy__screen" key={state}>
-                <FlowStep step={step} state={state} set={set} />
+                <FlowStep step={step} state={state ?? 'default'} set={set} />
                 <span className="jy__screen-name">{state}</span>
               </div>
             ))}
