@@ -695,8 +695,16 @@
    ships at. A 40px button beside a 32px switch reads as two toolbars that
    happen to touch, and the switch is the one whose size is fixed by its own
    internals — so the buttons are what move. */
+/* Every control in the bar stands as tall as the mode switch's segments:
+   5 above and below a 12px line at 1.2. Written as that sum rather than as
+   the 24.4 it comes to, so it is the same figure the switch is built from
+   rather than a decimal copied off a measurement of it.
+
+   The switch itself is taller than its segments — it wraps them in a 3px
+   inset and an edge — which is the one thing in the row that is meant to
+   sit proud of the others. */
 .demo__actions .dazn-btn {
-  block-size: 32px;
+  block-size: calc(2 * 5px + 12px * 1.2);
   gap: 6px;
   padding-inline: 12px;
   font-size: 12px;
@@ -704,7 +712,7 @@
 /* Icon only: square, so the glyph sits in the middle rather than left of an
    absent label. */
 .demo__actions .dazn-btn:not(:has(.dazn-btn__label:not(:empty))) {
-  inline-size: 32px;
+  inline-size: calc(2 * 5px + 12px * 1.2);
   padding-inline: 0;
 }
 .demo__savenote {

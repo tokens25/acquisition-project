@@ -25,7 +25,9 @@
     opacity 150ms ease;
 }
 .coach-pill[data-size='bar'] {
-  block-size: 36px;
+  /* What every control in that bar stands at: 5 above and below a 12px line
+     at 1.2, which is how the mode switch's segments are built. */
+  block-size: calc(2 * 5px + 12px * 1.2);
   padding-inline: 12px 16px;
   font-size: 12px;
 }
