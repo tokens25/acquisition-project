@@ -312,7 +312,7 @@ export function DemoApp() {
       <span className="demo__mark">
         <Icon svg={daznLogo} size={24} />
       </span>
-      <h1 className="demo__title">Acquisition model</h1>
+      <h1 className="demo__title">Agentic acquisition</h1>
       <span className="demo__beta">BETA</span>
       <button
         type="button"

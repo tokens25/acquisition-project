@@ -28,7 +28,7 @@ export function Index() {
         <span className="idx__mark">
           <Icon svg={daznLogo} size={24} />
         </span>
-        <h1 className="idx__title">Acquisition model</h1>
+        <h1 className="idx__title">Agentic acquisition</h1>
         <span className="idx__beta">BETA</span>
       </header>
 

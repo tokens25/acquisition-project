@@ -532,7 +532,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **top bar** | `.demo__top` | The strip across the very top. Stays put while everything below it scrolls. |
 | **brand strip** | `.demo__brand` | The left half of the top bar. It sits above the panel, and changes background to match whichever column is underneath it. |
 | **mark** | `.demo__mark` | The DAZN logo. |
-| **product title** | `.demo__title` | The words "Acquisition model". |
+| **product title** | `.demo__title` | The words "Agentic acquisition". |
 | **beta chip** | `.demo__beta` | The small outlined BETA label next to the title. |
 | **collapse control** | `.demo__collapse` | The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips. |
 | **status bar** | `.demo__statusbar` | The right half of the top bar. Tells you whether you can publish, and holds the buttons. |

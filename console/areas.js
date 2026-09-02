@@ -379,7 +379,7 @@
       ['top bar', '.demo__top', 'The strip across the very top. Stays put while everything below it scrolls.', 'shell'],
       ['brand strip', '.demo__brand', 'The left half of the top bar. It sits above the panel, and changes background to match whichever column is underneath it.', 'shell'],
       ['mark', '.demo__mark', 'The DAZN logo.', 'shell'],
-      ['product title', '.demo__title', 'The words "Acquisition model".', 'shell'],
+      ['product title', '.demo__title', 'The words "Agentic acquisition".', 'shell'],
       ['beta chip', '.demo__beta', 'The small outlined BETA label next to the title.', 'shell'],
       ['collapse control', '.demo__collapse', 'The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips.', 'shell'],
       ['status bar', '.demo__statusbar', 'The right half of the top bar. Tells you whether you can publish, and holds the buttons.', 'shell'],
