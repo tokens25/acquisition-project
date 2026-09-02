@@ -1110,3 +1110,15 @@
 .fl__field:focus-within {
   border-color: #afb3b8;
 }
+
+/* An autofilled field on a screen is white, whatever the tool's theme is
+   doing. The rule in index.css names the tool's own text colour, which
+   follows that theme; a phone screen is always dark and its text is always
+   this one. */
+.fl__field-input:-webkit-autofill,
+.fl__field-input:-webkit-autofill:hover,
+.fl__field-input:-webkit-autofill:focus,
+.fl__field-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #f8f8f8;
+  caret-color: #f8f8f8;
+}

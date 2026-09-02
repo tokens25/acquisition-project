@@ -43,8 +43,10 @@
    Chrome paints a pale block and its own dark text into an autofilled field,
    and neither answers to background-color or color — the engine draws them.
    Clipping that background to the glyphs is what removes it, and the text has
-   a fill property of its own, pointed back at whatever colour the field was
-   already using.
+   a fill property of its own. That fill is named outright rather than sent to
+   currentColor: currentColor resolves against the field's colour, which is the
+   very thing Chrome is overriding, so it can come back as Chrome's dark grey
+   and leave the text exactly as it was.
 
    Everywhere rather than on one screen: every field in this tool sits on a
    dark surface it does not paint itself, so the pale block is wrong in all of
@@ -53,10 +55,10 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-text-fill-color: currentColor;
+  -webkit-text-fill-color: var(--color-text-primary);
   -webkit-background-clip: text;
   background-clip: text;
-  caret-color: currentColor;
+  caret-color: var(--color-text-primary);
 }
 
 * {
