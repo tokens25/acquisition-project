@@ -5,6 +5,7 @@ import daznLogo from './assets/brand/logo-dazn.svg?raw'
 import { Button } from './components/Button'
 import { Icon } from './components/Icon'
 import { DefaultPanel } from './demo/DefaultPanel'
+import { useState } from 'react'
 import { useCardSet } from './editor/useCardSet'
 import { go } from './navigate'
 
@@ -21,6 +22,12 @@ import { go } from './navigate'
  */
 export function Index() {
   const store = useCardSet()
+  /**
+   * Unanswered until the fields say otherwise. Starting at one rather than
+   * zero so the way in is shut on the first paint, before anything has had a
+   * chance to count the questions.
+   */
+  const [pending, setPending] = useState(1)
 
   return (
     <main className="idx">
@@ -35,10 +42,18 @@ export function Index() {
       <div className="idx__body">
         <div className="idx__form">
           <div className="demo__fields">
-            <DefaultPanel store={store} prompt />
+            <DefaultPanel store={store} prompt onAsking={setPending} />
           </div>
 
-          <Button appearance="primary" size="lg" block onClick={() => go('/demo')}>
+          {/* Shut until every question on screen has an answer: the tool
+              opens on a situation, and half a situation is not one. */}
+          <Button
+            appearance="primary"
+            size="lg"
+            block
+            disabled={pending > 0}
+            onClick={() => go('/demo')}
+          >
             Create
           </Button>
         </div>

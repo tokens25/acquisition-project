@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { CardSetStore } from '../editor/useCardSet'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
 import { journeys } from '../rules/journeys'
@@ -16,9 +16,21 @@ import { SelectField } from '../components/SelectField'
  * context still carries the channel, so a partner storefront needs the field
  * back rather than a new concept.
  */
+/**
+ * Which questions have been answered, for as long as the tab is open.
+ *
+ * Outside the component on purpose. Leaving the front door pushes a route
+ * rather than loading a page, so coming back with the browser's own Back
+ * finds this still here and the answers still showing. Reloading the front
+ * door throws the module away with everything else, which is the one thing
+ * that should start the questions again.
+ */
+const answeredThisVisit: Record<string, boolean> = {}
+
 export function DefaultPanel({
   store,
   prompt = false,
+  onAsking,
 }: {
   store: CardSetStore
   /**
@@ -31,22 +43,43 @@ export function DefaultPanel({
    * what is held.
    */
   prompt?: boolean
+  /** How many questions are still unanswered, for whoever is waiting on them. */
+  onAsking?: (pending: number) => void
 }) {
   const { set, context, setContext, updateSet, journey } = store
 
-  const [answered, setAnswered] = useState<Record<string, boolean>>({})
+  const [answered, setAnswered] = useState<Record<string, boolean>>(() => ({
+    ...answeredThisVisit,
+  }))
   const asked = (key: string) => prompt && !answered[key]
   /** The standing answer, or nothing while the question is still being asked. */
   const shown = (key: string, actual: string) => (asked(key) ? '' : actual)
   /** The prompt itself, only for as long as it is unanswered. */
   const asking = (key: string) => (asked(key) ? [{ value: '', label: 'Choose…' }] : [])
-  const answer = (key: string) => setAnswered((prev) => ({ ...prev, [key]: true }))
+  const answer = (key: string) => {
+    answeredThisVisit[key] = true
+    setAnswered((prev) => ({ ...prev, [key]: true }))
+  }
 
   const statuses = userStatuses(journeys, context)
   const status = statuses.includes(journey.audience) ? journey.audience : (statuses[0] ?? '')
   const entries = entryPoints(journeys, context, status)
   const entryCta = entries.includes(journey.entry.cta) ? journey.entry.cta : (entries[0] ?? '')
   const matches = journeysMatching(journeys, context, status, entryCta)
+
+  /*
+   * The questions actually on screen, and how many are still open.
+   *
+   * Counted here rather than by whoever is waiting on the answer: the fourth
+   * question only exists when the first three describe more than one journey,
+   * so nobody outside this component can say how many there are.
+   */
+  const onScreen = ['market', 'status', 'entry', ...(matches.length > 1 ? ['journey'] : [])]
+  const pending = prompt ? onScreen.filter((q) => !answered[q]).length : 0
+  useEffect(() => {
+    onAsking?.(pending)
+  }, [onAsking, pending])
+
 
   const pick = (nextStatus: string, nextEntry?: string) => {
     const options = entryPoints(journeys, context, nextStatus)
