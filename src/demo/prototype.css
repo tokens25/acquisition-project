@@ -39,7 +39,7 @@
   /* An outline rather than a border: the phone is exactly 375 by 812, and
      under border-box a border would be taken out of that rather than drawn
      around it — the screen inside would lose the two pixels. */
-  outline: var(--border-1) solid var(--color-border-full-color-default);
+  outline: var(--border-2) solid var(--color-border-full-color-default);
 }
 
 /* The screen. Two of them are longer than a phone and scroll here, the way
