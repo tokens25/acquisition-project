@@ -307,6 +307,12 @@
   flex: none;
   align-items: center;
   justify-content: space-between;
+  /* 50, not the 40 the bar itself measures: the component centres a 40-tall
+     bar in a 50-tall box, and the screens are laid out against the 50. On
+     Subscription the design's own figures add to 811 of the frame's 812 only
+     with this — at 40 the screen overflows by ten and scrolls, which is how
+     the difference was found. */
+  block-size: 50px;
   padding-block: 10px 8px;
   background: var(--color-surface-default);
   color: var(--color-text-primary);

@@ -135,6 +135,11 @@
       'landing heading': [7,74,66,7], 'landing body': [7,83,66,9],
       'landing buttons': [7,96,66,20]
     }},
+    flowSubscription: { vb: '0 0 80 160', furn: [[0,0,80,12]], parts: {
+      'subscription control': [5,20,70,11], 'subscription tabs': [5,20,70,11],
+      'subscription tab': [6,21,33,9], 'tab sparkle': [41,20,34,10],
+      'subscription cards': [5,38,70,104]
+    }},
     flowCadence: { vb: '0 0 80 100', parts: {
       'ways to pay': [4,4,72,74],
       'pay options': [4,4,72,50], 'pay option': [4,4,72,23],

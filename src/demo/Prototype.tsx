@@ -4,6 +4,7 @@ import type { MouseEvent as ReactMouseEvent } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { FlowStep } from '../card/FlowStep'
+import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
 import { Icon } from '../components/Icon'
 import { iconArtwork } from '../card/assets'
 import reloadIcon from '../assets/browser/reload.svg'
@@ -44,14 +45,16 @@ const PHONE = { width: 375, height: 812 }
 const HOTSPOT = '.fl__cta, .dazn-btn, button, a, [role="button"]'
 
 /**
- * Controls the card answers itself.
+ * Controls a screen answers itself.
  *
  * "All features & content" and the "… more" link open the card's own dialog,
  * and everything inside that dialog — its tabs, its close — belongs to the
  * dialog. Advancing the flow underneath any of them would take the screen away
- * at the moment it was asked to show more of itself.
+ * at the moment it was asked to show more of itself. Subscription's Standard
+ * and Ultimate tabs are the same case: they move between that step's two
+ * frames rather than on to the next step.
  */
-const CARD_OWN = '.acq-details, .acq-card__footer, .acq-card-header__more'
+const SCREEN_OWN = '.acq-details, .acq-card__footer, .acq-card-header__more, .fl-sub__tabs'
 
 /** Room for the bar under the phone and a margin, before the phone must shrink. */
 const FURNITURE = 132
@@ -84,6 +87,15 @@ export function Prototype({
   const page = useRef<HTMLDivElement>(null)
 
   const current = screens[Math.min(at, screens.length - 1)]
+
+  /** Moves to another state of the step already open, if it has one. */
+  const goToState = useCallback(
+    (state: string) => {
+      const i = screens.findIndex((s) => s.step.id === current?.step.id && s.state === state)
+      if (i >= 0) setAt(i)
+    },
+    [current?.step.id, screens],
+  )
   const first = at === 0
   const last = at >= screens.length - 1
 
@@ -130,7 +142,7 @@ export function Prototype({
   const tap = (e: ReactMouseEvent) => {
     const el = e.target as HTMLElement
     // The card is handling this one. Let it, and stay where we are.
-    if (el.closest(CARD_OWN)) return
+    if (el.closest(SCREEN_OWN)) return
     if (el.closest(HOTSPOT)) {
       e.preventDefault()
       if (!last) go(1)
@@ -179,7 +191,12 @@ export function Prototype({
 
           <div className="proto__page" ref={page} onClick={tap}>
             {current.step.renderer === 'plans' ? (
-              <CardSetView set={phoneSet} context={context} />
+              <SubscriptionFlowScreen
+                tab={current.state === 'ultimate' ? 'ultimate' : 'standard'}
+                onTab={goToState}
+              >
+                <CardSetView set={phoneSet} context={context} />
+              </SubscriptionFlowScreen>
             ) : (
               <FlowStep step={current.step} state={current.state ?? 'default'} set={set} />
             )}

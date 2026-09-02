@@ -1,5 +1,7 @@
 import './flow.css'
 
+import sparkle from '../../assets/flow/subscription-sparkle.gif'
+
 import type { ReactNode } from 'react'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
 import badgeCheck from '../../assets/flow/badge-check.svg?raw'
@@ -75,12 +77,86 @@ function FlowHeader({ title }: { title: string }) {
   )
 }
 
-function Screen({ title, children }: { title: string; children: ReactNode }) {
+function Screen({
+  title,
+  flush,
+  children,
+}: {
+  title: string
+  /**
+   * Drops the body's side padding, for a screen whose content runs to the
+   * edge. Subscription's card row does: the design lets the next card be cut
+   * by the screen rather than by a margin, which is what says there is one.
+   */
+  flush?: boolean
+  children: ReactNode
+}) {
   return (
     <div className="fl">
       <FlowHeader title={title} />
-      <div className="fl__body">{children}</div>
+      <div className="fl__body" data-flush={flush ? '' : undefined}>
+        {children}
+      </div>
     </div>
+  )
+}
+
+/**
+ * "Choose your subscription" — node 671:25098.
+ *
+ * The cards are the live set, handed in as children the way the Figma
+ * component takes a slot: what belongs to this screen is the chrome the design
+ * draws around them, which is the header and the segmented control.
+ *
+ * Standard and Ultimate are the step's two states rather than a setting on one
+ * screen — the section draws them as two frames — so choosing a tab moves to
+ * that frame rather than changing this one.
+ */
+export function SubscriptionFlowScreen({
+  tab,
+  onTab,
+  children,
+}: {
+  tab: 'standard' | 'ultimate'
+  onTab?: (tab: 'standard' | 'ultimate') => void
+  children: ReactNode
+}) {
+  return (
+    <Screen title="Choose your subscription" flush>
+      <div className="fl-sub__control">
+        <div className="fl-sub__tabs">
+          <button
+            type="button"
+            className="fl-sub__tab"
+            data-on={tab === 'standard' || undefined}
+            aria-pressed={tab === 'standard'}
+            onClick={() => onTab?.('standard')}
+          >
+            Standard
+          </button>
+          <button
+            type="button"
+            className="fl-sub__tab"
+            data-on={tab === 'ultimate' || undefined}
+            aria-pressed={tab === 'ultimate'}
+            onClick={() => onTab?.('ultimate')}
+          >
+            <Icon svg={iconArtwork.upgrade} size={24} />
+            Ultimate
+          </button>
+        </div>
+        {/* Sparkle 440X200 — the animation the design runs behind the Ultimate
+            tab. Its box is 168 x 48 at the control's top right, and the frame
+            crops the picture rather than fitting it, so the offsets are the
+            design's percentages of that box rather than a fit that looks
+            close. */}
+        <span className="fl-sub__sparkle" aria-hidden="true">
+          <img src={sparkle} alt="" />
+        </span>
+      </div>
+
+      <div className="fl-sub__cards">{children}</div>
+    </Screen>
   )
 }
 

@@ -19,6 +19,7 @@ import multiviewIcon from '../assets/icons/features-multiview.svg?raw'
 import contentIcon from '../assets/icons/actions-content.svg?raw'
 import videoIcon from '../assets/icons/action-interface-video.svg?raw'
 import valueIcon from '../assets/icons/value.svg?raw'
+import upgradeIcon from '../assets/icons/action-upgrade.svg?raw'
 import addOnImage from '../assets/addon-world-cup-2026.png'
 import devilsLogo from '../assets/logos/team-devils.png'
 import islandersLogo from '../assets/logos/team-islanders.png'
@@ -72,6 +73,7 @@ export const iconArtwork: Record<string, string> = {
   discount: discountIcon,
   gift: giftIcon,
   value: valueIcon,
+  upgrade: upgradeIcon,
 }
 
 /**

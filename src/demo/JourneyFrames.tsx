@@ -82,7 +82,7 @@ export function JourneyFrames({
   const pages = Object.values(flowArtwork)
     .filter((f) => f.height <= ONE_SCREEN)
     .map((f) => (f.height - f.status - f.chrome) * thumbScale)
-  const CHROME = { status: 40 * thumbScale, address: 90 * thumbScale }
+  const CHROME = { status: 50 * thumbScale, address: 90 * thumbScale }
   const TILE = {
     width: TILE_WIDTH,
     height: Math.ceil(CHROME.status + Math.max(...pages, 0) + CHROME.address) + 2,

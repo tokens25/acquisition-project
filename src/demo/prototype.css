@@ -133,3 +133,15 @@
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-regular);
 }
+
+/* A phone has overlay scrollbars; it does not carve an 11px gutter out of the
+   screen to say a row scrolls. The screens still scroll — the two longer than
+   a phone have to — they just do not spend width announcing it. */
+.proto__page,
+.proto__page * {
+  scrollbar-width: none;
+}
+.proto__page::-webkit-scrollbar,
+.proto__page *::-webkit-scrollbar {
+  display: none;
+}

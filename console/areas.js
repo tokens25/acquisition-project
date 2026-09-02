@@ -189,6 +189,13 @@
       ['landing body', '.fl-landing__body', 'The paragraph under it.', 'flowLanding'],
       ['landing buttons', '.fl-landing__ctas', 'The gold button and the white one under it.', 'flowLanding'],
     ]],
+    ['flow-subscription', 'Subscription screen', 'edit', 'The chrome the design draws around the plan cards — node 671:25098. The cards themselves are the live set, the same component the editor previews; this is the header they sit under and the control above them. It shows in the prototype, where the screen is walked whole. The frames row draws the exported design instead, so the two differ where the card and the frame do.', [
+      ['subscription control', '.fl-sub__control', 'The segmented control and the sparkle behind it, kept together so the sparkle is positioned against the control rather than the screen.', 'flowSubscription'],
+      ['subscription tabs', '.fl-sub__tabs', 'Standard and Ultimate, 343 wide over a 2px edge. Not a setting on one screen: the section draws the two as separate frames, so choosing one moves to that frame — which is why the prototype does not treat a tab as a step forward.', 'flowSubscription'],
+      ['subscription tab', '.fl-sub__tab', 'One of the two. The chosen one takes a pale fill and the brighter text; Ultimate carries the upgrade glyph either way.', 'flowSubscription'],
+      ['tab sparkle', '.fl-sub__sparkle', 'The animation behind the Ultimate tab — 168 by 48 at the control\u2019s top right. The frame crops the picture rather than fitting it, so the offsets are the design\u2019s own percentages of that box.', 'flowSubscription'],
+      ['subscription cards', '.fl-sub__cards', 'The row the plan cards scroll in. It runs to the screen edge rather than stopping at a margin: the next card being cut by the phone is what says there is one.', 'flowSubscription'],
+    ]],
     ['flow-cadence', 'Cadence screen', 'edit', 'Group 1 of the flow. Which way of paying you choose.', [
       ['ways to pay', '.fl-cadence', 'The two options and the button under them.', 'flowCadence'],
       ['pay options', '.fl-cadence__options', 'The options as a stack.', 'flowCadence'],
