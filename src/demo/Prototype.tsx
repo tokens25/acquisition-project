@@ -54,7 +54,8 @@ const HOTSPOT = '.fl__cta, .dazn-btn, button, a, [role="button"]'
  * and Ultimate tabs are the same case: they move between that step's two
  * frames rather than on to the next step.
  */
-const SCREEN_OWN = '.acq-details, .acq-card__footer, .acq-card-header__more, .fl-sub__tabs'
+const SCREEN_OWN =
+  '.acq-details, .acq-card__footer, .acq-card-header__more, .fl-sub__tabs, .fl-cadence__option'
 
 /** Room for the bar under the phone and a margin, before the phone must shrink. */
 const FURNITURE = 132
@@ -85,6 +86,14 @@ export function Prototype({
   )
 
   const [at, setAt] = useState(0)
+  /**
+   * What has been chosen on the screens that offer a choice.
+   *
+   * Kept here rather than inside a screen: the screens are drawn in the frames
+   * row too, where they are pictures of what was written and hold nothing.
+   * Empty means the authored choice stands, which is what a screen opens on.
+   */
+  const [chosen, setChosen] = useState<{ cadence?: string }>({})
   const [hint, setHint] = useState(false)
   const [scale, setScale] = useState(1)
   const page = useRef<HTMLDivElement>(null)
@@ -216,6 +225,16 @@ export function Prototype({
       return
     }
     // The card is handling this one. Let it, and stay where we are.
+    // Picking one of the cadence options. It belongs to the screen — choosing
+    // is not moving on, the Continue button below it is — so it is read here
+    // rather than falling through to the step forward.
+    const option = el.closest<HTMLElement>('.fl-cadence__option')?.dataset.option
+    if (option) {
+      e.preventDefault()
+      setChosen((prev) => (prev.cadence === option ? prev : { ...prev, cadence: option }))
+      return
+    }
+
     if (el.closest(SCREEN_OWN)) return
     if (el.closest(HOTSPOT)) {
       e.preventDefault()
@@ -275,7 +294,12 @@ export function Prototype({
                 <CardSetView set={phoneSet} context={context} detailsScope="screen" />
               </SubscriptionFlowScreen>
             ) : (
-              <FlowStep step={current.step} state={current.state ?? 'default'} set={set} />
+              <FlowStep
+                step={current.step}
+                state={current.state ?? 'default'}
+                set={set}
+                chosen={chosen}
+              />
             )}
           </div>
 

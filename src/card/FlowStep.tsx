@@ -24,11 +24,18 @@ export function FlowStep({
   step,
   state,
   set,
+  chosen,
 }: {
   step: Step
   /** Which of the step's states to draw. */
   state: string
   set: CardSet
+  /**
+   * Choices made while walking the prototype, for the screens that offer one.
+   * Absent in the frames row, where a screen is a picture of what was written
+   * rather than something being used.
+   */
+  chosen?: { cadence?: string }
 }) {
   const flow = set.flow ?? defaultFlow
 
@@ -36,7 +43,12 @@ export function FlowStep({
     case 'landing':
       return <LandingFlowScreen content={flow.landing ?? defaultFlow.landing} />
     case 'cadence':
-      return <CadenceFlowScreen content={flow.cadence ?? defaultFlow.cadence} />
+      return (
+        <CadenceFlowScreen
+          content={flow.cadence ?? defaultFlow.cadence}
+          selected={chosen?.cadence}
+        />
+      )
     case 'auth':
       return <AuthFlowScreen content={flow.auth ?? defaultFlow.auth} />
     case 'account':

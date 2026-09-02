@@ -249,15 +249,39 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
 
 /* ── Cadence ───────────────────────────────────────────────── */
 
-export function CadenceFlowScreen({ content }: { content: CadenceScreen }) {
+export function CadenceFlowScreen({
+  content,
+  selected,
+}: {
+  content: CadenceScreen
+  /**
+   * What the person walking the prototype picked, when there is one.
+   *
+   * Absent everywhere else, which leaves the authored choice showing — a tile
+   * draws the screen as the panel wrote it, and nobody is choosing anything
+   * in a picture.
+   */
+  selected?: string
+}) {
+  const chosen = selected ?? content.selected
   return (
     <Screen title={content.navTitle}>
       <div className="fl-cadence">
-        <div className="fl-cadence__options">
+        <div className="fl-cadence__options" role="radiogroup" aria-label={content.navTitle}>
           {content.options.map((option) => {
-            const on = option.id === content.selected
+            const on = option.id === chosen
             return (
-              <div className="fl-cadence__option" key={option.id} data-on={on || undefined}>
+              <div
+                className="fl-cadence__option"
+                key={option.id}
+                data-on={on || undefined}
+                // The prototype reads clicks off the screen rather than the
+                // screen calling back, the way it does with the tabs and the
+                // back chevron. This is what tells it which row was hit.
+                data-option={option.id}
+                role="radio"
+                aria-checked={on}
+              >
                 <Mark
                   svg={on ? cadenceRadioOn : cadenceRadioOff}
                   size={24}
