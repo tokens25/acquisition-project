@@ -44,13 +44,15 @@
    two pixels with it; a pseudo-element takes no layout space, which is what an
    outside stroke is.
 
-   It runs left to right into the gold, not out of it: nothing at the left
-   edge, through #f2af3d, to #fbed7d at the right. Figma cannot hand over a
-   gradient stroke — the MCP reports the whole thing as one stop,
-   rgba(242,175,61,0) — and that stop is the start rather than the end, which
-   is what made the first attempt a mirror of this. The two colours are the
-   brand golds the node's variables name; the middle stop is read off the
-   design. */
+   It fades in and out again: nothing at either edge, up through #f2af3d and
+   into #fbed7d, brightest short of the right end. Both earlier attempts ran
+   it one way and so had to be wrong at one edge — first bright at the left,
+   then bright at the right.
+
+   Figma cannot hand over a gradient stroke: the MCP collapses the whole ramp
+   to a single stop, rgba(242,175,61,0). That stop is one of the two ends, and
+   which end it is cannot be read from it. The two colours are the brand golds
+   the node's variables name; the stops between are read off the design. */
 .fl__header::after {
   content: '';
   position: absolute;
@@ -60,8 +62,9 @@
   background: linear-gradient(
     90deg,
     rgb(242 175 61 / 0%) 0%,
-    #f2af3d 38%,
-    #fbed7d 100%
+    #f2af3d 40%,
+    #fbed7d 82%,
+    rgb(251 237 125 / 0%) 100%
   );
 }
 .fl__back {
