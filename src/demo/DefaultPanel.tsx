@@ -74,8 +74,12 @@ export function DefaultPanel({
    * question only exists when the first three describe more than one journey,
    * so nobody outside this component can say how many there are.
    */
-  const onScreen = ['market', 'status', 'entry', ...(matches.length > 1 ? ['journey'] : [])]
-  const pending = prompt ? onScreen.filter((q) => !answered[q]).length : 0
+  const open = (key: string) => (prompt && !answered[key] ? 1 : 0)
+  const pending =
+    open('market') +
+    open('status') +
+    open('entry') +
+    (matches.length > 1 ? open('journey') : 0)
   useEffect(() => {
     onAsking?.(pending)
   }, [onAsking, pending])
