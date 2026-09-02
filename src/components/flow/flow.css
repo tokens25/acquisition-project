@@ -1027,6 +1027,11 @@
 .fl-sub__cards .acq-set {
   gap: var(--space-16);
   padding-inline: var(--space-16);
+  /* The snap area has to be inset by the same 16, or the first card snaps to
+     the scroller edge and takes the padding with it — scrolling fully left
+     landed on scrollLeft 16 rather than 0, putting the card flush against the
+     phone. Padding says where the cards sit; this says where they stop. */
+  scroll-padding-inline: var(--space-16);
   /* The set keeps 8 under the row for a scrollbar to sit in. The phone has no
      visible scrollbar, so here that is 8 of the frame spent on nothing. */
   padding-block-end: 0;
