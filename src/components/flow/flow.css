@@ -25,13 +25,43 @@
 /* .header-mobile — 50 tall over a 2 gold rule. The rule is the progress the
    journey has made; it is drawn on every screen in the section. */
 .fl__header {
+  position: relative;
+  /* Over the body, so the rule below is not painted out by it. */
+  z-index: 1;
   display: flex;
   flex: none;
   align-items: center;
   block-size: 50px;
   padding-inline: var(--space-16);
-  border-block-end: var(--border-2) solid transparent;
-  border-image: linear-gradient(90deg, #f2af3d 0%, #fbed7d 55%, rgba(242, 175, 61, 0) 100%) 1;
+}
+
+/* The gold rule, under every header in the section.
+
+   Below the bar, not inside it. Figma strokes this one outside the 50-tall
+   header: the bar still ends at 100 of the frame and the rule lands on
+   100–102, which is why it read two pixels high in the design and two pixels
+   low here. Drawn as a border it was inside the 50 and took the header's last
+   two pixels with it; a pseudo-element takes no layout space, which is what an
+   outside stroke is.
+
+   The ramp is the subscribe gold the CTA a few rules down already uses —
+   #f2af3d into #fbed7d across the full width — rather than a ramp of its own.
+   The fade to nothing is a mask over that, so the colours stay the design's
+   two brand golds instead of being mixed with the fade.
+
+   Figma cannot hand over a gradient stroke: the MCP reports it as its last
+   stop alone, rgba(242,175,61,0), which is #f2af3d at zero alpha. So the two
+   colours and the transparent end are the design's; where the fade begins is
+   read off the rendered frame. */
+.fl__header::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 100%;
+  block-size: var(--border-2);
+  background: linear-gradient(90deg, #f2af3d 0%, #fbed7d 100%);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 72%, transparent 100%);
 }
 .fl__back {
   flex: none;
