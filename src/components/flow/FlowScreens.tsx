@@ -198,6 +198,9 @@ function Field({
         value={text}
         placeholder={label}
         aria-label={label}
+        // A name is not a misspelling, and the squiggle under one is the
+        // browser's rather than anything the design draws.
+        spellCheck={false}
         onChange={(event) => live.set(key, event.target.value)}
       />
     </span>

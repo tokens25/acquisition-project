@@ -38,6 +38,27 @@
    The cost, recorded because it was once a real bug: nothing now hints that a
    row scrolls sideways. The journey row and the card set both rely on the
    overhang of the next tile to say so. */
+/* Nothing of the browser's own inside a field it has filled in.
+
+   Chrome paints a pale block and its own dark text into an autofilled field,
+   and neither answers to background-color or color — the engine draws them.
+   Clipping that background to the glyphs is what removes it, and the text has
+   a fill property of its own, pointed back at whatever colour the field was
+   already using.
+
+   Everywhere rather than on one screen: every field in this tool sits on a
+   dark surface it does not paint itself, so the pale block is wrong in all of
+   them. Filling in still works — this is about what it looks like afterwards. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: currentColor;
+  -webkit-background-clip: text;
+  background-clip: text;
+  caret-color: currentColor;
+}
+
 * {
   scrollbar-width: none;
 }
