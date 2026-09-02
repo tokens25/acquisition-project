@@ -17,6 +17,7 @@ import { FlowPanel } from './FlowPanel'
 import { UserFlow } from './UserFlow'
 import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
+import { Prototype } from './Prototype'
 import type { Mode } from '../rules/pipeline'
 import { changeMap } from '../rules/pipeline'
 import { FieldMarks } from '../components/fieldMarks'
@@ -36,7 +37,7 @@ import { usePipeline } from './pipeline/usePipeline'
 export function DemoApp() {
   const store = useCardSet()
   const [editing, setEditing] = useState(false)
-  const [previewOnly, setPreviewOnly] = useState(false)
+  const [prototype, setPrototype] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
 
   const planned = planJourney(store.journey, store.context)
@@ -129,11 +130,10 @@ export function DemoApp() {
         appearance="secondary"
         size="md"
         iconBefore={<Icon svg={iconArtwork.preview} size={16} />}
-        aria-pressed={previewOnly}
-        title={previewOnly ? 'Show the panel again' : 'Hide the panel and fill the width'}
-        onClick={() => setPreviewOnly((v) => !v)}
+        title="Walk the journey at full size, one screen at a time"
+        onClick={() => setPrototype(true)}
       >
-        {previewOnly ? 'Show panel' : 'Preview'}
+        Preview
       </Button>
 
       <ModeToggle mode={pipe.mode} onChange={switchMode} />
@@ -166,11 +166,7 @@ export function DemoApp() {
 
   return (
 
-    <main
-      className="page demo"
-      data-preview-only={previewOnly || undefined}
-      data-collapsed={collapsed || undefined}
-    >
+    <main className="page demo" data-collapsed={collapsed || undefined}>
       {/* The bar spans the window and never moves. Collapsing the panel
           resizes the row beneath it, so the preview opens leftward without
           dragging the status of the whole set along with it. */}
@@ -296,6 +292,18 @@ export function DemoApp() {
           )}
         </div>
       </div>
+
+      {/* The whole journey, not the part Dev mode is showing: the prototype is
+          the flow a person walks, and what Market has marked ready is a fact
+          about the handoff rather than about the journey. */}
+      {prototype && (
+        <Prototype
+          planned={planned}
+          set={store.set}
+          context={store.context}
+          onClose={() => setPrototype(false)}
+        />
+      )}
     </main>
   )
 }

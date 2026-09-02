@@ -14,6 +14,17 @@
       'dev mode line': [0,18,160,5], 'body': [0,25,160,79], 'rail': [0,25,60,79],
       'panel': [2,27,56,75], 'preview pane': [60,25,100,79]
     }},
+    prototype: { vb: '0 0 120 192', furn: [[0,0,120,192]], parts: {
+      'prototype': [0,0,120,192], 'prototype stage': [22,2,76,186],
+      'prototype phone': [24,2,72,160], 'prototype screen': [24,11,72,141],
+      'address bar back': [26,154,7,6],
+      'prototype bar': [22,168,76,20],
+      'prototype step button': [25,172,12,12],
+      'prototype position': [39,172,30,12],
+      'screen count': [39,172,30,5], 'screen name': [39,178,22,5],
+      'screen state': [62,178,7,5],
+      'start again': [71,172,14,12], 'prototype close': [87,172,9,12]
+    }},
     actionsDefault: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
       'preview button': [8,6,48,11], 'export button': [62,6,50,11]
     }},

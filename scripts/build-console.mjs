@@ -49,6 +49,7 @@ const SCANNED = [
   'src/demo/IconPicker.tsx',
   'src/demo/BenefitIcon.tsx',
   'src/demo/JourneyFrames.tsx',
+  'src/demo/Prototype.tsx',
   'src/demo/FlowPanel.tsx',
   'src/card/FlowStep.tsx',
   'src/components/flow/FlowScreens.tsx',

@@ -67,14 +67,14 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **tile number** | `.jf__num` | Where the step falls in the flow, beside its name. A step drawn three ways occupies three numbers and shows the span — 6–8 — so the last number in the row still equals the journey’s screen count. |
 | **thumbnail** | `.jf__thumb` | A live miniature of the real screen, built from your actual content. Sized to the proportions of a 375 by 812 phone. |
 | **thumbnail scaler** | `.jf__thumb-scale` | The layer inside the thumbnail that shrinks the screen. The screen renders at full size and this scales it down, so the miniature is the real thing rather than a separate small version that could drift from it. |
-| **phone status bar** | `.jf__status` | The iOS status bar across the top of a tile — the iOS/android component from Figma, drawn at the tile’s scale. Static, so it holds still while the screen scrolls beneath it; each frame’s own status bar is clipped off the export and this one drawn in its place. |
+| **phone status bar** | `.jf__status` | The iOS status bar across the top of a tile — the iOS/android component from Figma, drawn at the tile’s scale here and at its own size in the prototype — one component, two scales, rather than two drawings that could drift. Static, so it holds still while the screen scrolls beneath it; each frame’s own status bar is clipped off the export and this one drawn in its place. |
 | **status time** | `.jf__status-time` | The clock. Always 9:41, as the design has it. |
 | **notch spacer** | `.jf__status-island` | The gap the Dynamic Island sits in. It draws nothing and reserves 124px, which is why the clock sits left of centre rather than in the middle. |
 | **status levels** | `.jf__status-levels` | The signal, wifi and battery group at the right. |
 | **signal icon** | `.jf__status-cell` | Cellular bars, exported from the component. |
 | **wifi icon** | `.jf__status-wifi` | Wifi, exported from the component. |
 | **battery icon** | `.jf__status-battery` | Battery, exported from the component. |
-| **browser chrome** | `.jf__chrome` | The Safari address bar at the foot of a tile — the .Safari, iOS component from Figma, drawn at the tile’s scale so it is the design’s own geometry rather than an approximation. It is pinned rather than left in the picture, so it holds still while the screen scrolls behind it; each frame’s own bar is clipped off and this one drawn in its place. |
+| **browser chrome** | `.jf__chrome` | The Safari address bar at the foot of a tile — the .Safari, iOS component from Figma, drawn at the tile’s scale here and at its own size in the prototype, so it is the design’s own geometry rather than an approximation of it. It is pinned rather than left in the picture, so it holds still while the screen scrolls behind it; each frame’s own bar is clipped off and this one drawn in its place. |
 | **chrome button** | `.jf__chrome-btn` | One of the two round 44px buttons either side of the address — back on the left, menu on the right. |
 | **address pill** | `.jf__url` | The rounded bar holding the site icon, the domain and the reload arrow. |
 | **site settings icon** | `.jf__url-icon` | The page-settings glyph at the left of the pill, exported from the Figma component. |
@@ -86,6 +86,26 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **screen artwork** | `.jf__art` | The screen exported from Figma, shown on steps that have not been built yet. Full tile width, natural height. It is a picture, so it does not change when you edit content — that is how you tell a built screen from one still to come. |
 | **frame name** | `.jf__frame` | The Figma frame name. The last resort, for a screen with neither a component nor an exported frame. |
 | **state label** | `.jf__state` | Which version of the screen a tile is — “standard”, “ultimate”. Sits under the tile rather than over it, where it covered the design it was labelling. |
+
+## Default view — Prototype
+
+*Default view* — What Preview opens: the journey running at full size, one screen at a time, over the tool. The frames row is the flow as a picture; this is the flow as a person meets it. Everything on a screen here is the live render, so it shows the content you wrote rather than the design it was drawn from — walking it is how you check that what you wrote reads in order. Screens rather than steps, so a step drawn three ways is three taps, and the count matches the row behind it.
+
+| Name | Where | What it is |
+| --- | --- | --- |
+| **prototype** | `.proto` | The dim over the whole tool. Clicking it closes, as does Escape. |
+| **prototype stage** | `.proto__stage` | The phone and the bar under it, kept together so the bar tracks the phone rather than the window. |
+| **prototype phone** | `.proto__phone` | The device: 375 by 812, the frame the Figma section draws every screen in. On a display too short to hold it, the whole phone scales down rather than the screen being clipped. |
+| **prototype screen** | `.proto__page` | The screen itself, between the status bar and the address bar. Tap something that looks like a control and the flow moves on; tap anywhere else and the controls outline themselves for a moment, so a miss says where to aim rather than doing nothing. The two screens longer than a phone scroll here, the way they scroll on one. |
+| **address bar back** | `.proto__back` | The chevron in the address bar, which goes back a screen. A control here rather than the picture of one the frames row draws, so it dims on the first screen. |
+| **prototype bar** | `.proto__bar` | The controls under the phone. Under it rather than over it, because the screen is the thing being shown. |
+| **prototype step button** | `.proto__step` | Back and on a screen. The arrow keys do the same, and each dims at the end it cannot pass. |
+| **prototype position** | `.proto__where` | Where you are, in two lines. |
+| **screen count** | `.proto__count` | Which screen of how many. The same count the row above the frames reports, because it is the same list. |
+| **screen name** | `.proto__name` | The step this screen belongs to. |
+| **screen state** | `.proto__state` | Which of the step’s states this is, on the steps drawn more than one way. |
+| **start again** | `.proto__restart` | Replaces the on button at the last screen, rather than leaving a dead control there. |
+| **prototype close** | `.proto__close` | Closes the prototype and puts you back where you were. |
 
 ## Default view — Action buttons
 

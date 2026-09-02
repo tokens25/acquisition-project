@@ -1,0 +1,135 @@
+/* The journey, running, over the tool.
+
+   Everything here is furniture around the screen — the dim, the phone's
+   rounded box, the bar that says where you are. The screen itself brings its
+   own design and its own colours, which is why nothing in here reaches inside
+   .proto__page to style what it holds. */
+
+.proto {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: var(--space-16);
+  background: color-mix(in srgb, #000 76%, transparent);
+}
+
+.proto__stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+/* 375 x 812 — the frame the section draws every screen in, at its own size
+   rather than a size that looks about right. zoom, not transform: a transform
+   shrinks what is drawn and leaves the box its full height, which would push
+   the bar below off a short display. */
+.proto__phone {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  inline-size: 375px;
+  block-size: 812px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--color-surface-default);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 55%);
+}
+
+/* The screen. Two of them are longer than a phone and scroll here, the way
+   they scroll on a phone. */
+.proto__page {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  cursor: pointer;
+}
+
+/* Miss every target and the targets say where they are, briefly. A tap that
+   does nothing at all is how a prototype comes to feel broken. */
+.proto__phone[data-hint] :is(.fl__cta, .dazn-btn) {
+  outline: var(--border-2) solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+/* The address bar's back chevron is a control here rather than a picture, so
+   it takes the disabled treatment the rest of the bar has no need of. */
+.proto__back {
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.proto__back:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.proto__bar {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  padding: var(--space-8);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-1);
+  color: var(--color-text-primary);
+}
+
+.proto__step,
+.proto__restart,
+.proto__close {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  block-size: 32px;
+  padding-inline: 12px;
+  border: 0;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.proto__step {
+  inline-size: 32px;
+  padding-inline: 0;
+}
+.proto__step:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.proto__restart {
+  background: var(--color-brand-primary);
+  color: var(--color-on-brand-primary, #000);
+}
+
+/* Where you are, in two lines: the count carries the flow's length, the name
+   carries which screen. Tabular figures so the count does not jitter as it
+   climbs past 9. */
+.proto__where {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-inline-size: 168px;
+  padding-inline: var(--space-8);
+}
+.proto__count {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.proto__name {
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+}
+.proto__state {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+}
