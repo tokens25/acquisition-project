@@ -36,6 +36,10 @@
   border-radius: 20px;
   background: var(--color-surface-default);
   box-shadow: 0 24px 64px rgb(0 0 0 / 55%);
+  /* An outline rather than a border: the phone is exactly 375 by 812, and
+     under border-box a border would be taken out of that rather than drawn
+     around it — the screen inside would lose the two pixels. */
+  outline: var(--border-1) solid var(--color-border-full-color-default);
 }
 
 /* The screen. Two of them are longer than a phone and scroll here, the way
