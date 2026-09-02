@@ -1,6 +1,7 @@
 import './flow.css'
 
 import sparkle from '../../assets/flow/subscription-sparkle.gif'
+import { useFlowInput } from './live'
 
 import type { ReactNode } from 'react'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
@@ -160,26 +161,54 @@ export function SubscriptionFlowScreen({
   )
 }
 
-/** Form/TextField at rest. Empty puts the label where the value would sit. */
+/**
+ * Form/TextField. Empty puts the label where the value would sit.
+ *
+ * Drawn as text where the screen is a picture, and as a real text box where
+ * the screen is being used. Both states look the same: the label sits over
+ * what was typed once there is something, and stands in its place while there
+ * is not — which is the placeholder's job in the box and the label's in the
+ * drawing.
+ */
 function Field({
   label,
   value,
   leading,
   trailing,
+  secret,
 }: {
   label: string
   value?: string
   leading?: string
   trailing?: string
+  /** Masks what is typed. The drawing carries bullets; the box carries a type. */
+  secret?: boolean
 }) {
-  const body = (
+  const live = useFlowInput()
+  const key = live ? `${live.scope}::${label}` : ''
+  // What the panel wrote is what the field opens on; typing replaces it.
+  const text = (live ? (live.get(key) ?? value) : value) ?? ''
+
+  const body = live ? (
+    <span className="fl__field-body">
+      {text ? <span className="fl__field-label">{label}</span> : null}
+      <input
+        className="fl__field-input"
+        type={secret ? 'password' : 'text'}
+        value={text}
+        placeholder={label}
+        aria-label={label}
+        onChange={(event) => live.set(key, event.target.value)}
+      />
+    </span>
+  ) : (
     <span className="fl__field-body">
       <span className="fl__field-label">{label}</span>
       {value ? <span className="fl__field-value">{value}</span> : null}
     </span>
   )
   return (
-    <div className="fl__field" data-empty={value ? undefined : ''}>
+    <div className="fl__field" data-empty={text ? undefined : ''}>
       {leading || trailing ? (
         <span className="fl__field-row">
           {leading && <Icon svg={leading} size={20} className="fl__field-icon" />}
@@ -397,6 +426,7 @@ export function AccountFlowScreen({
               label={content.passwordLabel}
               value={filled ? '•'.repeat(content.passwordValue.length) : undefined}
               trailing={iconArtwork.preview}
+              secret
             />
             {/* The checklist appears once there is a password to check. */}
             {filled && (

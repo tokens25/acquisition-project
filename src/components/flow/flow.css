@@ -1060,3 +1060,33 @@
 .fl-sub__tab:not([data-on]) .fl-sub__bolt {
   opacity: 0.5;
 }
+
+/* The text box a field becomes where the screen is used rather than looked at.
+
+   Sized and coloured as the value it replaces, so a filled field reads the
+   same whether it was typed or written in the panel. The placeholder takes
+   the empty label's treatment, which is what the box shows before anything
+   is typed — the label element itself is not drawn then, so the two cannot
+   both claim the same line. */
+.fl__field-input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #f8f8f8;
+  font: inherit;
+  font-size: var(--font-size-button-lg);
+  line-height: 21px;
+}
+.fl__field-input::placeholder {
+  color: #858b93;
+  opacity: 1;
+}
+/* The box has no ring of its own; the field it sits in takes the focus. */
+.fl__field-input:focus {
+  outline: none;
+}
+.fl__field:focus-within {
+  border-color: #afb3b8;
+}

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { FlowStep } from '../card/FlowStep'
 import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
+import { FlowInputContext } from '../components/flow/live'
 import { Icon } from '../components/Icon'
 import { iconArtwork } from '../card/assets'
 import reloadIcon from '../assets/browser/reload.svg'
@@ -55,7 +56,7 @@ const HOTSPOT = '.fl__cta, .dazn-btn, button, a, [role="button"]'
  * frames rather than on to the next step.
  */
 const SCREEN_OWN =
-  '.acq-details, .acq-card__footer, .acq-card-header__more, .fl-sub__tabs, .fl-cadence__option'
+  '.acq-details, .acq-card__footer, .acq-card-header__more, .fl-sub__tabs, .fl-cadence__option, .fl__field'
 
 /** Room for the bar under the phone and a margin, before the phone must shrink. */
 const FURNITURE = 132
@@ -94,11 +95,28 @@ export function Prototype({
    * Empty means the authored choice stands, which is what a screen opens on.
    */
   const [chosen, setChosen] = useState<{ cadence?: string }>({})
+  /**
+   * What has been typed, by screen and field.
+   *
+   * Here rather than in the fields: a screen is unmounted the moment you walk
+   * to the next one, and what someone typed should still be there when they
+   * come back.
+   */
+  const [typed, setTyped] = useState<Record<string, string>>({})
   const [hint, setHint] = useState(false)
   const [scale, setScale] = useState(1)
   const page = useRef<HTMLDivElement>(null)
 
   const current = screens[Math.min(at, screens.length - 1)]
+
+  const input = useMemo(
+    () => ({
+      scope: current?.step.id ?? '',
+      get: (key: string) => typed[key],
+      set: (key: string, value: string) => setTyped((prev) => ({ ...prev, [key]: value })),
+    }),
+    [current?.step.id, typed],
+  )
 
   /**
    * The first screen of the step after this one, or -1 at the end.
@@ -294,12 +312,14 @@ export function Prototype({
                 <CardSetView set={phoneSet} context={context} detailsScope="screen" />
               </SubscriptionFlowScreen>
             ) : (
-              <FlowStep
-                step={current.step}
-                state={current.state ?? 'default'}
-                set={set}
-                chosen={chosen}
-              />
+              <FlowInputContext.Provider value={input}>
+                <FlowStep
+                  step={current.step}
+                  state={current.state ?? 'default'}
+                  set={set}
+                  chosen={chosen}
+                />
+              </FlowInputContext.Provider>
             )}
           </div>
 

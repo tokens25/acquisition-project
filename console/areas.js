@@ -168,6 +168,7 @@
       ['screen body', '.fl__body', 'Everything under the header, with 16 down each side and 24 top and bottom.', 'flowShared'],
       ['screen field', '.fl__field', 'A text field at rest, 56 tall. With something typed it shows the name above the value; empty, the name sits where the value would.', 'flowShared'],
       ['field name', '.fl__field-label', 'What the field is called.', 'flowShared'],
+      ['field text box', '.fl__field-input', 'What a field becomes in the prototype, where a screen is used rather than looked at. It is sized and coloured as the written value it replaces, so a field reads the same whether it was typed or filled in from the panel, and the label stands in as its placeholder until there is something to sit above. A tile keeps the drawing: a tile is itself a button, and a text box cannot sit inside one. What is typed is held by the prototype rather than the field, so walking on and coming back does not empty it.', 'flowShared'],
       ['field value', '.fl__field-value', 'What has been typed into it.', 'flowShared'],
       ['field row', '.fl__field-row', 'The row inside a field that carries a mark beside the text.', 'flowShared'],
       ['field contents', '.fl__field-body', 'The name and value stacked, so they read as one thing beside any marks.', 'flowShared'],

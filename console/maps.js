@@ -121,7 +121,7 @@
       'screen back arrow': [6,5,7,7], 'screen title': [22,6,36,5], 'screen brand': [66,5,7,7],
       'screen body': [4,16,72,100],
       'screen field': [8,20,64,12], 'field row': [8,20,64,12],
-      'field contents': [14,22,44,8], 'field name': [14,22,24,3], 'field value': [14,26,30,4],
+      'field contents': [14,22,44,8], 'field name': [14,22,24,3], 'field text box': [14,26,30,4], 'field value': [14,26,30,4],
       'field mark': [64,24,5,5],
       'field pair': [8,36,64,22],
       'screen button': [8,62,64,10], 'screen divider': [8,76,64,5]
