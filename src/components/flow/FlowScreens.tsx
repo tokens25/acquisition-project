@@ -3,6 +3,7 @@ import './flow.css'
 import sparkle from '../../assets/flow/subscription-sparkle.gif'
 import { useFlowInput } from './live'
 import { cadenceSavings } from '../../rules/cadence'
+import { consentsOf } from '../../rules/consents'
 
 import type { ReactNode } from 'react'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
@@ -465,13 +466,20 @@ export function AccountFlowScreen({
 
           <div className="fl-account__block">
             <p className="fl-account__heading">{content.notifyHeading}</p>
-            <div className="fl-account__consent">
-              <p className="fl-account__consent-body">{content.consentBody}</p>
-              <span className="fl-account__switch">
-                <span className="fl-account__knob" />
-              </span>
-            </div>
-            <p className="fl-account__note">{content.consentNote}</p>
+            {consentsOf(content).map((consent) => (
+              <div key={consent.id}>
+                <div className="fl-account__consent">
+                  <p className="fl-account__consent-body">{consent.body}</p>
+                  {/* The switch draws where it starts. A consent that is on by
+                      default is a different thing being asked from one that is
+                      off, and the screen has to show which. */}
+                  <span className="fl-account__switch" data-on={consent.on || undefined}>
+                    <span className="fl-account__knob" />
+                  </span>
+                </div>
+                {consent.note && <p className="fl-account__note">{consent.note}</p>}
+              </div>
+            ))}
           </div>
         </div>
 

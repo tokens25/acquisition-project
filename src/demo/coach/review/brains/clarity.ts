@@ -1,4 +1,5 @@
 import type { CoachReviewContext } from '../../brief'
+import { consentsOf } from '../../../../rules/consents'
 import { confidenceFromScience, contentEvidence, scienceEvidence } from '../evidence'
 import { finding, looksLikePlaceholder, wordCount } from '../finding'
 import { renders, screenName, type JourneySnapshot } from '../snapshot'
@@ -124,7 +125,9 @@ export function clarityBrain(s: JourneySnapshot, ctx: CoachReviewContext): Findi
   // What the account screen asks at once.
   if (renders(s, 'account')) {
     const a = f.account
-    const consentWords = wordCount(a.consentBody)
+    const asked = consentsOf(a)
+    const consentBody = asked.map((c) => c.body).join(' ')
+    const consentWords = wordCount(consentBody)
     out.push(
       finding({
         brain: 'clarity',
@@ -132,8 +135,8 @@ export function clarityBrain(s: JourneySnapshot, ctx: CoachReviewContext): Findi
         sciences: ['cognitive-load', 'sludge'],
         screen: 'account',
         element: 'account-load',
-        highlight: [a.consentBody],
-        observation: `Account setup asks for name, email and a password with ${a.rules.length} rules, plus a ${consentWords}-word marketing consent.`,
+        highlight: asked.map((c) => c.body),
+        observation: `Account setup asks for name, email and a password with ${a.rules.length} rules, plus ${asked.length} consent${asked.length === 1 ? '' : 's'} running to ${consentWords} words.`,
         evidence: scienceEvidence('cognitive-load'),
         interpretation: `The consent is a separate decision, about being contacted, placed inside the one about joining.`,
         recommendation: null,

@@ -1,6 +1,8 @@
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
+import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
+import { blankConsent, consentsOf } from '../rules/consents'
 import { FieldGroup } from './FieldGroup'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { FlowContent } from '../rules/flow'
@@ -389,19 +391,61 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'account.notifyHeading'}
             onChange={(v) => patch('account', { notifyHeading: v })}
           />
-          <TextField
-            label="Consent text"
-            value={a.consentBody}
-            pipelineKey={'account.consentBody'}
-            onChange={(v) => patch('account', { consentBody: v })}
-            rows={4}
-          />
-          <TextField
-            label="Under the box"
-            value={a.consentNote}
-            pipelineKey={'account.consentNote'}
-            onChange={(v) => patch('account', { consentNote: v })}
-          />
+          {consentsOf(a).map((consent, i) => {
+            const all = consentsOf(a)
+            const write = (next: Partial<typeof consent>) =>
+              patch('account', {
+                consents: all.map((c, j) => (j === i ? { ...c, ...next } : c)),
+              })
+            return (
+              <div className="demo__feature" key={consent.id}>
+                <TextField
+                  label={`Consent ${i + 1}`}
+                  value={consent.body}
+                  pipelineKey={`account.consents[${i}].body`}
+                  onChange={(v) => write({ body: v })}
+                  rows={3}
+                />
+                <TextField
+                  label="Under the box"
+                  value={consent.note}
+                  pipelineKey={`account.consents[${i}].note`}
+                  onChange={(v) => write({ note: v })}
+                  helpText="Empty draws nothing."
+                />
+                <ToggleField
+                  label="On by default"
+                  checked={consent.on}
+                  onChange={(next: boolean) => write({ on: next })}
+                  hint={
+                    consent.on
+                      ? 'Someone has to turn it off to decline.'
+                      : 'Someone has to turn it on to agree.'
+                  }
+                />
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() =>
+                    patch('account', { consents: all.filter((_, j) => j !== i) })
+                  }
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('account', {
+                consents: [...consentsOf(a), blankConsent(consentsOf(a))],
+              })
+            }
+          >
+            Add a consent
+          </button>
         </FieldGroup>
 
         <FieldGroup title="Buttons">

@@ -93,3 +93,4 @@ export function blankCadenceOption(existing: CadenceOption[]): CadenceOption {
   while (existing.some((o) => o.id === `option-${n}`)) n += 1
   return { id: `option-${n}`, title: '', note: '', price: '', unit: '', badge: '' }
 }
+

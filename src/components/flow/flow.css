@@ -513,15 +513,22 @@
   font-size: var(--font-size-caption-xs);
   line-height: 1.5;
 }
+/* Off is the resting state: the track is grey and the knob sits left. On
+   throws it to green and the knob to the right — which is the difference
+   between a permission someone has to grant and one they have to withdraw. */
 .fl-account__switch {
   flex: none;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   inline-size: 48px;
   block-size: 28px;
   padding: 2px;
   border-radius: var(--radius-full);
+  background: #353a40;
+}
+.fl-account__switch[data-on] {
+  justify-content: flex-end;
   background: #79e99c;
 }
 .fl-account__knob {

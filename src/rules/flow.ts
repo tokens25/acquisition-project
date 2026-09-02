@@ -57,6 +57,16 @@ export interface AuthScreen {
   providers: { id: 'apple' | 'google' | 'facebook'; label: string }[]
 }
 
+export interface Consent {
+  id: string
+  /** What is being asked. */
+  body: string
+  /** The grey line under the group. Empty for none. */
+  note: string
+  /** Whether the switch starts on. */
+  on: boolean
+}
+
 export interface AccountScreen {
   navTitle: string
   nameHeading: string
@@ -73,8 +83,17 @@ export interface AccountScreen {
   rulesTitle: string
   rules: string[]
   notifyHeading: string
-  consentBody: string
-  consentNote: string
+  /**
+   * The permissions asked for, each with its own switch.
+   *
+   * Optional so that content published before there were several still draws:
+   * a copy carrying the single body and note below is read as one consent
+   * rather than as none. Write to this and the pair stops being read.
+   */
+  consents?: Consent[]
+  /** The one consent this screen used to have. Read only when the list is absent. */
+  consentBody?: string
+  consentNote?: string
   cta: string
   /** What the button says while the account is being made. */
   workingCta: string
@@ -233,9 +252,16 @@ export const defaultFlow: FlowContent = {
       'At least 6 characters (8 for stronger password)',
     ],
     notifyHeading: 'Get notified',
-    consentBody:
-      'Send me offers, events and more from DAZN via SMS or calls. You can stop messages by switching the toggle to “off“ or via your profile marketing preferences',
-    consentNote: 'You can adjust these settings later in My account',
+    consents: [
+      {
+        id: 'marketing',
+        body:
+          'I would like to receive news, offers and information about DAZN products and ' +
+          'services by email.',
+        note: 'You can adjust these settings later in My account',
+        on: false,
+      },
+    ],
     cta: 'Confirm and continue',
     workingCta: 'Creating your account',
   },
