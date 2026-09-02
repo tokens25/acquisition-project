@@ -104,6 +104,24 @@ export function Prototype({
     return screens.findIndex((s, n) => n > at && s.step.id !== current?.step.id)
   }, [at, current?.step.id, screens])
 
+  /**
+   * The first screen of the step before this one, or -1 at the start.
+   *
+   * The counterpart to the CTA's skip, so the two agree: if going on from
+   * Standard does not pass through Ultimate, coming back should not either.
+   * It lands on the previous step's first screen rather than its last, so a
+   * step drawn several ways opens where it starts.
+   */
+  const beforeThisStep = useCallback(() => {
+    const here = current?.step.id
+    let i = at - 1
+    while (i >= 0 && screens[i].step.id === here) i--
+    if (i < 0) return -1
+    const previous = screens[i].step.id
+    while (i > 0 && screens[i - 1].step.id === previous) i--
+    return i
+  }, [at, current?.step.id, screens])
+
   /** Moves to another state of the step already open, if it has one. */
   const goToState = useCallback(
     (state: string) => {
@@ -184,12 +202,17 @@ export function Prototype({
 
     // The header's back chevron. The screens draw it but cannot wire it: a
     // tile is itself a button, so the chevron inside one has to stay a span
-    // rather than become a nested button. In a tile it is part of the
-    // picture; here it is the control it looks like, and it goes back the
-    // same one screen the address bar's chevron does.
+    // rather than become a nested button. In a tile it is part of the picture;
+    // here it is the control it looks like.
+    //
+    // A step back, not a screen back — this is the app's own back, where the
+    // address bar below it is the browser's. The two differ on any step drawn
+    // more than one way: the browser retraces every screen, the app leaves the
+    // step it is in.
     if (el.closest('.fl__back')) {
       e.preventDefault()
-      go(-1)
+      const to = beforeThisStep()
+      if (to >= 0) setAt(to)
       return
     }
     // The card is handling this one. Let it, and stay where we are.
