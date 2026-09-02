@@ -65,9 +65,9 @@ export function usePipeline(store: CardSetStore, labels: Record<string, string>)
   }, [])
 
   const doc = store.set.pipeline ?? EMPTY
-  const { set, updatePipeline } = store
+  const { set, context, updatePipeline } = store
 
-  const sections = useMemo(() => sectionsFor(set, labels), [set, labels])
+  const sections = useMemo(() => sectionsFor(set, labels, context), [set, labels, context])
   const byId = useMemo(() => new Map(sections.map((s) => [s.id, s])), [sections])
 
   const previous = useRef<Record<string, Record<string, string>> | null>(null)

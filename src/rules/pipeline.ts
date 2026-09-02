@@ -14,8 +14,9 @@
  * README that came with the design reference.
  */
 
-import type { CardSet, Tier } from './content'
+import type { CardSet, Context, Tier } from './content'
 import { FLOW_STEPS, defaultFlow } from './flow'
+import { resolveOffer, resolveTier } from './resolve'
 
 export type Mode = 'market' | 'dev'
 export type SectionStatus = 'draft' | 'ready' | 'changed' | 'done'
@@ -185,19 +186,23 @@ function flowStrings(prefix: string, screen: Record<string, unknown>): StringDef
 }
 
 /**
- * A plan's strings, in the base content — before any market or campaign
- * override. Prices belong to (tier × cadence), so each base offer contributes
- * its own group of keys.
+ * A plan's strings, resolved for a context so overrides count as edits.
+ *
+ * A market context patches the tier through an override rather than the base,
+ * so tracking base values would leave every market-scoped edit invisible to the
+ * handoff. The section is derived from what the editor is actually looking at:
+ * the resolved tier and its resolved offers, per cadence available here.
  */
-function tierStrings(set: CardSet, tier: Tier): StringDef[] {
-  const group = tier.planName || tier.id
+function tierStrings(set: CardSet, tier: Tier, context: CardSet['context']): StringDef[] {
+  const resolved = resolveTier(tier, context)
+  const group = resolved.planName || tier.id
   const k = (field: string) => tierKey(tier.id, field)
   const out: StringDef[] = [
-    { key: k('badge'), label: 'Badge', value: tier.badge ?? '', required: false, group },
-    { key: k('name'), label: 'Tier name', value: tier.planName, required: true, group },
-    { key: k('description'), label: 'Description', value: tier.description, required: true, group },
+    { key: k('badge'), label: 'Badge', value: resolved.badge ?? '', required: false, group },
+    { key: k('name'), label: 'Tier name', value: resolved.planName, required: true, group },
+    { key: k('description'), label: 'Description', value: resolved.description, required: true, group },
   ]
-  tier.features.forEach((id, i) => {
+  resolved.features.forEach((id, i) => {
     const entry = set.featureCatalog.find((f) => f.id === id)
     out.push({
       key: k(`features[${i}]`),
@@ -207,7 +212,7 @@ function tierStrings(set: CardSet, tier: Tier): StringDef[] {
       group,
     })
   })
-  tier.logoTiles.forEach((id, i) => {
+  resolved.logoTiles.forEach((id, i) => {
     const entry = set.logoCatalog.find((l) => l.id === id)
     out.push({
       key: k(`competitions[${i}]`),
@@ -220,40 +225,39 @@ function tierStrings(set: CardSet, tier: Tier): StringDef[] {
   out.push({
     key: k('competitions.total'),
     label: 'Total competitions',
-    value: String(tier.logoTotal),
+    value: String(resolved.logoTotal),
     required: false,
     group,
   })
-  const offers = set.offers
-    .filter((o) => o.tierId === tier.id && !o.market)
-    .sort((a, b) => set.cadences.indexOf(a.cadence) - set.cadences.indexOf(b.cadence))
-  for (const o of offers) {
-    const c = (field: string) => cadenceKey(tier.id, o.cadence, field)
-    out.push({ key: c('full'), label: `${o.cadence} · Full price`, value: String(o.standardPrice), required: true, group })
+  for (const cadence of set.cadences) {
+    const offer = resolveOffer(set, tier.id, { ...context, cadence })
+    if (!offer) continue
+    const c = (field: string) => cadenceKey(tier.id, cadence, field)
+    out.push({ key: c('full'), label: `${cadence} · Full price`, value: String(offer.standardPrice), required: true, group })
     out.push({
       key: c('per'),
-      label: `${o.cadence} · Price per`,
-      value: set.priceUnits?.[o.cadence] ?? '',
+      label: `${cadence} · Price per`,
+      value: set.priceUnits?.[cadence] ?? '',
       required: false,
       group,
     })
-    if (o.discount) {
+    if (offer.discount) {
       out.push({
         key: c('discount'),
-        label: `${o.cadence} · Discount price`,
-        value: o.introPrice == null ? '' : String(o.introPrice),
+        label: `${cadence} · Discount price`,
+        value: offer.introPrice == null ? '' : String(offer.introPrice),
         required: false,
         group,
       })
       out.push({
         key: c('explainer'),
-        label: `${o.cadence} · Price explainer`,
-        value: o.explainer ?? '',
+        label: `${cadence} · Price explainer`,
+        value: offer.explainer ?? '',
         required: false,
         group,
       })
     }
-    out.push({ key: c('cta'), label: `${o.cadence} · Button`, value: o.ctaLabel ?? '', required: false, group })
+    out.push({ key: c('cta'), label: `${cadence} · Button`, value: offer.ctaLabel ?? '', required: false, group })
   }
   return out
 }
@@ -262,9 +266,15 @@ function tierStrings(set: CardSet, tier: Tier): StringDef[] {
  * Every section in the set: one per page of the journey.
  *
  * `labels` names the sections after their journey steps; without it the step
- * id is used.
+ * id is used. The plans section is resolved in `context` — this is what the
+ * editor is looking at, and a market override has to count as a change or the
+ * handoff misses everything a market changes.
  */
-export function sectionsFor(set: CardSet, labels: Record<string, string> = {}): Section[] {
+export function sectionsFor(
+  set: CardSet,
+  labels: Record<string, string> = {},
+  context: Context = set.context,
+): Section[] {
   const flow = { ...defaultFlow, ...set.flow }
   const out: Section[] = FLOW_STEPS.map((id) => ({
     id,
@@ -275,7 +285,7 @@ export function sectionsFor(set: CardSet, labels: Record<string, string> = {}): 
   out.splice(1, 0, {
     id: PLANS,
     label: labels[PLANS] ?? 'Subscription',
-    strings: tiers.flatMap((t) => tierStrings(set, t)),
+    strings: tiers.flatMap((t) => tierStrings(set, t, context)),
   })
   return out
 }
