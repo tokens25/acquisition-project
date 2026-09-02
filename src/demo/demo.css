@@ -218,6 +218,12 @@
   border-radius: var(--radius-8);
   font-size: var(--font-size-caption-xs);
 }
+/* Not drawn for now. It still counts — the coverage behind it is what the
+   review and the Coach both read — it just is not shown while the top bar is
+   being worked out. Deleting these three lines brings it back. */
+.demo__gate {
+  display: none;
+}
 .demo__gate[data-state='clear'] {
   background: var(--color-accent-success-surface-1);
   color: var(--color-accent-success-text);
@@ -679,6 +685,10 @@
   display: flex;
   gap: var(--space-12);
   align-items: center;
+  /* Held to the right by itself rather than by the gate opposite it. The bar
+     spaces its two halves apart, so with the gate not drawn the buttons slid
+     to the left where the gate used to be. */
+  margin-inline-start: auto;
 }
 /* The toolbar buttons stand next to the Market/Dev switch, so they take its
    height and type size rather than the 40px the design system's md button
