@@ -343,15 +343,14 @@
       'top bar': [0,0,160,16], 'brand strip': [0,0,60,16], 'mark': [4,4,8,8],
       'product title': [15,5,24,6], 'beta chip': [41,5,10,6], 'collapse control': [52,4,6,8],
       'status bar': [60,0,100,16], 'publish gate': [63,5,32,6], 'action buttons': [100,4,56,8],
-      'save note': [0,18,160,5], 'body': [0,25,160,79], 'rail': [0,25,60,79],
+      'dev mode line': [0,18,160,5], 'body': [0,25,160,79], 'rail': [0,25,60,79],
       'panel': [2,27,56,75], 'preview pane': [60,25,100,79]
     }},
     actionsDefault: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
       'preview button': [8,6,48,11], 'export button': [62,6,50,11]
     }},
     actionsEdit: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
-      'ready for review button': [4,6,36,11], 'approved button': [43,6,28,11],
-      'evaluate button': [74,6,42,11]
+      'market/dev toggle': [30,5,60,12]
     }},
     panelDefault: { vb: '0 0 80 121', furn: [[6,5,68,26]], parts: {
       'context fields': [6,36,68,30],
@@ -361,14 +360,17 @@
       'flow item': [8,83,64,11],
       'flow row': [8,84,64,9], 'flow dot': [10,86,5,5], 'flow name': [17,87,26,4],
       'flow skip tag': [46,87,10,4], 'flow edit button': [64,86,6,6], 'flow connector': [11,94,1.5,3],
+      'hidden steps note': [8,110,40,3],
       'reset progress': [6,113,24,4]
     }},
     panelEdit: { vb: '0 0 80 150', furn: [[6,22,68,18]], parts: {
       'step heading': [6,5,52,7], 'back arrow': [6,5,7,7], 'step title': [16,5,42,7],
+      'step status chip': [60,6,14,5], 'nothing ready note': [6,44,68,12],
       'field group': [6,44,68,16], 'group title': [6,44,26,4],
       'plans group': [6,44,68,16], 'header group': [6,64,68,16],
       'pricing group': [6,84,68,16], 'add-on group': [6,104,68,14],
-      'competitions group': [6,122,68,12], 'features group': [6,138,68,10]
+      'competitions group': [6,122,68,12], 'features group': [6,138,68,10],
+      'add button': [44,129,28,4]
     }},
     groupPlans: { vb: '0 0 80 44', parts: {
       'plan tabs': [4,4,72,10], 'plan tab': [4,4,24,10],
@@ -377,10 +379,11 @@
     groupHeader: { vb: '0 0 80 78', parts: {
       'badge field': [4,4,72,14], 'ultimate toggle': [4,21,72,12],
       'plan name field': [4,36,72,14],
-      'AI pill': [52,52,10,5], 'AI sparkle': [53,53,3,3], 'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
+      'AI pill': [52,52,10,5], 'AI sparkle': [53,53,3,3], 'source tabs': [52,52,24,5],
+      'source label': [30,52,18,5], 'description field': [4,59,72,14]
     }},
     groupPricing: { vb: '0 0 80 136', parts: {
-      'standard price field': [4,4,72,14],
+      'standard price field': [4,4,72,14], 'currency mark': [7,8,5,6],
       'price unit field': [4,21,72,14], 'apply discount toggle': [4,38,72,12],
       'discount price field': [4,53,72,14],
       'price explainer field': [4,70,72,16],
@@ -591,6 +594,7 @@
       ['flow skip tag', '.uf__tag', 'A small "seeded" or "not here" on steps this journey skips. "Seeded" means the entry point already answered that question; "not here" means the step does not exist in this journey.', 'panelDefault'],
       ['flow edit button', '.uf__edit', 'The pencil that opens a step. Only on steps that have something to edit.', 'panelDefault'],
       ['flow connector', '.uf__link', 'The short line drawn between one row and the next, so the list reads as a sequence.', 'panelDefault'],
+      ['hidden steps note', '.pl-hidden-note', 'One muted line under the list in Dev mode — "4 not ready yet · hidden in Dev". It names what the list is leaving out, so a short list reads as filtered rather than as the whole journey.', 'panelDefault'],
       ['reset progress', '.demo__reset', 'The link at the bottom. Throws away your local edits and reloads the content the app shipped with.', 'panelDefault'],
     ]],
     ['preview-default', 'Preview', 'default', 'The right column when you are not editing. Shows the whole journey at once.', [
@@ -638,6 +642,7 @@
       ['step heading', '.demo__head', 'The line at the top of the panel: the back arrow and the step title together.', 'panelEdit'],
       ['back arrow', '.demo__back', 'The chevron at the top left. It is the only thing on that line you can click, and it takes you back to the journey.', 'panelEdit'],
       ['step title', '.demo__step-title', 'The name of the step you have open. A heading, not a control — the arrow beside it is what takes you back.', 'panelEdit'],
+      ['step status chip', '.pl-head-chip', 'Holds the handoff status chip beside the step title, so where a page stands sits with its name rather than only in the journey list.', 'panelEdit'],
       ['field group', '.demo__group', 'One titled block of fields. There are six of them.', 'panelEdit'],
       ['group title', '.demo__group-title', 'The heading on a group. Pricing adds the currency to its heading.', 'panelEdit'],
       ['plans group', 'group 1 · Plans', 'Which plan you are editing.', 'panelEdit'],
@@ -646,6 +651,8 @@
       ['add-on group', 'group 4 · Add-on', 'An extra product attached to the plan.', 'panelEdit'],
       ['competitions group', 'group 5 · Competitions', 'Which competition logos show on the card.', 'panelEdit'],
       ['features group', 'group 6 · Features', 'The bullet list of what you get.', 'panelEdit'],
+      ['add button', '.ed-add', 'The "Add competition" and "Add benefit" buttons — one control shared by both groups. Switched off when there is nothing left to add, or when benefits have reached the five a card shows.', 'panelEdit'],
+      ['nothing ready note', '.pl-empty', 'What both columns show in Dev mode before Market has marked anything ready. It appears in the panel and the preview rather than leaving either blank.', 'panelEdit'],
     ]],
     ['group-plans', 'Plans group', 'edit', 'Group 1. Picks which plan the rest of the panel is about.', [
       ['plan tabs', '.ed-tabs', 'The row of plan names you switch between. Not a setting — it chooses which plan the whole panel below is editing.', 'groupPlans'],
@@ -660,10 +667,12 @@
       ['AI pill', '.ai-pill', 'The AI half of the source tabs — the product’s own pill, with the sparkle and the yellow-to-purple gradient edge. Two stacked backgrounds make that edge: a flat fill clipped to the padding box, the gradient clipped to the border box, showing through a transparent 1px border. Unselected it dims rather than changing shape.', 'groupHeader'],
       ['AI sparkle', '.ai-pill__mark', 'The four-point glyph inside the AI pill. A flex box rather than a plain wrapper, so the icon centres instead of resting on a text baseline.', 'groupHeader'],
       ['source tabs', '.ed-source', 'Two tabs hard right above a copy field: AI or Custom. Used twice — over the Description and over the Price explainer. Custom is the default, and it is what copy written before the choice existed counts as. Choosing AI hands that field to the assistant and makes it read-only here.', 'groupHeader'],
+      ['source label', '.ed-source__label', 'The word to the left of the AI/Custom tabs, naming which field they govern.', 'groupHeader'],
       ['description field', 'Description', 'The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to.', 'groupHeader'],
     ]],
     ['group-pricing', 'Pricing group', 'edit', 'Group 3. What it costs. Every price here belongs to one way of paying.', [
       ['standard price field', 'Full price', 'The undiscounted price, in the currency of the country you picked.', 'groupPricing'],
+      ['currency mark', '.ed-currency', 'The currency symbol pinned inside a price field. Read off the country you picked rather than typed into the value, so the number stays a number.', 'groupPricing'],
       ['price unit field', 'Price per', 'Everything after the slash — the “month” in “$29.99/month”. It belongs to the way of paying rather than to this plan, so what you write here reads the same on every plan priced that way. Leave it and it uses the name of the cadence itself, in lower case.', 'groupPricing'],
       ['apply discount toggle', 'Apply discount', 'Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change.', 'groupPricing'],
       ['discount price field', 'Discount price', 'The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount.', 'groupPricing'],
@@ -842,10 +851,8 @@
       ['placeholder note', '.jy__note', 'A free note about the screen. The same style also carries the message when a journey has no steps in the chosen country.', 'stepview'],
       ['placeholder warning', '.jy__todo', 'The line reading "Placeholder — this screen isn’t built yet."', 'stepview'],
     ]],
-    ['actions-edit', 'Action buttons', 'edit', 'The buttons at the top right once you have opened a step. They are the review, in the order it happens: hand it over, then have it approved. Whichever one is live is the solid button; the step behind it drops back to a plain one rather than disappearing, so you can still see where you are in the sequence. To leave a step, use the arrow at the top of the panel.', [
-      ['ready for review button', 'button 1 · Ready for review', 'Hands the content to product and UX. Switched off until every situation passes its rules — the gate to the left says how many are still failing — and switched off again once you have asked, since you cannot ask twice.', 'actionsEdit'],
-      ['approved button', 'button 2 · Approved', 'Records that product and UX said yes, and publishes to the shared copy at the same time. Only available while the content is with them.', 'actionsEdit'],
-      ['evaluate button', 'button 3 · Evaluate performance', 'The AI coach. Not connected to anything yet, so it is switched off and says so rather than answering a click with nothing.', 'actionsEdit'],
+    ['actions-edit', 'Action buttons', 'edit', 'The top right once you have opened a step. In edit mode this is the mode switch rather than a set of actions — to leave a step, use the arrow at the top of the panel.', [
+      ['market/dev toggle', 'toggle · Market / Dev', 'Switches the whole screen between the two sides of the handoff. Market writes the strings and marks a page ready; Dev reads what was marked and marks it done. The thumb slides between the two rather than each side lighting up in place, so the eye follows the mode across. Shift+D also switches it.', 'actionsEdit'],
     ]],
     ['card', 'The card', 'both', 'The plan card itself. This is what renders in the preview and inside every thumbnail.', [
       ['preview area', '.acq-preview', 'The box the cards sit in. It is also what the "All features & content" popup covers — the popup is sized to the phone, not to your browser window.', 'card'],
@@ -926,9 +933,9 @@
       ['beta chip', '.demo__beta', 'The small outlined BETA label next to the title.', 'shell'],
       ['collapse control', '.demo__collapse', 'The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips.', 'shell'],
       ['status bar', '.demo__statusbar', 'The right half of the top bar. Tells you whether you can publish, and holds the buttons.', 'shell'],
-      ['publish gate', '.demo__gate', 'Where the content stands, in four states: "Not ready for review" in red with how many situations are failing; "Ready for review" in green with how many were checked; "Waiting for product & UX approval" in amber once you have handed it over; and "Approved" in green after they say yes. It checks every market and storefront combination, not just the one you are looking at.', 'shell'],
-      ['action buttons', '.demo__actions', 'The button group at the far right. Two in each view, and which two depends on the view.', 'shell'],
-      ['save note', '.demo__savenote', 'A one-line message under the top bar confirming a save worked, or explaining why it did not. Only appears after you have saved.', 'shell'],
+      ['publish gate', '.demo__gate', 'Where the content stands, in two states: how many situations are failing, or how many were checked and passed. It checks every market and storefront combination, not just the one you are looking at.', 'shell'],
+      ['action buttons', '.demo__actions', 'The button group at the far right. Two buttons when you are not editing; the Market/Dev switch once you have opened a step.', 'shell'],
+      ['dev mode line', '.pl-devline', 'A line under the top bar in Dev mode: how many pages Market has marked ready, and how many stay hidden until it does. Only in Dev, and only once something is ready.', 'shell'],
       ['body', '.demo__body', 'Everything under the top bar: the left column and the right column side by side.', 'shell'],
       ['rail', '.demo__rail', 'The track the panel slides inside. This is the thing that actually shrinks when you collapse — the panel keeps its width and gets clipped.', 'shell'],
       ['panel', '.demo__panel', 'The 360px left column. Scrolls on its own, and its contents change completely between the two views.', 'shell'],

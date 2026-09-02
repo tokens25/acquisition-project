@@ -42,6 +42,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **flow skip tag** | `.uf__tag` | A small "seeded" or "not here" on steps this journey skips. "Seeded" means the entry point already answered that question; "not here" means the step does not exist in this journey. |
 | **flow edit button** | `.uf__edit` | The pencil that opens a step. Only on steps that have something to edit. |
 | **flow connector** | `.uf__link` | The short line drawn between one row and the next, so the list reads as a sequence. |
+| **hidden steps note** | `.pl-hidden-note` | One muted line under the list in Dev mode — "4 not ready yet · hidden in Dev". It names what the list is leaving out, so a short list reads as filtered rather than as the whole journey. |
 | **reset progress** | `.demo__reset` | The link at the bottom. Throws away your local edits and reloads the content the app shipped with. |
 
 ## Default view — Preview
@@ -104,6 +105,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **step heading** | `.demo__head` | The line at the top of the panel: the back arrow and the step title together. |
 | **back arrow** | `.demo__back` | The chevron at the top left. It is the only thing on that line you can click, and it takes you back to the journey. |
 | **step title** | `.demo__step-title` | The name of the step you have open. A heading, not a control — the arrow beside it is what takes you back. |
+| **step status chip** | `.pl-head-chip` | Holds the handoff status chip beside the step title, so where a page stands sits with its name rather than only in the journey list. |
 | **field group** | `.demo__group` | One titled block of fields. There are six of them. |
 | **group title** | `.demo__group-title` | The heading on a group. Pricing adds the currency to its heading. |
 | **plans group** | `group 1 · Plans` | Which plan you are editing. |
@@ -112,6 +114,8 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **add-on group** | `group 4 · Add-on` | An extra product attached to the plan. |
 | **competitions group** | `group 5 · Competitions` | Which competition logos show on the card. |
 | **features group** | `group 6 · Features` | The bullet list of what you get. |
+| **add button** | `.ed-add` | The "Add competition" and "Add benefit" buttons — one control shared by both groups. Switched off when there is nothing left to add, or when benefits have reached the five a card shows. |
+| **nothing ready note** | `.pl-empty` | What both columns show in Dev mode before Market has marked anything ready. It appears in the panel and the preview rather than leaving either blank. |
 
 ## Edit view — Plans group
 
@@ -136,6 +140,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **AI pill** | `.ai-pill` | The AI half of the source tabs — the product’s own pill, with the sparkle and the yellow-to-purple gradient edge. Two stacked backgrounds make that edge: a flat fill clipped to the padding box, the gradient clipped to the border box, showing through a transparent 1px border. Unselected it dims rather than changing shape. |
 | **AI sparkle** | `.ai-pill__mark` | The four-point glyph inside the AI pill. A flex box rather than a plain wrapper, so the icon centres instead of resting on a text baseline. |
 | **source tabs** | `.ed-source` | Two tabs hard right above a copy field: AI or Custom. Used twice — over the Description and over the Price explainer. Custom is the default, and it is what copy written before the choice existed counts as. Choosing AI hands that field to the assistant and makes it read-only here. |
+| **source label** | `.ed-source__label` | The word to the left of the AI/Custom tabs, naming which field they govern. |
 | **description field** | `Description` | The paragraph under the plan name. Type the whole thing; never shorten it yourself, because the card measures the space and adds "… more" where it needs to. |
 
 ## Edit view — Pricing group
@@ -145,6 +150,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | Name | Where | What it is |
 | --- | --- | --- |
 | **standard price field** | `Full price` | The undiscounted price, in the currency of the country you picked. |
+| **currency mark** | `.ed-currency` | The currency symbol pinned inside a price field. Read off the country you picked rather than typed into the value, so the number stays a number. |
 | **price unit field** | `Price per` | Everything after the slash — the “month” in “$29.99/month”. It belongs to the way of paying rather than to this plan, so what you write here reads the same on every plan priced that way. Leave it and it uses the name of the cadence itself, in lower case. |
 | **apply discount toggle** | `Apply discount` | Turns on a promotional price. Switching it on fills in a starting discount price for you, twenty percent under standard, which you can then change. |
 | **discount price field** | `Discount price` | The promotional price. Only appears when the discount is on, and it turns red if you type a number at or above the standard price, because that is not a discount. |
@@ -384,13 +390,11 @@ Unqualified requests mean **demo 1** at `/demo`.
 
 ## Edit view — Action buttons
 
-*Edit view* — The buttons at the top right once you have opened a step. They are the review, in the order it happens: hand it over, then have it approved. Whichever one is live is the solid button; the step behind it drops back to a plain one rather than disappearing, so you can still see where you are in the sequence. To leave a step, use the arrow at the top of the panel.
+*Edit view* — The top right once you have opened a step. In edit mode this is the mode switch rather than a set of actions — to leave a step, use the arrow at the top of the panel.
 
 | Name | Where | What it is |
 | --- | --- | --- |
-| **ready for review button** | `button 1 · Ready for review` | Hands the content to product and UX. Switched off until every situation passes its rules — the gate to the left says how many are still failing — and switched off again once you have asked, since you cannot ask twice. |
-| **approved button** | `button 2 · Approved` | Records that product and UX said yes, and publishes to the shared copy at the same time. Only available while the content is with them. |
-| **evaluate button** | `button 3 · Evaluate performance` | The AI coach. Not connected to anything yet, so it is switched off and says so rather than answering a click with nothing. |
+| **market/dev toggle** | `toggle · Market / Dev` | Switches the whole screen between the two sides of the handoff. Market writes the strings and marks a page ready; Dev reads what was marked and marks it done. The thumb slides between the two rather than each side lighting up in place, so the eye follows the mode across. Shift+D also switches it. |
 
 ## The card
 
@@ -496,9 +500,9 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **beta chip** | `.demo__beta` | The small outlined BETA label next to the title. |
 | **collapse control** | `.demo__collapse` | The button that slides the left panel away and brings it back. It stays in the same spot either way, and the arrow flips. |
 | **status bar** | `.demo__statusbar` | The right half of the top bar. Tells you whether you can publish, and holds the buttons. |
-| **publish gate** | `.demo__gate` | Where the content stands, in four states: "Not ready for review" in red with how many situations are failing; "Ready for review" in green with how many were checked; "Waiting for product & UX approval" in amber once you have handed it over; and "Approved" in green after they say yes. It checks every market and storefront combination, not just the one you are looking at. |
-| **action buttons** | `.demo__actions` | The button group at the far right. Two in each view, and which two depends on the view. |
-| **save note** | `.demo__savenote` | A one-line message under the top bar confirming a save worked, or explaining why it did not. Only appears after you have saved. |
+| **publish gate** | `.demo__gate` | Where the content stands, in two states: how many situations are failing, or how many were checked and passed. It checks every market and storefront combination, not just the one you are looking at. |
+| **action buttons** | `.demo__actions` | The button group at the far right. Two buttons when you are not editing; the Market/Dev switch once you have opened a step. |
+| **dev mode line** | `.pl-devline` | A line under the top bar in Dev mode: how many pages Market has marked ready, and how many stay hidden until it does. Only in Dev, and only once something is ready. |
 | **body** | `.demo__body` | Everything under the top bar: the left column and the right column side by side. |
 | **rail** | `.demo__rail` | The track the panel slides inside. This is the thing that actually shrinks when you collapse — the panel keeps its width and gets clipped. |
 | **panel** | `.demo__panel` | The 360px left column. Scrolls on its own, and its contents change completely between the two views. |

@@ -11,15 +11,14 @@
       'top bar': [0,0,160,16], 'brand strip': [0,0,60,16], 'mark': [4,4,8,8],
       'product title': [15,5,24,6], 'beta chip': [41,5,10,6], 'collapse control': [52,4,6,8],
       'status bar': [60,0,100,16], 'publish gate': [63,5,32,6], 'action buttons': [100,4,56,8],
-      'save note': [0,18,160,5], 'body': [0,25,160,79], 'rail': [0,25,60,79],
+      'dev mode line': [0,18,160,5], 'body': [0,25,160,79], 'rail': [0,25,60,79],
       'panel': [2,27,56,75], 'preview pane': [60,25,100,79]
     }},
     actionsDefault: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
       'preview button': [8,6,48,11], 'export button': [62,6,50,11]
     }},
     actionsEdit: { vb: '0 0 120 22', furn: [[0,0,120,22]], parts: {
-      'ready for review button': [4,6,36,11], 'approved button': [43,6,28,11],
-      'evaluate button': [74,6,42,11]
+      'market/dev toggle': [30,5,60,12]
     }},
     panelDefault: { vb: '0 0 80 121', furn: [[6,5,68,26]], parts: {
       'context fields': [6,36,68,30],
@@ -29,14 +28,17 @@
       'flow item': [8,83,64,11],
       'flow row': [8,84,64,9], 'flow dot': [10,86,5,5], 'flow name': [17,87,26,4],
       'flow skip tag': [46,87,10,4], 'flow edit button': [64,86,6,6], 'flow connector': [11,94,1.5,3],
+      'hidden steps note': [8,110,40,3],
       'reset progress': [6,113,24,4]
     }},
     panelEdit: { vb: '0 0 80 150', furn: [[6,22,68,18]], parts: {
       'step heading': [6,5,52,7], 'back arrow': [6,5,7,7], 'step title': [16,5,42,7],
+      'step status chip': [60,6,14,5], 'nothing ready note': [6,44,68,12],
       'field group': [6,44,68,16], 'group title': [6,44,26,4],
       'plans group': [6,44,68,16], 'header group': [6,64,68,16],
       'pricing group': [6,84,68,16], 'add-on group': [6,104,68,14],
-      'competitions group': [6,122,68,12], 'features group': [6,138,68,10]
+      'competitions group': [6,122,68,12], 'features group': [6,138,68,10],
+      'add button': [44,129,28,4]
     }},
     groupPlans: { vb: '0 0 80 44', parts: {
       'plan tabs': [4,4,72,10], 'plan tab': [4,4,24,10],
@@ -45,10 +47,11 @@
     groupHeader: { vb: '0 0 80 78', parts: {
       'badge field': [4,4,72,14], 'ultimate toggle': [4,21,72,12],
       'plan name field': [4,36,72,14],
-      'AI pill': [52,52,10,5], 'AI sparkle': [53,53,3,3], 'source tabs': [52,52,24,5], 'description field': [4,59,72,14]
+      'AI pill': [52,52,10,5], 'AI sparkle': [53,53,3,3], 'source tabs': [52,52,24,5],
+      'source label': [30,52,18,5], 'description field': [4,59,72,14]
     }},
     groupPricing: { vb: '0 0 80 136', parts: {
-      'standard price field': [4,4,72,14],
+      'standard price field': [4,4,72,14], 'currency mark': [7,8,5,6],
       'price unit field': [4,21,72,14], 'apply discount toggle': [4,38,72,12],
       'discount price field': [4,53,72,14],
       'price explainer field': [4,70,72,16],
