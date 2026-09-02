@@ -65,7 +65,7 @@ export interface Prepared {
   /** How the Coach's baseline review came out. */
   findings: number
   health: number
-  /** Where the copy came from, in the words the store uses. */
+  /** Where the words came from: published, file or unreachable. */
   copy: string
   screens: number
   steps: number
@@ -78,19 +78,15 @@ export async function prepare(bus: ProgressBus, job: Job): Promise<Prepared> {
     bus.report({ kind: 'copy:start' })
     try {
       const state = await loadRemote()
-      const where =
-        state.kind === 'published'
-          ? 'the shared copy'
-          : state.kind === 'file'
-            ? 'the copy in the repository'
-            : 'this browser only'
-      bus.report({ kind: 'copy:done', where, reachable: state.kind !== 'unreachable' })
-      return where
+      // The fact, not the sentence: `narrate` owns every word on the screen,
+      // so a phrase cannot end up written in two places.
+      bus.report({ kind: 'copy:done', source: state.kind, reachable: state.kind !== 'unreachable' })
+      return state.kind
     } catch (error) {
       // A failure is an ending: said plainly, and the lane settles on it
       // rather than hanging until the watchdog.
       bus.report({ kind: 'copy:failed', reason: error instanceof Error ? error.message : String(error) })
-      return 'this browser only'
+      return 'unreachable'
     }
   })()
 

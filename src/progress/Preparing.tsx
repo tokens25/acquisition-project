@@ -5,16 +5,18 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ProgressScreen, type Narration } from './ProgressScreen'
 import { createProgressBus, type ProgressEvent } from './progressBus'
 import { prepare, type Job, type Prepared } from './prepare'
+import { CoachOrb } from '../demo/coach/CoachOrb'
 import { go } from '../navigate'
 import { announceArrival } from './arrival'
 
 /**
  * The wait between answering the questions and the tool opening on them.
  *
- * It narrates the three things that genuinely happen in that gap — the copy is
+ * It narrates the four things that genuinely happen in that gap: the words are
  * fetched, the answers are resolved into a journey, the rules are run over
- * every context — and reports the numbers the tool itself will show. Nothing
- * here is a timer wearing a step's clothes.
+ * every market and way to pay, and the Coach reads the result. It reports the
+ * numbers the tool itself will show. Nothing here is a timer wearing a step's
+ * clothes.
  *
  * It lives above the routes rather than inside the front door, so the route can
  * change underneath it: the tool is already mounted behind the screen before
@@ -34,73 +36,103 @@ const TERMINAL = new Set([
 ])
 
 const LANES = [
-  { id: 'copy', label: 'COPY', idleStatus: 'waiting' },
+  { id: 'copy', label: 'WORDS', idleStatus: 'waiting' },
   { id: 'journey', label: 'JOURNEY', idleStatus: 'waiting' },
   { id: 'checks', label: 'CHECKS', idleStatus: 'waiting' },
   { id: 'coach', label: 'COACH', idleStatus: 'waiting' },
 ]
 
+/**
+ * Where the words on the screens came from, said plainly.
+ *
+ * The lane reports which of the three it was; the sentence and the short lane
+ * status are both written here, so they cannot drift from each other.
+ */
+const SOURCE: Record<string, { sentence: string; short: string }> = {
+  published: { sentence: 'the words your team published', short: "team's words" },
+  file: { sentence: 'the words saved with the project', short: 'project words' },
+  unreachable: { sentence: 'the words saved on this computer', short: 'this computer' },
+}
+
+/**
+ * The technical reason, turned into something a market user can act on.
+ *
+ * The reason itself is never thrown away: it goes in the record below, where
+ * whoever needs it can read it. What changes is the big sentence, which is for
+ * the person waiting rather than for the person who wrote the code.
+ */
+function plainReason(note: string): string {
+  if (/ANTHROPIC_API_KEY|no key|not set|not configured/i.test(note)) return 'The AI is switched off, so the Coach read the journey on its own'
+  if (/did not answer within|timeout|timed out/i.test(note)) return 'The AI took too long, so the Coach went with its own reading'
+  if (/401|auth|expired|sign in|login/i.test(note)) return 'The AI needs signing in again, so the Coach read the journey on its own'
+  if (/network|fetch|failed to load|502|503/i.test(note)) return 'The AI could not be reached, so the Coach read the journey on its own'
+  return 'The AI did not answer, so the Coach went with its own reading'
+}
+
 /** One place turns an event into words, so the words cannot drift from it. */
 function narrate(event: ProgressEvent): Narration | null {
   switch (event.kind) {
     case 'copy:start':
-      return { lane: 'copy', text: 'Reading the shared copy', laneStatus: 'reading', tone: 'working' }
-    case 'copy:done':
+      return { lane: 'copy', text: 'Fetching the latest words for your screens', laneStatus: 'fetching', tone: 'working' }
+    case 'copy:done': {
+      const source = SOURCE[String(event.source)] ?? SOURCE.file
       return {
         lane: 'copy',
-        text: `Content is coming from ${event.where}`,
-        record: `Content from ${event.where}`,
-        laneStatus: String(event.where),
+        text: `Your screens will show ${source.sentence}`,
+        record: `Words from ${source.sentence}`,
+        laneStatus: source.short,
         tone: 'ok',
       }
+    }
     case 'copy:failed':
       return {
         lane: 'copy',
-        // The reason verbatim: it is evidence, and rewording it would make the
-        // screen less honest about what went wrong.
-        text: `Could not reach the shared copy — ${event.reason}`,
-        record: `Shared copy unreachable: ${event.reason}`,
-        laneStatus: 'unreachable',
+        text: 'Could not fetch the shared words, so your screens will show the ones saved on this computer',
+        // The reason verbatim, in the record: it is evidence, and rewording it
+        // would make the screen less honest about what went wrong.
+        record: `Shared words unreachable: ${event.reason}`,
+        laneStatus: 'this computer',
         tone: 'retry',
       }
     case 'journey:start':
-      return { lane: 'journey', text: 'Working out the journey', laneStatus: 'resolving', tone: 'working' }
+      return { lane: 'journey', text: 'Building the journey your answers describe', laneStatus: 'building', tone: 'working' }
     case 'journey:done':
       return {
         lane: 'journey',
-        text: `${event.name} — ${event.screens} screens across ${event.steps} steps`,
+        text: `Your journey has ${event.screens} screens across ${event.steps} steps`,
         record: `${event.name}: ${event.screens} screens, ${event.steps} steps`,
         laneStatus: `${event.steps} steps`,
         tone: 'ok',
       }
     case 'checks:start':
-      return { lane: 'checks', text: 'Running the rules over every context', laneStatus: 'checking', tone: 'working' }
+      return { lane: 'checks', text: 'Checking the content in every market and way to pay', laneStatus: 'checking', tone: 'working' }
     case 'checks:done': {
       const failing = Number(event.failing)
+      const total = Number(event.contexts)
       return {
         lane: 'checks',
         text: failing
-          ? `${failing} of ${event.contexts} contexts are failing`
-          : `${event.contexts} contexts checked, all passing`,
+          ? `${failing} of the ${total} market and payment combinations have a problem`
+          : `Checked all ${total} market and payment combinations. Nothing wrong`,
         record: failing
-          ? `${failing} of ${event.contexts} contexts failing: ${(event.labels as string[]).slice(0, 3).join(', ')}`
-          : `${event.contexts} contexts checked`,
-        laneStatus: failing ? `${failing} failing` : 'all passing',
+          ? `${failing} of ${total} combinations failing: ${(event.labels as string[]).slice(0, 3).join(', ')}`
+          : `${total} combinations checked, all fine`,
+        laneStatus: failing ? `${failing} with problems` : 'all fine',
         tone: failing ? 'retry' : 'ok',
       }
     }
     case 'coach:start':
-      return { lane: 'coach', text: 'Asking the Coach to read the journey', laneStatus: 'reading', tone: 'working' }
+      return { lane: 'coach', text: 'The Coach is reading your journey', laneStatus: 'reading', tone: 'working' }
     case 'coach:read': {
       const findings = Number(event.findings)
       return {
         lane: 'coach',
         text: findings
-          ? `${findings} thing${findings === 1 ? '' : 's'} to look at across ${event.screens} screens`
-          : `Nothing to raise across ${event.screens} screens`,
-        record: `Baseline review: ${findings} to look at, health ${event.health}`,
+          ? `The Coach found ${findings} thing${findings === 1 ? '' : 's'} to look at, and is asking the AI too`
+          : 'The Coach found nothing to raise, and is asking the AI too',
+        record: `The Coach found ${findings} to look at. Journey health ${event.health} out of 100`,
         detail: `health ${event.health}`,
-        laneStatus: 'asking the model',
+        laneStatus: 'asking the AI',
         tone: 'working',
       }
     }
@@ -109,9 +141,9 @@ function narrate(event: ProgressEvent): Narration | null {
       return {
         lane: 'coach',
         text: added
-          ? `The model added ${added} more to look at`
-          : 'The model had nothing to add',
-        record: `Model answered: ${added} added to ${event.findings}`,
+          ? `The AI added ${added} more thing${added === 1 ? '' : 's'} to look at`
+          : 'The AI had nothing to add',
+        record: added ? `The AI added ${added} to the Coach's ${event.findings}` : 'The AI had nothing to add',
         laneStatus: added ? `${added} more` : 'nothing to add',
         tone: 'ok',
       }
@@ -119,10 +151,10 @@ function narrate(event: ProgressEvent): Narration | null {
     case 'coach:quiet':
       return {
         lane: 'coach',
-        // The Coach's own words for why, not a paraphrase of them.
-        text: String(event.note),
-        record: `Model not asked: ${event.note}`,
-        laneStatus: 'baseline only',
+        text: plainReason(String(event.note)),
+        // The exact reason stays on screen, one line down, for whoever needs it.
+        record: `The AI was not used: ${event.note}`,
+        laneStatus: 'the Coach only',
         tone: 'retry',
       }
     default:
@@ -169,13 +201,17 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
     <ProgressScreen
       bus={bus}
       lanes={LANES}
+      // The Coach's own face rather than the kit's generic orb: the slow lane
+      // on this screen is the Coach, and it is the same face the tool shows.
+      // 36 is what the CSS orb stood at, so the halo behind it still fits.
+      mark={<CoachOrb size={36} />}
       narrate={narrate}
       isTerminal={(event) => TERMINAL.has(event.kind)}
       // Checked against what is in hand, not against the stream: a lane can
       // settle without the job being done.
       delivered={() => result !== null}
       deliveredSignal={result}
-      openingText="Opening the tool on your answers…"
+      openingText="Opening your journey…"
       subject={job.journey.id}
       cancelLabel="Cancel and go back"
       onCancel={() => {

@@ -71,7 +71,10 @@
 .coach-goal {
   position: fixed;
   inset: 0 0 0 auto;
-  inline-size: min(400px, 100vw);
+  /* One side padding, used by the sheet and by the body that pulls back out
+     to the edge for its scrollbar. */
+  --coach-goal-pad: var(--space-24);
+  inline-size: min(480px, 100vw);
   max-inline-size: none;
   block-size: 100vh;
   max-block-size: none;
@@ -105,7 +108,7 @@
   flex-direction: column;
   gap: var(--space-16);
   block-size: 100%;
-  padding: var(--space-12) var(--space-16) var(--space-16);
+  padding: var(--space-12) var(--coach-goal-pad) var(--space-16);
 }
 
 /* Header row, as on the panel. */
@@ -152,8 +155,8 @@
   flex-direction: column;
   gap: var(--space-16);
   min-block-size: 0;
-  margin: 0 calc(-1 * var(--space-16));
-  padding: 0 var(--space-16) var(--space-8);
+  margin: 0 calc(-1 * var(--coach-goal-pad));
+  padding: 0 var(--coach-goal-pad) var(--space-8);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgb(255 255 255 / 0.18) transparent;
