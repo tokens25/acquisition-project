@@ -23,12 +23,21 @@ import { announceArrival } from './arrival'
  */
 
 /** Which events end a lane. A failure ends one too. */
-const TERMINAL = new Set(['copy:done', 'copy:failed', 'journey:done', 'checks:done'])
+const TERMINAL = new Set([
+  'copy:done',
+  'copy:failed',
+  'journey:done',
+  'checks:done',
+  // Both endings for the Coach: the model answered, or it could not be asked.
+  'coach:done',
+  'coach:quiet',
+])
 
 const LANES = [
   { id: 'copy', label: 'COPY', idleStatus: 'waiting' },
   { id: 'journey', label: 'JOURNEY', idleStatus: 'waiting' },
   { id: 'checks', label: 'CHECKS', idleStatus: 'waiting' },
+  { id: 'coach', label: 'COACH', idleStatus: 'waiting' },
 ]
 
 /** One place turns an event into words, so the words cannot drift from it. */
@@ -80,6 +89,42 @@ function narrate(event: ProgressEvent): Narration | null {
         tone: failing ? 'retry' : 'ok',
       }
     }
+    case 'coach:start':
+      return { lane: 'coach', text: 'Asking the Coach to read the journey', laneStatus: 'reading', tone: 'working' }
+    case 'coach:read': {
+      const findings = Number(event.findings)
+      return {
+        lane: 'coach',
+        text: findings
+          ? `${findings} thing${findings === 1 ? '' : 's'} to look at across ${event.screens} screens`
+          : `Nothing to raise across ${event.screens} screens`,
+        record: `Baseline review: ${findings} to look at, health ${event.health}`,
+        detail: `health ${event.health}`,
+        laneStatus: 'asking the model',
+        tone: 'working',
+      }
+    }
+    case 'coach:done': {
+      const added = Number(event.added)
+      return {
+        lane: 'coach',
+        text: added
+          ? `The model added ${added} more to look at`
+          : 'The model had nothing to add',
+        record: `Model answered: ${added} added to ${event.findings}`,
+        laneStatus: added ? `${added} more` : 'nothing to add',
+        tone: 'ok',
+      }
+    }
+    case 'coach:quiet':
+      return {
+        lane: 'coach',
+        // The Coach's own words for why, not a paraphrase of them.
+        text: String(event.note),
+        record: `Model not asked: ${event.note}`,
+        laneStatus: 'baseline only',
+        tone: 'retry',
+      }
     default:
       return null
   }
@@ -105,9 +150,12 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
     // twice into the record.
     if (started.current) return
     started.current = true
-    prepare(bus, job).then((prepared) => {
+    // A rejection is still an outcome. Without this the screen would wait on
+    // a promise that is never going to answer, and only the watchdog would
+    // free it — which is the trap the screen exists not to be.
+    prepare(bus, job).catch(() => null).then((prepared) => {
       if (cancelled.current) return
-      setResult(prepared)
+      setResult(prepared ?? ({} as Prepared))
       // The route changes while the screen is still opaque, so what the fade
       // uncovers is the tool rather than the questions behind it.
       go('/demo')
@@ -147,21 +195,18 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
         quietDissolveMs: 30_000,
         armWindowMs: 5_000,
         /*
-         * Ten seconds and change, where the work needs under one.
+         * Back to what a hold is for, now that the wait is real.
          *
-         * The hold is meant to cover a lane settling a moment before another
-         * one does, and nothing downstream here is debounced, so a few hundred
-         * milliseconds is all it needs. The rest is asked for: the screen is
-         * being shown to people, and the real pipeline settles too fast to be
-         * read.
+         * It was ten seconds while the work took under one, so that the screen
+         * could be read at all. The Coach put real work in that gap — it asks
+         * a model, which is a call over the wire — so the screen now lasts as
+         * long as the asking does, and the hold goes back to covering what it
+         * is meant to: one lane settling a moment before another.
          *
-         * It is a hold and not a story — no step is invented to fill it, and
-         * every line in the record still narrates something that happened.
-         * What it does mean is that a settled screen sits there looking busy,
-         * which is the honest cost of the request: shorten this the moment
-         * the wait is real.
+         * Nothing downstream of this is debounced, so a few hundred
+         * milliseconds is the whole of it.
          */
-        allSettledHoldMs: 10_700,
+        allSettledHoldMs: 700,
       }}
     />
   )
