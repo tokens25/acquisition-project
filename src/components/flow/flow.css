@@ -44,24 +44,25 @@
    two pixels with it; a pseudo-element takes no layout space, which is what an
    outside stroke is.
 
-   The ramp is the subscribe gold the CTA a few rules down already uses —
-   #f2af3d into #fbed7d across the full width — rather than a ramp of its own.
-   The fade to nothing is a mask over that, so the colours stay the design's
-   two brand golds instead of being mixed with the fade.
-
-   Figma cannot hand over a gradient stroke: the MCP reports it as its last
-   stop alone, rgba(242,175,61,0), which is #f2af3d at zero alpha. So the two
-   colours and the transparent end are the design's; where the fade begins is
-   read off the rendered frame. */
+   It runs left to right into the gold, not out of it: nothing at the left
+   edge, through #f2af3d, to #fbed7d at the right. Figma cannot hand over a
+   gradient stroke — the MCP reports the whole thing as one stop,
+   rgba(242,175,61,0) — and that stop is the start rather than the end, which
+   is what made the first attempt a mirror of this. The two colours are the
+   brand golds the node's variables name; the middle stop is read off the
+   design. */
 .fl__header::after {
   content: '';
   position: absolute;
   inset-inline: 0;
   inset-block-start: 100%;
   block-size: var(--border-2);
-  background: linear-gradient(90deg, #f2af3d 0%, #fbed7d 100%);
-  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 72%, transparent 100%);
-  mask-image: linear-gradient(90deg, #000 0%, #000 72%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    rgb(242 175 61 / 0%) 0%,
+    #f2af3d 38%,
+    #fbed7d 100%
+  );
 }
 .fl__back {
   flex: none;
