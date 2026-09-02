@@ -222,7 +222,7 @@ export function Prototype({
                 tab={current.state === 'ultimate' ? 'ultimate' : 'standard'}
                 onTab={goToState}
               >
-                <CardSetView set={phoneSet} context={context} />
+                <CardSetView set={phoneSet} context={context} detailsScope="screen" />
               </SubscriptionFlowScreen>
             ) : (
               <FlowStep step={current.step} state={current.state ?? 'default'} set={set} />

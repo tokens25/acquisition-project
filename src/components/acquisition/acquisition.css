@@ -775,3 +775,25 @@
     color-mix(in srgb, var(--color-text-bright) 10%, transparent);
   background: var(--color-surface-default);
 }
+
+/* ── The popup on a phone — node 677:159496 ────────────────────
+
+   On a card the dialog is placed over the card and dims that card alone, so
+   the ones beside it stay readable. On a phone there is nothing beside it:
+   the design draws the popup at 343 — the frame's own content width, the same
+   343 the tabs use — by 600, centred, over a dim that covers the screen.
+
+   No anchor is passed in this scope, so the placement never runs and the grid
+   centres the dialog. The card rectangle the dim is drawn from is unset too,
+   which leaves it at its full-size default; only its corner has to go, since
+   the screen it now covers has none. */
+.acq-details[data-scope='screen'] .acq-details__scrim::after {
+  border-radius: 0;
+}
+.acq-details[data-scope='screen'] .acq-details__dialog {
+  inline-size: 343px;
+  /* Below 375 the screen is scaled, not narrowed, so this only catches the
+     case of a screen narrower than the design's own. */
+  max-inline-size: calc(100% - 2 * var(--space-16));
+  block-size: 600px;
+}

@@ -133,3 +133,14 @@
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-regular);
 }
+
+/* The popup belongs to the screen here, so the screen is the box it fills.
+   .acq-preview is the positioned box it fills in the editor; inside the phone
+   that box is this one, and the preview steps out of the way rather than the
+   dialog being told about either. */
+.proto__page {
+  position: relative;
+}
+.proto__page .acq-preview {
+  position: static;
+}

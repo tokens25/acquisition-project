@@ -19,6 +19,7 @@ export function CardSetView({
   set,
   context = set.context,
   interactive = true,
+  detailsScope = 'card',
 }: {
   set: CardSet
   context?: Context
@@ -28,6 +29,12 @@ export function CardSetView({
    * would be a surprise, not a feature.
    */
   interactive?: boolean
+  /**
+   * Whether the details dialog belongs to the card it was opened from or to
+   * the screen around it. The phone is the second case: there is no room
+   * beside a card, so the popup takes the screen.
+   */
+  detailsScope?: 'card' | 'screen'
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const probeRef = useRef<HTMLParagraphElement>(null)
@@ -146,10 +153,11 @@ export function CardSetView({
       prev.length === next.length && prev.every((v, i) => v === next[i]) ? prev : next,
     )
     // A card scrolled out from under its own dialog leaves the dialog pointing
-    // at nothing, so it closes with the card.
+    // at nothing, so it closes with the card. In screen scope it points at the
+    // screen, which does not scroll away.
     const open = detailsRef.current
-    if (open && next[open.cardIndex] === false) setDetails(null)
-  }, [interactive])
+    if (detailsScope === 'card' && open && next[open.cardIndex] === false) setDetails(null)
+  }, [interactive, detailsScope])
 
   // Measured before paint, so a card that is already half out never offers the
   // control even for a frame. Scroll is captured on the document because it
@@ -197,14 +205,26 @@ export function CardSetView({
               onOpenDetails={
                 interactive ? (d) => setDetails({ ...d, cardIndex }) : undefined
               }
-              detailsBlocked={interactive && whole[cardIndex] !== true}
+              // Only in card scope. The wait exists so a dialog cannot open
+              // over a card that is half off screen; a dialog that belongs to
+              // the screen has no such card to be half off it.
+              detailsBlocked={
+                interactive && detailsScope === 'card' && whole[cardIndex] !== true
+              }
             />
           ))}
           <p className="acq-set__probe" ref={probeRef} aria-hidden="true" />
         </div>
       </div>
       {details && (
-        <PlanDetails {...details} anchor={anchor} onClose={() => setDetails(null)} />
+        <PlanDetails
+          {...details}
+          scope={detailsScope}
+          // No anchor in screen scope: there is no card to place against, and
+          // the dialog centres on the overlay when it is not given one.
+          anchor={detailsScope === 'card' ? anchor : undefined}
+          onClose={() => setDetails(null)}
+        />
       )}
     </div>
   )

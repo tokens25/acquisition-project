@@ -40,6 +40,17 @@ export interface PlanDetailsProps {
    * reference that can go stale.
    */
   anchor?: () => HTMLElement | null
+  /**
+   * What the dialog belongs to.
+   *
+   * 'card' places it over the card it was opened from and dims that card
+   * alone — the editor, where the other cards stay readable beside it.
+   * 'screen' is the phone: node 677:159496 draws the popup at the frame's own
+   * content width over a dim that covers everything, because on a phone there
+   * is nothing beside it to keep readable. No anchor comes with it, which is
+   * what leaves it centred.
+   */
+  scope?: 'card' | 'screen'
   onClose: () => void
 }
 
@@ -82,6 +93,7 @@ export function PlanDetails({
   competitions,
   features,
   anchor,
+  scope = 'card',
   onClose,
 }: PlanDetailsProps) {
   const [tab, setTab] = useState<'content' | 'features'>('content')
@@ -193,7 +205,7 @@ export function PlanDetails({
   }, [onClose])
 
   return (
-    <div className="acq-details" ref={rootRef}>
+    <div className="acq-details" ref={rootRef} data-scope={scope}>
       {/* The scrim is the dismiss target as well as the dim: clicking beside a
           dialog closes it everywhere else, and a bare div would not say so.
           It stays full size for that; the dim itself is drawn over the card. */}
