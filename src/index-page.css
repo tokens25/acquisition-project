@@ -42,8 +42,8 @@
   line-height: 18px;
 }
 
-/* In the middle of what is left under the bar, both ways. The page has one
-   thing on it, so there is nowhere else for it to be. */
+/* Across the middle, and a fifth of the way up from it. Centred exactly, a
+   page with one short thing on it reads as slightly low. */
 .idx__body {
   display: flex;
   flex: 1;
@@ -52,6 +52,17 @@
   justify-content: center;
   inline-size: 100%;
   padding: var(--space-40) var(--space-24) var(--space-64);
+}
+/* What lifts it. An empty two fifths at the end shares the centring with the
+   content, which puts the content one fifth higher — the same as shifting it,
+   except this shrinks when the window does rather than sliding the fields up
+   behind the bar. */
+.idx__body::after {
+  content: '';
+  /* Two fifths of the space under the bar. A percentage cannot be used here:
+     the body gets its height from flex-grow, which is not definite enough for
+     one to resolve against, and the spacer collapses to nothing. */
+  flex: 0 1 calc(40vh - 22px);
 }
 /* As wide as the fields under it, so the two read as one column rather than a
    wide paragraph with a narrow form beneath it. The words stay ranged left —
