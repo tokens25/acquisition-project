@@ -665,6 +665,23 @@
   gap: var(--space-12);
   align-items: center;
 }
+/* The toolbar buttons stand next to the Market/Dev switch, so they take its
+   height and type size rather than the 40px the design system's md button
+   ships at. A 40px button beside a 32px switch reads as two toolbars that
+   happen to touch, and the switch is the one whose size is fixed by its own
+   internals — so the buttons are what move. */
+.demo__actions .dazn-btn {
+  block-size: 32px;
+  gap: 6px;
+  padding-inline: 12px;
+  font-size: 12px;
+}
+/* Icon only: square, so the glyph sits in the middle rather than left of an
+   absent label. */
+.demo__actions .dazn-btn:not(:has(.dazn-btn__label:not(:empty))) {
+  inline-size: 32px;
+  padding-inline: 0;
+}
 .demo__savenote {
   margin: 0;
   color: var(--color-text-secondary);

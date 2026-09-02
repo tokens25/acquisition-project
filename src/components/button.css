@@ -22,6 +22,11 @@
   block-size: 40px;
   font-size: var(--font-size-button-md);
 }
+/* An icon-only button passes no children. Without this the empty label span
+   still takes the flex gap, padding the glyph off-centre by 8px. */
+.dazn-btn__label:empty {
+  display: none;
+}
 
 /* Inverse-surface CTA — standard plans */
 .dazn-btn--primary {

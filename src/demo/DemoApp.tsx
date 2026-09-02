@@ -113,25 +113,27 @@ export function DemoApp() {
     </div>
   ) : (
     <div className="demo__actions">
+      {/* Icon only. The label is carried by the tooltip and the accessible
+          name instead, so the toolbar reads as controls rather than as a
+          sentence competing with the gate to its left. */}
+      <Button
+        appearance="tertiary"
+        size="md"
+        iconBefore={<Icon svg={iconArtwork.download} size={16} />}
+        aria-label="Export JSON"
+        title="Export JSON — downloads the content as this app stores it, not yet the shape the rule engine reads."
+        onClick={store.exportJson}
+      />
+
       <Button
         appearance="secondary"
         size="md"
-        iconBefore={<Icon svg={iconArtwork.preview} size={20} />}
+        iconBefore={<Icon svg={iconArtwork.preview} size={16} />}
         aria-pressed={previewOnly}
         title={previewOnly ? 'Show the panel again' : 'Hide the panel and fill the width'}
         onClick={() => setPreviewOnly((v) => !v)}
       >
         {previewOnly ? 'Show panel' : 'Preview'}
-      </Button>
-
-      <Button
-        appearance="tertiary"
-        size="md"
-        iconBefore={<Icon svg={iconArtwork.download} size={20} />}
-        title="Downloads the content as this app stores it — not yet the shape the rule engine reads."
-        onClick={store.exportJson}
-      >
-        Export JSON
       </Button>
 
       <ModeToggle mode={pipe.mode} onChange={switchMode} />
