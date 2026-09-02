@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import type { Context } from '../rules/content'
 import type { CardSetStore } from '../editor/useCardSet'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
-import { journeys } from '../rules/journeys'
+import { MARKETS, SUBSCRIPTIONS, journeys } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
 
 /**
@@ -46,7 +47,7 @@ export function DefaultPanel({
   /** How many questions are still unanswered, for whoever is waiting on them. */
   onAsking?: (pending: number) => void
 }) {
-  const { set, context, setContext, updateSet, journey } = store
+  const { context, setContext, updateSet, journey } = store
 
   const [answered, setAnswered] = useState<Record<string, boolean>>(() => ({
     ...answeredThisVisit,
@@ -56,6 +57,9 @@ export function DefaultPanel({
   const shown = (key: string, actual: string) => (asked(key) ? '' : actual)
   /** The prompt itself, only for as long as it is unanswered. */
   const asking = (key: string) => (asked(key) ? [{ value: '', label: 'Choose…' }] : [])
+  /** Offered, and inert: adding a market is a job nothing here can do yet. */
+  const ADD_MARKET = '__add__'
+
   const answer = (key: string) => {
     answeredThisVisit[key] = true
     setAnswered((prev) => ({ ...prev, [key]: true }))
@@ -65,32 +69,40 @@ export function DefaultPanel({
   const status = statuses.includes(journey.audience) ? journey.audience : (statuses[0] ?? '')
   const entries = entryPoints(journeys, context, status)
   const entryCta = entries.includes(journey.entry.cta) ? journey.entry.cta : (entries[0] ?? '')
-  const matches = journeysMatching(journeys, context, status, entryCta)
 
   /*
-   * The questions actually on screen, and how many are still open.
+   * The questions on screen, and how many are still open.
    *
-   * Counted here rather than by whoever is waiting on the answer: the fourth
-   * question only exists when the first three describe more than one journey,
-   * so nobody outside this component can say how many there are.
+   * Counted here rather than by whoever is waiting on the answer: the questions
+   * belong to this component, and nothing outside it should have to know how
+   * many there are.
    */
   const open = (key: string) => (prompt && !answered[key] ? 1 : 0)
-  const pending =
-    open('market') +
-    open('status') +
-    open('entry') +
-    (matches.length > 1 ? open('journey') : 0)
+  const pending = open('market') + open('subscription') + open('status') + open('entry')
   useEffect(() => {
     onAsking?.(pending)
   }, [onAsking, pending])
 
 
-  const pick = (nextStatus: string, nextEntry?: string) => {
-    const options = entryPoints(journeys, context, nextStatus)
+  /*
+   * Re-reads the journey from the whole situation, every time any of it moves.
+   *
+   * All four answers name it now — the market and the product as much as the
+   * state and the entry — so changing any one of them leaves the standing
+   * journey pointing at a situation nobody is in. It is looked up again from
+   * the situation as it will be, not as it was, which is why the context is
+   * passed in rather than read from above.
+   */
+  const settle = (next: Context, nextStatus: string, nextEntry?: string) => {
+    setContext(next)
+    const options = entryPoints(journeys, next, nextStatus)
     const cta = nextEntry && options.includes(nextEntry) ? nextEntry : options[0]
-    const found = journeysMatching(journeys, context, nextStatus, cta ?? '')[0]
+    const found = journeysMatching(journeys, next, nextStatus, cta ?? '')[0]
     if (found) updateSet({ journeyId: found.id })
   }
+
+  /** The same, when only the answer below the context has changed. */
+  const pick = (nextStatus: string, nextEntry?: string) => settle(context, nextStatus, nextEntry)
 
   return (
     <>
@@ -109,15 +121,36 @@ export function DefaultPanel({
         value={shown('market', context.market)}
         options={[
           ...asking('market'),
-          { value: '*', label: 'Base — all markets' },
-          // The currency is not part of a market's name. It is what the
-          // pricing group's own heading says, where it is being used.
-          ...set.markets.map((m) => ({ value: m.code, label: m.label })),
+          // The base is a place to write, not a place a journey runs, so it is
+          // offered where the writing happens and not at the front door.
+          ...(prompt ? [] : [{ value: '*', label: 'Base — all markets' }]),
+          // The markets the journeys are keyed to, rather than the ones this
+          // copy of the content happens to carry. A market with no journey
+          // behind it is a dead end, and published content can be older than
+          // the list. The currency is not part of a market's name either — the
+          // pricing group's own heading says it, where it is being used.
+          ...MARKETS.map((m) => ({ value: m.code, label: m.label })),
+          ...(prompt ? [{ value: ADD_MARKET, label: 'Add new' }] : []),
+        ]}
+        onChange={(v) => {
+          if (!v || v === ADD_MARKET) return
+          answer('market')
+          settle({ ...context, market: v }, status, entryCta)
+        }}
+      />
+
+      <SelectField
+        label="Subscription"
+        helpText="What is being sold. It picks the journey; nothing else reads it yet."
+        value={shown('subscription', context.subscription ?? '')}
+        options={[
+          ...asking('subscription'),
+          ...SUBSCRIPTIONS.map((sub) => ({ value: sub.code, label: sub.label })),
         ]}
         onChange={(v) => {
           if (!v) return
-          answer('market')
-          setContext({ ...context, market: v })
+          answer('subscription')
+          settle({ ...context, subscription: v }, status, entryCta)
         }}
       />
 
@@ -148,22 +181,8 @@ export function DefaultPanel({
         }}
       />
 
-      {/* Only when the situation genuinely describes more than one journey.
-          Hidden for the sixteen pairs that identify one, so the common case
-          stays three questions rather than four. */}
-      {matches.length > 1 && (
-        <SelectField
-          label="Which journey"
-          helpText={`This situation covers ${matches.length} journeys. They differ after the entry.`}
-          value={shown('journey', journey.id)}
-          options={[...asking('journey'), ...matches.map((j) => ({ value: j.id, label: j.name }))]}
-          onChange={(v) => {
-            if (!v) return
-            answer('journey')
-            updateSet({ journeyId: v })
-          }}
-        />
-      )}
+      {/* No fourth question. Market, product, state and entry name exactly one
+          journey between them, so there is never a choice left to make. */}
     </>
   )
 }

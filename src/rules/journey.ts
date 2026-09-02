@@ -132,7 +132,7 @@ export interface Journey {
    * two to disagree. Reach for this when a DIRECT journey genuinely differs —
    * an unlaunched market, a country with its own purchase flow.
    */
-  when?: Partial<Pick<Context, 'market' | 'channel'>>
+  when?: Partial<Pick<Context, 'market' | 'channel' | 'subscription'>>
   /**
    * How many screens the Figma section actually contains for this journey.
    *
@@ -175,9 +175,10 @@ export function driftFromFigma(all: Journey[]): { id: string; declared: number; 
 
 /** Whether a journey runs in this context at all. */
 export function journeyApplies(journey: Journey, context: Context): boolean {
-  const { market, channel } = journey.when ?? {}
+  const { market, channel, subscription } = journey.when ?? {}
   if (market !== undefined && market !== context.market) return false
   if (channel !== undefined && channel !== context.channel) return false
+  if (subscription !== undefined && subscription !== context.subscription) return false
   return true
 }
 

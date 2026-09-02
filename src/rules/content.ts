@@ -184,6 +184,15 @@ export interface TierPatch {
 /** Where a card is being rendered. Omitted keys match anything. */
 export interface Context {
   market: string
+  /**
+   * Which product is being sold — DAZN's own subscription, or one of the
+   * league packages.
+   *
+   * Optional because nothing derives from it yet: it picks the journey and
+   * waits there. Made required it would multiply every context the rules run
+   * over, and there is nothing yet for those extra runs to find.
+   */
+  subscription?: string
   campaign?: string
   /** Which storefront — `direct` or a partner code. */
   channel: string
