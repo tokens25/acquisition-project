@@ -137,7 +137,8 @@
     }},
     flowSubscription: { vb: '0 0 80 160', furn: [[0,0,80,12]], parts: {
       'subscription control': [5,20,70,11], 'subscription tabs': [5,20,70,11],
-      'subscription tab': [6,21,33,9], 'tab sparkle': [41,20,34,10],
+      'subscription tab': [6,21,33,9], 'ultimate bolt': [44,23,5,5],
+      'tab sparkle': [41,20,34,10],
       'subscription cards': [5,38,70,104]
     }},
     flowCadence: { vb: '0 0 80 100', parts: {

@@ -141,7 +141,7 @@ export function SubscriptionFlowScreen({
             aria-pressed={tab === 'ultimate'}
             onClick={() => onTab?.('ultimate')}
           >
-            <Icon svg={iconArtwork.upgrade} size={24} />
+            <span className="fl-sub__bolt" aria-hidden="true" />
             Ultimate
           </button>
         </div>

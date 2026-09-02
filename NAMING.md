@@ -281,6 +281,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **subscription control** | `.fl-sub__control` | The segmented control and the sparkle behind it, kept together so the sparkle is positioned against the control rather than the screen. |
 | **subscription tabs** | `.fl-sub__tabs` | Standard and Ultimate, 343 wide over a 2px edge. Not a setting on one screen: the section draws the two as separate frames, so choosing one moves to that frame — which is why the prototype does not treat a tab as a step forward. |
 | **subscription tab** | `.fl-sub__tab` | One of the two. The chosen one takes a pale fill and the brighter text; Ultimate carries the upgrade glyph either way. |
+| **ultimate bolt** | `.fl-sub__bolt` | The glyph on the Ultimate tab. Gold rather than white, and shaded: the control is bound to the subscribe gold, which is a gradient, so the glyph is a mask over that gradient rather than a painted icon. It goes quiet with the tab it sits in, the way the label beside it drops to the secondary grey — still gold, just dimmer. |
 | **tab sparkle** | `.fl-sub__sparkle` | The animation behind the Ultimate tab — 168 by 48 at the control’s top right. The frame crops the picture rather than fitting it, so the offsets are the design’s own percentages of that box. |
 | **subscription cards** | `.fl-sub__cards` | The row the plan cards scroll in. It runs to the screen edge rather than stopping at a margin: the next card being cut by the phone is what says there is one. |
 

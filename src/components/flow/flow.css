@@ -1036,3 +1036,27 @@
      visible scrollbar, so here that is 8 of the frame spent on nothing. */
   padding-block-end: 0;
 }
+
+/* ic-subscribe, the bolt on the Ultimate tab.
+
+   Gold, not white: the export arrived with a literal white fill, which is why
+   it read as an ordinary icon in both states. The control's variables name
+   Dazn/subscribe-gold — a gradient style, which is why the glyph shades from
+   the lighter yellow into the deeper gold rather than sitting flat.
+
+   An inline svg cannot take a gradient from CSS, so the glyph is the mask and
+   the gradient is what shows through it. */
+.fl-sub__bolt {
+  flex: none;
+  inline-size: 24px;
+  block-size: 24px;
+  background: linear-gradient(160deg, #fbed7d 0%, #f2af3d 100%);
+  -webkit-mask: url('../../assets/icons/action-upgrade.svg') center / 24px 24px no-repeat;
+  mask: url('../../assets/icons/action-upgrade.svg') center / 24px 24px no-repeat;
+}
+/* Dimmed with the tab it sits in, the way the label beside it drops to the
+   secondary grey. The gold stays gold and goes quiet rather than turning
+   into a different colour. */
+.fl-sub__tab:not([data-on]) .fl-sub__bolt {
+  opacity: 0.5;
+}
