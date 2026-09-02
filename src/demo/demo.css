@@ -1225,3 +1225,30 @@
   background: var(--color-accent-warning-surface-1);
   color: var(--color-accent-warning-text);
 }
+
+/* The screens arrive one after another when the waiting screen lets go.
+
+   Keyed off the row saying it is arriving rather than off the tiles mounting:
+   the row mounts behind that screen and would have finished coming in before
+   anyone saw it. Each cell carries its own place in the order, counted across
+   every cell that renders, so they land left to right in the order they sit.
+
+   `both` so a cell holds its start state through its own delay — without it
+   the whole row is visible first and then jumps. */
+@keyframes jf-arrive {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+.jf[data-arriving] .jf__cell {
+  animation: jf-arrive 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* 90 and 380 are also in JourneyFrames, which needs them to know when the
+     last one has landed. */
+  animation-delay: calc(var(--jf-enter, 0) * 90ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .jf[data-arriving] .jf__cell {
+    animation: none;
+  }
+}

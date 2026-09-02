@@ -6,6 +6,7 @@ import { ProgressScreen, type Narration } from './ProgressScreen'
 import { createProgressBus, type ProgressEvent } from './progressBus'
 import { prepare, type Job, type Prepared } from './prepare'
 import { go } from '../navigate'
+import { announceArrival } from './arrival'
 
 /**
  * The wait between answering the questions and the tool opening on them.
@@ -133,7 +134,12 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
         cancelled.current = true
         onDone()
       }}
-      onLeave={() => onDone()}
+      onLeave={() => {
+        // The tool has been behind this for a while; this is the first moment
+        // anyone can see it.
+        announceArrival()
+        onDone()
+      }}
       timings={{
         // One fetch, no retries behind it — a silence longer than this is a
         // fault rather than patience. Comfortably past the hold below, so the

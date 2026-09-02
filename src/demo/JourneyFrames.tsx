@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import { useState } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { FlowStep } from '../card/FlowStep'
 import { artworkFor, flowArtwork } from '../card/flowArtwork'
@@ -12,6 +12,7 @@ import wifiIcon from '../assets/browser/status-wifi.svg'
 import batteryIcon from '../assets/browser/status-battery.svg'
 import type { CardSet, Context } from '../rules/content'
 import type { ResolvedStep } from '../rules/journey'
+import { onArrival } from '../progress/arrival'
 
 /**
  * The whole journey, one tile per screen, scrolling sideways.
@@ -49,6 +50,17 @@ export function JourneyFrames({
   /** Drawn after a step's name — its handoff status, when it has one. */
   marker?: (stepId: string) => ReactNode
 }) {
+  /**
+   * The screens come in one after another when the waiting screen lets go.
+   *
+   * Tied to that moment rather than to mounting: the row is mounted behind the
+   * screen and would have finished arriving before anyone saw it. It switches
+   * itself off once the last one has landed, so a later render — a reorder, a
+   * change of market — does not send them all in again.
+   */
+  const [arriving, setArriving] = useState(false)
+  useEffect(() => onArrival(() => setArriving(true)), [])
+
   const [dragging, setDragging] = useState<string | null>(null)
   const [over, setOver] = useState<{ id: string; after: boolean } | null>(null)
 
@@ -135,16 +147,37 @@ export function JourneyFrames({
   const before = (index: number) =>
     planned.slice(0, index).reduce((n, e) => n + (e.skipped ? 0 : statesOf(e).length), 0)
 
+  // Counted across every cell that renders, skips included, so the order they
+  // arrive in is the order they sit in.
+  let seq = 0
   const groups = planned.map((entry, index) => ({
     step: entry.step,
     skipped: entry.skipped,
     tiles: statesOf(entry).map((state, i) => ({
       state,
       number: entry.skipped ? null : before(index) + i + 1,
+      order: seq++,
     })),
   }))
   const screens = before(planned.length)
   const running = groups.filter((g) => !g.skipped).length
+
+  /*
+   * Switched off once the last one has landed, so a later render — a reorder,
+   * a change of market — does not send them all in again.
+   *
+   * Worked out from the row rather than guessed: the last cell starts after
+   * every cell before it and then takes its own turn. A twenty-screen journey
+   * would outlast a figure picked for this one.
+   */
+  const ARRIVE_STEP = 90
+  const ARRIVE_RUN = 380
+  const arriveOverBy = (seq - 1) * ARRIVE_STEP + ARRIVE_RUN + 200
+  useEffect(() => {
+    if (!arriving) return
+    const id = setTimeout(() => setArriving(false), arriveOverBy)
+    return () => clearTimeout(id)
+  }, [arriving, arriveOverBy])
 
   /** "5" for one screen, "5–7" for a step drawn three ways, "—" for a skip. */
   const numbering = (tiles: { number: number | null }[]) => {
@@ -156,7 +189,7 @@ export function JourneyFrames({
   }
 
   return (
-    <div className="jf">
+    <div className="jf" data-arriving={arriving || undefined}>
       <p className="jf__caption">
         {screens} screens across {running} steps
         {onReorder && <span className="jf__hint"> · drag a step to reorder, or alt + ← →</span>}
@@ -235,10 +268,14 @@ export function JourneyFrames({
             </h3>
 
             <div className="jf__tiles">
-              {tiles.map(({ state }, i) => {
+              {tiles.map(({ state, order }, i) => {
                 const art = artworkFor(step.id, state)
                 return (
-                <div className="jf__cell" key={i}>
+                <div
+                  className="jf__cell"
+                  key={i}
+                  style={{ '--jf-enter': order } as CSSProperties}
+                >
                 <button
                   type="button"
                   className="jf__tile"
