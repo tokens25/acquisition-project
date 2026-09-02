@@ -56,67 +56,13 @@
   line-height: 1.55;
 }
 
-.idx__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--space-20);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.idx__card {
+/* The situation, then the way in. A column the width of the tool's own
+   panel, so the fields are the size they will be on the other side of the
+   button rather than stretched across the page. */
+.idx__form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
-  block-size: 100%;
-  padding: var(--space-24);
-  border: var(--border-1) solid var(--color-border-full-color-subtle);
-  border-radius: var(--radius-12);
-  background: var(--color-surface-container-1);
-  text-decoration: none;
-  transition: border-color 120ms ease, background 120ms ease;
-}
-.idx__card:hover {
-  border-color: var(--color-brand-primary);
-  background: var(--color-surface-container-2);
-}
-.idx__card:focus-visible {
-  outline: var(--border-2) solid var(--color-brand-primary);
-  outline-offset: 2px;
-}
-.idx__number {
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-label-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.12px;
-  text-transform: uppercase;
-}
-.idx__name {
-  color: var(--color-text-primary);
-  font-size: var(--font-size-heading-h6);
-  font-weight: var(--font-weight-bold);
-}
-.idx__blurb {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-caption-sm);
-  line-height: 1.55;
-}
-.idx__points {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  margin: var(--space-8) 0 0;
-  padding: 0;
-  list-style: none;
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-caption-xs);
-}
-.idx__points li::before {
-  content: '— ';
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .idx__card {
-    transition: none;
-  }
+  gap: var(--space-32);
+  inline-size: 100%;
+  max-inline-size: 360px;
 }

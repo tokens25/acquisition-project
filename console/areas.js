@@ -416,9 +416,9 @@
       ['toggle knob', '.dazn-toggle__knob', 'The circle that slides across it.', 'dsToggle'],
       ['toggle hint', '.tg__hint', 'An optional line under a toggle explaining what it does. Nothing passes one at the moment, so it renders nowhere — the slot is still part of the component.', 'dsToggle'],
     ]],
-    ['routes', 'Routes', 'archive', 'Three pages. If you do not say which, I will assume demo 1.', [
-      ['index', '/', 'The front door. Two links and nothing else.', 'routes'],
+    ['routes', 'Routes', 'archive', 'Three pages. If you do not say which, I will assume the tool.', [
+      ['index', '/', 'The front door. It asks which situation you are writing for — the same three questions the tool asks, from the same component, writing to the same content — and Create opens the tool with them already answered. Nothing is carried across by hand: the answers are part of the content, which is where the tool reads them from.', 'routes'],
       ['demo 1', '/demo', 'The tool. Everything below lives here.', 'routes'],
-      ['demo 2', '/demo2', 'The old first attempt, kept only so we can compare. It has its own components, which are not listed here.', 'routes'],
+      ['demo 2', '/demo2', 'The old first attempt. Reachable by address but no longer offered — the front door stopped being a choice between the two when the second stopped being a candidate. It has its own components, which are not listed here.', 'routes'],
     ]],
   ];

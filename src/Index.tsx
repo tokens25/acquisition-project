@@ -1,36 +1,27 @@
 import './index-page.css'
+import './demo/demo.css'
 
 import daznLogo from './assets/brand/logo-dazn.svg?raw'
+import { Button } from './components/Button'
 import { Icon } from './components/Icon'
+import { DefaultPanel } from './demo/DefaultPanel'
+import { useCardSet } from './editor/useCardSet'
+import { go } from './navigate'
 
 /**
- * The front door.
+ * The front door: the situation, and a way in.
  *
- * Two iterations of the same tool, kept side by side rather than one replacing
- * the other — the point of a second route was always that the new one can be
- * argued with before it wins. Each link says what it is, not only which number
- * it was given.
+ * It asks the same three questions the tool asks — the same fields, from the
+ * same component, writing to the same content — rather than a copy of them
+ * that could drift. Answering here and answering inside the tool are the same
+ * act; Create only opens the door.
+ *
+ * Which is why nothing is carried across by hand. The answers are part of the
+ * content, and the content is where the tool reads them from when it opens.
  */
-const DEMOS = [
-  {
-    href: '/demo',
-    number: 'Demo 1',
-    name: 'Two-stage interface',
-    blurb:
-      'Situation first — market, storefront, who the user is and where they arrived — then one step of the journey at a time. Built from the DS components.',
-    points: ['Journey chosen by describing it', 'Every screen of the flow', 'DS fields and controls'],
-  },
-  {
-    href: '/demo2',
-    number: 'Demo 2',
-    name: 'First iteration',
-    blurb:
-      'The original single form: every field on one surface, with the card set beside it. The version the rules and the publish gate were built against.',
-    points: ['One form, all fields', 'Journey picked by name', 'Where the rules were proven'],
-  },
-]
-
 export function Index() {
+  const store = useCardSet()
+
   return (
     <main className="idx">
       <header className="idx__head">
@@ -43,26 +34,19 @@ export function Index() {
 
       <div className="idx__body">
         <p className="idx__lede">
-          Two iterations of the content editor. Both read the same content and enforce the same
-          rules; they differ in how much they ask of you at once.
+          Describe the situation you are writing content for. Where it is sold, who is buying, and
+          where they arrived from — the three answers pick the journey you will be editing.
         </p>
 
-        <ul className="idx__list">
-          {DEMOS.map((demo) => (
-            <li key={demo.href}>
-              <a className="idx__card" href={demo.href}>
-                <span className="idx__number">{demo.number}</span>
-                <span className="idx__name">{demo.name}</span>
-                <span className="idx__blurb">{demo.blurb}</span>
-                <ul className="idx__points">
-                  {demo.points.map((p) => (
-                    <li key={p}>{p}</li>
-                  ))}
-                </ul>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="idx__form">
+          <div className="demo__fields">
+            <DefaultPanel store={store} />
+          </div>
+
+          <Button appearance="primary" size="lg" block onClick={() => go('/demo')}>
+            Create
+          </Button>
+        </div>
       </div>
     </main>
   )

@@ -4,14 +4,14 @@ import { DemoApp } from './demo/DemoApp'
 import { Index } from './Index'
 
 /**
- * Two interfaces, one deployment.
+ * Three routes, one deployment.
  *
- * `/` is an index of both; `/demo` is the two-stage redesign and `/demo2` the
- * first iteration. Keeping both means the new one can be shown and argued with
- * before it replaces anything, which is the whole reason for a second route
- * rather than a branch nobody can open.
+ * `/` asks which situation you are writing for and opens the tool; `/demo` is
+ * the tool. `/demo2` is the first iteration, kept reachable by address but no
+ * longer offered — the front door stopped being a choice between the two when
+ * the second one stopped being a candidate.
  *
- * Hand-rolled rather than react-router: two static paths do not justify a
+ * Hand-rolled rather than react-router: three static paths do not justify a
  * dependency, and this is small enough to read in one sitting.
  */
 /**
