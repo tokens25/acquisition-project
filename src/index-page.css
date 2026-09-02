@@ -86,3 +86,12 @@
   inline-size: 100%;
   max-inline-size: 360px;
 }
+
+/* The tool's panel packs these tight — fields.css takes the gap to zero, and
+   its group headings and item cards do the separating there. Here there are
+   three fields on an empty page with nothing to separate them, so they take
+   the gap back. Scoped rather than global: the density in the panel is a
+   choice made about the panel. */
+.idx__form .demo__fields {
+  gap: var(--space-16);
+}
