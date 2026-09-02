@@ -64,18 +64,6 @@
      one to resolve against, and the spacer collapses to nothing. */
   flex: 0 1 calc(40vh - 22px);
 }
-/* Wider than the fields under it, and centred on them. The words stay ranged
-   left — centring the block is placing it, centring the text would be setting
-   it. */
-.idx__lede {
-  margin: 0 0 var(--space-32);
-  inline-size: 100%;
-  max-inline-size: 560px;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-body-default);
-  line-height: 1.55;
-}
-
 /* The situation, then the way in. A column the width of the tool's own
    panel, so the fields are the size they will be on the other side of the
    button rather than stretched across the page. */

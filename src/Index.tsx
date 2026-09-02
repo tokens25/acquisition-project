@@ -33,14 +33,9 @@ export function Index() {
       </header>
 
       <div className="idx__body">
-        <p className="idx__lede">
-          Describe the situation you are writing content for. Where it is sold, who is buying, and
-          where they arrived from — the three answers pick the journey you will be editing.
-        </p>
-
         <div className="idx__form">
           <div className="demo__fields">
-            <DefaultPanel store={store} />
+            <DefaultPanel store={store} prompt />
           </div>
 
           <Button appearance="primary" size="lg" block onClick={() => go('/demo')}>
