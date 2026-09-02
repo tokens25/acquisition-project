@@ -135,12 +135,26 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
       onLeave={() => onDone()}
       timings={{
         // One fetch, no retries behind it — a silence longer than this is a
-        // fault rather than patience.
-        quietDissolveMs: 20_000,
+        // fault rather than patience. Comfortably past the hold below, so the
+        // watchdog cannot fire while the screen is deliberately waiting.
+        quietDissolveMs: 30_000,
         armWindowMs: 5_000,
-        // Nothing downstream is debounced, so the hold only has to outlast a
-        // lane settling a moment before another one does.
-        allSettledHoldMs: 700,
+        /*
+         * Ten seconds and change, where the work needs under one.
+         *
+         * The hold is meant to cover a lane settling a moment before another
+         * one does, and nothing downstream here is debounced, so a few hundred
+         * milliseconds is all it needs. The rest is asked for: the screen is
+         * being shown to people, and the real pipeline settles too fast to be
+         * read.
+         *
+         * It is a hold and not a story — no step is invented to fill it, and
+         * every line in the record still narrates something that happened.
+         * What it does mean is that a settled screen sits there looking busy,
+         * which is the honest cost of the request: shorten this the moment
+         * the wait is real.
+         */
+        allSettledHoldMs: 10_700,
       }}
     />
   )
