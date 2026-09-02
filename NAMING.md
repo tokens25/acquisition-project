@@ -303,7 +303,7 @@ Unqualified requests mean **demo 1** at `/demo`.
 | **option price** | `.fl-cadence__price` | The amount and how often you pay it. |
 | **option amount** | `.fl-cadence__amount` | The number. |
 | **option unit** | `.fl-cadence__unit` | What follows the slash — “year”, “month”. |
-| **option saving** | `.fl-cadence__saving` | What this way of paying saves, in green beside the price, under a tag. Written in the panel rather than worked out: the prices are strings, and a figure parsed back out of them would be wrong in every market that writes money differently. Empty draws nothing. |
+| **option saving** | `.fl-cadence__saving` | What this way of paying saves, in green beside the price, under a tag. Worked out rather than written: it is the yearly price against twelve monthly ones, so it follows both instead of being kept in step with them by hand. Drawn on the yearly card only, and only when a monthly card is there to be saved against. The panel chooses whether it reads as money or as a share. |
 | **option ribbon** | `.fl-cadence__badge` | The gold corner ribbon. Empty text draws no ribbon. |
 | **cadence footnote** | `.fl-cadence__footnote` | The line with the information mark under the button. |
 

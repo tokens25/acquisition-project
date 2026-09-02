@@ -1,5 +1,6 @@
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
+import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
 import { FieldGroup } from './FieldGroup'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { FlowContent } from '../rules/flow'
@@ -84,6 +85,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
 
   if (step.renderer === 'cadence') {
     const c = flow.cadence
+    // What the yearly card will say, so the setting below can show it rather
+    // than describe it.
+    const savings = Object.values(cadenceSavings(c))[0] ?? ''
     return (
       <>
         <FieldGroup title="Screen">
@@ -130,21 +134,60 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
                   onChange={(v) => write({ badge: v })}
                   helpText="Empty draws no ribbon."
                 />
-                <TextField
-                  label="Saving"
-                  value={option.saving ?? ''}
-                  pipelineKey={`cadence.options[${i}].saving`}
-                  onChange={(v) => write({ saving: v })}
-                  helpText="Beside the price, in green. Empty draws nothing."
-                />
+                {/* A card can go, as long as one is left to choose. */}
+                {c.options.length > 1 && (
+                  <button
+                    type="button"
+                    className="demo__feature-remove"
+                    onClick={() =>
+                      patch('cadence', {
+                        options: c.options.filter((_, j) => j !== i),
+                        selected:
+                          c.selected === option.id
+                            ? (c.options.find((_, j) => j !== i)?.id ?? '')
+                            : c.selected,
+                      })
+                    }
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             )
           })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('cadence', { options: [...c.options, blankCadenceOption(c.options)] })
+            }
+          >
+            Add a way to pay
+          </button>
+
           <SelectField
             label="Pre-selected"
             value={c.selected}
             options={c.options.map((o) => ({ value: o.id, label: o.title }))}
             onChange={(v) => patch('cadence', { selected: v })}
+          />
+
+          {/* The saving itself is not written anywhere — it is the difference
+              between the yearly price and twelve monthly ones. This is only how
+              that difference is said. */}
+          <SelectField
+            label="Saving shown as"
+            value={c.savingAs ?? 'amount'}
+            options={[
+              { value: 'amount', label: 'Money — Save $108 /year' },
+              { value: 'percent', label: 'Percent — Save 30% /year' },
+            ]}
+            onChange={(v) => patch('cadence', { savingAs: v as 'amount' | 'percent' })}
+            helpText={
+              savings
+                ? `Drawn on the yearly card: "${savings}".`
+                : 'Drawn once a yearly card and a monthly card are both priced.'
+            }
           />
         </FieldGroup>
 

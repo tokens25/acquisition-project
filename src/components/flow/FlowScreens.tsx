@@ -2,6 +2,7 @@ import './flow.css'
 
 import sparkle from '../../assets/flow/subscription-sparkle.gif'
 import { useFlowInput } from './live'
+import { cadenceSavings } from '../../rules/cadence'
 
 import type { ReactNode } from 'react'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
@@ -301,6 +302,8 @@ export function CadenceFlowScreen({
   selected?: string
 }) {
   const chosen = selected ?? content.selected
+  // Worked out from the cards themselves, so it cannot disagree with them.
+  const savings = cadenceSavings(content)
   return (
     <Screen title={content.navTitle}>
       <div className="fl-cadence">
@@ -334,10 +337,10 @@ export function CadenceFlowScreen({
                   <p className="fl-cadence__price">
                     <span className="fl-cadence__amount">{option.price}</span>
                     <span className="fl-cadence__unit">/{option.unit}</span>
-                    {option.saving && (
+                    {savings[option.id] && (
                       <span className="fl-cadence__saving">
                         <Mark svg={iconArtwork.discount} size={16} />
-                        {option.saving}
+                        {savings[option.id]}
                       </span>
                     )}
                   </p>

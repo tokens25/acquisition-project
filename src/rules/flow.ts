@@ -25,14 +25,6 @@ export interface CadenceOption {
   unit: string
   /** The corner ribbon. Empty for no ribbon. */
   badge: string
-  /**
-   * "Save €108 /year", beside the price. Empty for none.
-   *
-   * Written rather than worked out: the prices here are strings the panel
-   * authors, and a figure derived from parsing them would be wrong in every
-   * market that writes money differently.
-   */
-  saving?: string
 }
 
 export interface CadenceScreen {
@@ -40,6 +32,13 @@ export interface CadenceScreen {
   options: CadenceOption[]
   /** Which option's radio is filled. */
   selected: string
+  /**
+   * How the yearly card states what it saves — as money, or as a share of the
+   * year's cost. The saving itself is not written anywhere: it is the
+   * difference between the yearly price and twelve monthly ones, so it follows
+   * both of them rather than being kept in step with them by hand.
+   */
+  savingAs?: 'amount' | 'percent'
   cta: string
   footnote: string
 }
