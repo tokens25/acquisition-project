@@ -130,6 +130,13 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
                   onChange={(v) => write({ badge: v })}
                   helpText="Empty draws no ribbon."
                 />
+                <TextField
+                  label="Saving"
+                  value={option.saving ?? ''}
+                  pipelineKey={`cadence.options[${i}].saving`}
+                  onChange={(v) => write({ saving: v })}
+                  helpText="Beside the price, in green. Empty draws nothing."
+                />
               </div>
             )
           })}

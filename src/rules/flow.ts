@@ -25,6 +25,14 @@ export interface CadenceOption {
   unit: string
   /** The corner ribbon. Empty for no ribbon. */
   badge: string
+  /**
+   * "Save €108 /year", beside the price. Empty for none.
+   *
+   * Written rather than worked out: the prices here are strings the panel
+   * authors, and a figure derived from parsing them would be wrong in every
+   * market that writes money differently.
+   */
+  saving?: string
 }
 
 export interface CadenceScreen {

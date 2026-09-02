@@ -147,6 +147,7 @@
       'option radio': [7,8,6,6], 'option text': [16,7,50,17],
       'option name': [16,7,22,4], 'option note': [16,12,44,3], 'option price': [16,17,26,6],
       'option amount': [16,17,14,6], 'option unit': [32,19,8,4],
+      'option saving': [42,18,22,5],
       'option ribbon': [50,2,26,5],
       'cadence footnote': [4,84,72,6]
     }},

@@ -322,6 +322,12 @@ export function CadenceFlowScreen({
                   <p className="fl-cadence__price">
                     <span className="fl-cadence__amount">{option.price}</span>
                     <span className="fl-cadence__unit">/{option.unit}</span>
+                    {option.saving && (
+                      <span className="fl-cadence__saving">
+                        <Mark svg={iconArtwork.discount} size={16} />
+                        {option.saving}
+                      </span>
+                    )}
                   </p>
                 </div>
                 {option.badge && (

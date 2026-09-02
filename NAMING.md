@@ -294,14 +294,15 @@ Unqualified requests mean **demo 1** at `/demo`.
 | --- | --- | --- |
 | **ways to pay** | `.fl-cadence` | The two options and the button under them. |
 | **pay options** | `.fl-cadence__options` | The options as a stack. |
-| **pay option** | `.fl-cadence__option` | One way of paying. The chosen one carries a gold edge. |
+| **pay option** | `.fl-cadence__option` | One way of paying. The chosen one carries a white edge, and in the prototype clicking one picks it — the choice is the prototype’s rather than the screen’s, because the same screen is a picture in the frames row. |
 | **option radio** | `.fl-cadence__radio` | The circle showing which one is chosen. |
 | **option text** | `.fl-cadence__text` | The name, the note and the price together. |
-| **option name** | `.fl-cadence__name` | What the option is called. Painted gold on the chosen one. |
+| **option name** | `.fl-cadence__name` | What the option is called. The same white whether or not it is chosen: the edge and the filled circle are what say which one is picked. |
 | **option note** | `.fl-cadence__note` | The grey line under the name. |
 | **option price** | `.fl-cadence__price` | The amount and how often you pay it. |
 | **option amount** | `.fl-cadence__amount` | The number. |
 | **option unit** | `.fl-cadence__unit` | What follows the slash — “year”, “month”. |
+| **option saving** | `.fl-cadence__saving` | What this way of paying saves, in green beside the price, under a tag. Written in the panel rather than worked out: the prices are strings, and a figure parsed back out of them would be wrong in every market that writes money differently. Empty draws nothing. |
 | **option ribbon** | `.fl-cadence__badge` | The gold corner ribbon. Empty text draws no ribbon. |
 | **cadence footnote** | `.fl-cadence__footnote` | The line with the information mark under the button. |
 

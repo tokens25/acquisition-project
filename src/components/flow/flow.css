@@ -256,8 +256,11 @@
   border-radius: var(--radius-18);
   text-align: start;
 }
+/* Chosen: a white edge. The radio beside it is already white, and the name
+   stays the white it is unchosen — the edge and the filled dot are what say
+   which one is picked, not a change of colour in the words. */
 .fl-cadence__option[data-on] {
-  border-color: #fbed7d;
+  border-color: #f8f8f8;
 }
 .fl-cadence__radio {
   flex: none;
@@ -276,11 +279,16 @@
   font-weight: var(--font-weight-bold);
   line-height: 1.55;
 }
-.fl-cadence__option[data-on] .fl-cadence__name {
-  background: linear-gradient(270deg, #fbed7d 0%, #f2af3d 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* What a way of paying saves, beside the price. Green is its own colour here
+   rather than one of the golds: it is the only thing on the screen that says
+   money back, and it should not read as another piece of brand furniture. */
+.fl-cadence__saving {
+  display: inline-flex;
+  gap: var(--space-4);
+  align-items: center;
+  margin-inline-start: var(--space-12);
+  color: #6ddb96;
+  font-size: var(--font-size-caption-xs);
 }
 .fl-cadence__note {
   margin: 0;
