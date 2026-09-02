@@ -59,6 +59,9 @@ const SCREEN_OWN = '.acq-details, .acq-card__footer, .acq-card-header__more, .fl
 /** Room for the bar under the phone and a margin, before the phone must shrink. */
 const FURNITURE = 132
 
+/** The dim's own padding, left and right. */
+const GUTTER = 32
+
 export function Prototype({
   planned,
   set,
@@ -106,15 +109,39 @@ export function Prototype({
     [screens.length],
   )
 
-  // A short display cannot hold 812 plus the bar under it. zoom rather than
-  // transform, so the box shrinks with the picture and the bar stays put
-  // instead of floating over a phone that still occupies its full height.
+  /*
+   * 375 x 812 at most, and smaller when the window cannot hold it.
+   *
+   * Capped at 1 in either direction: the phone is a phone, and a bigger one
+   * would be a picture of a phone blown up past the size its screens are drawn
+   * at. Both axes are checked, because a window can be short or narrow and
+   * either one has to shrink it.
+   *
+   * zoom rather than transform, so the box shrinks with the picture and the
+   * bar below stays put instead of floating over a phone that still occupies
+   * its full height.
+   */
   useEffect(() => {
     const fit = () =>
-      setScale(Math.min(1, (window.innerHeight - FURNITURE) / PHONE.height))
+      setScale(
+        Math.min(
+          1,
+          (window.innerHeight - FURNITURE) / PHONE.height,
+          (window.innerWidth - GUTTER) / PHONE.width,
+        ),
+      )
     fit()
+    // Both signals. The resize event is the obvious one, and the root
+    // element's box is the one that still answers when something changes the
+    // viewport without dispatching it. Either alone leaves the phone at the
+    // last size it measured in some environment; together they do not.
+    const observer = new ResizeObserver(fit)
+    observer.observe(document.documentElement)
     window.addEventListener('resize', fit)
-    return () => window.removeEventListener('resize', fit)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', fit)
+    }
   }, [])
 
   useEffect(() => {

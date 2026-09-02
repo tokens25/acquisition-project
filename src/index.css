@@ -27,6 +27,24 @@
   box-sizing: border-box;
 }
 
+/* No scrollbars anywhere.
+
+   A scroll region still scrolls — by wheel, trackpad, touch and keyboard —
+   it just never draws a bar. The tool is a preview of phone screens, where
+   the bar is not part of the design and its gutter is width taken out of a
+   375-wide picture, so the bars were a property of the browser rather than
+   of anything being shown.
+
+   The cost, recorded because it was once a real bug: nothing now hints that a
+   row scrolls sideways. The journey row and the card set both rely on the
+   overhang of the next tile to say so. */
+* {
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   margin: 0;
   background: var(--color-surface-default);

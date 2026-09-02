@@ -447,10 +447,6 @@
   overflow-y: auto;
   overflow-x: hidden;
   background: var(--color-surface-default);
-  scrollbar-width: none;
-}
-.jf__screen::-webkit-scrollbar {
-  display: none;
 }
 
 /* Clips the .Safari, iOS bar baked into the foot of every export. Its height
@@ -720,82 +716,6 @@
 
 /* Closed, the rail is a zero-width track. The panel is still there, just off
    the edge of it — which is what lets it slide back rather than reappearing. */
-
-/* ── Scrollbars ────────────────────────────────────────────────
-   The OS bars are the loudest thing on the screen — a white slab under a row
-   of dark tiles. These are transparent at rest and fade in on hover or focus
-   within the pane that owns them.
-
-   Not display:none. The horizontal journey row hid a card from view once
-   already, and a scroll region with no indication it scrolls is how that
-   happens. Quiet, not absent. */
-.demo__panel,
-.demo__preview,
-.demo .jf__row,
-.demo .acq-set,
-.demo .dz-field__control {
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-  transition: scrollbar-color 160ms ease;
-}
-.demo__panel:hover,
-.demo__panel:focus-within,
-.demo__preview:hover,
-.demo__preview:focus-within,
-.demo .jf__row:hover,
-.demo .jf__row:focus-within,
-.demo .acq-set:hover,
-.demo .dz-field__control:hover,
-.demo .dz-field__control:focus {
-  scrollbar-color: var(--color-surface-container-5) transparent;
-}
-
-/* WebKit has no scrollbar-color, so the same treatment by hand. */
-.demo__panel::-webkit-scrollbar,
-.demo__preview::-webkit-scrollbar,
-.demo .jf__row::-webkit-scrollbar,
-.demo .acq-set::-webkit-scrollbar,
-.demo .dz-field__control::-webkit-scrollbar {
-  inline-size: 8px;
-  block-size: 8px;
-}
-.demo__panel::-webkit-scrollbar-track,
-.demo__preview::-webkit-scrollbar-track,
-.demo .jf__row::-webkit-scrollbar-track,
-.demo .acq-set::-webkit-scrollbar-track,
-.demo .dz-field__control::-webkit-scrollbar-track {
-  background: transparent;
-}
-.demo__panel::-webkit-scrollbar-thumb,
-.demo__preview::-webkit-scrollbar-thumb,
-.demo .jf__row::-webkit-scrollbar-thumb,
-.demo .acq-set::-webkit-scrollbar-thumb,
-.demo .dz-field__control::-webkit-scrollbar-thumb {
-  border-radius: var(--radius-full);
-  background: transparent;
-  transition: background 160ms ease;
-}
-.demo__panel:hover::-webkit-scrollbar-thumb,
-.demo__panel:focus-within::-webkit-scrollbar-thumb,
-.demo__preview:hover::-webkit-scrollbar-thumb,
-.demo__preview:focus-within::-webkit-scrollbar-thumb,
-.demo .jf__row:hover::-webkit-scrollbar-thumb,
-.demo .jf__row:focus-within::-webkit-scrollbar-thumb,
-.demo .acq-set:hover::-webkit-scrollbar-thumb,
-.demo .dz-field__control:hover::-webkit-scrollbar-thumb,
-.demo .dz-field__control:focus::-webkit-scrollbar-thumb {
-  background: var(--color-surface-container-5);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .demo__panel,
-  .demo__preview,
-  .demo .jf__row,
-  .demo .acq-set,
-  .demo .dz-field__control {
-    transition: none;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .demo__rail {
