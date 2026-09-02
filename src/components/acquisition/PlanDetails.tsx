@@ -106,14 +106,36 @@ export function PlanDetails({
       if (!card) return
       const band = visibleBand(root)
       const c = card.getBoundingClientRect()
+
+      /*
+       * How many device pixels one of this element's own pixels covers.
+       *
+       * Rectangles come back in device pixels; everything they feed is in the
+       * element's own — CSS custom properties, and the dialog's offsetWidth
+       * below. Those are the same thing right up until an ancestor scales,
+       * which the prototype does to fit an 812-tall phone onto a shorter
+       * display. Writing a measurement straight back would then scale it a
+       * second time, and the dialog would come out the square of the zoom too
+       * small. Every use where nothing scales divides by 1 and is unchanged.
+       */
+      const z = root.offsetWidth ? root.getBoundingClientRect().width / root.offsetWidth : 1
+
       // Physical left/top, not logical: the overlay is pinned to all four
       // edges, so its origin is the top-left corner in either direction, and
       // the rectangles being measured are physical too.
       const frame = {
-        left: c.left - band.host.left,
-        top: c.top - band.host.top,
-        width: c.width,
-        height: c.height,
+        left: (c.left - band.host.left) / z,
+        top: (c.top - band.host.top) / z,
+        width: c.width / z,
+        height: c.height / z,
+      }
+      // The band in the same units, so the clamp below and the width above are
+      // measured in one system rather than two.
+      const view = {
+        left: band.left / z,
+        right: band.right / z,
+        top: band.top / z,
+        bottom: band.bottom / z,
       }
       // Written straight to the element and read back, not routed through
       // state: these decide the size the placement below is about to centre,
@@ -125,8 +147,8 @@ export function PlanDetails({
         '--acq-details-card-top': frame.top,
         '--acq-details-card-width': frame.width,
         '--acq-details-card-height': frame.height,
-        '--acq-details-band-inline': band.right - band.left,
-        '--acq-details-band-block': band.bottom - band.top,
+        '--acq-details-band-inline': view.right - view.left,
+        '--acq-details-band-block': view.bottom - view.top,
       }
       for (const [name, value] of Object.entries(vars)) {
         root.style.setProperty(name, `${value}px`)
@@ -136,8 +158,8 @@ export function PlanDetails({
       // Centred on the card, then held inside what is on screen — so a card
       // whose middle is below the fold still opens where you can read it.
       const next = {
-        left: fit(frame.left + (c.width - w) / 2, w, band.left, band.right),
-        top: fit(frame.top + (c.height - h) / 2, h, band.top, band.bottom),
+        left: fit(frame.left + (frame.width - w) / 2, w, view.left, view.right),
+        top: fit(frame.top + (frame.height - h) / 2, h, view.top, view.bottom),
       }
       setBox((prev) =>
         prev && prev.left === next.left && prev.top === next.top ? prev : next,

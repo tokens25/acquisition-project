@@ -43,6 +43,16 @@ const PHONE = { width: 375, height: 812 }
  */
 const HOTSPOT = '.fl__cta, .dazn-btn, button, a, [role="button"]'
 
+/**
+ * Controls the card answers itself.
+ *
+ * "All features & content" and the "… more" link open the card's own dialog,
+ * and everything inside that dialog — its tabs, its close — belongs to the
+ * dialog. Advancing the flow underneath any of them would take the screen away
+ * at the moment it was asked to show more of itself.
+ */
+const CARD_OWN = '.acq-details, .acq-card__footer, .acq-card-header__more'
+
 /** Room for the bar under the phone and a margin, before the phone must shrink. */
 const FURNITURE = 132
 
@@ -118,7 +128,10 @@ export function Prototype({
   }, [hint])
 
   const tap = (e: ReactMouseEvent) => {
-    if ((e.target as HTMLElement).closest(HOTSPOT)) {
+    const el = e.target as HTMLElement
+    // The card is handling this one. Let it, and stay where we are.
+    if (el.closest(CARD_OWN)) return
+    if (el.closest(HOTSPOT)) {
       e.preventDefault()
       if (!last) go(1)
     } else {
@@ -128,6 +141,9 @@ export function Prototype({
 
   // The set renders as a phone, the way it does in the frames row: this is a
   // 375-wide device, and a desktop row of three cards is not what it draws.
+  // Unlike the row, it is interactive here: the details dialog is a screen a
+  // person reaches in the real journey, so a prototype that cannot open it is
+  // missing one.
   const phoneSet = set.device === 'mobile' ? set : { ...set, device: 'mobile' as const }
 
   if (!current) return null
@@ -163,7 +179,7 @@ export function Prototype({
 
           <div className="proto__page" ref={page} onClick={tap}>
             {current.step.renderer === 'plans' ? (
-              <CardSetView set={phoneSet} context={context} interactive={false} />
+              <CardSetView set={phoneSet} context={context} />
             ) : (
               <FlowStep step={current.step} state={current.state ?? 'default'} set={set} />
             )}
