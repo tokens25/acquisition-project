@@ -16,6 +16,12 @@ export default tseslint.config([
     'console/**',
     // coach/ is a frozen snapshot of the hero project's Coach, not part of this app
     'coach/**',
+    // The waiting screen arrived as a kit and is kept verbatim, so a newer
+    // version of it drops in unchanged. Its own rules about refs and effects
+    // are load-bearing — the reveal is timed on them — and the wiring around
+    // it (Preparing.tsx, prepare.ts) is ours and is linted.
+    'src/progress/ProgressScreen.tsx',
+    'src/progress/progressBus.ts',
   ]),
   {
     files: ['**/*.{ts,tsx}'],

@@ -1,0 +1,456 @@
+/* ============================================================================
+   THE WAITING SCREEN: styles
+   ----------------------------------------------------------------------------
+   Plain CSS, no Tailwind, no build step. Import it once (the component already
+   does) or paste it into your global stylesheet.
+
+   THE COLOUR BUDGET LIVES HERE: an aurora wash, the mark's halo and the edge
+   line. Everything else on the screen is monochrome type and hairlines. That
+   restraint is the whole look, so if you rebrand, change the four accent
+   variables and leave the rest alone.
+
+   Reduced motion freezes the washes (they stay visible, just static) and stops
+   the sweep. Do not skip that block.
+   ========================================================================== */
+
+.ps-root {
+  /* ---- Rebrand here ------------------------------------------------------ */
+  --ps-accent-1: 255, 250, 0;   /* brand yellow */
+  --ps-accent-2: 255, 170, 0;   /* amber */
+  --ps-accent-3: 207, 20, 248;  /* purple */
+  --ps-accent-4: 80, 120, 255;  /* blue support */
+  --ps-ok: #4cc38a;
+  --ps-retry: #d9a53f;
+
+  --ps-ink: #f5f7fa;
+  --ps-ink-muted: rgba(245, 247, 250, 0.68);
+  --ps-ink-faint: rgba(245, 247, 250, 0.42);
+  --ps-line: rgba(255, 255, 255, 0.09);
+  --ps-line-muted: rgba(255, 255, 255, 0.05);
+  --ps-fade: 420ms;
+
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overflow: hidden;
+  /* The gradient ground. Everything else is painted on top of this. */
+  background: radial-gradient(120% 90% at 50% 0%, #101217 0%, #08090c 60%);
+  color: var(--ps-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  opacity: 1;
+  transition: opacity var(--ps-fade) ease;
+}
+
+.ps-root.ps-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- Backdrop layers ----------------------------------------------------- */
+
+@keyframes ps-aurora {
+  0%, 100% { transform: translateX(-53%) rotate(0deg); }
+  50%      { transform: translateX(-47%) rotate(4deg); }
+}
+
+.ps-aurora {
+  pointer-events: none;
+  position: absolute;
+  bottom: -180px;
+  left: 50%;
+  height: 340px;
+  width: 760px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(45% 60% at 30% 50%, rgba(var(--ps-accent-1), 0.2) 0%, transparent 70%),
+    radial-gradient(45% 60% at 55% 40%, rgba(var(--ps-accent-3), 0.16) 0%, transparent 70%),
+    radial-gradient(45% 60% at 78% 55%, rgba(var(--ps-accent-4), 0.15) 0%, transparent 70%);
+  filter: blur(46px);
+  animation: ps-aurora 9s ease-in-out infinite;
+}
+
+/* Inner glow: colour held INSIDE the frame's edges, breathing with the work.
+   Kept faint on purpose. It lights the room, it never becomes the show. */
+@keyframes ps-innerglow {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+.ps-innerglow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  box-shadow:
+    inset 0 0 140px 24px rgba(var(--ps-accent-3), 0.08),
+    inset 0 0 70px 12px rgba(var(--ps-accent-4), 0.06),
+    inset 0 0 220px 70px rgba(var(--ps-accent-1), 0.05);
+  animation: ps-innerglow 6s ease-in-out infinite;
+}
+
+/* The edge: a thin conic line tracing the screen's own frame, rotating slowly
+   with a heartbeat pulse. Driven by a registered custom property so the
+   gradient angle itself can animate; without @property support the line simply
+   stays static, which is fine. */
+@property --ps-beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes ps-beam-cycle {
+  to { --ps-beam-angle: 360deg; }
+}
+
+/* Heartbeat: a double thump (10%, 35%) then quiet (50% to 100%), mirroring a
+   real pulse rather than a even sine. */
+@keyframes ps-beam-pulse {
+  0%, 100% { filter: brightness(0.92) saturate(0.95); }
+  10%      { filter: brightness(1.35) saturate(1.25); }
+  20%      { filter: brightness(0.96) saturate(1); }
+  35%      { filter: brightness(1.3) saturate(1.2); }
+  50%      { filter: brightness(0.92) saturate(0.95); }
+}
+
+.ps-edge,
+.ps-edge-bleed {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  /* The line curves INTO the screen at each corner: masks follow
+     border-radius, so the content-box cutout rounds with it. */
+  border-radius: 18px;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--ps-beam-angle, 0deg),
+    rgba(var(--ps-accent-1), 0.9),
+    rgba(var(--ps-accent-2), 0.75),
+    rgba(var(--ps-accent-3), 0.85),
+    rgba(var(--ps-accent-4), 0.6),
+    rgba(var(--ps-accent-3), 0.85),
+    rgba(var(--ps-accent-2), 0.75),
+    rgba(var(--ps-accent-1), 0.9)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: ps-beam-cycle 10s linear infinite, ps-beam-pulse 2.4s ease-in-out infinite;
+}
+
+/* The FILL: the same ring, blurred wide, painted UNDER the crisp line, so the
+   border colour bleeds outward and pools in the corner gaps the radius leaves.
+
+   PULSE THE OPACITY, NOT THE FILTER. Animating `filter` makes the browser
+   re-run the whole chain every frame, blur included, across a full-viewport
+   layer, for as long as the work runs: the most expensive thing on the screen,
+   burning precisely while the user sits still watching it. With a static blur
+   the layer rasterises once and the compositor just fades it. Same rhythm. */
+.ps-edge-bleed {
+  animation: ps-beam-cycle 10s linear infinite, ps-bleed-pulse 2.4s ease-in-out infinite;
+  filter: blur(14px);
+  will-change: opacity;
+}
+
+@keyframes ps-bleed-pulse {
+  0%, 100% { opacity: 0.78; }
+  10%      { opacity: 1; }
+  20%      { opacity: 0.82; }
+  35%      { opacity: 0.97; }
+  50%      { opacity: 0.78; }
+}
+
+/* ---- Stage --------------------------------------------------------------- */
+
+.ps-stage {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  padding: 15vh 40px 0;
+}
+
+/* ---- The mark ------------------------------------------------------------ */
+
+.ps-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+@keyframes ps-halo {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.55; }
+  50%      { transform: translate(-50%, -50%) scale(1.25); opacity: 0.9; }
+}
+
+.ps-halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 64px;
+  width: 64px;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 40deg,
+    rgba(var(--ps-accent-1), 0.6),
+    rgba(var(--ps-accent-2), 0.5),
+    rgba(var(--ps-accent-3), 0.6),
+    rgba(var(--ps-accent-4), 0.45),
+    rgba(var(--ps-accent-1), 0.6)
+  );
+  filter: blur(14px);
+  animation: ps-halo 3.2s ease-in-out infinite;
+}
+
+/* The default mark: a CSS-only orb, so the kit needs no assets. Pass your own
+   product's avatar as the `mark` prop when you have one; a familiar face
+   working beats a generic loader handing over to one. */
+@keyframes ps-orb {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50%      { transform: rotate(180deg) scale(1.06); }
+}
+
+.ps-orb {
+  position: relative;
+  height: 36px;
+  width: 36px;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.85) 0%, transparent 38%),
+    conic-gradient(
+      from 0deg,
+      rgba(var(--ps-accent-1), 0.95),
+      rgba(var(--ps-accent-2), 0.9),
+      rgba(var(--ps-accent-3), 0.95),
+      rgba(var(--ps-accent-4), 0.85),
+      rgba(var(--ps-accent-1), 0.95)
+    );
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.45);
+  animation: ps-orb 7s linear infinite;
+}
+
+/* ---- The sentence -------------------------------------------------------- */
+
+@keyframes ps-arrive {
+  from { opacity: 0; transform: translateY(10px); filter: blur(5px); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+.ps-arrive { animation: ps-arrive 420ms cubic-bezier(0.22, 1, 0.36, 1); }
+
+.ps-sentence-slot {
+  margin-top: 32px;
+  display: grid;
+  grid-template-areas: "sentence";
+  min-height: 60px;
+  width: 100%;
+  max-width: 600px;
+  align-items: start;
+  justify-items: center;
+}
+
+.ps-sentence {
+  grid-area: sentence;
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.022em;
+  color: var(--ps-ink);
+}
+
+.ps-detail-slot {
+  margin: 4px 0 0;
+  height: 18px;
+  font-size: 13px;
+  color: var(--ps-ink-muted);
+}
+
+.ps-detail {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--ps-ink-faint);
+}
+
+@keyframes ps-soft { from { opacity: 0; } }
+.ps-soft { animation: ps-soft 240ms ease-out; }
+
+/* ---- Hairline ------------------------------------------------------------ */
+
+@keyframes ps-sweep {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(340%); }
+}
+
+.ps-hairline {
+  margin-top: 28px;
+  height: 1px;
+  width: 180px;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ps-sweep {
+  height: 100%;
+  width: 33.333%;
+  background: linear-gradient(
+    to right,
+    rgb(var(--ps-accent-1)),
+    rgb(var(--ps-accent-2)),
+    rgb(var(--ps-accent-3))
+  );
+  animation: ps-sweep 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* ---- Lanes --------------------------------------------------------------- */
+
+.ps-lanes {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ps-lane {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.ps-lane-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ps-ink-faint);
+  transition: color 300ms ease;
+}
+
+/* WORKING RIGHT NOW READS WHITE: at a glance you can see which workstream is
+   busy this second. Finished is green, a setback amber, idle dimmed. */
+.ps-lane-label-live { color: var(--ps-ink); }
+
+.ps-lane-status { transition: color 300ms ease; }
+.ps-tone-idle    { color: rgba(245, 247, 250, 0.25); }
+.ps-tone-working { color: var(--ps-ink); font-weight: 500; }
+.ps-tone-ok      { color: var(--ps-ok); }
+.ps-tone-retry   { color: var(--ps-retry); }
+
+/* ---- The record ---------------------------------------------------------- */
+
+.ps-record {
+  margin-top: 28px;
+  width: 100%;
+  max-width: 560px;
+  border-top: 1px solid var(--ps-line-muted);
+}
+
+/* Rows ease in from above; the opacity TRANSITION handles the age fade
+   re-stepping as newer rows push older ones down. */
+@keyframes ps-row { from { opacity: 0; transform: translateY(-5px); } }
+.ps-row-anim { animation: ps-row 320ms ease-out; transition: opacity 400ms ease; }
+
+.ps-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 9px 0;
+}
+.ps-row:last-child { border-bottom: 0; }
+
+.ps-row-lane {
+  width: 44px;
+  flex-shrink: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ps-ink-faint);
+}
+
+.ps-row-text {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12.5px;
+  color: var(--ps-ink-muted);
+}
+.ps-row-text-top { color: var(--ps-ink); }
+
+.ps-row-time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ps-ink-faint);
+}
+
+.ps-icon { height: 12px; width: 12px; flex-shrink: 0; }
+.ps-icon-ok { color: var(--ps-ok); }
+.ps-icon-retry { color: var(--ps-retry); }
+.ps-icon-dot {
+  height: 6px;
+  width: 6px;
+  border-radius: 9999px;
+  background: var(--ps-ink-faint);
+}
+
+/* ---- Chrome -------------------------------------------------------------- */
+
+.ps-cancel {
+  position: absolute;
+  bottom: 16px;
+  left: 24px;
+  border-radius: 9999px;
+  border: 1px solid var(--ps-line-muted);
+  background: transparent;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ps-ink-muted);
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+.ps-cancel:hover { color: var(--ps-ink); border-color: var(--ps-line); }
+.ps-cancel:focus-visible {
+  outline: 2px solid rgb(var(--ps-accent-1));
+  outline-offset: 2px;
+}
+
+.ps-clock {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ps-ink-faint);
+}
+
+/* ---- Reduced motion ------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-halo,
+  .ps-aurora,
+  .ps-sweep,
+  .ps-innerglow,
+  .ps-edge,
+  .ps-edge-bleed,
+  .ps-orb {
+    animation: none;
+    opacity: 0.5;
+  }
+  .ps-arrive,
+  .ps-row-anim,
+  .ps-soft {
+    animation: none;
+  }
+}

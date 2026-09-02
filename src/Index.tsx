@@ -7,7 +7,7 @@ import { Icon } from './components/Icon'
 import { DefaultPanel } from './demo/DefaultPanel'
 import { useState } from 'react'
 import { useCardSet } from './editor/useCardSet'
-import { go } from './navigate'
+import type { Job } from './progress/prepare'
 
 /**
  * The front door: the situation, and a way in.
@@ -20,7 +20,7 @@ import { go } from './navigate'
  * Which is why nothing is carried across by hand. The answers are part of the
  * content, and the content is where the tool reads them from when it opens.
  */
-export function Index() {
+export function Index({ onCreate }: { onCreate: (job: Job) => void }) {
   const store = useCardSet()
   /**
    * Unanswered until the fields say otherwise. Starting at one rather than
@@ -52,7 +52,9 @@ export function Index() {
             size="lg"
             block
             disabled={pending > 0}
-            onClick={() => go('/demo')}
+            // The situation as it stands at the moment it was asked for,
+            // which is what the wait is about and what the tool opens on.
+            onClick={() => onCreate({ set: store.set, context: store.context, journey: store.journey })}
           >
             Create
           </Button>

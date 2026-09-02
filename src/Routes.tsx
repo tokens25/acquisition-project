@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { App } from './App'
 import { DemoApp } from './demo/DemoApp'
 import { Index } from './Index'
+import { Preparing } from './progress/Preparing'
+import type { Job } from './progress/prepare'
 
 /**
  * Three routes, one deployment.
@@ -27,6 +29,8 @@ function currentPath() {
 
 export function Routes() {
   const [path, setPath] = useState(currentPath)
+  /** The run between the questions and the tool, while one is happening. */
+  const [job, setJob] = useState<Job | null>(null)
 
   useEffect(() => {
     const onChange = () => setPath(currentPath())
@@ -38,7 +42,16 @@ export function Routes() {
     }
   }, [])
 
-  if (path === '/demo') return <DemoApp />
-  if (path === '/demo2') return <App />
-  return <Index />
+  const page =
+    path === '/demo' ? <DemoApp /> : path === '/demo2' ? <App /> : <Index onCreate={setJob} />
+
+  return (
+    <>
+      {page}
+      {/* Above the route rather than inside the front door: the tool mounts
+          behind this while it is still opaque, so the fade uncovers the tool
+          and not the questions that were just answered. */}
+      {job && <Preparing job={job} onDone={() => setJob(null)} />}
+    </>
+  )
 }
