@@ -91,6 +91,19 @@ export function Prototype({
 
   const current = screens[Math.min(at, screens.length - 1)]
 
+  /**
+   * The first screen of the step after this one, or -1 at the end.
+   *
+   * Not every step's states are a sequence. Account setup and Checkout are —
+   * empty, then filled, then confirmed is a person filling a form in. Standard
+   * and Ultimate are not: they are two ways of drawing one screen, and you
+   * choose between them rather than passing through both. So a plan's CTA
+   * skips what is left of its own step instead of landing on the other tab.
+   */
+  const afterThisStep = useCallback(() => {
+    return screens.findIndex((s, n) => n > at && s.step.id !== current?.step.id)
+  }, [at, current?.step.id, screens])
+
   /** Moves to another state of the step already open, if it has one. */
   const goToState = useCallback(
     (state: string) => {
@@ -172,7 +185,10 @@ export function Prototype({
     if (el.closest(SCREEN_OWN)) return
     if (el.closest(HOTSPOT)) {
       e.preventDefault()
-      if (!last) go(1)
+      // A CTA commits to what the screen was asking, so it leaves the screen
+      // for good rather than moving to the next drawing of it.
+      const to = current.step.renderer === 'plans' ? afterThisStep() : at + 1
+      if (to >= 0 && to < screens.length) setAt(to)
     } else {
       setHint(true)
     }
