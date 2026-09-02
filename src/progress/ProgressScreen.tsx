@@ -572,7 +572,7 @@ export function ProgressScreen<E extends ProgressEvent>(props: ProgressScreenPro
                   {row.record ?? row.text}
                 </span>
                 <span className="ps-row-time">
-                  {startedAt ? mmss(row.at - startedAt) : ""}
+                  {startedAt ? stamp(row.at - startedAt) : ""}
                 </span>
               </div>
             ))}
@@ -629,4 +629,19 @@ function RowIcon({ tone }: { tone: Tone }) {
 function mmss(ms: number): string {
   const s = Math.max(0, Math.floor(ms / 1000));
   return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+}
+
+/**
+ * When a row happened, at a resolution that can tell two rows apart.
+ *
+ * ADDED TO THE KIT. The record stamped rows in whole seconds, which is right
+ * for a pipeline whose steps are seconds apart and useless for one whose steps
+ * are milliseconds apart: every row read 00:00 and the column looked broken
+ * rather than fast. Under a minute it now reads in seconds and hundredths, so
+ * a run that takes 25ms says so instead of rounding itself away. Past a minute
+ * the hundredths stop earning their place and it goes back to mm:ss.
+ */
+function stamp(ms: number): string {
+  if (ms >= 60_000) return mmss(ms);
+  return `${(Math.max(0, ms) / 1000).toFixed(2)}s`;
 }
