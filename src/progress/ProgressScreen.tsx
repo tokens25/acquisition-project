@@ -468,11 +468,20 @@ export function ProgressScreen<E extends ProgressEvent>(props: ProgressScreenPro
     [],
   );
 
-  // Elapsed clock: cosmetic, 1s resolution. It reports time PASSED, never time
-  // remaining, because a remaining-time estimate here would be a fiction.
+  // Elapsed clock. It reports time PASSED, never time remaining, because a
+  // remaining-time estimate here would be a fiction.
+  //
+  // CHANGED FROM THE KIT. It read once a second and drew nothing until the
+  // first tick, so it showed 00:00 for a whole second and then, with the timer
+  // coalesced under a busy first render, moved only every two — which reads as
+  // a stopped clock rather than a slow one. It now reads once on the spot and
+  // then four times a second. The value is still the difference between two
+  // wall-clock times, so a late or dropped tick cannot make it drift; the
+  // reading is only ever how stale the last paint is.
   useEffect(() => {
     if (phase !== "active" || startedAt === null) return;
-    const id = setInterval(() => setElapsed(Date.now() - startedAt), 1000);
+    setElapsed(Date.now() - startedAt);
+    const id = setInterval(() => setElapsed(Date.now() - startedAt), 250);
     return () => clearInterval(id);
   }, [phase, startedAt]);
 
