@@ -137,6 +137,21 @@
   flex-direction: column;
   gap: var(--space-16);
 }
+
+/* ── The situation fields ──────────────────────────────────────────────
+   The three that ask what you are writing for. They stand directly in the
+   column, where the edit panel's fields sit inside groups — which is what
+   keeps everything below off the edit panel without a class to say so.
+
+   Asked in two places, the front door and the journey page's sidebar, and
+   they should read the same in both. */
+.demo__fields:has(> .dz-field) {
+  gap: var(--space-16);
+}
+/* All three explain themselves, which is what makes the column even: each
+   box sits the same distance below the line under the one before it. A field
+   here without help text would show as a short gap among tall ones, so if one
+   is ever added it wants a line of its own rather than a spacer under it. */
 /* The step's heading, 225:46697 — a 20px chevron 4px clear of the title, which
    is bold and white. Only the chevron is the control now, so the hover belongs
    to it rather than to the whole line. */

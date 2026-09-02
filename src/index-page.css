@@ -86,26 +86,3 @@
   inline-size: 100%;
   max-inline-size: 360px;
 }
-
-/* The tool's panel packs these tight — fields.css takes the gap to zero, and
-   its group headings and item cards do the separating there. Here there are
-   three fields on an empty page with nothing to separate them, so they take
-   the gap back. Scoped rather than global: the density in the panel is a
-   choice made about the panel. */
-.idx__form .demo__fields {
-  gap: var(--space-16);
-}
-
-/* No help text on the front door.
-
-   It is written for someone editing — "Editing MSG+'s difference from the
-   base" is about the panel, not about choosing. It also sits inside the field
-   block, so wherever there is help text the boxes end up 21 further apart
-   than where there is not: 37, then 16, down a column of three. Without it
-   the gap between every pair of boxes is the 16 the container asks for.
-
-   The guidance is still there in the tool, on the other side of Create, where
-   it is about the work being done. */
-.idx__form .dz-field__help {
-  display: none;
-}

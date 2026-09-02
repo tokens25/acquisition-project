@@ -50,6 +50,7 @@ export function DefaultPanel({ store }: { store: CardSetStore }) {
 
       <SelectField
         label="User status"
+        helpText="Who is buying. It narrows the entry points below."
         value={status}
         options={statuses.map((s) => ({ value: s, label: STATUS_LABELS[s] ?? s }))}
         onChange={(v) => pick(v)}

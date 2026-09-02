@@ -12,6 +12,10 @@
   --ed-fill: var(--color-surface-container-2);
   --ed-line: var(--color-border-full-color-default);
   --ed-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* The help line under a field. Named because the situation fields reserve
+     one whether or not they have anything to put in it, and a reserved line
+     that does not match the real one defeats the point. */
+  --ed-help-size: 11.5px;
 }
 
 .demo__fields {
@@ -180,7 +184,7 @@
 .demo__fields .tg__hint,
 .demo__fields .fm-note {
   padding-inline: var(--space-12);
-  font-size: 11.5px;
+  font-size: var(--ed-help-size);
 }
 .ed-currency {
   font-variant-numeric: tabular-nums;
