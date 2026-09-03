@@ -188,6 +188,18 @@ export function journeysFor(all: Journey[], context: Context): Journey[] {
 }
 
 /**
+ * The journey a set is on: the one it names if that one runs here, otherwise
+ * the first that does.
+ *
+ * One function because two answers to this question is two situations — the
+ * editor would be writing copy for a journey the preview is not showing.
+ */
+export function chosenJourney(all: Journey[], context: Context, journeyId: string): Journey {
+  const running = journeysFor(all, context)
+  return running.find((j) => j.id === journeyId) ?? running[0] ?? all[0]
+}
+
+/**
  * A journey with its steps in the order the set says, if it says anything.
  *
  * Ids the journey does not have are ignored and ids the order omits keep their

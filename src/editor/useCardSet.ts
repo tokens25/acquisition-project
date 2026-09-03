@@ -8,7 +8,7 @@ import { adaptEngineContent, isEngineContent } from '../rules/adapt'
 import { readTemplate } from '../rules/sheet'
 import { readWorkbook } from '../rules/xlsx'
 import type { Journey } from '../rules/journey'
-import { applyStepOrder, isReordered, journeysFor } from '../rules/journey'
+import { applyStepOrder, chosenJourney, isReordered } from '../rules/journey'
 import { journeys } from '../rules/journeys'
 import { findOverride, resolveOffer } from '../rules/resolve'
 import type { RemoteState } from './remote'
@@ -419,10 +419,7 @@ export function useCardSet(): CardSetStore {
 
   // Resolved here, not in each consumer: the editor and the preview must agree
   // on which journey is on screen, and two copies of this line would drift.
-  const chosen =
-    journeysFor(journeys, context).find((j) => j.id === set.journeyId) ??
-    journeysFor(journeys, context)[0] ??
-    journeys[0]
+  const chosen = chosenJourney(journeys, context, set.journeyId)
   // Applied once, here, so the rail, the frames and the preview all walk the
   // same sequence rather than each re-deriving it.
   const journey = applyStepOrder(chosen, set.stepOrder?.[chosen.id])

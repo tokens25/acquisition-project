@@ -9,6 +9,20 @@ import type { CardSetStore } from '../editor/useCardSet'
 import type { FlowContent } from '../rules/flow'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
+import type { Selector } from '../rules/layers'
+import {
+  clearFlow,
+  layersFor,
+  resolveFlow,
+  sameSelector,
+  scopeLadder,
+  selectorLabel,
+  situationOf,
+  specificity,
+  writeFlow,
+} from '../rules/layers'
+import { flowFieldLabel } from '../rules/pipeline'
+import { useState } from 'react'
 
 /**
  * The edit view's form for the screens after the plan picker.
@@ -20,13 +34,79 @@ import type { Step } from '../rules/journey'
  * Grouped the way the screen reads top to bottom rather than by kind, so the
  * panel and the preview beside it can be followed together.
  */
+/**
+ * Which situations the edits below are for.
+ *
+ * Held here and not in the content: it is a fact about who is typing, not
+ * about what the screens say. It starts at the copy everybody gets, because
+ * the shared line is the one that should be edited unless somebody has a
+ * reason, and narrowing is the deliberate act.
+ */
 export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) {
   const { set, updateSet } = store
-  const flow = { ...defaultFlow, ...set.flow }
+  const at = situationOf(set)
+  const ladder = scopeLadder(at)
+  const [chosen, setChosen] = useState(ladder[0]?.label ?? 'Everywhere')
+  const scope = ladder.find((r) => r.label === chosen)?.when ?? {}
+  const screen = step.renderer as keyof FlowContent
+  if (!(screen in defaultFlow)) return <FlowFields store={store} step={step} scope={scope} />
 
-  /** Writes one field of one screen, leaving the other five alone. */
+  const applying = layersFor(set, at)
+  const mine = applying.find((l) => sameSelector(l.when, scope))
+  const owned = Object.keys(mine?.patch[screen] ?? {})
+  // Fields a narrower layer has already answered for. Typing into one of these
+  // at this scope changes something real, but nothing visible from here — which
+  // is worth saying out loud rather than leaving as a silent no-op.
+  const shadowed = applying
+    .filter((l) => specificity(l.when) > specificity(scope))
+    .flatMap((l) =>
+      Object.keys(l.patch[screen] ?? {}).map(
+        (field) => `${flowFieldLabel(field)} (${selectorLabel(l.when)})`,
+      ),
+    )
+
+  return (
+    <>
+      <FieldGroup title="Where this applies">
+        <SelectField
+          label="Editing"
+          value={chosen}
+          options={ladder.map((r) => ({ value: r.label, label: r.label }))}
+          onChange={setChosen}
+          helpText={
+            owned.length
+              ? `${owned.length} field${owned.length === 1 ? '' : 's'} on this screen ${owned.length === 1 ? 'is' : 'are'} written for ${chosen} only.`
+              : 'Everything on this screen is inherited. Editing writes here.'
+          }
+        />
+        {shadowed.length > 0 && (
+          <p className="ed-absent">
+            Answered more narrowly elsewhere, so edits here will not show in this
+            situation: {shadowed.join(', ')}.
+          </p>
+        )}
+        {owned.length > 0 && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => updateSet(clearFlow(set, scope, screen))}
+          >
+            Reset this screen to inherited
+          </button>
+        )}
+      </FieldGroup>
+      <FlowFields store={store} step={step} scope={scope} />
+    </>
+  )
+}
+
+function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; scope: Selector }) {
+  const { set, updateSet } = store
+  const flow = resolveFlow(set)
+
+  /** Writes one field of one screen to the chosen scope, and nothing else. */
   const patch = <K extends keyof FlowContent>(screen: K, next: Partial<FlowContent[K]>) =>
-    updateSet({ flow: { ...flow, [screen]: { ...flow[screen], ...next } } })
+    updateSet(writeFlow(set, scope, screen, next))
 
   const navTitle = (screen: keyof FlowContent, value: string) => (
     <TextField

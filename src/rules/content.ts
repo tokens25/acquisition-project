@@ -11,6 +11,7 @@
  */
 
 import type { FlowContent } from './flow'
+import type { FlowLayer } from './layers'
 import type { PipelineDoc } from './pipeline'
 
 export type AddOnPurchaseType = 'one_time_payment' | 'discount_code'
@@ -314,6 +315,15 @@ export interface CardSet {
    * a nav title beside a price.
    */
   flow?: FlowContent
+  /**
+   * Copy that differs by situation — market, subscription, user status, entry
+   * point — as sparse layers over `flow`.
+   *
+   * Layers rather than a copy of `flow` per situation: there are 240 of them,
+   * and a fix to a shared line has to reach every one that has not deliberately
+   * said otherwise. A layer holds only the fields it changes.
+   */
+  flowLayers?: FlowLayer[]
   /**
    * Kept with the content rather than in the page, because it is a fact about
    * this content and not about this browser tab: reloading does not un-ask for

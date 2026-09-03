@@ -1,7 +1,8 @@
 import type { CardSet, Context, MarketConfig } from '../../../rules/content'
+import { resolveFlow } from '../../../rules/layers'
 import { statesOf, tabsOf } from '../../../rules/tabs'
 import { deriveCard } from '../../../rules/derive'
-import { defaultFlow, type FlowContent } from '../../../rules/flow'
+import { type FlowContent } from '../../../rules/flow'
 import type { Journey, ResolvedStep, SkipReason, StepRenderer } from '../../../rules/journey'
 import { marketFor, resolveSet } from '../../../rules/resolve'
 import type { ScreenId } from './types'
@@ -115,7 +116,7 @@ export function buildSnapshot(set: CardSet, journey: Journey, context: Context, 
     rendered: steps.filter((s) => !s.skipped),
     plans,
     planTabs: tabsOf(set).map((t) => t.name),
-    flow: set.flow ?? defaultFlow,
+    flow: resolveFlow(set),
     teamNames: Object.fromEntries(set.logoCatalog.map((l) => [l.id, l.name])),
   }
 }

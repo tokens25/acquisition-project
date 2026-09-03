@@ -1,6 +1,7 @@
 import type { CardSet, TierPatch } from '../../../rules/content'
 import type { FlowContent } from '../../../rules/flow'
 import type { FindingFix } from './types'
+import { ownerOf, resolveFlow, writeFlow } from '../../../rules/layers'
 
 /**
  * Turns a fix into the patches the store understands: the flow copy, the
@@ -8,10 +9,40 @@ import type { FindingFix } from './types'
  * override). Only strings change; nothing is added or removed.
  */
 export interface FixPatches {
-  flow?: FlowContent
+  /** Flow copy, written where each changed field actually lives. */
+  flow?: Partial<CardSet>
   featureCatalog?: CardSet['featureCatalog']
   tiers: { id: string; patch: TierPatch }[]
   changed: number
+}
+
+/**
+ * Routes a fixed copy of the resolved flow back to where each field came from.
+ *
+ * The Coach reviews what a situation shows, which may be the shared line or a
+ * line written for this market alone. Fixing it has to change the one it read:
+ * writing every fix to the base would leave the words it objected to on screen,
+ * shadowed by the layer they were actually in.
+ */
+function flowWrites(set: CardSet, next: FlowContent): Partial<CardSet> {
+  const current = resolveFlow(set)
+  const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
+  let working = set
+  let out: Partial<CardSet> = {}
+  for (const screen of Object.keys(current) as (keyof FlowContent)[]) {
+    for (const field of Object.keys(current[screen])) {
+      const before = (current[screen] as unknown as Record<string, unknown>)[field]
+      const after = (next[screen] as unknown as Record<string, unknown>)[field]
+      if (same(before, after)) continue
+      const owner = ownerOf(working, screen, field)
+      const patch = writeFlow(working, owner?.when ?? {}, screen, {
+        [field]: after,
+      } as Partial<FlowContent[typeof screen]>)
+      working = { ...working, ...patch }
+      out = { ...out, ...patch }
+    }
+  }
+  return out
 }
 
 function rewrite(text: string, fix: FindingFix): string {
@@ -39,7 +70,7 @@ export function patchesFor(set: CardSet, fix: FindingFix): FixPatches {
   // Targeted replacements set one field and nothing else: "path:" into the
   // flow copy, "tier:<id>.<field>" on a plan, "feature:<id>" on a feature line.
   if ('replace' in fix && fix.replace.some((r) => /^(path|tier|feature):/.test(r.from))) {
-    const flow: FlowContent | undefined = set.flow ? structuredClone(set.flow) : undefined
+    const flow: FlowContent = structuredClone(resolveFlow(set))
     const tiers: FixPatches['tiers'] = []
     let featureCatalog = set.featureCatalog
     for (const r of fix.replace) {
@@ -55,7 +86,7 @@ export function patchesFor(set: CardSet, fix: FindingFix): FixPatches {
         count.n += 1
         continue
       }
-      if (!r.from.startsWith('path:') || !flow) continue
+      if (!r.from.startsWith('path:')) continue
       const keys = r.from.slice('path:'.length).split('.')
       let node: unknown = flow
       for (const k of keys.slice(0, -1)) node = (node as Record<string, unknown>)?.[k]
@@ -65,9 +96,14 @@ export function patchesFor(set: CardSet, fix: FindingFix): FixPatches {
         count.n += 1
       }
     }
-    return { flow, featureCatalog: featureCatalog === set.featureCatalog ? undefined : featureCatalog, tiers, changed: count.n }
+    return {
+      flow: flowWrites(set, flow),
+      featureCatalog: featureCatalog === set.featureCatalog ? undefined : featureCatalog,
+      tiers,
+      changed: count.n,
+    }
   }
-  const flow = set.flow ? walk(set.flow, fix, count) : undefined
+  const flow = walk(resolveFlow(set), fix, count)
   const featureCatalog = set.featureCatalog.map((f) => ({ ...f, text: walk(f.text, fix, count) }))
   const tiers = set.tiers.flatMap((t) => {
     const patch: TierPatch = {}
@@ -79,5 +115,5 @@ export function patchesFor(set: CardSet, fix: FindingFix): FixPatches {
     if (badge !== undefined && badge !== t.badge) patch.badge = badge
     return Object.keys(patch).length ? [{ id: t.id, patch }] : []
   })
-  return { flow, featureCatalog, tiers, changed: count.n }
+  return { flow: flowWrites(set, flow), featureCatalog, tiers, changed: count.n }
 }
