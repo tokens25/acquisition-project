@@ -11,6 +11,7 @@
  */
 
 import type { FlowContent } from './flow'
+import type { FlowLayer } from './layers'
 import type { PipelineDoc } from './pipeline'
 
 export type AddOnPurchaseType = 'one_time_payment' | 'discount_code'
@@ -57,6 +58,19 @@ export interface AddOnEntry {
   imageId: string
 }
 
+/** One tab over the plan picker. */
+export interface PlanTab {
+  id: string
+  name: string
+  /**
+   * How the tab is drawn. `celebratory` is the Ultimate treatment — the gold
+   * bolt before the name and the sparkle running behind it.
+   *
+   * Absent on tabs written before the choice existed; see `styleOf`.
+   */
+  style?: 'plain' | 'celebratory'
+}
+
 /**
  * A plan, scoped to nothing — market differences are patches, not copies.
  *
@@ -75,6 +89,14 @@ export interface Tier {
   /** Total competitions the plan carries; drives the derived "+N" tile. */
   logoTotal: number
   ultimate: boolean
+  /**
+   * Which tabs of the plan picker this tier appears under.
+   *
+   * Absent — and empty — means every tab, which is what the design draws and
+   * what every tier written before there were tabs meant. A tab is only worth
+   * adding if the cards can differ between them, and this is how they differ.
+   */
+  tabs?: string[]
   /**
    * The words on the badge. Authored, not derived.
    *
@@ -120,6 +142,14 @@ export interface CadenceOffer {
   cadence: string
   /** Omitted applies everywhere; a market code narrows it, and wins. */
   market?: string
+
+  /**
+   * Which tab this price is for. Omitted applies on every tab, and a
+   * tab-scoped row wins — the same sparseness `market` has, for the same
+   * reason: most plans cost the same on both tabs, and the ones that do not
+   * are a row rather than a second plan.
+   */
+  tab?: string
 
   standardPrice: number
   discount: boolean
@@ -175,6 +205,7 @@ export interface TierPatch {
   logoTiles?: string[]
   logoTotal?: number
   ultimate?: boolean
+  tabs?: string[]
   badge?: string
   descriptionSource?: Tier['descriptionSource']
   status?: Tier['status']
@@ -184,16 +215,34 @@ export interface TierPatch {
 /** Where a card is being rendered. Omitted keys match anything. */
 export interface Context {
   market: string
+  /**
+   * Which product is being sold — DAZN's own subscription, or one of the
+   * league packages.
+   *
+   * Optional because nothing derives from it yet: it picks the journey and
+   * waits there. Made required it would multiply every context the rules run
+   * over, and there is nothing yet for those extra runs to find.
+   */
+  subscription?: string
   campaign?: string
   /** Which storefront — `direct` or a partner code. */
   channel: string
   /** Which way of paying is on screen. */
   cadence: string
+  /**
+   * Which tab of the plan picker is on screen.
+   *
+   * Here with the rest of what is being looked at, because a tab is one: the
+   * same plan can be sold at a different price on the Ultimate tab, and the
+   * price a card shows depends on the tab the same way it depends on the
+   * cadence. Absent means no tab is showing — the picker has none.
+   */
+  tab?: string
 }
 
 export interface Override {
   id: string
-  when: Partial<Pick<Context, 'market' | 'campaign'>>
+  when: Partial<Pick<Context, 'market' | 'campaign' | 'tab'>>
   priority?: number
   patch: TierPatch
 }
@@ -243,6 +292,23 @@ export interface CardSet {
 
   tiers: Tier[]
   offers: CadenceOffer[]
+  /**
+   * The tabs over the plan picker.
+   *
+   * Here rather than in `flow` because a tab is a way of dividing the cards,
+   * and the cards live here. Absent means the two the design draws, so content
+   * written before tabs were authored still draws Standard and Ultimate.
+   */
+  planTabs?: PlanTab[]
+  /**
+   * A market's own tabs, once it has taken them.
+   *
+   * Markets are separate, and the tabs are as much a market's decision as the
+   * words on its screens — one market sells Standard and Ultimate, another
+   * sells neither. A market reads `planTabs` until it edits, and owns its list
+   * from then on.
+   */
+  planTabsByMarket?: Record<string, PlanTab[]>
 
   context: Context
   journeyId: string
@@ -282,6 +348,15 @@ export interface CardSet {
    * a nav title beside a price.
    */
   flow?: FlowContent
+  /**
+   * Copy that differs by situation — market, subscription, user status, entry
+   * point — as sparse layers over `flow`.
+   *
+   * Layers rather than a copy of `flow` per situation: there are 240 of them,
+   * and a fix to a shared line has to reach every one that has not deliberately
+   * said otherwise. A layer holds only the fields it changes.
+   */
+  flowLayers?: FlowLayer[]
   /**
    * Kept with the content rather than in the page, because it is a fact about
    * this content and not about this browser tab: reloading does not un-ask for

@@ -69,16 +69,21 @@ function offer(o: Partial<CadenceOffer> & { id: string; tierId: string; cadence:
 }
 
 export const defaultSet: CardSet = {
+  // The leagues sit alongside the countries rather than inside one: each is
+  // sold as its own market. MSG+ used to be here and is now a product — what
+  // is sold and where it is sold are two questions, and the front door asks
+  // them separately.
   markets: [
-    { code: 'IE', label: 'Ireland', locale: 'en-IE', currency: 'EUR' },
+    { code: 'GB', label: 'UK', locale: 'en-GB', currency: 'GBP' },
+    { code: 'IT', label: 'Italy', locale: 'it-IT', currency: 'EUR' },
     { code: 'DE', label: 'Germany', locale: 'de-DE', currency: 'EUR' },
+    { code: 'US', label: 'USA', locale: 'en-US', currency: 'USD' },
+    { code: 'JP', label: 'Japan', locale: 'ja-JP', currency: 'JPY' },
+    { code: 'CA', label: 'Canada', locale: 'en-CA', currency: 'CAD' },
+    { code: 'FR', label: 'France', locale: 'fr-FR', currency: 'EUR' },
     { code: 'ES', label: 'Spain', locale: 'es-ES', currency: 'EUR' },
-    { code: 'GB', label: 'United Kingdom', locale: 'en-GB', currency: 'GBP' },
-    { code: 'US', label: 'United States', locale: 'en-US', currency: 'USD' },
-    // The regional sports network sits alongside the countries rather than
-    // inside one: it is sold as its own market, and the ZIP check runs here for
-    // the same reason it runs in the US — regional blackouts.
-    { code: 'MSG+', label: 'MSG+', locale: 'en-US', currency: 'USD' },
+    { code: 'NFL', label: 'NFL', locale: 'en-US', currency: 'USD' },
+    { code: 'NHL', label: 'NHL', locale: 'en-US', currency: 'USD' },
   ],
   campaigns: [{ code: 'wc26', label: 'World Cup 2026' }],
   channels: [
@@ -138,8 +143,8 @@ export const defaultSet: CardSet = {
   // MSG+ is where the work is, so it is where a reset lands. It is also the
   // only market that runs the ZIP check, so the default flow is the whole
   // flow rather than one with a step missing.
-  context: { market: 'MSG+', channel: DIRECT, cadence: 'Monthly' },
-  journeyId: 'hero-signup',
+  context: { market: 'GB', subscription: 'dazn', channel: DIRECT, cadence: 'Monthly' },
+  journeyId: 'gb-dazn-logged-out-new-landing-page',
   featureIcons: 'feature',
   flow: defaultFlow,
   review: 'draft',

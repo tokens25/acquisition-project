@@ -1,4 +1,6 @@
 import './prototype.css'
+import { statesOf, tabsOf } from '../rules/tabs'
+import { resolveFlow } from '../rules/layers'
 
 import type { MouseEvent as ReactMouseEvent } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -82,8 +84,8 @@ export function Prototype({
     () =>
       planned
         .filter((p) => !p.skipped)
-        .flatMap((p) => (p.step.states ?? [null]).map((state) => ({ step: p.step, state }))),
-    [planned],
+        .flatMap((p) => statesOf(p.step, set).map((state) => ({ step: p.step, state }))),
+    [planned, set],
   )
 
   const [at, setAt] = useState(0)
@@ -306,11 +308,17 @@ export function Prototype({
           <div className="proto__page" ref={page} onClick={tap}>
             {current.step.renderer === 'plans' ? (
               <SubscriptionFlowScreen
-                tab={current.state === 'ultimate' ? 'ultimate' : 'standard'}
+                title={resolveFlow(set).plans.navTitle}
+                tabs={tabsOf(set)}
+                tab={current.state ?? tabsOf(set)[0]?.id ?? ''}
                 onTab={goToState}
-                content={set.flow?.plans}
               >
-                <CardSetView set={phoneSet} context={context} detailsScope="screen" />
+                <CardSetView
+                  set={phoneSet}
+                  context={context}
+                  detailsScope="screen"
+                  tab={current.state}
+                />
               </SubscriptionFlowScreen>
             ) : (
               <FlowInputContext.Provider value={input}>

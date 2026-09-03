@@ -132,7 +132,7 @@ export interface Journey {
    * two to disagree. Reach for this when a DIRECT journey genuinely differs —
    * an unlaunched market, a country with its own purchase flow.
    */
-  when?: Partial<Pick<Context, 'market' | 'channel'>>
+  when?: Partial<Pick<Context, 'market' | 'channel' | 'subscription'>>
   /**
    * How many screens the Figma section actually contains for this journey.
    *
@@ -175,15 +175,28 @@ export function driftFromFigma(all: Journey[]): { id: string; declared: number; 
 
 /** Whether a journey runs in this context at all. */
 export function journeyApplies(journey: Journey, context: Context): boolean {
-  const { market, channel } = journey.when ?? {}
+  const { market, channel, subscription } = journey.when ?? {}
   if (market !== undefined && market !== context.market) return false
   if (channel !== undefined && channel !== context.channel) return false
+  if (subscription !== undefined && subscription !== context.subscription) return false
   return true
 }
 
 /** Journeys available here, in declaration order. */
 export function journeysFor(all: Journey[], context: Context): Journey[] {
   return all.filter((j) => journeyApplies(j, context))
+}
+
+/**
+ * The journey a set is on: the one it names if that one runs here, otherwise
+ * the first that does.
+ *
+ * One function because two answers to this question is two situations — the
+ * editor would be writing copy for a journey the preview is not showing.
+ */
+export function chosenJourney(all: Journey[], context: Context, journeyId: string): Journey {
+  const running = journeysFor(all, context)
+  return running.find((j) => j.id === journeyId) ?? running[0] ?? all[0]
 }
 
 /**

@@ -143,7 +143,7 @@ function journey(
   return { id, name, audience: 'anonymous', entry, seeds, steps: steps() }
 }
 
-export const journeys: Journey[] = [
+const figmaJourneys: Journey[] = [
   journey(
     'hero-signup',
     'Hero — Sign up',
@@ -190,7 +190,7 @@ export const journeys: Journey[] = [
   ),
 ]
 
-journeys.push({
+figmaJourneys.push({
   id: 'movistar-partner',
   name: 'Movistar — partner storefront',
   audience: 'anonymous',
@@ -207,7 +207,7 @@ journeys.push({
   steps: steps(),
 })
 
-export const signUpJourney = journeys[0]
+export const signUpJourney = figmaJourneys[0]
 
 
 /**
@@ -372,7 +372,7 @@ function loggedOut(
   return { id, name, audience: 'anonymous', entry, seeds: [], steps: pick(stepIds, patches) }
 }
 
-journeys.push(
+figmaJourneys.push(
   loggedOut(
     'browse-hero-signup',
     'Logged out — browse hero CTA',
@@ -474,7 +474,7 @@ function loggedIn(
 // Identity is settled before any of these journeys begin.
 const SIGNED_IN: Seed[] = ['auth', 'account']
 
-journeys.push(
+figmaJourneys.push(
   loggedIn(
     'logged-in-free-rsn',
     'Logged in free — RSN tile',
@@ -554,7 +554,7 @@ journeys.push(
  * content nobody in this tool can currently edit.
  */
 
-journeys.push(
+figmaJourneys.push(
   loggedIn(
     'migration-no-payment',
     'Migration — no payment method',
@@ -645,7 +645,7 @@ journeys.push(
  * "new user" journeys and nowhere else.
  */
 
-journeys.push(
+figmaJourneys.push(
   loggedIn(
     'tve-msg-tile',
     'TVE — new user, MSG+ tile',
@@ -760,14 +760,18 @@ const FIGMA_SCREENS: Record<string, number> = {
   'ultimate-feature': 13,
 }
 
-for (const j of journeys) {
+// The screen counts, and the check below, belong to the journeys read off
+// Figma. The generated ones are copies of a flow rather than models of a
+// frame, so there is nothing for them to have drifted from — checking them
+// against a file that does not draw them would invent a failure.
+for (const j of figmaJourneys) {
   const declared = FIGMA_SCREENS[j.id]
   if (declared !== undefined) j.figmaScreens = declared
 }
 
 // Fails the dev boot rather than rendering a plausible-looking wrong journey.
 if (import.meta.env.DEV) {
-  const drift = driftFromFigma(journeys)
+  const drift = driftFromFigma(figmaJourneys)
   if (drift.length > 0) {
     throw new Error(
       'Journey model has drifted from Figma: ' +
@@ -778,7 +782,7 @@ if (import.meta.env.DEV) {
   // The exported frames are keyed by step and state. Rename either and the
   // picture detaches, which shows up as a tile falling back to a filename —
   // a failure that reads as a decision. Named here instead.
-  const orphans = orphanedArtwork(journeys.flatMap((j) => j.steps))
+  const orphans = orphanedArtwork(figmaJourneys.flatMap((j) => j.steps))
   if (orphans.length > 0) {
     throw new Error(
       `Flow artwork no step claims: ${orphans.join(', ')}. ` +
@@ -786,3 +790,92 @@ if (import.meta.env.DEV) {
     )
   }
 }
+
+
+/* ────────────────────────────────────────────────────────────────────────
+   Every situation, each with its own copy of the flow.
+
+   The four questions on the front door multiply out to two hundred and forty
+   situations, and each one gets a journey of its own carrying the same eight
+   steps the MSG+ journey above carries. They are copies today and that is the
+   point: the structure is expected to diverge market by market and state by
+   state, and a journey that shares its steps with another cannot diverge
+   without dragging that one with it.
+
+   Nothing is wired to the difference yet. Market, product, state and entry
+   pick a journey and the journey draws the same flow whichever they were —
+   which is what makes the picking safe to build against before the logic
+   behind it exists.
+
+   The Figma-derived journeys above are where this flow came from. They are
+   kept whole rather than edited into shape: when a situation earns its own
+   structure, it will be written the way those were.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/** Countries and leagues the product is sold in. */
+export const MARKETS = [
+  { code: 'GB', label: 'UK' },
+  { code: 'IT', label: 'Italy' },
+  { code: 'DE', label: 'Germany' },
+  { code: 'US', label: 'USA' },
+  { code: 'JP', label: 'Japan' },
+  { code: 'CA', label: 'Canada' },
+  { code: 'FR', label: 'France' },
+  { code: 'ES', label: 'Spain' },
+  { code: 'NFL', label: 'NFL' },
+  { code: 'NHL', label: 'NHL' },
+] as const
+
+/** What is being sold. */
+export const SUBSCRIPTIONS = [
+  { code: 'dazn', label: 'DAZN subscription' },
+  { code: 'msg', label: 'MSG+' },
+  { code: 'nfl', label: 'NFL' },
+  { code: 'nhl', label: 'NHL' },
+] as const
+
+/** Who is at the door. */
+export const STATUSES = ['logged-out-new', 'logged-out-existing'] as const
+
+/** Where they came in from. */
+export const ENTRIES = ['Landing page', 'CRM', 'Catalog'] as const
+
+const slug = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+
+export const journeys: Journey[] = MARKETS.flatMap((market) =>
+  SUBSCRIPTIONS.flatMap((subscription) =>
+    STATUSES.flatMap((audience) =>
+      ENTRIES.map(
+        (cta): Journey => ({
+          id: `${slug(market.code)}-${subscription.code}-${slug(audience)}-${slug(cta)}`,
+          name: `${cta} — ${subscription.label}`,
+          audience,
+          when: { market: market.code, subscription: subscription.code },
+          entry: {
+            cta,
+            section: cta,
+            // Not from a frame yet. Named as unknown rather than pointed at
+            // one of the frames this flow was copied from, which would read as
+            // a source it does not have.
+            figmaFrame: '—',
+            figmaSection: '—',
+          },
+          // Nothing is known in advance, so no step drops out: the whole flow
+          // runs for every situation until one of them says otherwise.
+          seeds: [],
+          // And nothing is scoped away either. The ZIP check names the two
+          // markets that have regional blackouts, which is true of the journey
+          // it was copied from and not yet decided for these — leaving it in
+          // place would drop that step from eight markets out of ten before
+          // anyone had said it should. The whole flow, everywhere, until the
+          // logic says otherwise.
+          steps: steps().map((step) => {
+            const whole = { ...step }
+            delete whole.markets
+            return whole
+          }),
+        }),
+      ),
+    ),
+  ),
+)

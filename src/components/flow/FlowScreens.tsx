@@ -2,9 +2,14 @@ import './flow.css'
 
 import sparkle from '../../assets/flow/subscription-sparkle.gif'
 import { useFlowInput } from './live'
+import { cadenceSavings } from '../../rules/cadence'
+import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
+import { styleOf } from '../../rules/tabs'
+import { landingText, providersOf, questionsOf } from '../../rules/landing'
+import { consentsOf } from '../../rules/consents'
 
+import { Fragment } from 'react'
 import type { ReactNode } from 'react'
-import { defaultFlow, type PlansScreen } from '../../rules/flow'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
 import badgeCheck from '../../assets/flow/badge-check.svg?raw'
 import cadenceRadioOff from '../../assets/flow/cadence-radio-off.svg?raw'
@@ -24,14 +29,26 @@ import payGpayType from '../../assets/flow/pay-gpay-type.svg'
 import payMastercard from '../../assets/flow/pay-mastercard.svg'
 import payPaypal from '../../assets/flow/pay-paypal.png'
 import payVisa from '../../assets/flow/pay-visa.svg'
+import providerAltice from '../../assets/landing/provider-altice.png'
+import providerAstound from '../../assets/landing/provider-astound.png'
+import providerBreezeline from '../../assets/landing/provider-breezeline.png'
+import providerDirectv from '../../assets/landing/provider-directv.png'
+import providerFios from '../../assets/landing/provider-fios.png'
+import providerFubo from '../../assets/landing/provider-fubo.png'
+import providerOptimum from '../../assets/landing/provider-optimum.png'
+import providerOptimumTv from '../../assets/landing/provider-optimum-tv.png'
+import providerSpectrum from '../../assets/landing/provider-spectrum.svg'
+import providerXfinity from '../../assets/landing/provider-xfinity.png'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
+import type { PlanTab } from '../../rules/content'
 import type {
   AccountScreen,
   LandingScreen,
   AuthScreen,
   CadenceScreen,
   CheckoutScreen,
+  PayMarks,
   ReadyScreen,
   ZipScreen,
 } from '../../rules/flow'
@@ -115,54 +132,86 @@ function Screen({
  * that frame rather than changing this one.
  */
 export function SubscriptionFlowScreen({
+  title,
+  tabs,
   tab,
   onTab,
-  content,
   children,
 }: {
-  tab: 'standard' | 'ultimate'
-  onTab?: (tab: 'standard' | 'ultimate') => void
-  /** The screen's own words. Absent falls back to the ones as drawn. */
-  content?: PlansScreen
-  children: ReactNode
+  title: string
+  tabs: PlanTab[]
+  tab: string
+  onTab?: (tab: string) => void
+  /**
+   * The cards. Left out where they are drawn beside the screen rather than in
+   * it — the edit view puts them outside so the screen's edge does not fall
+   * across one of them.
+   */
+  children?: ReactNode
 }) {
-  const copy = content ?? defaultFlow.plans
   return (
-    <Screen title={copy.navTitle} flush>
-      <div className="fl-sub__control">
-        <div className="fl-sub__tabs">
-          <button
-            type="button"
-            className="fl-sub__tab"
-            data-on={tab === 'standard' || undefined}
-            aria-pressed={tab === 'standard'}
-            onClick={() => onTab?.('standard')}
-          >
-            {copy.tabStandard}
-          </button>
-          <button
-            type="button"
-            className="fl-sub__tab"
-            data-on={tab === 'ultimate' || undefined}
-            aria-pressed={tab === 'ultimate'}
-            onClick={() => onTab?.('ultimate')}
-          >
-            <span className="fl-sub__bolt" aria-hidden="true" />
-            {copy.tabUltimate}
-          </button>
-        </div>
-        {/* Sparkle 440X200 — the animation the design runs behind the Ultimate
-            tab. Its box is 168 x 48 at the control's top right, and the frame
-            crops the picture rather than fitting it, so the offsets are the
-            design's percentages of that box rather than a fit that looks
-            close. */}
-        <span className="fl-sub__sparkle" aria-hidden="true">
-          <img src={sparkle} alt="" />
-        </span>
-      </div>
-
-      <div className="fl-sub__cards">{children}</div>
+    <Screen title={title} flush>
+      <SubscriptionTabs tabs={tabs} tab={tab} onTab={onTab} />
+      {children && <div className="fl-sub__cards">{children}</div>}
     </Screen>
+  )
+}
+
+/**
+ * The segmented control over the plan picker.
+ *
+ * Its own component because two places draw it: the phone, where it sits under
+ * the header, and the edit screen, where it sits over the cards being edited.
+ * Renaming a tab or adding one has to show in both, and one control is how
+ * that stays true.
+ */
+export function SubscriptionTabs({
+  tabs,
+  tab,
+  onTab,
+}: {
+  tabs: PlanTab[]
+  tab: string
+  onTab?: (tab: string) => void
+}) {
+  // No tabs is a plan picker with nothing dividing it, which is a picker with
+  // no control over it rather than an empty control.
+  if (!tabs.length) return null
+  return (
+    <div className="fl-sub__control">
+      <div className="fl-sub__tabs">
+        {tabs.map((one) => {
+          const Tag = onTab ? 'button' : 'span'
+          return (
+          <Tag
+            key={one.id}
+            type={onTab ? 'button' : undefined}
+            className="fl-sub__tab"
+            data-style={styleOf(one)}
+            data-on={tab === one.id || undefined}
+            aria-pressed={onTab ? tab === one.id : undefined}
+            onClick={onTab ? () => onTab(one.id) : undefined}
+          >
+            {styleOf(one) === 'celebratory' && (
+              <>
+                <span className="fl-sub__bolt" aria-hidden="true" />
+                {/* Sparkle 440X200 — the animation the design runs behind this
+                    tab. Its box is the tab, and the frame crops the picture
+                    rather than fitting it, so the offsets are the design's
+                    percentages of that box rather than a fit that looks close.
+                    Inside the tab and not the control, because the celebrated
+                    tab is not always the one on the right. */}
+                <span className="fl-sub__sparkle" aria-hidden="true">
+                  <img src={sparkle} alt="" />
+                </span>
+              </>
+            )}
+            {one.name}
+          </Tag>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
@@ -306,6 +355,8 @@ export function CadenceFlowScreen({
   selected?: string
 }) {
   const chosen = selected ?? content.selected
+  // Worked out from the cards themselves, so it cannot disagree with them.
+  const savings = cadenceSavings(content)
   return (
     <Screen title={content.navTitle}>
       <div className="fl-cadence">
@@ -339,10 +390,10 @@ export function CadenceFlowScreen({
                   <p className="fl-cadence__price">
                     <span className="fl-cadence__amount">{option.price}</span>
                     <span className="fl-cadence__unit">/{option.unit}</span>
-                    {option.saving && (
+                    {savings[option.id] && (
                       <span className="fl-cadence__saving">
                         <Mark svg={iconArtwork.discount} size={16} />
-                        {option.saving}
+                        {savings[option.id]}
                       </span>
                     )}
                   </p>
@@ -467,13 +518,20 @@ export function AccountFlowScreen({
 
           <div className="fl-account__block">
             <p className="fl-account__heading">{content.notifyHeading}</p>
-            <div className="fl-account__consent">
-              <p className="fl-account__consent-body">{content.consentBody}</p>
-              <span className="fl-account__switch">
-                <span className="fl-account__knob" />
-              </span>
-            </div>
-            <p className="fl-account__note">{content.consentNote}</p>
+            {consentsOf(content).map((consent) => (
+              <div key={consent.id}>
+                <div className="fl-account__consent">
+                  <p className="fl-account__consent-body">{consent.body}</p>
+                  {/* The switch draws where it starts. A consent that is on by
+                      default is a different thing being asked from one that is
+                      off, and the screen has to show which. */}
+                  <span className="fl-account__switch" data-on={consent.on || undefined}>
+                    <span className="fl-account__knob" />
+                  </span>
+                </div>
+                {consent.note && <p className="fl-account__note">{consent.note}</p>}
+              </div>
+            ))}
           </div>
         </div>
 
@@ -547,6 +605,8 @@ export function CheckoutFlowScreen({
   state: 'empty' | 'filled' | 'payment process' | 'payment verified'
 }) {
   const filled = state !== 'empty'
+  const methods = methodsOf(content)
+  const chosen = chosenMethod(content)
   return (
     <Screen title={content.navTitle}>
       <div className="fl-checkout">
@@ -557,11 +617,12 @@ export function CheckoutFlowScreen({
             <p className="fl-checkout__summary-title">{content.summaryTitle}</p>
             <span className="fl-checkout__change">{content.changeCta}</span>
           </div>
-          {content.lines.map((line) => (
+          {linesOf(content).map((line) => (
             <div
               className="fl-checkout__line"
-              key={line.label}
+              key={line.id}
               data-schedule={line.schedule ? '' : undefined}
+              data-offer={line.offer ? '' : undefined}
             >
               <p className="fl-checkout__line-label">
                 {line.schedule && <Mark svg={navSchedule} size={16} />}
@@ -577,18 +638,64 @@ export function CheckoutFlowScreen({
         </div>
 
         <div className="fl-checkout__methods">
-          <div className="fl-checkout__method">
-            <p className="fl-checkout__method-name">
-              <Mark svg={radioSelected} size={24} />
-              {content.cardsLabel}
-            </p>
-            <span className="fl-checkout__marks">
-              <img src={payVisa} alt="" />
-              <img src={payMastercard} alt="" />
-              <span className="fl-checkout__overflow">{content.cardsOverflow}</span>
-            </span>
-          </div>
+          {methods.map((method, i) => {
+            const on = method.id === chosen
+            // The form belongs to the option it is filling in, so it draws
+            // under that one rather than always under the first.
+            const form = on && method.card
+            const last = i === methods.length - 1
+            return (
+              <Fragment key={method.id}>
+                {last && methods.length > 1 && <div className="fl-checkout__spacer" />}
+                <div className="fl-checkout__method" data-tall={!last && !form ? '' : undefined}>
+                  <p className="fl-checkout__method-name">
+                    <Mark svg={on ? radioSelected : radioIdle} size={24} />
+                    {method.label}
+                  </p>
+                  <span className="fl-checkout__marks">
+                    {PAY_MARKS[method.marks].map((src) => (
+                      <img src={src} alt="" key={src} />
+                    ))}
+                    {method.overflow && (
+                      <span className="fl-checkout__overflow">{method.overflow}</span>
+                    )}
+                  </span>
+                </div>
+                {form && <CardForm content={content} filled={filled} state={state} />}
+              </Fragment>
+            )
+          })}
+        </div>
 
+        <div className="fl-checkout__promo">
+          <Icon svg={iconArtwork.gift} size={24} />
+          <p className="fl-checkout__promo-label">{content.promoLabel}</p>
+          <Icon svg={iconArtwork['chevron-right']} size={24} />
+        </div>
+      </div>
+    </Screen>
+  )
+}
+
+/** The artwork each set of marks draws, in order. */
+const PAY_MARKS: Record<PayMarks, string[]> = {
+  cards: [payVisa, payMastercard],
+  gpay: [payGpayMark, payGpayType],
+  paypal: [payPaypal],
+  none: [],
+}
+
+/** The card fields, which open under whichever option is being paid by card. */
+function CardForm({
+  content,
+  filled,
+  state,
+}: {
+  content: CheckoutScreen
+  filled: boolean
+  state: 'empty' | 'filled' | 'payment process' | 'payment verified'
+}) {
+  return (
           <div className="fl-checkout__details">
             <Field
               label={content.cardNumberLabel}
@@ -617,36 +724,6 @@ export function CheckoutFlowScreen({
               {content.secureCta}
             </Cta>
           </div>
-
-          <div className="fl-checkout__method" data-tall="">
-            <p className="fl-checkout__method-name">
-              <Mark svg={radioIdle} size={24} />
-              {content.googlePayLabel}
-            </p>
-            <span className="fl-checkout__marks">
-              <img src={payGpayMark} alt="" />
-              <img src={payGpayType} alt="" />
-            </span>
-          </div>
-          <div className="fl-checkout__spacer" />
-          <div className="fl-checkout__method">
-            <p className="fl-checkout__method-name">
-              <Mark svg={radioIdle} size={24} />
-              {content.paypalLabel}
-            </p>
-            <span className="fl-checkout__marks">
-              <img src={payPaypal} alt="" />
-            </span>
-          </div>
-        </div>
-
-        <div className="fl-checkout__promo">
-          <Icon svg={iconArtwork.gift} size={24} />
-          <p className="fl-checkout__promo-label">{content.promoLabel}</p>
-          <Icon svg={iconArtwork['chevron-right']} size={24} />
-        </div>
-      </div>
-    </Screen>
   )
 }
 
@@ -674,5 +751,146 @@ export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
         </div>
       </div>
     </Screen>
+  )
+}
+
+/* ── The landing page below the hero ─────────────────────────
+   Figma: 🚀 Acquisition for ai → "MSG+ - Landing page - Mobile", node
+   708:173735 — 375 wide and 7412 tall. The hero above is the whole of what
+   a tile and the walkthrough show; this is the rest of the page, which the
+   edit view scrolls. */
+
+const providerArt: Record<string, string> = {
+  Spectrum: providerSpectrum,
+  DIRECTV: providerDirectv,
+  fios: providerFios,
+  'optimum.': providerOptimum,
+  'optimum.tv': providerOptimumTv,
+  fubo: providerFubo,
+  xfinity: providerXfinity,
+  altice: providerAltice,
+  Astound: providerAstound,
+  breezeline: providerBreezeline,
+}
+
+/**
+ * The whole landing page, hero included.
+ *
+ * The sections a market writes: the postcode prompt, the teams, Multiview,
+ * the TV providers, the devices, the free games and the questions. What is
+ * drawn between them on the real page — the schedule, the scores, the news,
+ * the fan chat — is DAZN showing what it is showing, not copy anybody here
+ * writes, so it is not drawn at all rather than drawn as invented content.
+ *
+ * The plan picker sits in the middle of the design. It is not rebuilt here:
+ * the cards and their tabs are the ones the plans step already edits, handed
+ * in as children the way the design hands them to a slot.
+ */
+export function LandingPageScreen({
+  content,
+  children,
+}: {
+  content: LandingScreen
+  /** The plan picker, where the page puts it. */
+  children?: ReactNode
+}) {
+  const text = landingText(content)
+  return (
+    <div className="fl fl-page">
+      <LandingFlowScreen content={content} />
+
+      <section className="fl-page__zip">
+        <p className="fl-page__zip-heading">{text.zipHeading}</p>
+        <div className="fl-page__zip-row">
+          <Field label={text.zipLabel} value={text.zipValue} />
+          <Cta>{text.zipCta}</Cta>
+        </div>
+      </section>
+
+      {children && <section className="fl-page__plans">{children}</section>}
+
+      <section className="fl-page__teams">
+        <p className="fl-page__eyebrow">{text.teamsEyebrow}</p>
+        <h2 className="fl-page__title">{text.teamsTitle}</h2>
+        <p className="fl-page__body">{text.teamsBody}</p>
+        <p className="fl-page__note">{text.teamsNote}</p>
+        <Cta>{text.teamsCta}</Cta>
+      </section>
+
+      <section className="fl-page__multiview">
+        <p className="fl-page__eyebrow">
+          {text.multiviewEyebrow}
+          {text.multiviewBadge && (
+            <span className="fl-page__badge">{text.multiviewBadge}</span>
+          )}
+        </p>
+        <h2 className="fl-page__title">{text.multiviewTitle}</h2>
+        <p className="fl-page__body">{text.multiviewBody}</p>
+        <Cta>{text.multiviewCta}</Cta>
+      </section>
+
+      <section className="fl-page__providers">
+        <h2 className="fl-page__title" data-centre="">
+          {text.providersTitle}
+        </h2>
+        <p className="fl-page__body" data-centre="">
+          {text.providersBody}{' '}
+          {text.providersHighlight && (
+            <span className="fl-page__gold">{text.providersHighlight}</span>
+          )}
+        </p>
+        <div className="fl-page__provider-grid">
+          {providersOf(content).map((provider) => (
+            <span className="fl-page__provider" key={provider.id}>
+              {providerArt[provider.name] ? (
+                <img src={providerArt[provider.name]} alt={provider.name} />
+              ) : (
+                provider.name
+              )}
+            </span>
+          ))}
+        </div>
+        <p className="fl-page__note" data-centre="">
+          {text.providersNote}
+        </p>
+        <Cta appearance="outline">{text.providersCta}</Cta>
+      </section>
+
+      <section className="fl-page__devices">
+        <h2 className="fl-page__title">
+          {text.devicesTitle}
+          {text.devicesTitleTwo && (
+            <>
+              <br />
+              {text.devicesTitleTwo}
+            </>
+          )}
+        </h2>
+        <p className="fl-page__body">{text.devicesBody}</p>
+        <p className="fl-page__note">{text.devicesNote}</p>
+      </section>
+
+      <section className="fl-page__free">
+        <h2 className="fl-page__title" data-centre="">
+          {text.freeTitle}
+        </h2>
+        <p className="fl-page__body" data-centre="">
+          {text.freeBody}
+        </p>
+        <Cta>{text.freeCta}</Cta>
+      </section>
+
+      <section className="fl-page__faq">
+        <h2 className="fl-page__title">{text.faqTitle}</h2>
+        <ul className="fl-page__questions">
+          {questionsOf(content).map((one) => (
+            <li className="fl-page__question" key={one.id}>
+              {one.question}
+              <Icon svg={iconArtwork['chevron-right']} size={24} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
   )
 }

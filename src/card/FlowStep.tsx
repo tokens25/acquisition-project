@@ -1,4 +1,5 @@
 import type { CardSet } from '../rules/content'
+import { resolveFlow } from '../rules/layers'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
 import {
@@ -37,7 +38,7 @@ export function FlowStep({
    */
   chosen?: { cadence?: string }
 }) {
-  const flow = set.flow ?? defaultFlow
+  const flow = resolveFlow(set)
 
   switch (step.renderer) {
     case 'landing':

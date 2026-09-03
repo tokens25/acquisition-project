@@ -25,14 +25,6 @@ export interface CadenceOption {
   unit: string
   /** The corner ribbon. Empty for no ribbon. */
   badge: string
-  /**
-   * "Save €108 /year", beside the price. Empty for none.
-   *
-   * Written rather than worked out: the prices here are strings the panel
-   * authors, and a figure derived from parsing them would be wrong in every
-   * market that writes money differently.
-   */
-  saving?: string
 }
 
 export interface CadenceScreen {
@@ -40,6 +32,13 @@ export interface CadenceScreen {
   options: CadenceOption[]
   /** Which option's radio is filled. */
   selected: string
+  /**
+   * How the yearly card states what it saves — as money, or as a share of the
+   * year's cost. The saving itself is not written anywhere: it is the
+   * difference between the yearly price and twelve monthly ones, so it follows
+   * both of them rather than being kept in step with them by hand.
+   */
+  savingAs?: 'amount' | 'percent'
   cta: string
   footnote: string
 }
@@ -58,6 +57,16 @@ export interface AuthScreen {
   providers: { id: 'apple' | 'google' | 'facebook'; label: string }[]
 }
 
+export interface Consent {
+  id: string
+  /** What is being asked. */
+  body: string
+  /** The grey line under the group. Empty for none. */
+  note: string
+  /** Whether the switch starts on. */
+  on: boolean
+}
+
 export interface AccountScreen {
   navTitle: string
   nameHeading: string
@@ -74,8 +83,17 @@ export interface AccountScreen {
   rulesTitle: string
   rules: string[]
   notifyHeading: string
-  consentBody: string
-  consentNote: string
+  /**
+   * The permissions asked for, each with its own switch.
+   *
+   * Optional so that content published before there were several still draws:
+   * a copy carrying the single body and note below is read as one consent
+   * rather than as none. Write to this and the pair stops being read.
+   */
+  consents?: Consent[]
+  /** The one consent this screen used to have. Read only when the list is absent. */
+  consentBody?: string
+  consentNote?: string
   cta: string
   /** What the button says while the account is being made. */
   workingCta: string
@@ -95,12 +113,39 @@ export interface ZipScreen {
 }
 
 export interface CheckoutLine {
+  /** Absent on lines written before they had one; see `linesOf`. */
+  id?: string
   label: string
   value: string
   /** Rendered after the value, behind a slash: "/month". */
   unit?: string
   /** Draws the calendar mark before the label. */
   schedule?: boolean
+  /**
+   * Draws the line as an offer rather than as a plain amount — a discount, a
+   * free month, anything the summary announces rather than just totals.
+   */
+  offer?: boolean
+}
+
+/**
+ * Which artwork sits at the right of a payment option.
+ *
+ * A named set rather than a list of marks: the artwork ships with the tool, so
+ * what an option can show is a choice between the sets that exist, not a field
+ * someone types into.
+ */
+export type PayMarks = 'cards' | 'gpay' | 'paypal' | 'none'
+
+/** One way to pay, in the list the checkout screen offers. */
+export interface PaymentMethod {
+  id: string
+  label: string
+  marks: PayMarks
+  /** The chip after the marks, as in "+4". Empty draws none. */
+  overflow?: string
+  /** Whether choosing this option opens the card form under it. */
+  card?: boolean
 }
 
 export interface CheckoutScreen {
@@ -110,9 +155,14 @@ export interface CheckoutScreen {
   changeCta: string
   lines: CheckoutLine[]
   renewalNote: string
-  cardsLabel: string
-  /** The "+4" chip after the card marks. */
-  cardsOverflow: string
+  /** The ways to pay, in the order they are offered. */
+  methods?: PaymentMethod[]
+  /** Which one is chosen when the screen opens. */
+  chosen?: string
+  /** Superseded by `methods`; still read from content saved before it. */
+  cardsLabel?: string
+  /** The "+4" chip after the card marks. Superseded by `methods`. */
+  cardsOverflow?: string
   cardNumberLabel: string
   expiryLabel: string
   cvcLabel: string
@@ -120,8 +170,10 @@ export interface CheckoutScreen {
   legal: string
   payCta: string
   secureCta: string
-  googlePayLabel: string
-  paypalLabel: string
+  /** Superseded by `methods`. */
+  googlePayLabel?: string
+  /** Superseded by `methods`. */
+  paypalLabel?: string
   promoLabel: string
 }
 
@@ -135,6 +187,18 @@ export interface ReadyScreen {
   logos: string[]
 }
 
+/** One TV provider tile in the "How to connect" grid. */
+export interface LandingProvider {
+  id: string
+  name: string
+}
+
+/** One question in the landing page's FAQ. */
+export interface LandingQuestion {
+  id: string
+  question: string
+}
+
 export interface LandingScreen {
   /** The two buttons in the bar at the top. */
   navExplore: string
@@ -145,6 +209,59 @@ export interface LandingScreen {
   cta: string
   /** The white one under it. */
   altCta: string
+
+  /* ── The rest of the page, below the hero ──────────────────
+     Figma: 🚀 Acquisition for ai → "MSG+ - Landing page - Mobile"
+     (node 708:173735). The sections whose words a market writes; the
+     schedule, the scores, the news and the fan chat are drawn from what
+     DAZN is showing rather than from anything authored here. Every field
+     is optional so that content saved before the page had them still
+     loads — the screen falls back to the shipped wording. */
+
+  /** Under the hero: the postcode that decides which teams you are shown. */
+  zipHeading?: string
+  zipLabel?: string
+  zipValue?: string
+  zipCta?: string
+
+  /** "Meet the teams" — the tiles of what you get in your area. */
+  teamsEyebrow?: string
+  teamsTitle?: string
+  teamsBody?: string
+  teamsNote?: string
+  teamsCta?: string
+
+  /** The Multiview pitch, and the plan it belongs to. */
+  multiviewEyebrow?: string
+  multiviewBadge?: string
+  multiviewTitle?: string
+  multiviewBody?: string
+  multiviewCta?: string
+
+  /** "How to connect your TV Subscription" and the grid of providers. */
+  providersTitle?: string
+  providersBody?: string
+  /** The gold half of the sentence above. */
+  providersHighlight?: string
+  providersNote?: string
+  providersCta?: string
+  providers?: LandingProvider[]
+
+  /** "Watch on your favourite devices." */
+  devicesTitle?: string
+  /** The second line, which the design sets on its own. */
+  devicesTitleTwo?: string
+  devicesBody?: string
+  devicesNote?: string
+
+  /** The free games offer. */
+  freeTitle?: string
+  freeBody?: string
+  freeCta?: string
+
+  /** The questions at the foot of the page. */
+  faqTitle?: string
+  faqs?: LandingQuestion[]
 }
 
 /**
@@ -157,19 +274,7 @@ export interface LandingScreen {
  *
  * `ctaVerb` is the word before a plan's name on its button: "Get MSG+".
  */
-export interface PlansScreen {
-  navTitle: string
-  tabStandard: string
-  tabUltimate: string
-  /** Above the price: "Starts at". */
-  priceCaption: string
-  /** The button, before the plan's name. */
-  ctaVerb: string
-  /** The row at the foot of a card. */
-  footer: string
-  /** The ribbon on the Ultimate card, when a plan does not write its own. */
-  badge: string
-}
+
 
 export interface FlowContent {
   plans: PlansScreen
@@ -183,19 +288,27 @@ export interface FlowContent {
 }
 
 /** Copied from the node, including the placeholder Figma itself carries. */
-export const defaultFlow: FlowContent = {
-  // As drawn: the section's own nav title, its two tabs, and the three
-  // standing strings on a card.
-  plans: {
-    navTitle: 'Choose your subscription',
-    tabStandard: 'Standard',
-    tabUltimate: 'Ultimate',
-    priceCaption: 'Starts at',
-    ctaVerb: 'Get',
-    footer: 'All features & content',
-    badge: 'BEST EXPERIENCE',
-  },
+/**
+ * The plan picker's own chrome.
+ *
+ * Only the title, because everything else on that screen is the cards and the
+ * tabs, and both are authored elsewhere. It lives here rather than beside them
+ * so the line in the header is written and layered like every other line in
+ * the flow, instead of being the one screen with its title in the markup.
+ */
+export interface PlansScreen {
+  navTitle: string
+  /** Above the price: "Starts at". */
+  priceCaption: string
+  /** The button, before the plan's name. */
+  ctaVerb: string
+  /** The row at the foot of a card. */
+  footer: string
+  /** The ribbon on the Ultimate card, when a plan does not write its own. */
+  badge: string
+}
 
+export const defaultFlow: FlowContent = {
   landing: {
     // The first button and the second. The names are what they were when the
     // first drawing had them the other way round; the panel calls them by
@@ -206,8 +319,74 @@ export const defaultFlow: FlowContent = {
     body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
     cta: 'Sign up',
     altCta: 'Sign in with your TV provider',
+
+    // Read off node 708:173735 rather than rewritten, down to the full stop
+    // the design puts after "devices." and the one it leaves off "Anywhere".
+    zipHeading: 'Your home ZIP code unlocks your teams',
+    zipLabel: 'Zip Code:',
+    zipValue: '10001',
+    zipCta: 'Sign Up',
+
+    teamsEyebrow: 'Meet the teams',
+    teamsTitle: 'Your teams, one home',
+    teamsBody: 'Here are the teams available in your area',
+    teamsNote: 'Enter your zip code to see which teams you have access to.',
+    teamsCta: 'Sign Up',
+
+    multiviewEyebrow: 'Multiview',
+    multiviewBadge: 'Ultimate only',
+    multiviewTitle: 'Feel 4 times the action with Multiview',
+    multiviewBody:
+      'Build your perfect gameday with Multiview. Watch up to 4 live game feeds at once.',
+    multiviewCta: 'Get Ultimate',
+
+    providersTitle: 'How to connect your TV Subscription',
+    providersBody:
+      'Once you sign up to DAZN, select your TV provider to get full access to MSG+',
+    providersHighlight: 'at no extra cost.',
+    providersNote: 'Find the full list of TV providers after you log in to DAZN',
+    providersCta: 'Sign in with your TV provider',
+    providers: [
+      { id: 'provider-1', name: 'Spectrum' },
+      { id: 'provider-2', name: 'DIRECTV' },
+      { id: 'provider-3', name: 'fios' },
+      { id: 'provider-4', name: 'optimum.' },
+      { id: 'provider-5', name: 'optimum.tv' },
+      { id: 'provider-6', name: 'fubo' },
+      { id: 'provider-7', name: 'xfinity' },
+      { id: 'provider-8', name: 'altice' },
+      { id: 'provider-9', name: 'Astound' },
+      { id: 'provider-10', name: 'breezeline' },
+    ],
+
+    devicesTitle: 'Watch on your favourite devices.',
+    devicesTitleTwo: 'Anywhere.',
+    devicesBody:
+      'Whether you are at home or on the go, NHL TV is available on a wide range of mobile and connected devices including Smart TVs, Chromecast, Playstation, Xbox and more.',
+    devicesNote: 'Our leading supported devices',
+
+    freeTitle: 'Watch the New York sports for free',
+    freeBody:
+      'Watch all of the FIFA Club World Cup games live and other selected events and highlights',
+    freeCta: 'Get started',
+
+    faqTitle: 'FAQ',
+    faqs: [
+      { id: 'faq-1', question: 'What do I get with the Gotham Bundle?' },
+      { id: 'faq-2', question: 'How to connect your tv provider' },
+      { id: 'faq-3', question: 'What is Multiview?' },
+    ],
   },
 
+  // As drawn: the section's own nav title, and the standing strings on a card.
+  // The tabs are not here; they are authored as tabs.
+  plans: {
+    navTitle: 'Choose your subscription',
+    priceCaption: 'Starts at',
+    ctaVerb: 'Get',
+    footer: 'All features & content',
+    badge: 'BEST EXPERIENCE',
+  },
   cadence: {
     navTitle: 'Choose your subscription',
     options: [
@@ -271,9 +450,16 @@ export const defaultFlow: FlowContent = {
       'At least 6 characters (8 for stronger password)',
     ],
     notifyHeading: 'Get notified',
-    consentBody:
-      'Send me offers, events and more from DAZN via SMS or calls. You can stop messages by switching the toggle to “off“ or via your profile marketing preferences',
-    consentNote: 'You can adjust these settings later in My account',
+    consents: [
+      {
+        id: 'marketing',
+        body:
+          'I would like to receive news, offers and information about DAZN products and ' +
+          'services by email.',
+        note: 'You can adjust these settings later in My account',
+        on: false,
+      },
+    ],
     cta: 'Confirm and continue',
     workingCta: 'Creating your account',
   },
@@ -299,14 +485,18 @@ export const defaultFlow: FlowContent = {
     summaryTitle: 'MSG+',
     changeCta: 'Change',
     lines: [
-      { label: 'Pay now', value: '$279.99', unit: 'month' },
-      { label: 'Today you pay', value: '$279.99' },
-      { label: 'Next payment on 11/01/2026', value: '$279.99', schedule: true },
+      { id: 'line-1', label: 'Pay now', value: '$279.99', unit: 'month' },
+      { id: 'line-2', label: 'Today you pay', value: '$279.99' },
+      { id: 'line-3', label: 'Next payment on 11/01/2026', value: '$279.99', schedule: true },
     ],
     renewalNote:
       'Your plan will automatically renew on 01/10/2027 unless you turn off auto-renew in My Account.',
-    cardsLabel: 'Credit & Debit Cards',
-    cardsOverflow: '+4',
+    methods: [
+      { id: 'method-1', label: 'Credit & Debit Cards', marks: 'cards', overflow: '+4', card: true },
+      { id: 'method-2', label: 'Google Pay', marks: 'gpay' },
+      { id: 'method-3', label: 'Paypal', marks: 'paypal' },
+    ],
+    chosen: 'method-1',
     cardNumberLabel: 'Card number',
     expiryLabel: 'Expiry date',
     cvcLabel: 'CVC',
@@ -315,8 +505,6 @@ export const defaultFlow: FlowContent = {
       "By signing up you agree that your subscription starts immediately and that you have read and agree to our Terms of Use, Privacy Policy and Cookie Notice. Your subscription auto-renews unless you cancel before the end of the minimum term by selecting 'Cancel Subscription' in MyAccount.",
     payCta: 'Pay now',
     secureCta: 'Secure checkout',
-    googlePayLabel: 'Google Pay',
-    paypalLabel: 'Paypal',
     promoLabel: 'Redeem promo code',
   },
 

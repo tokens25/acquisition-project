@@ -1,5 +1,7 @@
 import type { CardSet } from '../rules/content'
 import { priceUnitFor } from '../rules/derive'
+import { resolveFlow } from '../rules/layers'
+import { tabsOf } from '../rules/tabs'
 import { defaultFlow, type FlowContent } from '../rules/flow'
 
 /**
@@ -17,8 +19,13 @@ import { defaultFlow, type FlowContent } from '../rules/flow'
  */
 const SKIP = new Set([
   'cadence.options[].price',
-  'cadence.options[].id',
   'cadence.options[].saving',
+  // Which option or method is chosen. An id, not a word.
+  'cadence.selected',
+  'checkout.chosen',
+  // Which icon a row draws, and the TV providers' own names.
+  'checkout.methods[].marks',
+  'landing.providers[].name',
   'auth.emailValue',
   'auth.providers[].id',
   'account.firstNameValue',
@@ -45,6 +52,9 @@ const shape = (key: string) => key.replace(/\[\d+\]/g, '[]')
 function walk(node: unknown, key: string, out: Translatable[], label: string) {
   if (typeof node === 'string') {
     if (!node.trim() || SKIP.has(shape(key))) return
+    // An id is never a word, whatever it is the id of. A rule rather than a
+    // list, so a new list of things with ids cannot leak them to a translator.
+    if (key.endsWith('.id')) return
     // A bare number, a price or a date is a fact, not a word.
     if (/^[^\p{L}]*$/u.test(node)) return
     out.push({ key, label, text: node })
@@ -77,6 +87,16 @@ export function flowStrings(flow: FlowContent = defaultFlow): Translatable[] {
     walk(node, screen, out, SCREEN_LABEL[screen] ?? screen)
   }
   return out
+}
+
+/**
+ * The tabs over the plan picker. Their names are written per market, so the
+ * ones collected are the ones this market shows.
+ */
+export function tabStrings(set: CardSet): Translatable[] {
+  return tabsOf(set)
+    .filter((t) => t.name.trim())
+    .map((t) => ({ key: `planTabs.${t.id}.name`, label: 'Tab name', text: t.name }))
 }
 
 /**
@@ -115,7 +135,10 @@ export function unitStrings(set: CardSet): Translatable[] {
 }
 
 export function everyString(set: CardSet): Translatable[] {
-  return [...flowStrings(set.flow ?? defaultFlow), ...cardStrings(set), ...unitStrings(set)]
+  // The flow as this situation resolves it, not the base underneath. A market
+  // that has taken its own copy of the screens reads that copy, and asking for
+  // the base would translate words nobody is looking at.
+  return [...flowStrings(resolveFlow(set)), ...tabStrings(set), ...cardStrings(set), ...unitStrings(set)]
 }
 
 /** Names a translation must leave exactly as they are. */

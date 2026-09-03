@@ -1,4 +1,17 @@
 import { useEffect, useState } from 'react'
+import { resolveFlow, writeFlow } from '../rules/layers'
+import {
+  forgetTab,
+  ownsTabs,
+  shareTabs,
+  styleOf,
+  tabsOf,
+  tierOnTab,
+  withTabAdded,
+  withTabRemoved,
+  writeTabs,
+} from '../rules/tabs'
+import type { CadenceOffer, PlanTab, TierPatch } from '../rules/content'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -46,7 +59,39 @@ const PURCHASE_TYPES = [
  * view made the number look absolute when it never is.
  */
 export function EditPanel({ store }: { store: CardSetStore }) {
-  const { set, context, updateTier, updateOffer, offerFor, updateSet } = store
+  const {
+    set,
+    context,
+    setContext,
+    updateTier: writeTier,
+    addTier,
+    removeTier,
+    updateOffer: writeOffer,
+    offerFor,
+    updateSet,
+  } = store
+  /**
+   * How narrowly the edits below are meant.
+   *
+   * A tab is always on screen, so this cannot be read off the context: doing
+   * that would make every edit belong to whichever tab happened to be showing.
+   * Empty is the plan however it is shown, which is what most edits are.
+   */
+  const planTabs = tabsOf(set)
+  const marketName = set.markets.find((m) => m.code === context.market)?.label ?? context.market
+  const tabScope = planTabs.some((t) => t.id === context.tab)
+    ? (context.tab as string)
+    : (planTabs[0]?.id ?? '')
+  const scope = tabScope ? { tab: tabScope } : undefined
+  const updateTier = (id: string, patch: TierPatch) => writeTier(id, patch, scope)
+  const forget = (tabIds: string[]) => {
+    const next = tabIds.reduce((tiers, id) => forgetTab(tiers, id), set.tiers)
+    next.forEach((t, i) => {
+      if (t !== set.tiers[i]) writeTier(t.id, { tabs: t.tabs })
+    })
+  }
+  const updateOffer = (tierId: string, patch: Partial<CadenceOffer>) =>
+    writeOffer(tierId, patch, scope)
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   /** The competition being dragged, and the row it is currently over. */
@@ -115,6 +160,16 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   // Absent means custom: copy written before this choice existed was written
   // by hand, and defaulting the other way would relabel it as generated.
   const source = resolved.descriptionSource ?? 'custom'
+  // The other tabs this plan has been written differently for, so an edit here
+  // says what it is not touching.
+  const otherTabs = planTabs
+    .filter(
+      (t) =>
+        t.id !== tabScope &&
+        (tier.overrides.some((o) => o.when.tab === t.id) ||
+          set.offers.some((o) => o.tierId === tier.id && o.tab === t.id)),
+    )
+    .map((t) => t.name)
   const explainerSource = offer?.explainerSource ?? 'custom'
 
   const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
@@ -171,6 +226,19 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   return (
 
     <>
+      <FieldGroup title="Screen">
+        {/* Written and layered like every other line in the flow, so the plan
+            picker is not the one screen whose title lives in the markup. */}
+        <TextField
+          label="Screen title"
+          value={resolveFlow(set).plans.navTitle}
+          onChange={(v) =>
+            updateSet(writeFlow(set, { market: context.market }, 'plans', { navTitle: v }))
+          }
+          helpText="The line in the bar under the status bar."
+        />
+      </FieldGroup>
+
       <FieldGroup title="Plans">
         <div className="ed-tabs">
           {set.tiers.map((t) => (
@@ -187,6 +255,31 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          className="ed-add"
+          onClick={() => setOpenTier(addTier())}
+        >
+          Add a plan
+        </button>
+        {/* Beside the picker that chose it, because removing a plan is a thing
+            you do to the one you are looking at — not something to find at the
+            bottom of its fields. A set with no plans has nothing to sell, so
+            the last one stays, and removing takes the plan's prices with it:
+            an offer for a plan that is gone prices nothing. */}
+        {set.tiers.length > 1 && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => {
+              const next = set.tiers.find((t) => t.id !== tier.id)
+              removeTier(tier.id)
+              setOpenTier(next?.id ?? '')
+            }}
+          >
+            Remove {resolved.planName || 'this plan'}
+          </button>
+        )}
         {absent.has(tier.id) && (
           <p className="ed-absent">
             <strong>{resolved.planName}</strong> is not in this set — {absent.get(tier.id)}. Edits
@@ -194,6 +287,95 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           </p>
         )}
       </FieldGroup>
+
+      <FieldGroup title="Tabs">
+        {tabsOf(set).map((one, i) => {
+          const all = tabsOf(set)
+          const write = (next: Partial<PlanTab>) =>
+            updateSet(writeTabs(set, all.map((t, j) => (j === i ? { ...t, ...next } : t))))
+          return (
+            <div className="demo__feature" key={one.id}>
+              <TextField
+                label={`Tab ${i + 1}`}
+                value={one.name}
+                onChange={(v) => write({ name: v })}
+              />
+              <SelectField
+                label="Style"
+                value={styleOf(one)}
+                options={[
+                  { value: 'plain', label: 'Just the name' },
+                  { value: 'celebratory', label: 'The name, a gold bolt and the sparkle' },
+                ]}
+                onChange={(v) => write({ style: v as PlanTab['style'] })}
+              />
+              {/* A pair goes together — one tab divides the plans into the
+                  plans — so a pair has one control under both of them rather
+                  than two buttons that would each do the same thing. */}
+              {all.length > 2 && (
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() => {
+                    updateSet(writeTabs(set, withTabRemoved(all, i)))
+                    forget([one.id])
+                  }}
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          )
+        })}
+        <button
+          type="button"
+          className="ed-add"
+          onClick={() => updateSet(writeTabs(set, withTabAdded(tabsOf(set))))}
+        >
+          {tabsOf(set).length ? 'Add a tab' : 'Add tabs'}
+        </button>
+        {tabsOf(set).length === 2 && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => {
+              const gone = tabsOf(set).map((t) => t.id)
+              updateSet(writeTabs(set, []))
+              forget(gone)
+            }}
+          >
+            Remove tabs
+          </button>
+        )}
+        {/* The tabs on screen are this market's, not everybody's. Handing them
+            back is the way out, the same as with the flow screens. */}
+        {ownsTabs(set) && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => updateSet(shareTabs(set))}
+          >
+            Give {marketName} the shared tabs back
+          </button>
+        )}
+      </FieldGroup>
+
+      {tabsOf(set).length > 0 && (
+        <FieldGroup title="Where this applies">
+          <SelectField
+            label="Editing"
+            value={tabScope}
+            options={tabsOf(set).map((t) => ({ value: t.id, label: t.name }))}
+            onChange={(v) => setContext({ ...context, tab: v })}
+            helpText="Prices and copy typed below are written for this tab."
+          />
+          {otherTabs.length > 0 && (
+            <p className="ed-absent">
+              {resolved.planName} reads differently on {otherTabs.join(', ')}.
+            </p>
+          )}
+        </FieldGroup>
+      )}
 
       <FieldGroup title="Tier">
         <TextField
@@ -213,6 +395,31 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           checked={resolved.ultimate}
           onChange={(v) => updateTier(tier.id, { ultimate: v })}
         />
+        {/* Which tabs the card appears under. Nothing ticked means every tab:
+            a plan that is on no tab is sold nowhere, which is what removing it
+            is for. */}
+        {tabsOf(set).length > 1 &&
+          tabsOf(set).map((one) => (
+            <ToggleField
+              key={one.id}
+              label={`Shows on ${one.name}`}
+              checked={tierOnTab(resolved, one.id)}
+              onChange={(on: boolean) => {
+                const showing = tabsOf(set)
+                  .map((t) => t.id)
+                  .filter((id) => (id === one.id ? on : tierOnTab(resolved, id)))
+                // Written for the market and not for a tab: which tabs a
+                // plan appears on is a fact about the plan across all of them,
+                // and a tab-scoped answer to it would only apply on the tab it
+                // was given from.
+                writeTier(tier.id, {
+                  // Every tab and no tab both mean the same drawing, so the
+                  // simpler of the two is what gets written.
+                  tabs: showing.length === tabsOf(set).length ? [] : showing,
+                })
+              }}
+            />
+          ))}
         <TextField
           label="Tier name"
           value={resolved.planName}

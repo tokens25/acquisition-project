@@ -20,9 +20,10 @@ import { DIRECT } from './content'
  */
 
 export function matches(override: Override, context: Context): boolean {
-  const { market, campaign } = override.when
+  const { market, campaign, tab } = override.when
   if (market !== undefined && market !== context.market) return false
   if (campaign !== undefined && campaign !== context.campaign) return false
+  if (tab !== undefined && tab !== context.tab) return false
   return true
 }
 
@@ -54,21 +55,29 @@ export function resolveTier(tier: Tier, context: Context): Tier {
 }
 
 /**
- * The offer for a tier at this cadence, in this market.
+ * The offer for a tier at this cadence, in this market, on this tab.
  *
- * A market-scoped offer beats an unscoped one. Returning null means the tier is
- * not sold this way here — which is a fact to respect, not a gap to fill.
+ * The row that names the most of them wins, market before tab: a price written
+ * for this market is about where it is sold, and a price written for a tab is
+ * about how it is presented, so the first is the stronger claim. Returning null
+ * means the tier is not sold this way here — a fact to respect, not a gap to
+ * fill.
  */
 export function resolveOffer(
   set: CardSet,
   tierId: string,
   context: Context,
 ): CadenceOffer | null {
-  const candidates = set.offers.filter(
-    (o) => o.tierId === tierId && o.cadence === context.cadence,
-  )
-  const scoped = candidates.find((o) => o.market === context.market)
-  return scoped ?? candidates.find((o) => o.market === undefined) ?? null
+  const named = (o: CadenceOffer) => (o.market !== undefined ? 2 : 0) + (o.tab !== undefined ? 1 : 0)
+  return set.offers
+    .filter(
+      (o) =>
+        o.tierId === tierId &&
+        o.cadence === context.cadence &&
+        (o.market === undefined || o.market === context.market) &&
+        (o.tab === undefined || o.tab === context.tab),
+    )
+    .reduce<CadenceOffer | null>((best, o) => (!best || named(o) > named(best) ? o : best), null)
 }
 
 /**

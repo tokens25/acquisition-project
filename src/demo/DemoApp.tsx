@@ -1,4 +1,5 @@
 import '../App.css'
+import { resolveFlow } from '../rules/layers'
 import './demo.css'
 import './fields.css'
 import './pipeline/pipeline.css'
@@ -128,7 +129,7 @@ export function DemoApp() {
     const patches = patchesFor(store.set, fix)
     if (patches.changed === 0) return
     const setPatch: Partial<typeof store.set> = {}
-    if (patches.flow) setPatch.flow = patches.flow
+    if (patches.flow) Object.assign(setPatch, patches.flow)
     if (patches.featureCatalog) setPatch.featureCatalog = patches.featureCatalog
     if (Object.keys(setPatch).length) store.updateSet(setPatch)
     for (const t of patches.tiers) store.updateTier(t.id, t.patch)
@@ -381,7 +382,7 @@ export function DemoApp() {
    * the Coach tracing words that exist.
    */
   const coachExamples = useMemo(() => {
-    const flow = store.set.flow
+    const flow = resolveFlow(store.set)
     const first = (text?: string) => (text ?? '').trim().split(/(?<=[.!?])\s/)[0]?.trim() ?? ''
     const campaigns = store.set.campaigns.map((c) => c.label)
     const addOns = store.set.addOnCatalog.map((a) => a.title)
@@ -568,7 +569,14 @@ export function DemoApp() {
         <div className="demo__preview">
 
           {editing && step ? (
-            <StepPreview journey={store.journey} set={marketSet} context={store.context} />
+            <StepPreview
+              journey={store.journey}
+              // The market's own words, so the preview reads as that market
+              // reads. The panel beside it still edits the English source.
+              set={marketSet}
+              context={store.context}
+              onTab={(tab) => store.setContext({ ...store.context, tab })}
+            />
           ) : (
             <JourneyFrames
               planned={shown}

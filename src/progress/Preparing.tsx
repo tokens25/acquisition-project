@@ -169,6 +169,23 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
   const [result, setResult] = useState<Prepared | null>(null)
   const cancelled = useRef(false)
 
+  /**
+   * Create promised the tool, so the tool is what it opens — whether the run
+   * finished, gave up, or was never answered at all.
+   *
+   * It used to open only when the work resolved, which made every lane a place
+   * the person could be stranded: one that never ended left them watching the
+   * screen dissolve back onto the questions they had just answered. The only
+   * way out that is not the tool is Cancel, because that is the one they asked
+   * for.
+   */
+  const opened = useRef(false)
+  const openTool = () => {
+    if (opened.current) return
+    opened.current = true
+    go('/demo')
+  }
+
   const started = useRef(false)
 
   useEffect(() => {
@@ -189,9 +206,9 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
     prepare(bus, job).catch(() => null).then((prepared) => {
       if (cancelled.current) return
       setResult(prepared ?? ({} as Prepared))
-      // The route changes while the screen is still opaque, so what the fade
-      // uncovers is the tool rather than the questions behind it.
-      go('/demo')
+      // While the screen is still opaque, so what the fade uncovers is the
+      // tool rather than the questions behind it.
+      openTool()
     })
     return () => {
       cancelled.current = true
@@ -219,7 +236,10 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
         cancelled.current = true
         onDone()
       }}
-      onLeave={() => {
+      onLeave={(reason) => {
+        // Whatever took the screen away — settled, given up on, or never
+        // started — the way out is forward. Except when it was asked for.
+        if (reason !== 'cancelled') openTool()
         // The tool has been behind this for a while; this is the first moment
         // anyone can see it.
         announceArrival()

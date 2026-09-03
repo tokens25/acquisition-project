@@ -42,8 +42,27 @@ function cleanEnv(): NodeJS.ProcessEnv {
 const MODEL = process.env.ANTHROPIC_MODEL ?? 'claude-opus-5'
 const ENDPOINT = 'https://api.anthropic.com/v1/messages'
 const CLI_TIMEOUT_MS = 4 * 60 * 1000
-/** Enough for a whole journey's copy in one pass, not enough to be a bill. */
-const MAX_STRINGS = 120
+/**
+ * Enough for a whole journey's copy in one pass, not enough to be a bill.
+ *
+ * The journey outgrew the old cap of 120 as more of the screens became things
+ * you can write, and the strings past it were quietly dropped: a Spanish
+ * journey with an English checkout. The cap is now well clear of the whole
+ * journey, and what it does drop is reported rather than swallowed.
+ */
+const MAX_STRINGS = 400
+/**
+ * How many strings go in one ask.
+ *
+ * A whole journey in a single call is the slowest way to get it: the model
+ * writes ninety answers one after another while the person watches nothing
+ * happen. Split into batches that run at the same time, the wait is roughly
+ * the longest batch rather than the sum of all of them. Small enough to be
+ * quick, large enough that a screen's strings mostly stay together.
+ */
+const BATCH = 24
+/** How many batches may be in the air at once. */
+const LANES = 6
 
 function isDeployed(): boolean {
   return Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
@@ -165,22 +184,42 @@ export default async function handler(request: Request): Promise<Response> {
       keep?: string[]
       strings?: { key: string; label?: string; text: string }[]
     }
-    const strings = (body.strings ?? []).slice(0, MAX_STRINGS)
+    const asked = body.strings ?? []
+    const strings = asked.slice(0, MAX_STRINGS)
+    const dropped = asked.length - strings.length
     if (!body.language || strings.length === 0) return json({ error: 'Body must include a language and some strings.' }, 400)
 
-    const user = [
-      `Market: ${body.market ?? 'unknown'}. Language: ${body.language}.`,
-      '',
-      'The strings, one per line, as key then the English:',
-      ...strings.map((s) => `- ${s.key}${s.label ? ` (${s.label})` : ''}: ${JSON.stringify(s.text)}`),
-    ].join('\n')
+    const userFor = (batch: typeof strings) =>
+      [
+        `Market: ${body.market ?? 'unknown'}. Language: ${body.language}.`,
+        '',
+        'The strings, one per line, as key then the English:',
+        ...batch.map((s) => `- ${s.key}${s.label ? ` (${s.label})` : ''}: ${JSON.stringify(s.text)}`),
+      ].join('\n')
+    const user = userFor(strings)
 
     const system = systemPrompt(body.language, body.keep ?? ['DAZN'])
 
     if (cli) {
-      const answer = await askViaCli(system, user)
-      if ('error' in answer) return json({ error: answer.error }, 502)
-      return json({ configured: true, via: 'cli', strings: answer.strings })
+      const batches: typeof strings[] = []
+      for (let i = 0; i < strings.length; i += BATCH) batches.push(strings.slice(i, i + BATCH))
+      // Six at a time: enough that a journey comes back in seconds, few enough
+      // that a long journey does not open twenty processes on the machine.
+      const answers: Awaited<ReturnType<typeof askViaCli>>[] = []
+      for (let i = 0; i < batches.length; i += LANES) {
+        answers.push(...(await Promise.all(batches.slice(i, i + LANES).map((batch) => askViaCli(system, userFor(batch))))))
+      }
+      const out: unknown[] = []
+      const failed: string[] = []
+      for (const answer of answers) {
+        if ('error' in answer) failed.push(answer.error)
+        else out.push(...answer.strings)
+      }
+      // Some words are better than none: a batch that failed leaves its own
+      // strings in English and says so, rather than throwing the rest away.
+      if (out.length === 0) return json({ error: failed[0] ?? 'The translation failed.' }, 502)
+      const note = failed[0] ?? (dropped > 0 ? `${dropped} strings were past the limit of ${MAX_STRINGS} and stayed in English.` : null)
+      return json({ configured: true, via: 'cli', strings: out, note })
     }
 
     const res = await fetch(ENDPOINT, {

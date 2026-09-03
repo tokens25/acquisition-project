@@ -13,6 +13,29 @@
 .lang[data-busy] {
   border-color: rgb(255 196 77 / 0.5);
 }
+.lang__note {
+  /* Clears the spinner, which sits at the control's inner edge. */
+  padding-inline-end: 24px;
+  color: #ffc44d;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+.lang__spin {
+  position: absolute;
+  inset-inline-end: 8px;
+  inline-size: 11px;
+  block-size: 11px;
+  border: 1.5px solid rgb(255 196 77 / 0.3);
+  border-block-start-color: #ffc44d;
+  border-radius: 50%;
+  animation: lang-spin 700ms linear infinite;
+}
+@keyframes lang-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lang__spin { animation-duration: 2s; }
+}
 .lang__select {
   appearance: none;
   block-size: 100%;

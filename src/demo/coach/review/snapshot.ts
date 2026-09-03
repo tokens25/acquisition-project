@@ -1,6 +1,8 @@
 import type { CardSet, Context, MarketConfig } from '../../../rules/content'
+import { resolveFlow } from '../../../rules/layers'
+import { statesOf, tabsOf } from '../../../rules/tabs'
 import { deriveCard } from '../../../rules/derive'
-import { defaultFlow, type FlowContent } from '../../../rules/flow'
+import { type FlowContent } from '../../../rules/flow'
 import type { Journey, ResolvedStep, SkipReason, StepRenderer } from '../../../rules/journey'
 import { marketFor, resolveSet } from '../../../rules/resolve'
 import type { ScreenId } from './types'
@@ -101,7 +103,7 @@ export function buildSnapshot(set: CardSet, journey: Journey, context: Context, 
     id: step.id as ScreenId,
     name: step.shortName ?? step.name,
     renderer: step.renderer,
-    states: step.states?.length ?? 1,
+    states: statesOf(step, set).length,
     skipped,
     position: skipped ? 0 : ++position,
   }))
@@ -113,8 +115,8 @@ export function buildSnapshot(set: CardSet, journey: Journey, context: Context, 
     steps,
     rendered: steps.filter((s) => !s.skipped),
     plans,
-    planTabs: planned.find((p) => p.step.renderer === 'plans')?.step.states ?? [],
-    flow: set.flow ?? defaultFlow,
+    planTabs: tabsOf(set).map((t) => t.name),
+    flow: resolveFlow(set),
     teamNames: Object.fromEntries(set.logoCatalog.map((l) => [l.id, l.name])),
   }
 }
@@ -134,11 +136,10 @@ export function screenStrings(s: JourneySnapshot): ScreenString[] {
   }
   // The plan screen's own words, which are content now rather than constants.
   add('plans', 'screen title', f.plans?.navTitle)
-  add('plans', 'standard tab', f.plans?.tabStandard)
-  add('plans', 'ultimate tab', f.plans?.tabUltimate)
   add('plans', 'price caption', f.plans?.priceCaption)
   add('plans', 'button verb', f.plans?.ctaVerb)
   add('plans', 'card footer', f.plans?.footer)
+  add('plans', 'card badge', f.plans?.badge)
   add('landing', 'title', f.landing.title)
   add('landing', 'body', f.landing.body)
   add('landing', 'button', f.landing.cta)

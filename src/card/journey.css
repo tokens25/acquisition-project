@@ -152,6 +152,25 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    room than the three of them need. */
 /* No outline. The screens carry their own edges, and a second one drawn
    around them read as part of the design rather than as the pane holding it. */
+/* The screen keeps a device's width in the edit view — it is a picture of a
+   phone and stretching it makes it a picture of nothing. What changes is that
+   the plan row is not clipped to it: the cards run past the screen's edge so
+   every one of them is there to be edited, rather than scrolling out of sight
+   the way they do on a device. */
+.jy__viewport .acq-set {
+  overflow-x: visible;
+}
+/* The row is the screen's neighbour here rather than its content, so its space
+   above is its own — 16 off the tabs, not the 24 the screen's body gives it. */
+.jy__viewport .fl-sub__cards {
+  margin-block-start: var(--space-16);
+}
+/* The screen ends under the tabs. Its body reserves room below for the cards
+   it would normally hold, and here it holds none. */
+.jy__viewport .fl__body {
+  padding-block-end: 0;
+}
+
 .jy__viewport[data-device='mobile'] {
   padding: var(--space-16);
   border-radius: var(--radius-18);
@@ -180,4 +199,17 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   color: var(--color-text-tertiary);
   font-size: var(--font-size-caption-xs);
   text-align: center;
+}
+
+/* The landing page is 7412 tall, so the edit view gives it a window to scroll
+   in rather than growing the panel's neighbour to the height of a page. */
+.jy__viewport[data-page] {
+  max-block-size: 70vh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+/* It is a page, not a row: the plan picker inside it keeps a device's width
+   and scrolls, the way it does everywhere the page is drawn whole. */
+.jy__viewport[data-page] .acq-set {
+  overflow-x: auto;
 }

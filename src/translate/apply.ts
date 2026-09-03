@@ -1,5 +1,7 @@
 import type { CardSet, TierPatch } from '../rules/content'
 import { priceUnitFor } from '../rules/derive'
+import { resolveFlow } from '../rules/layers'
+import { tabsOf } from '../rules/tabs'
 import { defaultFlow, type FlowContent } from '../rules/flow'
 
 /** One string's translation, and how far it has got. */
@@ -63,7 +65,18 @@ export function viewSet(set: CardSet, market: string, machine: Translations): Ca
 
 /** Writes a flat key to text map over a copy of the set. */
 export function applyCopy(set: CardSet, words: Record<string, string>): CardSet {
-  let flow: FlowContent = set.flow ?? defaultFlow
+  /**
+   * The flow as it resolves for this situation, flattened.
+   *
+   * A market can own its copy of the screens, and that copy is a layer over
+   * the base. Writing a translation into the base would leave the layer to put
+   * the English back on top of it, so the view is the resolved flow with the
+   * layers dropped: what is on screen, translated, and nothing left to
+   * override it.
+   */
+  let flow: FlowContent = resolveFlow(set)
+  let tabs = tabsOf(set)
+  let tabsTouched = false
   let tiers = set.tiers
   let featureCatalog = set.featureCatalog
   let priceUnits = set.priceUnits
@@ -85,10 +98,24 @@ export function applyCopy(set: CardSet, words: Record<string, string>): CardSet 
       featureCatalog = featureCatalog.map((f) => (f.id === feature[1] ? { ...f, text } : f))
       continue
     }
+    const tab = /^planTabs\.([^.]+)\.name$/.exec(key)
+    if (tab) {
+      tabs = tabs.map((t) => (t.id === tab[1] ? { ...t, name: text } : t))
+      tabsTouched = true
+      continue
+    }
     flow = put(flow, key, text)
   }
 
-  return { ...set, flow, tiers, featureCatalog, priceUnits }
+  return {
+    ...set,
+    flow,
+    flowLayers: [],
+    tiers,
+    featureCatalog,
+    priceUnits,
+    planTabsByMarket: tabsTouched ? { ...set.planTabsByMarket, [set.context.market]: tabs } : set.planTabsByMarket,
+  }
 }
 
 /** What the set says at a key today, whichever kind of key it is. */
@@ -103,7 +130,9 @@ export function currentAt(set: CardSet, key: string): string | undefined {
   if (feature) return set.featureCatalog.find((f) => f.id === feature[1])?.text
   const unit = /^priceUnits\.(.+)$/.exec(key)
   if (unit) return priceUnitFor(set, unit[1], 'en')
-  return readAt(set.flow ?? defaultFlow, key)
+  const tab = /^planTabs\.([^.]+)\.name$/.exec(key)
+  if (tab) return tabsOf(set).find((t) => t.id === tab[1])?.name
+  return readAt(resolveFlow(set), key)
 }
 
 /** What the set says at a key today, for checking a translation is still current. */

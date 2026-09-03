@@ -19,6 +19,8 @@ import { journeyApplies } from './journey'
 
 /** User statuses present in the modelled journeys, in a sensible reading order. */
 const STATUS_ORDER = [
+  'logged-out-new',
+  'logged-out-existing',
   'anonymous',
   'registered-free',
   'paying-dazn',
@@ -29,6 +31,8 @@ const STATUS_ORDER = [
 ]
 
 export const STATUS_LABELS: Record<string, string> = {
+  'logged-out-new': 'Logged out - new',
+  'logged-out-existing': 'Logged out - existing',
   anonymous: 'Logged out',
   'registered-free': 'Logged in — free',
   'paying-dazn': 'Logged in — paying DAZN',

@@ -15,7 +15,8 @@
  */
 
 import type { CardSet, Context, Tier } from './content'
-import { FLOW_STEPS, defaultFlow } from './flow'
+import { resolveFlow } from './layers'
+import { FLOW_STEPS } from './flow'
 import { resolveOffer, resolveTier } from './resolve'
 
 export type Mode = 'market' | 'dev'
@@ -124,6 +125,9 @@ const FLOW_LABELS: Record<string, string> = {
   options: 'Option',
   rules: 'Rule',
   lines: 'Line',
+  methods: 'Payment option',
+  overflow: 'Chip after the marks',
+  consents: 'Consent',
   nameHeading: 'Name heading',
   firstNameLabel: 'First name field',
   firstNameValue: 'First name shown',
@@ -155,12 +159,13 @@ const FLOW_LABELS: Record<string, string> = {
 }
 
 /** Flow fields that are settings or ids rather than copy. */
-const NOT_COPY = new Set(['id', 'selected', 'logos', 'schedule'])
+const NOT_COPY = new Set(['id', 'selected', 'chosen', 'marks', 'logos', 'schedule', 'offer'])
 
 /** Copy a screen cannot ship without. */
 const FLOW_REQUIRED = new Set(['title', 'heading', 'cta', 'navTitle', 'payCta'])
 
-const humanise = (field: string) =>
+/** A flow field in the words the panel uses for it. */
+export const flowFieldLabel = (field: string) =>
   FLOW_LABELS[field] ??
   field.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase())
 
@@ -175,12 +180,12 @@ function flowStrings(prefix: string, screen: Record<string, unknown>): StringDef
       value.forEach((item, i) => walk(item, `${key}[${i}]`, `${label} ${i + 1}`, field))
     } else if (typeof value === 'object' && value !== null) {
       for (const [f, v] of Object.entries(value)) {
-        walk(v, `${key}.${f}`, `${label} · ${humanise(f)}`, f)
+        walk(v, `${key}.${f}`, `${label} · ${flowFieldLabel(f)}`, f)
       }
     }
   }
   for (const [field, value] of Object.entries(screen)) {
-    walk(value, `${prefix}.${field}`, humanise(field), field)
+    walk(value, `${prefix}.${field}`, flowFieldLabel(field), field)
   }
   return out
 }
@@ -275,10 +280,10 @@ export function sectionsFor(
   labels: Record<string, string> = {},
   context: Context = set.context,
 ): Section[] {
-  const flow = { ...defaultFlow, ...set.flow }
+  const flow = resolveFlow(set)
   const out: Section[] = FLOW_STEPS.map((id) => ({
     id,
-    label: labels[id] ?? humanise(id),
+    label: labels[id] ?? flowFieldLabel(id),
     strings: flowStrings(id, flow[id] as unknown as Record<string, unknown>),
   }))
   const tiers = [...set.tiers].sort((a, b) => a.displayOrder - b.displayOrder)
@@ -345,7 +350,7 @@ export function changeMap(doc: PipelineDoc, section: Section): Map<string, Chang
 function labelFromKey(key: string) {
   const tail = key.split('.').pop() ?? key
   const m = /^(\w+)\[(\d+)\]$/.exec(tail)
-  return m ? `${humanise(m[1])} ${Number(m[2]) + 1}` : humanise(tail)
+  return m ? `${flowFieldLabel(m[1])} ${Number(m[2]) + 1}` : flowFieldLabel(tail)
 }
 
 export function statusOf(doc: PipelineDoc, section: Section): SectionStatus {

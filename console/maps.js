@@ -137,6 +137,22 @@
       'landing heading': [7,74,66,7], 'landing body': [7,83,66,9],
       'landing buttons': [7,96,66,20]
     }},
+    flowLandingPage: { vb: '0 0 80 220', parts: {
+      'landing page': [0,0,80,220],
+      'postcode block': [4,4,72,20], 'postcode heading': [4,4,72,5], 'postcode row': [4,12,72,10],
+      'page plan picker': [0,28,80,34],
+      'teams block': [4,66,72,26],
+      'multiview block': [4,96,72,26],
+      'providers block': [4,126,72,44], 'provider grid': [4,140,72,24],
+      'provider tile': [4,140,34,7],
+      'devices block': [4,174,72,18],
+      'free games block': [4,196,72,10],
+      'questions block': [4,208,72,10], 'question list': [4,208,72,10],
+      'question': [4,208,72,4],
+      'page section heading': [4,66,72,6], 'page section body': [4,74,72,6],
+      'page section note': [4,84,72,4], 'page eyebrow': [4,60,40,4],
+      'plan-only pill': [30,60,14,4], 'gold half sentence': [30,80,26,4]
+    }},
     flowSubscription: { vb: '0 0 80 160', furn: [[0,0,80,12]], parts: {
       'subscription control': [5,20,70,11], 'subscription tabs': [5,20,70,11],
       'subscription tab': [6,21,33,9], 'ultimate bolt': [44,23,5,5],

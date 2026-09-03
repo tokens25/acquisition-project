@@ -39,8 +39,11 @@
   align-items: center;
   margin-inline: calc(-1 * var(--space-20));
   padding: var(--space-10) var(--space-20);
-  background: color-mix(in srgb, var(--color-surface-container-1) 94%, transparent);
-  backdrop-filter: blur(8px);
+  /* Opaque, not nearly so. A group heading has the panel scrolling under it,
+     and six per cent of a field's border is enough to read as a second line
+     through the words. The blur went with it: there is nothing behind an
+     opaque surface to blur. */
+  background: var(--color-surface-container-1);
 }
 .fg__toggle {
   display: flex;

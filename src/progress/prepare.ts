@@ -47,6 +47,16 @@ import type { CoachReviewContext } from '../demo/coach/brief'
  */
 const COACH_BUDGET_MS = 20_000
 
+/**
+ * How long the shared copy gets before the lane stops waiting on it.
+ *
+ * It is a request over the network with nothing behind it forcing an answer.
+ * Left unbounded it can hold the whole screen, which is how the deployed build
+ * came to sit on the waiting screen and never open the tool: one lane that
+ * never ends is a run that never finishes.
+ */
+const COPY_BUDGET_MS = 12_000
+
 const NO_GOALS_STATED: CoachReviewContext = {
   businessGoals: [],
   targets: {},
@@ -77,9 +87,17 @@ export async function prepare(bus: ProgressBus, job: Job): Promise<Prepared> {
   const copy = (async () => {
     bus.report({ kind: 'copy:start' })
     try {
-      const state = await loadRemote()
-      // The fact, not the sentence: `narrate` owns every word on the screen,
-      // so a phrase cannot end up written in two places.
+      // Bounded, so the lane cannot hang on a store that never answers, and
+      // reported as the fact rather than the sentence: `narrate` owns every
+      // word on the screen, so a phrase cannot be written in two places.
+      const state = await Promise.race([
+        loadRemote(),
+        new Promise<{ kind: 'timeout' }>((resolve) => setTimeout(() => resolve({ kind: 'timeout' }), COPY_BUDGET_MS)),
+      ])
+      if (state.kind === 'timeout') {
+        bus.report({ kind: 'copy:failed', reason: `The content store did not answer within ${COPY_BUDGET_MS / 1000}s.` })
+        return 'unreachable'
+      }
       bus.report({ kind: 'copy:done', source: state.kind, reachable: state.kind !== 'unreachable' })
       return state.kind
     } catch (error) {

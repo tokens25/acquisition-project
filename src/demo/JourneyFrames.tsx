@@ -1,4 +1,6 @@
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react'
+import { statesOf, tabsOf } from '../rules/tabs'
+import { resolveFlow } from '../rules/layers'
 import { useEffect, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
@@ -150,14 +152,14 @@ export function JourneyFrames({
   // Numbering is assigned before render rather than counted during it: only
   // screens that render take a number, so a skipped step consumes none and the
   // last tile's number equals the journey's declared screen count.
-  const statesOf = (entry: ResolvedStep) =>
-    entry.skipped ? [null] : (entry.step.states ?? [null])
+  const tilesOf = (entry: ResolvedStep) =>
+    entry.skipped ? [null] : statesOf(entry.step, set)
 
   // Each screen's number is how many render at or before it — derived from the
   // list rather than counted during render, so a skipped step consumes none and
   // the last tile's number equals the journey's declared screen count.
   const before = (index: number) =>
-    planned.slice(0, index).reduce((n, e) => n + (e.skipped ? 0 : statesOf(e).length), 0)
+    planned.slice(0, index).reduce((n, e) => n + (e.skipped ? 0 : tilesOf(e).length), 0)
 
   // Counted across every cell that renders, skips included, so the order they
   // arrive in is the order they sit in.
@@ -165,7 +167,7 @@ export function JourneyFrames({
   const groups = planned.map((entry, index) => ({
     step: entry.step,
     skipped: entry.skipped,
-    tiles: statesOf(entry).map((state, i) => ({
+    tiles: tilesOf(entry).map((state, i) => ({
       state,
       number: entry.skipped ? null : before(index) + i + 1,
       order: seq++,
@@ -350,13 +352,15 @@ export function JourneyFrames({
                     </span>
                   </span>
 
-                  {/* The design first, then the live render, then the name.
-                      A step with an exported frame shows it, so the row reads
-                      as the flow as drawn — including Subscription, whose new
-                      design is not what the card component renders yet. The
-                      live render is still the whole point of the tool, and it
-                      is still what the edit view shows; the row is the flow,
-                      the edit view is the thing being built.
+                  {/* The live render first, then the design, then the name.
+                      The row is the flow as authored: rename a screen's title
+                      and its tile says so. It used to lead with the exported
+                      frame, which read as the flow as drawn — truer to Figma,
+                      but it meant the row was the one place edits did not
+                      show, and a picture that disagrees with the panel beside
+                      it is worse than a render that is rougher than the
+                      design. An exported frame is still what a step the code
+                      cannot draw falls back to.
 
                       The live render takes its width from the tile rather than
                       from the box, so it lines up with an exported frame beside
@@ -373,13 +377,24 @@ export function JourneyFrames({
                           style={{ inlineSize: frame.viewport, zoom: thumbScale }}
                         >
                           {step.renderer === 'plans' ? (
-                            /* The whole screen, not just the cards. The tile
-                               used to show the exported frame here, which had
-                               the nav bar and the tabs in it; rendering only
-                               the card row in its place took them off the
-                               screen the moment a language was chosen. */
-                            <SubscriptionFlowScreen tab={state === 'ultimate' ? 'ultimate' : 'standard'} content={set.flow?.plans}>
-                              <CardSetView set={phoneSet} context={context} interactive={false} />
+                            /* The same screen the phone draws — its header,
+                               its tabs and its cards. The tile used to show the
+                               exported frame here, which had the nav bar and
+                               the tabs in it; rendering only the card row in
+                               its place took them off the screen the moment a
+                               language was chosen. One tile per tab, so each
+                               says which tab it is. */
+                            <SubscriptionFlowScreen
+                              title={resolveFlow(set).plans.navTitle}
+                              tabs={tabsOf(set)}
+                              tab={state ?? ''}
+                            >
+                              <CardSetView
+                                set={phoneSet}
+                                context={context}
+                                interactive={false}
+                                tab={state}
+                              />
                             </SubscriptionFlowScreen>
                           ) : (
                             <FlowStep step={step} state={state ?? 'default'} set={set} />

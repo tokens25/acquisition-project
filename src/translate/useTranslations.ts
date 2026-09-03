@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CardSet, Context } from '../rules/content'
 import { everyString, keepAsIs } from './fields'
 import { languageOf, SOURCE_LANGUAGE } from './languages'
@@ -20,6 +20,17 @@ import { currentAt, type Translated, type Translations } from './apply'
 const KEY = 'acquisition-translations-v2'
 
 type Store = Record<string, Translations>
+
+/**
+ * Which languages have been asked for, outside the component.
+ *
+ * A ref is per mount, and React's development mode mounts twice on purpose.
+ * That meant the first switch to a language sent the whole journey to the
+ * translator twice over, two long runs racing each other for the same answer,
+ * which is most of why the first switch felt broken. Module scope is the right
+ * scope for "this page has already asked".
+ */
+const askedFor = new Set<string>()
 
 function read(): Store {
   try {
@@ -70,8 +81,6 @@ export function useTranslations(set: CardSet, context: Context, chosen?: string)
   /** English needs nothing, so the language decides that rather than a run. */
   const state: TranslationState = !wanted ? 'off' : runState
   const [note, setNote] = useState<string | null>(null)
-  /** Which language a fetch is already running or done for, so it runs once. */
-  const asked = useRef<Set<string>>(new Set())
 
   const entries = useMemo(() => (wanted ? (store[language.code] ?? {}) : {}), [wanted, store, language.code])
 
@@ -116,7 +125,7 @@ export function useTranslations(set: CardSet, context: Context, chosen?: string)
           headers: { 'content-type': 'application/json', accept: 'application/json' },
           body: JSON.stringify({ language: lang.name, market: market.label, keep: keepAsIs(set), strings }),
         })
-        const body = (await res.json()) as { strings?: { key: string; text: string }[]; error?: string }
+        const body = (await res.json()) as { strings?: { key: string; text: string }[]; error?: string; note?: string | null }
         if (!res.ok || body.error) {
           setState('failed')
           setNote(body.error ?? `The translator returned ${res.status}.`)
@@ -130,6 +139,9 @@ export function useTranslations(set: CardSet, context: Context, chosen?: string)
           next[row.key] = { text: row.text.trim(), state: 'machine', from }
         }
         save(lang.code, next)
+        // Some words back and a reason for the rest is a state a person can
+        // act on. Silently showing English is not.
+        if (body.note) setNote(body.note)
         setState('ready')
       } catch (error) {
         setState('failed')
@@ -141,8 +153,8 @@ export function useTranslations(set: CardSet, context: Context, chosen?: string)
 
   // Choosing a language, or a market that reads one, fetches it once.
   useEffect(() => {
-    if (!wanted || asked.current.has(language.code)) return
-    asked.current.add(language.code)
+    if (!wanted || askedFor.has(language.code)) return
+    askedFor.add(language.code)
     void translate(language, false)
   }, [wanted, language, translate])
 
@@ -168,7 +180,7 @@ export function useTranslations(set: CardSet, context: Context, chosen?: string)
     entries,
     counts,
     retranslate: () => {
-      asked.current.delete(language.code)
+      askedFor.delete(language.code)
       void translate(language, true)
     },
     accept: (key: string) => {

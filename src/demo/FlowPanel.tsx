@@ -1,10 +1,32 @@
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
+import { ToggleField } from '../components/ToggleField'
+import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
+import { blankConsent, consentsOf } from '../rules/consents'
+import { blankProvider, blankQuestion, landingText, providersOf, questionsOf } from '../rules/landing'
+import { blankLine, blankMethod, chosenMethod, linesOf, methodsOf } from '../rules/checkout'
 import { FieldGroup } from './FieldGroup'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { FlowContent } from '../rules/flow'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
+import type { Selector } from '../rules/layers'
+import {
+  SHARED,
+  clearFlow,
+  clearLayer,
+  isMarketCopy,
+  layersFor,
+  resolveFlow,
+  sameSelector,
+  scopeLadder,
+  selectorLabel,
+  situationOf,
+  specificity,
+  writeFlow,
+} from '../rules/layers'
+import { flowFieldLabel } from '../rules/pipeline'
+import { useState } from 'react'
 
 /**
  * The edit view's form for the screens after the plan picker.
@@ -16,13 +38,103 @@ import type { Step } from '../rules/journey'
  * Grouped the way the screen reads top to bottom rather than by kind, so the
  * panel and the preview beside it can be followed together.
  */
+/**
+ * Which situations the edits below are for.
+ *
+ * Held here and not in the content: it is a fact about who is typing, not
+ * about what the screens say. It opens on this market, because markets are
+ * separate and the market you are looking at is the one you meant — the shared
+ * copy is a deliberate step out, not somewhere to land by default.
+ */
 export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) {
   const { set, updateSet } = store
-  const flow = { ...defaultFlow, ...set.flow }
+  const at = situationOf(set)
+  const ladder = scopeLadder(at)
+  const home = ladder.find((r) => isMarketCopy(r.when)) ?? ladder[0]
+  const [chosen, setChosen] = useState(home?.label ?? SHARED)
+  const scope = ladder.find((r) => r.label === chosen)?.when ?? {}
+  const screen = step.renderer as keyof FlowContent
+  if (!(screen in defaultFlow)) return <FlowFields store={store} step={step} scope={scope} />
 
-  /** Writes one field of one screen, leaving the other five alone. */
+  const all = set.flowLayers ?? []
+  const applying = layersFor(set, at)
+  const mine = applying.find((l) => sameSelector(l.when, scope))
+  const owned = Object.keys(mine?.patch[screen] ?? {})
+  // Markets that have taken their own copy. An edit to the shared copy reaches
+  // none of them, which is the deal markets being separate makes.
+  const copies = all.filter((l) => isMarketCopy(l.when)).map((l) => selectorLabel(l.when))
+  // Fields a narrower layer has already answered for. Typing into one of these
+  // at this scope changes something real, but nothing visible from here — which
+  // is worth saying out loud rather than leaving as a silent no-op.
+  const shadowed = applying
+    .filter((l) => specificity(l.when) > specificity(scope))
+    .flatMap((l) =>
+      Object.keys(l.patch[screen] ?? {}).map(
+        (field) => `${flowFieldLabel(field)} (${selectorLabel(l.when)})`,
+      ),
+    )
+
+  const help = isMarketCopy(scope)
+    ? mine
+      ? `${chosen} has its own copy of all seven screens. Nothing written elsewhere reaches it.`
+      : `${chosen} shares the copy below. The first edit here gives it its own copy of all seven screens, starting from what it shows now.`
+    : scope.market
+      ? `Written for ${chosen} only, over ${selectorLabel({ market: scope.market })}’s own copy.`
+      : 'The copy a market reads until it has one of its own.'
+
+  return (
+    <>
+      <FieldGroup title="Where this applies">
+        <SelectField
+          label="Editing"
+          value={chosen}
+          options={ladder.map((r) => ({ value: r.label, label: r.label }))}
+          onChange={setChosen}
+          helpText={help}
+        />
+        {!scope.market && copies.length > 0 && (
+          <p className="ed-absent">
+            {copies.join(', ')} {copies.length === 1 ? 'has its' : 'have their'} own copy, so this
+            edit will not reach {copies.length === 1 ? 'it' : 'them'}.
+          </p>
+        )}
+        {shadowed.length > 0 && (
+          <p className="ed-absent">
+            Answered more narrowly elsewhere, so edits here will not show in this
+            situation: {shadowed.join(', ')}.
+          </p>
+        )}
+        {owned.length > 0 && !isMarketCopy(scope) && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => updateSet(clearFlow(set, scope, screen))}
+          >
+            Reset this screen to inherited
+          </button>
+        )}
+        {mine && isMarketCopy(scope) && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => updateSet(clearLayer(set, scope))}
+          >
+            Give {chosen} the shared copy back
+          </button>
+        )}
+      </FieldGroup>
+      <FlowFields store={store} step={step} scope={scope} />
+    </>
+  )
+}
+
+function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; scope: Selector }) {
+  const { set, updateSet } = store
+  const flow = resolveFlow(set)
+
+  /** Writes one field of one screen to the chosen scope, and nothing else. */
   const patch = <K extends keyof FlowContent>(screen: K, next: Partial<FlowContent[K]>) =>
-    updateSet({ flow: { ...flow, [screen]: { ...flow[screen], ...next } } })
+    updateSet(writeFlow(set, scope, screen, next))
 
   const navTitle = (screen: keyof FlowContent, value: string) => (
     <TextField
@@ -36,6 +148,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
 
   if (step.renderer === 'landing') {
     const l = flow.landing
+    // What the page says, the shipped wording standing in where a saved copy
+    // predates the section.
+    const t = landingText(l)
     return (
       <>
         <FieldGroup title="Top bar">
@@ -78,12 +193,133 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             onChange={(v) => patch('landing', { altCta: v })}
           />
         </FieldGroup>
+
+        {/* Everything below the hero. The page is long, so the groups are the
+            sections you would name if you were pointing at it. */}
+        <FieldGroup title="Postcode">
+          <TextField label="Heading" value={t.zipHeading} pipelineKey={'landing.zipHeading'} onChange={(v) => patch('landing', { zipHeading: v })} />
+          <TextField label="Field" value={t.zipLabel} pipelineKey={'landing.zipLabel'} onChange={(v) => patch('landing', { zipLabel: v })} />
+          <TextField label="Code shown" value={t.zipValue} pipelineKey={'landing.zipValue'} onChange={(v) => patch('landing', { zipValue: v })} />
+          <TextField label="Button" value={t.zipCta} pipelineKey={'landing.zipCta'} onChange={(v) => patch('landing', { zipCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Meet the teams">
+          <TextField label="Over the heading" value={t.teamsEyebrow} pipelineKey={'landing.teamsEyebrow'} onChange={(v) => patch('landing', { teamsEyebrow: v })} />
+          <TextField label="Heading" value={t.teamsTitle} pipelineKey={'landing.teamsTitle'} onChange={(v) => patch('landing', { teamsTitle: v })} />
+          <TextField label="Under the heading" value={t.teamsBody} pipelineKey={'landing.teamsBody'} onChange={(v) => patch('landing', { teamsBody: v })} rows={2} />
+          <TextField label="Under the tiles" value={t.teamsNote} pipelineKey={'landing.teamsNote'} onChange={(v) => patch('landing', { teamsNote: v })} rows={2} />
+          <TextField label="Button" value={t.teamsCta} pipelineKey={'landing.teamsCta'} onChange={(v) => patch('landing', { teamsCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Multiview">
+          <TextField label="Over the heading" value={t.multiviewEyebrow} pipelineKey={'landing.multiviewEyebrow'} onChange={(v) => patch('landing', { multiviewEyebrow: v })} />
+          <TextField label="Pill" value={t.multiviewBadge} pipelineKey={'landing.multiviewBadge'} onChange={(v) => patch('landing', { multiviewBadge: v })} helpText="Empty draws none." />
+          <TextField label="Heading" value={t.multiviewTitle} pipelineKey={'landing.multiviewTitle'} onChange={(v) => patch('landing', { multiviewTitle: v })} rows={2} />
+          <TextField label="Under the heading" value={t.multiviewBody} pipelineKey={'landing.multiviewBody'} onChange={(v) => patch('landing', { multiviewBody: v })} rows={3} />
+          <TextField label="Button" value={t.multiviewCta} pipelineKey={'landing.multiviewCta'} onChange={(v) => patch('landing', { multiviewCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="TV providers">
+          <TextField label="Heading" value={t.providersTitle} pipelineKey={'landing.providersTitle'} onChange={(v) => patch('landing', { providersTitle: v })} rows={2} />
+          <TextField label="Under the heading" value={t.providersBody} pipelineKey={'landing.providersBody'} onChange={(v) => patch('landing', { providersBody: v })} rows={3} />
+          <TextField label="The gold half" value={t.providersHighlight} pipelineKey={'landing.providersHighlight'} onChange={(v) => patch('landing', { providersHighlight: v })} helpText="Follows the sentence above, in gold." />
+          {providersOf(l).map((provider, i) => {
+            const all = providersOf(l)
+            return (
+              <div className="demo__feature" key={provider.id}>
+                <TextField
+                  label={`Provider ${i + 1}`}
+                  value={provider.name}
+                  pipelineKey={`landing.providers[${i}].name`}
+                  onChange={(v) =>
+                    patch('landing', {
+                      providers: all.map((p, j) => (j === i ? { ...p, name: v } : p)),
+                    })
+                  }
+                  helpText="The name picks the logo. One with no logo shows its name."
+                />
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() => patch('landing', { providers: all.filter((_, j) => j !== i) })}
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('landing', { providers: [...providersOf(l), blankProvider(providersOf(l))] })
+            }
+          >
+            Add a provider
+          </button>
+          <TextField label="Under the grid" value={t.providersNote} pipelineKey={'landing.providersNote'} onChange={(v) => patch('landing', { providersNote: v })} rows={2} />
+          <TextField label="Button" value={t.providersCta} pipelineKey={'landing.providersCta'} onChange={(v) => patch('landing', { providersCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Devices">
+          <TextField label="Heading" value={t.devicesTitle} pipelineKey={'landing.devicesTitle'} onChange={(v) => patch('landing', { devicesTitle: v })} />
+          <TextField label="Second line" value={t.devicesTitleTwo} pipelineKey={'landing.devicesTitleTwo'} onChange={(v) => patch('landing', { devicesTitleTwo: v })} helpText="The design sets this on its own line." />
+          <TextField label="Under the heading" value={t.devicesBody} pipelineKey={'landing.devicesBody'} onChange={(v) => patch('landing', { devicesBody: v })} rows={4} />
+          <TextField label="Over the logos" value={t.devicesNote} pipelineKey={'landing.devicesNote'} onChange={(v) => patch('landing', { devicesNote: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Free games">
+          <TextField label="Heading" value={t.freeTitle} pipelineKey={'landing.freeTitle'} onChange={(v) => patch('landing', { freeTitle: v })} rows={2} />
+          <TextField label="Under the heading" value={t.freeBody} pipelineKey={'landing.freeBody'} onChange={(v) => patch('landing', { freeBody: v })} rows={3} />
+          <TextField label="Button" value={t.freeCta} pipelineKey={'landing.freeCta'} onChange={(v) => patch('landing', { freeCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Questions">
+          <TextField label="Heading" value={t.faqTitle} pipelineKey={'landing.faqTitle'} onChange={(v) => patch('landing', { faqTitle: v })} />
+          {questionsOf(l).map((one, i) => {
+            const all = questionsOf(l)
+            return (
+              <div className="demo__feature" key={one.id}>
+                <TextField
+                  label={`Question ${i + 1}`}
+                  value={one.question}
+                  pipelineKey={`landing.faqs[${i}].question`}
+                  onChange={(v) =>
+                    patch('landing', {
+                      faqs: all.map((q, j) => (j === i ? { ...q, question: v } : q)),
+                    })
+                  }
+                  rows={2}
+                />
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() => patch('landing', { faqs: all.filter((_, j) => j !== i) })}
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('landing', { faqs: [...questionsOf(l), blankQuestion(questionsOf(l))] })
+            }
+          >
+            Add a question
+          </button>
+        </FieldGroup>
       </>
     )
   }
 
   if (step.renderer === 'cadence') {
     const c = flow.cadence
+    // What the yearly card will say, so the setting below can show it rather
+    // than describe it.
+    const savings = Object.values(cadenceSavings(c))[0] ?? ''
     return (
       <>
         <FieldGroup title="Screen">
@@ -130,21 +366,60 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
                   onChange={(v) => write({ badge: v })}
                   helpText="Empty draws no ribbon."
                 />
-                <TextField
-                  label="Saving"
-                  value={option.saving ?? ''}
-                  pipelineKey={`cadence.options[${i}].saving`}
-                  onChange={(v) => write({ saving: v })}
-                  helpText="Beside the price, in green. Empty draws nothing."
-                />
+                {/* A card can go, as long as one is left to choose. */}
+                {c.options.length > 1 && (
+                  <button
+                    type="button"
+                    className="demo__feature-remove"
+                    onClick={() =>
+                      patch('cadence', {
+                        options: c.options.filter((_, j) => j !== i),
+                        selected:
+                          c.selected === option.id
+                            ? (c.options.find((_, j) => j !== i)?.id ?? '')
+                            : c.selected,
+                      })
+                    }
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             )
           })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('cadence', { options: [...c.options, blankCadenceOption(c.options)] })
+            }
+          >
+            Add a way to pay
+          </button>
+
           <SelectField
             label="Pre-selected"
             value={c.selected}
             options={c.options.map((o) => ({ value: o.id, label: o.title }))}
             onChange={(v) => patch('cadence', { selected: v })}
+          />
+
+          {/* The saving itself is not written anywhere — it is the difference
+              between the yearly price and twelve monthly ones. This is only how
+              that difference is said. */}
+          <SelectField
+            label="Saving shown as"
+            value={c.savingAs ?? 'amount'}
+            options={[
+              { value: 'amount', label: 'Money — Save $108 /year' },
+              { value: 'percent', label: 'Percent — Save 30% /year' },
+            ]}
+            onChange={(v) => patch('cadence', { savingAs: v as 'amount' | 'percent' })}
+            helpText={
+              savings
+                ? `Drawn on the yearly card: "${savings}".`
+                : 'Drawn once a yearly card and a monthly card are both priced.'
+            }
           />
         </FieldGroup>
 
@@ -346,19 +621,61 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'account.notifyHeading'}
             onChange={(v) => patch('account', { notifyHeading: v })}
           />
-          <TextField
-            label="Consent text"
-            value={a.consentBody}
-            pipelineKey={'account.consentBody'}
-            onChange={(v) => patch('account', { consentBody: v })}
-            rows={4}
-          />
-          <TextField
-            label="Under the box"
-            value={a.consentNote}
-            pipelineKey={'account.consentNote'}
-            onChange={(v) => patch('account', { consentNote: v })}
-          />
+          {consentsOf(a).map((consent, i) => {
+            const all = consentsOf(a)
+            const write = (next: Partial<typeof consent>) =>
+              patch('account', {
+                consents: all.map((c, j) => (j === i ? { ...c, ...next } : c)),
+              })
+            return (
+              <div className="demo__feature" key={consent.id}>
+                <TextField
+                  label={`Consent ${i + 1}`}
+                  value={consent.body}
+                  pipelineKey={`account.consents[${i}].body`}
+                  onChange={(v) => write({ body: v })}
+                  rows={3}
+                />
+                <TextField
+                  label="Under the box"
+                  value={consent.note}
+                  pipelineKey={`account.consents[${i}].note`}
+                  onChange={(v) => write({ note: v })}
+                  helpText="Empty draws nothing."
+                />
+                <ToggleField
+                  label="On by default"
+                  checked={consent.on}
+                  onChange={(next: boolean) => write({ on: next })}
+                  hint={
+                    consent.on
+                      ? 'Someone has to turn it off to decline.'
+                      : 'Someone has to turn it on to agree.'
+                  }
+                />
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() =>
+                    patch('account', { consents: all.filter((_, j) => j !== i) })
+                  }
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('account', {
+                consents: [...consentsOf(a), blankConsent(consentsOf(a))],
+              })
+            }
+          >
+            Add a consent
+          </button>
         </FieldGroup>
 
         <FieldGroup title="Buttons">
@@ -465,13 +782,14 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             pipelineKey={'checkout.changeCta'}
             onChange={(v) => patch('checkout', { changeCta: v })}
           />
-          {c.lines.map((line, i) => {
+          {linesOf(c).map((line, i) => {
+            const all = linesOf(c)
             const write = (next: Partial<typeof line>) =>
               patch('checkout', {
-                lines: c.lines.map((l, j) => (j === i ? { ...l, ...next } : l)),
+                lines: all.map((l, j) => (j === i ? { ...l, ...next } : l)),
               })
             return (
-              <div className="demo__feature" key={i}>
+              <div className="demo__feature" key={line.id}>
                 <TextField
                   label={`Line ${i + 1}`}
                   value={line.label}
@@ -491,9 +809,42 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
                   onChange={(v) => write({ unit: v })}
                   helpText="Empty shows the amount on its own."
                 />
+                {/* Three ways a line can read, named by what each one draws
+                    rather than by the flag it sets. */}
+                <SelectField
+                  label="Reads as"
+                  value={line.offer ? 'offer' : line.schedule ? 'schedule' : 'plain'}
+                  options={[
+                    { value: 'plain', label: 'A plain amount' },
+                    { value: 'offer', label: 'An offer, in gold' },
+                    { value: 'schedule', label: 'What happens next, with a date mark' },
+                  ]}
+                  onChange={(v) =>
+                    write({ offer: v === 'offer', schedule: v === 'schedule' })
+                  }
+                />
+                {/* A summary with nothing in it is not a summary. */}
+                {all.length > 1 && (
+                  <button
+                    type="button"
+                    className="demo__feature-remove"
+                    onClick={() =>
+                      patch('checkout', { lines: all.filter((_, j) => j !== i) })
+                    }
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             )
           })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => patch('checkout', { lines: [...linesOf(c), blankLine(linesOf(c))] })}
+          >
+            Add a line
+          </button>
           <TextField
             label="Renewal note"
             value={c.renewalNote}
@@ -504,19 +855,87 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
         </FieldGroup>
 
         <FieldGroup title="How to pay">
-          <TextField
-            label="Cards option"
-            value={c.cardsLabel}
-            pipelineKey={'checkout.cardsLabel'}
-            onChange={(v) => patch('checkout', { cardsLabel: v })}
+          {methodsOf(c).map((method, i) => {
+            const all = methodsOf(c)
+            const write = (next: Partial<typeof method>) =>
+              patch('checkout', {
+                methods: all.map((m, j) => (j === i ? { ...m, ...next } : m)),
+              })
+            return (
+              <div className="demo__feature" key={method.id}>
+                <TextField
+                  label={`Option ${i + 1}`}
+                  value={method.label}
+                  pipelineKey={`checkout.methods[${i}].label`}
+                  onChange={(v) => write({ label: v })}
+                />
+                {/* The artwork ships with the tool, so this picks between the
+                    sets there are rather than asking for a file. */}
+                <SelectField
+                  label="Marks"
+                  value={method.marks}
+                  options={[
+                    { value: 'cards', label: 'Visa and Mastercard' },
+                    { value: 'gpay', label: 'The Google Pay mark' },
+                    { value: 'paypal', label: 'The PayPal mark' },
+                    { value: 'none', label: 'No marks' },
+                  ]}
+                  onChange={(v) => write({ marks: v as typeof method.marks })}
+                />
+                <TextField
+                  label="Chip after the marks"
+                  value={method.overflow ?? ''}
+                  pipelineKey={`checkout.methods[${i}].overflow`}
+                  onChange={(v) => write({ overflow: v })}
+                  helpText="The “+4” beside the card marks. Empty draws none."
+                />
+                <ToggleField
+                  label="Asks for a card"
+                  checked={method.card ?? false}
+                  onChange={(next: boolean) => write({ card: next })}
+                  hint={
+                    method.card
+                      ? 'The card fields open under it when it is chosen.'
+                      : 'Choosing it opens nothing here.'
+                  }
+                />
+                {all.length > 1 && (
+                  <button
+                    type="button"
+                    className="demo__feature-remove"
+                    onClick={() =>
+                      patch('checkout', {
+                        methods: all.filter((_, j) => j !== i),
+                        chosen:
+                          chosenMethod(c) === method.id
+                            ? (all.find((_, j) => j !== i)?.id ?? '')
+                            : chosenMethod(c),
+                      })
+                    }
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('checkout', { methods: [...methodsOf(c), blankMethod(methodsOf(c))] })
+            }
+          >
+            Add a way to pay
+          </button>
+
+          <SelectField
+            label="Chosen on arrival"
+            value={chosenMethod(c)}
+            options={methodsOf(c).map((m) => ({ value: m.id, label: m.label || 'Untitled' }))}
+            onChange={(v) => patch('checkout', { chosen: v })}
           />
-          <TextField
-            label="Cards chip"
-            value={c.cardsOverflow}
-            pipelineKey={'checkout.cardsOverflow'}
-            onChange={(v) => patch('checkout', { cardsOverflow: v })}
-            helpText="The “+4” beside the card marks."
-          />
+
           <TextField
             label="Card number field"
             value={c.cardNumberLabel}
@@ -540,18 +959,6 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
             value={c.nameOnCardLabel}
             pipelineKey={'checkout.nameOnCardLabel'}
             onChange={(v) => patch('checkout', { nameOnCardLabel: v })}
-          />
-          <TextField
-            label="Google Pay option"
-            value={c.googlePayLabel}
-            pipelineKey={'checkout.googlePayLabel'}
-            onChange={(v) => patch('checkout', { googlePayLabel: v })}
-          />
-          <TextField
-            label="PayPal option"
-            value={c.paypalLabel}
-            pipelineKey={'checkout.paypalLabel'}
-            onChange={(v) => patch('checkout', { paypalLabel: v })}
           />
         </FieldGroup>
 

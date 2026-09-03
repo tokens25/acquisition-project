@@ -52,9 +52,16 @@ export function LanguageSwitcher({
           </option>
         ))}
       </select>
-      <svg className="lang__chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      {busy ? (
+        /* A translation takes a while, and a quiet control reads as a broken
+           one. So the control says what is happening for as long as it is. */
+        <span className="lang__spin" aria-hidden="true" />
+      ) : (
+        <svg className="lang__chev" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
+      {busy && <span className="lang__note">Translating the journey</span>}
     </div>
   )
 }
