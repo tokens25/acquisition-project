@@ -29,6 +29,24 @@ export interface Situation {
  */
 export type Selector = Partial<Situation>
 
+/**
+ * Whether a scope is a market's own copy of the flow.
+ *
+ * Markets are separate. Editing one line in Spain must not leave Spain's other
+ * six screens following a shared copy somebody else can change underneath it —
+ * so a market's layer is the whole flow, taken at the moment it is first
+ * written to, and every screen in that market is that market's from then on.
+ *
+ * The narrower scopes are not like this. Inside a market, a subscription or a
+ * user status is a refinement of that market's copy, and refining is exactly
+ * the case where inheriting the rest is what you want.
+ */
+export const isMarketCopy = (scope: Selector) =>
+  scope.market !== undefined &&
+  scope.subscription === undefined &&
+  scope.status === undefined &&
+  scope.entry === undefined
+
 /** The fields one layer changes, per screen. Everything else is inherited. */
 export type FlowPatch = { [K in keyof FlowContent]?: Partial<FlowContent[K]> }
 
@@ -40,6 +58,9 @@ export interface FlowLayer {
 }
 
 const KEYS: (keyof Situation)[] = ['market', 'subscription', 'status', 'entry']
+
+/** What the copy is called when it belongs to no market in particular. */
+export const SHARED = 'Shared copy'
 
 /** The situation the set is currently being edited in. */
 export function situationOf(set: CardSet): Situation {
@@ -152,12 +173,18 @@ export function writeFlow<K extends keyof FlowContent>(
   const layers = set.flowLayers ?? []
   const at = layers.findIndex((l) => sameSelector(l.when, scope))
   const existing = layers[at]
+  // A market taking its copy takes what it was already showing, so the fork is
+  // invisible at the moment it happens — the words on screen do not change,
+  // only who owns them.
+  const opening: FlowPatch =
+    existing || !isMarketCopy(scope) ? {} : (forkFrom(set, scope) as FlowPatch)
+  const base = existing?.patch ?? opening
   const written: FlowLayer = {
     id: existing?.id ?? layerId(scope),
     when: scope,
     patch: {
-      ...existing?.patch,
-      [screen]: { ...existing?.patch[screen], ...next },
+      ...base,
+      [screen]: { ...base[screen], ...next },
     },
   }
   return {
@@ -165,6 +192,26 @@ export function writeFlow<K extends keyof FlowContent>(
       ? layers.map((l, i) => (i === at ? written : l))
       : [...layers, written],
   }
+}
+
+/**
+ * What a market's copy starts as: everything it was showing, which is the
+ * shared copy plus anything broader than the market itself.
+ */
+function forkFrom(set: CardSet, scope: Selector): FlowContent {
+  const mine = specificity(scope)
+  const below: CardSet = {
+    ...set,
+    flowLayers: (set.flowLayers ?? []).filter((l) => specificity(l.when) < mine),
+  }
+  return resolveFlow(below, { ...blankSituation, ...scope })
+}
+
+const blankSituation: Situation = { market: '', subscription: '', status: '', entry: '' }
+
+/** Drops a whole layer, so its situations read what they read before it. */
+export function clearLayer(set: CardSet, scope: Selector): Partial<CardSet> {
+  return { flowLayers: (set.flowLayers ?? []).filter((l) => !sameSelector(l.when, scope)) }
 }
 
 /** Drops a layer's changes to one screen, so the screen inherits again. */
@@ -198,7 +245,7 @@ export function selectorLabel(when: Selector): string {
     when.status && (STATUS_LABELS[when.status] ?? when.status),
     when.entry,
   ].filter(Boolean)
-  return parts.length ? parts.join(' · ') : 'Everywhere'
+  return parts.length ? parts.join(' · ') : SHARED
 }
 
 /**
@@ -208,14 +255,14 @@ export function selectorLabel(when: Selector): string {
  * A ladder rather than every combination of the four: sixteen scopes is not a
  * menu anybody can hold in their head, and the ones left out — status without
  * market, entry without status — are narrower than the reason for wanting them.
- * The two single-key rungs are here because "this market" and "this product"
- * are the two people actually ask for.
+ * There is no rung for a subscription across markets either: markets are
+ * separate, so a layer spanning them would be one a market with its own copy
+ * could never see.
  */
 export function scopeLadder(at: Situation): { when: Selector; label: string }[] {
   const rungs: Selector[] = [
     {},
     { market: at.market },
-    { subscription: at.subscription },
     { market: at.market, subscription: at.subscription },
     { market: at.market, subscription: at.subscription, status: at.status },
     { market: at.market, subscription: at.subscription, status: at.status, entry: at.entry },

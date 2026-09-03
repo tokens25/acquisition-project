@@ -11,7 +11,10 @@ import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
 import type { Selector } from '../rules/layers'
 import {
+  SHARED,
   clearFlow,
+  clearLayer,
+  isMarketCopy,
   layersFor,
   resolveFlow,
   sameSelector,
@@ -38,22 +41,27 @@ import { useState } from 'react'
  * Which situations the edits below are for.
  *
  * Held here and not in the content: it is a fact about who is typing, not
- * about what the screens say. It starts at the copy everybody gets, because
- * the shared line is the one that should be edited unless somebody has a
- * reason, and narrowing is the deliberate act.
+ * about what the screens say. It opens on this market, because markets are
+ * separate and the market you are looking at is the one you meant — the shared
+ * copy is a deliberate step out, not somewhere to land by default.
  */
 export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) {
   const { set, updateSet } = store
   const at = situationOf(set)
   const ladder = scopeLadder(at)
-  const [chosen, setChosen] = useState(ladder[0]?.label ?? 'Everywhere')
+  const home = ladder.find((r) => isMarketCopy(r.when)) ?? ladder[0]
+  const [chosen, setChosen] = useState(home?.label ?? SHARED)
   const scope = ladder.find((r) => r.label === chosen)?.when ?? {}
   const screen = step.renderer as keyof FlowContent
   if (!(screen in defaultFlow)) return <FlowFields store={store} step={step} scope={scope} />
 
+  const all = set.flowLayers ?? []
   const applying = layersFor(set, at)
   const mine = applying.find((l) => sameSelector(l.when, scope))
   const owned = Object.keys(mine?.patch[screen] ?? {})
+  // Markets that have taken their own copy. An edit to the shared copy reaches
+  // none of them, which is the deal markets being separate makes.
+  const copies = all.filter((l) => isMarketCopy(l.when)).map((l) => selectorLabel(l.when))
   // Fields a narrower layer has already answered for. Typing into one of these
   // at this scope changes something real, but nothing visible from here — which
   // is worth saying out loud rather than leaving as a silent no-op.
@@ -65,6 +73,14 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
       ),
     )
 
+  const help = isMarketCopy(scope)
+    ? mine
+      ? `${chosen} has its own copy of all seven screens. Nothing written elsewhere reaches it.`
+      : `${chosen} shares the copy below. The first edit here gives it its own copy of all seven screens, starting from what it shows now.`
+    : scope.market
+      ? `Written for ${chosen} only, over ${selectorLabel({ market: scope.market })}’s own copy.`
+      : 'The copy a market reads until it has one of its own.'
+
   return (
     <>
       <FieldGroup title="Where this applies">
@@ -73,25 +89,36 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
           value={chosen}
           options={ladder.map((r) => ({ value: r.label, label: r.label }))}
           onChange={setChosen}
-          helpText={
-            owned.length
-              ? `${owned.length} field${owned.length === 1 ? '' : 's'} on this screen ${owned.length === 1 ? 'is' : 'are'} written for ${chosen} only.`
-              : 'Everything on this screen is inherited. Editing writes here.'
-          }
+          helpText={help}
         />
+        {!scope.market && copies.length > 0 && (
+          <p className="ed-absent">
+            {copies.join(', ')} {copies.length === 1 ? 'has its' : 'have their'} own copy, so this
+            edit will not reach {copies.length === 1 ? 'it' : 'them'}.
+          </p>
+        )}
         {shadowed.length > 0 && (
           <p className="ed-absent">
             Answered more narrowly elsewhere, so edits here will not show in this
             situation: {shadowed.join(', ')}.
           </p>
         )}
-        {owned.length > 0 && (
+        {owned.length > 0 && !isMarketCopy(scope) && (
           <button
             type="button"
             className="demo__feature-remove"
             onClick={() => updateSet(clearFlow(set, scope, screen))}
           >
             Reset this screen to inherited
+          </button>
+        )}
+        {mine && isMarketCopy(scope) && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => updateSet(clearLayer(set, scope))}
+          >
+            Give {chosen} the shared copy back
           </button>
         )}
       </FieldGroup>
