@@ -53,6 +53,12 @@ import teamKnicks from '../../assets/landing/teams/knicks.png'
 import teamRangers from '../../assets/landing/teams/rangers.png'
 import teamIslanders from '../../assets/landing/teams/islanders.png'
 import teamPlaceholder from '../../assets/landing/teams/tile-placeholder.png'
+import readyKnicks from '../../assets/flow/ready/knicks.png'
+import readyRangers from '../../assets/flow/ready/rangers.png'
+import readyIslanders from '../../assets/flow/ready/islanders.png'
+import readyDevils from '../../assets/flow/ready/devils.png'
+import readySabres from '../../assets/flow/ready/sabres.png'
+import checkCircleFilled from '../../assets/flow/ready/check-circle-filled.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type { PlanTab } from '../../rules/content'
@@ -98,12 +104,17 @@ function Mark({ svg, size, className }: { svg: string; size: number; className?:
  * Its gold rule is the journey's progress and is drawn on every screen in the
  * section, so it belongs here rather than to any one of them.
  */
-function FlowHeader({ title }: { title: string }) {
+function FlowHeader({ title, mark }: { title: string; mark?: string }) {
   return (
-    <header className="fl__header">
+    <header className="fl__header" data-status={mark ? '' : undefined}>
       <span className="fl__back">
         <Icon svg={iconArtwork['chevron-left']} size={16} />
       </span>
+      {mark && (
+        <span className="fl__mark" aria-hidden="true">
+          <img src={mark} alt="" />
+        </span>
+      )}
       <h2 className="fl__title">{title}</h2>
       <Mark svg={daznRubik} size={28} className="fl__brand" />
     </header>
@@ -112,10 +123,13 @@ function FlowHeader({ title }: { title: string }) {
 
 function Screen({
   title,
+  mark,
   flush,
   children,
 }: {
   title: string
+  /** A glyph before the title, where the screen states a result. */
+  mark?: string
   /**
    * Drops the body's side padding, for a screen whose content runs to the
    * edge. Subscription's card row does: the design lets the next card be cut
@@ -126,7 +140,7 @@ function Screen({
 }) {
   return (
     <div className="fl">
-      <FlowHeader title={title} />
+      <FlowHeader title={title} mark={mark} />
       <div className="fl__body" data-flush={flush ? '' : undefined}>
         {children}
       </div>
@@ -783,21 +797,61 @@ function CardForm({
 
 /* ── Confirmation ──────────────────────────────────────────── */
 
+/**
+ * The circles on the confirmation screen — node 549:86715.
+ *
+ * Each team's own ground with its crest sized inside it, rather than one
+ * treatment repeated: the design gives every circle a different colour and
+ * every crest a different box, because a crest that fills its circle is a
+ * different picture from one that sits in it.
+ */
+const READY_CRESTS: Record<
+  string,
+  { ground: string; art: string; width: number; height: number }
+> = {
+  knicks: { ground: '#1b418b', art: readyKnicks, width: 48.222, height: 40.185 },
+  rangers: { ground: '#c8102e', art: readyRangers, width: 37.333, height: 40.444 },
+  islanders: { ground: '#fc4c02', art: readyIslanders, width: 61.534, height: 59.611 },
+  devils: { ground: '#202020', art: readyDevils, width: 38.538, height: 37.333 },
+  sabres: { ground: '#00468c', art: readySabres, width: 44.761, height: 45.111 },
+}
+
 export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
   const middle = Math.floor(content.logos.length / 2)
   return (
-    <Screen title={content.navTitle}>
+    <Screen title={content.navTitle} mark={checkCircleFilled}>
       <div className="fl-ready">
         <div className="fl-ready__content">
+          {/* The row spreads across the 343 and fades out at both ends — the
+              design masks it rather than cropping it, so the outer circles go
+              quiet instead of stopping. */}
           <div className="fl-ready__logos">
-            {content.logos.map((id, i) => (
-              <span className="fl-ready__logo" key={id} data-lead={i === middle ? '' : undefined}>
-                <img src={logoArtwork[id]} alt="" />
-              </span>
-            ))}
+            {content.logos.map((id, i) => {
+              const crest = READY_CRESTS[id]
+              return (
+                <span
+                  className="fl-ready__logo"
+                  key={id}
+                  data-lead={i === middle ? '' : undefined}
+                  style={crest ? { background: crest.ground } : undefined}
+                >
+                  <img
+                    src={crest?.art ?? logoArtwork[id]}
+                    alt=""
+                    style={
+                      crest
+                        ? { inlineSize: `${crest.width}px`, blockSize: `${crest.height}px` }
+                        : undefined
+                    }
+                  />
+                </span>
+              )
+            })}
           </div>
-          <h3 className="fl-ready__title">{content.title}</h3>
-          <p className="fl-ready__body">{content.body}</p>
+          <div className="fl-ready__words">
+            <h3 className="fl-ready__title">{content.title}</h3>
+            <p className="fl-ready__body">{content.body}</p>
+          </div>
         </div>
         <div className="fl-ready__ctas">
           <Cta>{content.cta}</Cta>

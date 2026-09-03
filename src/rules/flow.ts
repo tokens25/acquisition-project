@@ -519,7 +519,7 @@ export const defaultFlow: FlowContent = {
   },
 
   ready: {
-    navTitle: 'Choose your subscription',
+    navTitle: 'Your subscription is active',
     title: 'You’re ready to watch MSG+ on DAZN.',
     body: 'Watch Knicks, Rangers, Islanders, Devils, Sabres and more. all in one place.',
     cta: 'Open DAZN app',

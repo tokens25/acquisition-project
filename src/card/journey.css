@@ -156,9 +156,13 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    phone and stretching it makes it a picture of nothing. What changes is that
    the plan row is not clipped to it: the cards run past the screen's edge so
    every one of them is there to be edited, rather than scrolling out of sight
-   the way they do on a device. */
+   the way they do on a device.
+
+   Hidden rather than visible: the row has the whole pane to lay out in, so
+   nothing needs to spill outside its own box to be seen, and nothing draws a
+   scrollbar under it. */
 .jy__viewport .acq-set {
-  overflow-x: visible;
+  overflow-x: hidden;
 }
 /* The row is the screen's neighbour here rather than its content, so its space
    above is its own — 16 off the tabs, not the 24 the screen's body gives it. */

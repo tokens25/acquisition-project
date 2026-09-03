@@ -89,6 +89,24 @@
   inline-size: 28px;
   block-size: 28px;
 }
+/* A screen that states a result puts a filled tick before its line, and sets
+   the line in regular: it is reporting something, not naming the screen. The
+   glyph is 16 in a 32 box, which is what centres it against the title. */
+.fl__mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--space-32);
+  block-size: var(--space-32);
+}
+.fl__mark img {
+  inline-size: 16px;
+  block-size: 16px;
+}
+.fl__header[data-status] .fl__title {
+  padding-inline-end: 0;
+  font-weight: var(--font-weight-regular);
+}
 
 /* Layout — 16 down each side, 24 top and bottom, on every screen. */
 .fl__body {
@@ -813,12 +831,25 @@
   align-items: center;
   inline-size: 100%;
 }
-/* The circles overlap and the middle one is larger, which is what makes the
-   row read as a group rather than a list. */
+/* Spread across the 343 rather than overlapped, and faded at both ends: the
+   design masks the row with a horizontal ramp — nothing at the edges, 80% a
+   fifth in, full at the middle — so the outer circles go quiet instead of
+   stopping. The middle circle is larger, which is what makes the row read as
+   a group rather than a list. */
 .fl-ready__logos {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  inline-size: 343px;
+  block-size: 74px;
+  mask-image: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0%) 0%,
+    rgb(255 255 255 / 80%) 20%,
+    #fff 50%,
+    rgb(255 255 255 / 80%) 80%,
+    rgb(255 255 255 / 0%) 100%
+  );
 }
 .fl-ready__logo {
   display: grid;
@@ -829,9 +860,6 @@
   border: 1.556px solid #202327;
   border-radius: var(--radius-full);
 }
-.fl-ready__logo:not(:first-child) {
-  margin-inline-start: -8px;
-}
 .fl-ready__logo[data-lead] {
   inline-size: 74px;
   block-size: 74px;
@@ -840,7 +868,13 @@
 .fl-ready__logo > img {
   inline-size: 100%;
   block-size: 100%;
-  object-fit: cover;
+  object-fit: contain;
+}
+.fl-ready__words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  inline-size: 100%;
 }
 .fl-ready__title {
   margin: 0;

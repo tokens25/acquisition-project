@@ -119,7 +119,7 @@
 
     flowShared: { vb: '0 0 80 120', parts: {
       'screen frame': [4,4,72,112], 'screen header': [4,4,72,10],
-      'screen back arrow': [6,5,7,7], 'screen title': [22,6,36,5], 'screen brand': [66,5,7,7],
+      'screen back arrow': [6,5,7,7], 'screen title': [22,6,36,5], 'screen brand': [66,5,7,7], 'screen result mark': [26,3,5,5],
       'screen body': [4,16,72,100],
       'screen field': [8,20,64,12], 'field row': [8,20,64,12],
       'field contents': [14,22,44,8], 'field name': [14,22,24,3], 'field text box': [14,26,30,4], 'field value': [14,26,30,4],
@@ -244,7 +244,7 @@
       'confirmation screen': [4,6,72,78],
       'confirmation content': [4,6,72,44],
       'team circles': [16,6,48,14], 'team circle': [16,6,12,12],
-      'confirmation heading': [4,24,72,12], 'confirmation body': [4,38,72,10],
+      'confirmation words': [8,54,64,16], 'confirmation heading': [4,24,72,12], 'confirmation body': [4,38,72,10],
       'confirmation buttons': [4,58,72,24]
     }},
     stepview: { vb: '0 0 160 96', parts: {
