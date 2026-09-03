@@ -15,8 +15,8 @@ import { currentAt, type Translated, type Translations } from './apply'
  * Switching to a market that reads another language fetches its translation
  * once. Coming back to it is instant, and English needs nothing.
  */
-// v2: keyed by language rather than by market, now that a language can be
-// chosen on its own. Two markets reading German share one translation.
+// Keyed by language rather than by market: two markets reading German share
+// one translation.
 const KEY = 'acquisition-translations-v2'
 
 type Store = Record<string, Translations>
@@ -44,12 +44,8 @@ function read(): Store {
 export type TranslationState = 'off' | 'idle' | 'working' | 'ready' | 'unavailable' | 'failed'
 
 export interface TranslationStore {
-  /** The language on screen. */
+  /** The language on screen, which is the one this market reads. */
   language: { code: string; name: string }
-  /** The language this market reads in, whatever is on screen. */
-  marketLanguage: { code: string; name: string }
-  /** Whether the two agree, which is when a translation may be kept. */
-  matchesMarket: boolean
   state: TranslationState
   /** Why, when the state is unavailable or failed. */
   note: string | null
@@ -65,15 +61,10 @@ export interface TranslationStore {
   discard: (key: string) => void
 }
 
-export function useTranslations(set: CardSet, context: Context, chosen?: string): TranslationStore {
+export function useTranslations(set: CardSet, context: Context): TranslationStore {
   const market = useMemo(() => set.markets.find((m) => m.code === context.market) ?? set.markets[0], [set.markets, context.market])
-  const marketLanguage = languageOf(market)
-  /** What is on screen: the chosen language, or the market's own. */
-  const language = useMemo(() => {
-    if (!chosen || chosen === marketLanguage.code) return marketLanguage
-    const other = set.markets.map(languageOf).find((l) => l.code === chosen)
-    return other ?? marketLanguage
-  }, [chosen, marketLanguage, set.markets])
+  /** The language on screen is the one this market reads. Nothing else picks it. */
+  const language = useMemo(() => languageOf(market), [market])
   const wanted = language.code !== SOURCE_LANGUAGE
 
   const [store, setStore] = useState<Store>(read)
@@ -173,8 +164,6 @@ export function useTranslations(set: CardSet, context: Context, chosen?: string)
 
   return {
     language: { code: language.code, name: language.name },
-    marketLanguage: { code: marketLanguage.code, name: marketLanguage.name },
-    matchesMarket: language.code === marketLanguage.code,
     state,
     note,
     entries,

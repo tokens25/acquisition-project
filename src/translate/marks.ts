@@ -14,7 +14,6 @@ export interface TranslationMark {
   state: 'machine' | 'reviewed'
   language: string
   /** Whether keeping is possible: the language must be the market's own. */
-  canKeep: boolean
   /** Keep these words for this market, so they can be published. */
   onKeep: () => void
   /** Drop them and read the base again. */

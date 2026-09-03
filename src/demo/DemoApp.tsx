@@ -25,8 +25,6 @@ import { FieldMarks } from '../components/fieldMarks'
 import { TranslationBar } from '../translate/TranslationBar'
 import { TranslationMarks, type TranslationMark } from '../translate/marks'
 import { useTranslations } from '../translate/useTranslations'
-import { LanguageSwitcher } from '../translate/LanguageSwitcher'
-import { languagesIn } from '../translate/languages'
 import { currentAt, viewSet } from '../translate/apply'
 import { DevStrings } from './pipeline/DevStrings'
 import { ModeToggle } from './pipeline/ModeToggle'
@@ -266,10 +264,7 @@ export function DemoApp() {
    * Keeping writes it into that market's own copy, so no other market is
    * touched, and only kept words can be published.
    */
-  /** The language on screen, when it is not the market's own. */
-  const [language, setLanguage] = useState<string | undefined>(undefined)
-  const tx = useTranslations(store.set, store.context, language)
-  const languages = useMemo(() => languagesIn(store.set), [store.set])
+  const tx = useTranslations(store.set, store.context)
   const marketSet = useMemo(
     () => (tx.state === 'off' ? store.set : viewSet(store.set, store.context.market, tx.entries)),
     [store.set, store.context.market, tx.entries, tx.state],
@@ -304,7 +299,6 @@ export function DemoApp() {
         text,
         state: 'reviewed',
         language: tx.language.name,
-        canKeep: tx.matchesMarket,
         onKeep: () => keepTranslation(key, text),
         onDiscard: () => dropTranslation(key),
       })
@@ -317,16 +311,13 @@ export function DemoApp() {
         text: t.text,
         state: t.state,
         language: tx.language.name,
-        // Keeping publishes into the market's own copy, so it is only offered
-        // when the language on screen is the one this market reads.
-        canKeep: tx.matchesMarket,
         onKeep: () => keepTranslation(key, t.text),
         onDiscard: () => dropTranslation(key),
       })
     }
     return map
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx.entries, tx.state, tx.language.name, tx.matchesMarket, store.set, store.context.market])
+  }, [tx.entries, tx.state, tx.language.name, store.set, store.context.market])
 
   const gate =
     coverage.failing.length > 0
@@ -448,13 +439,6 @@ export function DemoApp() {
       <div className="demo__top" data-mode={pipe.mode}>
         {brand}
         <div className="demo__statusbar">
-          <LanguageSwitcher
-            languages={languages}
-            value={tx.language.code}
-            marketLanguage={tx.marketLanguage.code}
-            busy={tx.state === 'working'}
-            onChange={setLanguage}
-          />
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}
           <span className="demo__gate" data-state={gate.state}>

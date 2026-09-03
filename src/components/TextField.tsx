@@ -127,7 +127,7 @@ export function TextField({
           <span className="tr-note__state">{translation.state === 'reviewed' ? `${translation.language}, kept` : `${translation.language}, machine`}</span>
           <span className="tr-note__text">{translation.text}</span>
           <span className="tr-note__acts">
-            {translation.state === 'machine' && translation.canKeep && (
+            {translation.state === 'machine' && (
               <button type="button" className="tr-note__act" onClick={translation.onKeep}>
                 Keep it
               </button>

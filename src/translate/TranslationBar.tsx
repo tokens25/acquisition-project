@@ -55,7 +55,7 @@ export function TranslationBar({ tx, market }: { tx: TranslationStore; market: s
     <section className="tr-bar" data-state={tx.state} aria-label="Translation">
       <p className="tr-bar__head">
         <span className="tr-bar__lang">{tx.language.name}</span>
-        <span className="tr-bar__market">{tx.matchesMarket ? market : `${market} reads ${tx.marketLanguage.name}`}</span>
+        <span className="tr-bar__market">{market}</span>
         {tx.state === 'working' && <span className="tr-bar__working">Translating the whole flow…</span>}
       </p>
 
@@ -76,11 +76,8 @@ export function TranslationBar({ tx, market }: { tx: TranslationStore; market: s
           {stale > 0 && ` · ${stale} out of date since the English changed`}
         </p>
       )}
-      {tx.state === 'ready' && machine > 0 && tx.matchesMarket && (
+      {tx.state === 'ready' && machine > 0 && (
         <p className="tr-bar__warn">Machine translation. Read a field and keep it before this market is published.</p>
-      )}
-      {tx.state === 'ready' && !tx.matchesMarket && (
-        <p className="tr-bar__note">Reading only. {market} reads {tx.marketLanguage.name}, so nothing here can be kept for it.</p>
       )}
       {(tx.state === 'unavailable' || tx.state === 'failed') && (
         <>
