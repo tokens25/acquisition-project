@@ -228,6 +228,9 @@ export interface LandingScreen {
   zipValue?: string
   zipCta?: string
 
+  /** The heading over the fixtures DAZN is showing. */
+  scheduleHeading?: string
+
   /** "Meet the teams" — the tiles of what you get in your area. */
   teamsEyebrow?: string
   teamsTitle?: string
@@ -312,6 +315,8 @@ export const defaultFlow: FlowContent = {
     zipLabel: 'Zip Code:',
     zipValue: '10001',
     zipCta: 'Sign Up',
+
+    scheduleHeading: 'Live and Upcoming Games Schedule',
 
     teamsEyebrow: 'Meet the teams',
     teamsTitle: 'Your teams, one home',

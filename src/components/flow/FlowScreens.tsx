@@ -40,6 +40,15 @@ import providerXfinity from '../../assets/landing/provider-xfinity.png'
 import heroArt from '../../assets/landing/hero.jpg'
 import daznLogo from '../../assets/landing/logo-dazn.svg'
 import actionEdit from '../../assets/landing/action-edit.svg'
+import schedP0 from '../../assets/landing/schedule/p0.png'
+import schedP1 from '../../assets/landing/schedule/p1.png'
+import schedP2 from '../../assets/landing/schedule/p2.png'
+import schedP3 from '../../assets/landing/schedule/p3.png'
+import schedP4 from '../../assets/landing/schedule/p4.png'
+import schedP5 from '../../assets/landing/schedule/p5.png'
+import schedP6 from '../../assets/landing/schedule/p6.png'
+import icPlay from '../../assets/landing/schedule/ic-play.svg'
+import icReminder from '../../assets/landing/schedule/ic-reminder.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type { PlanTab } from '../../rules/content'
@@ -795,6 +804,95 @@ export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
   )
 }
 
+
+/* ── Live and upcoming games — node 731:27543 ────────────────
+   The schedule DAZN is showing, not copy a market writes: the fixtures, their
+   times and their scrub positions come from what is on air. It is drawn as the
+   design draws it and there is nothing here to edit. */
+
+/** One fixture's picture layers, timestamp, and what sits over them. */
+const FIXTURES = [
+  {
+    id: 'knicks-spurs',
+    art: [schedP0, schedP1, schedP2],
+    stamp: '14 SEP 19:00',
+    remind: true,
+    title: 'Knicks vs. Spurs ',
+    subtitle: 'NBA',
+  },
+  {
+    id: 'sabres-penguins',
+    art: [schedP0, schedP3, schedP4, schedP5, schedP6],
+    stamp: '14 SEP 19:00',
+    remind: true,
+    title: 'Sabres vs. Penguins',
+    subtitle: 'NHL',
+  },
+  { id: 'live', art: [schedP0], stamp: 'LIVE', title: 'Title', subtitle: 'Subtitle', label: 'Label' },
+  {
+    id: 'live-tv',
+    art: [schedP0],
+    stamp: 'LIVE TV',
+    title: 'Title',
+    subtitle: 'Subtitle',
+    label: 'Label',
+    /* The one part-watched: the time left, and how far the scrub has run. */
+    left: '1 hr 21 min left',
+    scrub: 190,
+  },
+] as const
+
+function ScheduleSection({ heading }: { heading: string }) {
+  return (
+    <section className="fl-page__schedule">
+      {/* The heading's own band, which fades to the page colour at both ends. */}
+      <div className="fl-page__schedule-head">
+        <p className="fl-page__schedule-title">{heading}</p>
+      </div>
+      <div className="fl-page__schedule-row">
+        {FIXTURES.map((fixture) => (
+          <article className="fl-fixture" key={fixture.id}>
+            <div className="fl-fixture__preview">
+              <span className="fl-fixture__art" aria-hidden="true">
+                {fixture.art.map((src, i) => (
+                  <img src={src} alt="" key={i} />
+                ))}
+              </span>
+              <span className="fl-fixture__stamp">{fixture.stamp}</span>
+              {'remind' in fixture && fixture.remind && (
+                <span className="fl-fixture__remind" aria-hidden="true">
+                  <img src={icReminder} alt="" />
+                </span>
+              )}
+              {'left' in fixture && fixture.left && (
+                <span className="fl-fixture__playback">
+                  <span className="fl-fixture__time">
+                    <img className="fl-fixture__play" src={icPlay} alt="" />
+                    {fixture.left}
+                  </span>
+                  <span className="fl-fixture__scrub-track">
+                    <span
+                      className="fl-fixture__scrub"
+                      style={{ inlineSize: `${fixture.scrub}px` }}
+                    />
+                  </span>
+                </span>
+              )}
+            </div>
+            <div className="fl-fixture__text">
+              <p className="fl-fixture__title">{fixture.title}</p>
+              <p className="fl-fixture__subtitle">{fixture.subtitle}</p>
+              {'label' in fixture && fixture.label && (
+                <span className="fl-fixture__label">{fixture.label}</span>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 /* ── The landing page below the hero ─────────────────────────
    Figma: 🚀 Acquisition for ai → "MSG+ - Landing page - Mobile", node
    708:173735 — 375 wide and 7412 tall. The hero above is the whole of what
@@ -861,6 +959,8 @@ export function LandingPageScreen({
           </button>
         </div>
       </section>
+
+      <ScheduleSection heading={text.scheduleHeading} />
 
       {children && <section className="fl-page__plans">{children}</section>}
 

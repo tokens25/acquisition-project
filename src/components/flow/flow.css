@@ -1499,3 +1499,198 @@
   font-size: var(--font-size-button-lg);
   font-weight: var(--font-weight-bold);
 }
+
+/* ── Live and upcoming games — node 731:27543 ──────────────── */
+
+/* Two bands, not one section: the heading's own, which fades to the page
+   colour at its top and bottom, and the row under it on the flat colour. The
+   design draws them as two frames, the second starting at 130 — which is
+   exactly where the first ends, so they stack with nothing between. */
+.fl-page .fl-page__schedule {
+  gap: 0;
+  padding-inline: 0;
+}
+.fl-page__schedule-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  align-items: flex-start;
+  justify-content: center;
+  inline-size: 100%;
+  padding: 40px var(--space-16) var(--space-24);
+  overflow: hidden;
+  background:
+    linear-gradient(
+      180deg,
+      #080e12 0%,
+      rgb(8 14 18 / 0%) 13.719%,
+      rgb(8 14 18 / 0%) 47.386%,
+      rgb(8 14 18 / 0%) 73.41%,
+      #080e12 101.61%
+    ),
+    #080e12;
+}
+.fl-page__schedule-title {
+  margin: 0;
+  inline-size: 343px;
+  overflow: hidden;
+  color: #f9fafa;
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25;
+  text-overflow: ellipsis;
+}
+.fl-page__schedule-row {
+  display: flex;
+  gap: var(--space-16);
+  align-items: flex-start;
+  inline-size: 100%;
+  padding-inline: var(--space-16);
+  background: #080e12;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-page__schedule-row::-webkit-scrollbar {
+  display: none;
+}
+
+.fl-fixture {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: flex-start;
+  inline-size: 300px;
+}
+.fl-fixture__preview {
+  position: relative;
+  inline-size: 100%;
+  /* 316 by 177.5 — the design's own ratio, not 16:9. */
+  aspect-ratio: 316 / 177.5;
+  border-radius: var(--radius-10);
+  overflow: hidden;
+}
+.fl-fixture__art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fl-fixture__art img {
+  position: absolute;
+  inset: 0;
+  max-inline-size: none;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: var(--radius-10);
+  object-fit: cover;
+}
+/* Label/Timestamp — the white chip at the top left. */
+.fl-fixture__stamp {
+  position: absolute;
+  inset-block-start: var(--space-8);
+  inset-inline-start: var(--space-8);
+  display: flex;
+  align-items: center;
+  block-size: 20px;
+  padding-inline: 6px;
+  border-radius: var(--radius-2);
+  background: #f8fafb;
+  color: #131415;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* IconButton/NonCTA — 24 of glyph in 8 of padding, on the scrim. */
+.fl-fixture__remind {
+  position: absolute;
+  inset-block-start: var(--space-8);
+  inset-inline-end: var(--space-8);
+  display: grid;
+  place-items: center;
+  padding: var(--space-8);
+  border-radius: var(--radius-full);
+  background: rgb(8 14 18 / 64%);
+}
+.fl-fixture__remind img {
+  inline-size: 24px;
+  block-size: 24px;
+}
+/* The part-watched one: time left above the scrub, both at the foot. */
+.fl-fixture__playback {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.fl-fixture__time {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px var(--space-12);
+  color: #f8f8f8;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  line-height: 1.52;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 40%);
+  white-space: nowrap;
+}
+.fl-fixture__play {
+  inline-size: 14px;
+  block-size: 14px;
+}
+.fl-fixture__scrub-track {
+  display: flex;
+  inline-size: 100%;
+  background: #f9fafa;
+  overflow: hidden;
+}
+.fl-fixture__scrub {
+  flex: none;
+  block-size: 4px;
+  background: #d12424;
+}
+
+.fl-fixture__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: flex-start;
+  inline-size: 100%;
+}
+.fl-fixture__title {
+  margin: 0;
+  inline-size: 100%;
+  color: #f8fafb;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: normal;
+}
+.fl-fixture__subtitle {
+  /* The design sets this one in DAZN Trim rather than Oscine. */
+  margin: 0 0 calc(-1 * var(--space-4));
+  inline-size: 100%;
+  color: #ced0d2;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: 20px;
+}
+.fl-fixture__label {
+  display: flex;
+  align-items: center;
+  block-size: 20px;
+  padding-inline: 6px;
+  border-radius: var(--radius-full);
+  background: #2a3238;
+  color: #f8f8f8;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}

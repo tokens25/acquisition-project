@@ -29,6 +29,7 @@ export function landingText(content: LandingScreen): Required<
     zipLabel: of('zipLabel'),
     zipValue: of('zipValue'),
     zipCta: of('zipCta'),
+    scheduleHeading: of('scheduleHeading'),
     teamsEyebrow: of('teamsEyebrow'),
     teamsTitle: of('teamsTitle'),
     teamsBody: of('teamsBody'),
