@@ -1362,7 +1362,10 @@
 /* Two classes, so it beats the page rule setting every section to 16. */
 .fl-page .fl-page__zip {
   gap: 22px;
-  padding-block: 42px var(--space-24);
+  /* No space above: the section sits straight under the hero, which already
+     ends on the wash. The design draws its 42 against a page that scrolls
+     under a bar; here the hero is what it meets. */
+  padding-block: 0 var(--space-24);
 }
 .fl-page__zip-copy {
   display: flex;
