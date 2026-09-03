@@ -1454,10 +1454,46 @@
   line-height: 1.55;
   white-space: nowrap;
 }
-/* The picker sits in the page at the page's own width, and keeps the row's
-   own inset rather than taking the section's. */
-.fl-page__plans {
+/* ── Choose the plan — node 708:173855 ─────────────────────── */
+
+/* The heading and the picker are one section: 56 above, 40 below, 32 between
+   them. Two classes, so the section keeps its own figures over the page rule. */
+.fl-page .fl-page__plans {
+  gap: 32px;
+  padding-block: 56px 40px;
   padding-inline: 0;
+  background: #080e12;
+}
+/* Its own 8 between the two lines, and 8 under them before the section's 32. */
+.fl-page__plans-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: flex-start;
+  inline-size: 100%;
+  padding-block-end: var(--space-8);
+  padding-inline: var(--space-16);
+}
+.fl-page__plans-title {
+  margin: 0;
+  inline-size: 100%;
+  color: #f9fafa;
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25;
+  text-align: center;
+  /* The design breaks the line itself rather than letting it wrap, so the
+     break travels with the words. */
+  white-space: pre-line;
+}
+.fl-page__plans-body {
+  margin: 0;
+  inline-size: 100%;
+  color: #b3b9bb;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+  text-align: center;
 }
 .fl-page__provider-grid {
   display: grid;

@@ -156,6 +156,8 @@
       'fixture scrub track': [4,49,34,1], 'fixture scrub': [4,49,20,1],
       'fixture words': [4,51,34,7], 'fixture title': [4,51,34,3],
       'fixture subtitle': [4,55,34,3], 'fixture label': [4,55,8,3],
+      'plans heading block': [4,60,72,10], 'plans heading': [4,60,72,6],
+      'plans subheading': [4,67,72,3],
       'teams block': [4,66,72,26],
       'multiview block': [4,96,72,26],
       'providers block': [4,126,72,44], 'provider grid': [4,140,72,24],

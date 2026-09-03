@@ -962,7 +962,17 @@ export function LandingPageScreen({
 
       <ScheduleSection heading={text.scheduleHeading} />
 
-      {children && <section className="fl-page__plans">{children}</section>}
+      {/* node 708:173855 — the heading and the picker are one section, 32
+          apart, with the section's own 56 above and 40 below. */}
+      {children && (
+        <section className="fl-page__plans">
+          <div className="fl-page__plans-head">
+            <p className="fl-page__plans-title">{text.plansTitle}</p>
+            <p className="fl-page__plans-body">{text.plansBody}</p>
+          </div>
+          {children}
+        </section>
+      )}
 
       <section className="fl-page__teams">
         <p className="fl-page__eyebrow">{text.teamsEyebrow}</p>

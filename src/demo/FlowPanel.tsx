@@ -208,6 +208,11 @@ function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; s
           <TextField label="Heading" value={t.scheduleHeading} pipelineKey={'landing.scheduleHeading'} onChange={(v) => patch('landing', { scheduleHeading: v })} rows={2} helpText="The fixtures under it are what DAZN is showing, not something written here." />
         </FieldGroup>
 
+        <FieldGroup title="Choose the plan">
+          <TextField label="Heading" value={t.plansTitle} pipelineKey={'landing.plansTitle'} onChange={(v) => patch('landing', { plansTitle: v })} rows={2} helpText="The design breaks this line itself — a new line here is the break." />
+          <TextField label="Under the heading" value={t.plansBody} pipelineKey={'landing.plansBody'} onChange={(v) => patch('landing', { plansBody: v })} rows={2} />
+        </FieldGroup>
+
         <FieldGroup title="Meet the teams">
           <TextField label="Over the heading" value={t.teamsEyebrow} pipelineKey={'landing.teamsEyebrow'} onChange={(v) => patch('landing', { teamsEyebrow: v })} />
           <TextField label="Heading" value={t.teamsTitle} pipelineKey={'landing.teamsTitle'} onChange={(v) => patch('landing', { teamsTitle: v })} />

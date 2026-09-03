@@ -231,6 +231,13 @@ export interface LandingScreen {
   /** The heading over the fixtures DAZN is showing. */
   scheduleHeading?: string
 
+  /**
+   * Over the plan picker. The design breaks the heading itself rather than
+   * letting it wrap, so the break is part of what is written.
+   */
+  plansTitle?: string
+  plansBody?: string
+
   /** "Meet the teams" — the tiles of what you get in your area. */
   teamsEyebrow?: string
   teamsTitle?: string
@@ -317,6 +324,9 @@ export const defaultFlow: FlowContent = {
     zipCta: 'Sign Up',
 
     scheduleHeading: 'Live and Upcoming Games Schedule',
+
+    plansTitle: "Choose the plan that's\nright for you",
+    plansBody: 'The best of NY sports, streaming all in one place.',
 
     teamsEyebrow: 'Meet the teams',
     teamsTitle: 'Your teams, one home',
