@@ -51,6 +51,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const {
     set,
     context,
+    setContext,
     updateTier: writeTier,
     addTier,
     removeTier,
@@ -65,7 +66,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
    * that would make every edit belong to whichever tab happened to be showing.
    * Empty is the plan however it is shown, which is what most edits are.
    */
-  const [tabScope, setTabScope] = useState('')
+  const planTabs = tabsOf(set)
+  const tabScope = planTabs.some((t) => t.id === context.tab)
+    ? (context.tab as string)
+    : (planTabs[0]?.id ?? '')
   const scope = tabScope ? { tab: tabScope } : undefined
   const updateTier = (id: string, patch: TierPatch) => writeTier(id, patch, scope)
   const updateOffer = (tierId: string, patch: Partial<CadenceOffer>) =>
@@ -138,11 +142,15 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   // Absent means custom: copy written before this choice existed was written
   // by hand, and defaulting the other way would relabel it as generated.
   const source = resolved.descriptionSource ?? 'custom'
-  const shownOffer = offerFor(tier.id)
-  // Tabs this plan has been written differently for, so an edit meant for all
-  // of them can say which ones it will not reach.
-  const ownTabs = tabsOf(set)
-    .filter((t) => tier.overrides.some((o) => o.when.tab === t.id))
+  // The other tabs this plan has been written differently for, so an edit here
+  // says what it is not touching.
+  const otherTabs = planTabs
+    .filter(
+      (t) =>
+        t.id !== tabScope &&
+        (tier.overrides.some((o) => o.when.tab === t.id) ||
+          set.offers.some((o) => o.tierId === tier.id && o.tab === t.id)),
+    )
     .map((t) => t.name)
   const explainerSource = offer?.explainerSource ?? 'custom'
 
@@ -313,37 +321,22 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         )}
       </FieldGroup>
 
-      <FieldGroup title="Where this applies">
-        <SelectField
-          label="Editing"
-          value={tabScope}
-          options={[
-            { value: '', label: 'However this plan is shown' },
-            ...tabsOf(set).map((t) => ({ value: t.id, label: `${t.name} only` })),
-          ]}
-          onChange={setTabScope}
-          helpText={
-            tabScope
-              ? 'Prices and copy typed below are written for that tab alone.'
-              : 'Prices and copy typed below apply on every tab that shows this plan.'
-          }
-        />
-        {/* The price on screen belongs to a tab, and this edit does not — so
-            typing here writes a price the tab already answers for. Worth
-            saying before it is typed rather than after. */}
-        {!tabScope && shownOffer?.tab && (
-          <p className="ed-absent">
-            This price is written for{' '}
-            {tabsOf(set).find((t) => t.id === shownOffer.tab)?.name ?? shownOffer.tab}, so an edit
-            here will not show on that tab.
-          </p>
-        )}
-        {!tabScope && ownTabs.length > 0 && (
-          <p className="ed-absent">
-            {resolved.planName} reads differently on {ownTabs.join(', ')}.
-          </p>
-        )}
-      </FieldGroup>
+      {tabsOf(set).length > 0 && (
+        <FieldGroup title="Where this applies">
+          <SelectField
+            label="Editing"
+            value={tabScope}
+            options={tabsOf(set).map((t) => ({ value: t.id, label: t.name }))}
+            onChange={(v) => setContext({ ...context, tab: v })}
+            helpText="Prices and copy typed below are written for this tab."
+          />
+          {otherTabs.length > 0 && (
+            <p className="ed-absent">
+              {resolved.planName} reads differently on {otherTabs.join(', ')}.
+            </p>
+          )}
+        </FieldGroup>
+      )}
 
       <FieldGroup title="Tier">
         <TextField
