@@ -44,6 +44,10 @@ export function StepPreview({
   const step = steps.find((s) => s.id === set.stepId) ?? steps[0]
   if (!step) return <p className="jy__note">This journey has no steps in this market.</p>
 
+  // The last state a step is drawn in — where the most has been filled in.
+  const drawn = statesOf(step, set)
+  const fullest = drawn[drawn.length - 1]
+
   const position = steps.indexOf(step) + 1
   // A partner storefront can carry a fourth card, and the row shows three.
   // Saying the number means a card scrolled out of view is still known about.
@@ -81,16 +85,23 @@ export function StepPreview({
           </SubscriptionFlowScreen>
         </div>
       ) : step.renderer !== 'stub' ? (
-        /* Every state the step is drawn in, side by side — the same shape the
-           plans step takes, and the same shape the Figma section lays out. */
+        /* One screen, not every state side by side.
+           A step's states are one screen at different points of being used —
+           the same fields empty, then typed into, then confirmed — and the
+           panel beside this edits the words on all of them at once. Three
+           copies of one screen is three places to look for the line you are
+           editing. The row is where the stages belong, and it still draws
+           every one of them.
+
+           The state drawn is the last, because it is the furthest the screen
+           gets: everything that can be filled in is, so every line the panel
+           can edit is on screen to be found. */
         <div className="jy__viewport" data-device={set.device}>
           <div className="jy__screens">
-            {statesOf(step, set).map((state) => (
-              <div className="jy__screen" key={state}>
-                <FlowStep step={step} state={state ?? 'default'} set={set} />
-                <span className="jy__screen-name">{state}</span>
-              </div>
-            ))}
+            <div className="jy__screen">
+              <FlowStep step={step} state={fullest ?? 'default'} set={set} />
+              <span className="jy__screen-name">{fullest}</span>
+            </div>
           </div>
         </div>
       ) : (
