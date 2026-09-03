@@ -18,16 +18,19 @@ export function CoachPill({
   title,
   disabled = false,
   onClick,
+  type = 'button',
 }: {
   children: ReactNode
   size?: 'bar' | 'sm' | 'lg'
   title?: string
   disabled?: boolean
   onClick?: () => void
+  /** `submit` when the pill is a form's own action. */
+  type?: 'button' | 'submit'
 }) {
   return (
     <button
-      type="button"
+      type={type}
       className="coach-pill"
       data-size={size}
       title={title}

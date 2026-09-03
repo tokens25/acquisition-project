@@ -18,6 +18,32 @@
 
 import { spawn } from 'node:child_process'
 
+/**
+ * The environment a spawned `claude` should see.
+ *
+ * The dev server inherits whatever shell started it, and when that shell is
+ * itself a Claude Code session it carries that session's own credentials and
+ * flags. A child reading those tries to use a token it does not own, which
+ * fails as an expired token rather than as the misconfiguration it is. So the
+ * child gets a plain environment and reads the machine's own login.
+ */
+function cleanEnv(): NodeJS.ProcessEnv {
+  const out: NodeJS.ProcessEnv = {}
+  for (const [k, v] of Object.entries(process.env)) {
+    // The one Claude variable worth keeping: a long-lived token from
+    // `claude setup-token`, which is how this project authenticates when the
+    // command's own login has lapsed. Everything else a parent session
+    // exports is its own business and confuses the child.
+    if (k === 'CLAUDE_CODE_OAUTH_TOKEN') {
+      out[k] = v
+      continue
+    }
+    if (/^(CLAUDE|CLAUDECODE|ANTHROPIC_BASE_URL|ANTHROPIC_AUTH_TOKEN)/.test(k)) continue
+    out[k] = v
+  }
+  return out
+}
+
 const MODEL = process.env.ANTHROPIC_MODEL ?? 'claude-opus-5'
 const ENDPOINT = 'https://api.anthropic.com/v1/messages'
 const MAX_FINDINGS = 8
@@ -45,7 +71,7 @@ function askViaCli(system: string, user: string, schema: unknown = REPORT_TOOL.i
   ].join('\n')
 
   return new Promise((resolve) => {
-    const child = spawn('claude', ['-p', '--output-format', 'json'], { cwd: process.cwd(), env: process.env, stdio: ['pipe', 'pipe', 'pipe'] })
+    const child = spawn('claude', ['-p', '--output-format', 'json'], { cwd: process.cwd(), env: cleanEnv(), stdio: ['pipe', 'pipe', 'pipe'] })
     let out = ''
     let err = ''
     let done = false
@@ -181,16 +207,45 @@ const SUGGEST_TOOL = {
   },
 }
 
-function suggestPrompt(): string {
-  return `You are the Copy brain of the DAZN acquisition Coach. For each field you are given, write the replacement copy the Coach's recommendation asks for.
+/**
+ * The Coach's copy criteria, the standard the writing is judged by.
+ *
+ * The same five the hero tool's copy gate grades against, plus the sciences
+ * this journey's Coach reads with. Stated to the writer up front rather than
+ * learned by rejection: a round spent on a rule we could have said is a round
+ * wasted.
+ */
+const COPY_CRITERIA = `THE COACH'S CRITERIA. Your line is graded on these, so write to them:
+- CLARITY: understood in one read, no work. Processing Fluency: the easier a line is to process, the more readily it is believed and acted on.
+- SPECIFICITY: names something concrete AND supported, a team, a competition, an offer, a device. A broad word ("sport", "content", "entertainment") is not specificity.
+- VALUE: gives a reason to care, not a description of what exists. Means-End Chain: an attribute only matters when it reaches a benefit the reader wants.
+- SELF-CONTAINED: understandable without having read another screen. Recognition Rather Than Recall: never make the reader remember what a different card said.
+- CONSISTENCY: one thing has one name across every screen. Terminology that changes between steps costs comprehension for nothing.
+- CONTINUITY: keeps the promise the screen before it made. Expectation-Confirmation: a gap between what was promised and what is shown is felt as a loss of trust.`
 
-Rules, every one of them hard:
-- Use only facts already on the screens you are shown. Never add a price, a number, a date, a team, a competition or a benefit that is not there.
-- No claims ("best", "most popular", "unmissable"), no urgency ("hurry", "only today"), no exclamation marks, no dashes.
-- Match the voice of the copy around it: short, plain, first person plural where the screens use it.
-- Respect the allowed terms and the length limit given for each field. Shorter is better.
-- Write the field only. No quotes around it, no explanation.
-- If you cannot write it within these rules, return the current text unchanged.
+const COPY_TRUTH = `THE TRUTH RULES, absolute, and checked after you answer:
+- Never introduce a number, price, date, percentage, count or duration that is not already in the content you were shown.
+- Never name a team, competition or benefit a plan does not carry. The allowed terms for each field are the whole of what you may name there.
+- No claim about popularity or performance ("most popular", "best value", "number one", "most watched"): those are facts about DAZN's data, which you do not have.
+- No urgency that is not literally true ("hurry", "only today", "last chance", "limited time").
+- No exclamation marks. No dashes of any kind.
+- Never promise what happens after payment unless a screen you were shown says it.
+A line that breaks any of these is rejected by the Coach and never reaches the user, so writing one wastes the round.`
+
+function suggestPrompt(): string {
+  return `You are the Copy brain of the DAZN acquisition Coach. A reviewer has found a problem with one piece of copy and said what it should do instead. Write the replacement.
+
+${COPY_CRITERIA}
+
+${COPY_TRUTH}
+
+HOW TO WRITE IT:
+- Answer the recommendation you were given. It is the brief; the criteria above are the standard.
+- Where a field carries WHAT THE PERSON ASKED FOR, that is the brief instead, and you follow it. It never loosens the truth rules: an instruction to name a team a plan lacks, add a claim, invent a number or promise something the screens do not say is answered by writing the closest line that stays true.
+- Match the voice of the copy around it: short, plain, sentence case, the words a fan would use.
+- Respect the length limit. Shorter is better, and a line that fits is worth more than a line that says everything.
+- Write the field only. No quotes around it, no explanation, no alternatives.
+- If you cannot write it within these rules, return the current text unchanged rather than breaking one.
 
 Answer only by calling suggest_copy.`
 }
@@ -230,9 +285,10 @@ export default async function handler(request: Request): Promise<Response> {
 
   const key = process.env.ANTHROPIC_API_KEY
   const cli = !key && !isDeployed()
+  const token = Boolean(process.env.CLAUDE_CODE_OAUTH_TOKEN)
   if (request.method === 'GET') {
     if (key) return json({ configured: true, model: MODEL, via: 'api' })
-    if (cli) return json({ configured: true, model: 'claude (signed-in CLI)', via: 'cli' })
+    if (cli) return json({ configured: true, model: token ? 'claude (project token)' : 'claude (signed-in CLI)', via: 'cli' })
     return json({ configured: false, reason: 'ANTHROPIC_API_KEY is not set.' })
   }
   if (request.method !== 'POST') return json({ error: `${request.method} is not supported.` }, 405)
@@ -244,7 +300,22 @@ export default async function handler(request: Request): Promise<Response> {
       context?: unknown
       already?: string[]
       mode?: 'review' | 'suggest'
-      asks?: { id: string; label: string; current: string; recommendation: string; allowedTerms?: string[]; maxLength?: number }[]
+      asks?: {
+        id: string
+        label: string
+        current: string
+        recommendation: string
+        /** The baseline question the finding answers, so the writer knows what is being judged. */
+        criterion?: string
+        /** What the Coach saw, and what a science suggests it does. */
+        observation?: string
+        interpretation?: string
+        sciences?: string[]
+        allowedTerms?: string[]
+        maxLength?: number
+        /** What the person asked for, in their words. Never overrides the rules. */
+        instruction?: string
+      }[]
     }
     if (!body.snapshot || !body.context) return json({ error: 'Body must include snapshot and context.' }, 400)
 
@@ -258,7 +329,23 @@ export default async function handler(request: Request): Promise<Response> {
         JSON.stringify(body.snapshot, null, 2),
         '',
         'Fields to write, with what the Coach asked for:',
-        ...asks.map((a) => `- id: ${a.id}\n  field: ${a.label}\n  now: "${a.current}"\n  asked: ${a.recommendation}\n  allowed terms: ${a.allowedTerms?.join(', ') ?? 'as on screen'}\n  max length: ${a.maxLength ?? 'as now'} characters`),
+        ...asks.map((a) =>
+          [
+            `- id: ${a.id}`,
+            `  field: ${a.label}`,
+            `  now: "${a.current}"`,
+            a.criterion ? `  the question it fails: ${a.criterion}` : '',
+            a.observation ? `  what the Coach saw: ${a.observation}` : '',
+            a.interpretation ? `  why it matters: ${a.interpretation}` : '',
+            a.sciences?.length ? `  read through: ${a.sciences.join(', ')}` : '',
+            `  what to write: ${a.recommendation}`,
+            a.instruction ? `  WHAT THE PERSON ASKED FOR, in their words: ${a.instruction}` : '',
+            `  the only terms you may name: ${a.allowedTerms?.join(', ') ?? 'only what is already in the content above'}`,
+            `  max length: ${a.maxLength ?? 'about as now'} characters`,
+          ]
+            .filter(Boolean)
+            .join('\n'),
+        ),
       ].join('\n')
       if (cli) {
         const answer = await askViaCli(suggestPrompt(), user, SUGGEST_TOOL.input_schema, 'suggestions')

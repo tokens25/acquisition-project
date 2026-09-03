@@ -147,7 +147,30 @@ export interface LandingScreen {
   altCta: string
 }
 
+/**
+ * The words on the plan screen that are not a plan's own copy.
+ *
+ * They were written into the components and into the derived card, which made
+ * them invisible to everything that works on content: they could not be
+ * translated for a market and the Coach never read them. A market cannot
+ * change what they mean, only what they say, which is exactly what copy is.
+ *
+ * `ctaVerb` is the word before a plan's name on its button: "Get MSG+".
+ */
+export interface PlansScreen {
+  navTitle: string
+  tabStandard: string
+  tabUltimate: string
+  /** Above the price: "Starts at". */
+  priceCaption: string
+  /** The button, before the plan's name. */
+  ctaVerb: string
+  /** The row at the foot of a card. */
+  footer: string
+}
+
 export interface FlowContent {
+  plans: PlansScreen
   landing: LandingScreen
   cadence: CadenceScreen
   auth: AuthScreen
@@ -159,6 +182,17 @@ export interface FlowContent {
 
 /** Copied from the node, including the placeholder Figma itself carries. */
 export const defaultFlow: FlowContent = {
+  // As drawn: the section's own nav title, its two tabs, and the three
+  // standing strings on a card.
+  plans: {
+    navTitle: 'Choose your subscription',
+    tabStandard: 'Standard',
+    tabUltimate: 'Ultimate',
+    priceCaption: 'Starts at',
+    ctaVerb: 'Get',
+    footer: 'All features & content',
+  },
+
   landing: {
     // The first button and the second. The names are what they were when the
     // first drawing had them the other way round; the panel calls them by

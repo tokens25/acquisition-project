@@ -26,7 +26,11 @@
   flex: none;
   grid-template-columns: 1fr 1fr;
   gap: 2px;
-  padding: 3px;
+  /* The bar's own height, so the switch stands with its neighbours rather
+     than proud of them. Its segments stretch to fill what is left after the
+     edge and the inset. */
+  block-size: var(--bar-control, 28px);
+  padding: 2px;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: 9px;
   isolation: isolate;
@@ -34,9 +38,9 @@
 /* The thumb: one element that slides, so the change reads as movement. */
 .pl-mode__thumb {
   position: absolute;
-  inset: 3px auto 3px 3px;
+  inset: 2px auto 2px 2px;
   z-index: -1;
-  inline-size: calc(50% - 4px);
+  inline-size: calc(50% - 3px);
   border-radius: 6px;
   background: var(--color-brand-primary);
   transition:
@@ -53,7 +57,7 @@
   align-items: center;
   justify-content: center;
   min-inline-size: 72px;
-  padding: 5px 12px;
+  padding: 0 10px;
   border: 0;
   border-radius: 6px;
   background: transparent;

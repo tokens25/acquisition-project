@@ -260,21 +260,37 @@
 }
 .cr__chain dt:first-child { margin-block-start: 0; }
 .cr__chain dd { margin: 0; color: var(--color-text-primary); }
-.cr__evidence { display: flex; flex-direction: column; gap: 3px; margin: 0; padding: 0; list-style: none; }
+.cr__evidence { display: flex; flex-direction: column; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.cr__evidence li { line-height: 1.5; }
+/* The kind of evidence, as a small pill that sizes to its words. It used to
+   be a 16px square holding a number; the words that replaced the number
+   overflowed it and ran into the source beside them. */
 .cr__level {
-  display: inline-grid;
-  place-items: center;
-  inline-size: 16px;
-  block-size: 16px;
+  display: inline-block;
   margin-inline-end: 6px;
+  padding: 1px 6px;
   border-radius: 4px;
   background: rgb(255 255 255 / 0.1);
-  font-size: 10px;
+  color: var(--color-text-secondary);
+  font-size: 10.5px;
   font-weight: var(--font-weight-bold);
-  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  vertical-align: baseline;
 }
-.cr__level[data-level='0'], .cr__level[data-level='1'], .cr__level[data-level='2'] { background: rgb(126 226 168 / 0.2); color: #7ee2a8; }
-.cr__level[data-level='6'] { background: rgb(207 20 248 / 0.2); color: #e0a6ff; }
+/* What the content itself shows, and what DAZN measured, are the two kinds
+   that can carry a fix. They read as the strong ones. */
+.cr__level[data-level='content'],
+.cr__level[data-level='dazn-causal'],
+.cr__level[data-level='dazn-behavioral'] {
+  background: rgb(126 226 168 / 0.2);
+  color: #7ee2a8;
+}
+.cr__level[data-level='ai'] {
+  background: rgb(207 20 248 / 0.2);
+  color: #e0a6ff;
+}
 .cr__level-name { color: var(--color-text-secondary); }
 .cr__meta { color: var(--color-text-tertiary); font-size: 11.5px; }
 
@@ -370,3 +386,105 @@
 .cr__goal[data-band='needs-work'] .cr__goal-score { color: #ffc44d; }
 .cr__goal[data-band='at-risk'] .cr__goal-score { color: var(--color-accent-error-text, #ff8a8a); }
 .cr__reliability { margin: 0; color: var(--color-text-tertiary); font-size: 11.5px; line-height: 1.45; }
+
+/* The options a finding weighed before recommending one. */
+.cr__options { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.cr__options li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.04);
+  border-inline-start: 2px solid rgb(255 255 255 / 0.14);
+}
+.cr__options li[data-chosen] {
+  background: rgb(126 226 168 / 0.08);
+  border-inline-start-color: var(--color-accent-success-text, #7ee2a8);
+}
+.cr__option-name {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+}
+.cr__option-pick {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgb(126 226 168 / 0.2);
+  color: var(--color-accent-success-text, #7ee2a8);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.cr__option-for, .cr__option-against { color: var(--color-text-secondary); line-height: 1.45; }
+
+/*
+ * The fix button and its menu. Pressing the pill runs the Coach's own brief;
+ * resting on it offers the two ways to write, and the custom prompt drops into
+ * the card below.
+ */
+.cr__fix { position: relative; display: inline-flex; align-items: stretch; }
+
+.cr__menu {
+  position: absolute;
+  inset-block-start: calc(100% + 6px);
+  inset-inline-start: 0;
+  z-index: 4;
+  display: none;
+  min-inline-size: 250px;
+  padding: 4px;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 10px;
+  background: #12181d;
+  box-shadow: 0 12px 28px rgb(0 0 0 / 0.45);
+}
+.cr__fix:hover .cr__menu,
+.cr__fix:focus-within .cr__menu { display: block; }
+/* Bridges the gap so the pointer can travel from the caret to the menu. */
+.cr__menu::before { content: ''; position: absolute; inset-block-start: -8px; inset-inline: 0; block-size: 8px; }
+.cr__menu button {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  inline-size: 100%;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.cr__menu button:hover { background: rgb(255 255 255 / 0.08); }
+.cr__menu strong { font-size: 12.5px; font-weight: var(--font-weight-bold); }
+.cr__menu span { color: var(--color-text-tertiary); font-size: 11.5px; }
+
+.cr__prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-block-start: 10px;
+  padding: 10px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.04);
+}
+.cr__prompt label { color: var(--color-text-secondary); font-size: 11.5px; font-weight: var(--font-weight-bold); }
+.cr__prompt textarea {
+  padding: 8px 9px;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 8px;
+  background: rgb(0 0 0 / 0.25);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 12.5px;
+  line-height: 1.45;
+  resize: vertical;
+}
+.cr__prompt textarea:focus-visible { outline: 1px solid rgb(255 196 77 / 0.7); outline-offset: 1px; }
+.cr__prompt-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.cr__prompt-row p { margin: 0; color: var(--color-text-tertiary); font-size: 11px; max-inline-size: 30ch; }
+.cr__prompt-row span { display: inline-flex; gap: 10px; align-items: center; }

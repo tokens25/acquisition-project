@@ -2,6 +2,7 @@ import './textfield.css'
 
 import { FieldMarkNote } from './FieldMark'
 import { useFieldMark } from './fieldMarks'
+import { useTranslationMark } from '../translate/marks'
 
 import type { ChangeEvent, ReactNode } from 'react'
 import { useEffect, useId, useRef } from 'react'
@@ -67,6 +68,8 @@ export function TextField({
   const id = inputId ?? generated
   const filled = value !== '' && value !== undefined && value !== null
   const mark = useFieldMark(pipelineKey)
+  // What this market reads here, when it does not read the base.
+  const translation = useTranslationMark(pipelineKey)
 
   // A multiline field is as tall as its text and never shorter than two
   // lines — `rows` says how much a screen expects, not how much empty box to
@@ -118,6 +121,22 @@ export function TextField({
       {helpText && <p className="dz-field__help">{helpText}</p>}
       {mark && (
         <FieldMarkNote mark={mark} onRevert={onChange && !readOnly ? () => onChange(mark.before) : undefined} />
+      )}
+      {translation && (
+        <p className="tr-note" data-state={translation.state}>
+          <span className="tr-note__state">{translation.state === 'reviewed' ? `${translation.language}, kept` : `${translation.language}, machine`}</span>
+          <span className="tr-note__text">{translation.text}</span>
+          <span className="tr-note__acts">
+            {translation.state === 'machine' && translation.canKeep && (
+              <button type="button" className="tr-note__act" onClick={translation.onKeep}>
+                Keep it
+              </button>
+            )}
+            <button type="button" className="tr-note__act" onClick={translation.onDiscard}>
+              {translation.state === 'reviewed' ? 'Unkeep' : 'Show English'}
+            </button>
+          </span>
+        </p>
       )}
     </div>
   )

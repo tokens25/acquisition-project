@@ -1,5 +1,5 @@
 import type { CoachReviewContext } from '../brief'
-import { BASELINE, type CriterionId } from './doctrine'
+import { BASELINE, CRITERION_BY_ID, type CriterionId } from './doctrine'
 import { finding } from './finding'
 import { SCIENCE_BY_ID } from './sciences'
 import type { JourneySnapshot } from './snapshot'
@@ -103,8 +103,28 @@ export type SuggestResult =
  * for, then puts every answer through the Coach's approval. Only what passes
  * is shown as a fix; what fails is shown with the reason.
  */
-export async function askCopySuggestions(snapshot: JourneySnapshot, ctx: CoachReviewContext, findings: Finding[]): Promise<SuggestResult> {
-  const asks = findings.filter((f) => f.copyTarget && !f.suggestion && f.recommendation)
+export async function askCopySuggestions(
+  snapshot: JourneySnapshot,
+  ctx: CoachReviewContext,
+  findings: Finding[],
+  /** What the person asked for, when they wrote their own instruction. */
+  instruction?: string,
+  /** Write it again even where a suggestion already stands. */
+  rewrite = false,
+): Promise<SuggestResult> {
+  /**
+   * What the writer is briefed with.
+   *
+   * The recommendation where the Coach made one. Where it withheld one and
+   * proposed a test instead, the test's variant is the brief: the Coach is not
+   * claiming the change will pay off, and writing the variant is how anyone
+   * finds out. Failing both, the reading itself says what is wrong.
+   */
+  const briefFor = (f: Finding): string =>
+    f.recommendation ??
+    (f.test ? `Write the variant this test proposes: ${f.test.variant}. ${f.test.hypothesis}` : f.interpretation)
+
+  const asks = findings.filter((f) => f.copyTarget && (rewrite || !f.suggestion))
   if (asks.length === 0) return { status: 'done', suggestions: {} }
   try {
     const probe = await fetch('/api/coach', { headers: { accept: 'application/json' } })
@@ -122,9 +142,16 @@ export async function askCopySuggestions(snapshot: JourneySnapshot, ctx: CoachRe
           id: f.id,
           label: f.copyTarget!.label,
           current: f.copyTarget!.current,
-          recommendation: f.recommendation,
+          recommendation: briefFor(f),
+          // What the Coach saw and why, so the writer answers the finding
+          // rather than rewriting the line to its own taste.
+          criterion: CRITERION_BY_ID[f.criterion]?.question,
+          observation: f.observation,
+          interpretation: f.interpretation,
+          sciences: f.sciences.map((id) => SCIENCE_BY_ID[id]?.name ?? id),
           allowedTerms: f.copyTarget!.allowedTerms,
           maxLength: f.copyTarget!.maxLength,
+          instruction: instruction?.trim() || undefined,
         })),
       }),
     })

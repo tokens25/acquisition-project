@@ -78,7 +78,7 @@ export type Validation = 'none' | 'dazn-data' | 'research' | 'experiment'
 export type ScreenId = FlowStepId | 'plans' | 'journey'
 
 /** The standing answer for a business outcome the Coach has no DAZN evidence for. */
-export const OUTCOME_UNKNOWN = 'Unknown. No DAZN causal evidence for this journey.'
+export const OUTCOME_UNKNOWN = 'Unknown until DAZN measures it.'
 
 /**
  * A proposed A/B test, described the way the brief asks: hypothesis, why,
@@ -128,6 +128,12 @@ export interface Finding {
   severity: Severity
   /** What would settle it. */
   validation: Validation
+  /**
+   * The wordings or arrangements weighed before recommending one. Present
+   * where two options are both defensible and the choice needs a reason
+   * rather than a preference.
+   */
+  alternatives?: { option: string; forIt: string; against: string; chosen?: boolean }[]
   /** How to get that validation, in plain words. */
   nextStep?: string
   /** The proposed experiment, when severity is `test`. */

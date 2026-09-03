@@ -1,0 +1,170 @@
+/* The language switch, in the top bar: the bar's own height, its own edge,
+   and a chevron of its own because a native arrow is the wrong size and
+   colour beside these controls. */
+.lang {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  block-size: var(--bar-control, 28px);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 9px;
+}
+.lang[data-busy] {
+  border-color: rgb(255 196 77 / 0.5);
+}
+.lang__select {
+  appearance: none;
+  block-size: 100%;
+  padding-inline: 10px 26px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+/* The menu itself is drawn by the platform, so it needs a ground of its own
+   rather than the transparent one the closed control sits on. */
+.lang__select option {
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+}
+.lang__select:hover {
+  color: var(--color-text-bright, #fff);
+}
+.lang__select:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 1px;
+}
+.lang__chev {
+  position: absolute;
+  inset-inline-end: 7px;
+  inline-size: 14px;
+  block-size: 14px;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+/* The translation bar, above the panel's fields. */
+.tr-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.04);
+}
+.tr-bar[data-state='working'] {
+  border-color: rgb(255 196 77 / 0.4);
+}
+.tr-bar__head {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin: 0;
+}
+.tr-bar__lang {
+  font-size: var(--font-size-body-default);
+  font-weight: var(--font-weight-bold);
+}
+.tr-bar__market {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+.tr-bar__working {
+  margin-inline-start: auto;
+  color: #ffc44d;
+  font-size: var(--font-size-caption-xs);
+}
+.tr-bar__note,
+.tr-bar__warn {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.45;
+}
+.tr-bar__warn {
+  color: #ffc44d;
+}
+.tr-bar__raw {
+  margin: 2px 0 0;
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+.tr-bar__again {
+  align-self: flex-start;
+  margin-block-start: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.tr-bar__again:hover {
+  color: var(--color-text-primary);
+}
+
+/* A field's own translation, under it. */
+/* A field's own translation, under it. The words get the width; the state and
+   the two actions sit on their own line so a long sentence is not squeezed
+   into a column three words wide. */
+.tr-note {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 8px;
+  margin: 6px 0 0;
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.45;
+}
+.tr-note__state {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(255 196 77 / 0.16);
+  color: #ffc44d;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tr-note[data-state='reviewed'] .tr-note__state {
+  background: rgb(126 226 168 / 0.18);
+  color: var(--color-accent-success-text, #7ee2a8);
+}
+.tr-note__text {
+  grid-column: 1;
+  min-inline-size: 0;
+  color: var(--color-text-primary);
+}
+.tr-note__acts {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  grid-column: 2;
+  white-space: nowrap;
+}
+.tr-note__act {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.tr-note__act:hover {
+  color: var(--color-text-primary);
+}

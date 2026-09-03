@@ -3,6 +3,7 @@ import type { CadenceOffer, CardSet, Context, Tier, TierPatch } from '../rules/c
 import type { PipelineDoc } from '../rules/pipeline'
 import { emptyPipeline } from '../rules/pipeline'
 import { DIRECT } from '../rules/content'
+import { defaultFlow, type FlowContent } from '../rules/flow'
 import { defaultSet } from '../rules/defaults'
 import { adaptEngineContent, isEngineContent } from '../rules/adapt'
 import { readTemplate } from '../rules/sheet'
@@ -56,7 +57,31 @@ function hydrate(raw: unknown): CardSet {
     context: { ...defaultSet.context, ...input.context },
     tiers: input.tiers.map((t) => ({ ...t, overrides: t.overrides ?? [] })),
     logoCatalog: withShippedBlurbs(input.logoCatalog),
+    // A screen the saved copy predates. Saved work never reseeds, so content
+    // stored before a screen existed would carry a hole where its words go,
+    // and everything that reads the flow would find nothing there. Merged per
+    // screen, so anything a person wrote wins over the shipped default.
+    flow: mergeFlow(input.flow),
   }
+}
+
+/**
+ * A screen the saved copy predates.
+ *
+ * Saved work never reseeds, so content stored before a screen existed would
+ * carry a hole where its words go, and everything that reads the flow would
+ * find nothing there. Merged screen by screen, so anything a person wrote
+ * wins over the shipped default and only absent keys are filled.
+ */
+function mergeFlow(stored: FlowContent | undefined): FlowContent {
+  if (!stored) return defaultFlow
+  const out = { ...defaultFlow }
+  for (const key of Object.keys(defaultFlow) as (keyof FlowContent)[]) {
+    const shipped = defaultFlow[key]
+    const saved = stored[key]
+    out[key] = (saved ? { ...shipped, ...saved } : shipped) as never
+  }
+  return out
 }
 
 /**

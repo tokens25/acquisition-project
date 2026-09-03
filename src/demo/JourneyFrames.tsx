@@ -1,6 +1,7 @@
-import type { CSSProperties, ReactNode } from 'react'
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
+import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
 import { FlowStep } from '../card/FlowStep'
 import { artworkFor, flowArtwork } from '../card/flowArtwork'
 import { Icon } from '../components/Icon'
@@ -36,6 +37,7 @@ export function JourneyFrames({
   reordered,
   onResetOrder,
   marker,
+  preferLive = false,
 }: {
   planned: ResolvedStep[]
   selectedId: string
@@ -49,6 +51,16 @@ export function JourneyFrames({
   onResetOrder?: () => void
   /** Drawn after a step's name — its handoff status, when it has one. */
   marker?: (stepId: string) => ReactNode
+  /**
+   * Render every screen that can render, rather than showing the exported
+   * frame where there is one.
+   *
+   * The row prefers the design file, which is right while the tool is being
+   * read against Figma. It is wrong the moment the content is not the content
+   * the export was made from: a market reading German would see an English
+   * picture with dollars on it, which is a screenshot of another market.
+   */
+  preferLive?: boolean
 }) {
   /**
    * The screens come in one after another when the waiting screen lets go.
@@ -203,7 +215,23 @@ export function JourneyFrames({
         )}
       </p>
 
-      <div className="jf__row">
+      <div
+        className="jf__row"
+        // A row of screens reads sideways, so a downward wheel moves it
+        // sideways. Without this the gesture depends on what the pointer
+        // happens to be over: a tile taller than the row gave the wheel to the
+        // page and the row sat still. A genuinely sideways gesture (a trackpad
+        // swipe, shift and wheel) is left alone.
+        onWheel={(e) => {
+          const el = e.currentTarget
+          const room = el.scrollWidth - el.clientWidth
+          if (room <= 0 || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
+          const next = Math.min(room, Math.max(0, el.scrollLeft + e.deltaY))
+          if (next === el.scrollLeft) return
+          el.scrollLeft = next
+          e.preventDefault()
+        }}
+      >
         {groups.map(({ step, skipped, tiles }) => (
           <section
             className="jf__step"
@@ -270,20 +298,43 @@ export function JourneyFrames({
             <div className="jf__tiles">
               {tiles.map(({ state, order }, i) => {
                 const art = artworkFor(step.id, state)
+                /**
+                 * Whether this tile draws the screen or shows its export,
+                 * and therefore which element it is. A live screen has its
+                 * own buttons in it, and a button inside a button is
+                 * invalid HTML, so a tile that renders one is a div that
+                 * behaves like a button: same click, same keyboard, same
+                 * disabled state.
+                 */
+                const live = step.renderer !== 'stub' && !skipped && (preferLive || !art)
+                const Tile = (live ? 'div' : 'button') as 'div'
+                const open = () => onOpen(step.id)
                 return (
                 <div
                   className="jf__cell"
                   key={i}
                   style={{ '--jf-enter': order } as CSSProperties}
                 >
-                <button
-                  type="button"
+                <Tile
+                  {...(live
+                    ? {
+                        role: 'button',
+                        tabIndex: skipped ? -1 : 0,
+                        'aria-disabled': skipped ? true : undefined,
+                        onKeyDown: (e: ReactKeyboardEvent<HTMLDivElement>) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            open()
+                          }
+                        },
+                      }
+                    : { type: 'button' as const, disabled: Boolean(skipped) })}
                   className="jf__tile"
                   style={{ blockSize: TILE.height }}
                   data-on={step.id === selectedId || undefined}
                   data-editable={step.renderer === 'plans' || undefined}
-                  disabled={Boolean(skipped)}
-                  onClick={() => onOpen(step.id)}
+                  data-live={live || undefined}
+                  onClick={skipped ? undefined : open}
                 >
                   {/* iOS/android — node 586:26748, at the tile's scale. Static
                       at the top the way the address bar is static at the foot,
@@ -311,7 +362,7 @@ export function JourneyFrames({
                       from the box, so it lines up with an exported frame beside
                       it instead of overhanging by the border. */}
                   <span className="jf__screen">
-                    {step.renderer !== 'stub' && !skipped && !art ? (
+                    {live ? (
                       <span className="jf__thumb" aria-hidden="true">
                         {/* zoom, not transform: a transform shrinks what is
                             drawn but not the box it occupies, so the tile
@@ -322,7 +373,14 @@ export function JourneyFrames({
                           style={{ inlineSize: frame.viewport, zoom: thumbScale }}
                         >
                           {step.renderer === 'plans' ? (
-                            <CardSetView set={phoneSet} context={context} interactive={false} />
+                            /* The whole screen, not just the cards. The tile
+                               used to show the exported frame here, which had
+                               the nav bar and the tabs in it; rendering only
+                               the card row in its place took them off the
+                               screen the moment a language was chosen. */
+                            <SubscriptionFlowScreen tab={state === 'ultimate' ? 'ultimate' : 'standard'} content={set.flow?.plans}>
+                              <CardSetView set={phoneSet} context={context} interactive={false} />
+                            </SubscriptionFlowScreen>
                           ) : (
                             <FlowStep step={step} state={state ?? 'default'} set={set} />
                           )}
@@ -372,7 +430,7 @@ export function JourneyFrames({
                     <span className="jf__chrome-btn jf__dots">•••</span>
                   </span>
 
-                </button>
+                </Tile>
 
                 {/* Under the tile, not over the screen. A caption naming which
                     version this is belongs beside the picture rather than on

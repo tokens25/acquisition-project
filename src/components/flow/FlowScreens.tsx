@@ -4,6 +4,7 @@ import sparkle from '../../assets/flow/subscription-sparkle.gif'
 import { useFlowInput } from './live'
 
 import type { ReactNode } from 'react'
+import { defaultFlow, type PlansScreen } from '../../rules/flow'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
 import badgeCheck from '../../assets/flow/badge-check.svg?raw'
 import cadenceRadioOff from '../../assets/flow/cadence-radio-off.svg?raw'
@@ -116,14 +117,18 @@ function Screen({
 export function SubscriptionFlowScreen({
   tab,
   onTab,
+  content,
   children,
 }: {
   tab: 'standard' | 'ultimate'
   onTab?: (tab: 'standard' | 'ultimate') => void
+  /** The screen's own words. Absent falls back to the ones as drawn. */
+  content?: PlansScreen
   children: ReactNode
 }) {
+  const copy = content ?? defaultFlow.plans
   return (
-    <Screen title="Choose your subscription" flush>
+    <Screen title={copy.navTitle} flush>
       <div className="fl-sub__control">
         <div className="fl-sub__tabs">
           <button
@@ -133,7 +138,7 @@ export function SubscriptionFlowScreen({
             aria-pressed={tab === 'standard'}
             onClick={() => onTab?.('standard')}
           >
-            Standard
+            {copy.tabStandard}
           </button>
           <button
             type="button"
@@ -143,7 +148,7 @@ export function SubscriptionFlowScreen({
             onClick={() => onTab?.('ultimate')}
           >
             <span className="fl-sub__bolt" aria-hidden="true" />
-            Ultimate
+            {copy.tabUltimate}
           </button>
         </div>
         {/* Sparkle 440X200 — the animation the design runs behind the Ultimate

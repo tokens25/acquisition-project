@@ -62,11 +62,12 @@ const SOURCE: Record<string, { sentence: string; short: string }> = {
  * the person waiting rather than for the person who wrote the code.
  */
 function plainReason(note: string): string {
-  if (/ANTHROPIC_API_KEY|no key|not set|not configured/i.test(note)) return 'The AI is switched off, so the Coach read the journey on its own'
-  if (/did not answer within|timeout|timed out/i.test(note)) return 'The AI took too long, so the Coach went with its own reading'
-  if (/401|auth|expired|sign in|login/i.test(note)) return 'The AI needs signing in again, so the Coach read the journey on its own'
-  if (/network|fetch|failed to load|502|503/i.test(note)) return 'The AI could not be reached, so the Coach read the journey on its own'
-  return 'The AI did not answer, so the Coach went with its own reading'
+  if (/API key is invalid/i.test(note)) return 'The Anthropic key is not valid, so the Coach read the journey on its own'
+  if (/ANTHROPIC_API_KEY|no key|not set|not configured/i.test(note)) return 'No Anthropic key here, so the Coach read the journey on its own'
+  if (/did not answer within|timeout|timed out/i.test(note)) return 'Anthropic took too long, so the Coach went with its own reading'
+  if (/401|auth|expired|sign in|login|logged in/i.test(note)) return 'The claude command is signed out, so the Coach read the journey on its own'
+  if (/network|fetch|failed to load|502|503/i.test(note)) return 'Anthropic could not be reached, so the Coach read the journey on its own'
+  return 'Anthropic did not answer, so the Coach went with its own reading'
 }
 
 /** One place turns an event into words, so the words cannot drift from it. */

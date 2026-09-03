@@ -21,27 +21,54 @@ export function copyBrain(s: JourneySnapshot, ctx: CoachReviewContext): Finding[
   void ctx
   const strings = screenStrings(s).filter((x) => x.field !== 'team' && !x.field.endsWith(' team') && !x.field.endsWith(' name') && !x.field.endsWith(' option') && !x.field.endsWith(' ribbon'))
 
-  // One action, two names.
+  // One action, two names. Which name is a question of practice, not taste,
+  // so the finding answers it rather than asking for consistency and stopping.
   const signIn = strings.filter((x) => /\bsign in\b/i.test(x.text))
   const logIn = strings.filter((x) => /\blog in\b/i.test(x.text))
   if (signIn.length && logIn.length) {
     const all = [...signIn, ...logIn]
+    const where = (list: typeof signIn) => [...new Set(list.map((x) => screenName(s, x.screen)))].join(', ')
+    // The journey's own precedent: what the TV provider button already says.
+    const provider = strings.find((x) => /provider/i.test(x.text))
+    const providerSaysSignIn = provider ? /\bsign in\b/i.test(provider.text) : false
     out.push(
       finding({
         brain: 'copy',
         criterion: 'journey-consistency',
-        sciences: ['processing-fluency', 'consistency-check'],
+        sciences: ['processing-fluency', 'mental-models', 'consistency-check'],
         screen: all[0].screen,
         alsoOn: [...new Set(all.slice(1).map((x) => x.screen))],
         element: 'sign-in-vs-log-in',
         highlight: all.map((x) => x.text.trim()),
-        observation: `The same action is called “sign in” on ${[...new Set(signIn.map((x) => screenName(s, x.screen)))].join(', ')} and “log in” on ${[...new Set(logIn.map((x) => screenName(s, x.screen)))].join(', ')}.`,
-        evidence: contentEvidence(signIn[0].text.trim(), logIn[0].text.trim()),
-        interpretation: `Two names for one action make readers check whether they are the same thing. They are.`,
-        recommendation: `Use “Sign in” everywhere.`,
-        expectedMechanism: 'One term for one action removes a comprehension step on every screen it appears.',
+        observation: `The same action is called “sign in” on ${where(signIn)} and “log in” on ${where(logIn)}.`,
+        evidence: [
+          ...contentEvidence(signIn[0].text.trim(), logIn[0].text.trim()),
+          {
+            kind: 'practice',
+            source: 'Apple, Material and GOV.UK all say Sign in. Log in comes from computing; sign in from signing a book.',
+          },
+        ],
+        interpretation:
+          'Readers stop to work out whether these are the same thing. Which word to keep is settled by practice, not taste: sign in is the plainer one and what the platforms use.' +
+          (providerSaysSignIn ? ' This journey already says it on the TV provider button.' : ''),
+        recommendation: 'Use “Sign in” everywhere. Keep “Sign up” for making an account.',
+        expectedMechanism: 'One name for one action, and a word readers already know.',
+        alternatives: [
+          {
+            option: 'Sign in',
+            forIt: 'Plainer, used by Apple, Material and GOV.UK, and already on this journey’s TV provider button.',
+            against: 'One letter from “Sign up”, so the two can be misread.',
+            chosen: true,
+          },
+          {
+            option: 'Log in',
+            forIt: 'Never confused with “Sign up”.',
+            against: 'Jargon in origin, against platform convention, and it would mean changing the TV provider button too.',
+          },
+        ],
         confidence: 'high',
         severity: 'fix',
+        validation: 'none',
         goals: { 'maintain-proposition': -1 },
         fix: { label: 'Use “Sign in” everywhere', replace: [{ from: 'Log in', to: 'Sign in' }, { from: 'log in', to: 'sign in' }, { from: 'Login', to: 'Sign in' }] },
       }),
@@ -166,7 +193,7 @@ export function copyBrain(s: JourneySnapshot, ctx: CoachReviewContext): Finding[
         evidence: [...contentEvidence(...filler.map((x) => x.text.trim())), ...scienceEvidence('information-scent')],
         interpretation: `Readers press a button when they can predict where it leads.`,
         recommendation: `Say the outcome: “Get MSG+”, “Pay now”, “Continue to payment”.`,
-        expectedMechanism: 'A button that names the next step gives the reader scent for it.',
+        expectedMechanism: 'A button that says what happens next tells people where they are going.',
         confidence: 'medium',
         severity: 'check',
         validation: 'none',

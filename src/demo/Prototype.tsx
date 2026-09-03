@@ -308,6 +308,7 @@ export function Prototype({
               <SubscriptionFlowScreen
                 tab={current.state === 'ultimate' ? 'ultimate' : 'standard'}
                 onTab={goToState}
+                content={set.flow?.plans}
               >
                 <CardSetView set={phoneSet} context={context} detailsScope="screen" />
               </SubscriptionFlowScreen>

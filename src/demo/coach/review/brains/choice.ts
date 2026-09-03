@@ -125,7 +125,7 @@ export function choiceBrain(s: JourneySnapshot, ctx: CoachReviewContext): Findin
           evidence: scienceEvidence('default-effect', 'status-quo-bias'),
           interpretation: `A preselected option gets chosen more often. That advantage should be a decision. No direction is configured that says which way to pay should be favoured.`,
           recommendation: `Decide which way to pay the business wants favoured, and set it as the goal. Then the default can be judged, and tested, against it.`,
-          expectedMechanism: 'A default that matches the intended direction turns the default effect to your purpose; one that does not works against it.',
+          expectedMechanism: 'When the option that is already ticked is the one you want chosen, that works for you. When it is not, it works against you.',
           confidence: confidenceFromScience('default-effect'),
           severity: 'check',
           nextStep: nextStepFor(ctx, 'how the two ways to pay split today'),
