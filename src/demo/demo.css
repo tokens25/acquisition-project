@@ -885,13 +885,24 @@
 .jf__tile .jf__thumb * {
   pointer-events: none;
 }
-/* Clip, not hidden. A hidden box is still a scroll container, so a trackpad
-   swipe over a tile was handed to this one — which has a screen taller than
-   itself and so something to absorb the gesture with — and the row underneath
-   sat still. Clip cuts the same picture without being a scroll container at
-   all, so the wheel goes where it was always meant to. */
+/* A tall screen scrolls inside its tile, and a sideways swipe still reaches
+   the row underneath.
+
+   Those two used to be one or the other. Hidden here — with chaining switched
+   off — meant the box absorbed a sideways gesture and the row sat still; clip
+   fixed that by making it no scroller at all, and took the vertical scrolling
+   with it. Naming the axes separately gives both: vertical stays in the tile,
+   sideways passes through to the row, which is the only place it can mean
+   anything. */
 .jf__tile .jf__screen {
-  overflow: clip;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: auto;
+  scrollbar-width: none;
+}
+.jf__tile .jf__screen::-webkit-scrollbar {
+  display: none;
 }
 .jf__thumb {
   display: grid;
