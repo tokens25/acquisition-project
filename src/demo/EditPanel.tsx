@@ -223,6 +223,24 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         >
           Add a plan
         </button>
+        {/* Beside the picker that chose it, because removing a plan is a thing
+            you do to the one you are looking at — not something to find at the
+            bottom of its fields. A set with no plans has nothing to sell, so
+            the last one stays, and removing takes the plan's prices with it:
+            an offer for a plan that is gone prices nothing. */}
+        {set.tiers.length > 1 && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => {
+              const next = set.tiers.find((t) => t.id !== tier.id)
+              removeTier(tier.id)
+              setOpenTier(next?.id ?? '')
+            }}
+          >
+            Remove {resolved.planName || 'this plan'}
+          </button>
+        )}
         {absent.has(tier.id) && (
           <p className="ed-absent">
             <strong>{resolved.planName}</strong> is not in this set — {absent.get(tier.id)}. Edits
@@ -272,6 +290,13 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             </div>
           )
         })}
+        <button
+          type="button"
+          className="ed-add"
+          onClick={() => updateSet({ planTabs: withTabAdded(tabsOf(set)) })}
+        >
+          {tabsOf(set).length ? 'Add a tab' : 'Add tabs'}
+        </button>
         {tabsOf(set).length === 2 && (
           <button
             type="button"
@@ -286,13 +311,6 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             Remove tabs
           </button>
         )}
-        <button
-          type="button"
-          className="ed-add"
-          onClick={() => updateSet({ planTabs: withTabAdded(tabsOf(set)) })}
-        >
-          {tabsOf(set).length ? 'Add a tab' : 'Add tabs'}
-        </button>
       </FieldGroup>
 
       <FieldGroup title="Where this applies">
@@ -392,22 +410,6 @@ export function EditPanel({ store }: { store: CardSetStore }) {
               : undefined
           }
         />
-        {/* A set with no plans has nothing to sell, so the last one stays.
-            Removing takes its prices with it: an offer for a plan that is gone
-            prices nothing. */}
-        {set.tiers.length > 1 && (
-          <button
-            type="button"
-            className="demo__feature-remove"
-            onClick={() => {
-              const next = set.tiers.find((t) => t.id !== tier.id)
-              removeTier(tier.id)
-              setOpenTier(next?.id ?? '')
-            }}
-          >
-            Remove this plan
-          </button>
-        )}
       </FieldGroup>
 
       <FieldGroup title={market ? `Pricing — ${market.currency}` : 'Pricing'}>

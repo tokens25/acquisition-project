@@ -152,6 +152,10 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    room than the three of them need. */
 /* No outline. The screens carry their own edges, and a second one drawn
    around them read as part of the design rather than as the pane holding it. */
+/* The tabs sit over the cards, not on them. */
+.jy__viewport .fl-sub__control {
+  margin-block-end: var(--space-16);
+}
 .jy__viewport[data-device='mobile'] {
   padding: var(--space-16);
   border-radius: var(--radius-18);
