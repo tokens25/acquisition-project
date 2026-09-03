@@ -160,16 +160,17 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 .jy__viewport .acq-set {
   overflow-x: visible;
 }
-/* With the row running past the screen, the screen keeping its own ground drew
-   an edge through the middle of a card. The frame around it is ground enough. */
-.jy__viewport .fl {
-  background: none;
+/* The row is the screen's neighbour here rather than its content, so its space
+   above is its own — 16 off the tabs, not the 24 the screen's body gives it. */
+.jy__viewport .fl-sub__cards {
+  margin-block-start: var(--space-16);
+}
+/* The screen ends under the tabs. Its body reserves room below for the cards
+   it would normally hold, and here it holds none. */
+.jy__viewport .fl__body {
+  padding-block-end: 0;
 }
 
-/* The tabs sit over the cards, not on them. */
-.jy__viewport .fl-sub__control {
-  margin-block-end: var(--space-16);
-}
 .jy__viewport[data-device='mobile'] {
   padding: var(--space-16);
   border-radius: var(--radius-18);

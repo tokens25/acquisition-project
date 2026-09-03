@@ -131,12 +131,17 @@ export function SubscriptionFlowScreen({
   tabs: PlanTab[]
   tab: string
   onTab?: (tab: string) => void
-  children: ReactNode
+  /**
+   * The cards. Left out where they are drawn beside the screen rather than in
+   * it — the edit view puts them outside so the screen's edge does not fall
+   * across one of them.
+   */
+  children?: ReactNode
 }) {
   return (
     <Screen title={title} flush>
       <SubscriptionTabs tabs={tabs} tab={tab} onTab={onTab} />
-      <div className="fl-sub__cards">{children}</div>
+      {children && <div className="fl-sub__cards">{children}</div>}
     </Screen>
   )
 }

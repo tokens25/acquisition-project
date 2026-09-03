@@ -80,9 +80,13 @@ export function StepPreview({
             tabs={tabs}
             tab={tab}
             onTab={(next) => onTab?.(next)}
-          >
+          />
+          {/* Beside the screen, not inside it. The row is wider than a phone
+              here, and a screen that ends halfway along it draws its edge
+              through whichever card that lands on. */}
+          <div className="fl-sub__cards">
             <CardSetView set={set} context={context} tab={tab} />
-          </SubscriptionFlowScreen>
+          </div>
         </div>
       ) : step.renderer !== 'stub' ? (
         /* One screen, not every state side by side.
