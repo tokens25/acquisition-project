@@ -879,6 +879,13 @@
   overflow: hidden;
   background: var(--color-surface-default);
 }
+/* The control lines up with the card row's own 16 inset, and stands off it
+   the way it does in the edit view. */
+.jf__tabs {
+  display: block;
+  padding-inline: var(--space-16);
+  margin-block-end: var(--space-16);
+}
 .jf__thumb-scale {
   display: block;
   /* width and scale come from the device, in the component */

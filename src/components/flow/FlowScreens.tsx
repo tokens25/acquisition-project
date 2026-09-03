@@ -162,15 +162,17 @@ export function SubscriptionTabs({
   return (
     <div className="fl-sub__control">
       <div className="fl-sub__tabs">
-        {tabs.map((one) => (
-          <button
+        {tabs.map((one) => {
+          const Tag = onTab ? 'button' : 'span'
+          return (
+          <Tag
             key={one.id}
-            type="button"
+            type={onTab ? 'button' : undefined}
             className="fl-sub__tab"
             data-style={styleOf(one)}
             data-on={tab === one.id || undefined}
-            aria-pressed={tab === one.id}
-            onClick={() => onTab?.(one.id)}
+            aria-pressed={onTab ? tab === one.id : undefined}
+            onClick={onTab ? () => onTab(one.id) : undefined}
           >
             {styleOf(one) === 'celebratory' && (
               <>
@@ -187,8 +189,9 @@ export function SubscriptionTabs({
               </>
             )}
             {one.name}
-          </button>
-        ))}
+          </Tag>
+          )
+        })}
       </div>
     </div>
   )

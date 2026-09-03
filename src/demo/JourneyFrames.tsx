@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { statesOf } from '../rules/tabs'
+import { statesOf, tabsOf } from '../rules/tabs'
+import { SubscriptionTabs } from '../components/flow/FlowScreens'
 import { useEffect, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { FlowStep } from '../card/FlowStep'
@@ -323,12 +324,23 @@ export function JourneyFrames({
                           style={{ inlineSize: frame.viewport, zoom: thumbScale }}
                         >
                           {step.renderer === 'plans' ? (
-                            <CardSetView
-                              set={phoneSet}
-                              context={context}
-                              interactive={false}
-                              tab={state}
-                            />
+                            <>
+                              {/* One tile per tab, so each shows which tab it
+                                  is — without it the two tiles are the same
+                                  picture with different cards and no way to
+                                  tell why. */}
+                              {tabsOf(set).length > 0 && (
+                                <span className="jf__tabs">
+                                  <SubscriptionTabs tabs={tabsOf(set)} tab={state ?? ''} />
+                                </span>
+                              )}
+                              <CardSetView
+                                set={phoneSet}
+                                context={context}
+                                interactive={false}
+                                tab={state}
+                              />
+                            </>
                           ) : (
                             <FlowStep step={step} state={state ?? 'default'} set={set} />
                           )}
