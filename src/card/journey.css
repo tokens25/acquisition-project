@@ -19,9 +19,16 @@
   flex: 1;
   min-block-size: 0;
   block-size: 100%;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
+  overflow: auto;
+  overscroll-behavior: contain;
   background: #060606;
+}
+/* The frame is the one scroller. The screens row carries its own overflow for
+   the places it is drawn outside a frame; inside one it would be a second
+   scroller nested in the first, and a screen wider than the pane would need
+   scrolling in an element that shows no sign of scrolling. */
+.jy__viewport .jy__screens {
+  overflow-x: visible;
 }
 
 .jy__steps {
