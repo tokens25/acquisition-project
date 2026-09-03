@@ -243,6 +243,18 @@ export interface LandingScreen {
   teamsTitle?: string
   teamsBody?: string
 
+  /**
+   * The card that answers a postcode outside the broadcast region: what was
+   * typed, what is not available there, and where to go instead.
+   */
+  areaTitle?: string
+  areaBody?: string
+  areaFieldLabel?: string
+  areaFieldValue?: string
+  areaNotice?: string
+  areaNote?: string
+  areaCta?: string
+
   /** The Multiview pitch, and the plan it belongs to. */
   multiviewEyebrow?: string
   multiviewBadge?: string
@@ -329,6 +341,15 @@ export const defaultFlow: FlowContent = {
     teamsEyebrow: 'Meet the teams',
     teamsTitle: 'Your teams, one home',
     teamsBody: 'Here are the teams available in your area',
+
+    areaTitle: "See what's live in your area",
+    areaBody: 'Enter your ZIP Code to see which teams you can watch.',
+    areaFieldLabel: 'Enter ZIP Code',
+    areaFieldValue: '43316',
+    areaNotice: "MSG+ and YES aren't available in 43316",
+    areaNote:
+      "Your area is outside the MSG+ and YES broadcast region. DAZN's national plans are available everywhere in the US, and other regional networks may cover your teams.",
+    areaCta: 'See DAZN plans',
 
     multiviewEyebrow: 'Multiview',
     multiviewBadge: 'Ultimate only',

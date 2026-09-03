@@ -1874,3 +1874,119 @@
   font-weight: var(--font-weight-bold);
   line-height: normal;
 }
+
+/* ── See what's live in your area ───────────────────────────
+   Built from the screenshot rather than a node, so its figures follow the
+   page's own scale — 26 for the heading, 16 for the body, the surface and
+   border the tabs already use — instead of being measured off an image. */
+.fl-page .fl-page__area {
+  padding-block: 40px;
+}
+.fl-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  align-items: center;
+  inline-size: 100%;
+  padding: var(--space-24);
+  border: var(--border-1) solid #242d33;
+  border-radius: var(--radius-16);
+  background: #0c161c;
+  text-align: center;
+}
+.fl-area__title {
+  margin: 0;
+  inline-size: 100%;
+  color: #f9fafa;
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25;
+}
+.fl-area__body,
+.fl-area__note {
+  margin: 0;
+  inline-size: 100%;
+  color: #b3b9bb;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+}
+/* Label over value, the pin at one end and the clear at the other. */
+.fl-area__field {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  inline-size: 100%;
+  padding: var(--space-12) var(--space-16);
+  border: var(--border-1) solid #4a5257;
+  border-radius: var(--radius-12);
+  text-align: start;
+}
+/* The design puts a location pin here. It is not in the icon set, so the
+   space it takes is held rather than filled with a glyph drawn by hand. */
+.fl-area__pin {
+  flex: none;
+  inline-size: 24px;
+  block-size: 24px;
+}
+.fl-area__entry {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+.fl-area__label {
+  color: #b3b9bb;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: normal;
+}
+.fl-area__value {
+  color: #f9fafa;
+  font-size: var(--font-size-body-default);
+  font-weight: var(--font-weight-regular);
+  line-height: normal;
+}
+.fl-area__clear {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 10%);
+  color: #f9fafa;
+}
+/* The mark sits on the first line of the notice rather than centred against
+   the pair of them, which is why the row aligns to its start. */
+.fl-area__notice {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-start;
+  margin: 0;
+  inline-size: 100%;
+  color: #f9fafa;
+  font-size: var(--font-size-body-default);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.38;
+}
+.fl-area__notice > span {
+  flex: 1;
+  min-inline-size: 0;
+}
+.fl-area__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  min-block-size: 56px;
+  padding-inline: var(--space-16);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: #f9fafa;
+  color: #080e12;
+  font-family: inherit;
+  font-size: var(--font-size-body-default);
+  font-weight: var(--font-weight-bold);
+}

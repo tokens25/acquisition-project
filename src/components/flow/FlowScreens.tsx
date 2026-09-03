@@ -1047,6 +1047,34 @@ export function LandingPageScreen({
         body={text.teamsBody}
       />
 
+      {/* The answer to a postcode outside the region: what was typed, what is
+          not available there, and the plans that are. */}
+      <section className="fl-page__area">
+        <div className="fl-area">
+          <p className="fl-area__title">{text.areaTitle}</p>
+          <p className="fl-area__body">{text.areaBody}</p>
+          <div className="fl-area__field">
+            {/* The pin the design puts here is not in the icon set yet. */}
+            <span className="fl-area__pin" aria-hidden="true" />
+            <span className="fl-area__entry">
+              <span className="fl-area__label">{text.areaFieldLabel}</span>
+              <span className="fl-area__value">{text.areaFieldValue}</span>
+            </span>
+            <span className="fl-area__clear" aria-hidden="true">
+              <Icon svg={iconArtwork.close} size={20} />
+            </span>
+          </div>
+          <p className="fl-area__notice">
+            <Mark svg={icInfoFill} size={24} />
+            <span>{text.areaNotice}</span>
+          </p>
+          <p className="fl-area__note">{text.areaNote}</p>
+          <button type="button" className="fl-area__cta">
+            {text.areaCta}
+          </button>
+        </div>
+      </section>
+
       <section className="fl-page__multiview">
         <p className="fl-page__eyebrow">
           {text.multiviewEyebrow}

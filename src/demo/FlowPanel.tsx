@@ -219,6 +219,16 @@ function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; s
           <TextField label="Under the heading" value={t.teamsBody} pipelineKey={'landing.teamsBody'} onChange={(v) => patch('landing', { teamsBody: v })} rows={2} />
         </FieldGroup>
 
+        <FieldGroup title="Outside the area">
+          <TextField label="Heading" value={t.areaTitle} pipelineKey={'landing.areaTitle'} onChange={(v) => patch('landing', { areaTitle: v })} />
+          <TextField label="Under the heading" value={t.areaBody} pipelineKey={'landing.areaBody'} onChange={(v) => patch('landing', { areaBody: v })} rows={2} />
+          <TextField label="Field label" value={t.areaFieldLabel} pipelineKey={'landing.areaFieldLabel'} onChange={(v) => patch('landing', { areaFieldLabel: v })} />
+          <TextField label="Code shown" value={t.areaFieldValue} pipelineKey={'landing.areaFieldValue'} onChange={(v) => patch('landing', { areaFieldValue: v })} />
+          <TextField label="Notice" value={t.areaNotice} pipelineKey={'landing.areaNotice'} onChange={(v) => patch('landing', { areaNotice: v })} rows={2} />
+          <TextField label="Under the notice" value={t.areaNote} pipelineKey={'landing.areaNote'} onChange={(v) => patch('landing', { areaNote: v })} rows={4} />
+          <TextField label="Button" value={t.areaCta} pipelineKey={'landing.areaCta'} onChange={(v) => patch('landing', { areaCta: v })} />
+        </FieldGroup>
+
         <FieldGroup title="Multiview">
           <TextField label="Over the heading" value={t.multiviewEyebrow} pipelineKey={'landing.multiviewEyebrow'} onChange={(v) => patch('landing', { multiviewEyebrow: v })} />
           <TextField label="Pill" value={t.multiviewBadge} pipelineKey={'landing.multiviewBadge'} onChange={(v) => patch('landing', { multiviewBadge: v })} helpText="Empty draws none." />
