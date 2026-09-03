@@ -129,8 +129,7 @@
     }},
     flowLanding: { vb: '0 0 80 120', parts: {
       'landing screen': [0,0,80,120], 'hero glow': [0,0,80,105],
-      'hero picture': [0,0,80,110], 'hero artwork': [0,0,80,110],
-      'hero artwork crop': [0,0,80,110], 'landing wash': [0,0,80,110],
+      'hero picture': [0,0,80,110], 'hero artwork': [0,0,80,110], 'landing wash': [0,0,80,110],
       'hero content slot': [3,58,74,46], 'hero content': [3,58,74,46],
       'landing heading': [7,60,66,7], 'landing body group': [7,69,66,12],
       'landing body': [7,70,66,10],

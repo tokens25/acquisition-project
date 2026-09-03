@@ -919,8 +919,9 @@
   overflow: hidden;
 }
 
-/* Three pictures stacked — a base, a second over it, and a third drawn larger
-   than the frame and pulled up and left so the players sit where they do. */
+/* The key art, over the page colour, filling the 660 and cropped by it. The
+   design stacks three pictures to build its own; this is one, and `cover` is
+   what keeps it filling the frame at any width the screen is drawn at. */
 .fl-landing__art {
   position: absolute;
   inset: 0;
@@ -934,19 +935,6 @@
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
-}
-.fl-landing__art-crop {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-.fl-landing__art-crop img {
-  position: absolute;
-  inset-block-start: -10.63%;
-  inset-inline-start: -9.25%;
-  max-inline-size: none;
-  inline-size: 118.24%;
-  block-size: 132.75%;
 }
 /* Four stops rather than a fade: clear a fifth of the way down, half dark at
    the middle, solid by seven tenths — which is what puts the copy on a ground

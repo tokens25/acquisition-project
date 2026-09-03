@@ -37,9 +37,7 @@ import providerOptimum from '../../assets/landing/provider-optimum.png'
 import providerOptimumTv from '../../assets/landing/provider-optimum-tv.png'
 import providerSpectrum from '../../assets/landing/provider-spectrum.svg'
 import providerXfinity from '../../assets/landing/provider-xfinity.png'
-import heroBase from '../../assets/landing/hero-1.png'
-import heroMid from '../../assets/landing/hero-2.png'
-import heroFront from '../../assets/landing/hero-3.jpg'
+import heroArt from '../../assets/landing/hero.jpg'
 import daznLogo from '../../assets/landing/logo-dazn.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
@@ -312,9 +310,9 @@ function Cta({
  *
  * 660 tall, and everything in it is laid from the bottom up: the copy sits on
  * the picture rather than under it, and the top bar floats over the whole thing
- * rather than taking a row of its own. Three pictures are stacked, which is how
- * the design builds it — a base, a second over it, and a third drawn larger
- * than the frame and pulled up and left so the players sit where they do.
+ * rather than taking a row of its own. The design stacks three pictures to make
+ * its own; the artwork here is the one supplied, so it is one, cropped by the
+ * frame the same way.
  */
 export function LandingFlowScreen({ content }: { content: LandingScreen }) {
   const text = landingText(content)
@@ -327,11 +325,7 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
       <span className="fl-landing__glow" aria-hidden="true" />
       <div className="fl-landing__hero">
         <span className="fl-landing__art" aria-hidden="true">
-          <img src={heroBase} alt="" />
-          <img src={heroMid} alt="" />
-          <span className="fl-landing__art-crop">
-            <img src={heroFront} alt="" />
-          </span>
+          <img src={heroArt} alt="" />
           {/* Four stops, not a fade: clear at a fifth of the way down, half
               dark at the middle, and solid by seven tenths, which is what puts
               the copy on a ground rather than on the picture. */}

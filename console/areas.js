@@ -182,7 +182,6 @@
       ["hero glow", '.fl-landing__glow', "A 100px blur over a gradient that runs from nothing, through gold, to a trace of green. It stops 96 short of the bottom, so it lifts the picture without reaching the page below it.", 'flowLanding'],
       ["hero picture", '.fl-landing__hero', "The 660 the picture and the copy live in, clipped, with everything inside laid to its foot.", 'flowLanding'],
       ["hero artwork", '.fl-landing__art', "The three pictures stacked, over the page colour — a base, a second over it, and a third the design draws larger than the frame.", 'flowLanding'],
-      ["hero artwork crop", '.fl-landing__art-crop', "The window the third picture is cropped by: 118.24 by 132.75 of it, pulled left 9.25 and up 10.63. The design’s own four figures rather than pixels, so the crop holds at any scale.", 'flowLanding'],
       ["landing wash", '.fl-landing__wash', "Four stops rather than a fade — clear a fifth of the way down, half dark at the middle, solid by seven tenths. That is what puts the copy on a ground instead of on the picture.", 'flowLanding'],
       ["hero content slot", '.fl-landing__slot', "The 16 of padding the copy sits in, bottom-aligned against the picture.", 'flowLanding'],
       ["hero content", '.fl-landing__content', "The column the copy is laid in, capped at 768 so the same block can sit on a wider screen.", 'flowLanding'],
