@@ -124,10 +124,13 @@ function FlowHeader({ title, mark }: { title: string; mark?: string }) {
 function Screen({
   title,
   mark,
+  name,
   flush,
   children,
 }: {
   title: string
+  /** Which screen this is, for the few rules that belong to one of them. */
+  name?: string
   /** A glyph before the title, where the screen states a result. */
   mark?: string
   /**
@@ -139,7 +142,7 @@ function Screen({
   children: ReactNode
 }) {
   return (
-    <div className="fl">
+    <div className="fl" data-screen={name}>
       <FlowHeader title={title} mark={mark} />
       <div className="fl__body" data-flush={flush ? '' : undefined}>
         {children}
@@ -819,7 +822,7 @@ const READY_CRESTS: Record<
 export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
   const middle = Math.floor(content.logos.length / 2)
   return (
-    <Screen title={content.navTitle} mark={checkCircleFilled}>
+    <Screen title={content.navTitle} mark={checkCircleFilled} name="ready">
       <div className="fl-ready">
         <div className="fl-ready__content">
           {/* The row spreads across the 343 and fades out at both ends — the
