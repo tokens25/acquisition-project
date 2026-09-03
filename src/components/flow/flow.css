@@ -89,9 +89,11 @@
   inline-size: 28px;
   block-size: 28px;
 }
-/* A screen that states a result puts a filled tick before its line, and sets
-   the line in regular: it is reporting something, not naming the screen. The
-   glyph is 16 in a 32 box, which is what centres it against the title. */
+/* A screen that states a result puts a filled tick before its line — 16 of
+   glyph in a 32 box, which is what centres it against the title. The title
+   itself is the same one every screen has: the design sets this one in
+   regular, and one screen's title reading differently from the other six is a
+   worse inconsistency than the weight is a fidelity. */
 .fl__mark {
   display: grid;
   flex: none;
@@ -102,10 +104,6 @@
 .fl__mark img {
   inline-size: 16px;
   block-size: 16px;
-}
-.fl__header[data-status] .fl__title {
-  padding-inline-end: 0;
-  font-weight: var(--font-weight-regular);
 }
 
 /* Layout — 16 down each side, 24 top and bottom, on every screen. */
