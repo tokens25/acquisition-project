@@ -119,9 +119,48 @@
   color: var(--color-text-primary);
 }
 
-/* ── "Read this market in another language" ─────────────────────────
-   The sheet itself is the Coach's, so only what is new to this one is
-   here: the languages a market already has, and the one action. */
+/* ── The market's languages ─────────────────────────────────────────
+   A dialog in the middle of the window, not a sheet down the side. The
+   Coach's sheet is a side panel because it is read beside the journey it
+   is about; this one is a short list and one button, so it sits in the
+   middle and gets out of the way. It borrows the Coach's blurred
+   backdrop and its rows, and overrides the geometry. Written as
+   `dialog.tsheet` because a bare class ties with the Coach's own and the
+   loser is decided by which stylesheet happens to load last. */
+dialog.tsheet {
+  inset: 0;
+  inline-size: min(420px, calc(100vw - 32px));
+  max-inline-size: none;
+  block-size: auto;
+  max-block-size: min(620px, calc(100vh - 80px));
+  margin: auto;
+  --coach-goal-pad: var(--space-20);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgb(0 0 0 / 0.5);
+}
+dialog.tsheet[open] {
+  animation: tsheet-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes tsheet-in {
+  from { opacity: 0; transform: scale(0.97); }
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog.tsheet[open] { animation: none; }
+}
+/* The dialog is as tall as its content up to the cap, and the list inside is
+   what scrolls when there is more than fits. Laying the dialog out as a flex
+   column is what keeps the button at the foot on screen; without it the form
+   takes its own height and the foot falls outside the box. `[open]` because a
+   closed dialog is display:none, and a display of its own would show it. */
+dialog.tsheet[open] { display: flex; }
+dialog.tsheet .coach-goal__sheet {
+  flex: 1;
+  block-size: auto;
+  min-block-size: 0;
+  max-block-size: 100%;
+}
+
 .tsheet__go {
   inline-size: 100%;
   padding: 11px 14px;
