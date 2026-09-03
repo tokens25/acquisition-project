@@ -1,3 +1,22 @@
+/* The step preview fills the column it is in rather than stopping where its
+   content does — a screen drawn against 130 of empty space below it reads as
+   a screen that failed to load. */
+.jy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-16);
+  min-block-size: 0;
+}
+/* The frame the screen is drawn in: the phone's own ground rather than the
+   app's surface, and the height the column gives it. */
+.jy__viewport {
+  flex: 1;
+  min-block-size: 0;
+  block-size: 100%;
+  background: #060606;
+}
+
 .jy__steps {
   display: flex;
   gap: var(--space-16);
@@ -178,7 +197,6 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 .jy__viewport[data-device='mobile'] {
   padding: var(--space-16);
   border-radius: var(--radius-18);
-  background: var(--color-surface-default);
 }
 .jy__viewport[data-device='mobile'] .acq-set {
   gap: var(--space-16);
@@ -208,7 +226,6 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 /* The landing page is 7412 tall, so the edit view gives it a window to scroll
    in rather than growing the panel's neighbour to the height of a page. */
 .jy__viewport[data-page] {
-  max-block-size: 70vh;
   overflow-y: auto;
   overscroll-behavior-y: contain;
 }

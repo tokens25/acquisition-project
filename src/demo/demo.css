@@ -208,6 +208,10 @@
 .demo__preview > * {
   flex: none;
 }
+.demo__preview > .jy {
+  flex: 1;
+  min-block-size: 0;
+}
 /* The rule stays in both states: it is the brand strip's right edge as much as
    the panel's, and the strip is still there when the panel is not. */
 .demo__statusbar {
