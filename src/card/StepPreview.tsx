@@ -1,6 +1,7 @@
 import './journey.css'
 import { statesOf, tabsOf } from '../rules/tabs'
-import { SubscriptionTabs } from '../components/flow/FlowScreens'
+import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
+import { resolveFlow } from '../rules/layers'
 
 import type { CardSet, Context } from '../rules/content'
 import type { Journey } from '../rules/journey'
@@ -67,11 +68,17 @@ export function StepPreview({
 
       {step.renderer === 'plans' ? (
         <div className="jy__viewport" data-device={set.device}>
-          {/* The same control the phone draws. The tabs editor sits in the
-              panel beside this, and a tab added or renamed there has to show
-              here or the editor is writing into the dark. */}
-          <SubscriptionTabs tabs={tabs} tab={tab} onTab={(next) => onTab?.(next)} />
-          <CardSetView set={set} context={context} tab={tab} />
+          {/* The same screen the phone draws. The panel beside this edits its
+              title and its tabs, and both have to show here or the editor is
+              writing into the dark. */}
+          <SubscriptionFlowScreen
+            title={resolveFlow(set).plans.navTitle}
+            tabs={tabs}
+            tab={tab}
+            onTab={(next) => onTab?.(next)}
+          >
+            <CardSetView set={set} context={context} tab={tab} />
+          </SubscriptionFlowScreen>
         </div>
       ) : step.renderer !== 'stub' ? (
         /* Every state the step is drawn in, side by side — the same shape the

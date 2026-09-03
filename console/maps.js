@@ -113,7 +113,6 @@
       'wifi icon': [24.4,26,1.2,2], 'battery icon': [25.8,26,1.6,2],
       'screen': [8,30,20,50],
       'thumbnail': [8,30,20,50], 'thumbnail scaler': [9,31,18,48],
-      'tile tabs': [9.6,31.5,15,4],
       'page clip': [8,30,20,50], 'screen artwork': [8,30,20,58],
       'frame name': [9,79,18,3], 'state label': [8,89,20,4]
     }},

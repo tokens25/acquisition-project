@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { resolveFlow, writeFlow } from '../rules/layers'
 import {
   forgetTab,
   ownsTabs,
@@ -225,6 +226,19 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   return (
 
     <>
+      <FieldGroup title="Screen">
+        {/* Written and layered like every other line in the flow, so the plan
+            picker is not the one screen whose title lives in the markup. */}
+        <TextField
+          label="Screen title"
+          value={resolveFlow(set).plans.navTitle}
+          onChange={(v) =>
+            updateSet(writeFlow(set, { market: context.market }, 'plans', { navTitle: v }))
+          }
+          helpText="The line in the bar under the status bar."
+        />
+      </FieldGroup>
+
       <FieldGroup title="Plans">
         <div className="ed-tabs">
           {set.tiers.map((t) => (

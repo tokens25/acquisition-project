@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { statesOf, tabsOf } from '../rules/tabs'
-import { SubscriptionTabs } from '../components/flow/FlowScreens'
+import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
+import { resolveFlow } from '../rules/layers'
 import { useEffect, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { FlowStep } from '../card/FlowStep'
@@ -324,23 +325,23 @@ export function JourneyFrames({
                           style={{ inlineSize: frame.viewport, zoom: thumbScale }}
                         >
                           {step.renderer === 'plans' ? (
-                            <>
-                              {/* One tile per tab, so each shows which tab it
-                                  is — without it the two tiles are the same
-                                  picture with different cards and no way to
-                                  tell why. */}
-                              {tabsOf(set).length > 0 && (
-                                <span className="jf__tabs">
-                                  <SubscriptionTabs tabs={tabsOf(set)} tab={state ?? ''} />
-                                </span>
-                              )}
+                            /* The same screen the phone draws — its header and
+                               its tabs, not just the cards. One tile per tab,
+                               so each says which tab it is; without that the
+                               tiles are one picture with different cards and
+                               nothing to explain the difference. */
+                            <SubscriptionFlowScreen
+                              title={resolveFlow(set).plans.navTitle}
+                              tabs={tabsOf(set)}
+                              tab={state ?? ''}
+                            >
                               <CardSetView
                                 set={phoneSet}
                                 context={context}
                                 interactive={false}
                                 tab={state}
                               />
-                            </>
+                            </SubscriptionFlowScreen>
                           ) : (
                             <FlowStep step={step} state={state ?? 'default'} set={set} />
                           )}

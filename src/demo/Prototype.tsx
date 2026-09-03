@@ -1,5 +1,6 @@
 import './prototype.css'
 import { statesOf, tabsOf } from '../rules/tabs'
+import { resolveFlow } from '../rules/layers'
 
 import type { MouseEvent as ReactMouseEvent } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -307,6 +308,7 @@ export function Prototype({
           <div className="proto__page" ref={page} onClick={tap}>
             {current.step.renderer === 'plans' ? (
               <SubscriptionFlowScreen
+                title={resolveFlow(set).plans.navTitle}
                 tabs={tabsOf(set)}
                 tab={current.state ?? tabsOf(set)[0]?.id ?? ''}
                 onTab={goToState}

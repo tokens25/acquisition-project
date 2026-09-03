@@ -121,18 +121,20 @@ function Screen({
  * that frame rather than changing this one.
  */
 export function SubscriptionFlowScreen({
+  title,
   tabs,
   tab,
   onTab,
   children,
 }: {
+  title: string
   tabs: PlanTab[]
   tab: string
   onTab?: (tab: string) => void
   children: ReactNode
 }) {
   return (
-    <Screen title="Choose your subscription" flush>
+    <Screen title={title} flush>
       <SubscriptionTabs tabs={tabs} tab={tab} onTab={onTab} />
       <div className="fl-sub__cards">{children}</div>
     </Screen>

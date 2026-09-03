@@ -119,6 +119,7 @@ export function resolveFlow(set: CardSet, at: Situation = situationOf(set)): Flo
   const base = { ...defaultFlow, ...set.flow }
   const out: FlowContent = {
     landing: { ...base.landing },
+    plans: { ...base.plans },
     cadence: { ...base.cadence },
     auth: { ...base.auth },
     account: { ...base.account },

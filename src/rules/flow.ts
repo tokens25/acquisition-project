@@ -201,6 +201,7 @@ export interface LandingScreen {
 
 export interface FlowContent {
   landing: LandingScreen
+  plans: PlansScreen
   cadence: CadenceScreen
   auth: AuthScreen
   account: AccountScreen
@@ -210,6 +211,18 @@ export interface FlowContent {
 }
 
 /** Copied from the node, including the placeholder Figma itself carries. */
+/**
+ * The plan picker's own chrome.
+ *
+ * Only the title, because everything else on that screen is the cards and the
+ * tabs, and both are authored elsewhere. It lives here rather than beside them
+ * so the line in the header is written and layered like every other line in
+ * the flow, instead of being the one screen with its title in the markup.
+ */
+export interface PlansScreen {
+  navTitle: string
+}
+
 export const defaultFlow: FlowContent = {
   landing: {
     // The first button and the second. The names are what they were when the
@@ -223,6 +236,7 @@ export const defaultFlow: FlowContent = {
     altCta: 'Sign in with your TV provider',
   },
 
+  plans: { navTitle: 'Choose your subscription' },
   cadence: {
     navTitle: 'Choose your subscription',
     options: [
