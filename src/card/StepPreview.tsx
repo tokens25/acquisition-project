@@ -1,6 +1,10 @@
 import './journey.css'
 import { statesOf, tabsOf } from '../rules/tabs'
-import { LandingPageScreen, SubscriptionFlowScreen } from '../components/flow/FlowScreens'
+import {
+  LandingPageScreen,
+  SubscriptionFlowScreen,
+  SubscriptionTabs,
+} from '../components/flow/FlowScreens'
 import { resolveFlow } from '../rules/layers'
 
 import type { CardSet, Context } from '../rules/content'
@@ -76,7 +80,13 @@ export function StepPreview({
            opens on, and a tile of a 7412px page is a tile of nothing. */
         <div className="jy__viewport" data-device={set.device} data-page="">
           <LandingPageScreen content={resolveFlow(set).landing}>
-            <CardSetView set={set} context={context} interactive={false} />
+            {/* The picker the page carries is the one the Subscription step
+                edits — its tabs and its cards, not a second drawing of them.
+                Rename a tab there and it reads the same here. */}
+            <div className="fl-page__plans-tabs">
+              <SubscriptionTabs tabs={tabs} tab={tab} onTab={(next) => onTab?.(next)} />
+            </div>
+            <CardSetView set={set} context={context} tab={tab} />
           </LandingPageScreen>
         </div>
       ) : step.renderer === 'plans' ? (

@@ -157,6 +157,7 @@
       'fixture words': [4,51,34,7], 'fixture title': [4,51,34,3],
       'fixture subtitle': [4,55,34,3], 'fixture label': [4,55,8,3],
       'plans heading block': [4,60,72,10], 'plans heading': [4,60,72,6],
+      'plans tabs row': [4,72,72,6],
       'plans subheading': [4,67,72,3],
       'teams block': [4,66,72,26],
       'multiview block': [4,96,72,26],

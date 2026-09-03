@@ -1464,6 +1464,16 @@
   padding-inline: 0;
   background: #080e12;
 }
+/* section-header-tabs, 708:173859 — the control keeps its own 16 above,
+   over the section's 32, and takes the page inset the card row supplies for
+   itself. */
+.fl-page__plans-tabs {
+  display: flex;
+  inline-size: 100%;
+  padding-block-start: var(--space-16);
+  padding-inline: var(--space-16);
+}
+
 /* Its own 8 between the two lines, and 8 under them before the section's 32. */
 .fl-page__plans-head {
   display: flex;

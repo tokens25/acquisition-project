@@ -238,6 +238,7 @@
       ["plans heading block", ".fl-page__plans-head", "The two lines over the picker — node 708:173855. Its own 8 between them and 8 under, before the section’s 32.", 'flowLandingPage'],
       ["plans heading", ".fl-page__plans-title", "“Choose the plan that’s right for you”, at 26 over 1.25, centred. The design breaks the line itself rather than letting it wrap, so the break travels with the words.", 'flowLandingPage'],
       ["plans subheading", ".fl-page__plans-body", "The line under it, at 16 over 1.55 in the subtle grey.", 'flowLandingPage'],
+      ["plans tabs row", '.fl-page__plans-tabs', "Where the page puts the segmented control — node 708:173859. It keeps its own 16 above, over the section’s 32, and takes the page inset the card row supplies for itself. The control in it is the Subscription step’s own, so a tab renamed there reads the same here.", 'flowLandingPage'],
       ["teams block", '.fl-page__teams', "What you get in your area, under the postcode.", 'flowLandingPage'],
       ["multiview block", '.fl-page__multiview', "The Multiview pitch and the plan it belongs to.", 'flowLandingPage'],
       ["providers block", '.fl-page__providers', "How to connect a TV subscription, and the grid of providers.", 'flowLandingPage'],
