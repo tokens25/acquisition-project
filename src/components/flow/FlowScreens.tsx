@@ -4,6 +4,7 @@ import sparkle from '../../assets/flow/subscription-sparkle.gif'
 import { useFlowInput } from './live'
 import { cadenceSavings } from '../../rules/cadence'
 import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
+import { styleOf } from '../../rules/tabs'
 import { consentsOf } from '../../rules/consents'
 
 import { Fragment } from 'react'
@@ -155,6 +156,9 @@ export function SubscriptionTabs({
   tab: string
   onTab?: (tab: string) => void
 }) {
+  // No tabs is a plan picker with nothing dividing it, which is a picker with
+  // no control over it rather than an empty control.
+  if (!tabs.length) return null
   return (
     <div className="fl-sub__control">
       <div className="fl-sub__tabs">
@@ -163,25 +167,29 @@ export function SubscriptionTabs({
             key={one.id}
             type="button"
             className="fl-sub__tab"
+            data-style={styleOf(one)}
             data-on={tab === one.id || undefined}
             aria-pressed={tab === one.id}
             onClick={() => onTab?.(one.id)}
           >
-            {/* The bolt belongs to the Ultimate tab, which is why it follows
-                the id rather than the name: renaming that tab keeps it. */}
-            {one.id === 'ultimate' && <span className="fl-sub__bolt" aria-hidden="true" />}
+            {styleOf(one) === 'celebratory' && (
+              <>
+                <span className="fl-sub__bolt" aria-hidden="true" />
+                {/* Sparkle 440X200 — the animation the design runs behind this
+                    tab. Its box is the tab, and the frame crops the picture
+                    rather than fitting it, so the offsets are the design's
+                    percentages of that box rather than a fit that looks close.
+                    Inside the tab and not the control, because the celebrated
+                    tab is not always the one on the right. */}
+                <span className="fl-sub__sparkle" aria-hidden="true">
+                  <img src={sparkle} alt="" />
+                </span>
+              </>
+            )}
             {one.name}
           </button>
         ))}
       </div>
-      {/* Sparkle 440X200 — the animation the design runs behind the Ultimate
-          tab. Its box is 168 x 48 at the control's top right, and the frame
-          crops the picture rather than fitting it, so the offsets are the
-          design's percentages of that box rather than a fit that looks
-          close. */}
-      <span className="fl-sub__sparkle" aria-hidden="true">
-        <img src={sparkle} alt="" />
-      </span>
     </div>
   )
 }

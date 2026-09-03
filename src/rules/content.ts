@@ -62,6 +62,13 @@ export interface AddOnEntry {
 export interface PlanTab {
   id: string
   name: string
+  /**
+   * How the tab is drawn. `celebratory` is the Ultimate treatment — the gold
+   * bolt before the name and the sparkle running behind it.
+   *
+   * Absent on tabs written before the choice existed; see `styleOf`.
+   */
+  style?: 'plain' | 'celebratory'
 }
 
 /**

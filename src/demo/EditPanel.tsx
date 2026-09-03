@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { blankTab, tabsOf, tierOnTab } from '../rules/tabs'
+import { styleOf, tabsOf, tierOnTab, withTabAdded, withTabRemoved } from '../rules/tabs'
+import type { PlanTab } from '../rules/content'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -207,46 +208,50 @@ export function EditPanel({ store }: { store: CardSetStore }) {
       <FieldGroup title="Tabs">
         {tabsOf(set).map((one, i) => {
           const all = tabsOf(set)
+          const write = (next: Partial<PlanTab>) =>
+            updateSet({ planTabs: all.map((t, j) => (j === i ? { ...t, ...next } : t)) })
           return (
             <div className="demo__feature" key={one.id}>
               <TextField
                 label={`Tab ${i + 1}`}
                 value={one.name}
-                onChange={(v) =>
+                onChange={(v) => write({ name: v })}
+              />
+              <SelectField
+                label="Style"
+                value={styleOf(one)}
+                options={[
+                  { value: 'plain', label: 'Just the name' },
+                  { value: 'celebratory', label: 'The name, a gold bolt and the sparkle' },
+                ]}
+                onChange={(v) => write({ style: v as PlanTab['style'] })}
+              />
+              {/* Removing the second-to-last takes the last with it: what would
+                  be left is one tab, and one tab divides the plans into the
+                  plans. Which is also why the button says so. */}
+              <button
+                type="button"
+                className="demo__feature-remove"
+                onClick={() =>
                   updateSet({
-                    planTabs: all.map((t, j) => (j === i ? { ...t, name: v } : t)),
+                    planTabs: withTabRemoved(all, i),
+                    tiers: set.tiers.map((t) =>
+                      t.tabs?.length ? { ...t, tabs: t.tabs.filter((id) => id !== one.id) } : t,
+                    ),
                   })
                 }
-              />
-              {/* A picker with no tabs is a picker with nothing to pick, so the
-                  last one stays. Removing a tab leaves the plans that were only
-                  on it, which is why they say which tabs they are on rather
-                  than a tab saying which plans it holds. */}
-              {all.length > 1 && (
-                <button
-                  type="button"
-                  className="demo__feature-remove"
-                  onClick={() =>
-                    updateSet({
-                      planTabs: all.filter((_, j) => j !== i),
-                      tiers: set.tiers.map((t) =>
-                        t.tabs?.length ? { ...t, tabs: t.tabs.filter((id) => id !== one.id) } : t,
-                      ),
-                    })
-                  }
-                >
-                  Remove
-                </button>
-              )}
+              >
+                {all.length <= 2 ? 'Remove both tabs' : 'Remove'}
+              </button>
             </div>
           )
         })}
         <button
           type="button"
           className="ed-add"
-          onClick={() => updateSet({ planTabs: [...tabsOf(set), blankTab(tabsOf(set))] })}
+          onClick={() => updateSet({ planTabs: withTabAdded(tabsOf(set)) })}
         >
-          Add a tab
+          {tabsOf(set).length ? 'Add a tab' : 'Add two tabs'}
         </button>
       </FieldGroup>
 

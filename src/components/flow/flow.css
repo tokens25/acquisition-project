@@ -1053,13 +1053,13 @@
 /* Sparkle 440X200 — 168 x 48 at the control's top right, cropping the picture
    rather than fitting it. The offsets are the frame's own percentages of that
    box, so the crop is the one the design makes. */
+/* Anchored to the tab it celebrates rather than to the control's corner: the
+   celebrated tab is wherever it was put, and the sparkle belongs to it. */
 .fl-sub__sparkle {
   position: absolute;
-  inset-block-start: 0;
-  inset-inline-end: 0;
-  inline-size: 168px;
-  block-size: 48px;
+  inset: 0;
   overflow: hidden;
+  border-radius: inherit;
   pointer-events: none;
 }
 .fl-sub__sparkle img {
@@ -1113,6 +1113,15 @@
    secondary grey. The gold stays gold and goes quiet rather than turning
    into a different colour. */
 .fl-sub__tab:not([data-on]) .fl-sub__bolt {
+  opacity: 0.5;
+}
+/* The tab holds the sparkle, so it has to be the thing the sparkle is placed
+   against and has to clip it. The sparkle paints over the tab, the way it
+   painted over the control before it belonged to one tab. */
+.fl-sub__tab {
+  position: relative;
+}
+.fl-sub__tab:not([data-on]) .fl-sub__sparkle {
   opacity: 0.5;
 }
 
