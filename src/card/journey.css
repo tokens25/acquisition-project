@@ -152,15 +152,18 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    room than the three of them need. */
 /* No outline. The screens carry their own edges, and a second one drawn
    around them read as part of the design rather than as the pane holding it. */
-/* The edit view is not a phone. The plan row scrolls on a device because a
-   device is 375 wide; here there is room for all of it, and a card you have to
-   scroll to is a card you forget to edit. The screen opens out to fit its
-   cards rather than the cards being clipped to the screen. */
-.jy__viewport .fl {
-  inline-size: 100%;
-}
+/* The screen keeps a device's width in the edit view — it is a picture of a
+   phone and stretching it makes it a picture of nothing. What changes is that
+   the plan row is not clipped to it: the cards run past the screen's edge so
+   every one of them is there to be edited, rather than scrolling out of sight
+   the way they do on a device. */
 .jy__viewport .acq-set {
   overflow-x: visible;
+}
+/* With the row running past the screen, the screen keeping its own ground drew
+   an edge through the middle of a card. The frame around it is ground enough. */
+.jy__viewport .fl {
+  background: none;
 }
 
 /* The tabs sit over the cards, not on them. */
