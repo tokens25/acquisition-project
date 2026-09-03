@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { forgetTab, styleOf, tabsOf, tierOnTab, withTabAdded, withTabRemoved } from '../rules/tabs'
-import type { PlanTab } from '../rules/content'
+import type { CadenceOffer, PlanTab, TierPatch } from '../rules/content'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -48,8 +48,28 @@ const PURCHASE_TYPES = [
  * view made the number look absolute when it never is.
  */
 export function EditPanel({ store }: { store: CardSetStore }) {
-  const { set, context, updateTier, addTier, removeTier, updateOffer, offerFor, updateSet } =
-    store
+  const {
+    set,
+    context,
+    updateTier: writeTier,
+    addTier,
+    removeTier,
+    updateOffer: writeOffer,
+    offerFor,
+    updateSet,
+  } = store
+  /**
+   * How narrowly the edits below are meant.
+   *
+   * A tab is always on screen, so this cannot be read off the context: doing
+   * that would make every edit belong to whichever tab happened to be showing.
+   * Empty is the plan however it is shown, which is what most edits are.
+   */
+  const [tabScope, setTabScope] = useState('')
+  const scope = tabScope ? { tab: tabScope } : undefined
+  const updateTier = (id: string, patch: TierPatch) => writeTier(id, patch, scope)
+  const updateOffer = (tierId: string, patch: Partial<CadenceOffer>) =>
+    writeOffer(tierId, patch, scope)
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
 
   /** The competition being dragged, and the row it is currently over. */
@@ -118,6 +138,12 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   // Absent means custom: copy written before this choice existed was written
   // by hand, and defaulting the other way would relabel it as generated.
   const source = resolved.descriptionSource ?? 'custom'
+  const shownOffer = offerFor(tier.id)
+  // Tabs this plan has been written differently for, so an edit meant for all
+  // of them can say which ones it will not reach.
+  const ownTabs = tabsOf(set)
+    .filter((t) => tier.overrides.some((o) => o.when.tab === t.id))
+    .map((t) => t.name)
   const explainerSource = offer?.explainerSource ?? 'custom'
 
   const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
@@ -267,6 +293,38 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         >
           {tabsOf(set).length ? 'Add a tab' : 'Add tabs'}
         </button>
+      </FieldGroup>
+
+      <FieldGroup title="Where this applies">
+        <SelectField
+          label="Editing"
+          value={tabScope}
+          options={[
+            { value: '', label: 'However this plan is shown' },
+            ...tabsOf(set).map((t) => ({ value: t.id, label: `${t.name} only` })),
+          ]}
+          onChange={setTabScope}
+          helpText={
+            tabScope
+              ? 'Prices and copy typed below are written for that tab alone.'
+              : 'Prices and copy typed below apply on every tab that shows this plan.'
+          }
+        />
+        {/* The price on screen belongs to a tab, and this edit does not — so
+            typing here writes a price the tab already answers for. Worth
+            saying before it is typed rather than after. */}
+        {!tabScope && shownOffer?.tab && (
+          <p className="ed-absent">
+            This price is written for{' '}
+            {tabsOf(set).find((t) => t.id === shownOffer.tab)?.name ?? shownOffer.tab}, so an edit
+            here will not show on that tab.
+          </p>
+        )}
+        {!tabScope && ownTabs.length > 0 && (
+          <p className="ed-absent">
+            {resolved.planName} reads differently on {ownTabs.join(', ')}.
+          </p>
+        )}
       </FieldGroup>
 
       <FieldGroup title="Tier">

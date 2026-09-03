@@ -143,6 +143,14 @@ export interface CadenceOffer {
   /** Omitted applies everywhere; a market code narrows it, and wins. */
   market?: string
 
+  /**
+   * Which tab this price is for. Omitted applies on every tab, and a
+   * tab-scoped row wins — the same sparseness `market` has, for the same
+   * reason: most plans cost the same on both tabs, and the ones that do not
+   * are a row rather than a second plan.
+   */
+  tab?: string
+
   standardPrice: number
   discount: boolean
   /** Required when `discount`, and must be below standardPrice. */
@@ -221,11 +229,20 @@ export interface Context {
   channel: string
   /** Which way of paying is on screen. */
   cadence: string
+  /**
+   * Which tab of the plan picker is on screen.
+   *
+   * Here with the rest of what is being looked at, because a tab is one: the
+   * same plan can be sold at a different price on the Ultimate tab, and the
+   * price a card shows depends on the tab the same way it depends on the
+   * cadence. Absent means no tab is showing — the picker has none.
+   */
+  tab?: string
 }
 
 export interface Override {
   id: string
-  when: Partial<Pick<Context, 'market' | 'campaign'>>
+  when: Partial<Pick<Context, 'market' | 'campaign' | 'tab'>>
   priority?: number
   patch: TierPatch
 }

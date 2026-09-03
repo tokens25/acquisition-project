@@ -85,11 +85,17 @@ export function CardSetView({
     detailsRef.current = details
   }, [details])
 
+  // The tab travels with the rest of what is on screen, so a price written for
+  // one tab is found the same way a price written for one market is.
+  const shown = useMemo(
+    () => (tab === undefined ? context : { ...context, tab: tab ?? undefined }),
+    [context, tab],
+  )
   // A tab shows the plans that say they belong to it; the rest of the tool
   // shows every plan, because there is no tab control to be on.
   const cards = useMemo(
-    () => resolveSet(set, context).filter((c) => !tab || tierOnTab(c.tier, tab)),
-    [set, context, tab],
+    () => resolveSet(set, shown).filter((c) => !shown.tab || tierOnTab(c.tier, shown.tab)),
+    [set, shown],
   )
   const market = marketFor(set, context.market)
 

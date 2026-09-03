@@ -153,7 +153,12 @@ export function App() {
             Only the plans step renders a real component; the rest carry their Figma frame,
             their states and the runtime conditions they depend on.
           </p>
-          <StepPreview journey={journey} set={store.set} context={store.context} />
+          <StepPreview
+            journey={journey}
+            set={store.set}
+            context={store.context}
+            onTab={(tab) => store.setContext({ ...store.context, tab })}
+          />
         </div>
       </div>
     </main>

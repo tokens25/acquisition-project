@@ -1,5 +1,4 @@
 import './journey.css'
-import { useState } from 'react'
 import { statesOf, tabsOf } from '../rules/tabs'
 import { SubscriptionTabs } from '../components/flow/FlowScreens'
 
@@ -22,16 +21,23 @@ export function StepPreview({
   journey,
   set,
   context,
+  onTab,
 }: {
   journey: Journey
   set: CardSet
   context: Context
+  /**
+   * Told which tab is showing, because the panel beside this prices that tab.
+   * The tab lives with the market and the cadence in the context rather than
+   * in this component: it is another thing being looked at, and the editor has
+   * to be looking at the same one.
+   */
+  onTab?: (tab: string) => void
 }) {
   const tabs = tabsOf(set)
-  const [openTab, setOpenTab] = useState('')
   // A tab that has been renamed keeps its id, but one that has been removed has
   // not — so the chosen tab falls back to the first rather than to nothing.
-  const tab = tabs.some((t) => t.id === openTab) ? openTab : (tabs[0]?.id ?? '')
+  const tab = tabs.some((t) => t.id === context.tab) ? (context.tab as string) : (tabs[0]?.id ?? '')
 
   const steps = resolveJourney(journey, context)
   const step = steps.find((s) => s.id === set.stepId) ?? steps[0]
@@ -64,7 +70,7 @@ export function StepPreview({
           {/* The same control the phone draws. The tabs editor sits in the
               panel beside this, and a tab added or renamed there has to show
               here or the editor is writing into the dark. */}
-          <SubscriptionTabs tabs={tabs} tab={tab} onTab={setOpenTab} />
+          <SubscriptionTabs tabs={tabs} tab={tab} onTab={(next) => onTab?.(next)} />
           <CardSetView set={set} context={context} tab={tab} />
         </div>
       ) : step.renderer !== 'stub' ? (

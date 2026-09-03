@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { CadenceOffer, CardSet, Context, Tier, TierPatch } from '../rules/content'
+import type { CadenceOffer, CardSet, Context, Override, Tier, TierPatch } from '../rules/content'
 import type { PipelineDoc } from '../rules/pipeline'
 import { emptyPipeline } from '../rules/pipeline'
 import { DIRECT } from '../rules/content'
@@ -120,11 +120,25 @@ function read(): { set: CardSet; seed: string; hadLocal: boolean } {
 }
 
 
-function selectorFor(context: Context): Partial<Pick<Context, 'market' | 'campaign'>> {
-  const when: Partial<Pick<Context, 'market' | 'campaign'>> = {}
+/**
+ * Which situations an edit is about.
+ *
+ * The market and the campaign come from the context, because being in a market
+ * is what makes an edit that market's. The tab does not: a tab is always on
+ * screen, so taking it from the context would quietly make every edit
+ * tab-only. It is passed in when somebody has said so.
+ */
+function selectorFor(context: Context, scope?: Scope): Override['when'] {
+  const when: Override['when'] = {}
   if (context.market !== BASE_MARKET) when.market = context.market
   if (context.campaign) when.campaign = context.campaign
+  if (scope?.tab) when.tab = scope.tab
   return when
+}
+
+/** How narrowly an edit is meant. Empty is "however this plan is shown". */
+export interface Scope {
+  tab?: string
 }
 
 export interface CardSetStore {
@@ -154,13 +168,13 @@ export interface CardSetStore {
   reordered: boolean
   updateSet: (patch: Partial<CardSet>) => void
   /** Writes to the base tier, or to this context's override. */
-  updateTier: (id: string, patch: TierPatch) => void
+  updateTier: (id: string, patch: TierPatch, scope?: Scope) => void
   /** Adds a plan, sold at every cadence, and returns its id. */
   addTier: () => string
   /** Removes a plan and everything priced against it. */
   removeTier: (id: string) => void
-  /** Edits the offer pricing this tier at the current cadence and market. */
-  updateOffer: (tierId: string, patch: Partial<CadenceOffer>) => void
+  /** Edits the offer pricing this tier at the current cadence, market and scope. */
+  updateOffer: (tierId: string, patch: Partial<CadenceOffer>, scope?: Scope) => void
   offerFor: (tierId: string) => CadenceOffer | null
   overriddenKeys: (tier: Tier) => string[]
   reset: () => void
@@ -278,17 +292,17 @@ export function useCardSet(): CardSetStore {
     }))
   }, [])
 
-  const updateTier = useCallback((id: string, patch: TierPatch) => {
+  const updateTier = useCallback((id: string, patch: TierPatch, scope?: Scope) => {
     setSet((prev) => {
       const ctx = prev.context
-      if (isBaseContext(ctx)) {
+      if (isBaseContext(ctx) && !scope?.tab) {
         return {
           ...prev,
           ...withdrawn(prev),
           tiers: prev.tiers.map((t) => (t.id === id ? { ...t, ...patch } : t)),
         }
       }
-      const when = selectorFor(ctx)
+      const when = selectorFor(ctx, scope)
       return {
         ...prev,
         ...withdrawn(prev),
@@ -303,7 +317,9 @@ export function useCardSet(): CardSetStore {
               ),
             }
           }
-          const oid = `${t.id}-${when.market ?? 'all'}${when.campaign ? `-${when.campaign}` : ''}`
+          const oid = `${t.id}-${when.market ?? 'all'}${when.campaign ? `-${when.campaign}` : ''}${
+            when.tab ? `-${when.tab}` : ''
+          }`
           return { ...t, overrides: [...t.overrides, { id: oid, when, patch }] }
         }),
       }
@@ -315,31 +331,38 @@ export function useCardSet(): CardSetStore {
    * a market is selected forks a market-scoped offer rather than changing the
    * price everywhere — the same base-plus-differences rule the tiers follow.
    */
-  const updateOffer = useCallback((tierId: string, patch: Partial<CadenceOffer>) => {
-    setSet((prev) => {
-      const ctx = prev.context
-      const target = resolveOffer(prev, tierId, ctx)
-      if (!target) return prev
+  const updateOffer = useCallback(
+    (tierId: string, patch: Partial<CadenceOffer>, scope?: Scope) => {
+      setSet((prev) => {
+        const ctx = prev.context
+        const target = resolveOffer(prev, tierId, ctx)
+        if (!target) return prev
 
-      const scopeMarket = ctx.market === BASE_MARKET ? undefined : ctx.market
-      const alreadyScoped = target.market === scopeMarket
+        const scopeMarket = ctx.market === BASE_MARKET ? undefined : ctx.market
+        // The row is this edit's own only if it is scoped to exactly what the
+        // edit is about. A price written for every tab must not be changed by
+        // someone editing one tab's price — that row is shared.
+        const alreadyScoped = target.market === scopeMarket && target.tab === scope?.tab
 
-      if (alreadyScoped) {
-        return {
-          ...prev,
-          ...withdrawn(prev),
-          offers: prev.offers.map((o) => (o.id === target.id ? { ...o, ...patch } : o)),
+        if (alreadyScoped) {
+          return {
+            ...prev,
+            ...withdrawn(prev),
+            offers: prev.offers.map((o) => (o.id === target.id ? { ...o, ...patch } : o)),
+          }
         }
-      }
-      const forked: CadenceOffer = {
-        ...target,
-        ...patch,
-        id: `${target.id}-${scopeMarket ?? 'all'}`,
-        market: scopeMarket,
-      }
-      return { ...prev, ...withdrawn(prev), offers: [...prev.offers, forked] }
-    })
-  }, [])
+        const forked: CadenceOffer = {
+          ...target,
+          ...patch,
+          id: `${target.id}-${scopeMarket ?? 'all'}${scope?.tab ? `-${scope.tab}` : ''}`,
+          market: scopeMarket,
+          tab: scope?.tab,
+        }
+        return { ...prev, ...withdrawn(prev), offers: [...prev.offers, forked] }
+      })
+    },
+    [],
+  )
 
   const offerFor = useCallback(
     (tierId: string) => resolveOffer(set, tierId, context),

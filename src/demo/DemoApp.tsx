@@ -449,7 +449,12 @@ export function DemoApp() {
         <div className="demo__preview">
 
           {editing && step ? (
-            <StepPreview journey={store.journey} set={store.set} context={store.context} />
+            <StepPreview
+              journey={store.journey}
+              set={store.set}
+              context={store.context}
+              onTab={(tab) => store.setContext({ ...store.context, tab })}
+            />
           ) : (
             <JourneyFrames
               planned={shown}
