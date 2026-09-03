@@ -9,11 +9,18 @@
   min-block-size: 0;
 }
 /* The frame the screen is drawn in: the phone's own ground rather than the
-   app's surface, and the height the column gives it. */
+   app's surface, and the height the column gives it.
+
+   It holds what it draws. A screen taller than the frame — checkout with a
+   card form under a summary, the landing page at seven thousand — scrolls
+   inside it rather than running out of the bottom and over whatever the tool
+   has put below. */
 .jy__viewport {
   flex: 1;
   min-block-size: 0;
   block-size: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
   background: #060606;
 }
 
@@ -230,10 +237,6 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 
 /* The landing page is 7412 tall, so the edit view gives it a window to scroll
    in rather than growing the panel's neighbour to the height of a page. */
-.jy__viewport[data-page] {
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-}
 /* It is a page, not a row: the plan picker inside it keeps a device's width
    and scrolls, the way it does everywhere the page is drawn whole. */
 .jy__viewport[data-page] .acq-set {
