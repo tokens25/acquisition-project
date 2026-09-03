@@ -3,6 +3,7 @@ import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
 import { blankConsent, consentsOf } from '../rules/consents'
+import { blankProvider, blankQuestion, landingText, providersOf, questionsOf } from '../rules/landing'
 import { blankLine, blankMethod, chosenMethod, linesOf, methodsOf } from '../rules/checkout'
 import { FieldGroup } from './FieldGroup'
 import type { CardSetStore } from '../editor/useCardSet'
@@ -147,6 +148,9 @@ function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; s
 
   if (step.renderer === 'landing') {
     const l = flow.landing
+    // What the page says, the shipped wording standing in where a saved copy
+    // predates the section.
+    const t = landingText(l)
     return (
       <>
         <FieldGroup title="Top bar">
@@ -188,6 +192,124 @@ function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; s
             pipelineKey={'landing.altCta'}
             onChange={(v) => patch('landing', { altCta: v })}
           />
+        </FieldGroup>
+
+        {/* Everything below the hero. The page is long, so the groups are the
+            sections you would name if you were pointing at it. */}
+        <FieldGroup title="Postcode">
+          <TextField label="Heading" value={t.zipHeading} pipelineKey={'landing.zipHeading'} onChange={(v) => patch('landing', { zipHeading: v })} />
+          <TextField label="Field" value={t.zipLabel} pipelineKey={'landing.zipLabel'} onChange={(v) => patch('landing', { zipLabel: v })} />
+          <TextField label="Code shown" value={t.zipValue} pipelineKey={'landing.zipValue'} onChange={(v) => patch('landing', { zipValue: v })} />
+          <TextField label="Button" value={t.zipCta} pipelineKey={'landing.zipCta'} onChange={(v) => patch('landing', { zipCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Meet the teams">
+          <TextField label="Over the heading" value={t.teamsEyebrow} pipelineKey={'landing.teamsEyebrow'} onChange={(v) => patch('landing', { teamsEyebrow: v })} />
+          <TextField label="Heading" value={t.teamsTitle} pipelineKey={'landing.teamsTitle'} onChange={(v) => patch('landing', { teamsTitle: v })} />
+          <TextField label="Under the heading" value={t.teamsBody} pipelineKey={'landing.teamsBody'} onChange={(v) => patch('landing', { teamsBody: v })} rows={2} />
+          <TextField label="Under the tiles" value={t.teamsNote} pipelineKey={'landing.teamsNote'} onChange={(v) => patch('landing', { teamsNote: v })} rows={2} />
+          <TextField label="Button" value={t.teamsCta} pipelineKey={'landing.teamsCta'} onChange={(v) => patch('landing', { teamsCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Multiview">
+          <TextField label="Over the heading" value={t.multiviewEyebrow} pipelineKey={'landing.multiviewEyebrow'} onChange={(v) => patch('landing', { multiviewEyebrow: v })} />
+          <TextField label="Pill" value={t.multiviewBadge} pipelineKey={'landing.multiviewBadge'} onChange={(v) => patch('landing', { multiviewBadge: v })} helpText="Empty draws none." />
+          <TextField label="Heading" value={t.multiviewTitle} pipelineKey={'landing.multiviewTitle'} onChange={(v) => patch('landing', { multiviewTitle: v })} rows={2} />
+          <TextField label="Under the heading" value={t.multiviewBody} pipelineKey={'landing.multiviewBody'} onChange={(v) => patch('landing', { multiviewBody: v })} rows={3} />
+          <TextField label="Button" value={t.multiviewCta} pipelineKey={'landing.multiviewCta'} onChange={(v) => patch('landing', { multiviewCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="TV providers">
+          <TextField label="Heading" value={t.providersTitle} pipelineKey={'landing.providersTitle'} onChange={(v) => patch('landing', { providersTitle: v })} rows={2} />
+          <TextField label="Under the heading" value={t.providersBody} pipelineKey={'landing.providersBody'} onChange={(v) => patch('landing', { providersBody: v })} rows={3} />
+          <TextField label="The gold half" value={t.providersHighlight} pipelineKey={'landing.providersHighlight'} onChange={(v) => patch('landing', { providersHighlight: v })} helpText="Follows the sentence above, in gold." />
+          {providersOf(l).map((provider, i) => {
+            const all = providersOf(l)
+            return (
+              <div className="demo__feature" key={provider.id}>
+                <TextField
+                  label={`Provider ${i + 1}`}
+                  value={provider.name}
+                  pipelineKey={`landing.providers[${i}].name`}
+                  onChange={(v) =>
+                    patch('landing', {
+                      providers: all.map((p, j) => (j === i ? { ...p, name: v } : p)),
+                    })
+                  }
+                  helpText="The name picks the logo. One with no logo shows its name."
+                />
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() => patch('landing', { providers: all.filter((_, j) => j !== i) })}
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('landing', { providers: [...providersOf(l), blankProvider(providersOf(l))] })
+            }
+          >
+            Add a provider
+          </button>
+          <TextField label="Under the grid" value={t.providersNote} pipelineKey={'landing.providersNote'} onChange={(v) => patch('landing', { providersNote: v })} rows={2} />
+          <TextField label="Button" value={t.providersCta} pipelineKey={'landing.providersCta'} onChange={(v) => patch('landing', { providersCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Devices">
+          <TextField label="Heading" value={t.devicesTitle} pipelineKey={'landing.devicesTitle'} onChange={(v) => patch('landing', { devicesTitle: v })} />
+          <TextField label="Second line" value={t.devicesTitleTwo} pipelineKey={'landing.devicesTitleTwo'} onChange={(v) => patch('landing', { devicesTitleTwo: v })} helpText="The design sets this on its own line." />
+          <TextField label="Under the heading" value={t.devicesBody} pipelineKey={'landing.devicesBody'} onChange={(v) => patch('landing', { devicesBody: v })} rows={4} />
+          <TextField label="Over the logos" value={t.devicesNote} pipelineKey={'landing.devicesNote'} onChange={(v) => patch('landing', { devicesNote: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Free games">
+          <TextField label="Heading" value={t.freeTitle} pipelineKey={'landing.freeTitle'} onChange={(v) => patch('landing', { freeTitle: v })} rows={2} />
+          <TextField label="Under the heading" value={t.freeBody} pipelineKey={'landing.freeBody'} onChange={(v) => patch('landing', { freeBody: v })} rows={3} />
+          <TextField label="Button" value={t.freeCta} pipelineKey={'landing.freeCta'} onChange={(v) => patch('landing', { freeCta: v })} />
+        </FieldGroup>
+
+        <FieldGroup title="Questions">
+          <TextField label="Heading" value={t.faqTitle} pipelineKey={'landing.faqTitle'} onChange={(v) => patch('landing', { faqTitle: v })} />
+          {questionsOf(l).map((one, i) => {
+            const all = questionsOf(l)
+            return (
+              <div className="demo__feature" key={one.id}>
+                <TextField
+                  label={`Question ${i + 1}`}
+                  value={one.question}
+                  pipelineKey={`landing.faqs[${i}].question`}
+                  onChange={(v) =>
+                    patch('landing', {
+                      faqs: all.map((q, j) => (j === i ? { ...q, question: v } : q)),
+                    })
+                  }
+                  rows={2}
+                />
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() => patch('landing', { faqs: all.filter((_, j) => j !== i) })}
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              patch('landing', { faqs: [...questionsOf(l), blankQuestion(questionsOf(l))] })
+            }
+          >
+            Add a question
+          </button>
         </FieldGroup>
       </>
     )

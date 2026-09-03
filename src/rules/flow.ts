@@ -187,6 +187,18 @@ export interface ReadyScreen {
   logos: string[]
 }
 
+/** One TV provider tile in the "How to connect" grid. */
+export interface LandingProvider {
+  id: string
+  name: string
+}
+
+/** One question in the landing page's FAQ. */
+export interface LandingQuestion {
+  id: string
+  question: string
+}
+
 export interface LandingScreen {
   /** The two buttons in the bar at the top. */
   navExplore: string
@@ -197,6 +209,59 @@ export interface LandingScreen {
   cta: string
   /** The white one under it. */
   altCta: string
+
+  /* ── The rest of the page, below the hero ──────────────────
+     Figma: 🚀 Acquisition for ai → "MSG+ - Landing page - Mobile"
+     (node 708:173735). The sections whose words a market writes; the
+     schedule, the scores, the news and the fan chat are drawn from what
+     DAZN is showing rather than from anything authored here. Every field
+     is optional so that content saved before the page had them still
+     loads — the screen falls back to the shipped wording. */
+
+  /** Under the hero: the postcode that decides which teams you are shown. */
+  zipHeading?: string
+  zipLabel?: string
+  zipValue?: string
+  zipCta?: string
+
+  /** "Meet the teams" — the tiles of what you get in your area. */
+  teamsEyebrow?: string
+  teamsTitle?: string
+  teamsBody?: string
+  teamsNote?: string
+  teamsCta?: string
+
+  /** The Multiview pitch, and the plan it belongs to. */
+  multiviewEyebrow?: string
+  multiviewBadge?: string
+  multiviewTitle?: string
+  multiviewBody?: string
+  multiviewCta?: string
+
+  /** "How to connect your TV Subscription" and the grid of providers. */
+  providersTitle?: string
+  providersBody?: string
+  /** The gold half of the sentence above. */
+  providersHighlight?: string
+  providersNote?: string
+  providersCta?: string
+  providers?: LandingProvider[]
+
+  /** "Watch on your favourite devices." */
+  devicesTitle?: string
+  /** The second line, which the design sets on its own. */
+  devicesTitleTwo?: string
+  devicesBody?: string
+  devicesNote?: string
+
+  /** The free games offer. */
+  freeTitle?: string
+  freeBody?: string
+  freeCta?: string
+
+  /** The questions at the foot of the page. */
+  faqTitle?: string
+  faqs?: LandingQuestion[]
 }
 
 export interface FlowContent {
@@ -234,6 +299,63 @@ export const defaultFlow: FlowContent = {
     body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
     cta: 'Sign up',
     altCta: 'Sign in with your TV provider',
+
+    // Read off node 708:173735 rather than rewritten, down to the full stop
+    // the design puts after "devices." and the one it leaves off "Anywhere".
+    zipHeading: 'Your home ZIP code unlocks your teams',
+    zipLabel: 'Zip Code:',
+    zipValue: '10001',
+    zipCta: 'Sign Up',
+
+    teamsEyebrow: 'Meet the teams',
+    teamsTitle: 'Your teams, one home',
+    teamsBody: 'Here are the teams available in your area',
+    teamsNote: 'Enter your zip code to see which teams you have access to.',
+    teamsCta: 'Sign Up',
+
+    multiviewEyebrow: 'Multiview',
+    multiviewBadge: 'Ultimate only',
+    multiviewTitle: 'Feel 4 times the action with Multiview',
+    multiviewBody:
+      'Build your perfect gameday with Multiview. Watch up to 4 live game feeds at once.',
+    multiviewCta: 'Get Ultimate',
+
+    providersTitle: 'How to connect your TV Subscription',
+    providersBody:
+      'Once you sign up to DAZN, select your TV provider to get full access to MSG+',
+    providersHighlight: 'at no extra cost.',
+    providersNote: 'Find the full list of TV providers after you log in to DAZN',
+    providersCta: 'Sign in with your TV provider',
+    providers: [
+      { id: 'provider-1', name: 'Spectrum' },
+      { id: 'provider-2', name: 'DIRECTV' },
+      { id: 'provider-3', name: 'fios' },
+      { id: 'provider-4', name: 'optimum.' },
+      { id: 'provider-5', name: 'optimum.tv' },
+      { id: 'provider-6', name: 'fubo' },
+      { id: 'provider-7', name: 'xfinity' },
+      { id: 'provider-8', name: 'altice' },
+      { id: 'provider-9', name: 'Astound' },
+      { id: 'provider-10', name: 'breezeline' },
+    ],
+
+    devicesTitle: 'Watch on your favourite devices.',
+    devicesTitleTwo: 'Anywhere.',
+    devicesBody:
+      'Whether you are at home or on the go, NHL TV is available on a wide range of mobile and connected devices including Smart TVs, Chromecast, Playstation, Xbox and more.',
+    devicesNote: 'Our leading supported devices',
+
+    freeTitle: 'Watch the New York sports for free',
+    freeBody:
+      'Watch all of the FIFA Club World Cup games live and other selected events and highlights',
+    freeCta: 'Get started',
+
+    faqTitle: 'FAQ',
+    faqs: [
+      { id: 'faq-1', question: 'What do I get with the Gotham Bundle?' },
+      { id: 'faq-2', question: 'How to connect your tv provider' },
+      { id: 'faq-3', question: 'What is Multiview?' },
+    ],
   },
 
   plans: { navTitle: 'Choose your subscription' },

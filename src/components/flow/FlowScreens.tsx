@@ -5,6 +5,7 @@ import { useFlowInput } from './live'
 import { cadenceSavings } from '../../rules/cadence'
 import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
 import { styleOf } from '../../rules/tabs'
+import { landingText, providersOf, questionsOf } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
 
 import { Fragment } from 'react'
@@ -28,6 +29,16 @@ import payGpayType from '../../assets/flow/pay-gpay-type.svg'
 import payMastercard from '../../assets/flow/pay-mastercard.svg'
 import payPaypal from '../../assets/flow/pay-paypal.png'
 import payVisa from '../../assets/flow/pay-visa.svg'
+import providerAltice from '../../assets/landing/provider-altice.png'
+import providerAstound from '../../assets/landing/provider-astound.png'
+import providerBreezeline from '../../assets/landing/provider-breezeline.png'
+import providerDirectv from '../../assets/landing/provider-directv.png'
+import providerFios from '../../assets/landing/provider-fios.png'
+import providerFubo from '../../assets/landing/provider-fubo.png'
+import providerOptimum from '../../assets/landing/provider-optimum.png'
+import providerOptimumTv from '../../assets/landing/provider-optimum-tv.png'
+import providerSpectrum from '../../assets/landing/provider-spectrum.svg'
+import providerXfinity from '../../assets/landing/provider-xfinity.png'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type { PlanTab } from '../../rules/content'
@@ -740,5 +751,146 @@ export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
         </div>
       </div>
     </Screen>
+  )
+}
+
+/* ── The landing page below the hero ─────────────────────────
+   Figma: 🚀 Acquisition for ai → "MSG+ - Landing page - Mobile", node
+   708:173735 — 375 wide and 7412 tall. The hero above is the whole of what
+   a tile and the walkthrough show; this is the rest of the page, which the
+   edit view scrolls. */
+
+const providerArt: Record<string, string> = {
+  Spectrum: providerSpectrum,
+  DIRECTV: providerDirectv,
+  fios: providerFios,
+  'optimum.': providerOptimum,
+  'optimum.tv': providerOptimumTv,
+  fubo: providerFubo,
+  xfinity: providerXfinity,
+  altice: providerAltice,
+  Astound: providerAstound,
+  breezeline: providerBreezeline,
+}
+
+/**
+ * The whole landing page, hero included.
+ *
+ * The sections a market writes: the postcode prompt, the teams, Multiview,
+ * the TV providers, the devices, the free games and the questions. What is
+ * drawn between them on the real page — the schedule, the scores, the news,
+ * the fan chat — is DAZN showing what it is showing, not copy anybody here
+ * writes, so it is not drawn at all rather than drawn as invented content.
+ *
+ * The plan picker sits in the middle of the design. It is not rebuilt here:
+ * the cards and their tabs are the ones the plans step already edits, handed
+ * in as children the way the design hands them to a slot.
+ */
+export function LandingPageScreen({
+  content,
+  children,
+}: {
+  content: LandingScreen
+  /** The plan picker, where the page puts it. */
+  children?: ReactNode
+}) {
+  const text = landingText(content)
+  return (
+    <div className="fl fl-page">
+      <LandingFlowScreen content={content} />
+
+      <section className="fl-page__zip">
+        <p className="fl-page__zip-heading">{text.zipHeading}</p>
+        <div className="fl-page__zip-row">
+          <Field label={text.zipLabel} value={text.zipValue} />
+          <Cta>{text.zipCta}</Cta>
+        </div>
+      </section>
+
+      {children && <section className="fl-page__plans">{children}</section>}
+
+      <section className="fl-page__teams">
+        <p className="fl-page__eyebrow">{text.teamsEyebrow}</p>
+        <h2 className="fl-page__title">{text.teamsTitle}</h2>
+        <p className="fl-page__body">{text.teamsBody}</p>
+        <p className="fl-page__note">{text.teamsNote}</p>
+        <Cta>{text.teamsCta}</Cta>
+      </section>
+
+      <section className="fl-page__multiview">
+        <p className="fl-page__eyebrow">
+          {text.multiviewEyebrow}
+          {text.multiviewBadge && (
+            <span className="fl-page__badge">{text.multiviewBadge}</span>
+          )}
+        </p>
+        <h2 className="fl-page__title">{text.multiviewTitle}</h2>
+        <p className="fl-page__body">{text.multiviewBody}</p>
+        <Cta>{text.multiviewCta}</Cta>
+      </section>
+
+      <section className="fl-page__providers">
+        <h2 className="fl-page__title" data-centre="">
+          {text.providersTitle}
+        </h2>
+        <p className="fl-page__body" data-centre="">
+          {text.providersBody}{' '}
+          {text.providersHighlight && (
+            <span className="fl-page__gold">{text.providersHighlight}</span>
+          )}
+        </p>
+        <div className="fl-page__provider-grid">
+          {providersOf(content).map((provider) => (
+            <span className="fl-page__provider" key={provider.id}>
+              {providerArt[provider.name] ? (
+                <img src={providerArt[provider.name]} alt={provider.name} />
+              ) : (
+                provider.name
+              )}
+            </span>
+          ))}
+        </div>
+        <p className="fl-page__note" data-centre="">
+          {text.providersNote}
+        </p>
+        <Cta appearance="outline">{text.providersCta}</Cta>
+      </section>
+
+      <section className="fl-page__devices">
+        <h2 className="fl-page__title">
+          {text.devicesTitle}
+          {text.devicesTitleTwo && (
+            <>
+              <br />
+              {text.devicesTitleTwo}
+            </>
+          )}
+        </h2>
+        <p className="fl-page__body">{text.devicesBody}</p>
+        <p className="fl-page__note">{text.devicesNote}</p>
+      </section>
+
+      <section className="fl-page__free">
+        <h2 className="fl-page__title" data-centre="">
+          {text.freeTitle}
+        </h2>
+        <p className="fl-page__body" data-centre="">
+          {text.freeBody}
+        </p>
+        <Cta>{text.freeCta}</Cta>
+      </section>
+
+      <section className="fl-page__faq">
+        <h2 className="fl-page__title">{text.faqTitle}</h2>
+        <ul className="fl-page__questions">
+          {questionsOf(content).map((one) => (
+            <li className="fl-page__question" key={one.id}>
+              {one.question}
+              <Icon svg={iconArtwork['chevron-right']} size={24} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
   )
 }

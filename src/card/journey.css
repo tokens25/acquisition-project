@@ -200,3 +200,16 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   font-size: var(--font-size-caption-xs);
   text-align: center;
 }
+
+/* The landing page is 7412 tall, so the edit view gives it a window to scroll
+   in rather than growing the panel's neighbour to the height of a page. */
+.jy__viewport[data-page] {
+  max-block-size: 70vh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+/* It is a page, not a row: the plan picker inside it keeps a device's width
+   and scrolls, the way it does everywhere the page is drawn whole. */
+.jy__viewport[data-page] .acq-set {
+  overflow-x: auto;
+}

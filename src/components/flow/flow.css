@@ -1166,3 +1166,125 @@
   -webkit-text-fill-color: #f8f8f8;
   caret-color: #f8f8f8;
 }
+
+/* ── The landing page below the hero ─────────────────────────
+   Figma: "MSG+ - Landing page - Mobile", node 708:173735. The page is one
+   column at the device's width; every section carries the design's 16 side
+   inset and stands 48 off the one above it. */
+.fl-page {
+  gap: var(--space-48);
+  padding-block-end: var(--space-48);
+}
+.fl-page section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  align-items: flex-start;
+  inline-size: 100%;
+  padding-inline: var(--space-16);
+}
+.fl-page__eyebrow {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  margin: 0;
+  color: #afb3b8;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+}
+/* The gold pill that says which plan a feature belongs to. */
+.fl-page__badge {
+  padding: 2px var(--space-8);
+  border-radius: var(--radius-2);
+  background: linear-gradient(160deg, #fbed7d 0%, #f2af3d 100%);
+  color: #060606;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+}
+.fl-page__title {
+  margin: 0;
+  font-size: var(--font-size-heading-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+}
+.fl-page__body {
+  margin: 0;
+  color: #afb3b8;
+  font-size: var(--font-size-button-lg);
+  line-height: 1.5;
+}
+.fl-page__note {
+  margin: 0;
+  color: #858b93;
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.12px;
+  line-height: 1.52;
+}
+/* The design centres the provider and free-games sections and sets the rest
+   to the left, so it is stated per block rather than per section. */
+.fl-page__title[data-centre],
+.fl-page__body[data-centre],
+.fl-page__note[data-centre] {
+  align-self: center;
+  text-align: center;
+}
+.fl-page__gold {
+  color: #f2af3d;
+}
+.fl-page__zip-row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-end;
+  inline-size: 100%;
+}
+.fl-page__zip-row > :first-child {
+  flex: 1;
+  min-inline-size: 0;
+}
+/* The picker sits in the page at the page's own width, and keeps the row's
+   own inset rather than taking the section's. */
+.fl-page__plans {
+  padding-inline: 0;
+}
+.fl-page__provider-grid {
+  display: grid;
+  gap: var(--space-12);
+  grid-template-columns: repeat(2, 1fr);
+  inline-size: 100%;
+}
+.fl-page__provider {
+  display: grid;
+  place-items: center;
+  block-size: 64px;
+  padding-inline: var(--space-16);
+  border-radius: var(--radius-12);
+  background: #16181d;
+  color: #f8f8f8;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+}
+.fl-page__provider img {
+  max-inline-size: 100%;
+  max-block-size: 32px;
+  object-fit: contain;
+}
+.fl-page__questions {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  inline-size: 100%;
+  list-style: none;
+}
+.fl-page__question {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-20);
+  border-block-end: var(--border-1) solid #202327;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+}

@@ -1,6 +1,6 @@
 import './journey.css'
 import { statesOf, tabsOf } from '../rules/tabs'
-import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
+import { LandingPageScreen, SubscriptionFlowScreen } from '../components/flow/FlowScreens'
 import { resolveFlow } from '../rules/layers'
 
 import type { CardSet, Context } from '../rules/content'
@@ -70,7 +70,16 @@ export function StepPreview({
         )}
       </p>
 
-      {step.renderer === 'plans' ? (
+      {step.renderer === 'landing' ? (
+        /* The whole page, which the edit view scrolls. The tiles and the
+           walkthrough keep drawing the hero alone: that is the screen a phone
+           opens on, and a tile of a 7412px page is a tile of nothing. */
+        <div className="jy__viewport" data-device={set.device} data-page="">
+          <LandingPageScreen content={resolveFlow(set).landing}>
+            <CardSetView set={set} context={context} interactive={false} />
+          </LandingPageScreen>
+        </div>
+      ) : step.renderer === 'plans' ? (
         <div className="jy__viewport" data-device={set.device}>
           {/* The same screen the phone draws. The panel beside this edits its
               title and its tabs, and both have to show here or the editor is
