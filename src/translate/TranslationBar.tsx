@@ -41,15 +41,17 @@ function plainReason(note: string | null): { says: string; act: string } {
 }
 
 /**
- * What language this market reads, and how far its words have got.
+ * What language this market is being read in.
  *
  * Nothing to say for an English market, so it draws nothing rather than a row
- * saying no. Machine translation is never silent about being machine
- * translation: the count is on screen until a person has read the strings.
+ * saying no. Nothing to say about a translation that worked either: the
+ * language is the fact, and the fields below carry their own marks. What is
+ * left is the two things a person can act on, a line the Coach held back and a
+ * translation that could not be fetched at all.
  */
 export function TranslationBar({ tx, market }: { tx: TranslationStore; market: string }) {
   if (tx.state === 'off') return null
-  const { machine, reviewed, stale, held } = tx.counts
+  const { held } = tx.counts
 
   return (
     <section className="tr-bar" data-state={tx.state} aria-label="Translation">
@@ -67,45 +69,22 @@ export function TranslationBar({ tx, market }: { tx: TranslationStore; market: s
         )}
       </p>
 
-      {tx.state === 'ready' && (
-        <p className="tr-bar__note">
-          {machine > 0 && (
-            <>
-              <strong>{machine}</strong> machine translated
-            </>
-          )}
-          {machine > 0 && reviewed > 0 && ' · '}
-          {reviewed > 0 && (
-            <>
-              <strong>{reviewed}</strong> kept by a person
-            </>
-          )}
-          {machine + reviewed === 0 && 'Nothing translated yet.'}
-          {stale > 0 && ` · ${stale} out of date since the English changed`}
-          {held > 0 && ` · ${held} left in English`}
-        </p>
-      )}
+      {/* An exception is worth a line. A count of what went right is not. */}
       {tx.state === 'ready' && held > 0 && (
         <p className="tr-bar__warn">
-          {held} {held === 1 ? 'line' : 'lines'} kept the English. The Coach checks a translation the way it checks any line
-          the tool writes, and holds one back rather than showing words nobody read.
+          {held} {held === 1 ? 'line' : 'lines'} kept the English, held back by the Coach.
         </p>
       )}
-      {tx.state === 'ready' && machine > 0 && (
-        <p className="tr-bar__warn">Machine translation. Read a field and keep it before this market is published.</p>
-      )}
+
       {(tx.state === 'unavailable' || tx.state === 'failed') && (
         <>
           <p className="tr-bar__warn">{plainReason(tx.note).says}</p>
           <p className="tr-bar__note">{plainReason(tx.note).act}</p>
           {tx.note && <p className="tr-bar__raw">{tx.note}</p>}
+          <button type="button" className="tr-bar__again" onClick={tx.retranslate}>
+            Try again
+          </button>
         </>
-      )}
-
-      {tx.state !== 'working' && (
-        <button type="button" className="tr-bar__again" onClick={tx.retranslate}>
-          {tx.state === 'ready' ? 'Translate again' : 'Try again'}
-        </button>
       )}
     </section>
   )

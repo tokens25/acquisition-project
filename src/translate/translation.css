@@ -122,43 +122,6 @@
 /* ── "Read this market in another language" ─────────────────────────
    The sheet itself is the Coach's, so only what is new to this one is
    here: the languages a market already has, and the one action. */
-.tsheet__have {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.tsheet__have li {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  border: 1px solid rgb(255 255 255 / 0.14);
-  border-radius: 10px;
-  font-size: 13px;
-}
-.tsheet__have button {
-  border: 0;
-  background: none;
-  color: var(--color-text-tertiary);
-  font-family: inherit;
-  font-size: 12px;
-  cursor: pointer;
-  text-decoration: underline;
-  text-decoration-color: rgb(255 255 255 / 0.25);
-  text-underline-offset: 3px;
-}
-.tsheet__have button:hover { color: var(--color-accent-error-text, #ff8a8a); }
-.tsheet__none { color: var(--color-text-tertiary); font-size: 13px; list-style: none; }
-.tsheet__foot {
-  margin: 0;
-  color: var(--color-text-tertiary);
-  font-size: 12px;
-  line-height: 1.45;
-}
 .tsheet__go {
   inline-size: 100%;
   padding: 11px 14px;

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import closeIcon from '../../assets/icons/action-close-md.svg?raw'
+import { clickedAway } from '../../components/dismiss'
 import { Icon } from '../../components/Icon'
 import { Toggle } from '../../components/Toggle'
 import { CoachOrb } from './CoachOrb'
@@ -157,7 +158,13 @@ export function CoachGoalDialog({ open, tiers, teams, features, examples, onClos
   const ready = goals.length > 0
 
   return (
-    <dialog ref={ref} className="coach-goal" onClose={onClose} aria-labelledby="coach-goal-title">
+    <dialog
+      ref={ref}
+      className="coach-goal"
+      onClose={onClose}
+      onClick={(e) => clickedAway(e) && onClose()}
+      aria-labelledby="coach-goal-title"
+    >
       <form
         method="dialog"
         className="coach-goal__sheet"
