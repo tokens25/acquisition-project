@@ -128,14 +128,19 @@
       'screen button': [8,62,64,10], 'screen divider': [8,76,64,5]
     }},
     flowLanding: { vb: '0 0 80 120', parts: {
-      'landing screen': [4,2,72,116], 'landing frame': [4,2,72,110],
-      'landing picture': [4,8,72,60],
-      'landing wash': [4,2,72,116],
-      'landing bar': [4,2,72,10], 'landing bar buttons': [40,3,34,8],
-      'landing bar button': [40,3,16,8],
-      'landing block': [7,74,66,42], 'landing copy': [7,74,66,18],
-      'landing heading': [7,74,66,7], 'landing body': [7,83,66,9],
-      'landing buttons': [7,96,66,20]
+      'landing screen': [0,0,80,120], 'hero glow': [0,0,80,105],
+      'hero picture': [0,0,80,110], 'hero artwork': [0,0,80,110],
+      'hero artwork crop': [0,0,80,110], 'landing wash': [0,0,80,110],
+      'hero content slot': [3,58,74,46], 'hero content': [3,58,74,46],
+      'landing heading': [7,60,66,7], 'landing body group': [7,69,66,12],
+      'landing body': [7,70,66,10],
+      'landing buttons': [7,84,66,22], 'button and note stack': [7,84,66,22],
+      'landing button group': [7,84,66,16], 'landing button': [7,84,66,7],
+      'landing footnote': [7,101,66,4],
+      'carousel dots': [30,109,20,6], 'carousel dot': [31,111,3,3],
+      'carousel progress bar': [39,111,3,3],
+      'landing bar': [0,0,80,10], 'landing brand': [3,2,7,7],
+      'landing bar buttons': [40,2,36,7], 'landing bar button': [40,2,17,7]
     }},
     flowLandingPage: { vb: '0 0 80 220', parts: {
       'landing page': [0,0,80,220],

@@ -23,6 +23,7 @@ export function landingText(content: LandingScreen): Required<
     body: of('body'),
     cta: of('cta'),
     altCta: of('altCta'),
+    footnote: of('footnote'),
     zipHeading: of('zipHeading'),
     zipLabel: of('zipLabel'),
     zipValue: of('zipValue'),

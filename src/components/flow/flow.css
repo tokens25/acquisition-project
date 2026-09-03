@@ -863,135 +863,299 @@
   inline-size: 100%;
 }
 
-/* ── Landing ───────────────────────────────────────────────── */
+/* ── Landing hero — node 708:173738 ────────────────────────── */
 
-/* One layered box rather than a header over a body: the copy sits on the
-   picture, and the bar at the top has no title to centre. */
-/* ── Landing — node 671:25099 ──────────────────────────────── */
-
+/* The design's own colours, named as it names them, so the values below read
+   as the tokens they are rather than as six hexes that happen to be right. */
 .fl-landing {
-  position: relative;
-  block-size: 100%;
-  overflow: hidden;
-}
-/* The 9:16 frame: 667 tall, the picture's own box rather than the screen's.
-   The five it leaves under itself before the browser bar is the page showing
-   through, which is how the design ends the screen — 667 and 5 are the 672
-   between the status bar and the bar at the foot.
+  --surface-default: #080e12;
+  --surface-max: #f9fafa;
+  --surface-neutral: #3d4549;
+  --surface-soft: rgb(255 255 255 / 10%);
+  --surface-btns: rgb(255 255 255 / 20%);
+  --surface-strong: #dddedf;
+  --text-default: #f9fafa;
+  --text-strong: #080e12;
+  --text-subtle: #b3b9bb;
 
-   It spaces its two children apart, which is what sets the copy 24 above its
-   own bottom edge rather than a margin doing it. The 10 of side padding is
-   why the top bar, drawn at the full 375, sits proud of it. */
-.fl-landing__frame {
   position: relative;
   display: flex;
-  flex: none;
+  /* Stated, because .fl sets a column and the design lays this one across:
+     the hero is the row, and the bar is placed over it rather than above it. */
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  inline-size: 100%;
+  background: var(--surface-default);
+}
+
+/* A 100px blur over a gradient that runs from nothing, through gold, to a
+   trace of green — and stops 96 short of the bottom, so it lifts the picture
+   without reaching the page below it. */
+.fl-landing__glow {
+  position: absolute;
+  inset: 0 0 96px;
+  background: linear-gradient(
+    180deg,
+    rgb(8 14 18 / 0%) 6.5408%,
+    rgb(242 178 64 / 10%) 34.579%,
+    rgb(252 238 126 / 10%) 72.142%,
+    rgb(100 252 220 / 1%) 100%
+  );
+  filter: blur(100px);
+}
+
+.fl-landing__hero {
+  position: relative;
+  display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  inline-size: 100%;
-  block-size: 667px;
-  padding: 0 10px var(--space-24);
+  /* Laid from the bottom: the copy sits at the foot of the picture, and what
+     is above it is picture. */
+  justify-content: flex-end;
+  min-inline-size: 0;
+  block-size: 660px;
   overflow: hidden;
-  background: #080e12;
 }
-/* The crop, in the frame's own percentages: 133.32 by 148.1 of it, pulled
-   left 13.99 and up 21.16. The design's four figures rather than pixels, so
-   the crop survives the frame being drawn at a tile's scale. */
-.fl-landing__hero {
+
+/* Three pictures stacked — a base, a second over it, and a third drawn larger
+   than the frame and pulled up and left so the players sit where they do. */
+.fl-landing__art {
   position: absolute;
-  inset-block-start: -21.16%;
-  inset-inline-start: -13.99%;
-  inline-size: 133.32%;
-  block-size: 148.1%;
+  inset: 0;
+  background: var(--surface-default);
+  pointer-events: none;
+}
+.fl-landing__art > img {
+  position: absolute;
+  inset: 0;
   max-inline-size: none;
+  inline-size: 100%;
+  block-size: 100%;
   object-fit: cover;
 }
-/* One pass rather than three: solid at the top, clear a fifth down, and back
-   to solid at 74 so the copy has ground under it. */
+.fl-landing__art-crop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.fl-landing__art-crop img {
+  position: absolute;
+  inset-block-start: -10.63%;
+  inset-inline-start: -9.25%;
+  max-inline-size: none;
+  inline-size: 118.24%;
+  block-size: 132.75%;
+}
+/* Four stops rather than a fade: clear a fifth of the way down, half dark at
+   the middle, solid by seven tenths — which is what puts the copy on a ground
+   instead of on the picture. */
 .fl-landing__wash {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    #060606 0%,
-    #060606 0%,
-    rgb(6 6 6 / 0%) 20%,
-    #060606 74.038%
+    rgb(8 14 18 / 80%) 0%,
+    rgb(8 14 18 / 0%) 20%,
+    rgb(8 14 18 / 60%) 50%,
+    rgb(8 14 18 / 100%) 70%
   );
 }
 
-/* Drawn at the full 375 inside a frame padded by 10, so it reaches past the
-   picture's side padding to the screen's own edges. */
-.fl-landing__nav {
+.fl-landing__slot {
   position: relative;
   display: flex;
   flex: none;
-  align-items: center;
-  justify-content: space-between;
-  inline-size: 375px;
-  block-size: 50px;
-  padding-inline: var(--space-16);
+  align-items: flex-end;
+  justify-content: center;
+  inline-size: 100%;
+  padding: var(--space-16);
+  overflow: hidden;
 }
-.fl-landing__nav-ctas {
+.fl-landing__content {
   display: flex;
-  gap: var(--space-12);
+  flex: 1;
+  flex-direction: column;
   align-items: center;
+  min-inline-size: 0;
+  max-inline-size: 768px;
 }
-.fl-landing__nav-cta {
-  display: grid;
-  place-items: center;
-  block-size: var(--space-40);
-  padding-inline: var(--space-16);
-  border-radius: var(--radius-8);
-  background: #f8f8f8;
-  color: #060606;
-  font-size: var(--font-size-button-md);
+.fl-landing__title {
+  margin: 0;
+  inline-size: 100%;
+  overflow: hidden;
+  color: var(--text-default);
+  font-size: 24px;
   font-weight: var(--font-weight-bold);
-  white-space: nowrap;
+  line-height: 1.32;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 16px rgb(8 14 18 / 36%);
 }
-.fl-landing__nav-cta[data-appearance='secondary'] {
-  background: rgb(195 209 219 / 10%);
-  color: #f8f8f8;
+.fl-landing__body-wrap {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center;
+  inline-size: 100%;
+  padding-block: var(--space-8);
 }
-
-/* 343 in a 375 frame, with the browser bar under it. */
-/* 343 in the 375, and no bottom margin of its own — the frame's 24 of padding
-   is what holds it off the foot. */
-.fl-landing__block {
-  position: relative;
+.fl-landing__body {
+  margin: 0;
+  inline-size: 100%;
+  color: var(--text-default);
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+  text-align: center;
+}
+.fl-landing__buttons {
   display: flex;
   flex: none;
   flex-direction: column;
   gap: var(--space-16);
   align-items: center;
-  inline-size: 343px;
-}
-.fl-landing__copy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-  align-items: center;
   inline-size: 100%;
-  text-align: center;
+  padding-block-start: var(--space-16);
 }
-.fl-landing__title {
-  margin: 0;
-  font-size: var(--font-size-heading-h5);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.32;
+/* The buttons and the note share one grid cell: the note is dropped 132 from
+   the top rather than following the group, so the block keeps its height
+   whether or not there is a note to draw. */
+.fl-landing__button-stack {
+  display: inline-grid;
+  grid-template-columns: max-content;
+  grid-template-rows: max-content;
+  place-items: start;
 }
-.fl-landing__body {
-  margin: 0;
-  color: #afb3b8;
-  font-size: var(--font-size-caption-sm);
-  line-height: 1.5;
-}
-.fl-landing__ctas {
+.fl-landing__button-group {
   display: flex;
   flex-direction: column;
   gap: var(--space-12);
+  grid-area: 1 / 1;
+  align-items: center;
+  justify-content: center;
+  inline-size: 343px;
+}
+.fl-landing__button {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: center;
   inline-size: 100%;
+  min-block-size: 48px;
+  padding: var(--space-12);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: var(--surface-max);
+  color: var(--text-strong);
+  font-family: inherit;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  overflow: hidden;
+}
+.fl-landing__button[data-appearance='soft'] {
+  padding: var(--space-12) var(--space-16);
+  background: var(--surface-soft);
+  color: var(--text-default);
+}
+.fl-landing__footnote {
+  grid-area: 1 / 1;
+  margin: 0;
+  margin-block-start: 132px;
+  inline-size: 343px;
+  color: var(--text-subtle);
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: 0.12px;
+  text-align: center;
+}
+
+.fl-landing__dots {
+  position: relative;
+  display: flex;
+  flex: none;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16) var(--space-12);
+}
+.fl-landing__dot {
+  display: flex;
+  align-items: center;
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: var(--radius-4);
+  background: var(--surface-btns);
+  overflow: hidden;
+}
+/* The one in progress is a 32 track with an 8 bar in it, not a wider dot. */
+.fl-landing__dot[data-on] {
+  inline-size: 32px;
+}
+.fl-landing__dot-bar {
+  flex: none;
+  inline-size: 8px;
+  block-size: 100%;
+  border-radius: var(--radius-4);
+  background: var(--surface-strong);
+}
+
+/* Over the picture, not above it: the bar is absolute at the top of the whole
+   container, which is why the hero starts at its own top rather than under a
+   row. */
+.fl-landing__nav {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 375px;
+  min-block-size: 44px;
+  padding: var(--space-8) var(--space-16);
+}
+.fl-landing__logo {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: 40px;
+  block-size: 40px;
+}
+.fl-landing__logo img {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.fl-landing__nav-ctas {
+  display: flex;
+  flex: none;
+  gap: var(--space-12);
+  align-items: center;
+  justify-content: center;
+}
+.fl-landing__nav-cta {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 72px;
+  min-block-size: 40px;
+  padding: 6px var(--space-8);
+  border-radius: var(--radius-8);
+  background: var(--surface-max);
+  color: var(--text-strong);
+  /* trimmed/sm — 14, not the 12 the small button token carries. */
+  font-size: var(--font-size-button-md);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.fl-landing__nav-cta[data-appearance='neutral'] {
+  background: var(--surface-neutral);
+  color: var(--text-default);
 }
 
 /* ── Choose your subscription — node 671:25098 ─────────────── */

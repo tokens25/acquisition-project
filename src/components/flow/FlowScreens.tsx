@@ -16,8 +16,6 @@ import cadenceRadioOff from '../../assets/flow/cadence-radio-off.svg?raw'
 import cadenceRadioOn from '../../assets/flow/cadence-radio-on.svg?raw'
 import icInfoFill from '../../assets/flow/ic-info-fill.svg?raw'
 import daznRubik from '../../assets/flow/logo-dazn-rubik.svg?raw'
-import daznVector from '../../assets/flow/logo-dazn-vector.svg?raw'
-import landingHero from '../../assets/flow/landing-hero.png'
 import navSchedule from '../../assets/flow/nav-schedule.svg?raw'
 import radioIdle from '../../assets/flow/radio-idle.svg?raw'
 import radioSelected from '../../assets/flow/radio-selected.svg?raw'
@@ -39,6 +37,10 @@ import providerOptimum from '../../assets/landing/provider-optimum.png'
 import providerOptimumTv from '../../assets/landing/provider-optimum-tv.png'
 import providerSpectrum from '../../assets/landing/provider-spectrum.svg'
 import providerXfinity from '../../assets/landing/provider-xfinity.png'
+import heroBase from '../../assets/landing/hero-1.png'
+import heroMid from '../../assets/landing/hero-2.png'
+import heroFront from '../../assets/landing/hero-3.jpg'
+import daznLogo from '../../assets/landing/logo-dazn.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type { PlanTab } from '../../rules/content'
@@ -305,35 +307,90 @@ function Cta({
  * picture rather than under it, which is why the frame is one layered box
  * instead of a header over a body.
  */
+/**
+ * The hero — node 708:173738, "hero-container".
+ *
+ * 660 tall, and everything in it is laid from the bottom up: the copy sits on
+ * the picture rather than under it, and the top bar floats over the whole thing
+ * rather than taking a row of its own. Three pictures are stacked, which is how
+ * the design builds it — a base, a second over it, and a third drawn larger
+ * than the frame and pulled up and left so the players sit where they do.
+ */
 export function LandingFlowScreen({ content }: { content: LandingScreen }) {
+  const text = landingText(content)
   return (
     <div className="fl fl-landing">
-      {/* The 9:16 frame — 667 of the 812, between the status bar and the
-          browser bar. The top bar and the copy are laid inside it and spaced
-          apart by it, rather than floating over a full-height backdrop. */}
-      <div className="fl-landing__frame">
-        <img className="fl-landing__hero" src={landingHero} alt="" />
-        <span className="fl-landing__wash" aria-hidden="true" />
-        <header className="fl-landing__nav">
-          <Mark svg={daznVector} size={32} />
-          <span className="fl-landing__nav-ctas">
-            <span className="fl-landing__nav-cta">{content.navExplore}</span>
-            <span className="fl-landing__nav-cta" data-appearance="secondary">
-              {content.navSignUp}
-            </span>
+      {/* The glow behind the picture: a 100px blur over a gradient that runs
+          from nothing through gold to a trace of green. It stops 96 short of
+          the bottom, so it lifts the picture without touching the page under
+          it. */}
+      <span className="fl-landing__glow" aria-hidden="true" />
+      <div className="fl-landing__hero">
+        <span className="fl-landing__art" aria-hidden="true">
+          <img src={heroBase} alt="" />
+          <img src={heroMid} alt="" />
+          <span className="fl-landing__art-crop">
+            <img src={heroFront} alt="" />
           </span>
-        </header>
-        <div className="fl-landing__block">
-          <div className="fl-landing__copy">
-            <h3 className="fl-landing__title">{content.title}</h3>
-            <p className="fl-landing__body">{content.body}</p>
-          </div>
-          <div className="fl-landing__ctas">
-            <Cta appearance="subscribe">{content.cta}</Cta>
-            <Cta>{content.altCta}</Cta>
+          {/* Four stops, not a fade: clear at a fifth of the way down, half
+              dark at the middle, and solid by seven tenths, which is what puts
+              the copy on a ground rather than on the picture. */}
+          <span className="fl-landing__wash" />
+        </span>
+
+        <div className="fl-landing__slot">
+          <div className="fl-landing__content">
+            <p className="fl-landing__title">{text.title}</p>
+            <div className="fl-landing__body-wrap">
+              <p className="fl-landing__body">{text.body}</p>
+            </div>
+            {/* The footnote is laid over the buttons rather than after them —
+                the design puts both in one grid cell and drops the note 132
+                from the top, so the group keeps its height whether or not
+                there is a note to draw. */}
+            <div className="fl-landing__buttons">
+              <div className="fl-landing__button-stack">
+                <div className="fl-landing__button-group">
+                  <button type="button" className="fl-landing__button">
+                    {text.cta}
+                  </button>
+                  <button
+                    type="button"
+                    className="fl-landing__button"
+                    data-appearance="soft"
+                  >
+                    {text.altCta}
+                  </button>
+                </div>
+                <p className="fl-landing__footnote">{text.footnote}</p>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Four dots, the third being the one in progress: a 32 wide track with
+            an 8 bar in it, rather than a wider dot. */}
+        <div className="fl-landing__dots" aria-hidden="true">
+          <span className="fl-landing__dot" />
+          <span className="fl-landing__dot" />
+          <span className="fl-landing__dot" data-on="">
+            <span className="fl-landing__dot-bar" />
+          </span>
+          <span className="fl-landing__dot" />
+        </div>
       </div>
+
+      <header className="fl-landing__nav">
+        <span className="fl-landing__logo">
+          <img src={daznLogo} alt="" />
+        </span>
+        <span className="fl-landing__nav-ctas">
+          <span className="fl-landing__nav-cta">{text.navExplore}</span>
+          <span className="fl-landing__nav-cta" data-appearance="neutral">
+            {text.navSignUp}
+          </span>
+        </span>
+      </header>
     </div>
   )
 }

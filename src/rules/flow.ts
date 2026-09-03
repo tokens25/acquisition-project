@@ -209,6 +209,8 @@ export interface LandingScreen {
   cta: string
   /** The white one under it. */
   altCta: string
+  /** The small line under the buttons, laid over them by the design's grid. */
+  footnote?: string
 
   /* ── The rest of the page, below the hero ──────────────────
      Figma: 🚀 Acquisition for ai → "MSG+ - Landing page - Mobile"
@@ -293,12 +295,13 @@ export const defaultFlow: FlowContent = {
     // The first button and the second. The names are what they were when the
     // first drawing had them the other way round; the panel calls them by
     // position, which is what they are.
-    navExplore: 'Log in',
-    navSignUp: 'Explore',
+    navExplore: 'Explore',
+    navSignUp: 'Sign in',
     title: 'MSG+ on DAZN',
     body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
-    cta: 'Sign up',
+    cta: 'Sign Up',
     altCta: 'Sign in with your TV provider',
+    footnote: 'Nationally broadcast games will not be available on DAZN',
 
     // Read off node 708:173735 rather than rewritten, down to the full stop
     // the design puts after "devices." and the one it leaves off "Anywhere".
