@@ -1,7 +1,7 @@
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react'
 import { statesOf, tabsOf } from '../rules/tabs'
 import { resolveFlow } from '../rules/layers'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
 import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
 import { FlowStep } from '../card/FlowStep'
@@ -202,6 +202,35 @@ export function JourneyFrames({
     return first === last ? String(first) : `${first}–${last}`
   }
 
+  /**
+   * A row of screens reads sideways, so a downward wheel moves it sideways.
+   *
+   * Attached here rather than with onWheel, because React registers wheel
+   * listeners as passive and preventDefault inside one does nothing — it only
+   * logs that it could not. The handler then moved the row while the browser
+   * went on scrolling whatever it had picked, and the two fought: a trackpad
+   * swipe moved the row a little and stopped. Owning the listener means the
+   * gesture is either ours or the browser's, never both.
+   *
+   * A genuinely sideways gesture is left alone, so the browser scrolls the row
+   * natively the way it always did.
+   */
+  const rowRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = rowRef.current
+    if (!el) return
+    const onWheel = (e: WheelEvent) => {
+      const room = el.scrollWidth - el.clientWidth
+      if (room <= 0 || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
+      const next = Math.min(room, Math.max(0, el.scrollLeft + e.deltaY))
+      if (next === el.scrollLeft) return
+      el.scrollLeft = next
+      e.preventDefault()
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [])
+
   return (
     <div className="jf" data-arriving={arriving || undefined}>
       <p className="jf__caption">
@@ -217,23 +246,7 @@ export function JourneyFrames({
         )}
       </p>
 
-      <div
-        className="jf__row"
-        // A row of screens reads sideways, so a downward wheel moves it
-        // sideways. Without this the gesture depends on what the pointer
-        // happens to be over: a tile taller than the row gave the wheel to the
-        // page and the row sat still. A genuinely sideways gesture (a trackpad
-        // swipe, shift and wheel) is left alone.
-        onWheel={(e) => {
-          const el = e.currentTarget
-          const room = el.scrollWidth - el.clientWidth
-          if (room <= 0 || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
-          const next = Math.min(room, Math.max(0, el.scrollLeft + e.deltaY))
-          if (next === el.scrollLeft) return
-          el.scrollLeft = next
-          e.preventDefault()
-        }}
-      >
+      <div className="jf__row" ref={rowRef}>
         {groups.map(({ step, skipped, tiles }) => (
           <section
             className="jf__step"
