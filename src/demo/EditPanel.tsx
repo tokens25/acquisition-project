@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { styleOf, tabsOf, tierOnTab, withTabAdded, withTabRemoved } from '../rules/tabs'
+import { forgetTab, styleOf, tabsOf, tierOnTab, withTabAdded, withTabRemoved } from '../rules/tabs'
 import type { PlanTab } from '../rules/content'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
@@ -226,32 +226,46 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 ]}
                 onChange={(v) => write({ style: v as PlanTab['style'] })}
               />
-              {/* Removing the second-to-last takes the last with it: what would
-                  be left is one tab, and one tab divides the plans into the
-                  plans. Which is also why the button says so. */}
-              <button
-                type="button"
-                className="demo__feature-remove"
-                onClick={() =>
-                  updateSet({
-                    planTabs: withTabRemoved(all, i),
-                    tiers: set.tiers.map((t) =>
-                      t.tabs?.length ? { ...t, tabs: t.tabs.filter((id) => id !== one.id) } : t,
-                    ),
-                  })
-                }
-              >
-                {all.length <= 2 ? 'Remove both tabs' : 'Remove'}
-              </button>
+              {/* A pair goes together — one tab divides the plans into the
+                  plans — so a pair has one control under both of them rather
+                  than two buttons that would each do the same thing. */}
+              {all.length > 2 && (
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() =>
+                    updateSet({
+                      planTabs: withTabRemoved(all, i),
+                      tiers: forgetTab(set.tiers, one.id),
+                    })
+                  }
+                >
+                  Remove
+                </button>
+              )}
             </div>
           )
         })}
+        {tabsOf(set).length === 2 && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() =>
+              updateSet({
+                planTabs: [],
+                tiers: tabsOf(set).reduce((tiers, t) => forgetTab(tiers, t.id), set.tiers),
+              })
+            }
+          >
+            Remove tabs
+          </button>
+        )}
         <button
           type="button"
           className="ed-add"
           onClick={() => updateSet({ planTabs: withTabAdded(tabsOf(set)) })}
         >
-          {tabsOf(set).length ? 'Add a tab' : 'Add two tabs'}
+          {tabsOf(set).length ? 'Add a tab' : 'Add tabs'}
         </button>
       </FieldGroup>
 

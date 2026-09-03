@@ -88,3 +88,8 @@ export function withTabRemoved(existing: PlanTab[], index: number): PlanTab[] {
   if (existing.length <= 2) return []
   return existing.filter((_, i) => i !== index)
 }
+
+/** Tiers stop naming a tab that no longer exists. */
+export function forgetTab(tiers: Tier[], tabId: string): Tier[] {
+  return tiers.map((t) => (t.tabs?.length ? { ...t, tabs: t.tabs.filter((id) => id !== tabId) } : t))
+}
