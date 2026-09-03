@@ -431,7 +431,13 @@ export function JourneyFrames({
                           style={{ marginBlockStart: -Math.round(art.status * thumbScale) }}
                           src={art.src}
                           alt=""
-                          loading="lazy"
+                          /* Eager. Lazy loading measures against the nearest
+                             scrollport, and these tiles no longer make one of
+                             their own — so the frames off to the right waited
+                             for a scroll that had to happen before they would
+                             draw, and the row looked empty. They are local
+                             assets a few tens of kilobytes each; there is
+                             nothing to defer. */
                           draggable={false}
                         />
                       </span>
