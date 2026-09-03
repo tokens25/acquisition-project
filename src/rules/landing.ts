@@ -25,6 +25,7 @@ export function landingText(content: LandingScreen): Required<
     altCta: of('altCta'),
     footnote: of('footnote'),
     zipHeading: of('zipHeading'),
+    zipNote: of('zipNote'),
     zipLabel: of('zipLabel'),
     zipValue: of('zipValue'),
     zipCta: of('zipCta'),

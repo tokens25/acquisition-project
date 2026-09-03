@@ -143,7 +143,11 @@
     }},
     flowLandingPage: { vb: '0 0 80 220', parts: {
       'landing page': [0,0,80,220],
-      'postcode block': [4,4,72,20], 'postcode heading': [4,4,72,5], 'postcode row': [4,12,72,10],
+      'postcode block': [0,2,80,24], 'postcode copy': [4,4,72,9],
+      'postcode heading': [4,4,72,4], 'postcode note': [4,9,72,4],
+      'postcode row': [4,16,72,8], 'postcode field': [4,16,44,8],
+      'postcode label': [6,18,16,4], 'postcode value': [30,18,16,4],
+      'postcode edit glyph': [43,18,4,4], 'postcode button': [50,16,26,8],
       'page plan picker': [0,28,80,34],
       'teams block': [4,66,72,26],
       'multiview block': [4,96,72,26],

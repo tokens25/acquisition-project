@@ -198,6 +198,7 @@ function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; s
             sections you would name if you were pointing at it. */}
         <FieldGroup title="Postcode">
           <TextField label="Heading" value={t.zipHeading} pipelineKey={'landing.zipHeading'} onChange={(v) => patch('landing', { zipHeading: v })} />
+          <TextField label="Under the heading" value={t.zipNote} pipelineKey={'landing.zipNote'} onChange={(v) => patch('landing', { zipNote: v })} rows={2} />
           <TextField label="Field" value={t.zipLabel} pipelineKey={'landing.zipLabel'} onChange={(v) => patch('landing', { zipLabel: v })} />
           <TextField label="Code shown" value={t.zipValue} pipelineKey={'landing.zipValue'} onChange={(v) => patch('landing', { zipValue: v })} />
           <TextField label="Button" value={t.zipCta} pipelineKey={'landing.zipCta'} onChange={(v) => patch('landing', { zipCta: v })} />

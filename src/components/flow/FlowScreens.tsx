@@ -39,6 +39,7 @@ import providerSpectrum from '../../assets/landing/provider-spectrum.svg'
 import providerXfinity from '../../assets/landing/provider-xfinity.png'
 import heroArt from '../../assets/landing/hero.jpg'
 import daznLogo from '../../assets/landing/logo-dazn.svg'
+import actionEdit from '../../assets/landing/action-edit.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type { PlanTab } from '../../rules/content'
@@ -850,11 +851,25 @@ export function LandingPageScreen({
     <div className="fl fl-page">
       <LandingFlowScreen content={content} />
 
+      {/* node 708:173789. Its own spacing rather than the page's: 42 above,
+          24 below, and 22 between the heading and the row. */}
       <section className="fl-page__zip">
-        <p className="fl-page__zip-heading">{text.zipHeading}</p>
+        <div className="fl-page__zip-copy">
+          <p className="fl-page__zip-heading">{text.zipHeading}</p>
+          <p className="fl-page__zip-note">{text.zipNote}</p>
+        </div>
         <div className="fl-page__zip-row">
-          <Field label={text.zipLabel} value={text.zipValue} />
-          <Cta>{text.zipCta}</Cta>
+          {/* The field holds 209 and the button takes what is left. */}
+          <span className="fl-page__zip-field">
+            <span className="fl-page__zip-label">{text.zipLabel}</span>
+            <span className="fl-page__zip-value">
+              {text.zipValue}
+              <img className="fl-page__zip-edit" src={actionEdit} alt="" />
+            </span>
+          </span>
+          <button type="button" className="fl-page__zip-cta">
+            {text.zipCta}
+          </button>
         </div>
       </section>
 
