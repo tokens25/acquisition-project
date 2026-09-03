@@ -136,8 +136,6 @@
       'landing buttons': [7,84,66,22], 'button and note stack': [7,84,66,22],
       'landing button group': [7,84,66,16], 'landing button': [7,84,66,7],
       'landing footnote': [7,101,66,4],
-      'carousel dots': [30,109,20,6], 'carousel dot': [31,111,3,3],
-      'carousel progress bar': [39,111,3,3],
       'landing bar': [0,0,80,10], 'landing brand': [3,2,7,7],
       'landing bar buttons': [40,2,36,7], 'landing bar button': [40,2,17,7]
     }},

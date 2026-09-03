@@ -362,17 +362,6 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
             </div>
           </div>
         </div>
-
-        {/* Four dots, the third being the one in progress: a 32 wide track with
-            an 8 bar in it, rather than a wider dot. */}
-        <div className="fl-landing__dots" aria-hidden="true">
-          <span className="fl-landing__dot" />
-          <span className="fl-landing__dot" />
-          <span className="fl-landing__dot" data-on="">
-            <span className="fl-landing__dot-bar" />
-          </span>
-          <span className="fl-landing__dot" />
-        </div>
       </div>
 
       <header className="fl-landing__nav">

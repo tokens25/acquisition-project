@@ -1061,36 +1061,6 @@
   text-align: center;
 }
 
-.fl-landing__dots {
-  position: relative;
-  display: flex;
-  flex: none;
-  gap: var(--space-8);
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-16) var(--space-12);
-}
-.fl-landing__dot {
-  display: flex;
-  align-items: center;
-  inline-size: 8px;
-  block-size: 8px;
-  border-radius: var(--radius-4);
-  background: var(--surface-btns);
-  overflow: hidden;
-}
-/* The one in progress is a 32 track with an 8 bar in it, not a wider dot. */
-.fl-landing__dot[data-on] {
-  inline-size: 32px;
-}
-.fl-landing__dot-bar {
-  flex: none;
-  inline-size: 8px;
-  block-size: 100%;
-  border-radius: var(--radius-4);
-  background: var(--surface-strong);
-}
-
 /* Over the picture, not above it: the bar is absolute at the top of the whole
    container, which is why the hero starts at its own top rather than under a
    row. */
