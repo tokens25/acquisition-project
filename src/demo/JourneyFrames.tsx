@@ -226,6 +226,24 @@ export function JourneyFrames({
     const onWheel = (e: WheelEvent) => {
       const room = el.scrollWidth - el.clientWidth
       if (room <= 0 || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
+      // A screen taller than its tile has first claim on a downward wheel:
+      // the row takes it only once that screen has nothing left to give in
+      // the direction being asked for. Without this the row swallowed every
+      // downward wheel and a tall tile could be scrolled back up but never
+      // down — up being the one direction the row had no answer for, since
+      // it was already at its start.
+      const from = e.target instanceof Element ? e.target : null
+      const inner =
+        from?.closest('.jf__screen') ??
+        from?.closest('.jf__tile')?.querySelector('.jf__screen') ??
+        null
+      if (inner) {
+        const left =
+          e.deltaY > 0
+            ? inner.scrollHeight - inner.clientHeight - inner.scrollTop
+            : inner.scrollTop
+        if (left > 1) return
+      }
       const next = Math.min(room, Math.max(0, el.scrollLeft + e.deltaY))
       if (next === el.scrollLeft) return
       el.scrollLeft = next
