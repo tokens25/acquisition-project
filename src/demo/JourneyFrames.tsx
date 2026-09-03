@@ -302,19 +302,21 @@ export function JourneyFrames({
                     </span>
                   </span>
 
-                  {/* The design first, then the live render, then the name.
-                      A step with an exported frame shows it, so the row reads
-                      as the flow as drawn — including Subscription, whose new
-                      design is not what the card component renders yet. The
-                      live render is still the whole point of the tool, and it
-                      is still what the edit view shows; the row is the flow,
-                      the edit view is the thing being built.
+                  {/* The live render first, then the design, then the name.
+                      The row is the flow as authored: rename a screen's title
+                      and its tile says so. It used to lead with the exported
+                      frame, which read as the flow as drawn — truer to Figma,
+                      but it meant the row was the one place edits did not
+                      show, and a picture that disagrees with the panel beside
+                      it is worse than a render that is rougher than the
+                      design. An exported frame is still what a step the code
+                      cannot draw falls back to.
 
                       The live render takes its width from the tile rather than
                       from the box, so it lines up with an exported frame beside
                       it instead of overhanging by the border. */}
                   <span className="jf__screen">
-                    {step.renderer !== 'stub' && !skipped && !art ? (
+                    {step.renderer !== 'stub' && !skipped ? (
                       <span className="jf__thumb" aria-hidden="true">
                         {/* zoom, not transform: a transform shrinks what is
                             drawn but not the box it occupies, so the tile
