@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CadenceOffer, CardSet, Context, Tier, TierPatch } from '../rules/content'
 import type { PipelineDoc } from '../rules/pipeline'
 import { emptyPipeline } from '../rules/pipeline'
@@ -383,7 +383,13 @@ export function useCardSet(): CardSetStore {
     journeys[0]
   // Applied once, here, so the rail, the frames and the preview all walk the
   // same sequence rather than each re-deriving it.
-  const journey = applyStepOrder(chosen, set.stepOrder?.[chosen.id])
+  /**
+   * Memoised, and not as a nicety: `applyStepOrder` rebuilds the journey when
+   * an order is recorded, so an unmemoised call handed every consumer a new
+   * object on every render. Anything watching the journey by identity then ran
+   * on every render, which is how a re-render loop starts.
+   */
+  const journey = useMemo(() => applyStepOrder(chosen, set.stepOrder?.[chosen.id]), [chosen, set.stepOrder])
   const reordered = isReordered(chosen, set.stepOrder?.[chosen.id])
 
   /**

@@ -135,14 +135,26 @@ export function DemoApp() {
     setSelected(null)
   }
 
-  // The review follows the content: edit a string, fix a finding, and the
-  // rules run again so what was fixed leaves the list.
+  /**
+   * The review follows the content: edit a string, fix a finding, and the
+   * rules run again so what was fixed leaves the list.
+   *
+   * Guarded by what the review is actually made of rather than by the identity
+   * of the objects carrying it. Running the rules sets state, so a dependency
+   * that is a fresh object on every render would run the rules again, and again,
+   * until React gave up and the screen stopped answering clicks. The guard
+   * means the worst any such dependency can now cost is one wasted compare.
+   */
+  const lastReviewed = useRef('')
   useEffect(() => {
     if (!review) return
+    const inputs = JSON.stringify([store.set, store.journey.steps.map((s) => s.id), store.context])
+    if (inputs === lastReviewed.current) return
+    lastReviewed.current = inputs
     const snapshot = buildSnapshot(store.set, store.journey, store.context, planJourney(store.journey, store.context))
     setReview((r) => (r ? { ...runCoach(snapshot, r.context, aiExtra.current), at: r.at, ai: r.ai, aiNote: r.aiNote, start: r.start } : r))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store.set, store.journey, store.context])
+  }, [store.set, store.journey, store.context, review])
 
   /**
    * The Coach's review of the whole flow.

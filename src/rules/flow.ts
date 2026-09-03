@@ -167,6 +167,8 @@ export interface PlansScreen {
   ctaVerb: string
   /** The row at the foot of a card. */
   footer: string
+  /** The ribbon on the Ultimate card, when a plan does not write its own. */
+  badge: string
 }
 
 export interface FlowContent {
@@ -191,6 +193,7 @@ export const defaultFlow: FlowContent = {
     priceCaption: 'Starts at',
     ctaVerb: 'Get',
     footer: 'All features & content',
+    badge: 'BEST EXPERIENCE',
   },
 
   landing: {

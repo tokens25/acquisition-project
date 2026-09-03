@@ -1,4 +1,5 @@
 import type { CardSet } from '../rules/content'
+import { priceUnitFor } from '../rules/derive'
 import { defaultFlow, type FlowContent } from '../rules/flow'
 
 /**
@@ -96,8 +97,25 @@ export function cardStrings(set: CardSet): Translatable[] {
   return out
 }
 
+/**
+ * What reads after a price on a plan card: the "month" in "$29.99 /month".
+ *
+ * It is derived rather than written — a cadence called Monthly is paid by the
+ * month — so it never appeared in the content and never reached the translator,
+ * which left an English word beside a translated price. Collected here per
+ * cadence, under the key the set stores it at, so translating it is the same
+ * act as translating anything else.
+ */
+export function unitStrings(set: CardSet): Translatable[] {
+  return set.cadences.map((cadence) => ({
+    key: `priceUnits.${cadence}`,
+    label: `${cadence} price period`,
+    text: priceUnitFor(set, cadence, 'en'),
+  }))
+}
+
 export function everyString(set: CardSet): Translatable[] {
-  return [...flowStrings(set.flow ?? defaultFlow), ...cardStrings(set)]
+  return [...flowStrings(set.flow ?? defaultFlow), ...cardStrings(set), ...unitStrings(set)]
 }
 
 /** Names a translation must leave exactly as they are. */

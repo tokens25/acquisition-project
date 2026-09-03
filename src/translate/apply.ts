@@ -1,4 +1,5 @@
 import type { CardSet, TierPatch } from '../rules/content'
+import { priceUnitFor } from '../rules/derive'
 import { defaultFlow, type FlowContent } from '../rules/flow'
 
 /** One string's translation, and how far it has got. */
@@ -65,9 +66,15 @@ export function applyCopy(set: CardSet, words: Record<string, string>): CardSet 
   let flow: FlowContent = set.flow ?? defaultFlow
   let tiers = set.tiers
   let featureCatalog = set.featureCatalog
+  let priceUnits = set.priceUnits
 
   for (const [key, text] of Object.entries(words)) {
     if (!text.trim()) continue
+    const unit = /^priceUnits\.(.+)$/.exec(key)
+    if (unit) {
+      priceUnits = { ...priceUnits, [unit[1]]: text }
+      continue
+    }
     const tier = /^plans\.([^.]+)\.(description|badge)$/.exec(key)
     if (tier) {
       tiers = tiers.map((x) => (x.id === tier[1] ? { ...x, [tier[2]]: text } : x))
@@ -81,7 +88,7 @@ export function applyCopy(set: CardSet, words: Record<string, string>): CardSet 
     flow = put(flow, key, text)
   }
 
-  return { ...set, flow, tiers, featureCatalog }
+  return { ...set, flow, tiers, featureCatalog, priceUnits }
 }
 
 /** What the set says at a key today, whichever kind of key it is. */
@@ -94,6 +101,8 @@ export function currentAt(set: CardSet, key: string): string | undefined {
   }
   const feature = /^features\.(.+)$/.exec(key)
   if (feature) return set.featureCatalog.find((f) => f.id === feature[1])?.text
+  const unit = /^priceUnits\.(.+)$/.exec(key)
+  if (unit) return priceUnitFor(set, unit[1], 'en')
   return readAt(set.flow ?? defaultFlow, key)
 }
 
@@ -108,9 +117,11 @@ export function readAt(root: unknown, key: string): string | undefined {
 }
 
 /** A promoted translation, as the patches the store already understands. */
-export function promotion(set: CardSet, key: string, text: string): { flow?: FlowContent; featureCatalog?: CardSet['featureCatalog']; tiers: { id: string; patch: TierPatch }[] } {
+export function promotion(set: CardSet, key: string, text: string): { flow?: FlowContent; featureCatalog?: CardSet['featureCatalog']; priceUnits?: CardSet['priceUnits']; tiers: { id: string; patch: TierPatch }[] } {
   const tier = /^plans\.([^.]+)\.(description|badge)$/.exec(key)
   if (tier) return { tiers: [{ id: tier[1], patch: { [tier[2]]: text } as TierPatch }] }
+  const unit = /^priceUnits\.(.+)$/.exec(key)
+  if (unit) return { priceUnits: { ...set.priceUnits, [unit[1]]: text }, tiers: [] }
   const feature = /^features\.(.+)$/.exec(key)
   if (feature) return { featureCatalog: set.featureCatalog.map((f) => (f.id === feature[1] ? { ...f, text } : f)), tiers: [] }
   return { flow: put(set.flow ?? defaultFlow, key, text), tiers: [] }

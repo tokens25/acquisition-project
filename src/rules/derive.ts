@@ -271,7 +271,7 @@ export function deriveCard(
     showBadge: ultimate,
     // Whether a badge shows is still the switch's call; what it says is
     // authored. An empty field falls back rather than rendering a blank ribbon.
-    badgeText: ultimate ? (tier.badge?.trim() || STATIC.badge) : null,
+    badgeText: ultimate ? (tier.badge?.trim() || plans?.badge?.trim() || STATIC.badge) : null,
     ctaAppearance: ultimate ? 'subscribe' : 'primary',
 
     // Always. The tiles carry "Starts at" above an undiscounted price too —
