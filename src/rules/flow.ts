@@ -490,7 +490,7 @@ export const defaultFlow: FlowContent = {
   },
 
   checkout: {
-    navTitle: 'Choose your subscription',
+    navTitle: 'Choose how you pay',
     note: 'Your payment is encrypted and you can change how you pay at any time.',
     summaryTitle: 'MSG+',
     changeCta: 'Change',
