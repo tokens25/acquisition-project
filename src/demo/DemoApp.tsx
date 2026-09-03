@@ -22,6 +22,12 @@ import { Prototype } from './Prototype'
 import type { Mode } from '../rules/pipeline'
 import { changeMap } from '../rules/pipeline'
 import { FieldMarks } from '../components/fieldMarks'
+import { TranslationBar } from '../translate/TranslationBar'
+import { TranslationMarks, type TranslationMark } from '../translate/marks'
+import { useTranslations } from '../translate/useTranslations'
+import { MarketLanguages } from '../translate/MarketLanguages'
+import { TranslateSheet } from '../translate/TranslateSheet'
+import { currentAt, viewSet } from '../translate/apply'
 import { DevStrings } from './pipeline/DevStrings'
 import { ModeToggle } from './pipeline/ModeToggle'
 import { CodeIcon } from './pipeline/icons'
@@ -61,29 +67,18 @@ export function DemoApp() {
   const [selected, setSelected] = useState<Finding | null>(null)
   /** What the AI added last time, kept so a re-run after an edit keeps it. */
   const aiExtra = useRef<Finding[]>([])
+  useCoachHighlight(selected?.highlight ?? null, [store.set, editing, selected?.id])
   /** Copy the Copy brain wrote and the Coach judged, by finding id. */
   const [suggestions, setSuggestions] = useState<Record<string, CopySuggestion>>({})
-  const [copyState, setCopyState] = useState<'idle' | 'pending' | 'done' | 'unavailable' | 'failed'>('idle')
+  /** Which finding is having its copy written right now, and how that went. */
+  const [writing, setWriting] = useState<string | null>(null)
+  const [copyNote, setCopyNote] = useState<{ id: string; note: string } | null>(null)
 
-  /** Findings with the suggestions they have earned so far. */
+  /** Findings with the copy that has been written for them so far. */
   const withSuggestions = (r: Review): Review => ({
     ...r,
     findings: r.findings.map((f) => (f.suggestion || !suggestions[f.id] ? f : { ...f, suggestion: suggestions[f.id] })),
   })
-
-  /** Ask the Copy brain for the copy the findings call for, then keep what the Coach approves. */
-  const writeCopyFor = (snapshot: ReturnType<typeof buildSnapshot>, context: CoachReviewContext, findings: Finding[]) => {
-    setCopyState('pending')
-    void askCopySuggestions(snapshot, context, findings.filter((f) => !suggestions[f.id])).then((res) => {
-      if (res.status !== 'done') {
-        setCopyState(res.status)
-        return
-      }
-      setSuggestions((prev) => ({ ...prev, ...res.suggestions }))
-      setCopyState('done')
-    })
-  }
-  useCoachHighlight(selected?.highlight ?? null, [store.set, editing, selected?.id])
 
   /** Go to the finding's screen and light up the strings it names. */
   const selectFinding = (f: Finding) => {
@@ -91,14 +86,46 @@ export function DemoApp() {
     if (f.screen !== 'journey') openStep(f.screen)
   }
 
-  /** Apply the fix through the same store methods the panel uses. */
+  /** Write the copy a finding asks for, then let the Coach judge it. */
+  const writeCopy = async (f: Finding, instruction?: string, rewrite = false) => {
+    if (!f.copyTarget || !review) return
+    setWriting(f.id)
+    setCopyNote(null)
+    const snapshot = buildSnapshot(store.set, store.journey, store.context, planned)
+    const res = await askCopySuggestions(snapshot, review.context, [f], instruction, rewrite)
+    setWriting(null)
+    if (res.status !== 'done') {
+      setCopyNote({ id: f.id, note: res.note })
+      return
+    }
+    const written = res.suggestions[f.id]
+    if (!written) {
+      setCopyNote({ id: f.id, note: 'The Copy AI did not answer for this one. Try again.' })
+      return
+    }
+    setSuggestions((prev) => ({ ...prev, [f.id]: written }))
+  }
+
+  /**
+   * Apply the fix through the same store methods the panel uses.
+   *
+   * Where the content proves the change, it happens at once. Where the change
+   * is a piece of copy nobody has written yet, this asks the Copy AI for it
+   * against the Coach's criteria; the Coach judges what comes back, and only
+   * then is there something to apply. So the first press writes and the second
+   * applies, and nothing lands that the Coach has not approved.
+   */
   const applyFix = (f: Finding) => {
+    const written = f.suggestion ?? suggestions[f.id]
     const fix =
       f.fix ??
-      (f.copyTarget && f.suggestion?.approved
-        ? { label: 'Apply the suggested copy', replace: [{ from: f.copyTarget.path, to: f.suggestion.after }] }
+      (f.copyTarget && written?.approved
+        ? { label: 'Apply the suggested copy', replace: [{ from: f.copyTarget.path, to: written.after }] }
         : undefined)
-    if (!fix) return
+    if (!fix) {
+      if (f.copyTarget) void writeCopy(f)
+      return
+    }
     const patches = patchesFor(store.set, fix)
     if (patches.changed === 0) return
     const setPatch: Partial<typeof store.set> = {}
@@ -109,14 +136,26 @@ export function DemoApp() {
     setSelected(null)
   }
 
-  // The review follows the content: edit a string, fix a finding, and the
-  // rules run again so what was fixed leaves the list.
+  /**
+   * The review follows the content: edit a string, fix a finding, and the
+   * rules run again so what was fixed leaves the list.
+   *
+   * Guarded by what the review is actually made of rather than by the identity
+   * of the objects carrying it. Running the rules sets state, so a dependency
+   * that is a fresh object on every render would run the rules again, and again,
+   * until React gave up and the screen stopped answering clicks. The guard
+   * means the worst any such dependency can now cost is one wasted compare.
+   */
+  const lastReviewed = useRef('')
   useEffect(() => {
     if (!review) return
+    const inputs = JSON.stringify([store.set, store.journey.steps.map((s) => s.id), store.context])
+    if (inputs === lastReviewed.current) return
+    lastReviewed.current = inputs
     const snapshot = buildSnapshot(store.set, store.journey, store.context, planJourney(store.journey, store.context))
     setReview((r) => (r ? { ...runCoach(snapshot, r.context, aiExtra.current), at: r.at, ai: r.ai, aiNote: r.aiNote, start: r.start } : r))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store.set, store.journey, store.context])
+  }, [store.set, store.journey, store.context, review])
 
   /**
    * The Coach's review of the whole flow.
@@ -131,8 +170,8 @@ export function DemoApp() {
     aiExtra.current = []
     setSelected(null)
     setSuggestions({})
+    setCopyNote(null)
     const first = runCoach(snapshot, context)
-    writeCopyFor(snapshot, context, first.findings)
     first.start = {
       health: first.health.overall,
       alignment: Object.fromEntries(first.alignment.map((a) => [a.goal, a.score])),
@@ -218,6 +257,72 @@ export function DemoApp() {
    * What the gate says, and the colour it says it in: whether every context
    * the set is sold in still passes the rules.
    */
+  /**
+   * The words this market reads.
+   *
+   * Switching to a market whose locale is not English translates the whole
+   * flow once and shows it. The panel still edits the English, which is the
+   * source; the fields say what the market would read and offer to keep it.
+   * Keeping writes it into that market's own copy, so no other market is
+   * touched, and only kept words can be published.
+   */
+  const tx = useTranslations(store.set, store.context)
+  /** The sheet that asks which languages this market should also read in. */
+  const [translating, setTranslating] = useState(false)
+  const marketSet = useMemo(
+    () => (tx.state === 'off' ? store.set : viewSet(store.set, store.context.market, tx.entries)),
+    [store.set, store.context.market, tx.entries, tx.state],
+  )
+
+  const marketLabel = store.set.markets.find((m) => m.code === store.context.market)?.label ?? store.context.market
+
+  const keepTranslation = (key: string, text: string) => {
+    const market = store.context.market
+    const forMarket = { ...(store.set.copyByMarket?.[market] ?? {}), [key]: text }
+    store.updateSet({ copyByMarket: { ...(store.set.copyByMarket ?? {}), [market]: forMarket } })
+    tx.accept(key)
+  }
+
+  const dropTranslation = (key: string) => {
+    const market = store.context.market
+    const forMarket = { ...(store.set.copyByMarket?.[market] ?? {}) }
+    if (key in forMarket) {
+      delete forMarket[key]
+      store.updateSet({ copyByMarket: { ...(store.set.copyByMarket ?? {}), [market]: forMarket } })
+    }
+    tx.discard(key)
+  }
+
+  /** What each field says in this market, for the field to draw under itself. */
+  const translationMarks = useMemo(() => {
+    const map = new Map<string, TranslationMark>()
+    if (tx.state === 'off') return map
+    const kept = store.set.copyByMarket?.[store.context.market] ?? {}
+    for (const [key, text] of Object.entries(kept)) {
+      map.set(key, {
+        text,
+        state: 'reviewed',
+        language: tx.current.name,
+        onKeep: () => keepTranslation(key, text),
+        onDiscard: () => dropTranslation(key),
+      })
+    }
+    for (const [key, t] of Object.entries(tx.entries)) {
+      if (map.has(key)) continue
+      // A translation of English that has since been edited is not this field's.
+      if (currentAt(store.set, key) !== t.from) continue
+      map.set(key, {
+        text: t.text,
+        state: t.state,
+        language: tx.current.name,
+        onKeep: () => keepTranslation(key, t.text),
+        onDiscard: () => dropTranslation(key),
+      })
+    }
+    return map
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx.entries, tx.state, tx.current.name, store.set, store.context.market])
+
   const gate =
     coverage.failing.length > 0
       ? {
@@ -330,6 +435,7 @@ export function DemoApp() {
 
   return (
 
+    <TranslationMarks.Provider value={translationMarks}>
     <main className="page demo" data-collapsed={collapsed || undefined}>
       {/* The bar spans the window and never moves. Collapsing the panel
           resizes the row beneath it, so the preview opens leftward without
@@ -337,6 +443,7 @@ export function DemoApp() {
       <div className="demo__top" data-mode={pipe.mode}>
         {brand}
         <div className="demo__statusbar">
+          <MarketLanguages tx={tx} onAdd={() => setTranslating(true)} />
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}
           <span className="demo__gate" data-state={gate.state}>
@@ -346,6 +453,7 @@ export function DemoApp() {
         </div>
       </div>
       {coachDialog}
+      <TranslateSheet open={translating} tx={tx} onClose={() => setTranslating(false)} />
       {dev && readyCount > 0 && (
         <p className="pl-devline">
           <CodeIcon size={12} />
@@ -387,6 +495,7 @@ export function DemoApp() {
                   end to end, and the card set's groups would have nothing to
                   say about it. */}
               <div className="demo__fields">
+                <TranslationBar tx={tx} market={marketLabel} />
                 {dev ? (
                   /* Dev reads: every string of the page, its key, and a button
                      to take it. Nothing here writes. */
@@ -415,6 +524,7 @@ export function DemoApp() {
           ) : (
             <>
               <div className="demo__fields">
+                <TranslationBar tx={tx} market={marketLabel} />
                 <DefaultPanel store={store} />
               </div>
 
@@ -451,7 +561,9 @@ export function DemoApp() {
           {editing && step ? (
             <StepPreview
               journey={store.journey}
-              set={store.set}
+              // The market's own words, so the preview reads as that market
+              // reads. The panel beside it still edits the English source.
+              set={marketSet}
               context={store.context}
               onTab={(tab) => store.setContext({ ...store.context, tab })}
             />
@@ -460,7 +572,10 @@ export function DemoApp() {
               planned={shown}
               selectedId={step?.id ?? ''}
               onOpen={openStep}
-              set={store.set}
+              set={marketSet}
+              // A translated market is not the market the frames were exported
+              // from, so the row renders the screens instead of showing them.
+              preferLive={tx.state !== 'off'}
               marker={(id) => (
                 <>
                   <SectionMarker status={pipe.status(id)} />
@@ -482,10 +597,12 @@ export function DemoApp() {
           <aside className="demo__coach" aria-label="Coach review">
             <CoachResults
               review={withSuggestions(review)}
-              copyState={copyState}
+              writingId={writing}
+              copyNote={copyNote}
               onOpen={openStep}
               onSelect={selectFinding}
               onFix={applyFix}
+              onFixWith={(f, instruction) => void writeCopy(f, instruction, true)}
               selectedId={selected?.id ?? null}
               onAgain={() => setCoachOpen(true)}
               onClose={() => setCoachView(false)}
@@ -500,11 +617,12 @@ export function DemoApp() {
       {prototype && (
         <Prototype
           planned={planned}
-          set={store.set}
+          set={marketSet}
           context={store.context}
           onClose={() => setPrototype(false)}
         />
       )}
     </main>
+    </TranslationMarks.Provider>
   )
 }

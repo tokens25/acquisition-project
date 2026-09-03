@@ -23,6 +23,7 @@ export interface FindingInput {
   confidence: Confidence
   severity: Severity
   validation?: Validation
+  alternatives?: { option: string; forIt: string; against: string; chosen?: boolean }[]
   nextStep?: string
   test?: TestProposal
   goals?: Partial<Record<BusinessGoalId, 1 | -1>>

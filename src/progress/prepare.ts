@@ -75,7 +75,7 @@ export interface Prepared {
   /** How the Coach's baseline review came out. */
   findings: number
   health: number
-  /** Where the copy came from, in the words the store uses. */
+  /** Where the words came from: published, file or unreachable. */
   copy: string
   screens: number
   steps: number
@@ -87,32 +87,24 @@ export async function prepare(bus: ProgressBus, job: Job): Promise<Prepared> {
   const copy = (async () => {
     bus.report({ kind: 'copy:start' })
     try {
+      // Bounded, so the lane cannot hang on a store that never answers, and
+      // reported as the fact rather than the sentence: `narrate` owns every
+      // word on the screen, so a phrase cannot be written in two places.
       const state = await Promise.race([
         loadRemote(),
-        new Promise<{ kind: 'timeout' }>((resolve) =>
-          setTimeout(() => resolve({ kind: 'timeout' }), COPY_BUDGET_MS),
-        ),
+        new Promise<{ kind: 'timeout' }>((resolve) => setTimeout(() => resolve({ kind: 'timeout' }), COPY_BUDGET_MS)),
       ])
       if (state.kind === 'timeout') {
-        bus.report({
-          kind: 'copy:failed',
-          reason: `The content store did not answer within ${COPY_BUDGET_MS / 1000}s.`,
-        })
-        return 'this browser only'
+        bus.report({ kind: 'copy:failed', reason: `The content store did not answer within ${COPY_BUDGET_MS / 1000}s.` })
+        return 'unreachable'
       }
-      const where =
-        state.kind === 'published'
-          ? 'the shared copy'
-          : state.kind === 'file'
-            ? 'the copy in the repository'
-            : 'this browser only'
-      bus.report({ kind: 'copy:done', where, reachable: state.kind !== 'unreachable' })
-      return where
+      bus.report({ kind: 'copy:done', source: state.kind, reachable: state.kind !== 'unreachable' })
+      return state.kind
     } catch (error) {
       // A failure is an ending: said plainly, and the lane settles on it
       // rather than hanging until the watchdog.
       bus.report({ kind: 'copy:failed', reason: error instanceof Error ? error.message : String(error) })
-      return 'this browser only'
+      return 'unreachable'
     }
   })()
 

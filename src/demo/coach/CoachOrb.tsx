@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react'
 
+// Its own styles travel with it: the orb is used on the waiting screen too,
+// which does not load the Coach panel's stylesheet.
+import './coach.css'
+
 /**
  * The Coach's face: the crystal-ball loop from the hero tool, masked into a
  * circle. Plays muted and looped; stays on its first frame when the person

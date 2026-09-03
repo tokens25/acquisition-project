@@ -366,6 +366,17 @@ export interface CardSet {
   review?: ReviewState
   /** Where each section stands in the Market → Dev handoff. */
   pipeline?: PipelineDoc
+  /**
+   * Words that belong to one market, keyed the way the panel keys its fields
+   * (`landing.title`, `cadence.options[0].badge`, `tier:msg-plus.description`).
+   *
+   * This is where a translation lands once a person has read it and kept it.
+   * It has to be scoped to the market, because the base copy is what every
+   * other market reads: writing Spanish into `flow` would hand Spanish to
+   * Ireland. Absent means the market reads the base, which is the truth for
+   * every English market.
+   */
+  copyByMarket?: Record<string, Record<string, string>>
   stepId: string
   device: Device
 }

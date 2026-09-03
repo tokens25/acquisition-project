@@ -288,9 +288,21 @@ export interface LandingScreen {
   faqs?: LandingQuestion[]
 }
 
+/**
+ * The words on the plan screen that are not a plan's own copy.
+ *
+ * They were written into the components and into the derived card, which made
+ * them invisible to everything that works on content: they could not be
+ * translated for a market and the Coach never read them. A market cannot
+ * change what they mean, only what they say, which is exactly what copy is.
+ *
+ * `ctaVerb` is the word before a plan's name on its button: "Get MSG+".
+ */
+
+
 export interface FlowContent {
-  landing: LandingScreen
   plans: PlansScreen
+  landing: LandingScreen
   cadence: CadenceScreen
   auth: AuthScreen
   account: AccountScreen
@@ -310,6 +322,14 @@ export interface FlowContent {
  */
 export interface PlansScreen {
   navTitle: string
+  /** Above the price: "Starts at". */
+  priceCaption: string
+  /** The button, before the plan's name. */
+  ctaVerb: string
+  /** The row at the foot of a card. */
+  footer: string
+  /** The ribbon on the Ultimate card, when a plan does not write its own. */
+  badge: string
 }
 
 export const defaultFlow: FlowContent = {
@@ -396,7 +416,15 @@ export const defaultFlow: FlowContent = {
     ],
   },
 
-  plans: { navTitle: 'Choose your subscription' },
+  // As drawn: the section's own nav title, and the standing strings on a card.
+  // The tabs are not here; they are authored as tabs.
+  plans: {
+    navTitle: 'Choose your subscription',
+    priceCaption: 'Starts at',
+    ctaVerb: 'Get',
+    footer: 'All features & content',
+    badge: 'BEST EXPERIENCE',
+  },
   cadence: {
     navTitle: 'Choose your subscription',
     options: [

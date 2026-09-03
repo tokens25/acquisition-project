@@ -5,7 +5,7 @@ import { Icon } from '../../components/Icon'
 import { CoachOrb } from './CoachOrb'
 import { CoachPill } from './CoachPill'
 import { ALIGNMENT_LABEL, BAND_LABEL, gainIfResolved, reachIfResolved } from './review/score'
-import { OUTCOME_UNKNOWN, type Finding, type Review, type Severity } from './review/types'
+import { EVIDENCE_KIND_LABEL, type Finding, type Review, type Severity } from './review/types'
 import { CRITERION_BY_ID, type CriterionId } from './review/doctrine'
 import './coach.css'
 import './results.css'
@@ -20,8 +20,10 @@ export function CoachResults({
   onOpen,
   onSelect,
   onFix,
+  onFixWith,
   selectedId,
-  copyState = 'idle',
+  writingId = null,
+  copyNote = null,
   onAgain,
   onClose,
 }: {
@@ -31,9 +33,13 @@ export function CoachResults({
   onSelect: (finding: Finding) => void
   /** Apply the finding's own fix. */
   onFix: (finding: Finding) => void
+  /** Write the copy again, with the person's own instruction where they gave one. */
+  onFixWith: (finding: Finding, instruction?: string) => void
   selectedId?: string | null
-  /** Where the Copy brain's writing stands, for cards still waiting on it. */
-  copyState?: 'idle' | 'pending' | 'done' | 'unavailable' | 'failed'
+  /** The finding whose copy is being written right now. */
+  writingId?: string | null
+  /** Why a write did not produce anything, for the card that asked. */
+  copyNote?: { id: string; note: string } | null
   onAgain: () => void
   onClose: () => void
 }) {
@@ -223,7 +229,17 @@ export function CoachResults({
                 </span>
               </h3>
               {g.items.map((f) => (
-                <FindingCard key={f.id} f={f} gain={gainIfResolved(findings, f)} copyState={copyState} selected={f.id === selectedId} onSelect={() => onSelect(f)} onFix={() => onFix(f)} />
+                <FindingCard
+                  key={f.id}
+                  f={f}
+                  gain={gainIfResolved(findings, f)}
+                  writing={writingId === f.id}
+                  note={copyNote?.id === f.id ? copyNote.note : null}
+                  selected={f.id === selectedId}
+                  onSelect={() => onSelect(f)}
+                  onFix={() => onFix(f)}
+                  onFixWith={(instruction) => onFixWith(f, instruction)}
+                />
               ))}
             </section>
           ))}
@@ -243,45 +259,88 @@ const CONFIDENCE_WORD: Record<Finding['confidence'], string> = { high: 'Certain'
 function FindingCard({
   f,
   gain,
-  copyState,
+  writing,
+  note,
   selected,
   onSelect,
   onFix,
+  onFixWith,
 }: {
   f: Finding
   gain: number
-  copyState: 'idle' | 'pending' | 'done' | 'unavailable' | 'failed'
+  /** The Copy AI is writing this one's copy right now. */
+  writing: boolean
+  /** Why the last write produced nothing, if it did not. */
+  note: string | null
   selected: boolean
   onSelect: () => void
   onFix: () => void
+  onFixWith: (instruction?: string) => void
 }) {
-  const [details, setDetails] = useState(false)
   const canGo = f.screen !== 'journey'
+  /**
+   * One action opens the finding: it lights up the words on the screen and
+   * shows the reasoning underneath. Two buttons for that read as two
+   * different things when they are the same thing.
+   */
+  const [open, setOpen] = useState(false)
+  const review = () => {
+    const next = !open
+    setOpen(next)
+    if (next && canGo) onSelect()
+  }
+
+  /**
+   * The Coach's brief is not always what you want said. Hovering the fix
+   * button offers the Coach's own brief, or your instruction instead. Keyboard
+   * reaches it the same way: focus lands on the pill, which opens the menu.
+   */
+  const [asking, setAsking] = useState(false)
+  const [prompt, setPrompt] = useState('')
+  /** The instruction the copy on screen was written to, where there was one. */
+  const [askedFor, setAskedFor] = useState<string | null>(null)
+
   const approved = f.suggestion?.approved ? f.suggestion : null
-  const canFix = Boolean(f.fix || (f.copyTarget && approved))
-  const fixLabel = f.fix?.label ?? 'Apply the suggested copy'
+  /** Ready to apply, or ready to be written. Both live on the same button. */
+  const canApply = Boolean(f.fix || approved)
+  const canWrite = Boolean(f.copyTarget) && !canApply
+  /** Anything the Copy AI can write, you can also write to your own brief. */
+  const canPrompt = Boolean(f.copyTarget)
+  const fixLabel = writing
+    ? 'Writing the copy…'
+    : f.fix
+      ? f.fix.label
+      : approved
+        ? 'Apply the suggested copy'
+        : 'Write the fix with AI'
 
   /** What the suggested-copy block says, in every state it can be in. */
   const copyBlock = () => {
     if (f.fix && 'replace' in f.fix) {
       const r = f.fix.replace[0]
-      const before = r.from.startsWith('path:') || r.from.startsWith('tier:') || r.from.startsWith('feature:') ? (f.copyTarget?.current ?? f.highlight?.[0] ?? '') : r.from
+      const before = /^(path|tier|feature):/.test(r.from) ? (f.copyTarget?.current ?? f.highlight?.[0] ?? '') : r.from
       return (
         <div className="cr__copy" data-state="approved">
           <p className="cr__copy-line"><span className="cr__copy-k">Now</span> <s>{before}</s></p>
           <p className="cr__copy-line"><span className="cr__copy-k">Change to</span> <strong>{r.to}</strong></p>
-          <p className="cr__copy-by">Written by the Coach from the content. Approved.</p>
+          <p className="cr__copy-by">The content itself shows the right wording. Approved.</p>
         </div>
       )
     }
     if (f.fix && 'trim' in f.fix) return <p className="cr__copy-by">Removes stray spaces. Nothing is reworded.</p>
     if (!f.copyTarget) return <p className="cr__copy-by">This is not about one piece of copy, so there is nothing to rewrite. The recommendation above is the change.</p>
-    if (f.suggestion?.approved) {
+    if (approved) {
       return (
         <div className="cr__copy" data-state="approved">
           <p className="cr__copy-line"><span className="cr__copy-k">Now</span> <s>{f.copyTarget.current}</s></p>
-          <p className="cr__copy-line"><span className="cr__copy-k">Change to</span> <strong>{f.suggestion.after}</strong></p>
-          <p className="cr__copy-by">{f.suggestion.source === 'ai' ? 'Written by the Copy AI. Approved by the Coach.' : `Written by the Coach from the content. Approved.${f.suggestion.why ? ` ${f.suggestion.why}` : ''}`}</p>
+          <p className="cr__copy-line"><span className="cr__copy-k">Change to</span> <strong>{approved.after}</strong></p>
+          <p className="cr__copy-by">
+            {approved.source === 'ai'
+              ? askedFor
+                ? `Written by the Copy AI to your instruction, “${askedFor}”. The Coach approved it.`
+                : 'Written by the Copy AI to the Coach’s criteria. The Coach approved it.'
+              : `Written from the content. Approved.${approved.why ? ` ${approved.why}` : ''}`}
+          </p>
         </div>
       )
     }
@@ -289,19 +348,18 @@ function FindingCard({
       return (
         <div className="cr__copy" data-state="rejected">
           <p className="cr__copy-line"><span className="cr__copy-k">Proposed</span> <s>{f.suggestion.after}</s></p>
-          <p className="cr__copy-by">The Copy AI proposed this. The Coach did not approve it: {f.suggestion.reason}</p>
+          <p className="cr__copy-by">The Copy AI wrote this. The Coach did not approve it: {f.suggestion.reason} Press the button again to have another go.</p>
         </div>
       )
     }
-    if (copyState === 'pending') return <p className="cr__copy-by" data-state="pending">The Copy AI is writing a suggestion for “{f.copyTarget.label}”…</p>
-    if (copyState === 'unavailable') return <p className="cr__copy-by">A suggestion for “{f.copyTarget.label}” needs the Copy AI. Sign in or add a key, then review again.</p>
-    if (copyState === 'failed') return <p className="cr__copy-by">The Copy AI did not answer this time. Review again to retry.</p>
-    return <p className="cr__copy-by">No suggestion yet for “{f.copyTarget.label}”.</p>
+    if (writing) return <p className="cr__copy-by" data-state="pending">The Copy AI is writing “{f.copyTarget.label}” to the Coach’s criteria…</p>
+    if (note) return <p className="cr__copy-by" data-state="pending">{note}</p>
+    return <p className="cr__copy-by">Press Fix and the Copy AI will write “{f.copyTarget.label}” to the Coach’s criteria. Nothing changes until the Coach approves it.</p>
   }
 
   return (
     <article className="cr__card" data-severity={f.severity} data-selected={selected || undefined}>
-      <button type="button" className="cr__card-head" onClick={onSelect} title={canGo ? 'Go to the screen and show it' : 'About the whole journey'}>
+      <button type="button" className="cr__card-head" onClick={review} title={canGo ? 'Show it on the screen and read the reasoning' : 'Read the reasoning'}>
         <span className="cr__chip" data-severity={f.severity}>
           {f.severity === 'fix' ? 'Fix' : f.severity === 'test' ? 'Test' : f.severity === 'check' ? 'Check' : 'Note'}
         </span>
@@ -312,81 +370,164 @@ function FindingCard({
             +{gain}
           </span>
         )}
-        <span className="cr__conf" data-level={f.confidence} title="How sure the Coach is of the diagnosis. Business impact is separate, and unknown without DAZN evidence.">
+        <span className="cr__conf" data-level={f.confidence}>
           {CONFIDENCE_WORD[f.confidence]}
         </span>
       </button>
 
-      <p className="cr__obs" onClick={onSelect}>{f.observation}</p>
+      <p className="cr__obs" onClick={review}>{f.observation}</p>
       <p className="cr__why">{f.interpretation}</p>
       {(f.recommendation || f.severity === 'check') && (
         <p className="cr__do">{f.recommendation ?? <em className="cr__none">Not enough evidence to change this yet.</em>}</p>
       )}
       {f.conflict && <p className="cr__conflict">{f.conflict}</p>}
 
-      {/* Fix, then Review and Details together on the right. */}
       <div className="cr__actions">
-        {canFix ? (
-          <CoachPill size="sm" title={fixLabel} onClick={onFix}>
-            {fixLabel}
-          </CoachPill>
+        {canApply || canWrite ? (
+          <span className="cr__fix">
+            <CoachPill
+              size="sm"
+              title={canPrompt ? undefined : canWrite ? 'Ask the Copy AI to write this, judged by the Coach' : fixLabel}
+              disabled={writing}
+              onClick={() => {
+                if (canWrite) setOpen(true)
+                onFix()
+              }}
+            >
+              {fixLabel}
+            </CoachPill>
+            {canPrompt && (
+              <>
+                <div className="cr__menu" role="menu">
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setAsking(false)
+                      setOpen(true)
+                      setAskedFor(null)
+                      if (canWrite) onFix()
+                      else onFixWith()
+                    }}
+                  >
+                    <strong>{canWrite ? 'Generate' : 'Generate again'}</strong>
+                    <span>The Copy AI writes it to the Coach's brief</span>
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setOpen(true)
+                      setAsking(true)
+                    }}
+                  >
+                    <strong>Custom prompt</strong>
+                    <span>Say how you want it written</span>
+                  </button>
+                </div>
+              </>
+            )}
+          </span>
         ) : (
-          <span className="cr__go cr__go--off" title={f.copyTarget ? 'Appears once the Coach has approved suggested copy' : 'Nothing to apply automatically'}>
+          <span className="cr__go cr__go--off" title="Nothing to apply automatically">
             Fix
           </span>
         )}
-        {canGo ? (
-          <button type="button" className="cr__go cr__go--right" onClick={onSelect}>
-            Review
-          </button>
-        ) : (
-          <span className="cr__go cr__go--off cr__go--right" title="About the whole journey">Review</span>
-        )}
-        <button type="button" className="cr__go cr__go--details" aria-expanded={details} onClick={() => setDetails((v) => !v)}>
-          {details ? 'Hide details' : 'Details'}
+        <button
+          type="button"
+          className="cr__go cr__go--details"
+          aria-expanded={open}
+          title={canGo ? 'Show it on the screen and read the reasoning' : 'Read the reasoning'}
+          onClick={review}
+        >
+          {open ? 'Hide' : 'Review'}
         </button>
       </div>
 
-      {details && (
+      {open && asking && (
+        <form
+          className="cr__prompt"
+          onSubmit={(e) => {
+            e.preventDefault()
+            const said = prompt.trim()
+            if (!said || writing) return
+            setAskedFor(said)
+            onFixWith(said)
+          }}
+        >
+          <label htmlFor={`prompt-${f.id}`}>How do you want this written?</label>
+          <textarea
+            id={`prompt-${f.id}`}
+            rows={2}
+            value={prompt}
+            autoFocus
+            placeholder="Shorter, and say what they get on the first day"
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                e.currentTarget.form?.requestSubmit()
+              }
+            }}
+          />
+          <div className="cr__prompt-row">
+            <p>The Coach still has to approve it. Prices, plan names and claims stay as they are.</p>
+            <span>
+              <button type="button" className="cr__go" onClick={() => setAsking(false)}>
+                Cancel
+              </button>
+              <CoachPill size="sm" type="submit" disabled={writing || !prompt.trim()}>
+                {writing ? 'Writing the copy…' : 'Write it'}
+              </CoachPill>
+            </span>
+          </div>
+        </form>
+      )}
+
+      {open && (
         <dl className="cr__chain">
-          {f.expectedMechanism && (
+          <dt>Suggested copy</dt>
+          <dd>{copyBlock()}</dd>
+          {f.alternatives && f.alternatives.length > 0 && (
             <>
-              <dt>Why this would help</dt>
-              <dd>{f.expectedMechanism}</dd>
-            </>
-          )}
-          <dt>Business outcome</dt>
-          <dd className={f.businessOutcome === OUTCOME_UNKNOWN ? 'cr__unknown' : undefined}>{f.businessOutcome}</dd>
-          {f.copyTarget && (
-            <>
-              <dt>Suggested copy</dt>
-              <dd>{copyBlock()}</dd>
-            </>
-          )}
-          {f.test && (
-            <>
-              <dt>Test to run</dt>
+              <dt>Options weighed</dt>
               <dd>
-                <div className="cr__test">
-                  <p className="cr__test-h">{f.test.hypothesis}</p>
-                  <p className="cr__test-why">{f.test.why}</p>
-                  <p className="cr__test-row"><span className="cr__test-k">Today</span> {f.test.control}</p>
-                  <p className="cr__test-row"><span className="cr__test-k">Variant</span> {f.test.variant}</p>
-                  <p className="cr__test-row"><span className="cr__test-k">Measure</span> {f.test.primaryMeasure}</p>
-                  <p className="cr__test-row"><span className="cr__test-k">Guardrail</span> {f.test.guardrail}</p>
-                  <p className="cr__test-row"><span className="cr__test-k">We learn</span> {f.test.learn}</p>
-                  <p className="cr__test-row"><span className="cr__test-k">Worth running</span> {f.test.worth}</p>
-                  <p className="cr__test-row"><span className="cr__test-k">Which wins</span> {f.test.win}</p>
-                </div>
+                <ul className="cr__options">
+                  {f.alternatives.map((a) => (
+                    <li key={a.option} data-chosen={a.chosen || undefined}>
+                      <span className="cr__option-name">
+                        {a.option}
+                        {a.chosen && <span className="cr__option-pick">chosen</span>}
+                      </span>
+                      <span className="cr__option-for">For: {a.forIt}</span>
+                      <span className="cr__option-against">Against: {a.against}</span>
+                    </li>
+                  ))}
+                </ul>
               </dd>
             </>
           )}
+          <dt>Where I saw it</dt>
+          <dd>
+            <ul className="cr__evidence">
+              {f.evidence.map((e, i) => (
+                <li key={i}>
+                  <span className="cr__level" data-level={e.kind}>
+                    {EVIDENCE_KIND_LABEL[e.kind]}
+                  </span>
+                  {e.source}
+                </li>
+              ))}
+            </ul>
+          </dd>
           {f.nextStep && (
             <>
-              <dt>What would settle it</dt>
+              <dt>How to be sure</dt>
               <dd>{f.nextStep}</dd>
             </>
           )}
+          <dt>Business outcome</dt>
+          <dd>{f.businessOutcome}</dd>
         </dl>
       )}
     </article>

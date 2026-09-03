@@ -76,8 +76,10 @@ export function ctaLabelFor(
   planName: string,
   offer: Pick<CadenceOffer, 'discount' | 'standardPrice' | 'introPrice' | 'ctaStyle'>,
   market: MarketConfig,
+  /** The word before the name, so a market can say it in its own language. */
+  verb = 'Get',
 ): string {
-  const plain = `Get ${planName}`
+  const plain = `${verb} ${planName}`
   const { discount, standardPrice, introPrice } = offer
   if (!discount || introPrice === null || standardPrice <= 0) return plain
 
@@ -192,6 +194,9 @@ export function deriveCard(
   const money = (amount: number) => formatMoney(amount, locale, currency)
 
   const priceUnit = priceUnitFor(set, context.cadence, locale)
+  // The plan screen's standing words. Content now, so a market reads them in
+  // its own language; the old constants are the floor when nothing is written.
+  const plans = set.flow?.plans
   const missingRefs: string[] = []
 
   /* Add-on. A bundled benefit and a sellable one are mutually exclusive; the
@@ -266,13 +271,13 @@ export function deriveCard(
     showBadge: ultimate,
     // Whether a badge shows is still the switch's call; what it says is
     // authored. An empty field falls back rather than rendering a blank ribbon.
-    badgeText: ultimate ? (tier.badge?.trim() || STATIC.badge) : null,
+    badgeText: ultimate ? (tier.badge?.trim() || plans?.badge?.trim() || STATIC.badge) : null,
     ctaAppearance: ultimate ? 'subscribe' : 'primary',
 
     // Always. The tiles carry "Starts at" above an undiscounted price too —
     // it says the price is a floor, which is true whether or not an intro
     // offer is running.
-    priceCaption: STATIC.priceCaption,
+    priceCaption: plans?.priceCaption?.trim() || STATIC.priceCaption,
     primaryPrice: money(discount && introPrice !== null ? introPrice : standardPrice),
     struckPrice: discount ? money(standardPrice) : null,
     showExplainer: discount,
@@ -287,7 +292,7 @@ export function deriveCard(
       : null,
 
     headerText: tier.planName,
-    ctaLabel: offer.ctaLabel?.trim() || ctaLabelFor(tier.planName, offer, market),
+    ctaLabel: offer.ctaLabel?.trim() || ctaLabelFor(tier.planName, offer, market, plans?.ctaVerb?.trim() || 'Get'),
     addOnIncludedLabel: `Included in ${tier.planName}`,
 
     logoRows,
@@ -299,7 +304,7 @@ export function deriveCard(
 
     features,
     addOn,
-    footerLabel: STATIC.footer,
+    footerLabel: plans?.footer?.trim() || STATIC.footer,
     missingRefs,
   }
 }

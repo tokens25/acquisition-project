@@ -32,6 +32,7 @@ export function clarityBrain(s: JourneySnapshot, ctx: CoachReviewContext): Findi
     { screen: 'cadence', field: 'footnote', text: f.cadence.footnote },
     { screen: 'checkout', field: 'summary title', text: f.checkout.summaryTitle },
     { screen: 'ready', field: 'title', text: f.ready.title },
+    { screen: 'plans', field: 'screen title', text: f.plans?.navTitle ?? '' },
   ]
   for (const { screen, field, text } of strings) {
     if (renders(s, screen) && looksLikePlaceholder(text)) {
@@ -66,8 +67,7 @@ export function clarityBrain(s: JourneySnapshot, ctx: CoachReviewContext): Findi
     { screen: 'checkout', title: f.checkout.navTitle },
     { screen: 'ready', title: f.ready.navTitle },
   ] as { screen: ScreenId; title: string }[]).filter((t) => renders(s, t.screen))
-  const plansStep = s.steps.find((st) => st.id === 'plans')
-  if (plansStep && !plansStep.skipped) titled.unshift({ screen: 'plans', title: plansStep.name })
+  if (renders(s, 'plans') && f.plans?.navTitle) titled.unshift({ screen: 'plans', title: f.plans.navTitle })
   const byTitle = new Map<string, ScreenId[]>()
   for (const t of titled) byTitle.set(t.title.trim(), [...(byTitle.get(t.title.trim()) ?? []), t.screen])
   for (const [title, screens] of byTitle) {

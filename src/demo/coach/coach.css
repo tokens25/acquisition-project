@@ -25,9 +25,8 @@
     opacity 150ms ease;
 }
 .coach-pill[data-size='bar'] {
-  /* What every control in that bar stands at: 5 above and below a 12px line
-     at 1.2, which is how the mode switch's segments are built. */
-  block-size: calc(2 * 5px + 12px * 1.2);
+  /* The bar's own height, so the pill matches whatever the bar is set to. */
+  block-size: var(--bar-control, 28px);
   padding-inline: 12px 16px;
   font-size: 12px;
 }
@@ -71,7 +70,10 @@
 .coach-goal {
   position: fixed;
   inset: 0 0 0 auto;
-  inline-size: min(400px, 100vw);
+  /* One side padding, used by the sheet and by the body that pulls back out
+     to the edge for its scrollbar. */
+  --coach-goal-pad: var(--space-24);
+  inline-size: min(480px, 100vw);
   max-inline-size: none;
   block-size: 100vh;
   max-block-size: none;
@@ -105,7 +107,7 @@
   flex-direction: column;
   gap: var(--space-16);
   block-size: 100%;
-  padding: var(--space-12) var(--space-16) var(--space-16);
+  padding: var(--space-12) var(--coach-goal-pad) var(--space-16);
 }
 
 /* Header row, as on the panel. */
@@ -152,8 +154,8 @@
   flex-direction: column;
   gap: var(--space-16);
   min-block-size: 0;
-  margin: 0 calc(-1 * var(--space-16));
-  padding: 0 var(--space-16) var(--space-8);
+  margin: 0 calc(-1 * var(--coach-goal-pad));
+  padding: 0 var(--coach-goal-pad) var(--space-8);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgb(255 255 255 / 0.18) transparent;
@@ -195,14 +197,20 @@
   gap: 12px;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
+  /* A little more room than the text strictly needs: these rows are read as
+     a list of choices, and 12 above and below sits them apart without a
+     divider. */
+  padding: 12px 14px;
+  /* The findings' own card edge: a full hairline all the way round, which
+     goes green when the goal is on. Two lists of cards in one tool should
+     not be drawn two different ways. */
+  border: 1px solid rgb(255 255 255 / 0.14);
   border-radius: 12px;
-  border-inline-start: 3px solid transparent;
   background: rgb(255 255 255 / 0.05);
   transition: background 120ms ease, border-color 120ms ease;
 }
 .coach-goal__row[data-on] {
-  border-inline-start-color: var(--color-accent-success-text, #7ee2a8);
+  border-color: color-mix(in srgb, var(--color-accent-success-text, #7ee2a8) 55%, transparent);
   background: rgb(126 226 168 / 0.08);
 }
 .coach-goal__row[data-asking] { align-items: flex-start; }
@@ -210,7 +218,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   min-inline-size: 0;
   font-size: 14px;
   font-weight: var(--font-weight-bold);
@@ -311,18 +319,40 @@
 
 
 /* ── The highlight: the Coach pointing at a string ──────────────── */
+/* A thin ring and a wash of the same amber, rather than a heavy outline: it
+   sits over a screen someone is reading, so it marks the words without
+   becoming the loudest thing on the phone.
+
+   One ring, never two, and which side it is drawn on depends on where the
+   words are. On a phone screen the ring goes just inside the box, because a
+   frame clips whatever leaves it and an outside ring came out with a fill and
+   no border. In the panel the field already has an edge of its own, so the
+   ring goes just outside it: an inside ring there would sit a hair within
+   that edge and read as a double border. */
 .coach-hl {
   position: relative;
   border-radius: 6px;
-  outline: 2px solid #ffc44d;
-  outline-offset: 3px;
-  box-shadow: 0 0 0 6px rgb(255 196 77 / 0.18), 0 0 24px rgb(255 196 77 / 0.35);
-  animation: coach-hl-in 900ms ease-out;
-  transition: outline-color 200ms ease;
+  background-color: rgb(255 196 77 / 0.12);
+  /* Drawn 3px within the box rather than on its edge. Some of these strings
+     sit flush inside a card that clips with rounded corners, and a ring on
+     the edge lost its bottom corners to that curve. */
+  outline: 1px solid rgb(255 196 77 / 0.9);
+  outline-offset: -3px;
+  animation: coach-hl-in 700ms ease-out;
+  transition: background-color 200ms ease, outline-color 200ms ease;
+}
+.demo__panel .coach-hl {
+  outline: 1px solid rgb(255 196 77 / 0.85);
+  outline-offset: 2px;
+  box-shadow: none;
 }
 @keyframes coach-hl-in {
-  0% { outline-color: transparent; box-shadow: 0 0 0 0 rgb(255 196 77 / 0); }
-  30% { outline-color: #ffc44d; box-shadow: 0 0 0 10px rgb(255 196 77 / 0.3), 0 0 32px rgb(255 196 77 / 0.5); }
+  0% {
+    background-color: rgb(255 196 77 / 0);
+  }
+  35% {
+    background-color: rgb(255 196 77 / 0.26);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .coach-hl { animation: none; }

@@ -134,6 +134,12 @@ export function screenStrings(s: JourneySnapshot): ScreenString[] {
   const add = (screen: ScreenId, field: string, text: string | undefined) => {
     if (renders(s, screen) && text && text.trim()) out.push({ screen, field, text })
   }
+  // The plan screen's own words, which are content now rather than constants.
+  add('plans', 'screen title', f.plans?.navTitle)
+  add('plans', 'price caption', f.plans?.priceCaption)
+  add('plans', 'button verb', f.plans?.ctaVerb)
+  add('plans', 'card footer', f.plans?.footer)
+  add('plans', 'card badge', f.plans?.badge)
   add('landing', 'title', f.landing.title)
   add('landing', 'body', f.landing.body)
   add('landing', 'button', f.landing.cta)

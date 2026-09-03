@@ -1,0 +1,249 @@
+/* The translation bar, above the panel's fields. */
+.tr-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.04);
+}
+.tr-bar[data-state='working'] {
+  border-color: rgb(255 196 77 / 0.4);
+}
+.tr-bar__head {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin: 0;
+}
+.tr-bar__lang {
+  font-size: var(--font-size-body-default);
+  font-weight: var(--font-weight-bold);
+}
+.tr-bar__market {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+.tr-bar__working {
+  margin-inline-start: auto;
+  color: #ffc44d;
+  font-size: var(--font-size-caption-xs);
+}
+.tr-bar__note,
+.tr-bar__warn {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.45;
+}
+.tr-bar__warn {
+  color: #ffc44d;
+}
+.tr-bar__raw {
+  margin: 2px 0 0;
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+.tr-bar__again {
+  align-self: flex-start;
+  margin-block-start: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.tr-bar__again:hover {
+  color: var(--color-text-primary);
+}
+
+/* A field's own translation, under it. */
+/* A field's own translation, under it. The words get the width; the state and
+   the two actions sit on their own line so a long sentence is not squeezed
+   into a column three words wide. */
+.tr-note {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 8px;
+  margin: 6px 0 0;
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.45;
+}
+.tr-note__state {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(255 196 77 / 0.16);
+  color: #ffc44d;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tr-note[data-state='reviewed'] .tr-note__state {
+  background: rgb(126 226 168 / 0.18);
+  color: var(--color-accent-success-text, #7ee2a8);
+}
+.tr-note__text {
+  grid-column: 1;
+  min-inline-size: 0;
+  color: var(--color-text-primary);
+}
+.tr-note__acts {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  grid-column: 2;
+  white-space: nowrap;
+}
+.tr-note__act {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.tr-note__act:hover {
+  color: var(--color-text-primary);
+}
+
+/* ── The market's languages ─────────────────────────────────────────
+   A dialog in the middle of the window, not a sheet down the side. The
+   Coach's sheet is a side panel because it is read beside the journey it
+   is about; this one is a short list and one button, so it sits in the
+   middle and gets out of the way. It borrows the Coach's blurred
+   backdrop and its rows, and overrides the geometry. Written as
+   `dialog.tsheet` because a bare class ties with the Coach's own and the
+   loser is decided by which stylesheet happens to load last. */
+dialog.tsheet {
+  inset: 0;
+  inline-size: min(420px, calc(100vw - 32px));
+  max-inline-size: none;
+  block-size: auto;
+  /* Tall enough for the whole list where the window allows it, so the common
+     case is a dialog you read rather than one you scroll. */
+  max-block-size: min(680px, calc(100vh - 80px));
+  margin: auto;
+  --coach-goal-pad: var(--space-20);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgb(0 0 0 / 0.5);
+}
+dialog.tsheet[open] {
+  animation: tsheet-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes tsheet-in {
+  from { opacity: 0; transform: scale(0.97); }
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog.tsheet[open] { animation: none; }
+}
+/* The dialog is as tall as its content up to the cap, and the list inside is
+   what scrolls when there is more than fits. Laying the dialog out as a flex
+   column is what keeps the button at the foot on screen; without it the form
+   takes its own height and the foot falls outside the box. `[open]` because a
+   closed dialog is display:none, and a display of its own would show it. */
+dialog.tsheet[open] { display: flex; }
+dialog.tsheet .coach-goal__sheet {
+  flex: 1;
+  block-size: auto;
+  min-block-size: 0;
+  max-block-size: 100%;
+}
+/* Tighter rows than the Coach's, and only here. A goal is a sentence with a
+   hint under it and earns the room; a language is one word, so the same
+   spacing reads as a list held apart for no reason. */
+dialog.tsheet .coach-goal__inset { gap: 5px; }
+dialog.tsheet .coach-goal__row { padding: 7px 12px; }
+dialog.tsheet .coach-goal__row-text { font-size: 13px; }
+dialog.tsheet .coach-goal__row-hint {
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.tsheet__go {
+  inline-size: 100%;
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--color-text-primary);
+  color: #080e12;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.tsheet__go:disabled { opacity: 0.4; cursor: default; }
+
+/* ── The languages one market reads, in the top bar ─────────────────
+   Only ever this market's: a language given to Spain is not a language
+   Germany has, because the two markets do not share their screens. */
+.mlang {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  block-size: var(--bar-control, 28px);
+  padding-inline: 3px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 9px;
+}
+.mlang[data-busy] { border-color: rgb(255 196 77 / 0.5); }
+.mlang__lang {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--color-text-tertiary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.mlang__lang:hover { color: var(--color-text-primary); }
+.mlang__lang[data-on] { background: rgb(255 255 255 / 0.1); color: var(--color-text-primary); }
+.mlang__add {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border: 0;
+  border-inline-start: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.mlang__add:only-child { border-inline-start: 0; }
+.mlang__add:hover { color: var(--color-text-primary); }
+.mlang__spin {
+  inline-size: 11px;
+  block-size: 11px;
+  border: 1.5px solid rgb(255 196 77 / 0.3);
+  border-block-start-color: #ffc44d;
+  border-radius: 50%;
+  animation: mlang-spin 700ms linear infinite;
+}
+@keyframes mlang-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mlang__spin { animation-duration: 2s; }
+}

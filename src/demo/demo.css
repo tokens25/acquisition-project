@@ -257,10 +257,16 @@
 }
 .jf__row {
   display: flex;
-  gap: var(--space-20);
-  align-items: start;
+  gap: var(--space-24);
+  align-items: flex-start;
+  /* Sideways only. Vertical was `auto`, which left the browser to decide
+     whether a downward wheel meant this row or the page, and over a tall tile
+     it chose the page. The row now says what it scrolls and the handler in
+     JourneyFrames turns a downward wheel into sideways movement. */
   overflow-x: auto;
-  padding-block-end: var(--space-12);
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  padding-block-end: var(--space-8);
 }
 .jf__step {
   display: flex;
@@ -705,16 +711,17 @@
    ships at. A 40px button beside a 32px switch reads as two toolbars that
    happen to touch, and the switch is the one whose size is fixed by its own
    internals — so the buttons are what move. */
-/* Every control in the bar stands as tall as the mode switch's segments:
-   5 above and below a 12px line at 1.2. Written as that sum rather than as
-   the 24.4 it comes to, so it is the same figure the switch is built from
-   rather than a decimal copied off a measurement of it.
-
-   The switch itself is taller than its segments — it wraps them in a 3px
-   inset and an edge — which is the one thing in the row that is meant to
-   sit proud of the others. */
+/* One height for every control in the bar, set here and read by all of them:
+   the buttons, the mode switch and the Coach's pill. Written as a single
+   token rather than the same sum repeated in three files, which is how the
+   switch came to stand 8px proud of its neighbours. */
+/* The bar's one control height, on the row rather than on the actions, so a
+   control at either end of it reads the same figure. */
+.demo__statusbar {
+  --bar-control: 28px;
+}
 .demo__actions .dazn-btn {
-  block-size: calc(2 * 5px + 12px * 1.2);
+  block-size: var(--bar-control);
   gap: 6px;
   padding-inline: 12px;
   font-size: 12px;
@@ -722,7 +729,7 @@
 /* Icon only: square, so the glyph sits in the middle rather than left of an
    absent label. */
 .demo__actions .dazn-btn:not(:has(.dazn-btn__label:not(:empty))) {
-  inline-size: calc(2 * 5px + 12px * 1.2);
+  inline-size: var(--bar-control);
   padding-inline: 0;
 }
 .demo__savenote {
@@ -866,6 +873,19 @@
    1100px is the set at full size (three 347 cards and two 24 gaps, with room
    for a fourth on a partner storefront); 0.138 brings that to the tile's 152
    of inner width. */
+/* A screen inside a tile is a thumbnail, not a screen: its own buttons must
+   not take the click meant for the tile, and nothing inside it scrolls.
+   A tile whose page is taller than the tile (Checkout, Login) otherwise owns
+   the wheel while the pointer is over it, and the row behind it stops
+   scrolling sideways for as long as you are on that step. */
+.jf__tile .jf__thumb,
+.jf__tile .jf__thumb * {
+  pointer-events: none;
+}
+.jf__tile .jf__screen {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
 .jf__thumb {
   display: grid;
   /* Top-aligned, the way a browser thumbnail is: a tall set loses its footer
