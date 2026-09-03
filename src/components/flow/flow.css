@@ -1740,3 +1740,137 @@
   text-transform: uppercase;
   white-space: nowrap;
 }
+
+/* ── Meet the teams — node 708:173983 ──────────────────────── */
+
+/* Rails/MobileWeb/1-5: 40 above and below, 24 between the words and the rail. */
+.fl-page .fl-page__teams {
+  gap: var(--space-24);
+  padding-block: 40px;
+}
+.fl-page__teams-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center;
+  inline-size: 100%;
+}
+.fl-page__teams-eyebrow {
+  margin: 0;
+  overflow: hidden;
+  color: #b3b9bb;
+  font-size: var(--font-size-button-md);
+  font-weight: var(--font-weight-bold);
+  line-height: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fl-page__teams-title {
+  margin: 0;
+  inline-size: 100%;
+  color: #f8f8f8;
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25;
+  text-align: center;
+}
+.fl-page__teams-body {
+  margin: 0;
+  inline-size: 100%;
+  color: #b3b9bb;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+  text-align: center;
+}
+/* 359 rather than 343: the rail runs to the screen's edge on the right, which
+   is what says there is more of it. */
+.fl-page__teams-rail {
+  display: flex;
+  gap: var(--space-16);
+  align-items: flex-start;
+  inline-size: 359px;
+  max-inline-size: 359px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-page__teams-rail::-webkit-scrollbar {
+  display: none;
+}
+.fl-team {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: flex-start;
+  inline-size: 150px;
+}
+.fl-team__tile {
+  position: relative;
+  inline-size: 150px;
+  block-size: 150px;
+  border-radius: var(--radius-10);
+  overflow: hidden;
+}
+/* Centred on the tile but 9 above its middle, which is what leaves room for
+   the name under it. */
+.fl-team__art {
+  position: absolute;
+  inset-block-start: calc(50% - 9px);
+  inset-inline-start: 50%;
+  block-size: 80px;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+.fl-team__plate {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: var(--radius-10);
+  object-fit: cover;
+}
+.fl-team__wash {
+  position: absolute;
+  inset-block-start: 96px;
+  inset-inline-start: 0;
+  inline-size: 150px;
+  block-size: 54px;
+  opacity: 0.6;
+  background: linear-gradient(180deg, rgb(8 14 18 / 0%) 0%, #080e12 100%);
+}
+.fl-team__content {
+  position: absolute;
+  inset-block-start: 104px;
+  inset-inline-start: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: flex-start;
+  justify-content: center;
+}
+.fl-team__city {
+  color: #b3b9bb;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  line-height: normal;
+  text-shadow: 0 0 16px #080e12;
+}
+.fl-team__name {
+  color: #f9fafa;
+  /* heading/sm — 18, which the token set carries as body-default. */
+  font-size: var(--font-size-body-default);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.38;
+  text-shadow: 0 0 24px #080e12;
+}
+.fl-team__label {
+  margin: 0;
+  inline-size: 100%;
+  color: #f8f8f8;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: normal;
+}

@@ -49,6 +49,10 @@ import schedP5 from '../../assets/landing/schedule/p5.png'
 import schedP6 from '../../assets/landing/schedule/p6.png'
 import icPlay from '../../assets/landing/schedule/ic-play.svg'
 import icReminder from '../../assets/landing/schedule/ic-reminder.svg'
+import teamKnicks from '../../assets/landing/teams/knicks.png'
+import teamRangers from '../../assets/landing/teams/rangers.png'
+import teamIslanders from '../../assets/landing/teams/islanders.png'
+import teamPlaceholder from '../../assets/landing/teams/tile-placeholder.png'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type { PlanTab } from '../../rules/content'
@@ -893,6 +897,69 @@ function ScheduleSection({ heading }: { heading: string }) {
   )
 }
 
+
+/* ── Meet the teams — node 708:173983 ────────────────────────
+   A rail of eight: the three the design fills in, and the five it leaves as
+   the tile's own template. Which teams a market shows is not written here —
+   the design draws these, so these are what is drawn. */
+
+const TEAMS = [
+  { id: 'knicks', ground: '#1b418b', art: teamKnicks, width: 98, city: 'New York', name: 'Knicks' },
+  { id: 'rangers', ground: '#e51937', art: teamRangers, width: 83, city: 'New York', name: 'Rangers' },
+  { id: 'islanders', ground: '#003087', art: teamIslanders, width: 83, city: 'New York', name: 'Islanders' },
+] as const
+
+function TeamsRail({
+  eyebrow,
+  title,
+  body,
+}: {
+  eyebrow: string
+  title: string
+  body: string
+}) {
+  return (
+    <section className="fl-page__teams">
+      <div className="fl-page__teams-head">
+        <p className="fl-page__teams-eyebrow">{eyebrow}</p>
+        <p className="fl-page__teams-title">{title}</p>
+        <p className="fl-page__teams-body">{body}</p>
+      </div>
+      <div className="fl-page__teams-rail">
+        {TEAMS.map((team) => (
+          <div className="fl-team" key={team.id}>
+            <div className="fl-team__tile" style={{ background: team.ground }}>
+              <img
+                className="fl-team__art"
+                src={team.art}
+                alt=""
+                style={{ inlineSize: `${team.width}px` }}
+              />
+              {/* 54 of gradient at 60%, from nothing to the page colour — what
+                  the name is read against. */}
+              <span className="fl-team__wash" aria-hidden="true" />
+              <span className="fl-team__content">
+                <span className="fl-team__city">{team.city}</span>
+                <span className="fl-team__name">{team.name}</span>
+              </span>
+            </div>
+          </div>
+        ))}
+        {/* The tile's own template, which the design leaves standing five
+            times over rather than filling in. */}
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div className="fl-team" key={`slot-${i}`}>
+            <div className="fl-team__tile">
+              <img className="fl-team__plate" src={teamPlaceholder} alt="" />
+            </div>
+            <p className="fl-team__label">Title</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 /* ── The landing page below the hero ─────────────────────────
    Figma: 🚀 Acquisition for ai → "MSG+ - Landing page - Mobile", node
    708:173735 — 375 wide and 7412 tall. The hero above is the whole of what
@@ -974,13 +1041,11 @@ export function LandingPageScreen({
         </section>
       )}
 
-      <section className="fl-page__teams">
-        <p className="fl-page__eyebrow">{text.teamsEyebrow}</p>
-        <h2 className="fl-page__title">{text.teamsTitle}</h2>
-        <p className="fl-page__body">{text.teamsBody}</p>
-        <p className="fl-page__note">{text.teamsNote}</p>
-        <Cta>{text.teamsCta}</Cta>
-      </section>
+      <TeamsRail
+        eyebrow={text.teamsEyebrow}
+        title={text.teamsTitle}
+        body={text.teamsBody}
+      />
 
       <section className="fl-page__multiview">
         <p className="fl-page__eyebrow">

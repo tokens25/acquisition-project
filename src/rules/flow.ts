@@ -242,8 +242,6 @@ export interface LandingScreen {
   teamsEyebrow?: string
   teamsTitle?: string
   teamsBody?: string
-  teamsNote?: string
-  teamsCta?: string
 
   /** The Multiview pitch, and the plan it belongs to. */
   multiviewEyebrow?: string
@@ -331,8 +329,6 @@ export const defaultFlow: FlowContent = {
     teamsEyebrow: 'Meet the teams',
     teamsTitle: 'Your teams, one home',
     teamsBody: 'Here are the teams available in your area',
-    teamsNote: 'Enter your zip code to see which teams you have access to.',
-    teamsCta: 'Sign Up',
 
     multiviewEyebrow: 'Multiview',
     multiviewBadge: 'Ultimate only',

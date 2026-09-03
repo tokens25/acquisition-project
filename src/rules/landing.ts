@@ -35,8 +35,6 @@ export function landingText(content: LandingScreen): Required<
     teamsEyebrow: of('teamsEyebrow'),
     teamsTitle: of('teamsTitle'),
     teamsBody: of('teamsBody'),
-    teamsNote: of('teamsNote'),
-    teamsCta: of('teamsCta'),
     multiviewEyebrow: of('multiviewEyebrow'),
     multiviewBadge: of('multiviewBadge'),
     multiviewTitle: of('multiviewTitle'),

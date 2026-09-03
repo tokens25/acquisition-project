@@ -217,8 +217,6 @@ function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; s
           <TextField label="Over the heading" value={t.teamsEyebrow} pipelineKey={'landing.teamsEyebrow'} onChange={(v) => patch('landing', { teamsEyebrow: v })} />
           <TextField label="Heading" value={t.teamsTitle} pipelineKey={'landing.teamsTitle'} onChange={(v) => patch('landing', { teamsTitle: v })} />
           <TextField label="Under the heading" value={t.teamsBody} pipelineKey={'landing.teamsBody'} onChange={(v) => patch('landing', { teamsBody: v })} rows={2} />
-          <TextField label="Under the tiles" value={t.teamsNote} pipelineKey={'landing.teamsNote'} onChange={(v) => patch('landing', { teamsNote: v })} rows={2} />
-          <TextField label="Button" value={t.teamsCta} pipelineKey={'landing.teamsCta'} onChange={(v) => patch('landing', { teamsCta: v })} />
         </FieldGroup>
 
         <FieldGroup title="Multiview">
