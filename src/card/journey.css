@@ -198,6 +198,12 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 .jy__viewport .acq-set {
   overflow-x: auto;
   scrollbar-width: none;
+  /* Chains out of the row when it reaches its end. The row contains its own
+     overscroll on a device, where it is the only thing that scrolls sideways.
+     Inside a frame that also scrolls sideways, containing it means a screen
+     wider than the pane can never be reached from over the cards — and the
+     cards are most of the screen. */
+  overscroll-behavior-x: auto;
 }
 .jy__viewport .acq-set::-webkit-scrollbar {
   display: none;
