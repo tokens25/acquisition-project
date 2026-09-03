@@ -28,10 +28,17 @@ export function TranslateSheet({ open, tx, onClose }: { open: boolean; tx: Trans
   }, [open])
 
   // Opening reads the market as it is now, not as it was last time.
-  useEffect(() => {
+  //
+  // Adjusted while rendering rather than in an effect. An effect would draw
+  // the last market's languages first and correct them a frame later, which
+  // is a flash of the wrong answer; setting state during a render re-runs it
+  // before anything is painted.
+  const [seen, setSeen] = useState(`${open}|${tx.market.code}`)
+  const showing = `${open}|${tx.market.code}`
+  if (seen !== showing) {
+    setSeen(showing)
     if (open) setOn(tx.languages.map((l) => l.code))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, tx.market.code])
+  }
 
   const rows = [...tx.languages, ...tx.offerable]
   const added = on.filter((c) => !has.includes(c))

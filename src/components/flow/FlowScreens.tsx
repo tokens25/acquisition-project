@@ -376,16 +376,12 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
             <div className="fl-landing__buttons">
               <div className="fl-landing__button-stack">
                 <div className="fl-landing__button-group">
-                  <button type="button" className="fl-landing__button">
+                  <span className="fl-landing__button" role="button">
                     {text.cta}
-                  </button>
-                  <button
-                    type="button"
-                    className="fl-landing__button"
-                    data-appearance="soft"
-                  >
+                  </span>
+                  <span className="fl-landing__button" role="button" data-appearance="soft">
                     {text.altCta}
-                  </button>
+                  </span>
                 </div>
                 <p className="fl-landing__footnote">{text.footnote}</p>
               </div>
@@ -1078,9 +1074,9 @@ export function LandingPageScreen({
               <img className="fl-page__zip-edit" src={actionEdit} alt="" />
             </span>
           </span>
-          <button type="button" className="fl-page__zip-cta">
+          <span className="fl-page__zip-cta" role="button">
             {text.zipCta}
-          </button>
+          </span>
         </div>
       </section>
 
@@ -1126,9 +1122,9 @@ export function LandingPageScreen({
             <span>{text.areaNotice}</span>
           </p>
           <p className="fl-area__note">{text.areaNote}</p>
-          <button type="button" className="fl-area__cta">
+          <span className="fl-area__cta" role="button">
             {text.areaCta}
-          </button>
+          </span>
         </div>
       </section>
 

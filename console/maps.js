@@ -297,7 +297,10 @@
     ds: { vb: '0 0 90 84', parts: {
       'text field': [6,5,78,15], 'field label': [10,7,22,4], 'select field': [6,24,78,15],
       'icon': [74,29,6,6], 'toggle field': [6,43,78,13], 'help text': [10,59,42,4],
-      'button': [6,66,32,10], 'button label': [11,69,22,4]
+      'button': [6,66,32,10], 'button label': [11,69,22,4],
+      'translation note': [10,59,64,4], 'translation state': [10,59,14,4],
+      'translation text': [26,59,28,4], 'translation actions': [56,59,18,4],
+      'translation action': [56,59,8,4]
     }},
     dsField: { vb: '0 0 90 36', parts: {
       'field body': [4,4,82,26], 'field leading': [8,11,10,12],

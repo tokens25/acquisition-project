@@ -154,7 +154,6 @@ export function DemoApp() {
     lastReviewed.current = inputs
     const snapshot = buildSnapshot(store.set, store.journey, store.context, planJourney(store.journey, store.context))
     setReview((r) => (r ? { ...runCoach(snapshot, r.context, aiExtra.current), at: r.at, ai: r.ai, aiNote: r.aiNote, start: r.start } : r))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store.set, store.journey, store.context, review])
 
   /**

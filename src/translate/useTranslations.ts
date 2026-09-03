@@ -223,7 +223,12 @@ export function useTranslations(set: CardSet, context: Context): TranslationStor
     const stamp = `${market.code}|${official.code}`
     if (askedFor.has(stamp)) return
     askedFor.add(stamp)
-    void runMany([official.code], false)
+    // Off the effect's own tick: runMany sets its working state before its
+    // first await, and doing that inside the effect cascades a second render
+    // before the first has painted. Nothing cancels it on cleanup — the stamp
+    // above already makes it once-only, and cancelling would mean StrictMode's
+    // second pass finds the stamp taken and never translates at all.
+    queueMicrotask(() => void runMany([official.code], false))
   }, [market.code, official.code, runMany])
 
   const counts = useMemo(() => {
