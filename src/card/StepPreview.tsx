@@ -1,5 +1,7 @@
 import './journey.css'
-import { statesOf } from '../rules/tabs'
+import { useState } from 'react'
+import { statesOf, tabsOf } from '../rules/tabs'
+import { SubscriptionTabs } from '../components/flow/FlowScreens'
 
 import type { CardSet, Context } from '../rules/content'
 import type { Journey } from '../rules/journey'
@@ -25,6 +27,12 @@ export function StepPreview({
   set: CardSet
   context: Context
 }) {
+  const tabs = tabsOf(set)
+  const [openTab, setOpenTab] = useState('')
+  // A tab that has been renamed keeps its id, but one that has been removed has
+  // not — so the chosen tab falls back to the first rather than to nothing.
+  const tab = tabs.some((t) => t.id === openTab) ? openTab : (tabs[0]?.id ?? '')
+
   const steps = resolveJourney(journey, context)
   const step = steps.find((s) => s.id === set.stepId) ?? steps[0]
   if (!step) return <p className="jy__note">This journey has no steps in this market.</p>
@@ -53,7 +61,11 @@ export function StepPreview({
 
       {step.renderer === 'plans' ? (
         <div className="jy__viewport" data-device={set.device}>
-          <CardSetView set={set} context={context} />
+          {/* The same control the phone draws. The tabs editor sits in the
+              panel beside this, and a tab added or renamed there has to show
+              here or the editor is writing into the dark. */}
+          <SubscriptionTabs tabs={tabs} tab={tab} onTab={setOpenTab} />
+          <CardSetView set={set} context={context} tab={tab} />
         </div>
       ) : step.renderer !== 'stub' ? (
         /* Every state the step is drawn in, side by side — the same shape the

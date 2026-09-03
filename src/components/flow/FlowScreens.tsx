@@ -132,36 +132,57 @@ export function SubscriptionFlowScreen({
 }) {
   return (
     <Screen title="Choose your subscription" flush>
-      <div className="fl-sub__control">
-        <div className="fl-sub__tabs">
-          {tabs.map((one) => (
-            <button
-              key={one.id}
-              type="button"
-              className="fl-sub__tab"
-              data-on={tab === one.id || undefined}
-              aria-pressed={tab === one.id}
-              onClick={() => onTab?.(one.id)}
-            >
-              {/* The bolt belongs to the Ultimate tab, which is why it follows
-                  the id rather than the name: renaming that tab keeps it. */}
-              {one.id === 'ultimate' && <span className="fl-sub__bolt" aria-hidden="true" />}
-              {one.name}
-            </button>
-          ))}
-        </div>
-        {/* Sparkle 440X200 — the animation the design runs behind the Ultimate
-            tab. Its box is 168 x 48 at the control's top right, and the frame
-            crops the picture rather than fitting it, so the offsets are the
-            design's percentages of that box rather than a fit that looks
-            close. */}
-        <span className="fl-sub__sparkle" aria-hidden="true">
-          <img src={sparkle} alt="" />
-        </span>
-      </div>
-
+      <SubscriptionTabs tabs={tabs} tab={tab} onTab={onTab} />
       <div className="fl-sub__cards">{children}</div>
     </Screen>
+  )
+}
+
+/**
+ * The segmented control over the plan picker.
+ *
+ * Its own component because two places draw it: the phone, where it sits under
+ * the header, and the edit screen, where it sits over the cards being edited.
+ * Renaming a tab or adding one has to show in both, and one control is how
+ * that stays true.
+ */
+export function SubscriptionTabs({
+  tabs,
+  tab,
+  onTab,
+}: {
+  tabs: PlanTab[]
+  tab: string
+  onTab?: (tab: string) => void
+}) {
+  return (
+    <div className="fl-sub__control">
+      <div className="fl-sub__tabs">
+        {tabs.map((one) => (
+          <button
+            key={one.id}
+            type="button"
+            className="fl-sub__tab"
+            data-on={tab === one.id || undefined}
+            aria-pressed={tab === one.id}
+            onClick={() => onTab?.(one.id)}
+          >
+            {/* The bolt belongs to the Ultimate tab, which is why it follows
+                the id rather than the name: renaming that tab keeps it. */}
+            {one.id === 'ultimate' && <span className="fl-sub__bolt" aria-hidden="true" />}
+            {one.name}
+          </button>
+        ))}
+      </div>
+      {/* Sparkle 440X200 — the animation the design runs behind the Ultimate
+          tab. Its box is 168 x 48 at the control's top right, and the frame
+          crops the picture rather than fitting it, so the offsets are the
+          design's percentages of that box rather than a fit that looks
+          close. */}
+      <span className="fl-sub__sparkle" aria-hidden="true">
+        <img src={sparkle} alt="" />
+      </span>
+    </div>
   )
 }
 
