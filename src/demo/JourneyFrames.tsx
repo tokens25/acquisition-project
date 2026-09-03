@@ -39,7 +39,7 @@ export function JourneyFrames({
   reordered,
   onResetOrder,
   marker,
-  preferLive = false,
+  preferLive = true,
 }: {
   planned: ResolvedStep[]
   selectedId: string
@@ -57,10 +57,14 @@ export function JourneyFrames({
    * Render every screen that can render, rather than showing the exported
    * frame where there is one.
    *
-   * The row prefers the design file, which is right while the tool is being
-   * read against Figma. It is wrong the moment the content is not the content
-   * the export was made from: a market reading German would see an English
-   * picture with dollars on it, which is a screenshot of another market.
+   * On by default: the row is the flow as authored. An export is a picture of
+   * what the design said on the day it was taken, so it is wrong the moment
+   * the content moves — a market reading German would see an English picture
+   * with dollars on it, and a screen redrawn since the export shows the old
+   * drawing. Confirmation lost its team crests that way.
+   *
+   * Off is still available for reading the tool against the Figma section,
+   * which is the one job the exports do better.
    */
   preferLive?: boolean
 }) {

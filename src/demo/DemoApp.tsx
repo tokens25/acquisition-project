@@ -574,7 +574,6 @@ export function DemoApp() {
               set={marketSet}
               // A translated market is not the market the frames were exported
               // from, so the row renders the screens instead of showing them.
-              preferLive={tx.state !== 'off'}
               marker={(id) => (
                 <>
                   <SectionMarker status={pipe.status(id)} />
