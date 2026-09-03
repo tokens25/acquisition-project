@@ -25,6 +25,8 @@ import { FieldMarks } from '../components/fieldMarks'
 import { TranslationBar } from '../translate/TranslationBar'
 import { TranslationMarks, type TranslationMark } from '../translate/marks'
 import { useTranslations } from '../translate/useTranslations'
+import { MarketLanguages } from '../translate/MarketLanguages'
+import { TranslateSheet } from '../translate/TranslateSheet'
 import { currentAt, viewSet } from '../translate/apply'
 import { DevStrings } from './pipeline/DevStrings'
 import { ModeToggle } from './pipeline/ModeToggle'
@@ -265,6 +267,8 @@ export function DemoApp() {
    * touched, and only kept words can be published.
    */
   const tx = useTranslations(store.set, store.context)
+  /** The sheet that asks which languages this market should also read in. */
+  const [translating, setTranslating] = useState(false)
   const marketSet = useMemo(
     () => (tx.state === 'off' ? store.set : viewSet(store.set, store.context.market, tx.entries)),
     [store.set, store.context.market, tx.entries, tx.state],
@@ -298,7 +302,7 @@ export function DemoApp() {
       map.set(key, {
         text,
         state: 'reviewed',
-        language: tx.language.name,
+        language: tx.current.name,
         onKeep: () => keepTranslation(key, text),
         onDiscard: () => dropTranslation(key),
       })
@@ -310,14 +314,14 @@ export function DemoApp() {
       map.set(key, {
         text: t.text,
         state: t.state,
-        language: tx.language.name,
+        language: tx.current.name,
         onKeep: () => keepTranslation(key, t.text),
         onDiscard: () => dropTranslation(key),
       })
     }
     return map
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx.entries, tx.state, tx.language.name, store.set, store.context.market])
+  }, [tx.entries, tx.state, tx.current.name, store.set, store.context.market])
 
   const gate =
     coverage.failing.length > 0
@@ -439,6 +443,7 @@ export function DemoApp() {
       <div className="demo__top" data-mode={pipe.mode}>
         {brand}
         <div className="demo__statusbar">
+          <MarketLanguages tx={tx} onAdd={() => setTranslating(true)} />
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}
           <span className="demo__gate" data-state={gate.state}>
@@ -448,6 +453,7 @@ export function DemoApp() {
         </div>
       </div>
       {coachDialog}
+      <TranslateSheet open={translating} tx={tx} onClose={() => setTranslating(false)} />
       {dev && readyCount > 0 && (
         <p className="pl-devline">
           <CodeIcon size={12} />

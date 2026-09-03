@@ -118,3 +118,118 @@
 .tr-note__act:hover {
   color: var(--color-text-primary);
 }
+
+/* ── "Read this market in another language" ─────────────────────────
+   The sheet itself is the Coach's, so only what is new to this one is
+   here: the languages a market already has, and the one action. */
+.tsheet__have {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tsheet__have li {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 10px;
+  font-size: 13px;
+}
+.tsheet__have button {
+  border: 0;
+  background: none;
+  color: var(--color-text-tertiary);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.25);
+  text-underline-offset: 3px;
+}
+.tsheet__have button:hover { color: var(--color-accent-error-text, #ff8a8a); }
+.tsheet__none { color: var(--color-text-tertiary); font-size: 13px; list-style: none; }
+.tsheet__foot {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.tsheet__go {
+  inline-size: 100%;
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--color-text-primary);
+  color: #080e12;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.tsheet__go:disabled { opacity: 0.4; cursor: default; }
+
+/* ── The languages one market reads, in the top bar ─────────────────
+   Only ever this market's: a language given to Spain is not a language
+   Germany has, because the two markets do not share their screens. */
+.mlang {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  block-size: var(--bar-control, 28px);
+  padding-inline: 3px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 9px;
+}
+.mlang[data-busy] { border-color: rgb(255 196 77 / 0.5); }
+.mlang__lang {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--color-text-tertiary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.mlang__lang:hover { color: var(--color-text-primary); }
+.mlang__lang[data-on] { background: rgb(255 255 255 / 0.1); color: var(--color-text-primary); }
+.mlang__add {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border: 0;
+  border-inline-start: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.mlang__add:only-child { border-inline-start: 0; }
+.mlang__add:hover { color: var(--color-text-primary); }
+.mlang__spin {
+  inline-size: 11px;
+  block-size: 11px;
+  border: 1.5px solid rgb(255 196 77 / 0.3);
+  border-block-start-color: #ffc44d;
+  border-radius: 50%;
+  animation: mlang-spin 700ms linear infinite;
+}
+@keyframes mlang-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mlang__spin { animation-duration: 2s; }
+}

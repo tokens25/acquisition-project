@@ -49,14 +49,22 @@ function plainReason(note: string | null): { says: string; act: string } {
  */
 export function TranslationBar({ tx, market }: { tx: TranslationStore; market: string }) {
   if (tx.state === 'off') return null
-  const { machine, reviewed, stale } = tx.counts
+  const { machine, reviewed, stale, held } = tx.counts
 
   return (
     <section className="tr-bar" data-state={tx.state} aria-label="Translation">
       <p className="tr-bar__head">
-        <span className="tr-bar__lang">{tx.language.name}</span>
-        <span className="tr-bar__market">{market}</span>
-        {tx.state === 'working' && <span className="tr-bar__working">Translating the whole flow…</span>}
+        <span className="tr-bar__lang">{tx.current.name}</span>
+        <span className="tr-bar__market">
+          {market}
+          {tx.current.code === tx.official.code ? ', official' : ', added'}
+        </span>
+        {tx.state === 'working' && (
+          <span className="tr-bar__working">
+            Translating into {tx.progress?.language ?? tx.current.name}
+            {tx.progress && tx.progress.left > 0 ? `, ${tx.progress.left} more to go` : ''}
+          </span>
+        )}
       </p>
 
       {tx.state === 'ready' && (
@@ -74,6 +82,13 @@ export function TranslationBar({ tx, market }: { tx: TranslationStore; market: s
           )}
           {machine + reviewed === 0 && 'Nothing translated yet.'}
           {stale > 0 && ` · ${stale} out of date since the English changed`}
+          {held > 0 && ` · ${held} left in English`}
+        </p>
+      )}
+      {tx.state === 'ready' && held > 0 && (
+        <p className="tr-bar__warn">
+          {held} {held === 1 ? 'line' : 'lines'} kept the English. The Coach checks a translation the way it checks any line
+          the tool writes, and holds one back rather than showing words nobody read.
         </p>
       )}
       {tx.state === 'ready' && machine > 0 && (
