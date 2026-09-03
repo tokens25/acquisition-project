@@ -65,7 +65,10 @@
   flex-direction: column;
   gap: var(--space-16);
   inline-size: 360px;
-  padding: var(--space-16) var(--space-20) var(--space-24);
+  /* No padding at the top: a sticky heading stops at the content edge, so
+     padding there is a strip above the heading that nothing covers and
+     everything scrolls through. The space is the first child's instead. */
+  padding: 0 var(--space-20) var(--space-24);
   border-inline-end: var(--border-1) solid var(--color-border-full-color-subtle);
   background: var(--color-surface-container-1);
   block-size: 100%;
@@ -77,6 +80,9 @@
    into each other. Nothing in the panel shrinks; the panel scrolls instead. */
 .demo__panel > * {
   flex: none;
+}
+.demo__panel > *:first-child {
+  margin-block-start: var(--space-16);
 }
 /* Menu_item_sub, 229:2122 — a 48px row, 8/20 padding, one hairline beneath.
    The mark and the title are one group on the left; the label sits apart on

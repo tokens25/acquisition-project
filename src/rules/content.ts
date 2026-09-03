@@ -300,6 +300,15 @@ export interface CardSet {
    * written before tabs were authored still draws Standard and Ultimate.
    */
   planTabs?: PlanTab[]
+  /**
+   * A market's own tabs, once it has taken them.
+   *
+   * Markets are separate, and the tabs are as much a market's decision as the
+   * words on its screens — one market sells Standard and Ultimate, another
+   * sells neither. A market reads `planTabs` until it edits, and owns its list
+   * from then on.
+   */
+  planTabsByMarket?: Record<string, PlanTab[]>
 
   context: Context
   journeyId: string

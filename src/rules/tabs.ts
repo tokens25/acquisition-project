@@ -20,8 +20,32 @@ const FIGMA_TABS: PlanTab[] = [
  * draws none. Reading empty as "use the default two" would make removing them
  * impossible.
  */
-export function tabsOf(set: CardSet): PlanTab[] {
-  return set.planTabs ?? FIGMA_TABS
+export function tabsOf(set: CardSet, market = set.context.market): PlanTab[] {
+  return set.planTabsByMarket?.[market] ?? set.planTabs ?? FIGMA_TABS
+}
+
+/**
+ * Writes a market's tabs, taking them for that market the first time.
+ *
+ * The market's list starts as whatever it was already showing, so taking it is
+ * invisible: the tabs on screen do not change, only whose they are. Everything
+ * written after that stays in this market — the same deal the flow screens
+ * make.
+ */
+export function writeTabs(set: CardSet, tabs: PlanTab[], market = set.context.market) {
+  return { planTabsByMarket: { ...set.planTabsByMarket, [market]: tabs } }
+}
+
+/** Whether this market has taken its tabs rather than reading the shared ones. */
+export function ownsTabs(set: CardSet, market = set.context.market): boolean {
+  return set.planTabsByMarket?.[market] !== undefined
+}
+
+/** Hands a market's tabs back, so it reads the shared ones again. */
+export function shareTabs(set: CardSet, market = set.context.market) {
+  const rest = { ...set.planTabsByMarket }
+  delete rest[market]
+  return { planTabsByMarket: rest }
 }
 
 /**

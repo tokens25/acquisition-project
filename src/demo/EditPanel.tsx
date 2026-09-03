@@ -1,5 +1,15 @@
 import { useEffect, useState } from 'react'
-import { forgetTab, styleOf, tabsOf, tierOnTab, withTabAdded, withTabRemoved } from '../rules/tabs'
+import {
+  forgetTab,
+  ownsTabs,
+  shareTabs,
+  styleOf,
+  tabsOf,
+  tierOnTab,
+  withTabAdded,
+  withTabRemoved,
+  writeTabs,
+} from '../rules/tabs'
 import type { CadenceOffer, PlanTab, TierPatch } from '../rules/content'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
@@ -67,11 +77,18 @@ export function EditPanel({ store }: { store: CardSetStore }) {
    * Empty is the plan however it is shown, which is what most edits are.
    */
   const planTabs = tabsOf(set)
+  const marketName = set.markets.find((m) => m.code === context.market)?.label ?? context.market
   const tabScope = planTabs.some((t) => t.id === context.tab)
     ? (context.tab as string)
     : (planTabs[0]?.id ?? '')
   const scope = tabScope ? { tab: tabScope } : undefined
   const updateTier = (id: string, patch: TierPatch) => writeTier(id, patch, scope)
+  const forget = (tabIds: string[]) => {
+    const next = tabIds.reduce((tiers, id) => forgetTab(tiers, id), set.tiers)
+    next.forEach((t, i) => {
+      if (t !== set.tiers[i]) writeTier(t.id, { tabs: t.tabs })
+    })
+  }
   const updateOffer = (tierId: string, patch: Partial<CadenceOffer>) =>
     writeOffer(tierId, patch, scope)
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
@@ -261,7 +278,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         {tabsOf(set).map((one, i) => {
           const all = tabsOf(set)
           const write = (next: Partial<PlanTab>) =>
-            updateSet({ planTabs: all.map((t, j) => (j === i ? { ...t, ...next } : t)) })
+            updateSet(writeTabs(set, all.map((t, j) => (j === i ? { ...t, ...next } : t))))
           return (
             <div className="demo__feature" key={one.id}>
               <TextField
@@ -285,12 +302,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 <button
                   type="button"
                   className="demo__feature-remove"
-                  onClick={() =>
-                    updateSet({
-                      planTabs: withTabRemoved(all, i),
-                      tiers: forgetTab(set.tiers, one.id),
-                    })
-                  }
+                  onClick={() => {
+                    updateSet(writeTabs(set, withTabRemoved(all, i)))
+                    forget([one.id])
+                  }}
                 >
                   Remove
                 </button>
@@ -301,7 +316,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         <button
           type="button"
           className="ed-add"
-          onClick={() => updateSet({ planTabs: withTabAdded(tabsOf(set)) })}
+          onClick={() => updateSet(writeTabs(set, withTabAdded(tabsOf(set))))}
         >
           {tabsOf(set).length ? 'Add a tab' : 'Add tabs'}
         </button>
@@ -309,14 +324,24 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           <button
             type="button"
             className="demo__feature-remove"
-            onClick={() =>
-              updateSet({
-                planTabs: [],
-                tiers: tabsOf(set).reduce((tiers, t) => forgetTab(tiers, t.id), set.tiers),
-              })
-            }
+            onClick={() => {
+              const gone = tabsOf(set).map((t) => t.id)
+              updateSet(writeTabs(set, []))
+              forget(gone)
+            }}
           >
             Remove tabs
+          </button>
+        )}
+        {/* The tabs on screen are this market's, not everybody's. Handing them
+            back is the way out, the same as with the flow screens. */}
+        {ownsTabs(set) && (
+          <button
+            type="button"
+            className="demo__feature-remove"
+            onClick={() => updateSet(shareTabs(set))}
+          >
+            Give {marketName} the shared tabs back
           </button>
         )}
       </FieldGroup>
@@ -369,7 +394,11 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 const showing = tabsOf(set)
                   .map((t) => t.id)
                   .filter((id) => (id === one.id ? on : tierOnTab(resolved, id)))
-                updateTier(tier.id, {
+                // Written for the market and not for a tab: which tabs a
+                // plan appears on is a fact about the plan across all of them,
+                // and a tab-scoped answer to it would only apply on the tab it
+                // was given from.
+                writeTier(tier.id, {
                   // Every tab and no tab both mean the same drawing, so the
                   // simpler of the two is what gets written.
                   tabs: showing.length === tabsOf(set).length ? [] : showing,
