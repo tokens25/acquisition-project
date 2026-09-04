@@ -198,7 +198,7 @@ export function CoachGoalDialog({ open, tiers, teams, features, examples, onClos
                 Goal <span className="coach-goal__req">Required · what the Coach may optimise</span>
               </>
             }
-            footer="The ten baseline questions run whatever you choose. A goal tells the Coach which levers it is allowed to judge, and what to trace through the journey."
+            footer="The eight journey health questions run whatever you choose. A goal tells the Coach which levers it is allowed to judge, and what to trace through the journey."
           >
             {BUSINESS_GOALS.map((g) => {
               const kind = goalPicks(g.id)
