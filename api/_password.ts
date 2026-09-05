@@ -68,7 +68,7 @@ export async function admitted(request: Request): Promise<boolean> {
 export function refuse(): Response {
   return new Response(JSON.stringify({ error: 'This preview is password protected.' }), {
     status: 401,
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
   })
 }
 

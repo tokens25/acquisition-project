@@ -27,7 +27,7 @@ export function Gate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let alive = true
-    fetch('/api/gate')
+    fetch('/api/gate', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : { required: false, admitted: true }))
       .then((a: { required?: boolean; admitted?: boolean }) => {
         if (alive) setOpen(!a.required || Boolean(a.admitted))

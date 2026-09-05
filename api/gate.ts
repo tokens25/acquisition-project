@@ -16,14 +16,14 @@ export default async function handler(request: Request): Promise<Response> {
   if (request.method === 'GET') {
     return new Response(
       JSON.stringify({ required: Boolean(password), admitted: await admitted(request) }),
-      { status: 200, headers: { 'content-type': 'application/json' } },
+      { status: 200, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } },
     )
   }
 
   if (request.method !== 'POST') {
     return new Response(JSON.stringify({ error: `${request.method} is not supported here.` }), {
       status: 405,
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
     })
   }
 
@@ -31,7 +31,7 @@ export default async function handler(request: Request): Promise<Response> {
   if (!password) {
     return new Response(JSON.stringify({ admitted: true }), {
       status: 200,
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
     })
   }
 
@@ -41,7 +41,7 @@ export default async function handler(request: Request): Promise<Response> {
   if (!same(given, password)) {
     return new Response(JSON.stringify({ admitted: false }), {
       status: 401,
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
     })
   }
 
@@ -58,6 +58,7 @@ export default async function handler(request: Request): Promise<Response> {
     status: 200,
     headers: {
       'content-type': 'application/json',
+      'cache-control': 'no-store',
       'set-cookie': `${COOKIE}=${stamp(password)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${WEEK}`,
     },
   })
