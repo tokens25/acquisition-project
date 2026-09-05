@@ -1,3 +1,4 @@
+import { guard } from './_password'
 import { spawn } from 'node:child_process'
 
 /**
@@ -74,6 +75,10 @@ function framePrompt(ask: Ask): string {
 }
 
 export default async function handler(request: Request): Promise<Response> {
+  // Nothing here answers a stranger while a password is set.
+  const shut = await guard(request)
+  if (shut) return shut
+
   // Availability probe. The console calls this on load and hides its send
   // buttons when it gets no answer — which is what happens when the page is
   // opened as a published artifact rather than from the dev server.

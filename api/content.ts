@@ -1,3 +1,5 @@
+import { guard } from './_password'
+
 /**
  * The shared content store: one JSON file in the repository, read and written
  * over the GitHub contents API.
@@ -73,6 +75,10 @@ async function writeFile(token: string, text: string, sha: string | null, messag
 }
 
 export default async function handler(request: Request): Promise<Response> {
+  // Nothing here answers a stranger while a password is set.
+  const shut = await guard(request)
+  if (shut) return shut
+
   const token = process.env.GITHUB_TOKEN
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {

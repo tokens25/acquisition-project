@@ -16,6 +16,7 @@
  *   ANTHROPIC_MODEL     optional, defaults to claude-opus-5
  */
 
+import { guard } from './_password'
 import { spawn } from 'node:child_process'
 
 /**
@@ -277,6 +278,10 @@ Answer only by calling report_findings.`
 }
 
 export default async function handler(request: Request): Promise<Response> {
+  // Nothing here answers a stranger while a password is set.
+  const shut = await guard(request)
+  if (shut) return shut
+
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {
       status,

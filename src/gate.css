@@ -1,0 +1,59 @@
+/* The password screen. Its own colours rather than the tool's tokens: it is
+   drawn before the tool is, and a screen that depends on what it is guarding
+   is a screen that can fail to appear. */
+.gate {
+  display: grid;
+  place-items: center;
+  min-block-size: 100svh;
+  background: #080e12;
+  color: #f9fafa;
+}
+.gate__form {
+  display: grid;
+  gap: var(--space-16, 16px);
+  inline-size: min(320px, calc(100vw - 48px));
+}
+.gate__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.gate__note {
+  margin: 0;
+  color: #b3b9bb;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.gate__input {
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 48px;
+  padding-inline: 16px;
+  border: 1px solid #3d4549;
+  border-radius: 10px;
+  background: #0c161c;
+  color: #f9fafa;
+  font: inherit;
+}
+.gate__input[data-wrong] {
+  border-color: #d12424;
+}
+.gate__input:focus-visible {
+  outline: 2px solid #f2af3d;
+  outline-offset: 2px;
+}
+.gate__cta {
+  block-size: 48px;
+  border: 0;
+  border-radius: 8px;
+  background: #f9fafa;
+  color: #080e12;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.gate__cta:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
