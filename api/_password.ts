@@ -14,20 +14,22 @@
  * Vercel is what starts the asking, and removing it stops.
  */
 
+import { createHmac } from 'node:crypto'
+
 export const COOKIE = 'acq_gate'
 export const WEEK = 60 * 60 * 24 * 7
 
-/** What the browser is given: a signature of the password, never the password. */
-export async function stamp(password: string): Promise<string> {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(password),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  )
-  const mac = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(COOKIE))
-  return [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, '0')).join('')
+/**
+ * What the browser is given: a signature of the password, never the password.
+ *
+ * Node's own crypto rather than the Web Crypto global. `crypto.subtle` is not
+ * dependable in the runtime these functions run in, and reaching for it is
+ * what crashed this deployment twice: the code only touched it once a password
+ * was set, so the deployment worked until the moment it was switched on. Both
+ * produce the same digest — this one is just always there.
+ */
+export function stamp(password: string): string {
+  return createHmac('sha256', password).update(COOKIE).digest('hex')
 }
 
 /** Compared to the end either way, so how long it takes says nothing. */
@@ -54,7 +56,7 @@ export async function admitted(request: Request): Promise<boolean> {
     .map((c) => c.trim())
     .find((c) => c.startsWith(`${COOKIE}=`))
     ?.slice(COOKIE.length + 1)
-  return Boolean(cookie && same(cookie, await stamp(password)))
+  return Boolean(cookie && same(cookie, stamp(password)))
 }
 
 /**

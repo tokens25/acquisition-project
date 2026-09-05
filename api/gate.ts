@@ -58,7 +58,7 @@ export default async function handler(request: Request): Promise<Response> {
     status: 200,
     headers: {
       'content-type': 'application/json',
-      'set-cookie': `${COOKIE}=${await stamp(password)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${WEEK}`,
+      'set-cookie': `${COOKIE}=${stamp(password)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${WEEK}`,
     },
   })
 }
