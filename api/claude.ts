@@ -73,40 +73,7 @@ function framePrompt(ask: Ask): string {
     .join('\n')
 }
 
-/**
- * The shared password, if this deployment asks for one.
- *
- * Written out in each route rather than shared from one module. Nothing in
- * this folder imported a sibling before, and the deployment stopped answering
- * the moment they all did — so the routes go back to standing alone, which is
- * the arrangement that has always worked here.
- *
- * No hashing either. The cookie holds the password, which the person holding
- * it typed in the first place; it is httpOnly so no script can read it back,
- * Secure so it never travels in the clear, and SameSite so it is not sent from
- * anywhere else. Every crypto call available here has now failed in
- * production, and a gate that works beats a gate with a nicer cookie.
- */
-function shut(request: Request): Response | null {
-  const password = process.env.SITE_PASSWORD
-  if (!password) return null
-  const mine = (request.headers.get('cookie') ?? '')
-    .split(';')
-    .map((c) => c.trim())
-    .find((c) => c.startsWith('acq_gate='))
-    ?.slice('acq_gate='.length)
-  if (mine && mine === encodeURIComponent(password)) return null
-  return new Response(JSON.stringify({ error: 'This preview is password protected.' }), {
-    status: 401,
-    headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
-  })
-}
-
 export default async function handler(request: Request): Promise<Response> {
-  // Nothing here answers a stranger while a password is set.
-  const closed = shut(request)
-  if (closed) return closed
-
   // Availability probe. The console calls this on load and hides its send
   // buttons when it gets no answer — which is what happens when the page is
   // opened as a published artifact rather than from the dev server.
