@@ -1,0 +1,369 @@
+/* The studio control family, ported from Project A (dazn-hero-banner-studio).
+
+   There it is written in Tailwind classes against that app's theme; here it is
+   the same values as CSS, because this app has no Tailwind and its styling is
+   plain CSS over DAZN custom properties. The numbers are the ones from the
+   source — 40px fields, 13px text, a 30×18 switch — rather than rounded to
+   this app's spacing scale, so the two apps still look like each other.
+
+   The palette is Project A's own (tailwind.config.ts):
+
+     ink          #F5F7FA          surface-3    #1D222C
+     ink-muted    rgba(245,247,250,0.68)
+     ink-faint    rgba(245,247,250,0.42)
+     line-strong  rgba(255,255,255,0.12)
+     critical     #FF6B6B          warn         #FFC24B
+
+   It is deliberately NOT mapped onto this app's tokens: these controls are a
+   denser second family beside the design system's own, and pretending they are
+   DS components by dressing them in DS variables would make that harder to see
+   rather than easier. */
+
+.st-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.st-field__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  /* Held whether or not anything sits beside the label, so a counter
+     appearing mid-typing does not shift the control below it. */
+  min-block-size: 20px;
+}
+.st-field__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-inline-size: 0;
+}
+.st-field__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(245, 247, 250, 0.68);
+}
+.st-field__hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.375;
+  color: rgba(245, 247, 250, 0.42);
+}
+
+/* Borderless and filled at rest; the border is a state, not a decoration. */
+.st-input {
+  inline-size: 100%;
+  block-size: 40px;
+  padding-inline: 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  font: inherit;
+  font-size: 13px;
+  color: #f5f7fa;
+  transition:
+    background-color 150ms,
+    border-color 150ms;
+}
+.st-input::placeholder {
+  color: rgba(245, 247, 250, 0.42);
+}
+.st-input:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.st-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+/* Only past the hard limit. `warn` is an ordinary state and says nothing. */
+.st-input[data-status='over'] {
+  border-color: rgba(255, 107, 107, 0.6);
+}
+.st-input[data-status='over']:focus {
+  border-color: #ff6b6b;
+}
+
+.st-input--area {
+  block-size: auto;
+  padding-block: 8px;
+  line-height: 1.375;
+  resize: none;
+  /* The height is set from the content, so there is never anything to scroll
+     to — a scrollbar here would mean the measuring had failed. */
+  overflow: hidden;
+}
+
+.st-count {
+  font-size: 11px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: rgba(245, 247, 250, 0.42);
+}
+.st-count[data-status='over'] {
+  color: #ff6b6b;
+}
+.st-count__hard {
+  color: rgba(245, 247, 250, 0.42);
+}
+
+.st-inset {
+  position: relative;
+}
+.st-inset__count {
+  position: absolute;
+  right: 8px;
+  padding-inline: 4px;
+  line-height: 1.25;
+  /* An annotation, not a control: it must never take a click meant for the
+     field underneath it. */
+  pointer-events: none;
+}
+.st-inset__count[data-align='bottom'] {
+  bottom: 6px;
+}
+/* Centred on the field rather than on the wrapper: the 8px matches the gap
+   the label row leaves above the control. */
+.st-inset__count[data-align='center'] {
+  top: 0;
+  bottom: 0;
+  margin-block-start: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.st-limit {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.375;
+  color: #ffc24b;
+}
+
+/* ── Switch ────────────────────────────────────────────────────────────── */
+
+.st-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  inline-size: 30px;
+  block-size: 18px;
+  padding: 2px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.st-switch[aria-checked='true'] {
+  background: #3fd37e;
+}
+.st-switch:hover {
+  filter: brightness(1.1);
+}
+.st-switch:active {
+  filter: brightness(0.95);
+}
+.st-switch:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.st-switch__knob {
+  display: inline-block;
+  inline-size: 14px;
+  block-size: 14px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 150ms;
+}
+/* 30 − 2·2 − 14, so the knob lands flush inside the far edge. */
+.st-switch[aria-checked='true'] .st-switch__knob {
+  transform: translateX(12px);
+}
+
+.st-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 6px;
+  cursor: pointer;
+}
+.st-switch-row[data-compact] {
+  padding-block: 0;
+}
+.st-switch-row:has(.st-switch:disabled) {
+  cursor: default;
+}
+.st-switch-row__text {
+  min-inline-size: 0;
+}
+.st-switch-row__label {
+  display: block;
+  font-size: 13px;
+  line-height: 1.25;
+  color: #f5f7fa;
+}
+.st-switch-row__hint {
+  display: block;
+  margin-block-start: 2px;
+  font-size: 12px;
+  line-height: 1.375;
+  color: rgba(245, 247, 250, 0.68);
+}
+
+/* ── Segmented control ─────────────────────────────────────────────────── */
+
+.st-seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.st-seg[data-vertical] {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.st-seg[data-full] {
+  display: flex;
+  inline-size: 100%;
+  flex-wrap: nowrap;
+}
+
+.st-seg__opt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  block-size: 32px;
+  padding-inline: 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(245, 247, 250, 0.68);
+  cursor: pointer;
+  transition:
+    background-color 150ms,
+    color 150ms;
+}
+.st-seg[data-size='sm'] .st-seg__opt {
+  block-size: 28px;
+  padding-inline: 10px;
+  font-size: 12px;
+}
+.st-seg__opt[data-icon-only] {
+  inline-size: 32px;
+  padding-inline: 0;
+}
+.st-seg[data-size='sm'] .st-seg__opt[data-icon-only] {
+  inline-size: 28px;
+}
+.st-seg[data-vertical] .st-seg__opt {
+  justify-content: flex-start;
+}
+.st-seg[data-full] .st-seg__opt {
+  flex: 1;
+  min-inline-size: 0;
+  padding-inline: 4px;
+}
+.st-seg__opt:hover:not([data-active]) {
+  background: rgba(255, 255, 255, 0.04);
+  color: #f5f7fa;
+}
+.st-seg__opt:active:not([data-active]) {
+  background: rgba(255, 255, 255, 0.06);
+}
+/* The raised face is the whole of the selected state — a lit top edge and a
+   shadow under it, which is what separates it from the recessed track. */
+.st-seg__opt[data-active] {
+  background: #1d222c;
+  color: #f5f7fa;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+}
+.st-seg__opt:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.st-seg__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.st-seg__icon > svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+.st-seg__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Hidden from the eye, kept for the screen reader; the visible name moves to
+   the tooltip, so the button is never unlabelled. */
+.st-seg__opt[data-icon-only] .st-seg__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── The gallery at /controls ──────────────────────────────────────────── */
+
+.st-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-inline-size: 420px;
+  padding: 40px 24px 80px;
+  margin-inline: auto;
+  color: #f5f7fa;
+}
+.st-gallery__head {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.st-gallery__note {
+  margin: -24px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(245, 247, 250, 0.68);
+}
+.st-gallery__group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: #101319;
+}
+/* The controls stretch; the segmented ones size to their content, which is
+   why the group aligns to the start rather than stretching everything. */
+.st-gallery__group > .st-field,
+.st-gallery__group > .st-switch-row {
+  align-self: stretch;
+}
+.st-gallery__title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(245, 247, 250, 0.42);
+}
