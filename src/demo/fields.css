@@ -331,3 +331,135 @@
     transition: none;
   }
 }
+
+/* ── The landing page's two tabs ────────────────────────────────────────
+   The banner at the top of the page is a hero and is authored with a hero's
+   controls; the eight sections under it are copy. One list of fourteen groups
+   meant scrolling the whole page to reach the picture, so they are two tabs.
+   Only the landing step has them, because only it has a hero. */
+.fp-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  margin-block-end: 12px;
+  border-radius: var(--ed-radius);
+  background: var(--color-surface-container-1);
+  border: 1px solid var(--color-border-full-color-subtle);
+}
+.fp-tab {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: calc(var(--ed-radius) - 2px);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 140ms var(--ed-ease), color 140ms var(--ed-ease);
+}
+.fp-tab:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-container-3);
+}
+.fp-tab[data-on] {
+  background: var(--color-surface-container-4);
+  color: var(--color-text-primary);
+}
+.fp-tab:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 1px;
+}
+
+/* ── The hero banner's picture ──────────────────────────────────────────
+   A 16/9 well, because that is the shape of the thing it goes into. Empty it
+   is the button that fills it; filled it shows the picture with the two acts
+   the hero tool offers, replace and remove. */
+.hb-image {
+  position: relative;
+}
+.hb-image__file {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.hb-image__shot {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--ed-radius);
+  background: var(--color-surface-container-1);
+}
+.hb-image__acts {
+  display: flex;
+  gap: 6px;
+  margin-block-start: 8px;
+}
+.hb-image__act {
+  appearance: none;
+  cursor: pointer;
+  flex: 1;
+  padding: 7px 10px;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-3);
+  border: 1px solid var(--ed-line);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 12.5px;
+}
+.hb-image__act:hover {
+  background: var(--color-surface-container-4);
+}
+.hb-image__drop {
+  appearance: none;
+  cursor: pointer;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: var(--ed-radius);
+  background: var(--color-surface-container-1);
+  border: 1px dashed var(--ed-line);
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: 13px;
+}
+.hb-image__drop:hover {
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+}
+.hb-image__drop small {
+  font-size: 11.5px;
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+}
+.hb-image__plus {
+  font-size: 20px;
+  line-height: 1;
+  color: var(--color-text-secondary);
+}
+
+/* How much of a field's budget is used, in the hero tool's own three states:
+   inside the recommended length, past it, and past the point it stops
+   fitting the picture. */
+.hb-count {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.hb-count[data-state='tight'] {
+  color: var(--color-brand-secondary);
+}
+.hb-count[data-state='over'] {
+  color: #ff6b5e;
+  font-weight: 700;
+}

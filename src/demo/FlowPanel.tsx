@@ -26,6 +26,7 @@ import {
   writeFlow,
 } from '../rules/layers'
 import { flowFieldLabel } from '../rules/pipeline'
+import { HeroBannerFields } from './HeroBannerFields'
 import { useState } from 'react'
 
 /**
@@ -52,6 +53,9 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
   const ladder = scopeLadder(at)
   const home = ladder.find((r) => isMarketCopy(r.when)) ?? ladder[0]
   const [chosen, setChosen] = useState(home?.label ?? SHARED)
+  // Which half of the landing page is being edited. The page, not the banner,
+  // because that is what every other screen's panel opens on.
+  const [tab, setTab] = useState<'page' | 'hero'>('page')
   const scope = ladder.find((r) => r.label === chosen)?.when ?? {}
   const screen = step.renderer as keyof FlowContent
   if (!(screen in defaultFlow)) return <FlowFields store={store} step={step} scope={scope} />
@@ -82,8 +86,32 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
       ? `Written for ${chosen} only, over ${selectorLabel({ market: scope.market })}’s own copy.`
       : 'The copy a market reads until it has one of its own.'
 
+  /* The landing page is two things being authored at once: the banner at the
+     top, which is a hero and has a hero's controls, and the eight sections
+     under it. One list of fourteen groups made you scroll past the whole page
+     to reach the picture, so they are two tabs. Only this screen has them,
+     because only this screen has a hero. */
+  const hasHero = screen === 'landing'
+
   return (
     <>
+      {hasHero && (
+        <div className="fp-tabs" role="tablist" aria-label="What to edit">
+          {(['page', 'hero'] as const).map((k) => (
+            <button
+              key={k}
+              type="button"
+              role="tab"
+              className="fp-tab"
+              aria-selected={tab === k}
+              data-on={tab === k || undefined}
+              onClick={() => setTab(k)}
+            >
+              {k === 'page' ? 'Landing page' : 'Hero banner'}
+            </button>
+          ))}
+        </div>
+      )}
       <FieldGroup title="Where this applies">
         <SelectField
           label="Editing"
@@ -123,7 +151,11 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
           </button>
         )}
       </FieldGroup>
-      <FlowFields store={store} step={step} scope={scope} />
+      {hasHero && tab === 'hero' ? (
+        <HeroBannerFields store={store} scope={scope} />
+      ) : (
+        <FlowFields store={store} step={step} scope={scope} />
+      )}
     </>
   )
 }

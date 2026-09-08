@@ -5,7 +5,7 @@ import { useFlowInput } from './live'
 import { cadenceSavings } from '../../rules/cadence'
 import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
 import { styleOf } from '../../rules/tabs'
-import { landingText, providersOf, questionsOf } from '../../rules/landing'
+import { heroOf, landingText, providersOf, questionsOf } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
 
 import { Fragment } from 'react'
@@ -306,13 +306,16 @@ function Cta({
  * instead of a header over a body.
  */
 export function LandingFlowScreen({ content }: { content: LandingScreen }) {
+  // The picture the Hero banner tab uploaded, or the shipped one. A page with
+  // no picture of its own is not a page with no picture.
+  const hero = heroOf(content)
   return (
     <div className="fl fl-landing">
       {/* The 9:16 frame — 667 of the 812, between the status bar and the
           browser bar. The top bar and the copy are laid inside it and spaced
           apart by it, rather than floating over a full-height backdrop. */}
       <div className="fl-landing__frame">
-        <img className="fl-landing__hero" src={landingHero} alt="" />
+        <img className="fl-landing__hero" src={hero.image || landingHero} alt="" />
         <span className="fl-landing__wash" aria-hidden="true" />
         <header className="fl-landing__nav">
           <Mark svg={daznVector} size={32} />
@@ -325,6 +328,11 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
         </header>
         <div className="fl-landing__block">
           <div className="fl-landing__copy">
+            {hero.labelEnabled && hero.label && (
+              <span className="fl-landing__eyebrow" data-variant={hero.labelVariant}>
+                {hero.label}
+              </span>
+            )}
             <h3 className="fl-landing__title">{content.title}</h3>
             <p className="fl-landing__body">{content.body}</p>
           </div>
