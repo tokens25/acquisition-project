@@ -1,12 +1,13 @@
 import './progress-screen.css'
 import './preparing.css'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ProgressScreen, type Narration } from './ProgressScreen'
 import { createProgressBus, type ProgressEvent } from './progressBus'
 import { prepare, type Job, type Prepared } from './prepare'
 import { CoachOrb } from '../demo/coach/CoachOrb'
 import { go } from '../navigate'
+import { pathFor } from '../product'
 import { announceArrival } from './arrival'
 
 /**
@@ -180,11 +181,14 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
    * for.
    */
   const opened = useRef(false)
-  const openTool = () => {
+  /* Held steady across renders because the run below leans on it: it is the
+     ending of a job, and which page that is depends on which product the job
+     was for. */
+  const openTool = useCallback(() => {
     if (opened.current) return
     opened.current = true
-    go('/demo')
-  }
+    go(pathFor(job.product))
+  }, [job.product])
 
   const started = useRef(false)
 
@@ -213,7 +217,7 @@ export function Preparing({ job, onDone }: { job: Job; onDone: () => void }) {
     return () => {
       cancelled.current = true
     }
-  }, [bus, job])
+  }, [bus, job, openTool])
 
   return (
     <ProgressScreen

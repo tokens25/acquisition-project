@@ -8,6 +8,7 @@ import { buildSnapshot } from '../demo/coach/review/snapshot'
 import { runCoach } from '../demo/coach/review/coach'
 import { askCoachAi } from '../demo/coach/review/ai'
 import type { CoachReviewContext } from '../demo/coach/brief'
+import type { Product } from '../product'
 
 /**
  * What opening the tool actually costs, narrated while it happens.
@@ -69,6 +70,8 @@ export interface Job {
   set: CardSet
   context: Context
   journey: Journey
+  /** Which of the two was asked for, and so which page the wait opens on. */
+  product: Product
 }
 
 export interface Prepared {

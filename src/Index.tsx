@@ -5,8 +5,10 @@ import daznLogo from './assets/brand/logo-dazn.svg?raw'
 import { Button } from './components/Button'
 import { Icon } from './components/Icon'
 import { DefaultPanel } from './demo/DefaultPanel'
+import { SelectField } from './components/SelectField'
 import { useState } from 'react'
 import { useCardSet } from './editor/useCardSet'
+import { PRODUCTS, type Product } from './product'
 import type { Job } from './progress/prepare'
 
 /**
@@ -28,6 +30,14 @@ export function Index({ onCreate }: { onCreate: (job: Job) => void }) {
    * chance to count the questions.
    */
   const [pending, setPending] = useState(1)
+  /**
+   * Which of the two is being made, unanswered until it is picked.
+   *
+   * It sits above the situation because it changes what the situation is: a
+   * landing page is where people arrive rather than somewhere they arrive
+   * from, so the entry point stops being a question the moment it is chosen.
+   */
+  const [product, setProduct] = useState<Product | ''>('')
 
   return (
     <main className="idx">
@@ -42,7 +52,21 @@ export function Index({ onCreate }: { onCreate: (job: Job) => void }) {
       <div className="idx__body">
         <div className="idx__form">
           <div className="demo__fields">
-            <DefaultPanel store={store} prompt onAsking={setPending} />
+            <SelectField
+              label="Product"
+              helpText="What you are making. A landing page opens on its own; the flow opens on every step."
+              value={product}
+              options={[{ value: '' as const, label: 'Choose…' }, ...PRODUCTS]}
+              onChange={(v) => v && setProduct(v as Product)}
+            />
+            <DefaultPanel
+              store={store}
+              prompt
+              // Where they arrived from is a question about a flow. The landing
+              // page is the arriving, so there is nothing to ask.
+              entry={product !== 'landing'}
+              onAsking={setPending}
+            />
           </div>
 
           {/* Shut until every question on screen has an answer: the tool
@@ -51,10 +75,13 @@ export function Index({ onCreate }: { onCreate: (job: Job) => void }) {
             appearance="primary"
             size="lg"
             block
-            disabled={pending > 0}
+            disabled={pending > 0 || !product}
             // The situation as it stands at the moment it was asked for,
             // which is what the wait is about and what the tool opens on.
-            onClick={() => onCreate({ set: store.set, context: store.context, journey: store.journey })}
+            onClick={() =>
+              product &&
+              onCreate({ set: store.set, context: store.context, journey: store.journey, product })
+            }
           >
             Create
           </Button>

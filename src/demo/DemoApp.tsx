@@ -47,6 +47,7 @@ import { useCoachHighlight } from './coach/useCoachHighlight'
 import type { Finding } from './coach/review/types'
 import { buildSnapshot } from './coach/review/snapshot'
 import type { Review } from './coach/review/types'
+import { titleFor, type Product } from '../product'
 
 /**
  * The redesigned interface, at /demo.
@@ -54,10 +55,16 @@ import type { Review } from './coach/review/types'
  * Two views rather than one long form. The default view asks which situation is
  * being authored for; the edit view edits one step of the journey that answers.
  * The old interface stays at / until this one earns the swap.
+ *
+ * The landing page is the same interface with one step in it. It is not a
+ * second screen with the panel, preview and toolbar copied into it — it is this
+ * one, told that the journey it is looking at is a page rather than a flow.
  */
-export function DemoApp() {
+export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const store = useCardSet()
-  const [editing, setEditing] = useState(false)
+  /* Straight into the page: on the landing product there is one step and it is
+     what was asked for, so a journey view of it would be a list of one. */
+  const [editing, setEditing] = useState(product === 'landing')
   const [prototype, setPrototype] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [coachOpen, setCoachOpen] = useState(false)
@@ -196,7 +203,17 @@ export function DemoApp() {
     })
   }
 
-  const planned = planJourney(store.journey, store.context)
+  const journeyPlan = planJourney(store.journey, store.context)
+  /*
+   * What this product is: the whole journey, or its landing page on its own.
+   *
+   * The first landing step rather than a step named "landing" — a journey names
+   * its steps as it likes, and what makes one the landing page is that it
+   * renders one. A journey with none falls back to its first step, so the tool
+   * still opens on something.
+   */
+  const landingStep = journeyPlan.find((p) => p.step.renderer === 'landing') ?? journeyPlan[0]
+  const planned = product === 'landing' ? (landingStep ? [landingStep] : []) : journeyPlan
   const steps = planned.filter((p) => !p.skipped).map((p) => p.step)
   const step = steps.find((s) => s.id === store.set.stepId) ?? steps[0]
   const coverage = summarise(validateAll(store.set))
@@ -417,7 +434,7 @@ export function DemoApp() {
       <span className="demo__mark">
         <Icon svg={daznLogo} size={24} />
       </span>
-      <h1 className="demo__title">Agentic acquisition</h1>
+      <h1 className="demo__title">{titleFor(product)}</h1>
       <span className="demo__beta">BETA</span>
       <button
         type="button"
@@ -524,7 +541,7 @@ export function DemoApp() {
             <>
               <div className="demo__fields">
                 <TranslationBar tx={tx} market={marketLabel} />
-                <DefaultPanel store={store} />
+                <DefaultPanel store={store} entry={product !== 'landing'} />
               </div>
 
               {dev && readyCount === 0 ? (
@@ -560,9 +577,14 @@ export function DemoApp() {
           {editing && step ? (
             <StepPreview
               journey={store.journey}
-              // The market's own words, so the preview reads as that market
-              // reads. The panel beside it still edits the English source.
-              set={marketSet}
+              /* The market's own words, so the preview reads as that market
+                 reads. The panel beside it still edits the English source.
+
+                 Pointed at the step being edited rather than at the one the set
+                 remembers: the preview finds its own step from the set, and on
+                 the landing page the set can still be carrying the step someone
+                 left the flow on. */
+              set={marketSet.stepId === step.id ? marketSet : { ...marketSet, stepId: step.id }}
               context={store.context}
               onTab={(tab) => store.setContext({ ...store.context, tab })}
             />

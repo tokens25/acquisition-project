@@ -31,6 +31,7 @@ const answeredThisVisit: Record<string, boolean> = {}
 export function DefaultPanel({
   store,
   prompt = false,
+  entry: askEntry = true,
   onAsking,
 }: {
   store: CardSetStore
@@ -44,6 +45,15 @@ export function DefaultPanel({
    * what is held.
    */
   prompt?: boolean
+  /**
+   * Whether where they arrived from is still a question.
+   *
+   * A landing page is the arrival, so nothing arrives at it and the field has
+   * nothing to ask. The journey underneath still has an entry — it has to, to
+   * resolve — and it settles on the first one the rest of the situation
+   * allows, exactly as it does while the question is unanswered.
+   */
+  entry?: boolean
   /** How many questions are still unanswered, for whoever is waiting on them. */
   onAsking?: (pending: number) => void
 }) {
@@ -78,7 +88,8 @@ export function DefaultPanel({
    * many there are.
    */
   const open = (key: string) => (prompt && !answered[key] ? 1 : 0)
-  const pending = open('market') + open('subscription') + open('status') + open('entry')
+  const pending =
+    open('market') + open('subscription') + open('status') + (askEntry ? open('entry') : 0)
   useEffect(() => {
     onAsking?.(pending)
   }, [onAsking, pending])
@@ -169,17 +180,19 @@ export function DefaultPanel({
         }}
       />
 
-      <SelectField
-        label="Entry point"
-        helpText="Where they arrived from. Narrowed by user status — a migrating subscriber never arrives from Upgrade."
-        value={shown('entry', entryCta)}
-        options={[...asking('entry'), ...entries.map((e) => ({ value: e, label: e }))]}
-        onChange={(v) => {
-          if (!v) return
-          answer('entry')
-          pick(status, v)
-        }}
-      />
+      {askEntry && (
+        <SelectField
+          label="Entry point"
+          helpText="Where they arrived from. Narrowed by user status — a migrating subscriber never arrives from Upgrade."
+          value={shown('entry', entryCta)}
+          options={[...asking('entry'), ...entries.map((e) => ({ value: e, label: e }))]}
+          onChange={(v) => {
+            if (!v) return
+            answer('entry')
+            pick(status, v)
+          }}
+        />
+      )}
 
       {/* No fourth question. Market, product, state and entry name exactly one
           journey between them, so there is never a choice left to make. */}

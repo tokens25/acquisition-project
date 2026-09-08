@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react'
 import { App } from './App'
 import { DemoApp } from './demo/DemoApp'
+import { Gallery } from './components/studio/Gallery'
 import { Index } from './Index'
 import { Preparing } from './progress/Preparing'
 import type { Job } from './progress/prepare'
 
 /**
- * Three routes, one deployment.
+ * Four routes, one deployment.
  *
- * `/` asks which situation you are writing for and opens the tool; `/demo` is
- * the tool. `/demo2` is the first iteration, kept reachable by address but no
- * longer offered — the front door stopped being a choice between the two when
- * the second one stopped being a candidate.
+ * `/` asks which product and which situation you are writing for and opens the
+ * tool; `/demo` is the tool on the whole flow, `/landing` the same tool on the
+ * landing page alone. `/demo2` is the first iteration, kept reachable by
+ * address but no longer offered — the front door stopped being a choice between
+ * the two when the second one stopped being a candidate.
  *
- * Hand-rolled rather than react-router: three static paths do not justify a
+ * Hand-rolled rather than react-router: four static paths do not justify a
  * dependency, and this is small enough to read in one sitting.
  */
 /**
@@ -43,7 +45,20 @@ export function Routes() {
   }, [])
 
   const page =
-    path === '/demo' ? <DemoApp /> : path === '/demo2' ? <App /> : <Index onCreate={setJob} />
+    path === '/demo' ? (
+      <DemoApp />
+    ) : path === '/landing' ? (
+      /* The same tool, on the landing page alone and open on it. */
+      <DemoApp product="landing" />
+    ) : path === '/controls' ? (
+      /* The controls ported from Project A, on a page of their own. Nothing
+         in the tool imports them yet; this is where they can be looked at. */
+      <Gallery />
+    ) : path === '/demo2' ? (
+      <App />
+    ) : (
+      <Index onCreate={setJob} />
+    )
 
   return (
     <>
