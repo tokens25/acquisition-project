@@ -1,0 +1,509 @@
+/* ── The account, in the corner of everything ──────────────────────────────
+   Fixed rather than laid into each screen's bar: the routes here have four
+   different bars between them and a corner is a corner. What the bars do
+   about it is leave room, by reading the slot below. */
+
+:root {
+  /* The avatar, and the air either side of it. A bar with controls of its own
+     at that end adds this to its end padding and they never meet. */
+  --account-slot: 46px;
+}
+
+.acc {
+  position: fixed;
+  z-index: 90;
+  inset-block-start: var(--space-12);
+  inset-inline-end: var(--space-16);
+}
+
+.acc__trigger {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  cursor: pointer;
+}
+.acc__trigger:focus-visible {
+  outline: var(--border-2) solid var(--color-border-full-color-default);
+  outline-offset: 2px;
+}
+
+/* Initials rather than a picture: there is no picture, and two letters in a
+   circle is what every tool draws while it waits for one. */
+.acc__avatar {
+  display: grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.4px;
+}
+/* Signed out: the same circle, saying nobody. */
+.acc__avatar[data-out] {
+  color: var(--color-text-tertiary);
+}
+.acc__avatar--lg {
+  inline-size: 52px;
+  block-size: 52px;
+  font-size: 18px;
+}
+
+/* ── The card ──────────────────────────────────────────────────────────── */
+
+.acc__card {
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-8));
+  inset-inline-end: 0;
+  display: flex;
+  flex-direction: column;
+  inline-size: 260px;
+  padding: var(--space-4);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-1);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 55%);
+}
+
+.acc__who {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center;
+  padding: var(--space-16) var(--space-12) var(--space-12);
+  text-align: center;
+}
+.acc__name {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-bold);
+}
+/* Its own line under the name, and quieter: it identifies the account rather
+   than naming it, and an address at full strength competes with the name. */
+.acc__email {
+  max-inline-size: 100%;
+  overflow: hidden;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.acc__who .acc__name + .acc__email {
+  margin-block-start: calc(var(--space-4) * -1);
+}
+
+.acc__rule {
+  block-size: var(--border-1);
+  margin: var(--space-4) var(--space-4);
+  background: var(--color-border-full-color-subtle);
+}
+
+.acc__row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-8) var(--space-8);
+}
+.acc__row-name {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+.acc__lang {
+  min-inline-size: 0;
+  padding: var(--space-4) var(--space-8);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--font-size-caption-sm);
+}
+
+/* One row shape for all four entries, so the way out is the same size as the
+   things above it and only its colour says what it is. */
+.acc__item {
+  display: flex;
+  gap: var(--space-10);
+  align-items: center;
+  inline-size: 100%;
+  padding: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: none;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: var(--font-size-caption-sm);
+  text-align: start;
+  cursor: pointer;
+}
+.acc__item:hover {
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+}
+.acc__item--out {
+  color: var(--color-accent-error-text);
+}
+.acc__item--out:hover {
+  color: var(--color-accent-error-text);
+}
+.acc__glyph {
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+}
+/* How many are waiting, at the end of the row that opens them. */
+.acc__count {
+  margin-inline-start: auto;
+  padding: 0 var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-3);
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+}
+
+/* ── The two sheets ────────────────────────────────────────────────────── */
+
+/* ── Reporting one: the screen, and a pen ──────────────────────────────────
+   Over everything, including the account it was opened from. Four controls
+   and no more — draw, clear, say what happened, send. */
+
+.bug {
+  position: fixed;
+  z-index: 200;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: rgb(0 0 0 / 85%);
+  backdrop-filter: blur(4px);
+}
+
+.bug__head {
+  flex: none;
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  padding: var(--space-12) var(--space-20);
+}
+.bug__title {
+  color: #fff;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-bold);
+}
+/* The instruction, beside the name rather than under it: it is one line and it
+   is only true while this is open. */
+.bug__hint {
+  color: rgb(255 255 255 / 55%);
+  font-size: var(--font-size-caption-xs);
+}
+.bug__clear {
+  margin-inline-start: auto;
+  padding: var(--space-4) var(--space-10);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: none;
+  color: rgb(255 255 255 / 70%);
+  font: inherit;
+  font-size: var(--font-size-caption-xs);
+  cursor: pointer;
+}
+.bug__clear:hover {
+  background: rgb(255 255 255 / 10%);
+  color: #fff;
+}
+.bug__close {
+  display: grid;
+  place-items: center;
+  inline-size: 28px;
+  block-size: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-8);
+  background: none;
+  color: rgb(255 255 255 / 70%);
+  cursor: pointer;
+}
+.bug__close:hover {
+  background: rgb(255 255 255 / 10%);
+  color: #fff;
+}
+
+.bug__stage {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 0;
+  padding-inline: var(--space-20);
+}
+/* The picture at its own proportions, as large as the room allows. The canvas
+   is laid exactly over it, which is what makes a mark land where it is drawn. */
+.bug__shot {
+  position: relative;
+  max-block-size: 100%;
+  line-height: 0;
+}
+.bug__shot > img {
+  max-inline-size: 100%;
+  max-block-size: 70vh;
+  inline-size: auto;
+  border: var(--border-1) solid rgb(255 255 255 / 15%);
+  border-radius: var(--radius-12);
+}
+.bug__marks {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-12);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.bug__foot {
+  flex: none;
+  padding: var(--space-16) var(--space-20);
+}
+.bug__composer {
+  position: relative;
+  max-inline-size: 900px;
+  margin-inline: auto;
+}
+.bug__note {
+  inline-size: 100%;
+  min-block-size: 64px;
+  padding: var(--space-12) 110px var(--space-12) var(--space-12);
+  border: var(--border-1) solid rgb(255 255 255 / 15%);
+  border-radius: var(--radius-12);
+  background: rgb(0 0 0 / 50%);
+  color: #fff;
+  font: inherit;
+  font-size: var(--font-size-caption-sm);
+  resize: none;
+}
+.bug__note::placeholder {
+  color: rgb(255 255 255 / 40%);
+}
+.bug__note:focus {
+  border-color: rgb(255 255 255 / 35%);
+  outline: none;
+}
+.bug__send {
+  position: absolute;
+  inset-block-end: 10px;
+  inset-inline-end: 10px;
+  block-size: 38px;
+  padding-inline: var(--space-16);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: #fff;
+  color: #000;
+  font: inherit;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.bug__send:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.bug__error {
+  max-inline-size: 900px;
+  margin: var(--space-8) auto 0;
+  color: var(--color-accent-error-text);
+  font-size: var(--font-size-caption-xs);
+}
+
+/* Named for the field it labels, and not drawn: the placeholder says it. */
+.acc-sr {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── The reports, as a table ───────────────────────────────────────────────
+   Wider than the tool's other sheets: three things are being compared down
+   the list and a 480 column crushes them into one. */
+
+/* Both classes, because the sheet it is built on states its own width in one
+   and whichever sheet loads last would otherwise win. */
+.coach-goal.acc-sheet {
+  inline-size: min(860px, 100vw);
+}
+
+.acc-bugs__empty {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.5;
+}
+
+.acc-bugs {
+  overflow: hidden;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+}
+.acc-bugs__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  text-align: start;
+}
+.acc-bugs__table th {
+  padding: var(--space-10) var(--space-16);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+  color: var(--color-text-tertiary);
+  font-size: 10.5px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.1em;
+  text-align: start;
+  text-transform: uppercase;
+}
+.acc-bugs__table td {
+  padding: var(--space-12) var(--space-16);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+  vertical-align: top;
+}
+.acc-bugs__table tbody tr:last-child td {
+  border-block-end: 0;
+}
+
+/* The picture, small — and saying it can be made large. `zoom-in` is the
+   magnifier the browser already draws, so the cursor is the affordance and
+   there is no badge to place over the corner of a thumbnail. */
+.acc-bugs__thumb {
+  display: block;
+  padding: 0;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: none;
+  line-height: 0;
+  cursor: zoom-in;
+}
+.acc-bugs__thumb:hover {
+  border-color: var(--color-border-full-color-default);
+}
+.acc-bugs__thumb img {
+  inline-size: 112px;
+  block-size: 64px;
+  border-radius: var(--radius-8);
+  object-fit: cover;
+}
+
+.acc-bugs__note {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.4;
+}
+/* A report can be a drawing and nothing else, and that is worth saying rather
+   than leaving a gap where a sentence would be. */
+.acc-bugs__note--none {
+  color: var(--color-text-tertiary);
+}
+.acc-bugs__meta {
+  margin: var(--space-4) 0 0;
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+.acc-bugs__meta code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.acc-bugs__by {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  white-space: nowrap;
+}
+.acc-bugs__end {
+  inline-size: 1%;
+  text-align: end;
+}
+
+/* Quiet until it is reached for, and then unmistakably the colour of the thing
+   it does — this cannot be undone, and the report only lives here. */
+.acc-bugs__forget {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 32px;
+  padding: 0;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.acc-bugs__forget:hover {
+  border-color: var(--color-accent-error-border);
+  color: var(--color-accent-error-text);
+}
+.acc-bugs__bin {
+  inline-size: 15px;
+  block-size: 15px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .acc-bugs__forget {
+    transition: none;
+  }
+}
+
+.acc-bugs__foot {
+  margin: var(--space-8) 0 0;
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+/* ── The picture, full size ────────────────────────────────────────────── */
+
+.acc-zoom {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-24);
+  background: rgb(0 0 0 / 80%);
+  backdrop-filter: blur(4px);
+  cursor: zoom-out;
+}
+.acc-zoom img {
+  max-inline-size: 92vw;
+  max-block-size: 86vh;
+  border: var(--border-1) solid rgb(255 255 255 / 15%);
+  border-radius: var(--radius-12);
+  object-fit: contain;
+  box-shadow: 0 32px 80px rgb(0 0 0 / 60%);
+  cursor: default;
+}
+.acc-zoom__note {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  margin: 0;
+  color: rgb(255 255 255 / 70%);
+  font-size: var(--font-size-caption-sm);
+}
+.acc-zoom__close {
+  padding: var(--space-4) var(--space-10);
+  border: var(--border-1) solid rgb(255 255 255 / 25%);
+  border-radius: var(--radius-8);
+  background: none;
+  color: rgb(255 255 255 / 90%);
+  font: inherit;
+  font-size: var(--font-size-caption-xs);
+  cursor: pointer;
+}
+.acc-zoom__close:hover {
+  background: rgb(255 255 255 / 10%);
+}

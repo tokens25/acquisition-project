@@ -224,6 +224,15 @@ export interface Context {
    * over, and there is nothing yet for those extra runs to find.
    */
   subscription?: string
+  /**
+   * Which of the landing surfaces is on screen — see `pageViews.ts`.
+   *
+   * Only the one-page product asks it: a journey says who is looking through
+   * its audience and its entry point, and a page that is the arrival has
+   * neither. Optional for the same reason `subscription` is — it is the
+   * answer to a question, and nothing derives from it yet.
+   */
+  pageView?: string
   campaign?: string
   /** Which storefront — `direct` or a partner code. */
   channel: string

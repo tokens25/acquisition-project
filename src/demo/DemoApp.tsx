@@ -592,12 +592,16 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
               {/* The panel follows the step. A flow screen is copy from
                   end to end, and the card set's groups would have nothing to
                   say about it. */}
-              <div className="demo__fields">
+              {/* Marked when the whole product is one page: the column is then
+                  a dozen components end to end rather than one screen's worth
+                  of fields, and it is spaced for a list rather than for a
+                  form. */}
+              <div className="demo__fields" data-single={single || undefined}>
                 <TranslationBar tx={tx} market={marketLabel} />
                 {/* Which market, product and buyer this is being written for.
                     It asked these on the journey view, which this product no
                     longer has; the questions did not stop mattering. */}
-                {single && !dev && <DefaultPanel store={store} entry={false} />}
+                {single && !dev && <DefaultPanel store={store} entry={false} views />}
                 {dev ? (
                   /* Dev reads: every string of the page, its key, and a button
                      to take it. Nothing here writes. */

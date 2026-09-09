@@ -537,6 +537,24 @@
   opacity: 0.8;
 }
 
+/* A dozen components in one column, each with a heading and a footer, is a
+   long way to scroll. They keep the shape a group has everywhere else and
+   take less air doing it: six above and below a heading rather than ten, and
+   twelve under the fields rather than sixteen. */
+.ls-card .fg__head {
+  padding-block: var(--space-6);
+}
+.ls-card .fg__inner {
+  padding-block: var(--space-2) var(--space-12);
+}
+/* Shut, the fold still holds that padding — a grid row of `0fr` collapses the
+   content and not the box's own padding, so every closed card was carrying
+   fourteen pixels for something nobody can see. A dozen cards is most of a
+   screen. */
+.ls-card .fg:not([data-open]) .fg__inner {
+  padding-block: 0;
+}
+
 /* Duplicate, and Delete on a copy: the tabs editor's own footer, which is a
    right-aligned row of quiet words rather than buttons competing with the
    fields above them. */
@@ -547,7 +565,7 @@
   align-items: center;
   /* Clear of the heading when the card is shut, and of the fields when it is
      open — the group's own bottom padding is inside the fold. */
-  padding-block-end: var(--space-10);
+  padding-block-end: var(--space-6);
 }
 
 /* ── Adding a component ───────────────────────────────────────────────────

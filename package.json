@@ -17,6 +17,7 @@
     "console:check": "node scripts/build-console.mjs --check"
   },
   "dependencies": {
+    "html-to-image": "^1.11.13",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

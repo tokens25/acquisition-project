@@ -94,7 +94,9 @@
   display: flex;
   gap: var(--space-8);
   align-items: center;
-  block-size: 100%;
+  /* Its own height rather than the bar's: the row it sits in is 56 and this
+     is the mark, which does not need all of it. */
+  block-size: 44px;
   padding-block: var(--space-8);
   padding-inline: var(--space-20);
   margin-inline: 0;
@@ -153,6 +155,16 @@
    they should read the same in both. */
 .demo__fields:has(> .dz-field) {
   gap: var(--space-16);
+}
+/* A one-page product's panel is a list of components rather than a screen's
+   worth of fields — a dozen cards, each with its own heading and footer, all
+   scrolled end to end. Everything about it is tighter for that.
+
+   Written with the attribute twice because the rule above is exactly as
+   specific and comes first: the situation fields are direct children here, so
+   both match, and one of them has to say which wins. */
+.demo__fields[data-single][data-single] {
+  gap: var(--space-10);
 }
 /* All three explain themselves, which is what makes the column even: each
    box sits the same distance below the line under the one before it. A field
@@ -219,7 +231,10 @@
   gap: var(--space-8);
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-8) var(--space-24);
+  /* The account sits in this corner, over everything. Its slot is added to
+     the end padding so the bar's own controls stop before it rather than
+     underneath it. */
+  padding: var(--space-8) calc(var(--space-24) + var(--account-slot)) var(--space-8) var(--space-24);
   border-inline-start: var(--border-1) solid var(--color-border-full-color-subtle);
   background: var(--color-surface-default);
 }

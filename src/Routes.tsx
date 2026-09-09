@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { AccountMenu } from './account/AccountMenu'
 import { App } from './App'
 import { DemoApp } from './demo/DemoApp'
 import { HeroGallery } from './hero/HeroGallery'
@@ -64,6 +65,11 @@ export function Routes() {
   return (
     <>
       {page}
+      {/* Beside every route rather than inside each of them. Every screen here
+          has a top right corner and this is what is in it; drawn by the router
+          means no screen has to remember to draw it, and all four agree about
+          where it is. */}
+      <AccountMenu />
       {/* Above the route rather than inside the front door: the tool mounts
           behind this while it is still opaque, so the fade uncovers the tool
           and not the questions that were just answered. */}

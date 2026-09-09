@@ -75,7 +75,7 @@ export function TranslateSheet({ open, tx, onClose }: { open: boolean; tx: Trans
             {tx.market.label} languages
           </h2>
           <button type="button" className="coach-goal__close" aria-label="Close" title="Close" onClick={onClose}>
-            <Icon svg={closeIcon} size={16} />
+            <Icon svg={closeIcon} size={24} />
           </button>
         </header>
 

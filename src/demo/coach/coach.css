@@ -124,22 +124,57 @@
   font-size: var(--font-size-heading-h6);
   font-weight: var(--font-weight-bold);
 }
+/* The plan details panel's close button, to the letter — it is the same
+   control and it should not be a second design of one.
+
+   The disc is not the button. The button is a 48 square of nothing, which is
+   the size a finger needs; what is drawn is a 24 circle inside it holding the
+   glyph at its own size. Drawing the circle at 30 and letting it be the button
+   made it both too big and too pale beside the one on the card. */
 .coach-goal__close {
   display: grid;
   flex: none;
   place-items: center;
-  inline-size: 30px;
-  block-size: 30px;
+  inline-size: var(--space-48);
+  block-size: var(--space-48);
+  /* Held to the end of the header row, and kept from setting its height: 48 in
+     a row of 24-tall words would push the title down nine pixels either side.
+     The hit area still reaches its full size, it just does not take the room. */
+  margin-block: -9px;
   margin-inline-start: auto;
+  padding: 0;
   border: 0;
-  border-radius: var(--radius-full);
-  background: rgb(255 255 255 / 0.1);
-  color: var(--color-text-secondary);
+  background: none;
+  color: var(--color-text-primary);
   cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
 }
-.coach-goal__close:hover { background: rgb(255 255 255 / 0.16); color: var(--color-text-primary); }
-.coach-goal__close:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 2px; }
+.coach-goal__close > .dazn-icon {
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-24);
+  block-size: var(--space-24);
+  border-radius: var(--radius-full);
+  /* DS semantic/base/surface/neutral. Absent from our token export, so the
+     design's own value with a note rather than the nearest wrong token. */
+  background: color-mix(in srgb, #3d4549 88%, transparent);
+  transition: background 120ms ease;
+}
+/* The disc answers, not the square around it — the square is invisible. */
+.coach-goal__close:hover > .dazn-icon {
+  background: color-mix(in srgb, #3d4549 100%, transparent);
+}
+.coach-goal__close:focus-visible {
+  outline: none;
+}
+.coach-goal__close:focus-visible > .dazn-icon {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .coach-goal__close > .dazn-icon {
+    transition: none;
+  }
+}
 .coach-goal__lede {
   margin: -6px 0 0;
   color: var(--color-text-secondary);

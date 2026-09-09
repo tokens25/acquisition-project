@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Context } from '../rules/content'
 import type { CardSetStore } from '../editor/useCardSet'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
+import { DEFAULT_PAGE_VIEW, PAGE_VIEWS } from '../rules/pageViews'
 import { MARKETS, SUBSCRIPTIONS, journeys } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
 
@@ -32,6 +33,7 @@ export function DefaultPanel({
   store,
   prompt = false,
   entry: askEntry = true,
+  views = false,
   onAsking,
 }: {
   store: CardSetStore
@@ -54,6 +56,15 @@ export function DefaultPanel({
    * allows, exactly as it does while the question is unanswered.
    */
   entry?: boolean
+  /**
+   * Whether "who is looking" is a page rather than an audience.
+   *
+   * The journey product asks which user a journey is for, and the answer picks
+   * one of the modelled journeys. A one-page product has no journeys to pick
+   * between — what the same question means there is which of the four landing
+   * surfaces is on screen, so the field keeps its name and changes its list.
+   */
+  views?: boolean
   /** How many questions are still unanswered, for whoever is waiting on them. */
   onAsking?: (pending: number) => void
 }) {
@@ -165,20 +176,38 @@ export function DefaultPanel({
         }}
       />
 
-      <SelectField
-        label="User status"
-        helpText="Who is buying. It narrows the entry points below."
-        value={shown('status', status)}
-        options={[
-          ...asking('status'),
-          ...statuses.map((s) => ({ value: s, label: STATUS_LABELS[s] ?? s })),
-        ]}
-        onChange={(v) => {
-          if (!v) return
-          answer('status')
-          pick(v)
-        }}
-      />
+      {/* The same question either way — who is looking at this — and two
+          different things to answer it with. A journey has an audience, and
+          choosing one picks the journey. A single page has none: what varies
+          is which of its four surfaces this is, and that is held on the
+          situation rather than looked up. */}
+      {views ? (
+        <SelectField
+          label="User status"
+          helpText="Which of the landing surfaces this is. Nothing draws it differently yet."
+          value={context.pageView ?? DEFAULT_PAGE_VIEW}
+          options={PAGE_VIEWS.map((v) => ({ value: v.code, label: v.label }))}
+          onChange={(v) => {
+            if (!v) return
+            setContext({ ...context, pageView: v })
+          }}
+        />
+      ) : (
+        <SelectField
+          label="User status"
+          helpText="Who is buying. It narrows the entry points below."
+          value={shown('status', status)}
+          options={[
+            ...asking('status'),
+            ...statuses.map((s) => ({ value: s, label: STATUS_LABELS[s] ?? s })),
+          ]}
+          onChange={(v) => {
+            if (!v) return
+            answer('status')
+            pick(v)
+          }}
+        />
+      )}
 
       {askEntry && (
         <SelectField

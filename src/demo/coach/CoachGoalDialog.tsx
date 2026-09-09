@@ -199,7 +199,7 @@ export function CoachGoalDialog({
             <CoachOrb size={16} /> Before the Coach reviews
           </h2>
           <button type="button" className="coach-goal__close" aria-label="Close" title="Close" onClick={onClose}>
-            <Icon svg={closeIcon} size={16} />
+            <Icon svg={closeIcon} size={24} />
           </button>
         </header>
         <p className="coach-goal__lede">
