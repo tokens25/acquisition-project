@@ -11,7 +11,7 @@ import './coach.css'
 import './results.css'
 
 /**
- * What the Coach found, the score, the ten baseline questions, and every
+ * What the Coach found, the score, the nine questions, and every
  * finding laid out as the chain it was built from: what was seen, what backs
  * it, what it may mean, what to do (or why not yet), and how sure.
  */

@@ -286,7 +286,66 @@ export interface LandingScreen {
   /** The questions at the foot of the page. */
   faqTitle?: string
   faqs?: LandingQuestion[]
+
+  /* ── The hero banner ──────────────────────────────────────
+     The controls the hero banner tool authors a banner with, brought over
+     from that project so the same picture is composed the same way here.
+
+     The heading, the line under it and the gold button are NOT repeated:
+     `title`, `body` and `cta` above are the hero's, and the Hero banner tab
+     writes those same fields. Two copies of one string is how a preview and
+     a panel come to disagree.
+
+     Everything below is what the hero tool has and this page did not.
+     Optional throughout, so a saved page from before they existed still
+     loads and simply has none of them on. */
+
+  /** The picture behind the hero, as a data URL. Empty means the shipped one. */
+  heroImage?: string
+  /** The small line above the heading, and what kind of line it is. */
+  heroLabelEnabled?: boolean
+  heroLabel?: string
+  heroLabelVariant?: HeroLabelVariant
+  /** The fine print under the buttons. */
+  heroHelperEnabled?: boolean
+  heroHelper?: string
+  /** The price, in the four parts the hero tool writes it in. */
+  heroPriceEnabled?: boolean
+  heroPricePrefix?: string
+  heroPriceValue?: string
+  heroPriceSuffix?: string
+  heroPriceOld?: string
+  /** The DAZN mark over the picture. */
+  heroLogoEnabled?: boolean
+  heroLogoSize?: HeroLogoSize
 }
+
+/**
+ * The three kinds of eyebrow the hero tool writes.
+ *
+ * Standard and gold are dates; discount is free text. Carried over as the
+ * same three words that project uses, so a banner authored in either place
+ * means the same thing.
+ */
+export type HeroLabelVariant = 'standard' | 'discount' | 'gold'
+
+export type HeroLogoSize = 'small' | 'medium' | 'large'
+
+/**
+ * How long each hero string is allowed to be.
+ *
+ * These are the hero banner tool's own numbers, from its `copyLimits`, not
+ * numbers chosen here: soft is the recommended maximum and hard is the point
+ * past which the copy will not fit the picture. Kept together so the counter
+ * beside a field and the tool that drew the design agree.
+ */
+export const HERO_LIMITS = {
+  title: { soft: 48, hard: 58, note: 'About 48 characters, two lines at most.' },
+  body: { soft: 60, hard: 80, note: 'Supports the heading. About 60 characters, two lines at most.' },
+  label: { soft: 24, hard: 32, note: 'Keep a date on one line.' },
+  cta: { soft: 18, hard: 26, note: 'Action led. One to three words.' },
+  helper: { soft: 72, hard: 96, note: 'Optional fine print.' },
+} as const
 
 /**
  * The words on the plan screen that are not a plan's own copy.
@@ -344,6 +403,22 @@ export const defaultFlow: FlowContent = {
     cta: 'Sign Up',
     altCta: 'Sign in with your TV provider',
     footnote: 'Nationally broadcast games will not be available on DAZN',
+    // The hero controls start off, so the page looks exactly as it does now
+    // until somebody turns one on. The words are the hero tool's own
+    // placeholders, which is what its fields show when empty.
+    heroImage: '',
+    heroLabelEnabled: false,
+    heroLabel: '',
+    heroLabelVariant: 'standard',
+    heroHelperEnabled: false,
+    heroHelper: '',
+    heroPriceEnabled: false,
+    heroPricePrefix: 'From',
+    heroPriceValue: '',
+    heroPriceSuffix: '/ month',
+    heroPriceOld: '',
+    heroLogoEnabled: false,
+    heroLogoSize: 'medium',
 
     // Read off node 708:173735 rather than rewritten, down to the full stop
     // the design puts after "devices." and the one it leaves off "Anywhere".

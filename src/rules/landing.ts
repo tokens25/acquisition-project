@@ -1,5 +1,82 @@
-import type { LandingProvider, LandingQuestion, LandingScreen } from './flow'
+import type {
+  HeroLabelVariant,
+  HeroLogoSize,
+  LandingProvider,
+  LandingQuestion,
+  LandingScreen,
+} from './flow'
 import { defaultFlow } from './flow'
+
+/**
+ * The hero banner's own fields, which are not words on the page below it.
+ *
+ * `landingText` resolves every string the page shows and types its result as
+ * "all of them, filled in". The hero carries switches, a picture and two
+ * pickers as well, so they are named here and left out of that type rather
+ * than making it lie about what it returns.
+ */
+export const HERO_KEYS = [
+  'heroImage',
+  'heroLabelEnabled',
+  'heroLabel',
+  'heroLabelVariant',
+  'heroHelperEnabled',
+  'heroHelper',
+  'heroPriceEnabled',
+  'heroPricePrefix',
+  'heroPriceValue',
+  'heroPriceSuffix',
+  'heroPriceOld',
+  'heroLogoEnabled',
+  'heroLogoSize',
+] as const
+
+export type HeroKey = (typeof HERO_KEYS)[number]
+
+/** The hero banner as the panel and the preview both read it. */
+export interface HeroBanner {
+  image: string
+  labelEnabled: boolean
+  label: string
+  labelVariant: HeroLabelVariant
+  helperEnabled: boolean
+  helper: string
+  priceEnabled: boolean
+  pricePrefix: string
+  priceValue: string
+  priceSuffix: string
+  priceOld: string
+  logoEnabled: boolean
+  logoSize: HeroLogoSize
+}
+
+/**
+ * What the hero is set to, with the shipped values standing in.
+ *
+ * Same shape as `landingText` and for the same reason: a page saved before
+ * these existed has none of them, and reading that as "off and empty" is
+ * exactly right rather than something to guard against at every call site.
+ */
+export function heroOf(content: LandingScreen): HeroBanner {
+  const base = defaultFlow.landing
+  const str = (k: HeroKey) => (content[k] ?? base[k] ?? '') as string
+  const on = (k: HeroKey) => (content[k] ?? base[k] ?? false) as boolean
+  return {
+    image: str('heroImage'),
+    labelEnabled: on('heroLabelEnabled'),
+    label: str('heroLabel'),
+    labelVariant: (content.heroLabelVariant ?? base.heroLabelVariant ?? 'standard') as HeroLabelVariant,
+    helperEnabled: on('heroHelperEnabled'),
+    helper: str('heroHelper'),
+    priceEnabled: on('heroPriceEnabled'),
+    pricePrefix: str('heroPricePrefix'),
+    priceValue: str('heroPriceValue'),
+    priceSuffix: str('heroPriceSuffix'),
+    priceOld: str('heroPriceOld'),
+    logoEnabled: on('heroLogoEnabled'),
+    logoSize: (content.heroLogoSize ?? base.heroLogoSize ?? 'medium') as HeroLogoSize,
+  }
+}
 
 /**
  * The words on the landing page, with the shipped wording standing in for
@@ -11,7 +88,7 @@ import { defaultFlow } from './flow'
  * designed until somebody changes it.
  */
 export function landingText(content: LandingScreen): Required<
-  Omit<LandingScreen, 'providers' | 'faqs'>
+  Omit<LandingScreen, 'providers' | 'faqs' | HeroKey>
 > {
   const base = defaultFlow.landing
   const of = <K extends keyof LandingScreen>(key: K) =>

@@ -1051,6 +1051,25 @@
   inline-size: 100%;
   padding-block-start: var(--space-16);
 }
+/* The hero's eyebrow, from the Hero banner tab. Uppercase and tracked out,
+   because it is a date or an offer and not a sentence. Gold and offer take the
+   brand gradient the rest of the page uses for a plan's own colour; the plain
+   date stays quiet so it does not compete with the heading under it. */
+.fl-landing__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--font-size-button-sm);
+  font-weight: var(--font-weight-bold);
+  color: #cfd4d8;
+}
+.fl-landing__eyebrow[data-variant='gold'],
+.fl-landing__eyebrow[data-variant='discount'] {
+  background: linear-gradient(160deg, #fbed7d 0%, #f2af3d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 /* The buttons and the note share one grid cell: the note is dropped 132 from
    the top rather than following the group, so the block keeps its height
    whether or not there is a note to draw. */

@@ -46,6 +46,7 @@
     panelEdit: { vb: '0 0 80 150', furn: [[6,22,68,18]], parts: {
       'step heading': [6,5,52,7], 'back arrow': [6,5,7,7], 'step title': [16,5,42,7],
       'step status chip': [60,6,14,5], 'nothing ready note': [6,44,68,12],
+      'edit tabs': [6,14,68,6], 'edit tab': [6,14,32,6],
       'field group': [6,44,68,16], 'group title': [6,44,26,4],
       'plans group': [6,44,68,16], 'header group': [6,64,68,16],
       'pricing group': [6,84,68,16], 'add-on group': [6,104,68,14],
@@ -131,6 +132,7 @@
       'landing screen': [0,0,80,120], 'hero glow': [0,0,80,105],
       'hero picture': [0,0,80,110], 'hero artwork': [0,0,80,110], 'landing wash': [0,0,80,110],
       'hero content slot': [3,58,74,46], 'hero content': [3,58,74,46],
+      'landing eyebrow': [7,55,66,3],
       'landing heading': [7,60,66,7], 'landing body group': [7,69,66,12],
       'landing body': [7,70,66,10],
       'landing buttons': [7,84,66,22], 'button and note stack': [7,84,66,22],

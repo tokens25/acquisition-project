@@ -5,7 +5,7 @@ import { useFlowInput } from './live'
 import { cadenceSavings } from '../../rules/cadence'
 import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
 import { styleOf } from '../../rules/tabs'
-import { landingText, providersOf, questionsOf } from '../../rules/landing'
+import { heroOf, landingText, providersOf, questionsOf } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
 
 import { Fragment } from 'react'
@@ -347,6 +347,9 @@ function Cta({
  */
 export function LandingFlowScreen({ content }: { content: LandingScreen }) {
   const text = landingText(content)
+  // What the Hero banner tab controls: an uploaded picture standing in for
+  // the shipped one, and the eyebrow over the heading.
+  const hero = heroOf(content)
   return (
     <div className="fl fl-landing">
       {/* The glow behind the picture: a 100px blur over a gradient that runs
@@ -356,7 +359,7 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
       <span className="fl-landing__glow" aria-hidden="true" />
       <div className="fl-landing__hero">
         <span className="fl-landing__art" aria-hidden="true">
-          <img src={heroArt} alt="" />
+          <img src={hero.image || heroArt} alt="" />
           {/* Four stops, not a fade: clear at a fifth of the way down, half
               dark at the middle, and solid by seven tenths, which is what puts
               the copy on a ground rather than on the picture. */}
@@ -365,6 +368,11 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
 
         <div className="fl-landing__slot">
           <div className="fl-landing__content">
+            {hero.labelEnabled && hero.label && (
+              <span className="fl-landing__eyebrow" data-variant={hero.labelVariant}>
+                {hero.label}
+              </span>
+            )}
             <p className="fl-landing__title">{text.title}</p>
             <div className="fl-landing__body-wrap">
               <p className="fl-landing__body">{text.body}</p>

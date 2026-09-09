@@ -109,6 +109,14 @@ const FLOW_LABELS: Record<string, string> = {
   changeCta: 'Change button',
   navExplore: 'First button',
   navSignUp: 'Second button',
+  heroLabel: 'Label (eyebrow)',
+  heroLabelVariant: 'Kind of label',
+  heroHelper: 'Helper text',
+  heroPricePrefix: 'Price prefix',
+  heroPriceValue: 'Price',
+  heroPriceSuffix: 'Price suffix',
+  heroPriceOld: 'Old price',
+  heroLogoSize: 'Logo size',
   note: 'Note at the top',
   footnote: 'Footnote',
   badge: 'Ribbon',
@@ -159,7 +167,12 @@ const FLOW_LABELS: Record<string, string> = {
 }
 
 /** Flow fields that are settings or ids rather than copy. */
-const NOT_COPY = new Set(['id', 'selected', 'chosen', 'marks', 'logos', 'schedule', 'offer'])
+/* `heroImage` holds a data URL, not words. It is a field on the screen like
+   any other, so the walker would list a two hundred kilobyte string as copy to
+   be translated and handed to dev. It is a picture; it goes in neither. */
+const NOT_COPY = new Set([
+  'id', 'selected', 'chosen', 'marks', 'logos', 'schedule', 'offer', 'heroImage',
+])
 
 /** Copy a screen cannot ship without. */
 const FLOW_REQUIRED = new Set(['title', 'heading', 'cta', 'navTitle', 'payCta'])
