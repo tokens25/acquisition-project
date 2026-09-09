@@ -87,8 +87,18 @@ export function heroOf(content: LandingScreen): HeroBanner {
  * page of blank headings; reading them as the default draws the page as
  * designed until somebody changes it.
  */
+/** Which fields are a choice rather than words on the page. */
+type ChoiceKey =
+  | 'titleSource'
+  | 'bodySource'
+  | 'ctaSource'
+  | 'altCtaEnabled'
+  | 'navSignUpEnabled'
+  | 'sections'
+  | 'sectionCopy'
+
 export function landingText(content: LandingScreen): Required<
-  Omit<LandingScreen, 'providers' | 'faqs' | HeroKey>
+  Omit<LandingScreen, 'providers' | 'faqs' | HeroKey | ChoiceKey>
 > {
   const base = defaultFlow.landing
   const of = <K extends keyof LandingScreen>(key: K) =>

@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 
 import { SelectField } from '../components/SelectField'
+import { SourceTabs } from './SourceTabs'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { FieldGroup } from './FieldGroup'
@@ -54,6 +55,15 @@ export function HeroBannerFields({
     updateSet(writeFlow(set, scope, 'landing', next))
 
   /**
+   * What a field says while the assistant owns it.
+   *
+   * The same words the plan card's description shows, and for the same reason:
+   * the copy is not this panel's to edit until somebody takes it back.
+   */
+  const ASSISTANT_NOTE = 'Written by the assistant. Switch to Custom to edit it here.'
+  const wroteBy = (source?: 'ai' | 'custom') => source ?? 'custom'
+
+  /**
    * How much of a field's budget is used, in the hero tool's own terms: within
    * the recommended length, past it, or past the point it stops fitting.
    */
@@ -89,12 +99,20 @@ export function HeroBannerFields({
           pipelineKey={'landing.navExplore'}
           onChange={(v) => patch({ navExplore: v })}
         />
-        <TextField
+        <ToggleField
           label="Second button"
-          value={l.navSignUp}
-          pipelineKey={'landing.navSignUp'}
-          onChange={(v) => patch({ navSignUp: v })}
+          checked={l.navSignUpEnabled ?? true}
+          onChange={(v) => patch({ navSignUpEnabled: v })}
+          hint="The filled one at the right of the bar."
         />
+        {(l.navSignUpEnabled ?? true) && (
+          <TextField
+            label="Second button"
+            value={l.navSignUp}
+            pipelineKey={'landing.navSignUp'}
+            onChange={(v) => patch({ navSignUp: v })}
+          />
+        )}
       </FieldGroup>
 
       <FieldGroup title="Picture">
@@ -170,40 +188,68 @@ export function HeroBannerFields({
           </>
         )}
 
+        {/* Who writes it sits above the field and to the right, so the field
+            keeps its own full width — as it does over a plan's description. */}
+        <SourceTabs
+          value={wroteBy(l.titleSource)}
+          onChange={(v) => patch({ titleSource: v })}
+          label="Title source"
+        />
         <TextField
-          label="Heading"
+          label="Title"
           value={l.title}
           pipelineKey={'landing.title'}
           onChange={(v) => patch({ title: v })}
           trailing={counter(l.title, HERO_LIMITS.title)}
-          helpText={HERO_LIMITS.title.note}
+          readOnly={wroteBy(l.titleSource) === 'ai'}
+          helpText={wroteBy(l.titleSource) === 'ai' ? ASSISTANT_NOTE : HERO_LIMITS.title.note}
+        />
+        <SourceTabs
+          value={wroteBy(l.bodySource)}
+          onChange={(v) => patch({ bodySource: v })}
+          label="Description source"
         />
         <TextField
-          label="Under the heading"
+          label="Description"
           value={l.body}
           pipelineKey={'landing.body'}
           onChange={(v) => patch({ body: v })}
           rows={2}
           trailing={counter(l.body, HERO_LIMITS.body)}
-          helpText={HERO_LIMITS.body.note}
+          readOnly={wroteBy(l.bodySource) === 'ai'}
+          helpText={wroteBy(l.bodySource) === 'ai' ? ASSISTANT_NOTE : HERO_LIMITS.body.note}
         />
       </FieldGroup>
 
       <FieldGroup title="CTA">
+        <SourceTabs
+          value={wroteBy(l.ctaSource)}
+          onChange={(v) => patch({ ctaSource: v })}
+          label="CTA source"
+        />
         <TextField
           label="CTA text"
           value={l.cta}
           pipelineKey={'landing.cta'}
           onChange={(v) => patch({ cta: v })}
           trailing={counter(l.cta, HERO_LIMITS.cta)}
-          helpText={HERO_LIMITS.cta.note}
+          readOnly={wroteBy(l.ctaSource) === 'ai'}
+          helpText={wroteBy(l.ctaSource) === 'ai' ? ASSISTANT_NOTE : HERO_LIMITS.cta.note}
         />
-        <TextField
+        <ToggleField
           label="Second button"
-          value={l.altCta}
-          pipelineKey={'landing.altCta'}
-          onChange={(v) => patch({ altCta: v })}
+          checked={l.altCtaEnabled ?? true}
+          onChange={(v) => patch({ altCtaEnabled: v })}
+          hint="The white button under the gold one."
         />
+        {(l.altCtaEnabled ?? true) && (
+          <TextField
+            label="Second button"
+            value={l.altCta}
+            pipelineKey={'landing.altCta'}
+            onChange={(v) => patch({ altCta: v })}
+          />
+        )}
         <ToggleField
           label="Helper text"
           checked={hero.helperEnabled}

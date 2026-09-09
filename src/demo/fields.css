@@ -463,3 +463,82 @@
   color: #ff6b5e;
   font-weight: 700;
 }
+
+/* ── The landing page's components ─────────────────────────────────────────
+   Each block of the page is a card in the panel: a grip to drag it by, a
+   switch that draws it or does not, and a copy of it if the page wants two.
+   The card is only chrome — the fields inside are the panel's own. */
+
+/* The hairline between groups.
+
+   Every group used to be a sibling of the next, so `.fg + .fg` drew the line
+   itself. Wrapping each component in a card broke that adjacency and took the
+   lines with it, so the card carries one above its own group — including the
+   first, which is what separates the run from the tabs above it. */
+.ls-card .fg {
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+
+.ls-card {
+  border-radius: var(--radius-8);
+  /* Two pixels of nothing on either side, so a card being dragged over has
+     somewhere to show the line it would land on. */
+  border-block: 2px solid transparent;
+}
+.ls-card[data-dragging] {
+  opacity: 0.4;
+}
+.ls-card[data-drop='before'] {
+  border-block-start-color: var(--color-brand-primary);
+}
+.ls-card[data-drop='after'] {
+  border-block-end-color: var(--color-brand-primary);
+}
+/* Switched off is still on the list and still editable — it just is not
+   drawn — so the card recedes rather than disappearing. */
+.ls-card[data-off] .demo__group-title {
+  opacity: 0.5;
+}
+
+.ls-card__name {
+  display: inline-flex;
+  gap: var(--space-8);
+  align-items: center;
+}
+/* Six dots in two columns, the grip every list of draggable things uses. */
+.ls-card__grip {
+  inline-size: 10px;
+  block-size: 16px;
+  flex: none;
+  cursor: grab;
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 5px 5px;
+  background-position: 0 2px;
+  opacity: 0.45;
+}
+.ls-card:hover .ls-card__grip {
+  opacity: 0.8;
+}
+.ls-card__copy {
+  padding: 1px var(--space-4);
+  border-radius: var(--radius-4);
+  background: var(--color-surface-container-3);
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-regular);
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.8;
+}
+
+/* Duplicate, and Delete on a copy: the tabs editor's own footer, which is a
+   right-aligned row of quiet words rather than buttons competing with the
+   fields above them. */
+.ls-card__foot {
+  display: flex;
+  gap: var(--space-8);
+  justify-content: flex-end;
+  align-items: center;
+  /* Clear of the heading when the card is shut, and of the fields when it is
+     open — the group's own bottom padding is inside the fold. */
+  padding-block-end: var(--space-10);
+}

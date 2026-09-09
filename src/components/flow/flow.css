@@ -1162,7 +1162,9 @@
   align-items: center;
   justify-content: center;
   min-inline-size: 72px;
-  min-block-size: 40px;
+  /* Fixed rather than a minimum, so the two buttons are the same height
+     whatever either one says. */
+  block-size: 40px;
   padding: 6px var(--space-8);
   border-radius: var(--radius-8);
   background: var(--surface-max);

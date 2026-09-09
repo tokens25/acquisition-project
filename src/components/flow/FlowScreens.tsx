@@ -7,6 +7,7 @@ import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
 import { styleOf } from '../../rules/tabs'
 import { heroOf, landingText, providersOf, questionsOf } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
+import { copyOf, sectionsOf, type PageSection } from '../../rules/sections'
 
 import { Fragment } from 'react'
 import type { ReactNode } from 'react'
@@ -387,9 +388,11 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
                   <span className="fl-landing__button" role="button">
                     {text.cta}
                   </span>
-                  <span className="fl-landing__button" role="button" data-appearance="soft">
-                    {text.altCta}
-                  </span>
+                  {(content.altCtaEnabled ?? true) && (
+                    <span className="fl-landing__button" role="button" data-appearance="soft">
+                      {text.altCta}
+                    </span>
+                  )}
                 </div>
                 <p className="fl-landing__footnote">{text.footnote}</p>
               </div>
@@ -404,9 +407,11 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
         </span>
         <span className="fl-landing__nav-ctas">
           <span className="fl-landing__nav-cta">{text.navExplore}</span>
-          <span className="fl-landing__nav-cta" data-appearance="neutral">
-            {text.navSignUp}
-          </span>
+          {(content.navSignUpEnabled ?? true) && (
+            <span className="fl-landing__nav-cta" data-appearance="neutral">
+              {text.navSignUp}
+            </span>
+          )}
         </span>
       </header>
     </div>
@@ -1065,34 +1070,75 @@ export function LandingPageScreen({
   return (
     <div className="fl fl-page">
       <LandingFlowScreen content={content} />
+      {sectionsOf(content)
+        .filter((section) => section.on)
+        .map((section) => (
+          <PageSectionView
+            key={section.id}
+            section={section}
+            content={content}
+            text={copyOf(text, content, section)}
+          >
+            {children}
+          </PageSectionView>
+        ))}
+    </div>
+  )
+}
 
-      {/* node 708:173789. Its own spacing rather than the page's: 42 above,
-          24 below, and 22 between the heading and the row. */}
-      <section className="fl-page__zip">
-        <div className="fl-page__zip-copy">
-          <p className="fl-page__zip-heading">{text.zipHeading}</p>
-          <p className="fl-page__zip-note">{text.zipNote}</p>
-        </div>
-        <div className="fl-page__zip-row">
-          {/* The field holds 209 and the button takes what is left. */}
-          <span className="fl-page__zip-field">
-            <span className="fl-page__zip-label">{text.zipLabel}</span>
-            <span className="fl-page__zip-value">
-              {text.zipValue}
-              <img className="fl-page__zip-edit" src={actionEdit} alt="" />
+/**
+ * One block of the page, drawn from what that instance says.
+ *
+ * Every block was written straight into the page in the order the design has
+ * them. They are a list now — the page can be arranged, blocks switched off,
+ * blocks copied — so each one has to be able to draw itself from an instance
+ * rather than from its place in a run of JSX. The markup inside each case is
+ * the markup that was there, down to the comments explaining the design.
+ */
+function PageSectionView({
+  section,
+  content,
+  text,
+  children,
+}: {
+  section: PageSection
+  content: LandingScreen
+  text: ReturnType<typeof landingText>
+  children?: ReactNode
+}) {
+  switch (section.type) {
+    /* node 708:173789. Its own spacing rather than the page's: 42 above,
+       24 below, and 22 between the heading and the row. */
+    case 'zip':
+      return (
+        <section className="fl-page__zip">
+          <div className="fl-page__zip-copy">
+            <p className="fl-page__zip-heading">{text.zipHeading}</p>
+            <p className="fl-page__zip-note">{text.zipNote}</p>
+          </div>
+          <div className="fl-page__zip-row">
+            {/* The field holds 209 and the button takes what is left. */}
+            <span className="fl-page__zip-field">
+              <span className="fl-page__zip-label">{text.zipLabel}</span>
+              <span className="fl-page__zip-value">
+                {text.zipValue}
+                <img className="fl-page__zip-edit" src={actionEdit} alt="" />
+              </span>
             </span>
-          </span>
-          <span className="fl-page__zip-cta" role="button">
-            {text.zipCta}
-          </span>
-        </div>
-      </section>
+            <span className="fl-page__zip-cta" role="button">
+              {text.zipCta}
+            </span>
+          </div>
+        </section>
+      )
 
-      <ScheduleSection heading={text.scheduleHeading} />
+    case 'schedule':
+      return <ScheduleSection heading={text.scheduleHeading} />
 
-      {/* node 708:173855 — the heading and the picker are one section, 32
-          apart, with the section's own 56 above and 40 below. */}
-      {children && (
+    /* node 708:173855 — the heading and the picker are one section, 32
+       apart, with the section's own 56 above and 40 below. */
+    case 'plans':
+      return children ? (
         <section className="fl-page__plans">
           <div className="fl-page__plans-head">
             <p className="fl-page__plans-title">{text.plansTitle}</p>
@@ -1100,116 +1146,128 @@ export function LandingPageScreen({
           </div>
           {children}
         </section>
-      )}
+      ) : null
 
-      <TeamsRail
-        eyebrow={text.teamsEyebrow}
-        title={text.teamsTitle}
-        body={text.teamsBody}
-      />
+    case 'teams':
+      return <TeamsRail eyebrow={text.teamsEyebrow} title={text.teamsTitle} body={text.teamsBody} />
 
-      {/* The answer to a postcode outside the region: what was typed, what is
-          not available there, and the plans that are. */}
-      <section className="fl-page__area">
-        <div className="fl-area">
-          <p className="fl-area__title">{text.areaTitle}</p>
-          <p className="fl-area__body">{text.areaBody}</p>
-          <div className="fl-area__field">
-            {/* The pin the design puts here is not in the icon set yet. */}
-            <span className="fl-area__pin" aria-hidden="true" />
-            <span className="fl-area__entry">
-              <span className="fl-area__label">{text.areaFieldLabel}</span>
-              <span className="fl-area__value">{text.areaFieldValue}</span>
-            </span>
-            <span className="fl-area__clear" aria-hidden="true">
-              <Icon svg={iconArtwork.close} size={20} />
+    /* The answer to a postcode outside the region: what was typed, what is
+       not available there, and the plans that are. */
+    case 'area':
+      return (
+        <section className="fl-page__area">
+          <div className="fl-area">
+            <p className="fl-area__title">{text.areaTitle}</p>
+            <p className="fl-area__body">{text.areaBody}</p>
+            <div className="fl-area__field">
+              {/* The pin the design puts here is not in the icon set yet. */}
+              <span className="fl-area__pin" aria-hidden="true" />
+              <span className="fl-area__entry">
+                <span className="fl-area__label">{text.areaFieldLabel}</span>
+                <span className="fl-area__value">{text.areaFieldValue}</span>
+              </span>
+              <span className="fl-area__clear" aria-hidden="true">
+                <Icon svg={iconArtwork.close} size={20} />
+              </span>
+            </div>
+            <p className="fl-area__notice">
+              <Mark svg={icInfoFill} size={24} />
+              <span>{text.areaNotice}</span>
+            </p>
+            <p className="fl-area__note">{text.areaNote}</p>
+            <span className="fl-area__cta" role="button">
+              {text.areaCta}
             </span>
           </div>
-          <p className="fl-area__notice">
-            <Mark svg={icInfoFill} size={24} />
-            <span>{text.areaNotice}</span>
+        </section>
+      )
+
+    case 'multiview':
+      return (
+        <section className="fl-page__multiview">
+          <p className="fl-page__eyebrow">
+            {text.multiviewEyebrow}
+            {text.multiviewBadge && <span className="fl-page__badge">{text.multiviewBadge}</span>}
           </p>
-          <p className="fl-area__note">{text.areaNote}</p>
-          <span className="fl-area__cta" role="button">
-            {text.areaCta}
-          </span>
-        </div>
-      </section>
+          <h2 className="fl-page__title">{text.multiviewTitle}</h2>
+          <p className="fl-page__body">{text.multiviewBody}</p>
+          <Cta>{text.multiviewCta}</Cta>
+        </section>
+      )
 
-      <section className="fl-page__multiview">
-        <p className="fl-page__eyebrow">
-          {text.multiviewEyebrow}
-          {text.multiviewBadge && (
-            <span className="fl-page__badge">{text.multiviewBadge}</span>
-          )}
-        </p>
-        <h2 className="fl-page__title">{text.multiviewTitle}</h2>
-        <p className="fl-page__body">{text.multiviewBody}</p>
-        <Cta>{text.multiviewCta}</Cta>
-      </section>
+    case 'providers':
+      return (
+        <section className="fl-page__providers">
+          <h2 className="fl-page__title" data-centre="">
+            {text.providersTitle}
+          </h2>
+          <p className="fl-page__body" data-centre="">
+            {text.providersBody}{' '}
+            {text.providersHighlight && (
+              <span className="fl-page__gold">{text.providersHighlight}</span>
+            )}
+          </p>
+          <div className="fl-page__provider-grid">
+            {providersOf(content).map((provider) => (
+              <span className="fl-page__provider" key={provider.id}>
+                {providerArt[provider.name] ? (
+                  <img src={providerArt[provider.name]} alt={provider.name} />
+                ) : (
+                  provider.name
+                )}
+              </span>
+            ))}
+          </div>
+          <p className="fl-page__note" data-centre="">
+            {text.providersNote}
+          </p>
+          <Cta appearance="outline">{text.providersCta}</Cta>
+        </section>
+      )
 
-      <section className="fl-page__providers">
-        <h2 className="fl-page__title" data-centre="">
-          {text.providersTitle}
-        </h2>
-        <p className="fl-page__body" data-centre="">
-          {text.providersBody}{' '}
-          {text.providersHighlight && (
-            <span className="fl-page__gold">{text.providersHighlight}</span>
-          )}
-        </p>
-        <div className="fl-page__provider-grid">
-          {providersOf(content).map((provider) => (
-            <span className="fl-page__provider" key={provider.id}>
-              {providerArt[provider.name] ? (
-                <img src={providerArt[provider.name]} alt={provider.name} />
-              ) : (
-                provider.name
-              )}
-            </span>
-          ))}
-        </div>
-        <p className="fl-page__note" data-centre="">
-          {text.providersNote}
-        </p>
-        <Cta appearance="outline">{text.providersCta}</Cta>
-      </section>
+    case 'devices':
+      return (
+        <section className="fl-page__devices">
+          <h2 className="fl-page__title">
+            {text.devicesTitle}
+            {text.devicesTitleTwo && (
+              <>
+                <br />
+                {text.devicesTitleTwo}
+              </>
+            )}
+          </h2>
+          <p className="fl-page__body">{text.devicesBody}</p>
+          <p className="fl-page__note">{text.devicesNote}</p>
+        </section>
+      )
 
-      <section className="fl-page__devices">
-        <h2 className="fl-page__title">
-          {text.devicesTitle}
-          {text.devicesTitleTwo && (
-            <>
-              <br />
-              {text.devicesTitleTwo}
-            </>
-          )}
-        </h2>
-        <p className="fl-page__body">{text.devicesBody}</p>
-        <p className="fl-page__note">{text.devicesNote}</p>
-      </section>
+    case 'free':
+      return (
+        <section className="fl-page__free">
+          <h2 className="fl-page__title" data-centre="">
+            {text.freeTitle}
+          </h2>
+          <p className="fl-page__body" data-centre="">
+            {text.freeBody}
+          </p>
+          <Cta>{text.freeCta}</Cta>
+        </section>
+      )
 
-      <section className="fl-page__free">
-        <h2 className="fl-page__title" data-centre="">
-          {text.freeTitle}
-        </h2>
-        <p className="fl-page__body" data-centre="">
-          {text.freeBody}
-        </p>
-        <Cta>{text.freeCta}</Cta>
-      </section>
-
-      <section className="fl-page__faq">
-        <h2 className="fl-page__title">{text.faqTitle}</h2>
-        <ul className="fl-page__questions">
-          {questionsOf(content).map((one) => (
-            <li className="fl-page__question" key={one.id}>
-              {one.question}
-              <Icon svg={iconArtwork['chevron-right']} size={24} />
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
-  )
+    case 'faq':
+      return (
+        <section className="fl-page__faq">
+          <h2 className="fl-page__title">{text.faqTitle}</h2>
+          <ul className="fl-page__questions">
+            {questionsOf(content).map((one) => (
+              <li className="fl-page__question" key={one.id}>
+                {one.question}
+                <Icon svg={iconArtwork['chevron-right']} size={24} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+  }
 }

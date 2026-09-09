@@ -193,6 +193,8 @@ export interface LandingProvider {
   name: string
 }
 
+import type { PageSection } from './sections'
+
 /** One question in the landing page's FAQ. */
 export interface LandingQuestion {
   id: string
@@ -203,14 +205,37 @@ export interface LandingScreen {
   /** The two buttons in the bar at the top. */
   navExplore: string
   navSignUp: string
+  /**
+   * Whether the bar has that second button at all. Absent means it does, for
+   * the same reason the hero's does: the page shipped with both.
+   */
+  navSignUpEnabled?: boolean
   title: string
   body: string
   /** The gold one. */
   cta: string
   /** The white one under it. */
   altCta: string
+  /**
+   * Whether the hero has that second button at all.
+   *
+   * Absent means it does: the shipped page has always drawn two, and content
+   * written before this could be turned off is content that wants both.
+   */
+  altCtaEnabled?: boolean
   /** The small line under the buttons, laid over them by the design's grid. */
   footnote?: string
+
+  /**
+   * Who writes the hero's three pieces of copy.
+   *
+   * The same choice the plan cards offer over their description: the
+   * assistant, or a person. Absent means custom, which is what every page
+   * written before this existed was.
+   */
+  titleSource?: 'ai' | 'custom'
+  bodySource?: 'ai' | 'custom'
+  ctaSource?: 'ai' | 'custom'
 
   /* ── The rest of the page, below the hero ──────────────────
      Figma: 🚀 Acquisition for ai → "MSG+ - Landing page - Mobile"
@@ -227,6 +252,19 @@ export interface LandingScreen {
   zipLabel?: string
   zipValue?: string
   zipCta?: string
+
+  /**
+   * How the page below the hero is arranged: which blocks, in what order, and
+   * which of them are drawn. Absent means the shipped page — see
+   * `rules/sections.ts`, which owns the vocabulary.
+   */
+  sections?: PageSection[]
+  /**
+   * What a duplicated block says, where it differs from the page's own fields.
+   * Keyed by the instance's id; the original of a type has no entry, because
+   * its words are the fields themselves.
+   */
+  sectionCopy?: Record<string, Partial<LandingScreen>>
 
   /** The heading over the fixtures DAZN is showing. */
   scheduleHeading?: string
