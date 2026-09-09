@@ -62,9 +62,18 @@ import { titleFor, type Product } from '../product'
  */
 export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const store = useCardSet()
-  /* Straight into the page: on the landing product there is one step and it is
-     what was asked for, so a journey view of it would be a list of one. */
-  const [editing, setEditing] = useState(product === 'landing')
+  /*
+   * The landing page is one page, not two.
+   *
+   * Its journey is a single step, so a journey view of it was a list of one
+   * and a way back to nothing. The editor is the whole product: the situation
+   * fields that used to sit on the journey view moved into the panel, above
+   * the tabs, and there is no arrow out because there is nowhere out to go.
+   */
+  const single = product === 'landing'
+  const [stepOpen, setStepOpen] = useState(false)
+  const editing = single || stepOpen
+  const setEditing = setStepOpen
   const [prototype, setPrototype] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [coachOpen, setCoachOpen] = useState(false)
@@ -347,7 +356,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
         }
       : { state: 'clear' as const, text: `${coverage.total} contexts checked` }
 
-  const actions = editing ? (
+  const actions = editing && !single ? (
     <div className="demo__actions">
       <ModeToggle mode={pipe.mode} onChange={switchMode} />
     </div>
@@ -492,14 +501,16 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                   for one step. What is left is the step's own title, which is
                   a heading rather than a control. */}
               <div className="demo__head">
-                <button
-                  type="button"
-                  className="demo__back"
-                  onClick={() => setEditing(false)}
-                  aria-label="Back to the journey"
-                >
-                  <Icon svg={iconArtwork['chevron-left']} size={20} />
-                </button>
+                {!single && (
+                  <button
+                    type="button"
+                    className="demo__back"
+                    onClick={() => setEditing(false)}
+                    aria-label="Back to the journey"
+                  >
+                    <Icon svg={iconArtwork['chevron-left']} size={20} />
+                  </button>
+                )}
                 <h2 className="demo__step-title">{step?.shortName ?? step?.name}</h2>
                 {section && (
                   <span className="pl-head-chip">
@@ -512,6 +523,10 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                   say about it. */}
               <div className="demo__fields">
                 <TranslationBar tx={tx} market={marketLabel} />
+                {/* Which market, product and buyer this is being written for.
+                    It asked these on the journey view, which this product no
+                    longer has; the questions did not stop mattering. */}
+                {single && !dev && <DefaultPanel store={store} entry={false} />}
                 {dev ? (
                   /* Dev reads: every string of the page, its key, and a button
                      to take it. Nothing here writes. */
@@ -541,7 +556,9 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
             <>
               <div className="demo__fields">
                 <TranslationBar tx={tx} market={marketLabel} />
-                <DefaultPanel store={store} entry={product !== 'landing'} />
+                {/* Always the flow here: the landing product has no journey
+                    view to reach this, so the entry point is always a question. */}
+                <DefaultPanel store={store} />
               </div>
 
               {dev && readyCount === 0 ? (
@@ -577,6 +594,8 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
           {editing && step ? (
             <StepPreview
               journey={store.journey}
+              // One page, no journey to place it in.
+              meta={!single}
               /* The market's own words, so the preview reads as that market
                  reads. The panel beside it still edits the English source.
 

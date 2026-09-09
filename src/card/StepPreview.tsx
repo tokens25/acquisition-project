@@ -26,11 +26,19 @@ export function StepPreview({
   journey,
   set,
   context,
+  meta = true,
   onTab,
 }: {
   journey: Journey
   set: CardSet
   context: Context
+  /**
+   * Whether to say where this step sits in its journey.
+   *
+   * A product with one page has no journey to place it in — "step 1 of 8" and
+   * the CTA it was entered from are facts about a flow that is not on screen.
+   */
+  meta?: boolean
   /**
    * Told which tab is showing, because the panel beside this prices that tab.
    * The tab lives with the market and the cadence in the context rather than
@@ -65,9 +73,11 @@ export function StepPreview({
           called Sign up — without that, the line reads as the wrong step. */}
       <p className="jy__entry">
         <strong className="jy__step-name">{step.shortName ?? step.name}</strong>
-        <span className="jy__meta">
-          step {position} of {steps.length} · entered from “{journey.entry.cta}”
-        </span>
+        {meta && (
+          <span className="jy__meta">
+            step {position} of {steps.length} · entered from “{journey.entry.cta}”
+          </span>
+        )}
         {inbound.length > 0 && <span className="jy__seeds">inbound: {inbound.join(', ')}</span>}
         {step.renderer === 'plans' && (
           <span className="jy__meta">{planCount} plans in this set</span>

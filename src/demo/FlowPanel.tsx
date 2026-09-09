@@ -112,6 +112,11 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
           ))}
         </div>
       )}
+      {/* Neither half of the landing page asks where the copy applies. It is
+          written for the market the fields above name, which is where an edit
+          made while looking at that market was always going to go — the ladder
+          out to the shared copy is a step this page does not offer. */}
+      {!hasHero && (
       <FieldGroup title="Where this applies">
         <SelectField
           label="Editing"
@@ -151,16 +156,34 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
           </button>
         )}
       </FieldGroup>
+      )}
       {hasHero && tab === 'hero' ? (
         <HeroBannerFields store={store} scope={scope} />
       ) : (
-        <FlowFields store={store} step={step} scope={scope} />
+        <FlowFields store={store} step={step} scope={scope} hero={!hasHero} />
       )}
     </>
   )
 }
 
-function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; scope: Selector }) {
+function FlowFields({
+  store,
+  step,
+  scope,
+  /**
+   * Whether this list owns the hero's own fields.
+   *
+   * False on the landing page, where the hero has a tab of its own and these
+   * groups would be the same fields twice; true everywhere else, since no
+   * other screen splits itself in two.
+   */
+  hero = true,
+}: {
+  store: CardSetStore
+  step: Step
+  scope: Selector
+  hero?: boolean
+}) {
   const { set, updateSet } = store
   const flow = resolveFlow(set)
 
@@ -185,46 +208,50 @@ function FlowFields({ store, step, scope }: { store: CardSetStore; step: Step; s
     const t = landingText(l)
     return (
       <>
-        <FieldGroup title="Top bar">
-          <TextField
-            label="First button"
-            value={l.navExplore}
-            pipelineKey={'landing.navExplore'}
-            onChange={(v) => patch('landing', { navExplore: v })}
-          />
-          <TextField
-            label="Second button"
-            value={l.navSignUp}
-            pipelineKey={'landing.navSignUp'}
-            onChange={(v) => patch('landing', { navSignUp: v })}
-          />
-        </FieldGroup>
-
-        <FieldGroup title="Over the picture">
-          <TextField
-            label="Heading"
-            value={l.title}
-            pipelineKey={'landing.title'}
-            onChange={(v) => patch('landing', { title: v })}
-          />
-          <TextField
-            label="Under the heading"
-            value={l.body}
-            pipelineKey={'landing.body'}
-            onChange={(v) => patch('landing', { body: v })}
-            rows={4}
-          />
-        </FieldGroup>
-
-        <FieldGroup title="Buttons">
-          <TextField label="Button" value={l.cta} pipelineKey={'landing.cta'} onChange={(v) => patch('landing', { cta: v })} />
-          <TextField
-            label="Second button"
-            value={l.altCta}
-            pipelineKey={'landing.altCta'}
-            onChange={(v) => patch('landing', { altCta: v })}
-          />
-        </FieldGroup>
+        {hero && (
+          <>
+          <FieldGroup title="Top bar">
+            <TextField
+              label="First button"
+              value={l.navExplore}
+              pipelineKey={'landing.navExplore'}
+              onChange={(v) => patch('landing', { navExplore: v })}
+            />
+            <TextField
+              label="Second button"
+              value={l.navSignUp}
+              pipelineKey={'landing.navSignUp'}
+              onChange={(v) => patch('landing', { navSignUp: v })}
+            />
+          </FieldGroup>
+  
+          <FieldGroup title="Over the picture">
+            <TextField
+              label="Heading"
+              value={l.title}
+              pipelineKey={'landing.title'}
+              onChange={(v) => patch('landing', { title: v })}
+            />
+            <TextField
+              label="Under the heading"
+              value={l.body}
+              pipelineKey={'landing.body'}
+              onChange={(v) => patch('landing', { body: v })}
+              rows={4}
+            />
+          </FieldGroup>
+  
+          <FieldGroup title="Buttons">
+            <TextField label="Button" value={l.cta} pipelineKey={'landing.cta'} onChange={(v) => patch('landing', { cta: v })} />
+            <TextField
+              label="Second button"
+              value={l.altCta}
+              pipelineKey={'landing.altCta'}
+              onChange={(v) => patch('landing', { altCta: v })}
+            />
+          </FieldGroup>
+          </>
+        )}
 
         {/* Everything below the hero. The page is long, so the groups are the
             sections you would name if you were pointing at it. */}

@@ -79,6 +79,24 @@ export function HeroBannerFields({
 
   return (
     <>
+      {/* The bar sits over the picture, so it moved here with it when the
+          Landing page tab gave the hero its own. These are the same two
+          strings the page has always had, written to the same fields. */}
+      <FieldGroup title="Top bar">
+        <TextField
+          label="First button"
+          value={l.navExplore}
+          pipelineKey={'landing.navExplore'}
+          onChange={(v) => patch({ navExplore: v })}
+        />
+        <TextField
+          label="Second button"
+          value={l.navSignUp}
+          pipelineKey={'landing.navSignUp'}
+          onChange={(v) => patch({ navSignUp: v })}
+        />
+      </FieldGroup>
+
       <FieldGroup title="Picture">
         <div className="hb-image">
           {hero.image ? (
