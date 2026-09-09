@@ -551,6 +551,14 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                   </FieldMarks.Provider>
                 )}
               </div>
+              {/* The way back to the shipped page. It sat under the journey
+                  view, which the landing product no longer has — so on that
+                  product it sits at the foot of the panel instead. */}
+              {single && (
+                <button type="button" className="demo__reset" onClick={store.reset}>
+                  Reset progress
+                </button>
+              )}
             </>
           ) : (
             <>

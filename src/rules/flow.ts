@@ -195,10 +195,45 @@ export interface LandingProvider {
 
 import type { PageSection } from './sections'
 
+/** One word in the footer. It goes nowhere; it is a name on a page. */
+export interface LandingLink {
+  id: string
+  label: string
+  /**
+   * Whether this one starts a line.
+   *
+   * The design groups the words — the languages, then the privacy line on its
+   * own, then the three about the business — and left to wrap they would fall
+   * differently. So where a line starts is authored rather than whatever the
+   * width happens to allow.
+   */
+  breaks?: boolean
+}
+
+/**
+ * One row of the features list.
+ *
+ * The tag is the row's key as well as its label: it picks the icon beside it
+ * and the picture at its left, the way a provider's name picks its logo.
+ */
+export interface LandingFeature {
+  id: string
+  tag: string
+  title: string
+  body: string
+}
+
 /** One question in the landing page's FAQ. */
 export interface LandingQuestion {
   id: string
   question: string
+  /**
+   * What opening it says.
+   *
+   * Optional, and empty by default: the design gives the questions and not the
+   * answers, and a row with nothing to say does not open.
+   */
+  answer?: string
 }
 
 export interface LandingScreen {
@@ -314,12 +349,31 @@ export interface LandingScreen {
   /** The second line, which the design sets on its own. */
   devicesTitleTwo?: string
   devicesBody?: string
-  devicesNote?: string
 
-  /** The free games offer. */
-  freeTitle?: string
-  freeBody?: string
-  freeCta?: string
+  /* The footer — node 741:29473. The words under everything, and the mark
+     under those. It is not one of the page's components: it does not move and
+     it cannot be taken off, because a page without a footer is not a page. */
+  footerLinks?: LandingLink[]
+  footerMark?: string
+
+  /** The heading over the wall of device logos — node 853:58657. */
+  supportedTitle?: string
+  /** The line under the wall, and the words in it that are a link. */
+  supportedNote?: string
+  supportedLink?: string
+
+  /* The features list — node 852:58100. A run of rows, each a picture, a
+     tag, a heading and a line, with a way in under them. */
+  featuresEyebrow?: string
+  featuresTitle?: string
+  featuresCta?: string
+  features?: LandingFeature[]
+
+  /* The image card — node 747:46379. A picture with a heading, a line and a
+     button laid over the foot of it. */
+  imageCtaTitle?: string
+  imageCtaBody?: string
+  imageCtaCta?: string
 
   /** The questions at the foot of the page. */
   faqTitle?: string
@@ -354,6 +408,8 @@ export interface LandingScreen {
   heroPriceSuffix?: string
   heroPriceOld?: string
   /** The DAZN mark over the picture. */
+  /** Whether the hero's main button takes the gold the article card uses. */
+  heroCtaGold?: boolean
   heroLogoEnabled?: boolean
   heroLogoSize?: HeroLogoSize
 }
@@ -455,6 +511,7 @@ export const defaultFlow: FlowContent = {
     heroPriceValue: '',
     heroPriceSuffix: '/ month',
     heroPriceOld: '',
+    heroCtaGold: false,
     heroLogoEnabled: false,
     heroLogoSize: 'medium',
 
@@ -476,13 +533,13 @@ export const defaultFlow: FlowContent = {
     teamsBody: 'Here are the teams available in your area',
 
     areaTitle: "See what's live in your area",
-    areaBody: 'Enter your ZIP Code to see which teams you can watch.',
+    areaBody: 'Enter your ZIP Code to see which teams you can watch',
     areaFieldLabel: 'Enter ZIP Code',
     areaFieldValue: '43316',
     areaNotice: "MSG+ and YES aren't available in 43316",
     areaNote:
       "Your area is outside the MSG+ and YES broadcast region. DAZN's national plans are available everywhere in the US, and other regional networks may cover your teams.",
-    areaCta: 'See DAZN plans',
+    areaCta: 'See Dazn plans',
 
     multiviewEyebrow: 'Multiview',
     multiviewBadge: 'Ultimate only',
@@ -491,41 +548,101 @@ export const defaultFlow: FlowContent = {
       'Build your perfect gameday with Multiview. Watch up to 4 live game feeds at once.',
     multiviewCta: 'Get Ultimate',
 
-    providersTitle: 'How to connect your TV Subscription',
+    providersTitle: 'How to connect your\nTV Subscription',
     providersBody:
       'Once you sign up to DAZN, select your TV provider to get full access to MSG+',
     providersHighlight: 'at no extra cost.',
-    providersNote: 'Find the full list of TV providers after you log in to DAZN',
+    providersNote: 'See the full list of TV providers after you log in to DAZN',
     providersCta: 'Sign in with your TV provider',
     providers: [
       { id: 'provider-1', name: 'Spectrum' },
-      { id: 'provider-2', name: 'DIRECTV' },
-      { id: 'provider-3', name: 'fios' },
-      { id: 'provider-4', name: 'optimum.' },
-      { id: 'provider-5', name: 'optimum.tv' },
-      { id: 'provider-6', name: 'fubo' },
-      { id: 'provider-7', name: 'xfinity' },
-      { id: 'provider-8', name: 'altice' },
-      { id: 'provider-9', name: 'Astound' },
+      { id: 'provider-2', name: 'optimum.' },
+      { id: 'provider-3', name: 'optimum.tv' },
+      { id: 'provider-4', name: 'fios' },
+      { id: 'provider-5', name: 'DIRECTV' },
+      { id: 'provider-6', name: 'DIRECTV stream' },
+      { id: 'provider-7', name: 'fubo' },
+      { id: 'provider-8', name: 'Astound' },
+      { id: 'provider-9', name: 'xfinity' },
       { id: 'provider-10', name: 'breezeline' },
+      { id: 'provider-11', name: 'Mid-Hudson Fiber' },
     ],
 
     devicesTitle: 'Watch on your favourite devices.',
-    devicesTitleTwo: 'Anywhere.',
+    devicesTitleTwo: 'Anytime. Anywhere.',
     devicesBody:
       'Whether you are at home or on the go, NHL TV is available on a wide range of mobile and connected devices including Smart TVs, Chromecast, Playstation, Xbox and more.',
-    devicesNote: 'Our leading supported devices',
 
-    freeTitle: 'Watch the New York sports for free',
-    freeBody:
-      'Watch all of the FIFA Club World Cup games live and other selected events and highlights',
-    freeCta: 'Get started',
+    footerLinks: [
+      { id: 'footer-1', label: 'español' },
+      { id: 'footer-2', label: 'Français' },
+      { id: 'footer-3', label: 'Help' },
+      { id: 'footer-4', label: 'privacy policy and cookie notice', breaks: true },
+      { id: 'footer-5', label: 'Terms of use', breaks: true },
+      { id: 'footer-6', label: 'Redeem' },
+      { id: 'footer-7', label: 'Dazn for business' },
+    ],
+    footerMark: 'DAZN',
 
-    faqTitle: 'FAQ',
+    supportedTitle: 'Our leading supported devices',
+    supportedNote: 'For more information see our full list of',
+    supportedLink: 'supported devices',
+
+    featuresEyebrow: 'Experience more with DAZN',
+    featuresTitle: 'All the features every fan needs',
+    featuresCta: 'Get started',
+    features: [
+      {
+        id: 'feature-1',
+        tag: 'Downloads',
+        title: 'Watch on the go',
+        body: 'Download full replays, highlights and original shows straight to your device.',
+      },
+      {
+        id: 'feature-2',
+        tag: 'Portability',
+        title: 'Portability',
+        body: 'Get access to your subscription for 30 days from outside your home region.',
+      },
+      {
+        id: 'feature-3',
+        tag: 'Original content',
+        title: 'With premium VOD there are no off-days on DAZN',
+        body: 'Watch on-demand shows and original series.',
+      },
+      {
+        id: 'feature-4',
+        tag: 'Highlights',
+        title: 'Highlights from every game',
+        body: 'Catch up on all the New York sports action the way you want with short highlights and condensed games.',
+      },
+    ],
+
+    imageCtaTitle: 'Watch the New York sports for free',
+    imageCtaBody:
+      'Sign up to on-demand content and game highlights from MSG+ and YES. No subscription required',
+    imageCtaCta: 'Get started',
+
+    faqTitle: 'Frequently asked questions',
     faqs: [
-      { id: 'faq-1', question: 'What do I get with the Gotham Bundle?' },
-      { id: 'faq-2', question: 'How to connect your tv provider' },
-      { id: 'faq-3', question: 'What is Multiview?' },
+      {
+        id: 'faq-1',
+        question: 'I have a Gotham Sports App subscription. Will I need to get a new subscription?',
+        answer:
+          'No. Your subscription moves across to DAZN — sign in with the same details and your MSG+ and YES access comes with it. You will not be charged twice.',
+      },
+      {
+        id: 'faq-2',
+        question: 'How long is the Gotham App still going to be available?',
+        answer:
+          'It stays open while subscriptions are moving across. You will hear from us in the app before it closes, with time to move yours over.',
+      },
+      {
+        id: 'faq-3',
+        question: 'What do I get with my subscription on DAZN?',
+        answer:
+          'Every MSG+ and YES game your area gets, live, plus highlights, replays and original shows on demand. Multiview comes with Ultimate.',
+      },
     ],
   },
 

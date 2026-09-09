@@ -228,13 +228,19 @@ export function HeroBannerFields({
           label="CTA source"
         />
         <TextField
-          label="CTA text"
+          label="Main button"
           value={l.cta}
           pipelineKey={'landing.cta'}
           onChange={(v) => patch({ cta: v })}
           trailing={counter(l.cta, HERO_LIMITS.cta)}
           readOnly={wroteBy(l.ctaSource) === 'ai'}
           helpText={wroteBy(l.ctaSource) === 'ai' ? ASSISTANT_NOTE : HERO_LIMITS.cta.note}
+        />
+        <ToggleField
+          label="Gold button"
+          checked={hero.ctaGold}
+          onChange={(v) => patch({ heroCtaGold: v })}
+          hint="The gold the article card uses, instead of white."
         />
         <ToggleField
           label="Second button"

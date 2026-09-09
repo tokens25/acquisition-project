@@ -1088,6 +1088,12 @@
   justify-content: center;
   inline-size: 343px;
 }
+/* Gold instead of white: the fill the article card's button uses, so the two
+   are the same button rather than two golds. */
+.fl-landing__button[data-gold] {
+  background: url('../../assets/landing/article/button-fill.png') center / cover no-repeat;
+  color: #080e12;
+}
 .fl-landing__button {
   display: flex;
   gap: var(--space-8);
@@ -1357,6 +1363,10 @@
    Figma: "MSG+ - Landing page - Mobile", node 708:173735. The page is one
    column at the device's width; every section carries the design's 16 side
    inset and stands 48 off the one above it. */
+/* One rhythm for the whole page: 48 between components, and 10 inside each
+   of them (see `.fl-page section`). Four of them used to space themselves to
+   their own nodes, which made the gap depend on which two components happened
+   to be next to each other. */
 .fl-page {
   gap: var(--space-48);
   padding-block-end: var(--space-48);
@@ -1367,54 +1377,8 @@
   gap: var(--space-16);
   align-items: flex-start;
   inline-size: 100%;
+  padding-block: var(--space-10);
   padding-inline: var(--space-16);
-}
-.fl-page__eyebrow {
-  display: flex;
-  gap: var(--space-8);
-  align-items: center;
-  margin: 0;
-  color: #afb3b8;
-  font-size: var(--font-size-button-lg);
-  font-weight: var(--font-weight-bold);
-}
-/* The gold pill that says which plan a feature belongs to. */
-.fl-page__badge {
-  padding: 2px var(--space-8);
-  border-radius: var(--radius-2);
-  background: linear-gradient(160deg, #fbed7d 0%, #f2af3d 100%);
-  color: #060606;
-  font-size: var(--font-size-caption-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.12px;
-  text-transform: uppercase;
-}
-.fl-page__title {
-  margin: 0;
-  font-size: var(--font-size-heading-lg);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.2;
-}
-.fl-page__body {
-  margin: 0;
-  color: #afb3b8;
-  font-size: var(--font-size-button-lg);
-  line-height: 1.5;
-}
-.fl-page__note {
-  margin: 0;
-  color: #858b93;
-  font-size: var(--font-size-caption-xs);
-  letter-spacing: 0.12px;
-  line-height: 1.52;
-}
-/* The design centres the provider and free-games sections and sets the rest
-   to the left, so it is stated per block rather than per section. */
-.fl-page__title[data-centre],
-.fl-page__body[data-centre],
-.fl-page__note[data-centre] {
-  align-self: center;
-  text-align: center;
 }
 .fl-page__gold {
   color: #f2af3d;
@@ -1426,10 +1390,7 @@
 /* Two classes, so it beats the page rule setting every section to 16. */
 .fl-page .fl-page__zip {
   gap: 22px;
-  /* No space above: the section sits straight under the hero, which already
-     ends on the wash. The design draws its 42 against a page that scrolls
-     under a bar; here the hero is what it meets. */
-  padding-block: 0 var(--space-24);
+  padding-block: var(--space-10);
 }
 .fl-page__zip-copy {
   display: flex;
@@ -1520,11 +1481,11 @@
 }
 /* ── Choose the plan — node 708:173855 ─────────────────────── */
 
-/* The heading and the picker are one section: 56 above, 40 below, 32 between
-   them. Two classes, so the section keeps its own figures over the page rule. */
+/* The heading and the picker are 32 apart. Two classes, so the section keeps
+   its own figures over the page rule. */
 .fl-page .fl-page__plans {
   gap: 32px;
-  padding-block: 56px 40px;
+  padding-block: var(--space-10);
   padding-inline: 0;
   background: #080e12;
 }
@@ -1569,45 +1530,644 @@
   line-height: 1.55;
   text-align: center;
 }
-.fl-page__provider-grid {
+/* ── TV providers — node 734:27154 ─────────────────────────────
+
+   The section's own spacing: 24 between its four parts and 16 down each side,
+   against the page's 16 and its left edge. Two columns of tiles 12 apart,
+   each tile 165 by 72 on the container-3 surface with a 12 radius. The logos
+   are sized one by one rather than fitted to a common height, which is what
+   the design does — see providerArt for the boxes. */
+.fl-page .fl-page__providers {
+  gap: var(--space-24);
+  align-items: center;
+}
+.fl-provider__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center;
+  inline-size: 100%;
+  color: #f8f8f8;
+  text-align: center;
+}
+.fl-provider__title {
+  margin: 0;
+  /* The design breaks this line itself rather than letting it wrap, so a new
+     line in the field is the break — as in the plan picker's heading. */
+  white-space: pre-line;
+  /* Display/d5 is 26 | 32 | 32 and this is a phone; the token carries the
+     desktop step alone. */
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25;
+}
+.fl-provider__body {
+  margin: 0;
+  /* Body/long paragraph at its mobile step, and bold: the design sets both
+     halves of this sentence in the bold face, the gold half included. */
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.55;
+}
+.fl-provider__grid {
   display: grid;
   gap: var(--space-12);
   grid-template-columns: repeat(2, 1fr);
   inline-size: 100%;
 }
-.fl-page__provider {
+.fl-provider {
   display: grid;
   place-items: center;
-  block-size: 64px;
-  padding-inline: var(--space-16);
+  block-size: 72px;
+  padding: var(--space-12);
   border-radius: var(--radius-12);
-  background: #16181d;
+  background: #191c20;
   color: #f8f8f8;
   font-size: var(--font-size-button-lg);
   font-weight: var(--font-weight-bold);
+  filter: drop-shadow(0 4px 4px rgb(0 0 0 / 20%));
 }
-.fl-page__provider img {
-  max-inline-size: 100%;
-  max-block-size: 32px;
+/* The picture's own box, at the size the design gives that logo. */
+.fl-provider__art {
+  position: relative;
+  display: block;
+}
+.fl-provider__art img {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
   object-fit: contain;
 }
-.fl-page__questions {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-  inline-size: 100%;
-  list-style: none;
+.fl-provider__art img[data-fit='cover'] {
+  object-fit: cover;
 }
-.fl-page__question {
+/* Drawn from a larger picture: the box shows the part the design shows, and
+   the picture is laid inside it at that offset. */
+.fl-provider__art[data-clip] {
+  overflow: hidden;
+}
+.fl-provider__art[data-clip] img {
+  inset: auto;
+  max-inline-size: none;
+  object-fit: fill;
+}
+.fl-provider__note {
+  margin: 0;
+  color: #afb3b8;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5;
+  text-align: center;
+}
+.fl-provider__cta {
   display: flex;
   gap: var(--space-8);
   align-items: center;
-  justify-content: space-between;
-  padding-block: var(--space-20);
-  border-block-end: var(--border-1) solid #202327;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 48px;
+  padding: var(--space-12);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: #f8f8f8;
+  color: #0c1216;
+  font-family: inherit;
   font-size: var(--font-size-button-lg);
   font-weight: var(--font-weight-bold);
+}
+/* ── Article CTA — node 708:174095 ─────────────────────────────
+
+   A card on the soft surface inside a 2px border at an 18 radius, 16 of
+   padding and 16 between the still and the words. The still keeps the
+   design's 1369 by 770 and takes a 2px border of its own at a 6 radius. The
+   words are 8 apart, and the button sits 16 under them.
+
+   The gold on the pill and the button is the fill the design exports rather
+   than a gradient guessed from it. */
+.fl-art {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  align-items: center;
+  inline-size: 100%;
+  padding: var(--space-16);
+  border: var(--border-2) solid #252729;
+  border-radius: var(--radius-18);
+  background: #0c161c;
+}
+.fl-art__shot {
+  inline-size: 100%;
+  aspect-ratio: 1369 / 770;
+  border: var(--border-2) solid #242d33;
+  border-radius: var(--radius-6);
+  object-fit: cover;
+}
+.fl-art__words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: flex-start;
+  inline-size: 100%;
+}
+.fl-art__prefix {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  margin: 0;
+  inline-size: 100%;
+}
+.fl-art__kind {
+  color: #b3b9bb;
+  font-size: 18px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+  white-space: nowrap;
+}
+/* The pill sits 12 clear of the words before it. */
+.fl-art__tab {
+  padding-inline-start: var(--space-12);
+}
+.fl-art__badge {
+  display: inline-flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 20px;
+  min-block-size: 20px;
+  padding: var(--space-4) 6px;
+  border: var(--border-1) solid #cfa120;
+  border-radius: var(--radius-2);
+  background: url('../../assets/landing/article/pill-fill.png') center / cover no-repeat;
+  color: #080e12;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.fl-art__title {
+  margin: 0;
+  inline-size: 100%;
+  color: #f9fafa;
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.32;
+}
+.fl-art__body {
+  margin: 0;
+  inline-size: 100%;
+  color: #b3b9bb;
+  font-size: 18px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+}
+.fl-art__cta {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  min-inline-size: 192px;
+  block-size: 48px;
+  margin-block-start: var(--space-8);
+  padding: var(--space-12);
+  border-radius: var(--radius-8);
+  background: url('../../assets/landing/article/button-fill.png') center / cover no-repeat;
+  color: #080e12;
+  font-family: inherit;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+  overflow: clip;
+}
+
+/* ── Supported devices — node 853:58657 ────────────────────────
+
+   The heading sits between two 53 by 24 rules, 12 from each. The logos are
+   44 under it, in rows 20 apart: four rows of three held apart by the row
+   rather than by a column, and a last row of one in the middle. Every logo is
+   40 tall and the width the design gives it. */
+.fl-page .fl-page__supported {
+  gap: 44px;
+  align-items: center;
+}
+.fl-dev__heading {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  inline-size: 100%;
+  color: #f8f8f8;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  white-space: nowrap;
+}
+.fl-dev__rule {
+  flex: none;
+  inline-size: 53px;
+  block-size: 24px;
+}
+/* The wall and the line under it are 10 apart, against the 44 that separates
+   the pair of them from the heading. */
+.fl-dev__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  inline-size: 100%;
+}
+.fl-dev__wall {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  inline-size: 100%;
+}
+.fl-dev__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+  /* A row is the height of the artwork in it — 32 — and the rows are 20 apart,
+     which is the 52 pitch the design lays them out on. The 40 the generated
+     code gives each logo is the slot in another frame, not this one. */
+  min-block-size: 32px;
+}
+/* The last row is one logo, and the design centres it rather than leaving it
+   at the start of a row that has nothing to space it against. */
+.fl-dev__row[data-one] {
+  justify-content: center;
+}
+/* Drawn at the size it was exported — every logo is 32 tall and its own
+   width. Held to the slot's 40 instead, each one stretched by a quarter. */
+.fl-dev__logo {
+  flex: none;
+  block-size: 32px;
+  object-fit: contain;
+}
+
+.fl-dev__note {
+  margin: 0;
+  inline-size: 100%;
+  color: #afb3b8;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5;
+  text-align: center;
+}
+/* The words that are a link: the design's blue, and bold. It wraps to its own
+   line at this width, which is how the design draws it. */
+.fl-dev__link {
+  color: #1183ff;
+  font-weight: var(--font-weight-bold);
+}
+
+/* ── Features list — node 852:58100 ────────────────────────────
+
+   The words, the rows, and the way in: 24 apart. A row is a 130 picture and
+   the words beside it, 16 apart, with 24 above and below and a hairline
+   between rows — the last one has none, because a rule under the last row
+   would be a rule under the section. */
+.fl-page .fl-page__features {
+  gap: var(--space-24);
+}
+.fl-feat__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  inline-size: 100%;
+}
+.fl-feat__eyebrow {
+  margin: 0;
+  color: #afb3b8;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.5;
+}
+.fl-feat__title {
+  margin: 0;
+  color: #f8f8f8;
+  /* display/sm-bold at its mobile step. */
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25;
+}
+.fl-feat__list {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+}
+.fl-feat__row {
+  display: flex;
+  gap: var(--space-16);
+  align-items: flex-start;
+  inline-size: 100%;
+  padding-block: var(--space-24);
+  border-block-end: var(--border-1) solid #242d33;
+}
+.fl-feat__row:last-child {
+  border-block-end: 0;
+}
+/* The picture's square, which the picture sits inside at its own height. */
+.fl-feat__shot {
+  position: relative;
+  display: block;
+  flex: none;
+  inline-size: 130px;
+  block-size: 130px;
+}
+.fl-feat__frame {
+  position: absolute;
+  inset-inline-start: 0;
+  display: block;
+  inline-size: 130px;
+  overflow: hidden;
+}
+.fl-feat__frame img {
+  position: absolute;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  max-inline-size: none;
+}
+.fl-feat__words {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  min-inline-size: 0;
+}
+.fl-feat__tag {
+  display: inline-flex;
+  gap: var(--space-4);
+  align-items: center;
+  overflow: clip;
+  /* 8 in front of the icon and 9 after the word: the design's own pair. */
+  padding: 6px 9px 6px var(--space-8);
+  border-radius: var(--radius-6);
+  background: #202327;
+  color: #f8f8f8;
+  font-size: var(--font-size-button-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  white-space: nowrap;
+}
+.fl-feat__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 100%;
+}
+.fl-feat__name {
+  margin: 0;
+  color: #f8f8f8;
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.55;
+}
+.fl-feat__body {
+  margin: 0;
+  color: #afb3b8;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5;
+}
+.fl-feat__cta {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 48px;
+  padding: var(--space-12);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: #f8f8f8;
+  color: #0c1216;
+  font-family: inherit;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ── Image CTA — node 747:46379 ────────────────────────────────
+
+   A picture the card's own size — 343 by 447, kept as a ratio so it holds
+   whatever width the page is — with a 2px border on a 12 radius, and the
+   words and the button laid over the foot of it: 311 wide, 12 between them,
+   16 clear of the bottom. */
+.fl-imgcta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  inline-size: 100%;
+  aspect-ratio: 343 / 447;
+  padding-block-end: var(--space-16);
+  border: var(--border-2) solid #202327;
+  border-radius: var(--radius-12);
+}
+.fl-imgcta__art {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: var(--radius-12);
+  object-fit: cover;
+  pointer-events: none;
+}
+.fl-imgcta__foot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: center;
+  inline-size: 311px;
+  max-inline-size: 100%;
+}
+/* The heading and the line under it are 4 apart, against the 12 that separates
+   the pair of them from the button. */
+.fl-imgcta__words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 100%;
+  color: #f8f8f8;
+  text-align: center;
+}
+.fl-imgcta__title {
+  margin: 0;
+  /* Heading/h6 is 18 | 20 | 22 and this is a phone. */
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.38;
+}
+.fl-imgcta__body {
+  margin: 0;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5;
+}
+.fl-imgcta__cta {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 48px;
+  padding: var(--space-12);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: #f8f8f8;
+  color: #0c1216;
+  font-family: inherit;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ── Text block — node 734:41541 ───────────────────────────────
+
+   Two paragraphs, 8 apart, centred on the page's 343. The heading is
+   Display/d5 at its mobile step and its second line takes the gradient the
+   page uses for a plan's own colour; the words under it are the paragraph
+   style at 16 over 1.55. */
+.fl-page .fl-page__devices {
+  gap: var(--space-8);
+  align-items: center;
+}
+.fl-text__title {
+  margin: 0;
+  inline-size: 100%;
+  color: #f8f8f8;
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25;
+  text-align: center;
+}
+/* Gold running to the left, as the design draws it — not the flat gold the
+   rest of the page uses for a half-sentence. */
+.fl-text__gold {
+  background: linear-gradient(to left, #fbed7d, #f2af3d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.fl-text__body {
+  margin: 0;
+  inline-size: 100%;
+  color: #afb3b8;
+  font-size: 16px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+  text-align: center;
+}
+/* ── Footer — node 741:29473 ───────────────────────────────────
+
+   32 above and below, the words 24 apart in both directions, uppercase and
+   bold at 14. The rows are what fits on a line rather than groups: the design
+   sets three, one, three, which is how these words fall at this width. */
+.fl-foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  align-items: center;
+  inline-size: 100%;
+  padding-block: 32px;
+  padding-inline: var(--space-16);
+  color: #f8f8f8;
+  font-size: var(--font-size-button-md);
+  font-weight: var(--font-weight-bold);
+  line-height: normal;
+  text-align: center;
+  text-transform: uppercase;
+}
+.fl-foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+  align-items: center;
+  justify-content: center;
+}
+.fl-foot__link {
+  white-space: nowrap;
+}
+/* Takes the whole line and none of its height, so the word after it starts a
+   line of its own however much room was left on this one. */
+.fl-foot__break {
+  flex-basis: 100%;
+  block-size: 0;
+}
+.fl-foot__mark {
+  margin: 0;
+}
+/* The mark's trailing letters, which the design sets at 9. */
+.fl-foot__tm {
+  font-size: 9px;
+  vertical-align: super;
+}
+
+/* ── FAQs — node 747:46377 ─────────────────────────────────────
+
+   The heading, then a card per question. The design puts 10 either side of an
+   8 spacer between the two, which is the 28 below; the cards are 12 apart. */
+.fl-page .fl-page__faq {
+  gap: 28px;
+  align-items: center;
+}
+.fl-faq__title {
+  margin: 0;
+  inline-size: 100%;
+  color: #f8f8f8;
+  /* Heading/h5 is 20 | 22 | 24 and this is a phone. */
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.32;
+  text-align: center;
+}
+.fl-faq__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  inline-size: 100%;
+}
+.fl-faq__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  inline-size: 100%;
+  padding: var(--space-16);
+  border-radius: var(--radius-8);
+  background: #191c20;
+  color: #f8f8f8;
+}
+.fl-faq__card[role='button'] {
+  cursor: pointer;
+}
+.fl-faq__row {
+  display: flex;
+  gap: var(--space-16);
+  align-items: flex-start;
+  inline-size: 100%;
+}
+.fl-faq__question {
+  flex: 1;
+  min-inline-size: 0;
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.55;
+}
+/* The chevron points along the row until the row opens, and then down. */
+.fl-faq__card > .fl-faq__row svg {
+  flex: none;
+  transition: transform 160ms ease;
+}
+.fl-faq__card[data-open] > .fl-faq__row svg {
+  transform: rotate(90deg);
+}
+.fl-faq__answer {
+  color: #afb3b8;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.5;
 }
 
 /* ── Live and upcoming games — node 731:27543 ──────────────── */
@@ -1810,7 +2370,7 @@
 /* Rails/MobileWeb/1-5: 40 above and below, 24 between the words and the rail. */
 .fl-page .fl-page__teams {
   gap: var(--space-24);
-  padding-block: 40px;
+  padding-block: var(--space-10);
 }
 .fl-page__teams-head {
   display: flex;
@@ -1943,114 +2503,178 @@
    Built from the screenshot rather than a node, so its figures follow the
    page's own scale — 26 for the heading, 16 for the body, the surface and
    border the tabs already use — instead of being measured off an image. */
+/* ── Outside the area — node 738:42451 ─────────────────────────
+
+   The card the design calls .payment_card. Every number below is read off
+   that node: 20 of padding, an 18 radius, four things 20 apart, a 56 field
+   with a 10 radius, a message box at 8, and a 48 button.
+
+   Its colours are the design file's own literals rather than this app's
+   colour tokens, which the sync has a few points away from them — surface
+   container-1 is #0d0e11 there and #0c1216 here, subtle border #202327
+   against #21292e, primary text #f8f8f8 against #fafbfc. Spacing and radius
+   agree exactly, so those stay tokens. */
+
 .fl-page .fl-page__area {
-  padding-block: 40px;
+  padding-block: var(--space-10);
 }
 .fl-area {
   display: flex;
   flex-direction: column;
-  gap: var(--space-24);
+  gap: var(--space-20);
   align-items: center;
   inline-size: 100%;
-  padding: var(--space-24);
-  border: var(--border-1) solid #242d33;
-  border-radius: var(--radius-16);
-  background: #0c161c;
+  padding: var(--space-20);
+  border: var(--border-1) solid #202327;
+  border-radius: var(--radius-18);
+  background: #0d0e11;
+}
+.fl-area__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  inline-size: 100%;
   text-align: center;
 }
 .fl-area__title {
   margin: 0;
-  inline-size: 100%;
-  color: #f9fafa;
-  font-size: 26px;
+  color: #f8f8f8;
+  /* Heading/h4 — 24 over 1.32. */
+  font-size: 24px;
   font-weight: var(--font-weight-bold);
-  line-height: 1.25;
+  line-height: 1.32;
 }
-.fl-area__body,
-.fl-area__note {
+.fl-area__body {
   margin: 0;
-  inline-size: 100%;
-  color: #b3b9bb;
-  font-size: var(--font-size-button-lg);
+  color: #afb3b8;
+  /* Body/short paragraph is 16 | 18 | 18 across mobile, tablet and desktop,
+     and this is a phone. The token carries the desktop step alone — the gap
+     tokens.css names at the top of itself — so the mobile step is written
+     here rather than taken from a variable that would draw it 18. */
+  font-size: 16px;
   font-weight: var(--font-weight-regular);
-  line-height: 1.55;
+  line-height: normal;
 }
-/* Label over value, the pin at one end and the clear at the other. */
+
 .fl-area__field {
   display: flex;
-  gap: var(--space-12);
+  gap: var(--space-8);
   align-items: center;
   inline-size: 100%;
-  padding: var(--space-12) var(--space-16);
-  border: var(--border-1) solid #4a5257;
-  border-radius: var(--radius-12);
-  text-align: start;
+  block-size: 56px;
+  padding-inline: var(--space-16);
+  border: var(--border-1) solid #6a717a;
+  border-radius: var(--radius-10);
 }
-/* The design puts a location pin here. It is not in the icon set, so the
-   space it takes is held rather than filled with a glyph drawn by hand. */
 .fl-area__pin {
+  display: block;
   flex: none;
-  inline-size: 24px;
-  block-size: 24px;
+  inline-size: 20px;
+  block-size: 20px;
 }
+.fl-area__pin img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+/* The label is laid over the value rather than stacked above it, which is how
+   the field keeps its 56 whether or not a label is showing. */
 .fl-area__entry {
+  position: relative;
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var(--space-2);
+  justify-content: center;
   min-inline-size: 0;
+  padding-block-start: var(--space-12);
 }
 .fl-area__label {
-  color: #b3b9bb;
-  font-size: var(--font-size-caption-sm);
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(50% - 13px);
+  transform: translateY(-50%);
+  color: #858b93;
+  font-size: var(--font-size-caption-xs);
   font-weight: var(--font-weight-regular);
-  line-height: normal;
+  line-height: 1.52;
+  letter-spacing: 0.12px;
 }
 .fl-area__value {
-  color: #f9fafa;
-  font-size: var(--font-size-body-default);
+  overflow: hidden;
+  color: #f8f8f8;
+  /* 16 for the same reason as the line above the field. */
+  font-size: 16px;
   font-weight: var(--font-weight-regular);
   line-height: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .fl-area__clear {
   display: grid;
   flex: none;
   place-items: center;
-  inline-size: 40px;
-  block-size: 40px;
-  border-radius: var(--radius-full);
-  background: rgb(255 255 255 / 10%);
-  color: #f9fafa;
+  inline-size: 24px;
+  block-size: 24px;
+  color: #f8f8f8;
 }
-/* The mark sits on the first line of the notice rather than centred against
-   the pair of them, which is why the row aligns to its start. */
+
 .fl-area__notice {
   display: flex;
-  gap: var(--space-12);
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 100%;
+  /* 12 on three sides and 16 at the end, as the node has it. */
+  padding: var(--space-12) var(--space-16) var(--space-12) var(--space-12);
+  border-radius: var(--radius-8);
+  background: #131518;
+}
+.fl-area__notice-line {
+  display: flex;
+  gap: var(--space-8);
   align-items: flex-start;
   margin: 0;
-  inline-size: 100%;
-  color: #f9fafa;
-  font-size: var(--font-size-body-default);
+  color: #f8f8f8;
+  /* caption/sm-bold — 14 over 1.5, and bold. The code the design tool hands
+     back names the family Regular for every run of text; the style attached to
+     this node is the bold one, and the design draws it heavier than the reason
+     underneath. */
+  font-size: var(--font-size-caption-sm);
   font-weight: var(--font-weight-bold);
-  line-height: 1.38;
+  line-height: 1.5;
 }
-.fl-area__notice > span {
+/* The mark keeps the 20 it is drawn at; only the words take the rest of the
+   row. Grown together, the icon's box took half the line and pushed the
+   sentence into the middle of it. */
+.fl-area__notice-line > span:first-child {
+  flex: none;
+}
+.fl-area__notice-line > span:last-child {
   flex: 1;
   min-inline-size: 0;
 }
+/* Indented past the mark above it: 20 of icon and the 8 beside it. */
+.fl-area__note {
+  margin: 0;
+  padding-inline-start: 28px;
+  color: #afb3b8;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.52;
+}
+
 .fl-area__cta {
   display: flex;
+  gap: var(--space-8);
   align-items: center;
   justify-content: center;
   inline-size: 100%;
-  min-block-size: 56px;
-  padding-inline: var(--space-16);
+  block-size: 48px;
+  padding: var(--space-12);
   border: 0;
   border-radius: var(--radius-8);
-  background: #f9fafa;
-  color: #080e12;
+  background: #f8f8f8;
+  color: #0c1216;
   font-family: inherit;
-  font-size: var(--font-size-body-default);
+  font-size: var(--font-size-button-lg);
   font-weight: var(--font-weight-bold);
 }

@@ -3,18 +3,32 @@ import { useState } from 'react'
 import { FieldGroup } from './FieldGroup'
 import { TextField } from '../components/TextField'
 import { Toggle } from '../components/Toggle'
-import { blankProvider, blankQuestion, landingText, providersOf, questionsOf } from '../rules/landing'
+import { ToggleField } from '../components/ToggleField'
+import {
+  blankFeature,
+  blankLink,
+  blankProvider,
+  blankQuestion,
+  featuresOf,
+  landingText,
+  linksOf,
+  providersOf,
+  questionsOf,
+} from '../rules/landing'
 import { resolveFlow, writeFlow } from '../rules/layers'
 import {
   SECTION_LABEL,
+  SECTION_TYPES,
   isFirst,
   sectionsOf,
+  withAdded,
   withDropped,
   withDuplicated,
   withMoved,
   withRemoved,
   withToggled,
   type PageSection,
+  type SectionType,
 } from '../rules/sections'
 import type { LandingScreen } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
@@ -74,7 +88,130 @@ export function LandingSections({ store, scope }: { store: CardSetStore; scope: 
           onRemove={() => arrange(withRemoved(list, section.id))}
         />
       ))}
+      <AddSection
+        onAdd={(type) => arrange(withAdded(list, type))}
+        missing={SECTION_TYPES.filter((type) => !list.some((s) => s.type === type))}
+      />
+      <FooterFields store={store} scope={scope} />
     </>
+  )
+}
+
+/**
+ * The footer's words.
+ *
+ * Below the palette and outside the run of cards, because the footer is not
+ * one of them: it does not move, it cannot be switched off, and there is
+ * nothing to duplicate. What it does have is its words, and they can be added
+ * to and taken away.
+ */
+function FooterFields({ store, scope }: { store: CardSetStore; scope: Selector }) {
+  const { set, updateSet } = store
+  const l = resolveFlow(set).landing
+  const links = linksOf(l)
+  const write = (next: Partial<LandingScreen>) =>
+    updateSet(writeFlow(set, scope, 'landing', next))
+
+  return (
+    <FieldGroup title="Footer" defaultOpen={false}>
+        {/* A link is one thing: what it says, whether it starts a line, and
+            the way to be rid of it — in the card the panel wraps a tab or a
+            question in, with Remove where Remove always sits. */}
+        {links.map((link, i) => (
+          <div className="demo__feature" key={link.id}>
+            <TextField
+              label={`Link ${i + 1}`}
+              value={link.label}
+              pipelineKey={`landing.footerLinks[${i}].label`}
+              onChange={(v) =>
+                write({ footerLinks: links.map((one, j) => (j === i ? { ...one, label: v } : one)) })
+              }
+            />
+            {i > 0 && (
+              <ToggleField
+                label="New line"
+                checked={link.breaks ?? false}
+                onChange={(v) =>
+                  write({
+                    footerLinks: links.map((one, j) => (j === i ? { ...one, breaks: v } : one)),
+                  })
+                }
+              />
+            )}
+            <button
+              type="button"
+              className="demo__feature-remove"
+              title={`Remove ${link.label || 'this link'}`}
+              onClick={() => write({ footerLinks: links.filter((_, j) => j !== i) })}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          className="ed-add"
+          onClick={() => write({ footerLinks: [...links, blankLink(links)] })}
+        >
+          Add a link
+        </button>
+      <TextField
+        label="Mark"
+        value={l.footerMark ?? ''}
+        pipelineKey={'landing.footerMark'}
+        onChange={(v) => write({ footerMark: v })}
+        helpText="The name under the links, with its trailing letters. Empty draws none."
+      />
+    </FieldGroup>
+  )
+}
+
+/**
+ * What else the page could have on it.
+ *
+ * The dashed row is the one the panel already uses for adding a provider or a
+ * question. What it opens is every kind of block the page knows how to draw,
+ * with the ones the page is not currently showing first — after a block is
+ * deleted, putting it back is the likeliest reason anybody opens this.
+ *
+ * A kind can be added more than once. The second is a new block with its own
+ * words, exactly as duplicating gives you.
+ */
+function AddSection({
+  onAdd,
+  missing,
+}: {
+  onAdd: (type: SectionType) => void
+  missing: SectionType[]
+}) {
+  const [open, setOpen] = useState(false)
+  const rest = SECTION_TYPES.filter((type) => !missing.includes(type))
+
+  return (
+    <div className="ls-add">
+      <button type="button" className="ed-add" onClick={() => setOpen((v) => !v)}>
+        {open ? 'Never mind' : 'Add a component'}
+      </button>
+      {open && (
+        <div className="ls-add__list">
+          {[...missing, ...rest].map((type) => (
+            <button
+              key={type}
+              type="button"
+              className="ls-add__option"
+              data-missing={missing.includes(type) || undefined}
+              onClick={() => {
+                onAdd(type)
+                setOpen(false)
+              }}
+            >
+              {SECTION_LABEL[type]}
+              {!missing.includes(type) && <span className="ls-add__again">another</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -209,16 +346,18 @@ function SectionCard({
         >
           Duplicate
         </button>
-        {!isFirst(section) && (
-          <button
-            type="button"
-            className="demo__feature-remove"
-            title="Delete this copy"
-            onClick={onRemove}
-          >
-            Delete
-          </button>
-        )}
+        <button
+          type="button"
+          className="demo__feature-remove"
+          title={
+            isFirst(section)
+              ? `Take ${label} off the page — its words stay, and Add a component brings it back`
+              : 'Delete this copy'
+          }
+          onClick={onRemove}
+        >
+          Delete
+        </button>
       </div>
     </div>
   )
@@ -313,7 +452,7 @@ function SectionFields({
       return (
         <>
 
-              <TextField label="Heading" value={t.providersTitle} pipelineKey={key('landing.providersTitle')} onChange={(v) => write({ providersTitle: v })} rows={2} />
+              <TextField label="Heading" value={t.providersTitle} pipelineKey={key('landing.providersTitle')} onChange={(v) => write({ providersTitle: v })} rows={2} helpText="The design breaks this line itself — a new line here is the break." />
               <TextField label="Under the heading" value={t.providersBody} pipelineKey={key('landing.providersBody')} onChange={(v) => write({ providersBody: v })} rows={3} />
               <TextField label="The gold half" value={t.providersHighlight} pipelineKey={key('landing.providersHighlight')} onChange={(v) => write({ providersHighlight: v })} helpText="Follows the sentence above, in gold." />
               {providersOf(inst).map((provider, i) => {
@@ -360,19 +499,97 @@ function SectionFields({
         <>
 
               <TextField label="Heading" value={t.devicesTitle} pipelineKey={key('landing.devicesTitle')} onChange={(v) => write({ devicesTitle: v })} />
-              <TextField label="Second line" value={t.devicesTitleTwo} pipelineKey={key('landing.devicesTitleTwo')} onChange={(v) => write({ devicesTitleTwo: v })} helpText="The design sets this on its own line." />
+              <TextField label="Second line" value={t.devicesTitleTwo} pipelineKey={key('landing.devicesTitleTwo')} onChange={(v) => write({ devicesTitleTwo: v })} helpText="Its own line, in the brand gradient." />
               <TextField label="Under the heading" value={t.devicesBody} pipelineKey={key('landing.devicesBody')} onChange={(v) => write({ devicesBody: v })} rows={4} />
-              <TextField label="Over the logos" value={t.devicesNote} pipelineKey={key('landing.devicesNote')} onChange={(v) => write({ devicesNote: v })} />
         </>
       )
 
-    case 'free':
+    case 'supported':
       return (
         <>
+          <TextField
+            label="Heading"
+            value={t.supportedTitle}
+            pipelineKey={key('landing.supportedTitle')}
+            onChange={(v) => write({ supportedTitle: v })}
+            helpText="The logos under it are the ones DAZN supports, and are not written here."
+          />
+          <TextField
+            label="Under the logos"
+            value={t.supportedNote}
+            pipelineKey={key('landing.supportedNote')}
+            onChange={(v) => write({ supportedNote: v })}
+            rows={2}
+          />
+          <TextField
+            label="The words that link"
+            value={t.supportedLink}
+            pipelineKey={key('landing.supportedLink')}
+            onChange={(v) => write({ supportedLink: v })}
+            helpText="Follows the line above, in blue. Empty draws none."
+          />
+        </>
+      )
 
-              <TextField label="Heading" value={t.freeTitle} pipelineKey={key('landing.freeTitle')} onChange={(v) => write({ freeTitle: v })} rows={2} />
-              <TextField label="Under the heading" value={t.freeBody} pipelineKey={key('landing.freeBody')} onChange={(v) => write({ freeBody: v })} rows={3} />
-              <TextField label="Button" value={t.freeCta} pipelineKey={key('landing.freeCta')} onChange={(v) => write({ freeCta: v })} />
+    case 'features':
+      return (
+        <>
+          <TextField label="Over the heading" value={t.featuresEyebrow} pipelineKey={key('landing.featuresEyebrow')} onChange={(v) => write({ featuresEyebrow: v })} />
+          <TextField label="Heading" value={t.featuresTitle} pipelineKey={key('landing.featuresTitle')} onChange={(v) => write({ featuresTitle: v })} rows={2} />
+          {featuresOf(inst).map((feature, i) => {
+            const all = featuresOf(inst)
+            const edit = (next: Partial<typeof feature>) =>
+              write({ features: all.map((f, j) => (j === i ? { ...f, ...next } : f)) })
+            return (
+              <div className="demo__feature" key={feature.id}>
+                <TextField
+                  label={`Tag ${i + 1}`}
+                  value={feature.tag}
+                  pipelineKey={key(`landing.features[${i}].tag`)}
+                  onChange={(v) => edit({ tag: v })}
+                  helpText="The tag picks the icon and the picture. One with neither shows its words alone."
+                />
+                <TextField
+                  label="Heading"
+                  value={feature.title}
+                  pipelineKey={key(`landing.features[${i}].title`)}
+                  onChange={(v) => edit({ title: v })}
+                  rows={2}
+                />
+                <TextField
+                  label="Under the heading"
+                  value={feature.body}
+                  pipelineKey={key(`landing.features[${i}].body`)}
+                  onChange={(v) => edit({ body: v })}
+                  rows={3}
+                />
+                <button
+                  type="button"
+                  className="demo__feature-remove"
+                  onClick={() => write({ features: all.filter((_, j) => j !== i) })}
+                >
+                  Remove
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ features: [...featuresOf(inst), blankFeature(featuresOf(inst))] })}
+          >
+            Add a feature
+          </button>
+          <TextField label="Button" value={t.featuresCta} pipelineKey={key('landing.featuresCta')} onChange={(v) => write({ featuresCta: v })} />
+        </>
+      )
+
+    case 'imageCta':
+      return (
+        <>
+          <TextField label="Heading" value={t.imageCtaTitle} pipelineKey={key('landing.imageCtaTitle')} onChange={(v) => write({ imageCtaTitle: v })} rows={2} />
+          <TextField label="Under the heading" value={t.imageCtaBody} pipelineKey={key('landing.imageCtaBody')} onChange={(v) => write({ imageCtaBody: v })} rows={3} />
+          <TextField label="Button" value={t.imageCtaCta} pipelineKey={key('landing.imageCtaCta')} onChange={(v) => write({ imageCtaCta: v })} />
         </>
       )
 
@@ -395,6 +612,18 @@ function SectionFields({
                         })
                       }
                       rows={2}
+                    />
+                    <TextField
+                      label="Answer"
+                      value={one.answer ?? ''}
+                      pipelineKey={key(`landing.faqs[${i}].answer`)}
+                      onChange={(v) =>
+                        write({
+                          faqs: all.map((q, j) => (j === i ? { ...q, answer: v } : q)),
+                        })
+                      }
+                      rows={4}
+                      helpText="What opening the question shows. Empty leaves it shut."
                     />
                     <button
                       type="button"

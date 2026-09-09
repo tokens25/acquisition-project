@@ -542,3 +542,51 @@
      open — the group's own bottom padding is inside the fold. */
   padding-block-end: var(--space-10);
 }
+
+/* ── Adding a component ───────────────────────────────────────────────────
+   The dashed row is the panel's own; what it opens is the list of blocks the
+   page knows how to draw. A block the page is not showing is marked, because
+   putting one back is the likeliest reason this is open at all. */
+
+.ls-add {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-block: var(--space-12) var(--space-16);
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.ls-add__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+.ls-add__option {
+  display: inline-flex;
+  gap: var(--space-6);
+  align-items: center;
+  padding: var(--space-6) var(--space-10);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: var(--font-size-caption-md);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease;
+}
+.ls-add__option:hover {
+  border-color: var(--color-border-full-color-strong);
+  color: var(--color-text-primary);
+}
+/* Not on the page at the moment: the ones somebody is most likely looking for. */
+.ls-add__option[data-missing] {
+  border-color: var(--color-border-full-color-strong);
+  color: var(--color-text-primary);
+}
+/* Already on the page, so this one would be a second of its kind. */
+.ls-add__again {
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+}

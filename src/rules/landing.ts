@@ -1,6 +1,8 @@
 import type {
   HeroLabelVariant,
   HeroLogoSize,
+  LandingFeature,
+  LandingLink,
   LandingProvider,
   LandingQuestion,
   LandingScreen,
@@ -27,6 +29,7 @@ export const HERO_KEYS = [
   'heroPriceValue',
   'heroPriceSuffix',
   'heroPriceOld',
+  'heroCtaGold',
   'heroLogoEnabled',
   'heroLogoSize',
 ] as const
@@ -46,6 +49,7 @@ export interface HeroBanner {
   priceValue: string
   priceSuffix: string
   priceOld: string
+  ctaGold: boolean
   logoEnabled: boolean
   logoSize: HeroLogoSize
 }
@@ -73,6 +77,7 @@ export function heroOf(content: LandingScreen): HeroBanner {
     priceValue: str('heroPriceValue'),
     priceSuffix: str('heroPriceSuffix'),
     priceOld: str('heroPriceOld'),
+    ctaGold: on('heroCtaGold'),
     logoEnabled: on('heroLogoEnabled'),
     logoSize: (content.heroLogoSize ?? base.heroLogoSize ?? 'medium') as HeroLogoSize,
   }
@@ -98,7 +103,7 @@ type ChoiceKey =
   | 'sectionCopy'
 
 export function landingText(content: LandingScreen): Required<
-  Omit<LandingScreen, 'providers' | 'faqs' | HeroKey | ChoiceKey>
+  Omit<LandingScreen, 'providers' | 'faqs' | 'features' | 'footerLinks' | HeroKey | ChoiceKey>
 > {
   const base = defaultFlow.landing
   const of = <K extends keyof LandingScreen>(key: K) =>
@@ -142,17 +147,56 @@ export function landingText(content: LandingScreen): Required<
     devicesTitle: of('devicesTitle'),
     devicesTitleTwo: of('devicesTitleTwo'),
     devicesBody: of('devicesBody'),
-    devicesNote: of('devicesNote'),
-    freeTitle: of('freeTitle'),
-    freeBody: of('freeBody'),
-    freeCta: of('freeCta'),
+    footerMark: of('footerMark'),
+    supportedTitle: of('supportedTitle'),
+    supportedNote: of('supportedNote'),
+    supportedLink: of('supportedLink'),
+    featuresEyebrow: of('featuresEyebrow'),
+    featuresTitle: of('featuresTitle'),
+    featuresCta: of('featuresCta'),
+    imageCtaTitle: of('imageCtaTitle'),
+    imageCtaBody: of('imageCtaBody'),
+    imageCtaCta: of('imageCtaCta'),
     faqTitle: of('faqTitle'),
   }
 }
 
 /** The TV providers the page lists. */
+/**
+ * The ten the page shipped with before node 734:27154 replaced the section.
+ *
+ * The design's list is eleven: it adds DIRECTV stream and Mid-Hudson Fiber,
+ * and drops altice.
+ */
+const SUPERSEDED_PROVIDERS = [
+  'Spectrum',
+  'DIRECTV',
+  'fios',
+  'optimum.',
+  'optimum.tv',
+  'fubo',
+  'xfinity',
+  'altice',
+  'Astound',
+  'breezeline',
+]
+
 export function providersOf(content: LandingScreen): LandingProvider[] {
-  return content.providers ?? defaultFlow.landing.providers ?? []
+  const saved = content.providers
+  const shipped = defaultFlow.landing.providers ?? []
+  if (!saved) return shipped
+  /*
+   * A copy saved before the section was rebuilt carries the old ten, and a
+   * list cannot gain a tile the way a missing field gains its shipped wording.
+   * Matched name for name it is the old shipped list rather than anybody's
+   * own, so the current one stands in — which is how a page saved last week
+   * shows the logos the design has this week. A list anyone has touched is
+   * theirs, and is left exactly as it is.
+   */
+  const untouched =
+    saved.length === SUPERSEDED_PROVIDERS.length &&
+    saved.every((p, i) => p.name === SUPERSEDED_PROVIDERS[i])
+  return untouched ? shipped : saved
 }
 
 /** A new provider tile. Named blank, because the name picks the logo. */
@@ -160,14 +204,54 @@ export function blankProvider(existing: LandingProvider[]): LandingProvider {
   return { id: nextId('provider', existing), name: '' }
 }
 
-/** The questions at the foot of the page. */
+/** The words in the footer. */
+export function linksOf(content: LandingScreen): LandingLink[] {
+  return content.footerLinks ?? defaultFlow.landing.footerLinks ?? []
+}
+
+/** A new one, waiting to be named. */
+export function blankLink(existing: LandingLink[]): LandingLink {
+  return { id: nextId('footer', existing), label: '' }
+}
+
+/** The rows of the features list. */
+export function featuresOf(content: LandingScreen): LandingFeature[] {
+  return content.features ?? defaultFlow.landing.features ?? []
+}
+
+/** A new row. Its tag is what picks the icon and the picture, so it is empty. */
+export function blankFeature(existing: LandingFeature[]): LandingFeature {
+  return { id: nextId('feature', existing), tag: '', title: '', body: '' }
+}
+
+/** The three the page asked before node 747:46377 gave it its own. */
+const SUPERSEDED_QUESTIONS = [
+  'What do I get with the Gotham Bundle?',
+  'How to connect your tv provider',
+  'What is Multiview?',
+]
+
+/**
+ * The questions at the foot of the page.
+ *
+ * A saved copy carrying the old three is carrying the old shipped list rather
+ * than anybody's own, and a list cannot grow an answer the way a missing field
+ * grows its shipped wording — so the current three stand in, answers and all.
+ * A list anyone has touched is theirs and is left alone.
+ */
 export function questionsOf(content: LandingScreen): LandingQuestion[] {
-  return content.faqs ?? defaultFlow.landing.faqs ?? []
+  const saved = content.faqs
+  const shipped = defaultFlow.landing.faqs ?? []
+  if (!saved) return shipped
+  const untouched =
+    saved.length === SUPERSEDED_QUESTIONS.length &&
+    saved.every((q, i) => q.question === SUPERSEDED_QUESTIONS[i])
+  return untouched ? shipped : saved
 }
 
 /** A new question. */
 export function blankQuestion(existing: LandingQuestion[]): LandingQuestion {
-  return { id: nextId('faq', existing), question: '' }
+  return { id: nextId('faq', existing), question: '', answer: '' }
 }
 
 function nextId(stem: string, existing: { id: string }[]): string {

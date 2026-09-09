@@ -26,8 +26,10 @@ export type SectionType =
   | 'multiview'
   | 'providers'
   | 'devices'
-  | 'free'
   | 'faq'
+  | 'imageCta'
+  | 'features'
+  | 'supported'
 
 export interface PageSection {
   /**
@@ -43,6 +45,28 @@ export interface PageSection {
   on: boolean
 }
 
+/**
+ * Every kind of block the page can draw.
+ *
+ * Longer than the shipped page: a kind can exist for the palette to offer
+ * without the page having one — node 747:46379 is drawn nowhere in
+ * 708:173735, and is added to a page by whoever wants it.
+ */
+export const SECTION_TYPES: SectionType[] = [
+  'zip',
+  'schedule',
+  'plans',
+  'teams',
+  'area',
+  'multiview',
+  'providers',
+  'devices',
+  'faq',
+  'imageCta',
+  'features',
+  'supported',
+]
+
 /** The page as it ships, in the order node 708:173735 has it. */
 export const SHIPPED_ORDER: SectionType[] = [
   'zip',
@@ -53,7 +77,6 @@ export const SHIPPED_ORDER: SectionType[] = [
   'multiview',
   'providers',
   'devices',
-  'free',
   'faq',
 ]
 
@@ -64,17 +87,31 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   plans: 'Choose the plan',
   teams: 'Meet the teams',
   area: 'Outside the area',
-  multiview: 'Multiview',
+  /* Named for what it is rather than what it happens to be about: a still,
+     a line about it, and a way in — node 708:174095. */
+  multiview: 'Article CTA',
   providers: 'TV providers',
-  devices: 'Devices',
-  free: 'Free games',
-  faq: 'Questions',
+  /* The type keeps its name because saved pages are arranged by it; what it
+     is called is "Text block", which is what the design calls the component
+     and what it now is — words, and nothing device-shaped about it. */
+  devices: 'Text block',
+  faq: 'FAQs',
+  imageCta: 'Image CTA',
+  features: 'Features list',
+  supported: 'Supported devices',
 }
 
 /** The list this page is arranged into, or the one it has always had. */
 export function sectionsOf(content: LandingScreen): PageSection[] {
   const saved = content.sections
-  if (saved && saved.length > 0) return saved
+  if (saved && saved.length > 0) {
+    /*
+     * A page arranged before a kind was retired still has it on the list.
+     * Nothing draws it and nothing can name it, so it goes here rather than
+     * leaving a nameless card in the panel and a hole in the page.
+     */
+    return saved.filter((s) => SECTION_TYPES.includes(s.type))
+  }
   return SHIPPED_ORDER.map((type) => ({ id: type, type, on: true }))
 }
 
@@ -157,9 +194,24 @@ export function withDuplicated(
   return { list: next, id: made.id }
 }
 
-/** The list without one instance. The original of a type is never removed. */
+/**
+ * The list with one more block of a type, at the end.
+ *
+ * A type that is not on the page takes the plain id again, which is how a
+ * block that was deleted comes back to the words it always had: those live in
+ * the page's own fields, and the plain id is what reads them.
+ */
+export function withAdded(list: PageSection[], type: SectionType): PageSection[] {
+  const taken = list.some((s) => s.id === type)
+  return [...list, { id: taken ? freeId(list, type) : type, type, on: true }]
+}
+
+/**
+ * The list without one instance.
+ *
+ * Any of them, including a type's original: what it said is in the page's own
+ * fields and stays there, so adding that type back brings its words with it.
+ */
 export function withRemoved(list: PageSection[], id: string): PageSection[] {
-  const section = list.find((s) => s.id === id)
-  if (!section || isFirst(section)) return list
   return list.filter((s) => s.id !== id)
 }

@@ -5,11 +5,18 @@ import { useFlowInput } from './live'
 import { cadenceSavings } from '../../rules/cadence'
 import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
 import { styleOf } from '../../rules/tabs'
-import { heroOf, landingText, providersOf, questionsOf } from '../../rules/landing'
+import {
+  featuresOf,
+  heroOf,
+  landingText,
+  linksOf,
+  providersOf,
+  questionsOf,
+} from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
 import { copyOf, sectionsOf, type PageSection } from '../../rules/sections'
 
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import type { ReactNode } from 'react'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
 import badgeCheck from '../../assets/flow/badge-check.svg?raw'
@@ -28,19 +35,46 @@ import payGpayType from '../../assets/flow/pay-gpay-type.svg'
 import payMastercard from '../../assets/flow/pay-mastercard.svg'
 import payPaypal from '../../assets/flow/pay-paypal.png'
 import payVisa from '../../assets/flow/pay-visa.svg'
-import providerAltice from '../../assets/landing/provider-altice.png'
-import providerAstound from '../../assets/landing/provider-astound.png'
-import providerBreezeline from '../../assets/landing/provider-breezeline.png'
-import providerDirectv from '../../assets/landing/provider-directv.png'
-import providerFios from '../../assets/landing/provider-fios.png'
-import providerFubo from '../../assets/landing/provider-fubo.png'
-import providerOptimum from '../../assets/landing/provider-optimum.png'
-import providerOptimumTv from '../../assets/landing/provider-optimum-tv.png'
-import providerSpectrum from '../../assets/landing/provider-spectrum.svg'
-import providerXfinity from '../../assets/landing/provider-xfinity.png'
+import providerSpectrum from '../../assets/landing/providers/spectrum.png'
+import providerOptimum from '../../assets/landing/providers/optimum.png'
+import providerOptimumTv from '../../assets/landing/providers/optimum-tv.png'
+import providerFios from '../../assets/landing/providers/fios.png'
+import providerDirectv from '../../assets/landing/providers/directv.png'
+import providerDirectvStream from '../../assets/landing/providers/directv-stream.png'
+import providerFubo from '../../assets/landing/providers/fubo.png'
+import providerAstound from '../../assets/landing/providers/astound.png'
+import providerXfinity from '../../assets/landing/providers/xfinity.png'
+import providerBreezeline from '../../assets/landing/providers/breezeline.png'
+import providerMidHudson from '../../assets/landing/providers/mid-hudson.png'
 import heroArt from '../../assets/landing/hero.jpg'
 import daznLogo from '../../assets/landing/logo-dazn.svg'
 import actionEdit from '../../assets/landing/action-edit.svg'
+import actionLocation from '../../assets/landing/action-location.svg'
+import imageCtaArt from '../../assets/landing/image-cta.png'
+import articleShot from '../../assets/landing/article/shot.jpg'
+import articleIcon from '../../assets/landing/article/icon-multiview.svg?raw'
+import deviceRule from '../../assets/landing/devices/rule.svg'
+import deviceRoku from '../../assets/landing/devices/roku.svg'
+import deviceFireTv from '../../assets/landing/devices/fire-tv.svg'
+import deviceGooglePlay from '../../assets/landing/devices/google-play.svg'
+import deviceSamsung from '../../assets/landing/devices/samsung.svg'
+import deviceAppleTv from '../../assets/landing/devices/apple-tv.svg'
+import devicePanasonic from '../../assets/landing/devices/panasonic.svg'
+import deviceChromecast from '../../assets/landing/devices/chromecast.svg'
+import deviceSony from '../../assets/landing/devices/sony.svg'
+import deviceLg from '../../assets/landing/devices/lg.svg'
+import deviceAppStore from '../../assets/landing/devices/app-store.svg'
+import devicePlaystation from '../../assets/landing/devices/playstation.svg'
+import deviceXbox from '../../assets/landing/devices/xbox.svg'
+import deviceAndroidTv from '../../assets/landing/devices/android-tv.svg'
+import featureDownloads from '../../assets/landing/features/downloads.png'
+import featurePortability from '../../assets/landing/features/portability.png'
+import featureOriginal from '../../assets/landing/features/original.png'
+import featureHighlights from '../../assets/landing/features/highlights.png'
+import iconDownloads from '../../assets/landing/features/icon-downloads.svg?raw'
+import iconPortability from '../../assets/landing/features/icon-portability.svg?raw'
+import iconOriginal from '../../assets/landing/features/icon-original.svg?raw'
+import iconHighlights from '../../assets/landing/features/icon-highlights.svg?raw'
 import schedP0 from '../../assets/landing/schedule/p0.png'
 import schedP1 from '../../assets/landing/schedule/p1.png'
 import schedP2 from '../../assets/landing/schedule/p2.png'
@@ -385,7 +419,7 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
             <div className="fl-landing__buttons">
               <div className="fl-landing__button-stack">
                 <div className="fl-landing__button-group">
-                  <span className="fl-landing__button" role="button">
+                  <span className="fl-landing__button" role="button" data-gold={hero.ctaGold || undefined}>
                     {text.cta}
                   </span>
                   {(content.altCtaEnabled ?? true) && (
@@ -1032,17 +1066,184 @@ function TeamsRail({
    a tile and the walkthrough show; this is the rest of the page, which the
    edit view scrolls. */
 
-const providerArt: Record<string, string> = {
-  Spectrum: providerSpectrum,
-  DIRECTV: providerDirectv,
-  fios: providerFios,
-  'optimum.': providerOptimum,
-  'optimum.tv': providerOptimumTv,
-  fubo: providerFubo,
-  xfinity: providerXfinity,
-  altice: providerAltice,
-  Astound: providerAstound,
-  breezeline: providerBreezeline,
+/**
+ * A provider's logo, and the box the design gives it — node 734:27154.
+ *
+ * Every tile is the same 165 by 72; what differs is the picture inside it,
+ * which the design sizes per provider rather than fitting to a common height.
+ * Some are drawn from a larger picture, so the box clips and the picture is
+ * laid inside it at the offsets the design uses. A name with no entry falls
+ * back to the name itself, which is what an unknown provider has always done.
+ */
+interface ProviderArt {
+  src: string
+  /** The picture's box inside the tile. */
+  w: number
+  h: number
+  /** Fills its box rather than fitting inside it. */
+  cover?: boolean
+  /** Drawn from a larger picture: the part of it the design shows. */
+  crop?: { top: string; left?: string; inlineSize?: string; blockSize: string }
+}
+
+const providerArt: Record<string, ProviderArt> = {
+  Spectrum: { src: providerSpectrum, w: 119, h: 46 },
+  'optimum.': { src: providerOptimum, w: 120, h: 42 },
+  'optimum.tv': {
+    src: providerOptimumTv,
+    w: 135,
+    h: 53,
+    crop: { blockSize: '128.57%', top: '-14.29%' },
+  },
+  fios: { src: providerFios, w: 75, h: 39, cover: true },
+  DIRECTV: { src: providerDirectv, w: 99, h: 38 },
+  'DIRECTV stream': { src: providerDirectvStream, w: 97, h: 38 },
+  fubo: { src: providerFubo, w: 80, h: 31, crop: { blockSize: '85.71%', top: '7.14%' } },
+  Astound: { src: providerAstound, w: 112, h: 43 },
+  xfinity: { src: providerXfinity, w: 94, h: 37 },
+  breezeline: {
+    src: providerBreezeline,
+    w: 131,
+    h: 51,
+    crop: { blockSize: '212.14%', top: '-56.07%', left: '-23.33%', inlineSize: '146.67%' },
+  },
+  'Mid-Hudson Fiber': {
+    src: providerMidHudson,
+    w: 140,
+    h: 20,
+    crop: { blockSize: '70.75%', top: '14.62%' },
+  },
+}
+
+/**
+ * The questions at the foot of the page — node 747:46377.
+ *
+ * A card each on the container-3 surface rather than the ruled list this used
+ * to be: 16 of padding, an 8 radius, 12 between them, the question in 16 bold
+ * and the chevron 24 at its right.
+ *
+ * A question with an answer written for it opens onto that answer, and the
+ * chevron turns to say so. One with nothing to say does not open at all —
+ * the design gives the questions and leaves the answers to whoever writes
+ * them, and a row that opens onto nothing is worse than a row that does not.
+ */
+function FaqSection({ content, title }: { content: LandingScreen; title: string }) {
+  const [open, setOpen] = useState<string | null>(null)
+
+  return (
+    <section className="fl-page__faq">
+      <p className="fl-faq__title">{title}</p>
+      <div className="fl-faq__list">
+        {questionsOf(content).map((one) => {
+          const answer = (one.answer ?? '').trim()
+          const isOpen = open === one.id
+          return (
+            <span
+              className="fl-faq__card"
+              key={one.id}
+              role={answer ? 'button' : undefined}
+              tabIndex={answer ? 0 : undefined}
+              aria-expanded={answer ? isOpen : undefined}
+              data-open={isOpen || undefined}
+              onClick={() => answer && setOpen(isOpen ? null : one.id)}
+            >
+              <span className="fl-faq__row">
+                <span className="fl-faq__question">{one.question}</span>
+                <Icon svg={iconArtwork['chevron-right']} size={24} />
+              </span>
+              {answer && isOpen && <span className="fl-faq__answer">{answer}</span>}
+            </span>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * The wall of device logos — node 853:58657.
+ *
+ * Four rows of three and a last row of one, each logo 40 tall and its own
+ * width. The widths are the design's to a tenth of a pixel: they are what
+ * space the row, since the three sit apart rather than in columns.
+ */
+const DEVICE_ROWS: { src: string; name: string; w: number }[][] = [
+  [
+    { src: deviceRoku, name: 'Roku', w: 69.6 },
+    { src: deviceFireTv, name: 'Amazon Fire TV', w: 124.8 },
+    { src: deviceGooglePlay, name: 'Google Play', w: 108.8 },
+  ],
+  [
+    { src: deviceSamsung, name: 'Samsung', w: 111.2 },
+    { src: deviceAppleTv, name: 'Apple TV', w: 56.8 },
+    { src: devicePanasonic, name: 'Panasonic', w: 105.6 },
+  ],
+  [
+    { src: deviceChromecast, name: 'Chromecast', w: 123.2 },
+    { src: deviceSony, name: 'Sony', w: 95.2 },
+    { src: deviceLg, name: 'LG', w: 57.6 },
+  ],
+  [
+    { src: deviceAppStore, name: 'App Store', w: 101.6 },
+    { src: devicePlaystation, name: 'PlayStation 5', w: 104.8 },
+    { src: deviceXbox, name: 'Xbox', w: 81.6 },
+  ],
+  [{ src: deviceAndroidTv, name: 'Android TV', w: 126.4 }],
+]
+
+/**
+ * A feature's icon and picture, and how the design lays that picture out.
+ *
+ * Keyed by the tag, which is the row's own label: the tag picks the artwork
+ * the way a provider's name picks its logo. Every picture sits in a 130 box;
+ * what differs is the height it is drawn at, where the top of it sits, and how
+ * much of a larger photograph the design shows — read off node 852:58100 row
+ * by row rather than averaged into one treatment.
+ */
+interface FeatureArt {
+  icon: string
+  photo: string
+  /** The picture's height inside the 130 box, and its offset from the top. */
+  h: number
+  top: number
+  /** The part of the photograph the design shows. */
+  imgH: string
+  imgTop: string
+}
+
+const featureArt: Record<string, FeatureArt> = {
+  Downloads: {
+    icon: iconDownloads,
+    photo: featureDownloads,
+    h: 83,
+    top: 0,
+    imgH: '108.11%',
+    imgTop: '-9.48%',
+  },
+  Portability: {
+    icon: iconPortability,
+    photo: featurePortability,
+    h: 83,
+    top: 0,
+    imgH: '108.11%',
+    imgTop: '-9.48%',
+  },
+  'Original content': {
+    icon: iconOriginal,
+    photo: featureOriginal,
+    h: 81,
+    top: 2,
+    imgH: '110.78%',
+    imgTop: '-12.18%',
+  },
+  Highlights: {
+    icon: iconHighlights,
+    photo: featureHighlights,
+    h: 87,
+    top: -4,
+    imgH: '103.14%',
+    imgTop: '-4.45%',
+  },
 }
 
 /**
@@ -1082,6 +1283,29 @@ export function LandingPageScreen({
             {children}
           </PageSectionView>
         ))}
+      {/* Under every section and outside the list: the footer is not a
+          component. It does not move, it cannot be switched off, and there is
+          nothing to arrange about it — node 741:29473. */}
+      <footer className="fl-foot">
+        <div className="fl-foot__links">
+          {linksOf(content)
+            .filter((link) => link.label.trim() !== '')
+            .map((link, i) => (
+              <Fragment key={link.id}>
+                {/* Nothing to look at: a full-width item with no height, which
+                    is what pushes the next word onto a line of its own. */}
+                {link.breaks && i > 0 && <span className="fl-foot__break" aria-hidden="true" />}
+                <span className="fl-foot__link">{link.label}</span>
+              </Fragment>
+            ))}
+        </div>
+        {text.footerMark && (
+          <p className="fl-foot__mark">
+            {text.footerMark}
+            <span className="fl-foot__tm">TM</span>
+          </p>
+        )}
+      </footer>
     </div>
   )
 }
@@ -1152,29 +1376,43 @@ function PageSectionView({
       return <TeamsRail eyebrow={text.teamsEyebrow} title={text.teamsTitle} body={text.teamsBody} />
 
     /* The answer to a postcode outside the region: what was typed, what is
-       not available there, and the plans that are. */
+       not available there, and the plans that are.
+
+       Node 738:42451 — the card the design calls .payment_card, rebuilt from
+       it rather than from a picture of it. Four things stacked 20 apart: the
+       words, the field, the message, the button. */
     case 'area':
       return (
         <section className="fl-page__area">
           <div className="fl-area">
-            <p className="fl-area__title">{text.areaTitle}</p>
-            <p className="fl-area__body">{text.areaBody}</p>
+            <div className="fl-area__copy">
+              <p className="fl-area__title">{text.areaTitle}</p>
+              <p className="fl-area__body">{text.areaBody}</p>
+            </div>
+            {/* Form/TextField at 56, its label floating over the value the way
+                every other field in the system floats one. */}
             <div className="fl-area__field">
-              {/* The pin the design puts here is not in the icon set yet. */}
-              <span className="fl-area__pin" aria-hidden="true" />
+              <span className="fl-area__pin" aria-hidden="true">
+                <img src={actionLocation} alt="" />
+              </span>
               <span className="fl-area__entry">
                 <span className="fl-area__label">{text.areaFieldLabel}</span>
                 <span className="fl-area__value">{text.areaFieldValue}</span>
               </span>
               <span className="fl-area__clear" aria-hidden="true">
-                <Icon svg={iconArtwork.close} size={20} />
+                <Icon svg={iconArtwork.close} size={24} />
               </span>
             </div>
-            <p className="fl-area__notice">
-              <Mark svg={icInfoFill} size={24} />
-              <span>{text.areaNotice}</span>
-            </p>
-            <p className="fl-area__note">{text.areaNote}</p>
+            {/* The message is its own box on the container-2 surface, not two
+                loose paragraphs: mark and headline on one row, and the reason
+                indented 28 under it, clear of the mark. */}
+            <div className="fl-area__notice">
+              <p className="fl-area__notice-line">
+                <Mark svg={icInfoFill} size={20} />
+                <span>{text.areaNotice}</span>
+              </p>
+              <p className="fl-area__note">{text.areaNote}</p>
+            </div>
             <span className="fl-area__cta" role="button">
               {text.areaCta}
             </span>
@@ -1182,92 +1420,229 @@ function PageSectionView({
         </section>
       )
 
+    /* Node 708:174095 — the still, then who it is for, what it is, and the
+       way in. A card of its own on the soft surface inside a 2px border. */
     case 'multiview':
       return (
         <section className="fl-page__multiview">
-          <p className="fl-page__eyebrow">
-            {text.multiviewEyebrow}
-            {text.multiviewBadge && <span className="fl-page__badge">{text.multiviewBadge}</span>}
-          </p>
-          <h2 className="fl-page__title">{text.multiviewTitle}</h2>
-          <p className="fl-page__body">{text.multiviewBody}</p>
-          <Cta>{text.multiviewCta}</Cta>
+          <div className="fl-art">
+            <img className="fl-art__shot" src={articleShot} alt="" />
+            <div className="fl-art__words">
+              <p className="fl-art__prefix">
+                <Mark svg={articleIcon} size={24} />
+                <span className="fl-art__kind">{text.multiviewEyebrow}</span>
+                {text.multiviewBadge && (
+                  <span className="fl-art__tab">
+                    <span className="fl-art__badge">{text.multiviewBadge}</span>
+                  </span>
+                )}
+              </p>
+              <p className="fl-art__title">{text.multiviewTitle}</p>
+              <p className="fl-art__body">{text.multiviewBody}</p>
+              <span className="fl-art__cta" role="button">
+                {text.multiviewCta}
+              </span>
+            </div>
+          </div>
         </section>
       )
 
+    /* Node 734:27154 — the words, the tiles in two columns 12 apart, the line
+       about the rest of them, and the way in. Everything 24 apart. */
     case 'providers':
       return (
         <section className="fl-page__providers">
-          <h2 className="fl-page__title" data-centre="">
-            {text.providersTitle}
-          </h2>
-          <p className="fl-page__body" data-centre="">
-            {text.providersBody}{' '}
-            {text.providersHighlight && (
-              <span className="fl-page__gold">{text.providersHighlight}</span>
-            )}
-          </p>
-          <div className="fl-page__provider-grid">
-            {providersOf(content).map((provider) => (
-              <span className="fl-page__provider" key={provider.id}>
-                {providerArt[provider.name] ? (
-                  <img src={providerArt[provider.name]} alt={provider.name} />
-                ) : (
-                  provider.name
-                )}
-              </span>
-            ))}
+          <div className="fl-provider__copy">
+            <h2 className="fl-provider__title">{text.providersTitle}</h2>
+            <p className="fl-provider__body">
+              {text.providersBody}
+              {text.providersHighlight && (
+                <>
+                  {/* Its own line in the design, not the tail of the sentence
+                      above it. */}
+                  <br />
+                  <span className="fl-page__gold">{text.providersHighlight}</span>
+                </>
+              )}
+            </p>
           </div>
-          <p className="fl-page__note" data-centre="">
-            {text.providersNote}
-          </p>
-          <Cta appearance="outline">{text.providersCta}</Cta>
+          <div className="fl-provider__grid">
+            {/* A provider with no name yet draws nothing rather than an empty
+                tile: the field is there to be typed into, and the design has
+                no blank in the grid. */}
+            {providersOf(content)
+              .filter((provider) => provider.name.trim() !== '')
+              .map((provider) => {
+                const art = providerArt[provider.name]
+                return (
+                  <span className="fl-provider" key={provider.id}>
+                    {art ? (
+                      <span
+                        className="fl-provider__art"
+                        data-clip={art.crop ? '' : undefined}
+                        style={{ inlineSize: art.w, blockSize: art.h }}
+                      >
+                        <img
+                          src={art.src}
+                          alt={provider.name}
+                          data-fit={art.cover ? 'cover' : undefined}
+                          style={
+                            art.crop && {
+                              insetBlockStart: art.crop.top,
+                              insetInlineStart: art.crop.left ?? 0,
+                              inlineSize: art.crop.inlineSize ?? '100%',
+                              blockSize: art.crop.blockSize,
+                            }
+                          }
+                        />
+                      </span>
+                    ) : (
+                      provider.name
+                    )}
+                  </span>
+                )
+              })}
+          </div>
+          <p className="fl-provider__note">{text.providersNote}</p>
+          <span className="fl-provider__cta" role="button">
+            {text.providersCta}
+          </span>
         </section>
       )
 
+    /* Node 734:41541 — .Section_Text_Block. Two paragraphs 8 apart and
+       centred: a heading whose second line takes the brand gradient, and the
+       words under it. Nothing else; the row of device logos the section used
+       to promise is not in the design. */
     case 'devices':
       return (
         <section className="fl-page__devices">
-          <h2 className="fl-page__title">
+          <p className="fl-text__title">
             {text.devicesTitle}
             {text.devicesTitleTwo && (
               <>
                 <br />
-                {text.devicesTitleTwo}
+                <span className="fl-text__gold">{text.devicesTitleTwo}</span>
               </>
             )}
-          </h2>
-          <p className="fl-page__body">{text.devicesBody}</p>
-          <p className="fl-page__note">{text.devicesNote}</p>
+          </p>
+          <p className="fl-text__body">{text.devicesBody}</p>
         </section>
       )
 
-    case 'free':
+    /* Node 853:58657 — a heading between two rules, and the logos under it:
+       four rows of three spaced apart, and one on its own at the end. */
+    case 'supported':
       return (
-        <section className="fl-page__free">
-          <h2 className="fl-page__title" data-centre="">
-            {text.freeTitle}
-          </h2>
-          <p className="fl-page__body" data-centre="">
-            {text.freeBody}
+        <section className="fl-page__supported">
+          <p className="fl-dev__heading">
+            <img className="fl-dev__rule" src={deviceRule} alt="" />
+            <span>{text.supportedTitle}</span>
+            <img className="fl-dev__rule" src={deviceRule} alt="" />
           </p>
-          <Cta>{text.freeCta}</Cta>
+          <div className="fl-dev__body">
+          <div className="fl-dev__wall">
+            {DEVICE_ROWS.map((row) => (
+              <div className="fl-dev__row" key={row.map((d) => d.name).join()} data-one={row.length === 1 || undefined}>
+                {row.map((device) => (
+                  <img
+                    className="fl-dev__logo"
+                    key={device.name}
+                    src={device.src}
+                    alt={device.name}
+                    style={{ inlineSize: device.w }}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+          <p className="fl-dev__note">
+            {text.supportedNote}
+            {text.supportedLink && (
+              <>
+                {/* Its own line, as the design sets it — the text block is two
+                    lines of 21 whatever the width would allow. */}
+                <br />
+                <span className="fl-dev__link">{text.supportedLink}</span>
+              </>
+            )}
+          </p>
+          </div>
+        </section>
+      )
+
+    /* Node 852:58100 — the words, then a row per feature with a hairline
+       between them, then the way in. Each row is a 130 picture, a tag, a
+       heading and a line. */
+    case 'features':
+      return (
+        <section className="fl-page__features">
+          <div className="fl-feat__copy">
+            <p className="fl-feat__eyebrow">{text.featuresEyebrow}</p>
+            <p className="fl-feat__title">{text.featuresTitle}</p>
+          </div>
+          <div className="fl-feat__list">
+            {featuresOf(content).map((feature) => {
+              const art = featureArt[feature.tag]
+              return (
+                <div className="fl-feat__row" key={feature.id}>
+                  <span className="fl-feat__shot">
+                    {art && (
+                      <span
+                        className="fl-feat__frame"
+                        style={{ blockSize: art.h, insetBlockStart: art.top }}
+                      >
+                        <img
+                          src={art.photo}
+                          alt=""
+                          style={{ blockSize: art.imgH, insetBlockStart: art.imgTop }}
+                        />
+                      </span>
+                    )}
+                  </span>
+                  <div className="fl-feat__words">
+                    {feature.tag && (
+                      <span className="fl-feat__tag">
+                        {art && <Mark svg={art.icon} size={20} />}
+                        {feature.tag}
+                      </span>
+                    )}
+                    <span className="fl-feat__text">
+                      <p className="fl-feat__name">{feature.title}</p>
+                      <p className="fl-feat__body">{feature.body}</p>
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+          <span className="fl-feat__cta" role="button">
+            {text.featuresCta}
+          </span>
+        </section>
+      )
+
+    /* Node 747:46379 — a picture 343 by 447 with the words and the button
+       laid over the foot of it, inside a 2px border on a 12 radius. */
+    case 'imageCta':
+      return (
+        <section className="fl-page__image-cta">
+          <div className="fl-imgcta">
+            <img className="fl-imgcta__art" src={imageCtaArt} alt="" />
+            <div className="fl-imgcta__foot">
+              <div className="fl-imgcta__words">
+                <p className="fl-imgcta__title">{text.imageCtaTitle}</p>
+                <p className="fl-imgcta__body">{text.imageCtaBody}</p>
+              </div>
+              <span className="fl-imgcta__cta" role="button">
+                {text.imageCtaCta}
+              </span>
+            </div>
+          </div>
         </section>
       )
 
     case 'faq':
-      return (
-        <section className="fl-page__faq">
-          <h2 className="fl-page__title">{text.faqTitle}</h2>
-          <ul className="fl-page__questions">
-            {questionsOf(content).map((one) => (
-              <li className="fl-page__question" key={one.id}>
-                {one.question}
-                <Icon svg={iconArtwork['chevron-right']} size={24} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
+      return <FaqSection content={content} title={text.faqTitle} />
   }
 }
