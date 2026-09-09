@@ -450,6 +450,13 @@
 /* How much of a field's budget is used, in the hero tool's own three states:
    inside the recommended length, past it, and past the point it stops
    fitting the picture. */
+/* The design system’s trailing slot is a 24 icon, and a counter is wider than
+   that: centred in a 24 box, “139/60” hung five pixels out either side and ate
+   the field’s own padding. Only the counter’s slot grows; every other trailing
+   element is still the icon the shell was drawn for. */
+.demo__fields .dz-field__trailing:has(.hb-count) {
+  inline-size: auto;
+}
 .hb-count {
   font-size: 11px;
   font-variant-numeric: tabular-nums;

@@ -5,6 +5,7 @@ import { resolveFlow } from '../rules/layers'
 import type { MouseEvent as ReactMouseEvent } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CardSetView } from '../card/CardSetView'
+import { LandingPageScreen, SubscriptionTabs } from '../components/flow/FlowScreens'
 import { FlowStep } from '../card/FlowStep'
 import { SubscriptionFlowScreen } from '../components/flow/FlowScreens'
 import { FlowInputContext } from '../components/flow/live'
@@ -306,7 +307,24 @@ export function Prototype({
           </span>
 
           <div className="proto__page" ref={page} onClick={tap}>
-            {current.step.renderer === 'plans' ? (
+            {current.step.renderer === 'landing' ? (
+              /* The whole page, not the hero alone.
+              
+                 A tile draws the hero because a tile of a 7000px page is a
+                 tile of nothing, but this is the phone: the page is what a
+                 reader would get, and it scrolls here the way it scrolls
+                 there. */
+              <LandingPageScreen content={resolveFlow(set).landing}>
+                <div className="fl-page__plans-tabs">
+                  <SubscriptionTabs
+                    tabs={tabsOf(set)}
+                    tab={current.state ?? tabsOf(set)[0]?.id ?? ''}
+                    onTab={goToState}
+                  />
+                </div>
+                <CardSetView set={phoneSet} context={context} tab={current.state} />
+              </LandingPageScreen>
+            ) : current.step.renderer === 'plans' ? (
               <SubscriptionFlowScreen
                 title={resolveFlow(set).plans.navTitle}
                 tabs={tabsOf(set)}

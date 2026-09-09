@@ -47,6 +47,39 @@ import { useState } from 'react'
  * separate and the market you are looking at is the one you meant — the shared
  * copy is a deliberate step out, not somewhere to land by default.
  */
+/**
+ * The two halves of the landing page, as tabs.
+ *
+ * Market edits through them and Dev reads through them, so they are one
+ * component: two tab strips that could drift apart would be two answers to
+ * "which half is this string on".
+ */
+export function FlowTabs({
+  value,
+  onChange,
+}: {
+  value: 'page' | 'hero'
+  onChange: (next: 'page' | 'hero') => void
+}) {
+  return (
+    <div className="fp-tabs" role="tablist" aria-label="What to edit">
+      {(['page', 'hero'] as const).map((k) => (
+        <button
+          key={k}
+          type="button"
+          role="tab"
+          className="fp-tab"
+          aria-selected={value === k}
+          data-on={value === k || undefined}
+          onClick={() => onChange(k)}
+        >
+          {k === 'page' ? 'Landing page' : 'Hero banner'}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) {
   const { set, updateSet } = store
   const at = situationOf(set)
@@ -95,23 +128,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
 
   return (
     <>
-      {hasHero && (
-        <div className="fp-tabs" role="tablist" aria-label="What to edit">
-          {(['page', 'hero'] as const).map((k) => (
-            <button
-              key={k}
-              type="button"
-              role="tab"
-              className="fp-tab"
-              aria-selected={tab === k}
-              data-on={tab === k || undefined}
-              onClick={() => setTab(k)}
-            >
-              {k === 'page' ? 'Landing page' : 'Hero banner'}
-            </button>
-          ))}
-        </div>
-      )}
+      {hasHero && <FlowTabs value={tab} onChange={setTab} />}
       {/* Neither half of the landing page asks where the copy applies. It is
           written for the market the fields above name, which is where an edit
           made while looking at that market was always going to go — the ladder

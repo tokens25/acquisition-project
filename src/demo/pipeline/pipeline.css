@@ -512,14 +512,25 @@
   flex-direction: column;
   gap: var(--space-16);
 }
+/* A named group is a card, the same one the Market editor wraps a component
+   in — on the landing page these ARE the components, and telling one from the
+   next by a bold line alone asks the reader to do the separating. A group with
+   no name (a screen whose strings are simply its own) keeps the plain run. */
 .pl-strings__group {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
+.pl-strings__group:has(> .pl-strings__name) {
+  gap: var(--space-8);
+  padding: var(--space-10);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-10);
+}
 .pl-strings__name {
   margin: 0;
   padding-block-end: var(--space-4);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
   color: var(--color-text-primary);
   font-size: var(--font-size-caption-sm);
   font-weight: var(--font-weight-bold);

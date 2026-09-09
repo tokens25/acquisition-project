@@ -67,6 +67,61 @@ export const SECTION_TYPES: SectionType[] = [
   'supported',
 ]
 
+/**
+ * Which component owns which field of the landing content.
+ *
+ * The panel groups by it, the handoff groups by it, and anything else that
+ * needs to say where a string lives asks here rather than guessing from the
+ * name. Fields the hero owns are not listed: the hero is not a component of
+ * the page, it is the page's own top.
+ */
+export const FIELD_COMPONENT: Record<string, SectionType> = {
+  zipHeading: 'zip',
+  zipNote: 'zip',
+  zipLabel: 'zip',
+  zipValue: 'zip',
+  zipCta: 'zip',
+  scheduleHeading: 'schedule',
+  plansTitle: 'plans',
+  plansBody: 'plans',
+  teamsEyebrow: 'teams',
+  teamsTitle: 'teams',
+  teamsBody: 'teams',
+  areaTitle: 'area',
+  areaBody: 'area',
+  areaFieldLabel: 'area',
+  areaFieldValue: 'area',
+  areaNotice: 'area',
+  areaNote: 'area',
+  areaCta: 'area',
+  multiviewEyebrow: 'multiview',
+  multiviewBadge: 'multiview',
+  multiviewTitle: 'multiview',
+  multiviewBody: 'multiview',
+  multiviewCta: 'multiview',
+  providersTitle: 'providers',
+  providersBody: 'providers',
+  providersHighlight: 'providers',
+  providersNote: 'providers',
+  providersCta: 'providers',
+  providers: 'providers',
+  devicesTitle: 'devices',
+  devicesTitleTwo: 'devices',
+  devicesBody: 'devices',
+  supportedTitle: 'supported',
+  supportedNote: 'supported',
+  supportedLink: 'supported',
+  featuresEyebrow: 'features',
+  featuresTitle: 'features',
+  featuresCta: 'features',
+  features: 'features',
+  imageCtaTitle: 'imageCta',
+  imageCtaBody: 'imageCta',
+  imageCtaCta: 'imageCta',
+  faqTitle: 'faq',
+  faqs: 'faq',
+}
+
 /** The page as it ships, in the order node 708:173735 has it. */
 export const SHIPPED_ORDER: SectionType[] = [
   'zip',

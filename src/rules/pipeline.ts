@@ -171,7 +171,10 @@ const FLOW_LABELS: Record<string, string> = {
    any other, so the walker would list a two hundred kilobyte string as copy to
    be translated and handed to dev. It is a picture; it goes in neither. */
 const NOT_COPY = new Set([
-  'id', 'selected', 'chosen', 'marks', 'logos', 'schedule', 'offer', 'heroImage',
+  'id', 'selected', 'chosen', 'marks', 'logos', 'schedule', 'offer',
+  // Pictures. Uploaded ones are data URLs, and a handoff listing a megabyte of
+  // base64 as a string to implement is a handoff nobody can read.
+  'heroImage', 'image', 'imageCtaImage', 'multiviewImage',
 ])
 
 /** Copy a screen cannot ship without. */

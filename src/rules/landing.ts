@@ -36,6 +36,36 @@ export const HERO_KEYS = [
 
 export type HeroKey = (typeof HERO_KEYS)[number]
 
+/**
+ * The landing fields the Hero banner tab owns.
+ *
+ * The hero's own controls, and the four strings it shares with the page: the
+ * bar's two buttons and the words over the picture are edited there, so they
+ * are listed there — in the panel and in the handoff both, which is why this
+ * is here rather than written out twice.
+ */
+const HERO_FIELDS = new Set<string>([
+  ...HERO_KEYS,
+  'navExplore',
+  'navSignUp',
+  'navSignUpEnabled',
+  'title',
+  'body',
+  'cta',
+  'altCta',
+  'altCtaEnabled',
+  'footnote',
+  'titleSource',
+  'bodySource',
+  'ctaSource',
+])
+
+/** Whether a landing field is the hero's, given `landing.navExplore` or `navExplore`. */
+export function isHeroField(key: string): boolean {
+  const field = key.replace(/^landing\./, '').split(/[.[]/)[0]
+  return HERO_FIELDS.has(field)
+}
+
 /** The hero banner as the panel and the preview both read it. */
 export interface HeroBanner {
   image: string
@@ -99,6 +129,10 @@ type ChoiceKey =
   | 'ctaSource'
   | 'altCtaEnabled'
   | 'navSignUpEnabled'
+  | 'imageCtaImage'
+  | 'imageCtaImageOff'
+  | 'multiviewImage'
+  | 'multiviewImageOff'
   | 'sections'
   | 'sectionCopy'
 
