@@ -76,4 +76,18 @@ function apiRoutes(): Plugin {
 
 export default defineConfig({
   plugins: [react(), apiRoutes()],
+  server: {
+    /**
+     * The port the harness assigned, or ours.
+     *
+     * It used to be pinned on the command line with `--port 5183
+     * --strictPort`, which meant a second session could not run the app at
+     * all: the port was already taken and strictPort turned that into a
+     * failure rather than a different port. Nothing here needs a fixed
+     * origin, every API call is relative and there is no redirect URI or CORS
+     * list to match, so the port is a convenience and 5183 is only the
+     * default when nobody has asked for another.
+     */
+    port: Number(process.env.PORT) || 5183,
+  },
 })

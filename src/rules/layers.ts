@@ -132,7 +132,40 @@ export function resolveFlow(set: CardSet, at: Situation = situationOf(set)): Flo
       Object.assign(out[key], layer.patch[key])
     }
   }
-  return out
+  // And the lists inside a screen are copied too, which the spread above does
+  // not do. Without this, every market's resolve handed back the SAME
+  // providers and faqs arrays, and the same ones the shipped defaults hold:
+  // one `providers.push(...)` on a resolved screen would have written into the
+  // defaults and changed every market at once, including markets that had
+  // taken their own copy. Nothing does that today, because every edit path
+  // builds a new array, but markets being separate should not rest on every
+  // future caller remembering to.
+  //
+  // Written out per screen for the same reason the copies above are: a new
+  // screen should be a compile error here rather than a screen whose lists are
+  // quietly still shared.
+  return {
+    landing: detachLists(out.landing),
+    plans: detachLists(out.plans),
+    cadence: detachLists(out.cadence),
+    auth: detachLists(out.auth),
+    account: detachLists(out.account),
+    zip: detachLists(out.zip),
+    checkout: detachLists(out.checkout),
+    ready: detachLists(out.ready),
+  }
+}
+
+/** A screen with its own copy of any list it holds, items included. */
+function detachLists<T>(screen: T): T {
+  const copy = { ...screen } as Record<string, unknown>
+  for (const [field, value] of Object.entries(copy)) {
+    if (!Array.isArray(value)) continue
+    copy[field] = value.map((item) =>
+      item && typeof item === 'object' && !Array.isArray(item) ? { ...item } : item,
+    )
+  }
+  return copy as T
 }
 
 /**
