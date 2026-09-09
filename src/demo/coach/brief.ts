@@ -22,6 +22,12 @@ export interface CoachReviewContext {
  * whatever is chosen. `asks` is the one thing the Coach needs to know to
  * check a goal against the journey, which content, which offer, and the
  * field appears in the popup only when that goal is on.
+ *
+ * `on` says which product a goal can be set for. A flow is judged on getting
+ * somebody through it, so its levers are packages, plans and the checkout; a
+ * page is judged on what it says and whether it offers a way in. Four goals
+ * suit both, because content, audience, offer and proposition are things a
+ * page carries as much as a journey does.
  */
 /** What a goal lets the user pick from: the set's plans, its teams, or its feature lines. */
 export type GoalPicks = 'plans' | 'teams' | 'features'
@@ -29,17 +35,20 @@ export type GoalPicks = 'plans' | 'teams' | 'features'
 export const BUSINESS_GOALS = [
   {
     id: 'drive-package',
+    on: 'journey',
     label: 'Drive Specific Package',
     hint: 'Make a business-selected package the clearest path. First place, a default or a badge are strategies, not requirements',
     picks: 'plans',
   },
   {
     id: 'drive-annual',
+    on: 'journey',
     label: 'Drive Annual Plan',
     hint: 'Communicate Annual clearly and check whether the existing choice architecture supports or works against it',
   },
   {
     id: 'acquire-content',
+    on: 'both',
     label: 'Acquire for Specific Content',
     hint: 'Trace the sport, competition, team, athlete or event that brought the user in, and find where it disappears',
     picks: 'teams',
@@ -48,6 +57,7 @@ export const BUSINESS_GOALS = [
   },
   {
     id: 'acquire-audience',
+    on: 'both',
     label: 'Acquire Specific Audience',
     hint: 'Check whether language, proposition and benefits address the audience, without pretending to know their preferences',
     asks: 'Or describe the audience',
@@ -55,6 +65,7 @@ export const BUSINESS_GOALS = [
   },
   {
     id: 'drive-offer',
+    on: 'both',
     label: 'Drive Specific Offer',
     hint: 'Check an existing verified offer is clearly communicated and maintained. The economics never change',
     asks: 'Or type the offer',
@@ -62,6 +73,7 @@ export const BUSINESS_GOALS = [
   },
   {
     id: 'drive-benefit',
+    on: 'journey',
     label: 'Drive Specific Benefit',
     hint: 'Check a verified benefit is clear, relevant to the decision and carried through the journey',
     picks: 'features',
@@ -70,20 +82,50 @@ export const BUSINESS_GOALS = [
   },
   {
     id: 'drive-bundle',
+    on: 'journey',
     label: 'Drive Bundle / Add-on',
     hint: 'Check whether structure, copy, ordering and emphasis support the bundle or add-on',
     picks: 'plans',
   },
   {
     id: 'maintain-proposition',
+    on: 'both',
     label: 'Maintain Campaign Proposition',
     hint: 'Trace the proposition from entry through checkout and find where the promise is diluted, contradicted or lost',
     asks: 'Or type the proposition',
     guide: 'The promise that brought the user in, in the campaign’s own words. The Coach traces it from entry to checkout.',
   },
+  {
+    id: 'page-signup',
+    on: 'page',
+    label: 'Get people to sign up',
+    hint: 'Make signing up the clearest thing on the page, and find what competes with it',
+  },
+  {
+    id: 'page-explain',
+    on: 'page',
+    label: 'Explain what is included',
+    hint: 'Check the page says what a subscription carries, in words somebody can act on',
+  },
+  {
+    id: 'page-region',
+    on: 'page',
+    label: 'Get the region checked',
+    hint: 'The postcode decides which teams a reader gets, so check the page asks before it matters',
+  },
+  {
+    id: 'page-answer',
+    on: 'page',
+    label: 'Answer the doubts',
+    hint: 'Check the questions somebody would leave over are answered where they are asked',
+  },
 ] as const
 
 export type BusinessGoalId = (typeof BUSINESS_GOALS)[number]['id']
+
+/** The goals that can be set for a flow, or for a page. */
+export const goalsFor = (subject: 'journey' | 'page') =>
+  BUSINESS_GOALS.filter((g) => g.on === subject || g.on === 'both')
 
 export const BUSINESS_CONSTRAINTS = [
   { id: 'offer-eligibility', label: 'Offer eligibility' },

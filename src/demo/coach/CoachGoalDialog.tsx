@@ -1,3 +1,4 @@
+import { SUBJECT_WORDS, type CoachSubject } from './subject'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import closeIcon from '../../assets/icons/action-close-md.svg?raw'
 import { clickedAway } from '../../components/dismiss'
@@ -6,7 +7,7 @@ import { Toggle } from '../../components/Toggle'
 import { CoachOrb } from './CoachOrb'
 import { CoachPill } from './CoachPill'
 import './coach.css'
-import { BUSINESS_GOALS, type BusinessGoalId, type CoachReviewContext, type GoalPicks } from './brief'
+import { BUSINESS_GOALS, goalsFor, type BusinessGoalId, type CoachReviewContext, type GoalPicks } from './brief'
 
 export interface CoachGoalDialogProps {
   open: boolean
@@ -21,6 +22,8 @@ export interface CoachGoalDialogProps {
   examples: Partial<Record<BusinessGoalId, string[]>>
   onClose: () => void
   onReview: (context: CoachReviewContext) => void
+  /** A flow or a page, so the dialog asks about the right thing. */
+  subject?: CoachSubject
 }
 
 const goalPicks = (g: BusinessGoalId): GoalPicks | undefined => {
@@ -141,7 +144,17 @@ function SwitchRow({
  * Evidence. Market and journey are already chosen in the panel, so they are
  * shown at the top, not asked again.
  */
-export function CoachGoalDialog({ open, tiers, teams, features, examples, onClose, onReview }: CoachGoalDialogProps) {
+export function CoachGoalDialog({
+  open,
+  tiers,
+  teams,
+  features,
+  examples,
+  onClose,
+  onReview,
+  subject = 'journey',
+}: CoachGoalDialogProps) {
+  const words = SUBJECT_WORDS[subject]
   const ref = useRef<HTMLDialogElement>(null)
   const [goals, setGoals] = useState<BusinessGoalId[]>([])
   const [targets, setTargets] = useState<Partial<Record<BusinessGoalId, string>>>({})
@@ -189,7 +202,10 @@ export function CoachGoalDialog({ open, tiers, teams, features, examples, onClos
             <Icon svg={closeIcon} size={16} />
           </button>
         </header>
-        <p className="coach-goal__lede">What is this journey for? The Coach judges it against your goal, not a generic best practice.</p>
+        <p className="coach-goal__lede">
+          What is {words.the} for? The Coach judges it against your goal, not a generic best
+          practice.
+        </p>
 
         <div className="coach-goal__body">
           <Group
@@ -198,9 +214,11 @@ export function CoachGoalDialog({ open, tiers, teams, features, examples, onClos
                 Goal <span className="coach-goal__req">Required · what the Coach may optimise</span>
               </>
             }
-            footer="The eight journey health questions run whatever you choose. A goal tells the Coach which levers it is allowed to judge, and what to trace through the journey."
+            footer={`The eight ${words.one} health questions run whatever you choose. A goal tells the Coach which levers it is allowed to judge, and what to trace through the ${words.one}.`}
           >
-            {BUSINESS_GOALS.map((g) => {
+            {/* Only the levers this product has: a page has no annual plan to
+                drive, and a flow has no components to arrange. */}
+            {goalsFor(subject).map((g) => {
               const kind = goalPicks(g.id)
               const options = kind === 'plans' ? tiers.map((t) => t.name) : kind === 'teams' ? teams : kind === 'features' ? features : undefined
               return (
@@ -227,11 +245,11 @@ export function CoachGoalDialog({ open, tiers, teams, features, examples, onClos
         <footer className="coach-goal__foot">
           <CoachPill
             size="lg"
-            title={ready ? 'Review every screen of this journey' : 'Turn on at least one business goal first'}
+            title={ready ? `Review ${words.every}` : 'Turn on at least one business goal first'}
             disabled={!ready}
             onClick={() => ref.current?.querySelector('form')?.requestSubmit()}
           >
-            Review the journey
+            Review the {words.one}
           </CoachPill>
         </footer>
       </form>

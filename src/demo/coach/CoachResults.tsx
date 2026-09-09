@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SUBJECT_WORDS, type CoachSubject } from './subject'
 import closeIcon from '../../assets/icons/action-close-md.svg?raw'
 import settingsIcon from '../../assets/icons/nav-settings.svg?raw'
 import { Icon } from '../../components/Icon'
@@ -17,6 +18,7 @@ import './results.css'
  */
 export function CoachResults({
   review,
+  subject = 'journey',
   onOpen,
   onSelect,
   onFix,
@@ -42,7 +44,10 @@ export function CoachResults({
   copyNote?: { id: string; note: string } | null
   onAgain: () => void
   onClose: () => void
+  /** A flow or a page, so the rail says what it is scoring. */
+  subject?: CoachSubject
 }) {
+  const words = SUBJECT_WORDS[subject]
   const [tab, setTab] = useState<'issues' | 'score'>('issues')
   const [filter, setFilter] = useState<Severity | 'all'>('all')
   const [question, setQuestion] = useState<CriterionId | null>(null)
@@ -96,7 +101,9 @@ export function CoachResults({
           </span>
         </div>
         <p className="cr__meaning">
-          Journey health, out of 100: how well the journey answers the eight baseline questions. The same for this journey whichever goal you pick. Goal alignment is scored separately below.
+          {words.one === 'page' ? 'Page' : 'Journey'} health, out of 100: how well {words.the}{' '}
+          answers the eight baseline questions. The same for {words.the} whichever goal you pick.
+          Goal alignment is scored separately below.
         </p>
         {/* The counts are the filters: tap one to see only those. */}
         <div className="cr__counts" role="group" aria-label="Show">
@@ -127,7 +134,7 @@ export function CoachResults({
       {tab === 'score' && (
         <>
           <section className="cr__block">
-            <p className="cr__sub">The questions the Coach asks of every journey. Tap one to see what pulls it down. Goal alignment is the ninth and is scored on its own.</p>
+            <p className="cr__sub">The questions the Coach asks of every {words.one}. Tap one to see what pulls it down. Goal alignment is the ninth and is scored on its own.</p>
             <ol className="cr__criteria">
               {health.byCriterion.filter((c) => c.id !== 'goal-alignment').map((c) => {
                 const started = review.start?.byCriterion[c.id]
@@ -174,7 +181,10 @@ export function CoachResults({
           {alignment.length > 0 && (
             <section className="cr__block">
               <h3 className="cr__h">Goal alignment</h3>
-              <p className="cr__sub">How strongly this journey supports the direction you set. Kept apart from journey health on purpose: a healthy journey can still point the wrong way.</p>
+              <p className="cr__sub">
+                How strongly {words.the} supports the direction you set. Kept apart from {words.one}{' '}
+                health on purpose: a healthy {words.one} can still point the wrong way.
+              </p>
               <ul className="cr__goals">
                 {alignment.map((g) => (
                   <li key={g.goal} className="cr__goal" data-band={g.band}>
@@ -191,7 +201,7 @@ export function CoachResults({
 
           <p className="cr__reliability">
             Scoring weights are product-defined, not calibrated against DAZN data.
-            {review.reliability.guarded > 0 && ` The Coach held back ${review.reliability.guarded} of its own ${review.reliability.total} readings for want of evidence; that is a note on the Coach, and it does not affect the journey's score.`}
+            {review.reliability.guarded > 0 && ` The Coach held back ${review.reliability.guarded} of its own ${review.reliability.total} readings for want of evidence; that is a note on the Coach, and it does not affect the ${words.one}'s score.`}
           </p>
 
           <p className="cr__ai" data-state={review.ai}>

@@ -4,7 +4,7 @@ import './demo.css'
 import './fields.css'
 import './pipeline/pipeline.css'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import daznLogo from '../assets/brand/logo-dazn.svg?raw'
 import { StepPreview } from '../card/StepPreview'
 import { Icon } from '../components/Icon'
@@ -14,7 +14,10 @@ import { summarise, validateAll } from '../rules/validate'
 import { Button } from '../components/Button'
 import { DefaultPanel } from './DefaultPanel'
 import { EditPanel } from './EditPanel'
-import { FlowPanel } from './FlowPanel'
+import { FlowPanel, FlowTabs } from './FlowPanel'
+import { isHeroField } from '../rules/landing'
+import { FIELD_COMPONENT, SECTION_LABEL, sectionsOf } from '../rules/sections'
+import type { Section } from '../rules/pipeline'
 import { UserFlow } from './UserFlow'
 import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
@@ -41,7 +44,7 @@ import { CoachMark } from './coach/CoachMark'
 import { CoachResults } from './coach/CoachResults'
 import { askCoachAi, askCopySuggestions } from './coach/review/ai'
 import type { CopySuggestion } from './coach/review/types'
-import { runCoach } from './coach/review/coach'
+import { ruleSet } from './coach/review/sets'
 import { patchesFor } from './coach/review/fix'
 import { useCoachHighlight } from './coach/useCoachHighlight'
 import type { Finding } from './coach/review/types'
@@ -75,6 +78,37 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const editing = single || stepOpen
   const setEditing = setStepOpen
   const [prototype, setPrototype] = useState(false)
+  /** Which half of the landing page Dev is reading. */
+  const [devTab, setDevTab] = useState<'page' | 'hero'>('page')
+
+  /**
+   * The landing page's strings, as Dev should meet them: the half the tab is
+   * on, each string under the component that draws it, and the components in
+   * the order the page has them. A string whose component is not on the page
+   * is still listed — it is written and it is not drawn, and dev finding that
+   * out from a list is better than dev finding it out from a screen.
+   */
+  const byComponent = (from: Section): Section => {
+    const order = sectionsOf(resolveFlow(store.set).landing)
+    const rank = new Map(order.map((s, i) => [s.type, i]))
+    const mine = from.strings.filter((s) => isHeroField(s.key) === (devTab === 'hero'))
+    if (devTab === 'hero') return { ...from, strings: mine }
+    const named = mine.map((s) => {
+      const field = s.key.replace(/^landing\./, '').split(/[.[]/)[0]
+      const type = FIELD_COMPONENT[field]
+      /* The footer is under everything and is not one of the components, so it
+         is last and says so. Anything else with no component left owning it is
+         a field a saved copy still carries and the page no longer draws — dev
+         should see that for what it is rather than as work. */
+      const footer = field.startsWith('footer')
+      return {
+        string: { ...s, group: type ? SECTION_LABEL[type] : footer ? 'Footer' : 'Not drawn any more' },
+        at: type ? (rank.get(type) ?? 99) : footer ? 100 : 101,
+      }
+    })
+    named.sort((a, b) => a.at - b.at)
+    return { ...from, strings: named.map((n) => n.string) }
+  }
   const [collapsed, setCollapsed] = useState(false)
   const [coachOpen, setCoachOpen] = useState(false)
 
@@ -162,6 +196,21 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
    * until React gave up and the screen stopped answering clicks. The guard
    * means the worst any such dependency can now cost is one wasted compare.
    */
+  /**
+   * Which Coach reads this product.
+   *
+   * The landing page is a page rather than a flow, so the specialists that
+   * read it are its own: the same engine, the same evidence guard, the same
+   * review coming out, asking what a page can be asked. Everything that shows
+   * a review — the marks, the rail, the pill — is told nothing about which.
+   */
+  const rules = ruleSet(single ? 'landing' : 'flow')
+  const reread = useCallback(
+    (snapshot: ReturnType<typeof buildSnapshot>, context: CoachReviewContext, extra: Finding[] = []) =>
+      ruleSet(single ? 'landing' : 'flow').run(snapshot, store.set, context, extra),
+    [single, store.set],
+  )
+
   const lastReviewed = useRef('')
   useEffect(() => {
     if (!review) return
@@ -169,8 +218,8 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     if (inputs === lastReviewed.current) return
     lastReviewed.current = inputs
     const snapshot = buildSnapshot(store.set, store.journey, store.context, planJourney(store.journey, store.context))
-    setReview((r) => (r ? { ...runCoach(snapshot, r.context, aiExtra.current), at: r.at, ai: r.ai, aiNote: r.aiNote, start: r.start } : r))
-  }, [store.set, store.journey, store.context, review])
+    setReview((r) => (r ? { ...reread(snapshot, r.context, aiExtra.current), at: r.at, ai: r.ai, aiNote: r.aiNote, start: r.start } : r))
+  }, [store.set, store.journey, store.context, review, reread])
 
   /**
    * The Coach's review of the whole flow.
@@ -186,7 +235,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     setSelected(null)
     setSuggestions({})
     setCopyNote(null)
-    const first = runCoach(snapshot, context)
+    const first = reread(snapshot, context)
     first.start = {
       health: first.health.overall,
       alignment: Object.fromEntries(first.alignment.map((a) => [a.goal, a.score])),
@@ -206,7 +255,9 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
         if (!current || current.at !== first.at) return current
         if (ai.status !== 'done') return { ...current, ai: ai.status, aiNote: ai.note }
         aiExtra.current = ai.findings
-        const merged = runCoach(snapshot, context, ai.findings)
+        // The same set that read it the first time reads it again with the
+        // AI's findings in hand.
+        const merged = reread(snapshot, context, ai.findings)
         return { ...merged, at: current.at, ai: 'done', aiNote: `${ai.findings.length} from the AI, via ${ai.model}.`, start: current.start }
       })
     })
@@ -387,7 +438,13 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
       <ModeToggle mode={pipe.mode} onChange={switchMode} />
 
       <CoachPill
-        title={review && !coachView ? 'Show the last review' : 'Ask the Coach to review every screen of this journey'}
+        title={
+          review && !coachView
+            ? 'Show the last review'
+            : single
+              ? 'Ask the Coach to read every component of this page'
+              : 'Ask the Coach to review every screen of this journey'
+        }
         onClick={() => (review && !coachView ? setCoachView(true) : setCoachOpen(true))}
       >
         Coach review
@@ -431,6 +488,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
       examples={coachExamples}
       onClose={() => setCoachOpen(false)}
       onReview={reviewWithCoach}
+      subject={rules.subject}
     />
   )
 
@@ -531,10 +589,21 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                   /* Dev reads: every string of the page, its key, and a button
                      to take it. Nothing here writes. */
                   section ? (
-                    <section className="demo__group">
-                      <h3 className="demo__group-title">Strings</h3>
-                      <DevStrings section={section} />
-                    </section>
+                    <>
+                      {/* The landing page is two things to Dev as well: the
+                          strings split where the panel splits them, so a
+                          handoff conversation about the hero is about the
+                          hero. */}
+                      {step?.renderer === 'landing' && (
+                        <FlowTabs value={devTab} onChange={setDevTab} />
+                      )}
+                      <section className="demo__group">
+                        <h3 className="demo__group-title">Strings</h3>
+                        <DevStrings
+                          section={step?.renderer === 'landing' ? byComponent(section) : section}
+                        />
+                      </section>
+                    </>
                   ) : (
                     <p className="pl-empty">
                       Nothing is marked ready for dev yet.
@@ -653,6 +722,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
               selectedId={selected?.id ?? null}
               onAgain={() => setCoachOpen(true)}
               onClose={() => setCoachView(false)}
+              subject={rules.subject}
             />
           </aside>
         )}
