@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { App } from './App'
 import { DemoApp } from './demo/DemoApp'
-import { Gallery } from './components/studio/Gallery'
 import { Index } from './Index'
 import { Preparing } from './progress/Preparing'
 import type { Job } from './progress/prepare'
@@ -50,10 +49,6 @@ export function Routes() {
     ) : path === '/landing' ? (
       /* The same tool, on the landing page alone and open on it. */
       <DemoApp product="landing" />
-    ) : path === '/controls' ? (
-      /* The controls ported from Project A, on a page of their own. Nothing
-         in the tool imports them yet; this is where they can be looked at. */
-      <Gallery />
     ) : path === '/demo2' ? (
       <App />
     ) : (
