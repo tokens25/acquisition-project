@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
 import { FieldGroup } from './FieldGroup'
+import { ImagePicker } from './ImagePicker'
+import { articleShot, featureArt, imageCtaArt } from '../components/flow/landingArt'
 import { TextField } from '../components/TextField'
 import { Toggle } from '../components/Toggle'
 import { ToggleField } from '../components/ToggleField'
@@ -439,6 +441,16 @@ function SectionFields({
     case 'multiview':
       return (
         <>
+          <ImagePicker
+            // The still's own 1369 by 770.
+            aspect="1369 / 770"
+            src={inst.multiviewImage}
+            shipped={articleShot}
+            off={inst.multiviewImageOff}
+            onPick={(url) => write({ multiviewImage: url, multiviewImageOff: false })}
+            onRemove={() => write({ multiviewImage: '', multiviewImageOff: true })}
+            onShipped={() => write({ multiviewImage: '', multiviewImageOff: false })}
+          />
 
               <TextField label="Over the heading" value={t.multiviewEyebrow} pipelineKey={key('landing.multiviewEyebrow')} onChange={(v) => write({ multiviewEyebrow: v })} />
               <TextField label="Pill" value={t.multiviewBadge} pipelineKey={key('landing.multiviewBadge')} onChange={(v) => write({ multiviewBadge: v })} helpText="Empty draws none." />
@@ -542,6 +554,18 @@ function SectionFields({
               write({ features: all.map((f, j) => (j === i ? { ...f, ...next } : f)) })
             return (
               <div className="demo__feature" key={feature.id}>
+                {/* The tag brings a picture with it; this is where a row gets
+                    one of its own, or none. */}
+                <ImagePicker
+                  // 130 by 83, as the row draws it.
+                  aspect="130 / 83"
+                  src={feature.image}
+                  shipped={featureArt[feature.tag]?.photo}
+                  off={feature.imageOff}
+                  onPick={(url) => edit({ image: url, imageOff: false })}
+                  onRemove={() => edit({ image: '', imageOff: true })}
+                  onShipped={() => edit({ image: '', imageOff: false })}
+                />
                 <TextField
                   label={`Tag ${i + 1}`}
                   value={feature.tag}
@@ -587,6 +611,16 @@ function SectionFields({
     case 'imageCta':
       return (
         <>
+          <ImagePicker
+            // The card is taller than it is wide — node 747:46379 is 343 by 447.
+            aspect="343 / 447"
+            src={inst.imageCtaImage}
+            shipped={imageCtaArt}
+            off={inst.imageCtaImageOff}
+            onPick={(url) => write({ imageCtaImage: url, imageCtaImageOff: false })}
+            onRemove={() => write({ imageCtaImage: '', imageCtaImageOff: true })}
+            onShipped={() => write({ imageCtaImage: '', imageCtaImageOff: false })}
+          />
           <TextField label="Heading" value={t.imageCtaTitle} pipelineKey={key('landing.imageCtaTitle')} onChange={(v) => write({ imageCtaTitle: v })} rows={2} />
           <TextField label="Under the heading" value={t.imageCtaBody} pipelineKey={key('landing.imageCtaBody')} onChange={(v) => write({ imageCtaBody: v })} rows={3} />
           <TextField label="Button" value={t.imageCtaCta} pipelineKey={key('landing.imageCtaCta')} onChange={(v) => write({ imageCtaCta: v })} />

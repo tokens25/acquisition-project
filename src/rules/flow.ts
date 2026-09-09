@@ -221,6 +221,10 @@ export interface LandingFeature {
   tag: string
   title: string
   body: string
+  /** A picture of its own, instead of the one the tag brings. */
+  image?: string
+  /** Drawn without a picture at all. */
+  imageOff?: boolean
 }
 
 /** One question in the landing page's FAQ. */
@@ -334,6 +338,9 @@ export interface LandingScreen {
   multiviewTitle?: string
   multiviewBody?: string
   multiviewCta?: string
+  /** The still: one of its own, and whether it is drawn with one at all. */
+  multiviewImage?: string
+  multiviewImageOff?: boolean
 
   /** "How to connect your TV Subscription" and the grid of providers. */
   providersTitle?: string
@@ -374,6 +381,9 @@ export interface LandingScreen {
   imageCtaTitle?: string
   imageCtaBody?: string
   imageCtaCta?: string
+  /** A picture of its own, and whether it is drawn with one at all. */
+  imageCtaImage?: string
+  imageCtaImageOff?: boolean
 
   /** The questions at the foot of the page. */
   faqTitle?: string

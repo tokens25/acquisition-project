@@ -911,7 +911,7 @@
 /* The design's own colours, named as it names them, so the values below read
    as the tokens they are rather than as six hexes that happen to be right. */
 .fl-landing {
-  --surface-default: #080e12;
+  --surface-default: #060606;
   --surface-max: #f9fafa;
   --surface-neutral: #3d4549;
   --surface-soft: rgb(255 255 255 / 10%);
@@ -1487,7 +1487,7 @@
   gap: 32px;
   padding-block: var(--space-10);
   padding-inline: 0;
-  background: #080e12;
+  background: #060606;
 }
 /* section-header-tabs, 708:173859 — the control keeps its own 16 above,
    over the section's 32, and takes the page inset the card row supplies for
@@ -1888,6 +1888,16 @@
   inline-size: 100%;
   max-inline-size: none;
 }
+/* A picture of the row's own takes the whole square and is cropped to it. */
+.fl-feat__frame[data-own] {
+  inset-block: 0;
+  block-size: 100%;
+}
+.fl-feat__frame[data-own] img {
+  inset-block: 0;
+  block-size: 100%;
+  object-fit: cover;
+}
 .fl-feat__words {
   display: flex;
   flex: 1;
@@ -2179,6 +2189,7 @@
 .fl-page .fl-page__schedule {
   gap: 0;
   padding-inline: 0;
+  background: #060606;
 }
 .fl-page__schedule-head {
   display: flex;
@@ -2189,16 +2200,6 @@
   inline-size: 100%;
   padding: 40px var(--space-16) var(--space-24);
   overflow: hidden;
-  background:
-    linear-gradient(
-      180deg,
-      #080e12 0%,
-      rgb(8 14 18 / 0%) 13.719%,
-      rgb(8 14 18 / 0%) 47.386%,
-      rgb(8 14 18 / 0%) 73.41%,
-      #080e12 101.61%
-    ),
-    #080e12;
 }
 .fl-page__schedule-title {
   margin: 0;
@@ -2216,7 +2217,6 @@
   align-items: flex-start;
   inline-size: 100%;
   padding-inline: var(--space-16);
-  background: #080e12;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;

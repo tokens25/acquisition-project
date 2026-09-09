@@ -14,6 +14,7 @@ import {
   questionsOf,
 } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
+import { articleShot, featureArt, imageCtaArt } from './landingArt'
 import { copyOf, sectionsOf, type PageSection } from '../../rules/sections'
 
 import { Fragment, useState } from 'react'
@@ -50,8 +51,6 @@ import heroArt from '../../assets/landing/hero.jpg'
 import daznLogo from '../../assets/landing/logo-dazn.svg'
 import actionEdit from '../../assets/landing/action-edit.svg'
 import actionLocation from '../../assets/landing/action-location.svg'
-import imageCtaArt from '../../assets/landing/image-cta.png'
-import articleShot from '../../assets/landing/article/shot.jpg'
 import articleIcon from '../../assets/landing/article/icon-multiview.svg?raw'
 import deviceRule from '../../assets/landing/devices/rule.svg'
 import deviceRoku from '../../assets/landing/devices/roku.svg'
@@ -67,14 +66,6 @@ import deviceAppStore from '../../assets/landing/devices/app-store.svg'
 import devicePlaystation from '../../assets/landing/devices/playstation.svg'
 import deviceXbox from '../../assets/landing/devices/xbox.svg'
 import deviceAndroidTv from '../../assets/landing/devices/android-tv.svg'
-import featureDownloads from '../../assets/landing/features/downloads.png'
-import featurePortability from '../../assets/landing/features/portability.png'
-import featureOriginal from '../../assets/landing/features/original.png'
-import featureHighlights from '../../assets/landing/features/highlights.png'
-import iconDownloads from '../../assets/landing/features/icon-downloads.svg?raw'
-import iconPortability from '../../assets/landing/features/icon-portability.svg?raw'
-import iconOriginal from '../../assets/landing/features/icon-original.svg?raw'
-import iconHighlights from '../../assets/landing/features/icon-highlights.svg?raw'
 import schedP0 from '../../assets/landing/schedule/p0.png'
 import schedP1 from '../../assets/landing/schedule/p1.png'
 import schedP2 from '../../assets/landing/schedule/p2.png'
@@ -1191,60 +1182,6 @@ const DEVICE_ROWS: { src: string; name: string; w: number }[][] = [
   [{ src: deviceAndroidTv, name: 'Android TV', w: 126.4 }],
 ]
 
-/**
- * A feature's icon and picture, and how the design lays that picture out.
- *
- * Keyed by the tag, which is the row's own label: the tag picks the artwork
- * the way a provider's name picks its logo. Every picture sits in a 130 box;
- * what differs is the height it is drawn at, where the top of it sits, and how
- * much of a larger photograph the design shows — read off node 852:58100 row
- * by row rather than averaged into one treatment.
- */
-interface FeatureArt {
-  icon: string
-  photo: string
-  /** The picture's height inside the 130 box, and its offset from the top. */
-  h: number
-  top: number
-  /** The part of the photograph the design shows. */
-  imgH: string
-  imgTop: string
-}
-
-const featureArt: Record<string, FeatureArt> = {
-  Downloads: {
-    icon: iconDownloads,
-    photo: featureDownloads,
-    h: 83,
-    top: 0,
-    imgH: '108.11%',
-    imgTop: '-9.48%',
-  },
-  Portability: {
-    icon: iconPortability,
-    photo: featurePortability,
-    h: 83,
-    top: 0,
-    imgH: '108.11%',
-    imgTop: '-9.48%',
-  },
-  'Original content': {
-    icon: iconOriginal,
-    photo: featureOriginal,
-    h: 81,
-    top: 2,
-    imgH: '110.78%',
-    imgTop: '-12.18%',
-  },
-  Highlights: {
-    icon: iconHighlights,
-    photo: featureHighlights,
-    h: 87,
-    top: -4,
-    imgH: '103.14%',
-    imgTop: '-4.45%',
-  },
-}
 
 /**
  * The whole landing page, hero included.
@@ -1426,7 +1363,9 @@ function PageSectionView({
       return (
         <section className="fl-page__multiview">
           <div className="fl-art">
-            <img className="fl-art__shot" src={articleShot} alt="" />
+            {!content.multiviewImageOff && (
+              <img className="fl-art__shot" src={content.multiviewImage || articleShot} alt="" />
+            )}
             <div className="fl-art__words">
               <p className="fl-art__prefix">
                 <Mark svg={articleIcon} size={24} />
@@ -1587,17 +1526,27 @@ function PageSectionView({
               return (
                 <div className="fl-feat__row" key={feature.id}>
                   <span className="fl-feat__shot">
-                    {art && (
-                      <span
-                        className="fl-feat__frame"
-                        style={{ blockSize: art.h, insetBlockStart: art.top }}
-                      >
-                        <img
-                          src={art.photo}
-                          alt=""
-                          style={{ blockSize: art.imgH, insetBlockStart: art.imgTop }}
-                        />
+                    {/* A picture somebody chose fills the square, because there
+                        is no design telling us how to crop it. The tag's own
+                        is laid out the way that row is drawn. */}
+                    {!feature.imageOff && feature.image ? (
+                      <span className="fl-feat__frame" data-own="">
+                        <img src={feature.image} alt="" />
                       </span>
+                    ) : (
+                      !feature.imageOff &&
+                      art && (
+                        <span
+                          className="fl-feat__frame"
+                          style={{ blockSize: art.h, insetBlockStart: art.top }}
+                        >
+                          <img
+                            src={art.photo}
+                            alt=""
+                            style={{ blockSize: art.imgH, insetBlockStart: art.imgTop }}
+                          />
+                        </span>
+                      )
                     )}
                   </span>
                   <div className="fl-feat__words">
@@ -1628,7 +1577,13 @@ function PageSectionView({
       return (
         <section className="fl-page__image-cta">
           <div className="fl-imgcta">
-            <img className="fl-imgcta__art" src={imageCtaArt} alt="" />
+            {!content.imageCtaImageOff && (
+              <img
+                className="fl-imgcta__art"
+                src={content.imageCtaImage || imageCtaArt}
+                alt=""
+              />
+            )}
             <div className="fl-imgcta__foot">
               <div className="fl-imgcta__words">
                 <p className="fl-imgcta__title">{text.imageCtaTitle}</p>
