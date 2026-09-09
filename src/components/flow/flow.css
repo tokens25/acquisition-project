@@ -962,23 +962,95 @@
   overflow: hidden;
 }
 
-/* The key art, over the page colour, filling the 660 and cropped by it. The
-   design stacks three pictures to build its own; this is one, and `cover` is
-   what keeps it filling the frame at any width the screen is drawn at. */
+/* The key art, over the page colour. This is the visible picture: what is
+   drawn outside it is not drawn at all, which is what lets the picture be
+   moved and zoomed without spilling into the page under it.
+
+   It is a container, so the sums below can be written in its own width and
+   height — a hero drawn at 375 and the same hero drawn in a tile both get the
+   right answer without anybody measuring anything. */
 .fl-landing__art {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  container-type: size;
   background: var(--surface-default);
   pointer-events: none;
 }
+
+/* The picture is placed rather than fitted.
+   `--cover` is the width at which it would fill the frame exactly — the
+   larger of the frame's width and what the frame's height asks for at this
+   picture's shape. The zoom is a multiple of that, so 100% fills, 200% is
+   twice as much picture as frame, and 25% is a quarter of the size that fills.
+
+   Where it sits is the same sum both ways round. `(frame - picture)` is
+   negative while the picture is larger, so the focal point runs it from its
+   own top-left showing to its own bottom-right showing; it is positive once
+   the picture is smaller, and the same 0 to 100 walks it corner to corner
+   inside the frame. Which is why a smaller picture moves further.
+
+   Until the picture's shape is known there is nothing to work from, and the
+   rule under this one fits it the way it always was. */
 .fl-landing__art > img {
+  --hero-shape: max(100cqw, 100cqh * var(--hero-ratio));
+  --hero-w: calc(var(--hero-zoom) * var(--hero-shape));
+  --hero-h: calc(var(--hero-w) / var(--hero-ratio));
+
   position: absolute;
-  inset: 0;
+  inset-inline-start: calc((100cqw - var(--hero-w)) * var(--hero-x) / 100);
+  inset-block-start: calc((100cqh - var(--hero-h)) * var(--hero-y) / 100);
   max-inline-size: none;
+  inline-size: var(--hero-w);
+  block-size: var(--hero-h);
+  /* The box is already the picture's own shape, so there is nothing to fit. */
+  object-fit: fill;
+}
+/* Before the picture's shape is known there is no sum to do, so it is fitted
+   the way it always was. One frame at most, and the right one. */
+.fl-landing__art[data-fit] > img {
+  inset: 0;
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
 }
+/* What it costs, under the words and over the button. The price is the lead
+   and the three parts around it are three quarters of it, all sitting on one
+   baseline — the hero tool's own lockup, at the size this page is set at. */
+.fl-landing__price {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: baseline;
+  justify-content: center;
+  margin: 0;
+  padding-block: var(--space-8);
+  inline-size: 100%;
+}
+/* Switched on with nothing typed: the lockup shows where a price would land,
+   at half strength so it is not read as one. */
+.fl-landing__price[data-empty] {
+  opacity: 0.45;
+}
+.fl-landing__price-value {
+  color: var(--text-default);
+  font-size: 22px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+}
+.fl-landing__price-part {
+  color: rgb(255 255 255 / 70%);
+  font-size: 16px;
+  line-height: 1.2;
+}
+/* After the price, not before it: now against was. */
+.fl-landing__price-was {
+  color: rgb(255 255 255 / 55%);
+  font-size: 16px;
+  line-height: 1.2;
+  text-decoration: line-through;
+}
+
 /* Four stops rather than a fade: clear a fifth of the way down, half dark at
    the middle, solid by seven tenths — which is what puts the copy on a ground
    instead of on the picture. */
@@ -991,6 +1063,28 @@
     rgb(8 14 18 / 0%) 20%,
     rgb(8 14 18 / 60%) 50%,
     rgb(8 14 18 / 100%) 70%
+  );
+}
+/* Three strengths, because a picture decides how much cover its words need: a
+   bright, busy photograph swallows white text and a dark, plain one does not.
+   The middle one is the design's own; the other two move the stops rather than
+   adding a second layer over them. */
+.fl-landing__wash[data-strength='light'] {
+  background: linear-gradient(
+    180deg,
+    rgb(8 14 18 / 50%) 0%,
+    rgb(8 14 18 / 0%) 22%,
+    rgb(8 14 18 / 35%) 55%,
+    rgb(8 14 18 / 85%) 78%
+  );
+}
+.fl-landing__wash[data-strength='heavy'] {
+  background: linear-gradient(
+    180deg,
+    rgb(8 14 18 / 92%) 0%,
+    rgb(8 14 18 / 20%) 18%,
+    rgb(8 14 18 / 80%) 44%,
+    rgb(8 14 18 / 100%) 62%
   );
 }
 
@@ -1129,12 +1223,55 @@
   text-align: center;
 }
 
-/* Over the picture, not above it: the bar is absolute at the top of the whole
-   container, which is why the hero starts at its own top rather than under a
-   row. */
-.fl-landing__nav {
+/* Over the picture, not above it: the bar is absolute at the top of whatever
+   holds it, which is why the hero starts at its own top rather than under a
+   row. 45 tall — 16, the signals' 13, 16 again — with the time at one end and
+   the signals at the other. */
+.fl-landing__status {
   position: absolute;
   inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  block-size: 45px;
+  padding-inline: var(--space-16);
+  color: #fff;
+  /* Nothing here is anything to click. It is over the top of the picture, and
+     the picture is dragged to frame it — so the bar has to let that through
+     rather than eating the top 45 of the drag. */
+  pointer-events: none;
+}
+.fl-landing__time {
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.28px;
+  line-height: normal;
+}
+.fl-landing__signals {
+  inline-size: 68px;
+  block-size: 13px;
+}
+/* The notch the phone cuts out of its own screen: flush with the top edge,
+   a little under half the width across, and rounded only where it meets the
+   picture. The bar is over a picture, so it is drawn as its own black rather
+   than as a hole in something. */
+.fl-landing__notch {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+  inline-size: 42%;
+  block-size: 18.75px;
+  border-end-start-radius: 18.75px;
+  border-end-end-radius: 18.75px;
+  background: #000;
+  transform: translateX(-50%);
+}
+.fl-landing__nav {
+  position: absolute;
+  /* Under the phone's bar: 16 of padding, 13 of signals, 16 again. */
+  inset-block-start: 45px;
   inset-inline-start: 0;
   display: flex;
   align-items: center;
@@ -1489,6 +1626,16 @@
   padding-inline: 0;
   background: #060606;
 }
+/* The picker is a row inside a page, so it takes the page's width and does its
+   scrolling there. Left alone it takes the width of its cards — three of them,
+   813 — and a section wider than the page does not scroll where it is: it
+   makes the page wider, and the whole layout slides sideways instead. */
+.fl-page__plans .acq-preview,
+.fl-page__plans .acq-set-scroll {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
 /* section-header-tabs, 708:173859 — the control keeps its own 16 above,
    over the section's 32, and takes the page inset the card row supplies for
    itself. */

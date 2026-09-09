@@ -1,4 +1,4 @@
-import type { CardSet } from '../rules/content'
+import { marketOf, type CardSet } from '../rules/content'
 import { resolveFlow } from '../rules/layers'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
@@ -42,7 +42,12 @@ export function FlowStep({
 
   switch (step.renderer) {
     case 'landing':
-      return <LandingFlowScreen content={flow.landing ?? defaultFlow.landing} />
+      return (
+        <LandingFlowScreen
+          content={flow.landing ?? defaultFlow.landing}
+          market={marketOf(set)}
+        />
+      )
     case 'cadence':
       return (
         <CadenceFlowScreen

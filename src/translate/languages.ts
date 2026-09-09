@@ -5,13 +5,13 @@ import type { CardSet, MarketConfig } from '../rules/content'
  * carries. No second list to keep in step: add a market with `de-AT` and it
  * reads German because its locale says so.
  *
- * That one is the market's official language, and it is the language the
- * journey is translated into without being asked. Any other language a market
- * reads in is a language somebody chose for it, and is offered beside the
- * official one rather than in place of it.
+ * That one is the market's official language. It is what the market would
+ * ship in, so it is offered first and named as such — but it is offered, not
+ * done: nothing here translates anything until somebody asks for it.
  *
- * English is the source. The screens are written in it, so an English market
- * needs no translation and never asks for one.
+ * English is the source. The screens are written in it, every market reads it,
+ * and it is what stays on screen until a translation is asked for and switched
+ * to. So a market always has its English, whatever else it has been given.
  */
 export const SOURCE_LANGUAGE = 'en'
 
@@ -52,16 +52,20 @@ export function languageOf(market: MarketConfig): Language {
 /**
  * Every language a market could be translated into.
  *
- * The ones DAZN's own markets read come first, because those are the languages
- * a real screen has to work in; the rest of what the tool can name follows. A
- * market's own language is not offered, because it is never optional.
+ * Its own language leads, because that is the one it would ship in and so the
+ * one most likely to be wanted. Then the languages DAZN's other markets read,
+ * because those are the ones a real screen has to work in, and then the rest
+ * of what the tool can name.
+ *
+ * English is not on the list. It is not a translation — it is the words the
+ * screens are written in, and every market has it already.
  */
 export function offerableFor(set: CardSet, market: MarketConfig): Language[] {
   const own = languageOf(market).code
   const theirs = [...new Set(set.markets.map((m) => languageOf(m).code))]
   const rest = Object.keys(NAMES).filter((c) => !theirs.includes(c))
-  return [...theirs, ...rest]
-    .filter((code) => code !== own && code !== SOURCE_LANGUAGE)
+  return [...new Set([own, ...theirs, ...rest])]
+    .filter((code) => code !== SOURCE_LANGUAGE)
     .map((code) => ({ code, name: nameOf(code) }))
 }
 

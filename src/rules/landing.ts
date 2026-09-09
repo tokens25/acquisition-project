@@ -1,6 +1,5 @@
 import type {
   HeroLabelVariant,
-  HeroLogoSize,
   LandingFeature,
   LandingLink,
   LandingProvider,
@@ -8,6 +7,18 @@ import type {
   LandingScreen,
 } from './flow'
 import { defaultFlow } from './flow'
+
+/**
+ * How far the hero picture can be zoomed, as a percentage of the size that
+ * fills the frame exactly.
+ *
+ * 100 is that size, so it is the middle of the idea rather than the bottom of
+ * the range: below it the picture is smaller than the frame and the page
+ * colour shows around it, which is a thing somebody may well want — and the
+ * smaller it is, the further it can be moved before it runs out of frame.
+ */
+export const HERO_ZOOM_MIN = 25
+export const HERO_ZOOM_MAX = 200
 
 /**
  * The hero banner's own fields, which are not words on the page below it.
@@ -22,16 +33,17 @@ export const HERO_KEYS = [
   'heroLabelEnabled',
   'heroLabel',
   'heroLabelVariant',
-  'heroHelperEnabled',
-  'heroHelper',
+  'footnoteEnabled',
   'heroPriceEnabled',
   'heroPricePrefix',
   'heroPriceValue',
   'heroPriceSuffix',
   'heroPriceOld',
+  'heroFocalX',
+  'heroFocalY',
+  'heroZoom',
+  'heroWash',
   'heroCtaGold',
-  'heroLogoEnabled',
-  'heroLogoSize',
 ] as const
 
 export type HeroKey = (typeof HERO_KEYS)[number]
@@ -72,16 +84,18 @@ export interface HeroBanner {
   labelEnabled: boolean
   label: string
   labelVariant: HeroLabelVariant
+  /** Whether the footnote under the buttons is drawn. What it says is `footnote`. */
   helperEnabled: boolean
-  helper: string
   priceEnabled: boolean
   pricePrefix: string
   priceValue: string
   priceSuffix: string
   priceOld: string
+  focalX: number
+  focalY: number
+  zoom: number
+  wash: 'light' | 'standard' | 'heavy'
   ctaGold: boolean
-  logoEnabled: boolean
-  logoSize: HeroLogoSize
 }
 
 /**
@@ -100,16 +114,17 @@ export function heroOf(content: LandingScreen): HeroBanner {
     labelEnabled: on('heroLabelEnabled'),
     label: str('heroLabel'),
     labelVariant: (content.heroLabelVariant ?? base.heroLabelVariant ?? 'standard') as HeroLabelVariant,
-    helperEnabled: on('heroHelperEnabled'),
-    helper: str('heroHelper'),
+    helperEnabled: on('footnoteEnabled'),
     priceEnabled: on('heroPriceEnabled'),
     pricePrefix: str('heroPricePrefix'),
     priceValue: str('heroPriceValue'),
     priceSuffix: str('heroPriceSuffix'),
     priceOld: str('heroPriceOld'),
+    focalX: (content.heroFocalX ?? base.heroFocalX ?? 50) as number,
+    focalY: (content.heroFocalY ?? base.heroFocalY ?? 50) as number,
+    zoom: (content.heroZoom ?? base.heroZoom ?? 100) as number,
+    wash: (content.heroWash ?? base.heroWash ?? 'standard') as HeroBanner['wash'],
     ctaGold: on('heroCtaGold'),
-    logoEnabled: on('heroLogoEnabled'),
-    logoSize: (content.heroLogoSize ?? base.heroLogoSize ?? 'medium') as HeroLogoSize,
   }
 }
 

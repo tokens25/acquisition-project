@@ -1,0 +1,24 @@
+/* The drag surface: over everything in the frame, and invisible. What it does
+   is take the pointer, so the cursor is the whole of its affordance. */
+.fd-drag {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  /* The hero art is pointer-events: none — it is scenery, and nothing in it
+     should take a click. The handle is the exception, so it says so; without
+     this the surface is there, looks right, and the mouse goes straight
+     through it. */
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.fd-drag:active {
+  cursor: grabbing;
+}
+
+/* A picture that fills the frame exactly has nowhere to go, so it does not
+   offer the hand at all. */
+.fd-drag[data-axis='none'] {
+  cursor: default;
+}

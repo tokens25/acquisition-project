@@ -1,5 +1,6 @@
 import '../App.css'
-import { resolveFlow } from '../rules/layers'
+import { isMarketCopy, resolveFlow, scopeLadder, situationOf, writeFlow } from '../rules/layers'
+import type { CardSet } from '../rules/content'
 import './demo.css'
 import './fields.css'
 import './pipeline/pipeline.css'
@@ -63,6 +64,18 @@ import { titleFor, type Product } from '../product'
  * second screen with the panel, preview and toolbar copied into it — it is this
  * one, told that the journey it is looking at is a page rather than a flow.
  */
+/**
+ * Where an edit made on the canvas lands.
+ *
+ * The panel resolves this for itself and offers the ladder above it; the
+ * canvas has no ladder, so it writes where the panel opens: this market's own
+ * copy. Anywhere else and the market would go on reading what it had.
+ */
+const marketScope = (set: CardSet) => {
+  const ladder = scopeLadder(situationOf(set))
+  return (ladder.find((r) => isMarketCopy(r.when)) ?? ladder[0])?.when ?? {}
+}
+
 export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const store = useCardSet()
   /*
@@ -683,6 +696,43 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
               set={marketSet.stepId === step.id ? marketSet : { ...marketSet, stepId: step.id }}
               context={store.context}
               onTab={(tab) => store.setContext({ ...store.context, tab })}
+              /* Only where the panel beside it owns the hero. It writes at the
+                 same scope the panel writes at — this market's own copy — and
+                 not at the shared one: a market with a copy of its own reads
+                 that, so a write to the shared copy is a write nothing draws. */
+              onFocal={
+                step?.renderer === 'landing'
+                  ? (x, y) =>
+                      store.updateSet(
+                        writeFlow(store.set, marketScope(store.set), 'landing', {
+                          heroFocalX: Math.round(x),
+                          heroFocalY: Math.round(y),
+                        }),
+                      )
+                  : undefined
+              }
+              onZoom={
+                step?.renderer === 'landing'
+                  ? (zoom) =>
+                      store.updateSet(
+                        writeFlow(store.set, marketScope(store.set), 'landing', { heroZoom: zoom }),
+                      )
+                  : undefined
+              }
+              /* One write, not three: each of these reads the set as it stands
+                 at this render, so three in a row would each undo the last. */
+              onReset={
+                step?.renderer === 'landing'
+                  ? () =>
+                      store.updateSet(
+                        writeFlow(store.set, marketScope(store.set), 'landing', {
+                          heroFocalX: 50,
+                          heroFocalY: 50,
+                          heroZoom: 100,
+                        }),
+                      )
+                  : undefined
+              }
             />
           ) : (
             <JourneyFrames

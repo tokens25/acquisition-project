@@ -16,7 +16,7 @@ import siteSettingsIcon from '../assets/browser/site-settings.svg'
 import cellularIcon from '../assets/browser/status-cellular.svg'
 import wifiIcon from '../assets/browser/status-wifi.svg'
 import batteryIcon from '../assets/browser/status-battery.svg'
-import type { CardSet, Context } from '../rules/content'
+import { marketOf, type CardSet, type Context } from '../rules/content'
 import type { ResolvedStep } from '../rules/journey'
 
 /**
@@ -314,7 +314,7 @@ export function Prototype({
                  tile of nothing, but this is the phone: the page is what a
                  reader would get, and it scrolls here the way it scrolls
                  there. */
-              <LandingPageScreen content={resolveFlow(set).landing}>
+              <LandingPageScreen content={resolveFlow(set).landing} market={marketOf(set)}>
                 <div className="fl-page__plans-tabs">
                   <SubscriptionTabs
                     tabs={tabsOf(set)}

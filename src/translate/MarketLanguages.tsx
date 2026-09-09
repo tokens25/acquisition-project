@@ -1,3 +1,4 @@
+import { SOURCE_LANGUAGE } from './languages'
 import type { TranslationStore } from './useTranslations'
 import './translation.css'
 
@@ -9,9 +10,10 @@ import './translation.css'
  * nothing to Germany. Switching here changes which of this market's languages
  * is on screen, and nothing else.
  *
- * The official language is always the first, and never removable. Where a
- * market reads English and has been given nothing, there is one language and
- * nothing to switch between, so only the button shows.
+ * English is always the first, because it is what the screens are written in
+ * and what the market reads until it is given something else. Where a market
+ * has been given nothing there is only English, nothing to switch between, and
+ * so only the button shows.
  */
 export function MarketLanguages({ tx, onAdd }: { tx: TranslationStore; onAdd: () => void }) {
   const working = tx.state === 'working'
@@ -25,7 +27,13 @@ export function MarketLanguages({ tx, onAdd }: { tx: TranslationStore; onAdd: ()
             className="mlang__lang"
             data-on={l.code === tx.current.code || undefined}
             aria-pressed={l.code === tx.current.code}
-            title={l.code === tx.official.code ? `${l.name}, what ${tx.market.label} reads officially` : `${l.name}, added for ${tx.market.label}`}
+            title={
+              l.code === SOURCE_LANGUAGE
+                ? `${l.name}, what the screens are written in`
+                : l.code === tx.official.code
+                  ? `${l.name}, what ${tx.market.label} reads officially`
+                  : `${l.name}, added for ${tx.market.label}`
+            }
             onClick={() => tx.show(l.code)}
           >
             {l.name}

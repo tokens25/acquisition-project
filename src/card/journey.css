@@ -227,6 +227,53 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   gap: var(--space-16);
 }
 
+/* ── The phone, around the page ────────────────────────────────────────────
+   The landing page is read on a phone, so the edit view draws one: a bezel
+   round the screen, and the screen is the scroller. That is what keeps the top
+   still — the hat sticks to the top of the screen and the bezel is outside the
+   scroll altogether, so the page passes under both rather than carrying them
+   off. */
+.jy__phone {
+  --jy-bezel: 12px;
+
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-self: center;
+  min-block-size: 0;
+  padding: var(--jy-bezel);
+  border-radius: 52px;
+  background: #0b0f11;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 8%),
+    0 24px 60px rgb(0 0 0 / 50%);
+}
+/* Inside the bezel the viewport is the screen itself: the page's own width,
+   edge to edge, and rounded the way the glass is. */
+.jy__phone > .jy__viewport {
+  flex: 1;
+  inline-size: 375px;
+  block-size: auto;
+  min-block-size: 0;
+  padding: 0;
+  border-radius: 40px;
+  /* A phone does not scroll sideways, and neither does this. Anything on the
+     page that is wider than the page — the card row, the fixtures — scrolls
+     where it stands; the screen itself only goes up and down. */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* The phone's own bar, over the screen and outside the scroll. Held by the
+   frame rather than by the page means it holds still through everything the
+   page does — scrolling, and the bounce at either end of it. */
+.jy__phone-hat {
+  position: absolute;
+  z-index: 3;
+  inset-block-start: var(--jy-bezel);
+  inset-inline: var(--jy-bezel);
+}
+
 /* Every state of one step, side by side — the shape the Figma section takes,
    and the shape the plans step already takes for its three cards. */
 .jy__screens {
@@ -254,4 +301,108 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    and scrolls, the way it does everywhere the page is drawn whole. */
 .jy__viewport[data-page] .acq-set {
   overflow-x: auto;
+}
+
+/* ── The framing handle, over the canvas ───────────────────────────────────
+   A floating pair above the screen rather than a field in the panel: what you
+   are choosing is what stays in shot, and the shot is here. It sits over the
+   preview, so it is on the canvas without being in the picture. */
+.jy__tools {
+  position: sticky;
+  inset-block-start: var(--space-12);
+  z-index: 5;
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  align-self: center;
+  padding: var(--space-4);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+  background: rgb(12 18 22 / 92%);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 45%);
+}
+.jy__tool {
+  display: inline-flex;
+  gap: var(--space-8);
+  align-items: center;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--radius-8);
+  background: none;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: var(--font-size-caption-sm);
+  cursor: pointer;
+}
+.jy__tool:hover {
+  color: var(--color-text-primary);
+}
+/* On, and it says so: the tool is a state, not an action. */
+.jy__tool[data-on] {
+  background: var(--color-surface-container-3);
+  color: var(--color-text-primary);
+}
+/* The four-way arrow, drawn rather than imported. */
+.jy__tool-mark {
+  position: relative;
+  inline-size: 14px;
+  block-size: 14px;
+  background:
+    linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat;
+}
+.jy__tool-mark::before,
+.jy__tool-mark::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 50%;
+  inline-size: 6px;
+  block-size: 6px;
+  border: 2px solid currentColor;
+  transform: translateX(-50%) rotate(45deg);
+}
+.jy__tool-mark::before {
+  inset-block-start: 0;
+  border-inline-end: 0;
+  border-block-end: 0;
+}
+.jy__tool-mark::after {
+  inset-block-end: 0;
+  border-inline-start: 0;
+  border-block-start: 0;
+}
+.jy__tools-split {
+  inline-size: 1px;
+  block-size: 20px;
+  background: var(--color-border-full-color-subtle);
+}
+
+/* ── Zoom, beside the framing handle ───────────────────────────────────────
+   Only while framing: it is part of aiming the picture, not a thing the
+   preview carries about. 100 is the size that fills the frame exactly, so the
+   range runs both ways from it: in to crop harder, out to stand the picture
+   smaller than the frame with the page colour around it — and the smaller it
+   is, the further it can be moved before it runs out of frame. */
+.jy__zoom {
+  display: inline-flex;
+  gap: var(--space-8);
+  align-items: center;
+  padding-inline: var(--space-8);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+.jy__zoom-name {
+  white-space: nowrap;
+}
+.jy__zoom input {
+  inline-size: 96px;
+  accent-color: var(--color-brand-primary);
+  cursor: pointer;
+}
+.jy__zoom-read {
+  inline-size: 4ch;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
 }

@@ -1,0 +1,280 @@
+/* The hero studio's pieces, in this project's vocabulary.
+
+   Their styling is Tailwind against that project's theme; this is the same
+   drawing in our CSS, with tokens wherever the two agree and the studio's own
+   literals where they do not — a bezel is a bezel, and there is no token for
+   the graphite an unlit screen is set in.
+
+   Everything is prefixed `hp-` (hero pieces) so nothing here can reach into
+   the tool around it, or be reached. */
+
+/* ── The device shells ─────────────────────────────────────────────────── */
+
+.hp-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hp-frame__bezel {
+  position: relative;
+  border: 1px solid rgb(255 255 255 / 6%);
+  background: linear-gradient(155deg, #20262b 0%, #0c1013 55%, #15191d 100%);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 55%);
+}
+.hp-frame--phone .hp-frame__bezel,
+.hp-frame--tablet.hp-frame__bezel {
+  border-color: rgb(255 255 255 / 7%);
+}
+.hp-frame__screen {
+  overflow: hidden;
+  background: #000;
+}
+/* The television stands on a neck and a foot. */
+.hp-frame__neck {
+  background: linear-gradient(#1a2026, #0d1114);
+}
+.hp-frame__foot {
+  border-radius: var(--radius-8);
+  background: linear-gradient(#222a30, #10151a);
+}
+/* The laptop's deck, with the notch the lid closes into. */
+.hp-frame__deck {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-block-start: -2px;
+  border-end-start-radius: var(--radius-12);
+  border-end-end-radius: var(--radius-12);
+  background: linear-gradient(#2a3137, #11161a);
+}
+.hp-frame__hinge {
+  border-end-start-radius: var(--radius-8);
+  border-end-end-radius: var(--radius-8);
+  background: #0a0e11;
+}
+/* The tablet's camera. */
+.hp-frame__lens {
+  position: absolute;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  border-radius: var(--radius-full);
+  background: #05080a;
+  box-shadow: inset 0 0 2px rgb(255 255 255 / 20%);
+}
+.hp-frame__screen-wrap {
+  position: relative;
+}
+.hp-frame__key {
+  position: absolute;
+  inline-size: 2px;
+  border-radius: 4px;
+  background: #10151a;
+}
+.hp-frame__key[data-side='left'] {
+  inset-inline-start: -2px;
+}
+.hp-frame__key[data-side='right'] {
+  inset-inline-end: -2px;
+}
+.hp-frame__notch {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  background: #000;
+}
+
+/* ── The carousel dots ─────────────────────────────────────────────────── */
+
+.hp-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hp-dot {
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 32%);
+}
+
+/* ── The bar along the bottom ──────────────────────────────────────────── */
+
+.hp-nav {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  display: flex;
+  gap: 6%;
+  align-items: center;
+  justify-content: center;
+  border-block-start: 1px solid rgb(255 255 255 / 10%);
+  background: rgb(7 12 16 / 85%);
+  backdrop-filter: blur(12px);
+}
+.hp-nav__item {
+  position: relative;
+  color: rgb(255 255 255 / 55%);
+  font-weight: var(--font-weight-medium, 500);
+}
+/* The one you are on keeps its own colour and takes the rule under it. */
+.hp-nav__item[data-on] {
+  color: #fff;
+}
+.hp-nav__item[data-on]::after {
+  content: '';
+  position: absolute;
+  inset-block-end: -0.45em;
+  inset-inline-start: 50%;
+  inline-size: 70%;
+  block-size: 2px;
+  transform: translateX(-50%);
+  border-radius: var(--radius-full);
+  background: var(--color-brand-primary);
+}
+
+/* ── What sits over the top ────────────────────────────────────────────── */
+
+.hp-status {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--space-16);
+  background: #09161d;
+  color: #fff;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.28px;
+}
+.hp-status[data-clear] {
+  background: transparent;
+}
+.hp-status__right {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.hp-status__bars {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+}
+.hp-status__bars i {
+  display: block;
+  inline-size: 2px;
+  border-radius: 2px;
+  background: #fff;
+}
+.hp-status__battery {
+  position: relative;
+  display: inline-block;
+  inline-size: 19px;
+  block-size: 10px;
+  border: 1px solid rgb(255 255 255 / 80%);
+  border-radius: 3px;
+}
+.hp-status__battery i {
+  position: absolute;
+  inset: 2px 3px 2px 2px;
+  display: block;
+  border-radius: 1px;
+  background: #fff;
+}
+
+.hp-web {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--space-16);
+  border-block-end: 1px solid rgb(255 255 255 / 10%);
+  background: rgb(7 12 16 / 70%);
+  backdrop-filter: blur(4px);
+}
+.hp-web__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.hp-web__menu span {
+  display: block;
+  block-size: 2px;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 80%);
+}
+.hp-web__mark {
+  color: rgb(255 255 255 / 90%);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+}
+.hp-web__avatar {
+  border: 1px solid rgb(255 255 255 / 40%);
+  border-radius: var(--radius-full);
+}
+
+/* ── The safe area ─────────────────────────────────────────────────────── */
+
+.hp-safe {
+  position: absolute;
+  z-index: 2;
+  border: 1px dashed var(--color-brand-primary);
+  pointer-events: none;
+}
+.hp-safe__label {
+  position: absolute;
+  inset-block-start: -0.5px;
+  inset-inline-start: -0.5px;
+  padding: 1px 4px;
+  background: var(--color-brand-primary);
+  color: #0c1216;
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── The picture ───────────────────────────────────────────────────────── */
+
+.hp-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.hp-bg img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+/* Up from the bottom, so words laid over it are read on a ground rather than
+   on a picture. */
+.hp-bg__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(6 6 6 / 0%) 20%,
+    rgb(6 6 6 / 55%) 62%,
+    rgb(6 6 6 / 92%) 100%
+  );
+}
+
+/* ── The drag surface ──────────────────────────────────────────────────── */
+
+/* Over everything in the frame, and invisible: what it does is take the
+   pointer. Grabbing is the whole affordance, so the cursor is the label. */
+.hp-drag {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.hp-drag:active {
+  cursor: grabbing;
+}

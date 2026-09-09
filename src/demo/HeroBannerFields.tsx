@@ -1,13 +1,16 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import { SelectField } from '../components/SelectField'
 import { SourceTabs } from './SourceTabs'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { FieldGroup } from './FieldGroup'
-import { heroOf } from '../rules/landing'
+import { heroOf, landingText } from '../rules/landing'
+import { readPicture, type PictureReading } from './readPicture'
+import heroArt from '../assets/landing/hero.jpg'
 import { HERO_LIMITS } from '../rules/flow'
-import type { HeroLabelVariant, HeroLogoSize, LandingScreen } from '../rules/flow'
+import type { HeroLabelVariant, LandingScreen } from '../rules/flow'
+import { marketOf } from '../rules/content'
 import { resolveFlow, writeFlow } from '../rules/layers'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { Selector } from '../rules/layers'
@@ -48,6 +51,24 @@ export function HeroBannerFields({
   const flow = resolveFlow(set)
   const l = flow.landing
   const hero = heroOf(l)
+  // What the page is actually showing, which is what a field should read: a
+  // page that has never been edited says the shipped line, not nothing.
+  const text = landingText(l)
+  /*
+   * The market the panel is set to, and the sign it prices in.
+   *
+   * The amount is authored and the currency is not — the same rule the plan
+   * cards are written under — so the field takes a number and shows the sign
+   * beside it rather than in it. A market the set carries no configuration for
+   * has no sign, and the field is a plain box.
+   */
+  const market = marketOf(set)
+  const sign = market
+    ? new Intl.NumberFormat(market.locale, { style: 'currency', currency: market.currency })
+        .formatToParts(0)
+        .find((part) => part.type === 'currency')?.value
+    : undefined
+  const currencyMark = sign ? <span className="ed-currency">{sign}</span> : undefined
   const file = useRef<HTMLInputElement>(null)
 
   /** Writes one hero field to the chosen scope, and nothing else. */
@@ -116,6 +137,9 @@ export function HeroBannerFields({
       </FieldGroup>
 
       <FieldGroup title="Picture">
+        {/* Aim it and read it — both ideas from the hero studio, which treats a
+            picture as something to point rather than only to choose. */}
+        <HeroPicture store={store} scope={scope} />
         <div className="hb-image">
           {hero.image ? (
             <>
@@ -259,23 +283,23 @@ export function HeroBannerFields({
         <ToggleField
           label="Helper text"
           checked={hero.helperEnabled}
-          onChange={(v) => patch({ heroHelperEnabled: v })}
+          onChange={(v) => patch({ footnoteEnabled: v })}
           hint="Fine print under the buttons."
         />
         {hero.helperEnabled && (
           <TextField
             label="Helper text"
-            value={hero.helper}
-            pipelineKey={'landing.heroHelper'}
-            onChange={(v) => patch({ heroHelper: v })}
+            value={text.footnote}
+            pipelineKey={'landing.footnote'}
+            onChange={(v) => patch({ footnote: v })}
             rows={2}
-            trailing={counter(hero.helper, HERO_LIMITS.helper)}
-            helpText={`${HERO_LIMITS.helper.note} This page's hero does not draw it yet.`}
+            trailing={counter(text.footnote, HERO_LIMITS.helper)}
+            helpText={HERO_LIMITS.helper.note}
           />
         )}
       </FieldGroup>
 
-      <FieldGroup title="Price" defaultOpen={false}>
+      <FieldGroup title={market ? `Price — ${market.currency}` : 'Price'} defaultOpen={false}>
         <ToggleField
           label="Price block"
           checked={hero.priceEnabled}
@@ -296,6 +320,8 @@ export function HeroBannerFields({
               value={hero.priceValue}
               pipelineKey={'landing.heroPriceValue'}
               onChange={(v) => patch({ heroPriceValue: v })}
+              leading={currencyMark}
+              helpText="The amount only. The sign and where it sits come from the market."
             />
             <TextField
               label="Suffix"
@@ -309,32 +335,83 @@ export function HeroBannerFields({
               value={hero.priceOld}
               pipelineKey={'landing.heroPriceOld'}
               onChange={(v) => patch({ heroPriceOld: v })}
-              helpText="Shown struck through, for a discount. This page's hero does not draw the price yet."
+              leading={currencyMark}
+              helpText="Shown struck through, for a discount."
             />
           </>
         )}
       </FieldGroup>
-
-      <FieldGroup title="Logo" defaultOpen={false}>
-        <ToggleField
-          label="Logo"
-          checked={hero.logoEnabled}
-          onChange={(v) => patch({ heroLogoEnabled: v })}
-          hint="The DAZN mark over the picture. This page's hero draws its own, so this does not change it yet."
-        />
-        {hero.logoEnabled && (
-          <SelectField<HeroLogoSize>
-            label="Logo size"
-            value={hero.logoSize}
-            options={[
-              { value: 'small', label: 'Small' },
-              { value: 'medium', label: 'Medium' },
-              { value: 'large', label: 'Large' },
-            ]}
-            onChange={(v) => patch({ heroLogoSize: v })}
-          />
-        )}
-      </FieldGroup>
     </>
+  )
+}
+
+/**
+ * The picture, as something to aim rather than only to choose.
+ *
+ * What the picture does to the words that will sit on it, and what to do
+ * about it. The idea is the hero studio's: it measures a creative rather than
+ * leaving somebody to squint at it.
+ *
+ * The reading is the browser's own arithmetic — the lower half's brightness,
+ * and how much it varies — rather than a model. It suggests; the button
+ * applies; nothing changes on its own.
+ *
+ * Aiming the picture is not here. That happens on the preview, where the
+ * picture is: see the framing handle over the canvas.
+ */
+function HeroPicture({ store, scope }: { store: CardSetStore; scope: Selector }) {
+  const { set, updateSet } = store
+  const l = resolveFlow(set).landing
+  const hero = heroOf(l)
+  const [reading, setReading] = useState<PictureReading | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  const patch = (next: Partial<LandingScreen>) => updateSet(writeFlow(set, scope, 'landing', next))
+  const shown = hero.image || heroArt
+
+  const read = async () => {
+    setBusy(true)
+    setReading(await readPicture(shown))
+    setBusy(false)
+  }
+
+  return (
+    <div className="hb-aim">
+      <div className="hb-aim__side">
+        <p className="hb-aim__read">
+          Cropped from <strong>{hero.focalX}%</strong> across, <strong>{hero.focalY}%</strong> down
+          <span className="hb-aim__where"> · move it on the preview, under Adjust framing</span>
+        </p>
+        <div className="hb-aim__acts">
+          <button type="button" className="hb-image__act" onClick={read} disabled={busy}>
+            {busy ? 'Reading…' : 'Read the picture'}
+          </button>
+        </div>
+        {reading && (
+          <div className="hb-aim__note">
+            <p>{reading.note}</p>
+            {reading.suggest !== hero.wash && (
+              <button
+                type="button"
+                className="hb-image__act"
+                onClick={() => patch({ heroWash: reading.suggest })}
+              >
+                Use the {reading.suggest} wash
+              </button>
+            )}
+          </div>
+        )}
+        <SelectField<'light' | 'standard' | 'heavy'>
+          label="Wash over the picture"
+          value={hero.wash}
+          options={[
+            { value: 'light', label: 'Light — more of the picture' },
+            { value: 'standard', label: 'Standard — as designed' },
+            { value: 'heavy', label: 'Heavy — words first' },
+          ]}
+          onChange={(v) => patch({ heroWash: v })}
+        />
+      </div>
+    </div>
   )
 }

@@ -280,6 +280,16 @@ export interface ChannelConfig {
  */
 export type ReviewState = 'draft' | 'in-review' | 'approved'
 
+/**
+ * The market the set is being read as, where it is one the set knows about.
+ *
+ * A set can be pointed at a market it carries no configuration for — the
+ * league journeys are not countries — and then there is no locale and no
+ * currency, which is a real answer rather than a missing one.
+ */
+export const marketOf = (set: CardSet): MarketConfig | undefined =>
+  set.markets.find((m) => m.code === set.context.market)
+
 export interface CardSet {
   markets: MarketConfig[]
   campaigns: CampaignConfig[]

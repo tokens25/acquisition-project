@@ -1,0 +1,292 @@
+/* The page the pieces are shown on. Nothing here is a piece; it is the room
+   they are stood in, so it uses this project's tokens throughout. */
+
+.hg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  max-inline-size: 1100px;
+  padding: var(--space-40, 40px) var(--space-24) 80px;
+  margin-inline: auto;
+  color: var(--color-text-primary);
+}
+.hg__head {
+  display: flex;
+  gap: var(--space-24);
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.hg__title {
+  margin: 0 0 var(--space-8);
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+}
+.hg__lede {
+  margin: 0;
+  max-inline-size: 62ch;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.55;
+}
+.hg__lede code,
+.hg-card__from code {
+  padding: 1px 5px;
+  border-radius: var(--radius-6);
+  background: var(--color-surface-container-2);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.92em;
+}
+
+/* The device switch, in the segmented shape the tool uses elsewhere. */
+.hg__devices {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-10);
+  background: var(--color-surface-container-2);
+}
+.hg__device {
+  padding: 7px 14px;
+  border: 0;
+  border-radius: var(--radius-8);
+  background: none;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: var(--font-size-caption-sm);
+  cursor: pointer;
+}
+.hg__device[data-on] {
+  background: var(--color-surface-container-4);
+  color: var(--color-text-primary);
+}
+.hg__device-note {
+  margin: calc(var(--space-16) * -1) 0 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+
+.hg__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+.hg-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-20);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-1);
+}
+/* Ticked, and it says so from across the page. */
+.hg-card[data-taken] {
+  border-color: var(--color-brand-primary);
+}
+.hg-card__head {
+  display: flex;
+  gap: var(--space-16);
+  align-items: center;
+  justify-content: space-between;
+}
+.hg-card__name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+}
+.hg-card__take {
+  display: inline-flex;
+  gap: var(--space-8);
+  align-items: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  cursor: pointer;
+}
+.hg-card__what,
+.hg-card__instead {
+  margin: 0;
+  max-inline-size: 76ch;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.55;
+}
+.hg-card__instead {
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-tertiary);
+}
+.hg-card__instead strong {
+  color: var(--color-text-secondary);
+}
+.hg-card__from {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+.hg-card__stage {
+  display: flex;
+  gap: var(--space-16);
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-20);
+  border-radius: var(--radius-10);
+  background: #060606;
+}
+
+/* A device drawn at its own size, shrunk to fit the card. */
+.hg-scale {
+  position: relative;
+  inline-size: 100%;
+}
+.hg-scale__inner {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+  transform-origin: top center;
+  translate: -50% 0;
+}
+.hg-shot {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* A screen on its own, for the pieces that are drawn over one. */
+.hg-screen {
+  position: relative;
+  overflow: hidden;
+  inline-size: 300px;
+  block-size: 480px;
+  border-radius: var(--radius-12);
+  background: #000;
+}
+.hg-screen[data-device='tv'],
+.hg-screen[data-device='desktop'] {
+  inline-size: 520px;
+  block-size: 292px;
+}
+.hg-screen[data-device='tablet'] {
+  inline-size: 340px;
+  block-size: 453px;
+}
+.hg-screen--small {
+  inline-size: 168px;
+  block-size: 268px;
+}
+.hg-screen--small[data-device='tv'],
+.hg-screen--small[data-device='desktop'] {
+  inline-size: 268px;
+  block-size: 151px;
+}
+.hg-screen__spacer {
+  display: block;
+}
+/* Where the dots sit on the hero: above the fold of the bottom. */
+.hg-dots-slot {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 24px;
+  z-index: 2;
+}
+
+.hg-focals {
+  display: flex;
+  gap: var(--space-16);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hg-focal {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center;
+}
+.hg-focal figcaption {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+
+.hg__foot {
+  padding-block-start: var(--space-16);
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+.hg__foot p {
+  margin: 0;
+}
+
+/* The drag demonstration: the frame, and what it is reading. */
+.hg-adjust {
+  display: flex;
+  gap: var(--space-20);
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hg-adjust__read {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: flex-start;
+  max-inline-size: 32ch;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+.hg-adjust__read p {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.hg-adjust__read strong {
+  color: var(--color-text-primary);
+}
+.hg-adjust__read small {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.5;
+}
+.hg-adjust__reset {
+  padding: 6px 10px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--font-size-caption-xs);
+  cursor: pointer;
+}
+
+/* The left editor, as a list of what it is made of rather than a copy of it. */
+.hg-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  inline-size: 100%;
+}
+.hg-sidebar__row {
+  display: grid;
+  grid-template-columns: 12rem 5rem 1fr;
+  gap: var(--space-12);
+  align-items: baseline;
+  padding-block: var(--space-8);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+  font-size: var(--font-size-caption-sm);
+}
+.hg-sidebar__row:last-child {
+  border-block-end: 0;
+}
+.hg-sidebar__name {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+}
+.hg-sidebar__lines {
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+.hg-sidebar__note {
+  color: var(--color-text-secondary);
+}

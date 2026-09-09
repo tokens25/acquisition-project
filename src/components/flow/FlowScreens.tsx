@@ -5,6 +5,8 @@ import { useFlowInput } from './live'
 import { cadenceSavings } from '../../rules/cadence'
 import { chosenMethod, linesOf, methodsOf } from '../../rules/checkout'
 import { styleOf } from '../../rules/tabs'
+import { useImageRatio } from './useImageRatio'
+import type { HeroBanner } from '../../rules/landing'
 import {
   featuresOf,
   heroOf,
@@ -18,7 +20,7 @@ import { articleShot, featureArt, imageCtaArt } from './landingArt'
 import { copyOf, sectionsOf, type PageSection } from '../../rules/sections'
 
 import { Fragment, useState } from 'react'
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import actionsInfo from '../../assets/flow/actions-info.svg?raw'
 import badgeCheck from '../../assets/flow/badge-check.svg?raw'
 import cadenceRadioOff from '../../assets/flow/cadence-radio-off.svg?raw'
@@ -51,6 +53,7 @@ import heroArt from '../../assets/landing/hero.jpg'
 import daznLogo from '../../assets/landing/logo-dazn.svg'
 import actionEdit from '../../assets/landing/action-edit.svg'
 import actionLocation from '../../assets/landing/action-location.svg'
+import statusMini from '../../assets/landing/status-mini.svg'
 import articleIcon from '../../assets/landing/article/icon-multiview.svg?raw'
 import deviceRule from '../../assets/landing/devices/rule.svg'
 import deviceRoku from '../../assets/landing/devices/roku.svg'
@@ -87,7 +90,8 @@ import readySabres from '../../assets/flow/ready/sabres.png'
 import checkCircleFilled from '../../assets/flow/ready/check-circle-filled.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
-import type { PlanTab } from '../../rules/content'
+import type { MarketConfig, PlanTab } from '../../rules/content'
+import { statedMoney } from '../../rules/money'
 import type {
   AccountScreen,
   LandingScreen,
@@ -363,6 +367,72 @@ function Cta({
  * instead of a header over a body.
  */
 /**
+ * What it costs, between the words and the button.
+ *
+ * The hero tool's own lockup, and its order: the prefix, the price, the old
+ * price struck through *after* it — which is what makes it read as now-against-
+ * was rather than as two prices — and then the unit. Baseline-aligned, because
+ * the price is set larger than the three parts around it and they have to sit
+ * on its line rather than in the middle of it.
+ *
+ * Switched on with nothing typed, it draws the tool's own placeholder at half
+ * strength: turning it on should show where the price lands, and an empty
+ * space shows nothing. Dimmed and hidden from anything reading the page aloud,
+ * so it is never mistaken for a price somebody meant.
+ *
+ * What is authored is the amount. The sign, the separators and where the sign
+ * goes are the market's, which is why the same 9.99 reads £9.99 in the UK and
+ * 9,99 € in Germany, and why changing the market at the top of the panel
+ * changes it here.
+ */
+function HeroPrice({ hero, market }: { hero: HeroBanner; market?: MarketConfig }) {
+  const money = (n: string) => statedMoney(n, market?.locale, market?.currency)
+  const empty = hero.priceValue.trim() === ''
+  const prefix = hero.pricePrefix.trim() || (empty ? 'From' : '')
+  const value = money(hero.priceValue) || (empty ? money('9.99') || '£9.99' : '')
+  const suffix = hero.priceSuffix.trim() || (empty ? '/ month' : '')
+  // Never invented: a discount is a thing somebody states, not a placeholder.
+  const was = money(hero.priceOld)
+  return (
+    <p
+      className="fl-landing__price"
+      data-empty={empty || undefined}
+      aria-hidden={empty || undefined}
+    >
+      {prefix && <span className="fl-landing__price-part">{prefix}</span>}
+      <span className="fl-landing__price-value">{value}</span>
+      {was && <span className="fl-landing__price-was">{was}</span>}
+      {suffix && <span className="fl-landing__price-part">{suffix}</span>}
+    </p>
+  )
+}
+
+/**
+ * The phone's own hat: the notch, and the bar either side of it — node
+ * 708:173737.
+ *
+ * It belongs to the phone rather than to the page, which is why it is drawn
+ * by whoever draws the phone rather than by the page inside it. Held there it
+ * is outside the scroll altogether: it does not move when the page moves, and
+ * it does not move when the page overscrolls and bounces either — which is
+ * what a real one does, and what one held inside the scroll cannot do.
+ *
+ * The notch is the black one a phone cuts out of its own screen — flush with
+ * the top edge, a little under half the width across, rounded where it meets
+ * the picture. It is not in the status bar node, which is the time and the
+ * signals; it is what makes those two read as a phone.
+ */
+export function PhoneHat() {
+  return (
+    <div className="fl-landing__status" aria-hidden="true">
+      <span className="fl-landing__notch" />
+      <span className="fl-landing__time">9:41</span>
+      <img className="fl-landing__signals" src={statusMini} alt="" />
+    </div>
+  )
+}
+
+/**
  * The hero — node 708:173738, "hero-container".
  *
  * 660 tall, and everything in it is laid from the bottom up: the copy sits on
@@ -371,11 +441,36 @@ function Cta({
  * its own; the artwork here is the one supplied, so it is one, cropped by the
  * frame the same way.
  */
-export function LandingFlowScreen({ content }: { content: LandingScreen }) {
+export function LandingFlowScreen({
+  content,
+  overArt,
+  hat = true,
+  market,
+}: {
+  content: LandingScreen
+  /** Laid over the picture itself — the framing handle, when one is offered. */
+  overArt?: ReactNode
+  /** Whose money the price is in. Without one it is drawn as written. */
+  market?: MarketConfig
+  /**
+   * Whether the hero draws the phone's bar over its own top.
+   *
+   * On its own — a tile, the walkthrough — the hero is the whole screen and
+   * carries it. Inside the page the page draws it instead, held at the top of
+   * the scroll rather than at the top of the hero, so it stays where a phone's
+   * would while the page runs under it.
+   */
+  hat?: boolean
+}) {
   const text = landingText(content)
   // What the Hero banner tab controls: an uploaded picture standing in for
   // the shipped one, and the eyebrow over the heading.
   const hero = heroOf(content)
+  const picture = hero.image || heroArt
+  // The picture is placed rather than fitted, so its own shape is part of
+  // where it goes. Until it is known the frame's shape stands in, which draws
+  // it exactly filling — the same thing `cover` would have done.
+  const ratio = useImageRatio(picture)
   return (
     <div className="fl fl-landing">
       {/* The glow behind the picture: a 100px blur over a gradient that runs
@@ -384,12 +479,30 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
           it. */}
       <span className="fl-landing__glow" aria-hidden="true" />
       <div className="fl-landing__hero">
-        <span className="fl-landing__art" aria-hidden="true">
-          <img src={hero.image || heroArt} alt="" />
+        {/* Everything the framing decides, handed to the sheet as four
+            numbers: the picture's shape, how big it is drawn against the size
+            that fills the frame, and where it sits. The sheet does the
+            arithmetic in the frame's own units, so it holds at whatever size
+            the hero happens to be drawn — a tile, a phone, the popup. */}
+        <span
+          className="fl-landing__art"
+          aria-hidden="true"
+          data-fit={ratio ? undefined : ''}
+          style={
+            {
+              '--hero-ratio': ratio,
+              '--hero-zoom': hero.zoom / 100,
+              '--hero-x': hero.focalX,
+              '--hero-y': hero.focalY,
+            } as CSSProperties
+          }
+        >
+          <img src={picture} alt="" />
           {/* Four stops, not a fade: clear at a fifth of the way down, half
               dark at the middle, and solid by seven tenths, which is what puts
               the copy on a ground rather than on the picture. */}
-          <span className="fl-landing__wash" />
+          <span className="fl-landing__wash" data-strength={hero.wash} />
+          {overArt}
         </span>
 
         <div className="fl-landing__slot">
@@ -403,6 +516,7 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
             <div className="fl-landing__body-wrap">
               <p className="fl-landing__body">{text.body}</p>
             </div>
+            {hero.priceEnabled && <HeroPrice hero={hero} market={market} />}
             {/* The footnote is laid over the buttons rather than after them —
                 the design puts both in one grid cell and drops the note 132
                 from the top, so the group keeps its height whether or not
@@ -419,12 +533,16 @@ export function LandingFlowScreen({ content }: { content: LandingScreen }) {
                     </span>
                   )}
                 </div>
-                <p className="fl-landing__footnote">{text.footnote}</p>
+                {hero.helperEnabled && (
+                  <p className="fl-landing__footnote">{text.footnote}</p>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {hat && <PhoneHat />}
 
       <header className="fl-landing__nav">
         <span className="fl-landing__logo">
@@ -1199,15 +1317,24 @@ const DEVICE_ROWS: { src: string; name: string; w: number }[][] = [
 export function LandingPageScreen({
   content,
   children,
+  overArt,
+  market,
 }: {
   content: LandingScreen
   /** The plan picker, where the page puts it. */
   children?: ReactNode
+  /** Handed to the hero, to lay over its picture. */
+  overArt?: ReactNode
+  /** Handed to the hero, for its price. */
+  market?: MarketConfig
 }) {
   const text = landingText(content)
   return (
     <div className="fl fl-page">
-      <LandingFlowScreen content={content} />
+      {/* No hat here. Whatever draws the phone draws that — the preview's own
+          frame, the popup's — so the page is only ever the page, and the bar
+          is never drawn twice over one screen. */}
+      <LandingFlowScreen content={content} overArt={overArt} hat={false} market={market} />
       {sectionsOf(content)
         .filter((section) => section.on)
         .map((section) => (

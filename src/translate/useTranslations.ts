@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { CardSet, Context, MarketConfig } from '../rules/content'
 import { everyString, keepAsIs } from './fields'
 import { languageOf, nameOf, offerableFor, SOURCE_LANGUAGE, type Language } from './languages'
+import { MARKETS } from '../rules/journeys'
 import { judgeTranslation } from './judge'
 import { currentAt, type Translated, type Translations } from './apply'
 
@@ -13,10 +14,17 @@ import { currentAt, type Translated, type Translations } from './apply'
  * string once they have read it, and that promotion goes through the panel's
  * own methods like any other edit.
  *
- * A market has one official language, taken from its locale, and the journey is
- * translated into it without being asked. Beyond that a market may be given as
- * many languages as someone needs to check, and they belong to that market
- * alone: a market owns its screens, so the same language in two markets is two
+ * Nothing is translated until somebody asks for it. Switching to Italy shows
+ * Italy's screens in English, because English is what they are written in;
+ * Italian arrives when it is asked for through the Translate button, and then
+ * the two sit side by side and either can be read. That is the point of
+ * keeping translations out of the content: the English is never overwritten,
+ * so every market keeps it whatever else it has been given.
+ *
+ * A market's official language, taken from its locale, is the one offered
+ * first and named as official. Beyond that a market may be given as many
+ * languages as someone needs to check, and they belong to that market alone:
+ * a market owns its screens, so the same language in two markets is two
  * different translations of two different sets of words.
  */
 // v3: per market, then per language. v2 was per language alone, which was only
@@ -51,7 +59,7 @@ export interface TranslationStore {
   market: MarketConfig
   /** The language it reads in officially, which is never optional. */
   official: Language
-  /** Every language this market has, official first. */
+  /** Every language this market can be read in, English first. */
   languages: Language[]
   /** Languages this market could be given, which it does not have yet. */
   offerable: Language[]
@@ -81,10 +89,28 @@ export interface TranslationStore {
 }
 
 export function useTranslations(set: CardSet, context: Context): TranslationStore {
-  const market = useMemo(
-    () => set.markets.find((m) => m.code === context.market) ?? set.markets[0],
-    [set.markets, context.market],
-  )
+  /*
+   * The market on screen, as the set knows it.
+   *
+   * A set can be pointed at a market it carries no configuration for — the
+   * leagues are not countries, and content imported from the engine only
+   * carries the markets its tiers mention. There is no locale to read an
+   * official language from, so it reads English and can still be given any
+   * language by hand. What it must not do is stand in the set's first market,
+   * which is what happened before: picking Italy then showed Ireland's
+   * languages, under Italy's name.
+   */
+  const market = useMemo<MarketConfig>(() => {
+    const known = set.markets.find((m) => m.code === context.market)
+    if (known) return known
+    const named = MARKETS.find((m) => m.code === context.market)
+    return {
+      code: context.market,
+      label: named?.label ?? context.market,
+      locale: SOURCE_LANGUAGE,
+      currency: '',
+    }
+  }, [set.markets, context.market])
   const official = useMemo(() => languageOf(market), [market])
 
   const [store, setStore] = useState<Store>(read)
@@ -96,22 +122,26 @@ export function useTranslations(set: CardSet, context: Context): TranslationStor
 
   const mine = useMemo(() => store[market.code] ?? {}, [store, market.code])
 
-  /** Official first, then whatever this market has been given, in order. */
   const languages = useMemo<Language[]>(() => {
-    const extra = Object.keys(mine)
-      .filter((code) => code !== official.code)
+    const source: Language = { code: SOURCE_LANGUAGE, name: nameOf(SOURCE_LANGUAGE) }
+    const given = Object.keys(mine)
+      .filter((code) => code !== SOURCE_LANGUAGE)
       .map((code) => ({ code, name: nameOf(code) }))
-    return official.code === SOURCE_LANGUAGE ? [official, ...extra] : [official, ...extra]
-  }, [mine, official])
+    return [source, ...given]
+  }, [mine])
 
   const offerable = useMemo(
     () => offerableFor(set, market).filter((l) => !(l.code in mine)),
     [set, market, mine],
   )
 
+
+  /* What is on screen: whatever this market was last switched to, and English
+     until it is switched. A language that has since been taken away falls back
+     to English rather than to a list of words that is no longer there. */
   const current = useMemo(
-    () => languages.find((l) => l.code === shown[market.code]) ?? official,
-    [languages, shown, market.code, official],
+    () => languages.find((l) => l.code === shown[market.code]) ?? languages[0],
+    [languages, shown, market.code],
   )
   const wanted = current.code !== SOURCE_LANGUAGE
   const state: TranslationState = !wanted ? 'off' : runState
@@ -217,20 +247,6 @@ export function useTranslations(set: CardSet, context: Context): TranslationStor
     [runOne],
   )
 
-  // A market's official language is translated without being asked, once.
-  useEffect(() => {
-    if (official.code === SOURCE_LANGUAGE) return
-    const stamp = `${market.code}|${official.code}`
-    if (askedFor.has(stamp)) return
-    askedFor.add(stamp)
-    // Off the effect's own tick: runMany sets its working state before its
-    // first await, and doing that inside the effect cascades a second render
-    // before the first has painted. Nothing cancels it on cleanup — the stamp
-    // above already makes it once-only, and cancelling would mean StrictMode's
-    // second pass finds the stamp taken and never translates at all.
-    queueMicrotask(() => void runMany([official.code], false))
-  }, [market.code, official.code, runMany])
-
   const counts = useMemo(() => {
     let machine = 0
     let reviewed = 0
@@ -297,7 +313,7 @@ export function useTranslations(set: CardSet, context: Context): TranslationStor
         return merged
       })
       askedFor.delete(`${market.code}|${code}`)
-      setShown((prev) => ({ ...prev, [market.code]: official.code }))
+      setShown((prev) => ({ ...prev, [market.code]: SOURCE_LANGUAGE }))
     },
   }
 }

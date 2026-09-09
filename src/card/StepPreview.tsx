@@ -2,12 +2,17 @@ import './journey.css'
 import { statesOf, tabsOf } from '../rules/tabs'
 import {
   LandingPageScreen,
+  PhoneHat,
   SubscriptionFlowScreen,
   SubscriptionTabs,
 } from '../components/flow/FlowScreens'
 import { resolveFlow } from '../rules/layers'
+import { HERO_ZOOM_MAX, HERO_ZOOM_MIN, heroOf } from '../rules/landing'
+import heroArt from '../assets/landing/hero.jpg'
+import { FocalDrag } from '../demo/FocalDrag'
+import { useState } from 'react'
 
-import type { CardSet, Context } from '../rules/content'
+import { marketOf, type CardSet, type Context } from '../rules/content'
 import type { Journey } from '../rules/journey'
 import { knownAt, resolveJourney } from '../rules/journey'
 import { resolveSet } from '../rules/resolve'
@@ -28,15 +33,20 @@ export function StepPreview({
   context,
   meta = true,
   onTab,
+  onFocal,
+  onZoom,
+  onReset,
 }: {
   journey: Journey
   set: CardSet
   context: Context
   /**
-   * Whether to say where this step sits in its journey.
+   * Whether to name the step and say where it sits in its journey.
    *
-   * A product with one page has no journey to place it in — "step 1 of 8" and
-   * the CTA it was entered from are facts about a flow that is not on screen.
+   * A product with one page has no journey to place it in: its name, "step 1
+   * of 8" and the CTA it was entered from are all facts about a flow that is
+   * not on screen, and the page is the only thing there is to look at. So the
+   * whole line goes rather than being emptied out.
    */
   meta?: boolean
   /**
@@ -46,7 +56,19 @@ export function StepPreview({
    * to be looking at the same one.
    */
   onTab?: (tab: string) => void
+  /**
+   * Where the hero's picture is cropped from, when the preview is allowed to
+   * move it. Absent and the handle is not offered at all — the walkthrough and
+   * the tiles show the page, they do not edit it.
+   */
+  onFocal?: (x: number, y: number) => void
+  /** How far into the picture the frame is, where that can be changed. */
+  onZoom?: (zoom: number) => void
+  /** Back to the middle and the whole picture, in one act. */
+  onReset?: () => void
 }) {
+  /** Whether the picture is being moved right now, and which ways it can go. */
+  const [framing, setFraming] = useState(false)
   const tabs = tabsOf(set)
   // A tab that has been renamed keeps its id, but one that has been removed has
   // not — so the chosen tab falls back to the first rather than to nothing.
@@ -70,34 +92,98 @@ export function StepPreview({
     <div className="jy">
       {/* Lead with the step's own name. The entry CTA is quoted and labelled
           because a journey can enter from "Sign up" while a later step is also
-          called Sign up — without that, the line reads as the wrong step. */}
-      <p className="jy__entry">
-        <strong className="jy__step-name">{step.shortName ?? step.name}</strong>
-        {meta && (
+          called Sign up — without that, the line reads as the wrong step.
+
+          None of which a one-page product has anything to say about, so it
+          draws no line at all rather than an empty one. */}
+      {meta && (
+        <p className="jy__entry">
+          <strong className="jy__step-name">{step.shortName ?? step.name}</strong>
           <span className="jy__meta">
             step {position} of {steps.length} · entered from “{journey.entry.cta}”
           </span>
-        )}
-        {inbound.length > 0 && <span className="jy__seeds">inbound: {inbound.join(', ')}</span>}
-        {step.renderer === 'plans' && (
-          <span className="jy__meta">{planCount} plans in this set</span>
-        )}
-      </p>
+          {inbound.length > 0 && <span className="jy__seeds">inbound: {inbound.join(', ')}</span>}
+          {step.renderer === 'plans' && (
+            <span className="jy__meta">{planCount} plans in this set</span>
+          )}
+        </p>
+      )}
 
+      {/* Framing is done on the picture rather than in a field: you are
+          choosing what stays in shot, and the shot is here. */}
+      {step.renderer === 'landing' && onFocal && (
+        <div className="jy__tools">
+          <button
+            type="button"
+            className="jy__tool"
+            data-on={framing || undefined}
+            aria-pressed={framing}
+            onClick={() => setFraming((v) => !v)}
+          >
+            <span className="jy__tool-mark" aria-hidden="true" />
+            Adjust framing
+          </button>
+          {framing && onZoom && (
+            <>
+              <span className="jy__tools-split" aria-hidden="true" />
+              <label className="jy__zoom">
+                <span className="jy__zoom-name">Zoom</span>
+                <input
+                  type="range"
+                  min={HERO_ZOOM_MIN}
+                  max={HERO_ZOOM_MAX}
+                  step={5}
+                  value={heroOf(resolveFlow(set).landing).zoom}
+                  onChange={(e) => onZoom(Number(e.target.value))}
+                  aria-label="How far into the picture"
+                />
+                <span className="jy__zoom-read">{heroOf(resolveFlow(set).landing).zoom}%</span>
+              </label>
+            </>
+          )}
+          <span className="jy__tools-split" aria-hidden="true" />
+          <button type="button" className="jy__tool" onClick={() => onReset?.()}>
+            Reset
+          </button>
+        </div>
+      )}
       {step.renderer === 'landing' ? (
         /* The whole page, which the edit view scrolls. The tiles and the
            walkthrough keep drawing the hero alone: that is the screen a phone
            opens on, and a tile of a 7412px page is a tile of nothing. */
-        <div className="jy__viewport" data-device={set.device} data-page="">
-          <LandingPageScreen content={resolveFlow(set).landing}>
-            {/* The picker the page carries is the one the Subscription step
-                edits — its tabs and its cards, not a second drawing of them.
-                Rename a tab there and it reads the same here. */}
-            <div className="fl-page__plans-tabs">
-              <SubscriptionTabs tabs={tabs} tab={tab} onTab={(next) => onTab?.(next)} />
-            </div>
-            <CardSetView set={set} context={context} tab={tab} />
-          </LandingPageScreen>
+        <div className="jy__phone">
+          {/* The phone's, not the page's: held by the frame, so the page can
+              scroll and bounce under it without taking it along. */}
+          <div className="jy__phone-hat">
+            <PhoneHat />
+          </div>
+          <div className="jy__viewport" data-device={set.device} data-page="">
+            <LandingPageScreen
+              content={resolveFlow(set).landing}
+              market={marketOf(set)}
+              overArt={
+                framing && onFocal ? (
+                  <FocalDrag
+                    focalX={heroOf(resolveFlow(set).landing).focalX}
+                    focalY={heroOf(resolveFlow(set).landing).focalY}
+                    onDrag={onFocal}
+                    /* The picture as drawn — the uploaded one, or the shipped one
+                       it stands in for. What can move depends on which. */
+                    src={heroOf(resolveFlow(set).landing).image || heroArt}
+                    zoom={heroOf(resolveFlow(set).landing).zoom}
+                  />
+                ) : undefined
+              }
+            >
+              {/* The picker the page carries is the one the Subscription step
+                  edits — its tabs and its cards, not a second drawing of them.
+                  Rename a tab there and it reads the same here. */}
+              <div className="fl-page__plans-tabs">
+                <SubscriptionTabs tabs={tabs} tab={tab} onTab={(next) => onTab?.(next)} />
+              </div>
+              <CardSetView set={set} context={context} tab={tab} />
+            </LandingPageScreen>
+          </div>
         </div>
       ) : step.renderer === 'plans' ? (
         <div className="jy__viewport" data-device={set.device}>

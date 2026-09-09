@@ -597,3 +597,60 @@
   color: var(--color-text-tertiary);
   font-size: 11.5px;
 }
+
+/* Aiming the hero's picture, and what the reading says about it. */
+.hb-aim {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+/* The same three strengths the hero draws, so what is aimed is what is drawn. */
+.hb-aim__wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(8 14 18 / 0%) 20%, rgb(8 14 18 / 60%) 60%, rgb(8 14 18 / 100%) 100%);
+}
+.hb-aim__wash[data-strength='light'] {
+  background: linear-gradient(180deg, rgb(8 14 18 / 0%) 28%, rgb(8 14 18 / 35%) 65%, rgb(8 14 18 / 85%) 100%);
+}
+.hb-aim__wash[data-strength='heavy'] {
+  background: linear-gradient(180deg, rgb(8 14 18 / 20%) 12%, rgb(8 14 18 / 80%) 48%, rgb(8 14 18 / 100%) 82%);
+}
+.hb-aim__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.hb-aim__read {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+.hb-aim__read strong {
+  color: var(--color-text-primary);
+}
+.hb-aim__acts {
+  display: flex;
+  gap: 6px;
+}
+.hb-aim__note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-10);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+}
+.hb-aim__note p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+/* Where the aiming happens, said once rather than repeated as a control. */
+.hb-aim__where {
+  color: var(--color-text-tertiary);
+}

@@ -3,20 +3,24 @@ import closeIcon from '../assets/icons/action-close-md.svg?raw'
 import { clickedAway } from '../components/dismiss'
 import { Icon } from '../components/Icon'
 import { Toggle } from '../components/Toggle'
+import { SOURCE_LANGUAGE } from './languages'
 import type { TranslationStore } from './useTranslations'
 import './translation.css'
 
 /**
  * The languages a market reads.
  *
- * One list, and the switch says whether the market has that language. Its
- * official language is on and cannot be turned off, because the journey is
- * written in it whether or not anyone asks. Turning one on translates the
- * journey into it; turning one off takes it away, with its words.
+ * One list, and the switch says whether the market has that language. Turning
+ * one on translates the journey into it; turning one off takes it away, with
+ * its words. Its official language leads and is named as such, but it is a
+ * language like any other here — offered rather than assumed, and removable.
+ *
+ * English is not on the list. It is the words the screens are written in, the
+ * market has it already, and there is nothing to translate or take away.
  */
 export function TranslateSheet({ open, tx, onClose }: { open: boolean; tx: TranslationStore; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null)
-  const has = tx.languages.map((l) => l.code)
+  const has = tx.languages.map((l) => l.code).filter((code) => code !== SOURCE_LANGUAGE)
   const [on, setOn] = useState<string[]>(has)
 
   // The native dialog owns focus, Escape and the backdrop; we only tell it when.
@@ -37,12 +41,12 @@ export function TranslateSheet({ open, tx, onClose }: { open: boolean; tx: Trans
   const showing = `${open}|${tx.market.code}`
   if (seen !== showing) {
     setSeen(showing)
-    if (open) setOn(tx.languages.map((l) => l.code))
+    if (open) setOn(tx.languages.map((l) => l.code).filter((code) => code !== SOURCE_LANGUAGE))
   }
 
-  const rows = [...tx.languages, ...tx.offerable]
+  const rows = [...tx.languages.filter((l) => l.code !== SOURCE_LANGUAGE), ...tx.offerable]
   const added = on.filter((c) => !has.includes(c))
-  const dropped = has.filter((c) => !on.includes(c) && c !== tx.official.code)
+  const dropped = has.filter((c) => !on.includes(c))
   const changed = added.length + dropped.length > 0
 
   return (
@@ -88,7 +92,6 @@ export function TranslateSheet({ open, tx, onClose }: { open: boolean; tx: Trans
                   <Toggle
                     label={l.name}
                     active={on.includes(l.code)}
-                    disabled={official}
                     onChange={(want) => setOn((list) => (want ? [...list, l.code] : list.filter((c) => c !== l.code)))}
                   />
                 </li>

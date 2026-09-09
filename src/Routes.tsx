@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react'
 import { App } from './App'
 import { DemoApp } from './demo/DemoApp'
+import { HeroGallery } from './hero/HeroGallery'
 import { Index } from './Index'
 import { Preparing } from './progress/Preparing'
 import type { Job } from './progress/prepare'
 
 /**
- * Four routes, one deployment.
+ * Five routes, one deployment.
  *
  * `/` asks which product and which situation you are writing for and opens the
  * tool; `/demo` is the tool on the whole flow, `/landing` the same tool on the
- * landing page alone. `/demo2` is the first iteration, kept reachable by
+ * landing page alone. `/hero` shows the pieces ported out of the hero studio,
+ * to be chosen from. `/demo2` is the first iteration, kept reachable by
  * address but no longer offered — the front door stopped being a choice between
  * the two when the second one stopped being a candidate.
  *
- * Hand-rolled rather than react-router: four static paths do not justify a
+ * Hand-rolled rather than react-router: five static paths do not justify a
  * dependency, and this is small enough to read in one sitting.
  */
 /**
@@ -49,6 +51,10 @@ export function Routes() {
     ) : path === '/landing' ? (
       /* The same tool, on the landing page alone and open on it. */
       <DemoApp product="landing" />
+    ) : path === '/hero' ? (
+      /* The pieces ported out of the hero studio, to be looked at before any
+         of them is taken up. Nothing else in the tool imports them. */
+      <HeroGallery />
     ) : path === '/demo2' ? (
       <App />
     ) : (

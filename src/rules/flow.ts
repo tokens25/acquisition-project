@@ -408,9 +408,22 @@ export interface LandingScreen {
   heroLabelEnabled?: boolean
   heroLabel?: string
   heroLabelVariant?: HeroLabelVariant
-  /** The fine print under the buttons. */
-  heroHelperEnabled?: boolean
-  heroHelper?: string
+  /**
+   * Whether the fine print under the buttons is drawn.
+   *
+   * What it says is `footnote`, which is where that line has always lived and
+   * where the handoff and every market's fork still read it. The hero owns
+   * only the switch.
+   *
+   * It is named for the line rather than for the field, which is not tidiness:
+   * there was a `heroHelperEnabled` before it, and what that governed was
+   * whether the panel showed a box nothing on the page read. Pages saved while
+   * that was so carry it as false, and reading that as "hide the footnote"
+   * would take a line off every page that has ever been saved. A switch over
+   * something drawn is a different switch, so it has a different name and its
+   * own default.
+   */
+  footnoteEnabled?: boolean
   /** The price, in the four parts the hero tool writes it in. */
   heroPriceEnabled?: boolean
   heroPricePrefix?: string
@@ -418,10 +431,29 @@ export interface LandingScreen {
   heroPriceSuffix?: string
   heroPriceOld?: string
   /** The DAZN mark over the picture. */
+  /**
+   * Where the hero's picture is cropped from, as percentages.
+   *
+   * The idea is the studio's: a picture cropped to its middle loses whatever
+   * was not in the middle, and the thing worth keeping is rarely centred.
+   */
+  heroFocalX?: number
+  heroFocalY?: number
+  /**
+   * How far in, as a percentage. 100 is the picture filling the frame and no
+   * more, which is where a crop has slack in one direction at most; above it,
+   * the picture is larger than the frame both ways and can be moved either.
+   */
+  heroZoom?: number
+  /**
+   * How hard the wash over the picture works.
+   *
+   * Also theirs: they read a picture for brightness and busyness and suggest a
+   * treatment; this is the treatment being suggested.
+   */
+  heroWash?: 'light' | 'standard' | 'heavy'
   /** Whether the hero's main button takes the gold the article card uses. */
   heroCtaGold?: boolean
-  heroLogoEnabled?: boolean
-  heroLogoSize?: HeroLogoSize
 }
 
 /**
@@ -433,7 +465,6 @@ export interface LandingScreen {
  */
 export type HeroLabelVariant = 'standard' | 'discount' | 'gold'
 
-export type HeroLogoSize = 'small' | 'medium' | 'large'
 
 /**
  * How long each hero string is allowed to be.
@@ -514,16 +545,19 @@ export const defaultFlow: FlowContent = {
     heroLabelEnabled: false,
     heroLabel: '',
     heroLabelVariant: 'standard',
-    heroHelperEnabled: false,
-    heroHelper: '',
+    // The one hero control that starts on: the line it draws is the page's
+    // own footnote, which the page has always shown.
+    footnoteEnabled: true,
     heroPriceEnabled: false,
     heroPricePrefix: 'From',
     heroPriceValue: '',
     heroPriceSuffix: '/ month',
     heroPriceOld: '',
+    heroFocalX: 50,
+    heroFocalY: 50,
+    heroZoom: 100,
+    heroWash: 'standard',
     heroCtaGold: false,
-    heroLogoEnabled: false,
-    heroLogoSize: 'medium',
 
     // Read off node 708:173735 rather than rewritten, down to the full stop
     // the design puts after "devices." and the one it leaves off "Anywhere".

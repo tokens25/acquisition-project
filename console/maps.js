@@ -140,10 +140,13 @@
       'landing eyebrow': [7,55,66,3],
       'landing heading': [7,60,66,7], 'landing body group': [7,69,66,12],
       'landing body': [7,70,66,10],
+      'hero price': [7,77,66,6], 'hero price amount': [30,77,20,6],
+      'hero price part': [20,78,9,4], 'hero old price': [51,78,9,4],
       'landing buttons': [7,84,66,22], 'button and note stack': [7,84,66,22],
       'landing button group': [7,84,66,16], 'landing button': [7,84,66,7],
       'landing footnote': [7,101,66,4],
-      'landing bar': [0,0,80,10], 'landing brand': [3,2,7,7],
+      'landing status bar': [0,0,80,5], 'landing notch': [29,0,22,3], 'landing clock': [3,1,8,3], 'landing signals': [62,1,14,3],
+      'landing bar': [0,5,80,10], 'landing brand': [3,2,7,7],
       'landing bar buttons': [40,2,36,7], 'landing bar button': [40,2,17,7]
     }},
     flowLandingPage: { vb: '0 0 80 220', parts: {
@@ -292,9 +295,12 @@
       'confirmation buttons': [4,58,72,24]
     }},
     stepview: { vb: '0 0 160 96', parts: {
-      'step preview': [0,0,160,96], 'entry line': [6,5,100,12], 'step name': [6,5,26,5],
+      'step preview': [0,0,160,96],      'framing tools': [20,2,40,6], 'framing tool': [21,3,22,4],
+      'framing tool mark': [22,4,3,3], 'framing tools divider': [45,3,1,4],
+      'framing zoom': [47,3,16,4], 'framing zoom name': [47,3,5,4], 'framing zoom reading': [59,3,4,4],
+ 'entry line': [6,5,100,12], 'step name': [6,5,26,5],
       'step meta': [34,5,40,5], 'inbound seeds': [6,11,50,4],
-      'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
+      'preview phone': [44,20,72,74], 'preview hat': [46,22,68,4], 'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
       'placeholder frame name': [50,26,60,5], 'placeholder states': [50,33,60,4],
       'placeholder gates': [50,39,60,10], 'placeholder note': [50,51,60,4],
       'placeholder warning': [50,57,60,4],
