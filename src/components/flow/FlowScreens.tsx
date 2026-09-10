@@ -1399,7 +1399,7 @@ export function LandingPageScreen({
 }) {
   const text = landingText(content)
   return (
-    <div className="fl fl-page">
+    <div className="fl fl-page" data-device={device}>
       {/* No hat here. Whatever draws the phone draws that — the preview's own
           frame, the popup's — so the page is only ever the page, and the bar
           is never drawn twice over one screen. */}

@@ -24,7 +24,7 @@
   text-align: start;
 }
 /* The page and the hero take the screen they are on rather than a phone's. */
-.fl-page:has(> [data-device]:not([data-device='mobile'])),
+.fl-page[data-device]:not([data-device='mobile']),
 .fl-landing[data-device]:not([data-device='mobile']) {
   inline-size: 100%;
 }
@@ -1641,6 +1641,22 @@
 .fl-page__plans .acq-set-scroll {
   inline-size: 100%;
   min-inline-size: 0;
+}
+
+/* The card row runs edge to edge — the design lets the screen cut the next
+   card, which is what says there is one — but the ends of the run are not the
+   middle of it: scrolled to either end, the first and last card stand off the
+   screen by the page's own 16 rather than touching the glass.
+
+   Padding on the scroller rather than a margin on the cards, so it is the
+   scrollable area that is inset and both ends get it. */
+.fl-page[data-device='mobile'] .fl-page__plans .acq-set {
+  padding-inline: var(--space-16);
+  /* And the snap points move with it. The row snaps a card's start to the
+     scroll port's start, which ignores padding — so scrolled home, the first
+     card was pulled straight back over the inset and sat on the glass while
+     the last one kept its 16. */
+  scroll-padding-inline: var(--space-16);
 }
 
 /* section-header-tabs, 708:173859 — the control keeps its own 16 above,
