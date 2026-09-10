@@ -7,6 +7,10 @@
   flex-direction: column;
   gap: var(--space-16);
   min-block-size: 0;
+  /* A screen that keeps its own shape can be taller than the room it is in —
+     a short window, a wide one. The column reaches it rather than the screen
+     bending to fit. */
+  overflow-y: auto;
 }
 /* The frame the screen is drawn in: the phone's own ground rather than the
    app's surface, and the height the column gives it.
@@ -233,9 +237,37 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    still — the hat sticks to the top of the screen and the bezel is outside the
    scroll altogether, so the page passes under both rather than carrying them
    off. */
-/* The thing the page is drawn inside, which is a different thing per device.
-   One class so the preview does not have to know which, and an attribute so
-   each can be the shape it is. */
+/* Everything the screen is presented on: the thing it is drawn inside, what
+   that thing stands on, and the label under it. A phone is one of those and a
+   laptop is three, so the stage holds them all and each part is only itself. */
+.jy__stage {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  min-block-size: 0;
+}
+/* The laptop keeps its shape as the room changes.
+
+   Its width used to be all that moved — the lid took whatever height was
+   going, so a narrow window drew a tall narrow screen no laptop has. The lid
+   is a 16:9 screen and a bezel, and the hinge, the base and the label follow
+   it, so the whole thing gets smaller rather than thinner.
+
+   Its height is its own rather than the room's, which is what `flex: none`
+   says. A window too short to hold it scrolls to it — the column above is the
+   scroller — rather than squashing it back out of shape. */
+.jy__stage:not([data-device='mobile']) {
+  flex: none;
+  inline-size: min(100%, 1128px);
+}
+
+/* The lid — the bezel and the screen in it, and nothing else. One class so the
+   preview does not have to know which device it is drawing, and an attribute
+   so each can be the shape it is. */
 .jy__shell {
   --jy-bezel: 12px;
 
@@ -243,7 +275,7 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   display: flex;
   flex: 1;
   flex-direction: column;
-  align-self: center;
+  align-self: stretch;
   min-block-size: 0;
   padding: var(--jy-bezel);
   background: #0b0f11;
@@ -252,29 +284,58 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
     0 24px 60px rgb(0 0 0 / 50%);
 }
 .jy__shell[data-device='mobile'] {
+  align-self: center;
+  flex: 1;
+}
+.jy__shell[data-device='mobile'] {
   border-radius: 52px;
 }
-/* A laptop: a shallow bezel, a squarer corner, and a base under it. Its own
-   proportions rather than a phone's — the same shell at a phone's radius reads
-   as a very large phone. */
-.jy__shell:not([data-device='mobile']) {
-  --jy-bezel: 14px;
+/* A laptop is three things, and the shell is only the first of them: the lid
+   around the screen, the hinge under it, and the base the whole thing stands
+   on. Drawn with the lid's own proportions rather than a phone's — a wide
+   phone is what this looked like when it borrowed them.
 
-  inline-size: min(100%, 1128px);
-  border-radius: 18px;
+   The bezel is even on all four sides. */
+.jy__shell:not([data-device='mobile']) {
+  --jy-bezel: 16px;
+
+  flex: none;
+  inline-size: 100%;
+  border-radius: 22px;
+  background: #171d21;
 }
-/* The lip the lid sits on. Wider than the screen and shallower than the bezel,
-   which is the whole of what says "laptop". */
+
+/* Where the lid meets the base — narrow, centred, and darker than both, which
+   is what reads as a gap rather than a moulding. */
+.jy__hinge {
+  flex: none;
+  inline-size: 15%;
+  min-inline-size: 120px;
+  block-size: 10px;
+  border-radius: 0 0 8px 8px;
+  /* Darker than the lid and darker than the base: it is the gap between them,
+     and a gap that is lighter than either reads as a moulding. */
+  background: #090d0f;
+}
+
+/* The base the lid stands on: wider than the lid on both sides, shallow, and
+   rounded only where it meets the desk. The overhang is the whole of what says
+   laptop — without it the shape is a framed picture. */
 .jy__base {
   flex: none;
-  align-self: center;
-  inline-size: calc(100% + 96px);
-  block-size: 14px;
-  margin-block-start: var(--jy-bezel);
-  margin-block-end: calc(var(--jy-bezel) * -1);
-  border-radius: 0 0 12px 12px;
-  background: #14191c;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 6%);
+  inline-size: calc(100% + 112px);
+  block-size: 16px;
+  /* Up over the hinge, so the two read as one piece rather than as a bar under
+     a tab. */
+  margin-block-start: -10px;
+  border-radius: 0 0 16px 16px;
+  /* Lit along the top and falling away to the desk, which is what makes a flat
+     bar read as an edge seen from slightly above. Flat, it was ten points off
+     the page behind it and disappeared into it. */
+  background: linear-gradient(180deg, #262d33 0%, #1a2024 55%, #12171a 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    0 16px 28px rgb(0 0 0 / 45%);
 }
 /* Inside the bezel the viewport is the screen itself: the page's own width,
    edge to edge, and rounded the way the glass is. */
@@ -294,9 +355,13 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   inline-size: 375px;
   border-radius: 40px;
 }
+/* The screen's own shape, which is what the lid is sized from. */
 .jy__shell:not([data-device='mobile']) > .jy__viewport {
+  flex: none;
   inline-size: 100%;
-  border-radius: 6px;
+  block-size: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
 }
 
 /* The phone's own bar, over the screen and outside the scroll. Held by the
@@ -453,7 +518,7 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   color: var(--color-text-tertiary);
   font-size: var(--font-size-caption-sm);
 }
-.jy__shell:not([data-device='mobile']) .jy__caption {
-  /* Clear of the base, which already hangs below the bezel. */
-  padding-block-start: var(--space-32);
+.jy__stage:not([data-device='mobile']) .jy__caption {
+  /* Clear of the base, which stands below the lid. */
+  padding-block-start: var(--space-24);
 }

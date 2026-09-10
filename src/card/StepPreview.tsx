@@ -153,6 +153,10 @@ export function StepPreview({
         /* The whole page, which the edit view scrolls. The tiles and the
            walkthrough keep drawing the hero alone: that is the screen a phone
            opens on, and a tile of a 7412px page is a tile of nothing. */
+        /* The lid, what stands under it, and the label under that — a
+           laptop is three things and a phone is one, so the stage holds them
+           and the shell is only ever the lid. */
+        <div className="jy__stage" data-device={set.device}>
         <div className="jy__shell" data-device={set.device}>
           {/* The phone's, not the page's: held by the frame, so the page can
               scroll and bounce under it without taking it along. Only a phone
@@ -191,9 +195,16 @@ export function StepPreview({
               <CardSetView set={set} context={context} tab={tab} />
             </LandingPageScreen>
           </div>
-          {/* The base of the laptop, which is what makes the shape read as one
-              rather than as a rounded rectangle. Nothing on a phone. */}
-          {set.device !== 'mobile' && <span className="jy__base" aria-hidden="true" />}
+        </div>
+          {/* The hinge and the base, under the lid rather than inside it —
+              which is where they are on a laptop, and the whole of what makes
+              the shape read as one. Nothing on a phone. */}
+          {set.device !== 'mobile' && (
+            <>
+              <span className="jy__hinge" aria-hidden="true" />
+              <span className="jy__base" aria-hidden="true" />
+            </>
+          )}
           {/* What you are looking at, under the thing you are looking at: the
               device and which of the four surfaces it is drawn as. Both are
               chosen in the bar above, and neither is written anywhere on the
