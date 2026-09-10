@@ -473,7 +473,6 @@
       ['preview hat', '.jy__phone-hat', 'Where the frame holds the phone’s bar: over the screen and outside the scroll, so it stays put through everything the page does — scrolling, and the bounce at either end of it.', 'stepview'],
       ['preview stage', '.jy__stage', 'Everything the screen is presented on: the thing it is drawn inside, what that thing stands on, and the label under it. A phone is one of those; a laptop is three.', 'stepview'],
       ['preview shell', '.jy__shell', 'The lid: the bezel and the screen in it, and nothing else. One class so the preview does not have to know which device it is drawing, and an attribute so each can be the shape it is.', 'stepview'],
-      ['preview caption', '.jy__caption', 'What you are looking at, under the thing you are looking at: the device and which of the four surfaces. Both are chosen in the bar above and neither is written on the page, so a screenshot of this says what it is.', 'stepview'],
       ['preview hinge', '.jy__hinge', 'Where the lid meets the base: narrow, centred, and darker than both, which is what reads as a gap rather than a moulding.', 'stepview'],
       ['preview base', '.jy__base', 'The lip the laptop lid sits on: wider than the screen and shallower than the bezel, which is the whole of what says laptop rather than large phone.', 'stepview'],
       ['viewport', '.jy__viewport', 'The frame the real screen renders inside. Sized to a 375-wide phone when the set is a mobile one.', 'stepview'],

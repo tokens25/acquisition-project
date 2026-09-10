@@ -7,8 +7,6 @@ import {
   SubscriptionTabs,
 } from '../components/flow/FlowScreens'
 import { resolveFlow } from '../rules/layers'
-import { DEVICE_LABEL } from '../rules/content'
-import { DEFAULT_PAGE_VIEW, pageViewLabel } from '../rules/pageViews'
 import { HERO_ZOOM_MAX, HERO_ZOOM_MIN, heroOf } from '../rules/landing'
 import heroArt from '../assets/landing/hero.jpg'
 import { FocalDrag } from '../demo/FocalDrag'
@@ -205,13 +203,6 @@ export function StepPreview({
               <span className="jy__base" aria-hidden="true" />
             </>
           )}
-          {/* What you are looking at, under the thing you are looking at: the
-              device and which of the four surfaces it is drawn as. Both are
-              chosen in the bar above, and neither is written anywhere on the
-              page itself — so a screenshot of this says what it is. */}
-          <p className="jy__caption">
-            {DEVICE_LABEL[set.device]} · {pageViewLabel(context.pageView ?? DEFAULT_PAGE_VIEW)}
-          </p>
         </div>
       ) : step.renderer === 'plans' ? (
         <div className="jy__viewport" data-device={set.device}>

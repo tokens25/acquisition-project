@@ -243,25 +243,22 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 .jy__stage {
   position: relative;
   display: flex;
-  flex: 1;
+  /* Its height is the screen's rather than the room's. A window too short to
+     hold it scrolls to it — the column above is the scroller — rather than
+     stretching it out of shape. */
+  flex: none;
   flex-direction: column;
   align-items: center;
   align-self: center;
   justify-content: center;
   min-block-size: 0;
 }
-/* The laptop keeps its shape as the room changes.
-
-   Its width used to be all that moved — the lid took whatever height was
-   going, so a narrow window drew a tall narrow screen no laptop has. The lid
-   is a 16:9 screen and a bezel, and the hinge, the base and the label follow
-   it, so the whole thing gets smaller rather than thinner.
-
-   Its height is its own rather than the room's, which is what `flex: none`
-   says. A window too short to hold it scrolls to it — the column above is the
-   scroller — rather than squashing it back out of shape. */
+/* The laptop keeps its shape as the room changes. Its width used to be all
+   that moved — the lid took whatever height was going, so a narrow window drew
+   a tall narrow screen no laptop has. The lid is a 16:9 screen and a bezel,
+   and the hinge and the base follow it, so the whole thing gets smaller rather
+   than thinner. */
 .jy__stage:not([data-device='mobile']) {
-  flex: none;
   inline-size: min(100%, 1128px);
 }
 
@@ -285,7 +282,7 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
 }
 .jy__shell[data-device='mobile'] {
   align-self: center;
-  flex: 1;
+  flex: none;
 }
 .jy__shell[data-device='mobile'] {
   border-radius: 52px;
@@ -350,9 +347,16 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   overflow-x: hidden;
   overflow-y: auto;
 }
-/* The page's own width, edge to edge, and rounded the way the glass is. */
+/* The page's own width, edge to edge, and rounded the way the glass is.
+
+   Sixteen by nine standing up, which at 375 is 667 — the shape the phone the
+   flow is drawn at actually is, rather than whatever height the pane happened
+   to be. */
 .jy__shell[data-device='mobile'] > .jy__viewport {
+  flex: none;
   inline-size: 375px;
+  block-size: auto;
+  aspect-ratio: 9 / 16;
   border-radius: 40px;
 }
 /* The screen's own shape, which is what the lid is sized from. */
@@ -507,18 +511,3 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
   text-align: end;
 }
 
-/* What you are looking at, under the thing you are looking at. Outside the
-   bezel, quiet, and never in the picture: it is a label on the preview rather
-   than anything the page says. */
-.jy__caption {
-  flex: none;
-  align-self: center;
-  margin: 0;
-  padding-block-start: var(--space-24);
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-caption-sm);
-}
-.jy__stage:not([data-device='mobile']) .jy__caption {
-  /* Clear of the base, which stands below the lid. */
-  padding-block-start: var(--space-24);
-}

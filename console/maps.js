@@ -300,7 +300,7 @@
       'framing zoom': [47,3,16,4], 'framing zoom name': [47,3,5,4], 'framing zoom reading': [59,3,4,4],
  'entry line': [6,5,100,12], 'step name': [6,5,26,5],
       'step meta': [34,5,40,5], 'inbound seeds': [6,11,50,4],
-      'preview stage': [42,18,76,82], 'preview shell': [44,20,72,74], 'preview base': [40,94,80,3], 'preview hinge': [56,92,10,2], 'preview caption': [42,98,16,2], 'preview hat': [46,22,68,4], 'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
+      'preview stage': [42,18,76,82], 'preview shell': [44,20,72,74], 'preview base': [40,94,80,3], 'preview hinge': [56,92,10,2], 'preview hat': [46,22,68,4], 'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
       'placeholder frame name': [50,26,60,5], 'placeholder states': [50,33,60,4],
       'placeholder gates': [50,39,60,10], 'placeholder note': [50,51,60,4],
       'placeholder warning': [50,57,60,4],
