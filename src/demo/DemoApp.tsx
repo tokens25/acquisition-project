@@ -16,6 +16,8 @@ import { Button } from '../components/Button'
 import { DefaultPanel } from './DefaultPanel'
 import { EditPanel } from './EditPanel'
 import { FlowPanel, FlowTabs } from './FlowPanel'
+import { DEVICE_LABEL } from '../rules/content'
+import { DEFAULT_PLATFORM, type Platform } from '../rules/platform'
 import { isHeroField } from '../rules/landing'
 import { FIELD_COMPONENT, SECTION_LABEL, sectionsOf } from '../rules/sections'
 import type { Section } from '../rules/pipeline'
@@ -23,6 +25,8 @@ import { UserFlow } from './UserFlow'
 import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
 import { Prototype } from './Prototype'
+import { SubscriptionSheet } from './SubscriptionSheet'
+import { DeviceSwitch, PlatformSwitch } from './ViewSwitches'
 import type { Mode } from '../rules/pipeline'
 import { changeMap } from '../rules/pipeline'
 import { FieldMarks } from '../components/fieldMarks'
@@ -87,7 +91,17 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
    * the tabs, and there is no arrow out because there is nowhere out to go.
    */
   const single = product === 'landing'
-  const [stepOpen, setStepOpen] = useState(false)
+  /*
+   * Arriving with the editor already open.
+   *
+   * The landing product sends people here to edit the plans, and a route
+   * change mounts this fresh — so this cannot be held in state across it. It
+   * rides in the query, which the router does not read; which step is already
+   * on the set, written before the move. Read while rendering rather than in
+   * an effect, so the editor is open on the first paint rather than after it.
+   */
+  const arriving = useMemo(() => new URLSearchParams(window.location.search).has('edit'), [])
+  const [stepOpen, setStepOpen] = useState(arriving)
   const editing = single || stepOpen
   const setEditing = setStepOpen
   const [prototype, setPrototype] = useState(false)
@@ -289,6 +303,20 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const planned = product === 'landing' ? (landingStep ? [landingStep] : []) : journeyPlan
   const steps = planned.filter((p) => !p.skipped).map((p) => p.step)
   const step = steps.find((s) => s.id === store.set.stepId) ?? steps[0]
+  /*
+   * The screen that owns the plan picker.
+   *
+   * Found in the whole journey rather than in `steps`, because on the landing
+   * product `steps` is the landing page and nothing else — that is the point
+   * of the product — and the screen being asked about is one this page draws
+   * without owning.
+   *
+   * Read here rather than further down where it is used: a read of the plan
+   * after the memo below, which has `section` among its dependencies, makes
+   * the compiler treat that value as one that may still change, and it gives
+   * up on memoising the panel's marks.
+   */
+  const plansStep = journeyPlan.find((p) => p.step.renderer === 'plans' && !p.skipped)?.step
   const coverage = summarise(validateAll(store.set))
 
   /* ── Market / Dev handoff ──
@@ -341,6 +369,28 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     store.updateSet({ stepId: id })
     setEditing(true)
   }
+
+  /* Taken out of the address once it has been read, so a reload is a plain
+     visit rather than the same arrival over again. */
+  useEffect(() => {
+    if (arriving) window.history.replaceState(null, '', window.location.pathname)
+  }, [arriving])
+
+  /*
+   * Where the plan picker is actually edited.
+   *
+   * The landing page draws the Subscription screen's tabs and cards; what the
+   * page owns is the heading over them. So the component offers the way there
+   * rather than a set of fields that would be editing the wrong screen — and
+   * only from the one-page product, since on the flow you are already inside
+   * the journey that holds it.
+   *
+   * In a window over the page rather than a route away: the picker being
+   * edited is drawn a scroll below it, and nothing about changing it means
+   * leaving the page it is on.
+   */
+  const [editingPlans, setEditingPlans] = useState(false)
+  const editPlans = single && plansStep ? () => setEditingPlans(true) : undefined
 
   /**
    * What the gate says, and the colour it says it in: whether every context
@@ -540,6 +590,31 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
         {brand}
         <div className="demo__statusbar">
           <MarketLanguages tx={tx} onAdd={() => setTranslating(true)} />
+          {/* Which reading of the screen is on: the device it is drawn at, and
+              the build it ships in. Beside the language for the same reason —
+              none of them change what the page says, only which version of it
+              you see.
+
+              The one-page product only, for now. The flow draws its screens as
+              a row of phones and its walkthrough forces one, so neither of
+              these would change anything there yet. */}
+          {single && (
+            <>
+              <DeviceSwitch
+                device={store.set.device}
+                onChange={(device) => store.updateSet({ device })}
+              />
+              {/* Only a phone has two of them. A desktop is a browser and
+                  nothing else, so asking which build it is would be a question
+                  with one answer. */}
+              {store.set.device === 'mobile' && (
+                <PlatformSwitch
+                  platform={(store.context.platform as Platform) ?? DEFAULT_PLATFORM}
+                  onChange={(platform) => store.setContext({ ...store.context, platform })}
+                />
+              )}
+            </>
+          )}
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}
           <span className="demo__gate" data-state={gate.state}>
@@ -582,7 +657,14 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                     <Icon svg={iconArtwork['chevron-left']} size={20} />
                   </button>
                 )}
-                <h2 className="demo__step-title">{step?.shortName ?? step?.name}</h2>
+                {/* What is being edited. On the flow that is which step you
+                    are in, because there are eight of them; on a product that
+                    is one page it is which device the page is drawn at, since
+                    the step's name is the product's name and already at the
+                    top of the window. */}
+                <h2 className="demo__step-title">
+                  {single ? DEVICE_LABEL[store.set.device] : (step?.shortName ?? step?.name)}
+                </h2>
                 {section && (
                   <span className="pl-head-chip">
                     <StatusChip section={section} pipe={pipe} />
@@ -630,7 +712,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                 ) : (
                   <FieldMarks.Provider value={marks}>
                     {step && step.renderer !== 'plans' && step.renderer !== 'stub' ? (
-                      <FlowPanel store={store} step={step} />
+                      <FlowPanel store={store} step={step} onEditPlans={editPlans} />
                     ) : (
                       <EditPanel store={store} />
                     )}
@@ -781,6 +863,19 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
           </aside>
         )}
       </div>
+
+      {/* The Subscription screen's own editor, over the page that draws it.
+          Outside the panel that offers it, because the panel is a column and
+          this is the width of the tool. */}
+      {plansStep && (
+        <SubscriptionSheet
+          open={editingPlans}
+          store={store}
+          step={plansStep}
+          set={marketSet}
+          onClose={() => setEditingPlans(false)}
+        />
+      )}
 
       {/* The whole journey, not the part Dev mode is showing: the prototype is
           the flow a person walks, and what Market has marked ready is a fact

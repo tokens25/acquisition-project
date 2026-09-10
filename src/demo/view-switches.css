@@ -1,0 +1,57 @@
+/* ── Which reading of the screen you are looking at ────────────────────────
+   The device, and the build it ships in. Two segmented controls beside the
+   language switch, because they ask the same kind of question — not what the
+   page says, but which of its readings is on screen — and they should read as
+   one row of switches rather than three unrelated controls. */
+
+.vsw {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  align-items: center;
+  block-size: var(--bar-control, 28px);
+  padding-inline: 3px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: 9px;
+}
+
+.vsw__opt {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  block-size: 22px;
+  padding-inline: 9px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.vsw__opt:hover {
+  color: var(--color-text-primary);
+}
+/* The one you are on, lit rather than outlined: an outline inside an outline
+   is two boxes, and the row already has its own. */
+.vsw__opt[data-on] {
+  background: var(--color-surface-container-3);
+  color: var(--color-text-primary);
+}
+.vsw__opt:focus-visible {
+  outline: var(--border-2) solid var(--color-text-primary);
+  outline-offset: -2px;
+}
+
+/* Square, because a glyph has no side bearings to pad. */
+.vsw__opt--icon {
+  inline-size: 26px;
+  padding-inline: 0;
+  justify-content: center;
+}
+.vsw__glyph {
+  inline-size: 15px;
+  block-size: 15px;
+}

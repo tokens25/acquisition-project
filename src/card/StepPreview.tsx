@@ -7,6 +7,8 @@ import {
   SubscriptionTabs,
 } from '../components/flow/FlowScreens'
 import { resolveFlow } from '../rules/layers'
+import { DEVICE_LABEL } from '../rules/content'
+import { DEFAULT_PAGE_VIEW, pageViewLabel } from '../rules/pageViews'
 import { HERO_ZOOM_MAX, HERO_ZOOM_MIN, heroOf } from '../rules/landing'
 import heroArt from '../assets/landing/hero.jpg'
 import { FocalDrag } from '../demo/FocalDrag'
@@ -151,16 +153,21 @@ export function StepPreview({
         /* The whole page, which the edit view scrolls. The tiles and the
            walkthrough keep drawing the hero alone: that is the screen a phone
            opens on, and a tile of a 7412px page is a tile of nothing. */
-        <div className="jy__phone">
+        <div className="jy__shell" data-device={set.device}>
           {/* The phone's, not the page's: held by the frame, so the page can
-              scroll and bounce under it without taking it along. */}
-          <div className="jy__phone-hat">
-            <PhoneHat />
-          </div>
+              scroll and bounce under it without taking it along. Only a phone
+              has one — a desktop has a browser around it instead, and nothing
+              here draws the browser. */}
+          {set.device === 'mobile' && (
+            <div className="jy__phone-hat">
+              <PhoneHat />
+            </div>
+          )}
           <div className="jy__viewport" data-device={set.device} data-page="">
             <LandingPageScreen
               content={resolveFlow(set).landing}
               market={marketOf(set)}
+              device={set.device}
               overArt={
                 framing && onFocal ? (
                   <FocalDrag
@@ -184,6 +191,16 @@ export function StepPreview({
               <CardSetView set={set} context={context} tab={tab} />
             </LandingPageScreen>
           </div>
+          {/* The base of the laptop, which is what makes the shape read as one
+              rather than as a rounded rectangle. Nothing on a phone. */}
+          {set.device !== 'mobile' && <span className="jy__base" aria-hidden="true" />}
+          {/* What you are looking at, under the thing you are looking at: the
+              device and which of the four surfaces it is drawn as. Both are
+              chosen in the bar above, and neither is written anywhere on the
+              page itself — so a screenshot of this says what it is. */}
+          <p className="jy__caption">
+            {DEVICE_LABEL[set.device]} · {pageViewLabel(context.pageView ?? DEFAULT_PAGE_VIEW)}
+          </p>
         </div>
       ) : step.renderer === 'plans' ? (
         <div className="jy__viewport" data-device={set.device}>

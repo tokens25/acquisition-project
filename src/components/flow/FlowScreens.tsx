@@ -90,7 +90,7 @@ import readySabres from '../../assets/flow/ready/sabres.png'
 import checkCircleFilled from '../../assets/flow/ready/check-circle-filled.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
-import type { MarketConfig, PlanTab } from '../../rules/content'
+import type { Device, MarketConfig, PlanTab } from '../../rules/content'
 import { statedMoney } from '../../rules/money'
 import type {
   AccountScreen,
@@ -367,6 +367,16 @@ function Cta({
  * instead of a header over a body.
  */
 /**
+ * The site's own navigation, on the screens wide enough to carry it.
+ *
+ * Chrome rather than content: the page arrives inside this, the panel does not
+ * write it, and it says the same thing in every market the tool draws. Named
+ * here rather than in the content so nothing goes looking for a field to edit
+ * them with.
+ */
+const WEB_LINKS = ['Home', 'All sports', 'Schedule', 'Betting', 'News']
+
+/**
  * What it costs, between the words and the button.
  *
  * The hero tool's own lockup, and its order: the prefix, the price, the old
@@ -446,12 +456,22 @@ export function LandingFlowScreen({
   overArt,
   hat = true,
   market,
+  device = 'mobile',
 }: {
   content: LandingScreen
   /** Laid over the picture itself — the framing handle, when one is offered. */
   overArt?: ReactNode
   /** Whose money the price is in. Without one it is drawn as written. */
   market?: MarketConfig
+  /**
+   * What it is being drawn on.
+   *
+   * The same content and the same fields, laid out for the screen it is being
+   * looked at on: a phone stacks it and centres it under a status bar, a
+   * desktop stands the words in a column down the left of the picture under a
+   * web header. Everything editable is the same on both.
+   */
+  device?: Device
   /**
    * Whether the hero draws the phone's bar over its own top.
    *
@@ -472,7 +492,7 @@ export function LandingFlowScreen({
   // it exactly filling — the same thing `cover` would have done.
   const ratio = useImageRatio(picture)
   return (
-    <div className="fl fl-landing">
+    <div className="fl fl-landing" data-device={device}>
       {/* The glow behind the picture: a 100px blur over a gradient that runs
           from nothing through gold to a trace of green. It stops 96 short of
           the bottom, so it lifts the picture without touching the page under
@@ -538,17 +558,63 @@ export function LandingFlowScreen({
                 )}
               </div>
             </div>
+            {/* Which of the banners in the rotation this is. Three, because
+                three is what the design draws; nothing here rotates, so the
+                first is always the one showing. */}
+            {device !== 'mobile' && (
+              <span className="fl-landing__dots" aria-hidden="true">
+                <i data-on="" />
+                <i />
+                <i />
+              </span>
+            )}
           </div>
         </div>
+        {/* The way to the next banner, either side of the picture. Drawn
+            because the design draws them; there is one banner here, so they
+            are chrome rather than controls. */}
+        {device !== 'mobile' && (
+          <>
+            <span className="fl-landing__step" data-side="back" aria-hidden="true">
+              <Icon svg={iconArtwork['chevron-left']} size={16} />
+            </span>
+            <span className="fl-landing__step" data-side="on" aria-hidden="true">
+              <Icon svg={iconArtwork['chevron-right']} size={16} />
+            </span>
+          </>
+        )}
       </div>
 
-      {hat && <PhoneHat />}
+      {/* A phone's bar, on a phone. A desktop has a browser around it rather
+          than a status bar over it, and nothing here draws the browser. */}
+      {hat && device === 'mobile' && <PhoneHat />}
 
       <header className="fl-landing__nav">
         <span className="fl-landing__logo">
           <img src={daznLogo} alt="" />
         </span>
+        {/* The site's own navigation, which only a wide screen has room for.
+            Static, like the phone's bar and the screen headers are: it is the
+            chrome the page arrives in rather than anything the page says, and
+            nothing in the panel writes it. */}
+        {device !== 'mobile' && (
+          <nav className="fl-landing__links" aria-hidden="true">
+            {WEB_LINKS.map((link, i) => (
+              <span key={link} className="fl-landing__link" data-on={i === 0 || undefined}>
+                {link}
+              </span>
+            ))}
+          </nav>
+        )}
         <span className="fl-landing__nav-ctas">
+          {device !== 'mobile' && (
+            <span className="fl-landing__search" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <circle cx="10.5" cy="10.5" r="7" />
+                <path d="m16 16 5 5" />
+              </svg>
+            </span>
+          )}
           <span className="fl-landing__nav-cta">{text.navExplore}</span>
           {(content.navSignUpEnabled ?? true) && (
             <span className="fl-landing__nav-cta" data-appearance="neutral">
@@ -1319,6 +1385,7 @@ export function LandingPageScreen({
   children,
   overArt,
   market,
+  device = 'mobile',
 }: {
   content: LandingScreen
   /** The plan picker, where the page puts it. */
@@ -1327,6 +1394,8 @@ export function LandingPageScreen({
   overArt?: ReactNode
   /** Handed to the hero, for its price. */
   market?: MarketConfig
+  /** Handed to the hero, which is the part that is laid out differently. */
+  device?: Device
 }) {
   const text = landingText(content)
   return (
@@ -1334,7 +1403,13 @@ export function LandingPageScreen({
       {/* No hat here. Whatever draws the phone draws that — the preview's own
           frame, the popup's — so the page is only ever the page, and the bar
           is never drawn twice over one screen. */}
-      <LandingFlowScreen content={content} overArt={overArt} hat={false} market={market} />
+      <LandingFlowScreen
+        content={content}
+        overArt={overArt}
+        hat={false}
+        market={market}
+        device={device}
+      />
       {sectionsOf(content)
         .filter((section) => section.on)
         .map((section) => (

@@ -49,7 +49,7 @@
       'edit tabs': [6,14,68,6], 'edit tab': [6,14,32,6],
       'component card': [6,44,68,16], 'component name': [8,46,26,4],
       'component grip': [8,46,3,4], 'component copy tag': [30,46,8,4],
-      'component footer': [46,56,26,4],
+      'component footer': [46,56,26,4], 'edit the subscription': [46,56,10,4],
       'add a component': [6,120,68,14], 'component choices': [6,126,68,8],
       'component choice': [6,126,20,5], 'second of its kind': [20,127,6,3],
       'field group': [6,44,68,16], 'group title': [6,44,26,4],
@@ -146,7 +146,7 @@
       'landing button group': [7,84,66,16], 'landing button': [7,84,66,7],
       'landing footnote': [7,101,66,4],
       'landing status bar': [0,0,80,5], 'landing notch': [29,0,22,3], 'landing clock': [3,1,8,3], 'landing signals': [62,1,14,3],
-      'landing bar': [0,5,80,10], 'landing brand': [3,2,7,7],
+      'landing bar': [0,5,80,10], 'landing links': [14,6,30,8], 'landing link': [14,6,8,8], 'landing search': [60,6,4,8], 'landing dots': [8,68,10,3], 'landing arrow': [2,40,5,6], 'landing brand': [3,2,7,7],
       'landing bar buttons': [40,2,36,7], 'landing bar button': [40,2,17,7]
     }},
     flowLandingPage: { vb: '0 0 80 220', parts: {
@@ -300,7 +300,7 @@
       'framing zoom': [47,3,16,4], 'framing zoom name': [47,3,5,4], 'framing zoom reading': [59,3,4,4],
  'entry line': [6,5,100,12], 'step name': [6,5,26,5],
       'step meta': [34,5,40,5], 'inbound seeds': [6,11,50,4],
-      'preview phone': [44,20,72,74], 'preview hat': [46,22,68,4], 'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
+      'preview shell': [44,20,72,74], 'preview base': [40,94,80,3], 'preview caption': [42,98,16,2], 'preview hat': [46,22,68,4], 'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
       'placeholder frame name': [50,26,60,5], 'placeholder states': [50,33,60,4],
       'placeholder gates': [50,39,60,10], 'placeholder note': [50,51,60,4],
       'placeholder warning': [50,57,60,4],

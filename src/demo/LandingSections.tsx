@@ -50,7 +50,23 @@ import type { Selector } from '../rules/layers'
  * string per field of the page, and a second Postcode does not have a second
  * name for the same string yet.
  */
-export function LandingSections({ store, scope }: { store: CardSetStore; scope: Selector }) {
+export function LandingSections({
+  store,
+  scope,
+  onEditPlans,
+}: {
+  store: CardSetStore
+  scope: Selector
+  /**
+   * The way to the plan picker's own editor, when there is one.
+   *
+   * The plans component draws the Subscription screen's tabs and cards, and
+   * none of that is a landing field: what the page owns is the heading over
+   * them. So the card says where the rest of it is edited rather than pretending
+   * the fields are missing.
+   */
+  onEditPlans?: () => void
+}) {
   const { set, updateSet } = store
   const l = resolveFlow(set).landing
   const list = sectionsOf(l)
@@ -70,6 +86,7 @@ export function LandingSections({ store, scope }: { store: CardSetStore; scope: 
           section={section}
           store={store}
           scope={scope}
+          onEditPlans={section.type === 'plans' ? onEditPlans : undefined}
           dragging={dragging}
           over={over}
           onDragStart={() => setDragging(section.id)}
@@ -232,6 +249,7 @@ function SectionCard({
   onToggle,
   onDuplicate,
   onRemove,
+  onEditPlans,
 }: {
   section: PageSection
   store: CardSetStore
@@ -247,6 +265,8 @@ function SectionCard({
   onToggle: (on: boolean) => void
   onDuplicate: () => void
   onRemove: () => void
+  /** Only the plans card has one — see LandingSections. */
+  onEditPlans?: () => void
 }) {
   const { set, updateSet } = store
   const l = resolveFlow(set).landing
@@ -340,6 +360,19 @@ function SectionCard({
       {/* Outside the fold, where Remove tabs sits under the tabs: what you do
           to a component is available whether or not you are looking inside it. */}
       <div className="ls-card__foot">
+        {/* At the other end from what you do to the component, because it is
+            not one of those things: it leaves this page for the screen that
+            owns the plans. */}
+        {onEditPlans && (
+          <button
+            type="button"
+            className="ls-card__away"
+            title="Open the Subscription screen, where the tabs and the plan cards are edited"
+            onClick={onEditPlans}
+          >
+            Edit subscription
+          </button>
+        )}
         <button
           type="button"
           className="demo__feature-remove"

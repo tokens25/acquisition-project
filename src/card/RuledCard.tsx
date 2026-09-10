@@ -1,6 +1,10 @@
 import { AcquisitionCard, Feature, FeaturesList } from '../components/acquisition'
 import type { PlanDetailsProps } from '../components/acquisition'
-import type { CadenceOffer, CardSet, Context, Device, MarketConfig, Tier } from '../rules/content'
+import type { CadenceOffer, CardSet, Context, MarketConfig, Tier } from '../rules/content'
+/* The card's own breakpoint, not the tool's device: three variants the design
+   draws, against four devices somebody can look at. `breakpointOf` maps one to
+   the other, and this end only ever sees the design's. */
+import type { Device } from '../components/acquisition/types'
 import { deriveCard } from '../rules/derive'
 import { iconArtwork, imageArtwork, logoArtwork } from './assets'
 

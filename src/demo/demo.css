@@ -8,6 +8,15 @@
    hardcoded bar height means the bar can change without the panes overflowing
    past the viewport. */
 .demo {
+  /* The tool's own control height, and not the design system's.
+     A 40px md button is the right size on a page; among the tool's own
+     furniture — a 32px mode switch, a row of quiet words — it reads as a
+     second toolbar that happens to touch the first. Declared on the whole
+     tool rather than on the bar: the language switch, the mode switch, the
+     Coach's pill and a component's own footer all read it, and only one of
+     those is in the bar. */
+  --bar-control: 28px;
+
   display: flex;
   flex-direction: column;
   block-size: 100vh;
@@ -112,9 +121,10 @@
   flex: none;
   inline-size: 32px;
   block-size: 32px;
-  /* 16px to the title, 8px onward — the mark, the name and the label read as
-     one group rather than three evenly spaced things. */
-  margin-inline-end: var(--space-8);
+  /* Nothing of its own: the row's gap is the whole distance to the name, so
+     the mark, the name and the label read as one group rather than three
+     evenly spaced things. */
+  margin-inline-end: 0;
   color: var(--color-text-primary);
 }
 .demo__title {
@@ -733,11 +743,7 @@
    the buttons, the mode switch and the Coach's pill. Written as a single
    token rather than the same sum repeated in three files, which is how the
    switch came to stand 8px proud of its neighbours. */
-/* The bar's one control height, on the row rather than on the actions, so a
-   control at either end of it reads the same figure. */
-.demo__statusbar {
-  --bar-control: 28px;
-}
+/* The bar's buttons at that height. */
 .demo__actions .dazn-btn {
   block-size: var(--bar-control);
   gap: 6px;

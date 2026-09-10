@@ -568,6 +568,47 @@
   padding-block-end: var(--space-6);
 }
 
+/* The way out of this page, at the other end of the footer from what you do
+   to the component.
+
+   Translate's control, not the design system's button: an outlined pill of the
+   tool's own control height, quiet until it is reached for. Both open
+   something rather than change something, and they should not be two different
+   shapes for that. */
+.ls-card__away {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  /* A stated gap rather than `auto`, which threw it to the far end of the row
+     and left it stranded under the fields. It belongs with the two words it
+     sits beside, a little clear of them. */
+  margin-inline-end: 84px;
+  block-size: var(--bar-control, 28px);
+  padding-inline: 9px;
+  border: 0;
+  border-radius: var(--radius-8);
+  /* Translate's height, Preview's everything else: it is the size of the
+     furniture around it and the weight of the thing it does, which is open a
+     window rather than change a field. */
+  background: var(--color-surface-container-5);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ls-card__away:hover {
+  background: var(--color-surface-container-4);
+}
+/* Duplicate and Delete are pushed to the bottom of whatever row they are in —
+   which is right under a column of fields, and wrong beside a control taller
+   than they are: the footer becomes the pill's height and they sank four
+   pixels below it. In this row they sit where everything else does. */
+.ls-card__foot .demo__feature-remove {
+  align-self: center;
+}
+
 /* ── Adding a component ───────────────────────────────────────────────────
    The dashed row is the panel's own; what it opens is the list of blocks the
    page knows how to draw. A block the page is not showing is marked, because

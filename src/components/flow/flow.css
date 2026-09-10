@@ -15,11 +15,18 @@
 .fl {
   display: flex;
   flex-direction: column;
+  /* A phone's width, which is what every screen but the landing page is drawn
+     at. The landing page is drawn at whatever the device is, and says so. */
   inline-size: 375px;
   background: #060606;
   font-family: var(--font-family);
   color: #f8f8f8;
   text-align: start;
+}
+/* The page and the hero take the screen they are on rather than a phone's. */
+.fl-page:has(> [data-device]:not([data-device='mobile'])),
+.fl-landing[data-device]:not([data-device='mobile']) {
+  inline-size: 100%;
 }
 
 /* .header-mobile — 50 tall over a 2 gold rule. The rule is the progress the
@@ -2240,7 +2247,7 @@
 .fl-foot__links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-24);
+  gap: var(--space-16);
   align-items: center;
   justify-content: center;
 }
@@ -2248,10 +2255,16 @@
   white-space: nowrap;
 }
 /* Takes the whole line and none of its height, so the word after it starts a
-   line of its own however much room was left on this one. */
+   line of its own however much room was left on this one.
+
+   It is still an item, though, so a wrapping row puts it on a line of its own
+   and the row gap lands twice — once above it and once below — which is why
+   every deliberate break was set twice as far from its neighbours as the lines
+   that wrapped on their own. Its own gap is taken back here. */
 .fl-foot__break {
   flex-basis: 100%;
   block-size: 0;
+  margin-block: calc(var(--space-16) / -2);
 }
 .fl-foot__mark {
   margin: 0;
@@ -2824,4 +2837,198 @@
   font-family: inherit;
   font-size: var(--font-size-button-lg);
   font-weight: var(--font-weight-bold);
+}
+
+/* ── The landing page, on a wide screen ────────────────────────────────────
+   The same content and the same fields laid out for the screen it is looked
+   at on. A phone stacks the words under a status bar and centres them; a
+   desktop stands them in a column down the left of the picture, under the
+   site's own navigation. Nothing here is a second set of strings — every one
+   of them is the same field the panel writes. */
+
+.fl-landing[data-device='desktop'] {
+  --hero-inset: 72px;
+}
+
+/* Tall enough to hold a column of words beside the picture rather than a
+   stack under it. */
+.fl-landing[data-device='desktop'] .fl-landing__hero {
+  block-size: 720px;
+}
+
+/* The site's navigation across the top, not the phone's two buttons: the mark,
+   the sections, and the way in at the far end. */
+.fl-landing[data-device='desktop'] .fl-landing__nav {
+  inset-block-start: 0;
+  gap: var(--space-32);
+  inline-size: 100%;
+  min-block-size: 72px;
+  padding-inline: var(--hero-inset);
+}
+.fl-landing__links {
+  display: flex;
+  flex: 1;
+  gap: var(--space-24);
+  align-items: center;
+}
+.fl-landing__link {
+  color: var(--text-default);
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+}
+/* Where you are, in the brand's own yellow. */
+.fl-landing__link[data-on] {
+  color: var(--color-brand-primary);
+}
+.fl-landing__search {
+  display: grid;
+  place-items: center;
+  inline-size: 20px;
+  block-size: 20px;
+  color: var(--text-default);
+}
+.fl-landing__search > svg {
+  inline-size: 20px;
+  block-size: 20px;
+}
+.fl-landing[data-device='desktop'] .fl-landing__nav-ctas {
+  gap: var(--space-12);
+}
+
+/* The words down the left, on the picture rather than under it. */
+.fl-landing[data-device='desktop'] .fl-landing__slot {
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: flex-start;
+  padding-inline: var(--hero-inset);
+}
+.fl-landing[data-device='desktop'] .fl-landing__content {
+  flex: none;
+  gap: var(--space-16);
+  align-items: flex-start;
+  inline-size: 420px;
+  max-inline-size: 420px;
+}
+.fl-landing[data-device='desktop'] .fl-landing__title,
+.fl-landing[data-device='desktop'] .fl-landing__body,
+.fl-landing[data-device='desktop'] .fl-landing__footnote {
+  text-align: start;
+}
+.fl-landing[data-device='desktop'] .fl-landing__title {
+  font-size: 34px;
+  line-height: 1.2;
+  /* The phone clips a long heading to keep its own height; a desktop has the
+     room to let it run. */
+  overflow: visible;
+  text-overflow: clip;
+}
+.fl-landing[data-device='desktop'] .fl-landing__body {
+  font-size: 17px;
+}
+.fl-landing[data-device='desktop'] .fl-landing__price {
+  justify-content: flex-start;
+  inline-size: auto;
+}
+/* The buttons take their own width rather than the column's: a full-width
+   button in a 420 column is a 420 button, which no desktop draws. */
+.fl-landing[data-device='desktop'] .fl-landing__buttons,
+.fl-landing[data-device='desktop'] .fl-landing__button-stack {
+  align-items: flex-start;
+  inline-size: auto;
+}
+.fl-landing[data-device='desktop'] .fl-landing__button-group {
+  flex-direction: row;
+  inline-size: auto;
+}
+.fl-landing[data-device='desktop'] .fl-landing__button {
+  inline-size: auto;
+  min-inline-size: 200px;
+  padding-inline: var(--space-32);
+}
+/* On a phone the note is laid over the buttons — both in one grid cell, the
+   note dropped 132 from the top — so the group keeps its height with or
+   without one. A desktop has the room to let it follow them. */
+.fl-landing[data-device='desktop'] .fl-landing__button-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+.fl-landing[data-device='desktop'] .fl-landing__footnote {
+  grid-area: auto;
+  inline-size: auto;
+  margin-block-start: 0;
+}
+
+/* Which banner of the rotation this is. */
+.fl-landing__dots {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  margin-block-start: var(--space-16);
+}
+.fl-landing__dots > i {
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 34%);
+}
+/* The one showing, drawn as a bar rather than a dot — the design's own way of
+   saying which of them you are on. */
+.fl-landing__dots > i[data-on] {
+  inline-size: 28px;
+  background: var(--surface-max);
+}
+
+/* The way to the next banner, either side of the picture. */
+.fl-landing__step {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 50%;
+  display: grid;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: var(--border-1) solid rgb(255 255 255 / 40%);
+  border-radius: var(--radius-full);
+  color: var(--text-default);
+  transform: translateY(-50%);
+}
+.fl-landing__step[data-side='back'] {
+  inset-inline-start: var(--space-24);
+}
+.fl-landing__step[data-side='on'] {
+  inset-inline-end: var(--space-24);
+}
+
+/* The wash runs the way the words do. On a phone they sit at the foot of the
+   picture, so it darkens downward; on a desktop they stand in a column down
+   the left, so it darkens leftward — a gradient aimed at the wrong edge is a
+   heading on a jersey. Same three strengths, same idea, turned ninety
+   degrees. */
+.fl-landing[data-device='desktop'] .fl-landing__wash {
+  background:
+    linear-gradient(90deg, rgb(8 14 18 / 92%) 0%, rgb(8 14 18 / 70%) 34%, rgb(8 14 18 / 0%) 68%),
+    linear-gradient(180deg, rgb(8 14 18 / 70%) 0%, rgb(8 14 18 / 0%) 24%);
+}
+.fl-landing[data-device='desktop'] .fl-landing__wash[data-strength='light'] {
+  background:
+    linear-gradient(90deg, rgb(8 14 18 / 76%) 0%, rgb(8 14 18 / 44%) 32%, rgb(8 14 18 / 0%) 62%),
+    linear-gradient(180deg, rgb(8 14 18 / 56%) 0%, rgb(8 14 18 / 0%) 22%);
+}
+.fl-landing[data-device='desktop'] .fl-landing__wash[data-strength='heavy'] {
+  background:
+    linear-gradient(90deg, rgb(8 14 18 / 98%) 0%, rgb(8 14 18 / 86%) 38%, rgb(8 14 18 / 0%) 76%),
+    linear-gradient(180deg, rgb(8 14 18 / 82%) 0%, rgb(8 14 18 / 0%) 28%);
+}
+
+/* Two buttons in a 420 column will not stand side by side at their own width,
+   so they take what they need and drop to a second line when they cannot. */
+.fl-landing[data-device='desktop'] .fl-landing__button-group {
+  flex-wrap: wrap;
+  gap: var(--space-12);
+}
+.fl-landing[data-device='desktop'] .fl-landing__button {
+  min-inline-size: 0;
+  padding-inline: var(--space-24);
 }

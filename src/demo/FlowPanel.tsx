@@ -80,7 +80,16 @@ export function FlowTabs({
   )
 }
 
-export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) {
+export function FlowPanel({
+  store,
+  step,
+  onEditPlans,
+}: {
+  store: CardSetStore
+  step: Step
+  /** Handed to the plans component, when there is somewhere for it to go. */
+  onEditPlans?: () => void
+}) {
   const { set, updateSet } = store
   const at = situationOf(set)
   const ladder = scopeLadder(at)
@@ -91,7 +100,8 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
   const [tab, setTab] = useState<'page' | 'hero'>('page')
   const scope = ladder.find((r) => r.label === chosen)?.when ?? {}
   const screen = step.renderer as keyof FlowContent
-  if (!(screen in defaultFlow)) return <FlowFields store={store} step={step} scope={scope} />
+  if (!(screen in defaultFlow))
+    return <FlowFields store={store} step={step} scope={scope} onEditPlans={onEditPlans} />
 
   const all = set.flowLayers ?? []
   const applying = layersFor(set, at)
@@ -177,7 +187,7 @@ export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) 
       {hasHero && tab === 'hero' ? (
         <HeroBannerFields store={store} scope={scope} />
       ) : (
-        <FlowFields store={store} step={step} scope={scope} hero={!hasHero} />
+        <FlowFields store={store} step={step} scope={scope} hero={!hasHero} onEditPlans={onEditPlans} />
       )}
     </>
   )
@@ -195,11 +205,14 @@ function FlowFields({
    * other screen splits itself in two.
    */
   hero = true,
+  onEditPlans,
 }: {
   store: CardSetStore
   step: Step
   scope: Selector
   hero?: boolean
+  /** Handed on to the plans component — see FlowPanel. */
+  onEditPlans?: () => void
 }) {
   const { set, updateSet } = store
   const flow = resolveFlow(set)
@@ -269,7 +282,7 @@ function FlowFields({
 
         {/* Everything below the hero, as the list of components it is: each
             one can move, be switched off, or be copied. */}
-        <LandingSections store={store} scope={scope} />
+        <LandingSections store={store} scope={scope} onEditPlans={onEditPlans} />
       </>
     )
   }

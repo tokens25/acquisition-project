@@ -3,6 +3,7 @@ import { tierOnTab } from '../rules/tabs'
 import { PlanDetails, type PlanDetailsProps } from '../components/acquisition'
 import { isWholeInView } from '../components/acquisition/viewport'
 import type { CardSet, Context } from '../rules/content'
+import { breakpointOf } from '../rules/content'
 import { marketFor, resolveSet } from '../rules/resolve'
 import { RuledCard } from './RuledCard'
 
@@ -218,7 +219,7 @@ export function CardSetView({
               offer={offer}
               market={market}
               context={context}
-              device={set.device}
+              device={breakpointOf(set.device)}
               descriptionLines={descriptionLines}
               onOpenDetails={
                 interactive ? (d) => setDetails({ ...d, cardIndex }) : undefined

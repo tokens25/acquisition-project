@@ -1,3 +1,4 @@
+import type { Device as CardDevice } from '../components/acquisition/types'
 /**
  * Authored content only.
  *
@@ -15,7 +16,45 @@ import type { FlowLayer } from './layers'
 import type { PipelineDoc } from './pipeline'
 
 export type AddOnPurchaseType = 'one_time_payment' | 'discount_code'
-export type Device = 'mobile' | 'desktop' | 'xl'
+export type Device = 'mobile' | 'desktop' | 'tablet' | 'xl'
+
+/**
+ * What each is called on screen.
+ *
+ * Beside the type rather than in whichever panel happens to name one first:
+ * two places calling the same device two things is the kind of drift nobody
+ * notices until a screenshot goes out with both in it.
+ */
+export const DEVICE_LABEL: Record<Device, string> = {
+  xl: 'TV',
+  desktop: 'Desktop',
+  tablet: 'Tablet',
+  mobile: 'Mobile',
+}
+
+/**
+ * Largest first, which is the order every device switcher is drawn in and the
+ * order the design's own is: the eye runs from the set in the room down to the
+ * thing in a hand.
+ *
+ * `xl` is the television. It was named for the size rather than the device
+ * because the cards were the only thing that read it, and renaming a value the
+ * saved content carries is a migration rather than a rename.
+ */
+export const DEVICES: Device[] = ['xl', 'desktop', 'tablet', 'mobile']
+
+/**
+ * The card's own breakpoint for a device.
+ *
+ * Two different questions that happen to share a word. This one is which
+ * device is being looked at, and there are four. The card's is which of the
+ * design's `Device` variants to draw at, and there are three: the design has
+ * no tablet, so one is drawn at the desktop breakpoint — which is what the
+ * design itself does with a tablet — until it is given its own.
+ */
+export function breakpointOf(device: Device): CardDevice {
+  return device === 'tablet' ? 'desktop' : device
+}
 
 /** Direct storefront, or a partner code. Open by design — partners keep appearing. */
 export const DIRECT = 'direct'
@@ -233,6 +272,13 @@ export interface Context {
    * answer to a question, and nothing derives from it yet.
    */
   pageView?: string
+  /**
+   * Which build the screen is being looked at in — see `platform.ts`.
+   *
+   * Optional for the same reason `pageView` is: it is the answer to a
+   * question, and nothing derives from it yet.
+   */
+  platform?: string
   campaign?: string
   /** Which storefront — `direct` or a partner code. */
   channel: string

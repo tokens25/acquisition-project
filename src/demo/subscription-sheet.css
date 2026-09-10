@@ -1,0 +1,93 @@
+/* ── The Subscription editor, in a window ──────────────────────────────────
+   Nearly the whole screen, because it is the panel and the preview side by
+   side and either alone is half an answer. Centred rather than down one side:
+   what is behind it is the page that opened it, and this is not a note about
+   that page — it is a different screen being worked on. */
+
+.sub-sheet {
+  inline-size: min(1240px, 94vw);
+  max-inline-size: none;
+  block-size: min(880px, 92vh);
+  max-block-size: none;
+  padding: 0;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-16, 16px);
+  background: var(--color-surface-default);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  box-shadow: 0 40px 120px rgb(0 0 0 / 60%);
+  color-scheme: dark;
+}
+.sub-sheet::backdrop {
+  background: rgb(0 0 0 / 55%);
+  backdrop-filter: blur(8px);
+}
+
+.sub-sheet__sheet {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  min-block-size: 0;
+}
+
+.sub-sheet__head {
+  flex: none;
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  padding: var(--space-12) var(--space-20);
+  border-block-end: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.sub-sheet__title {
+  margin: 0;
+  font-size: var(--font-size-heading-h6);
+  font-weight: var(--font-weight-bold);
+}
+
+/* The panel down one side and the screen beside it, which is the shape the
+   tool has everywhere else — so what is being edited is where it is expected. */
+.sub-sheet__body {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 360px minmax(0, 1fr);
+  min-block-size: 0;
+}
+.sub-sheet__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  min-block-size: 0;
+  /* No padding at the top, for the reason the tool's own panel has none: a
+     sticky heading stops at the content edge, so padding above it is a strip
+     that nothing covers and everything scrolls through — the tier tabs came up
+     through it and sat over the heading. The space is the first child's
+     instead. */
+  padding: 0 var(--space-20) var(--space-24);
+  overflow-y: auto;
+  border-inline-end: var(--border-1) solid var(--color-border-full-color-subtle);
+  background: var(--color-surface-container-1);
+}
+/* A flex column of a fixed height shrinks its children to fit rather than
+   overflowing, which squeezes the groups instead of scrolling them. */
+.sub-sheet__panel > * {
+  flex: none;
+}
+/* The first group's own space, since the column above it has none to give. */
+.sub-sheet__panel > *:first-child {
+  margin-block-start: var(--space-16);
+}
+.sub-sheet__preview {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  padding: var(--space-16);
+  overflow: auto;
+}
+
+/* The phone's own bar, which the screen draws and this window does not want:
+   it names the screen, and the field that names it is the one left out of the
+   panel beside it. Hidden rather than made optional through four components
+   for the one place that asks. */
+.sub-sheet .fl__header {
+  display: none;
+}

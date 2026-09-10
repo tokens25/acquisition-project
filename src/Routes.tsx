@@ -47,11 +47,19 @@ export function Routes() {
   }, [])
 
   const page =
+    /*
+     * Keyed, because the two products are the same component in the same
+     * place: without a key React keeps the instance and hands it new props, so
+     * moving between them carries the last one's state across — which step was
+     * open, which view was showing — and anything either of them reads once on
+     * mount is never read again. They are two tools that happen to share a
+     * shape; each gets its own mount.
+     */
     path === '/demo' ? (
-      <DemoApp />
+      <DemoApp key="flow" />
     ) : path === '/landing' ? (
       /* The same tool, on the landing page alone and open on it. */
-      <DemoApp product="landing" />
+      <DemoApp key="landing" product="landing" />
     ) : path === '/hero' ? (
       /* The pieces ported out of the hero studio, to be looked at before any
          of them is taken up. Nothing else in the tool imports them. */
