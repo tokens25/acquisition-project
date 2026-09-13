@@ -1,18 +1,16 @@
 import type { Device } from '../rules/content'
 import { DEVICE_LABEL, DEVICES } from '../rules/content'
-import { PLATFORMS, type Platform } from '../rules/platform'
 import './view-switches.css'
 
 /**
  * What the screen is being looked at on, beside the language it is read in.
  *
- * Two segmented controls, ported in shape from the hero studio's command bar:
- * the device, drawn as glyphs because four names in a row is a sentence rather
- * than a switch, and the platform, drawn as words because "web" and "native"
- * have no picture anybody would recognise.
+ * A segmented control, ported in shape from the hero studio's command bar and
+ * drawn as glyphs rather than names: four names in a row is a sentence rather
+ * than a switch.
  *
- * They sit next to Translate because they are the same kind of question — not
- * what the page says, but which of its readings you are looking at.
+ * It sits next to Translate because it is the same kind of question — not what
+ * the page says, but which of its readings you are looking at.
  */
 export function DeviceSwitch({
   device,
@@ -36,33 +34,6 @@ export function DeviceSwitch({
           onClick={() => onChange(id)}
         >
           <DeviceGlyph device={id} />
-        </button>
-      ))}
-    </div>
-  )
-}
-
-export function PlatformSwitch({
-  platform,
-  onChange,
-}: {
-  platform: Platform
-  onChange: (platform: Platform) => void
-}) {
-  return (
-    <div className="vsw" role="radiogroup" aria-label="Platform">
-      {PLATFORMS.map((p) => (
-        <button
-          key={p.code}
-          type="button"
-          className="vsw__opt"
-          role="radio"
-          aria-checked={p.code === platform}
-          title={p.hint}
-          data-on={p.code === platform || undefined}
-          onClick={() => onChange(p.code)}
-        >
-          {p.label}
         </button>
       ))}
     </div>

@@ -162,7 +162,7 @@ export function DefaultPanel({
       />
 
       <SelectField
-        label="Subscription"
+        label="Product group"
         helpText="What is being sold. It picks the journey; nothing else reads it yet."
         value={shown('subscription', context.subscription ?? '')}
         options={[

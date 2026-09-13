@@ -17,7 +17,6 @@ import { DefaultPanel } from './DefaultPanel'
 import { EditPanel } from './EditPanel'
 import { FlowPanel, FlowTabs } from './FlowPanel'
 import { DEVICE_LABEL } from '../rules/content'
-import { DEFAULT_PLATFORM, type Platform } from '../rules/platform'
 import { isHeroField } from '../rules/landing'
 import { FIELD_COMPONENT, SECTION_LABEL, sectionsOf } from '../rules/sections'
 import type { Section } from '../rules/pipeline'
@@ -26,7 +25,7 @@ import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
 import { Prototype } from './Prototype'
 import { SubscriptionSheet } from './SubscriptionSheet'
-import { DeviceSwitch, PlatformSwitch } from './ViewSwitches'
+import { DeviceSwitch } from './ViewSwitches'
 import type { Mode } from '../rules/pipeline'
 import { changeMap } from '../rules/pipeline'
 import { FieldMarks } from '../components/fieldMarks'
@@ -599,21 +598,10 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
               a row of phones and its walkthrough forces one, so neither of
               these would change anything there yet. */}
           {single && (
-            <>
-              <DeviceSwitch
-                device={store.set.device}
-                onChange={(device) => store.updateSet({ device })}
-              />
-              {/* Only a phone has two of them. A desktop is a browser and
-                  nothing else, so asking which build it is would be a question
-                  with one answer. */}
-              {store.set.device === 'mobile' && (
-                <PlatformSwitch
-                  platform={(store.context.platform as Platform) ?? DEFAULT_PLATFORM}
-                  onChange={(platform) => store.setContext({ ...store.context, platform })}
-                />
-              )}
-            </>
+            <DeviceSwitch
+              device={store.set.device}
+              onChange={(device) => store.updateSet({ device })}
+            />
           )}
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}

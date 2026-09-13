@@ -272,13 +272,6 @@ export interface Context {
    * answer to a question, and nothing derives from it yet.
    */
   pageView?: string
-  /**
-   * Which build the screen is being looked at in — see `platform.ts`.
-   *
-   * Optional for the same reason `pageView` is: it is the answer to a
-   * question, and nothing derives from it yet.
-   */
-  platform?: string
   campaign?: string
   /** Which storefront — `direct` or a partner code. */
   channel: string
