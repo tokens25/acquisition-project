@@ -1458,7 +1458,7 @@ export function LandingPageScreen({
  * rather than from its place in a run of JSX. The markup inside each case is
  * the markup that was there, down to the comments explaining the design.
  */
-function PageSectionView({
+export function PageSectionView({
   section,
   content,
   text,

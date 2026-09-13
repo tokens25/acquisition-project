@@ -3048,3 +3048,23 @@
   min-inline-size: 0;
   padding-inline: var(--space-24);
 }
+
+/* ── The drawn page answers the pointer ────────────────────────────────────
+   The screens are a drawing rather than a working page: nothing here submits
+   anything and nothing navigates. But a thing drawn as a button, a tab or a
+   link should say so when the pointer reaches it — an arrow over a Sign up
+   reads as a picture of a page, which is exactly the impression a preview is
+   trying not to give.
+
+   One rule rather than a line per component: `role="button"` is already on
+   everything the screens draw as a button, and the few controls that are not
+   buttons — the tabs, the navigation, the footer's links — are named after it. */
+.fl [role='button'],
+.fl-landing__nav-cta,
+.fl-landing__link,
+.fl-landing__search,
+.fl-landing__step,
+.fl-art__tab,
+.fl-foot__link {
+  cursor: pointer;
+}

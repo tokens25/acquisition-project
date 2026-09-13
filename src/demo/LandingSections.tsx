@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
+import { ComponentPeek } from './ComponentPeek'
 import { FieldGroup } from './FieldGroup'
+import { ChevronIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
 import { articleShot, featureArt, imageCtaArt } from '../components/flow/landingArt'
 import { TextField } from '../components/TextField'
-import { Toggle } from '../components/Toggle'
 import { ToggleField } from '../components/ToggleField'
 import {
   blankFeature,
@@ -19,9 +20,12 @@ import {
 } from '../rules/landing'
 import { resolveFlow, writeFlow } from '../rules/layers'
 import {
+  SECTION_BARS,
+  SECTION_CONTENTS,
   SECTION_LABEL,
   SECTION_TYPES,
   isFirst,
+  isOnceOnly,
   sectionsOf,
   withAdded,
   withDropped,
@@ -77,9 +81,30 @@ export function LandingSections({
 
   const [dragging, setDragging] = useState<string | null>(null)
   const [over, setOver] = useState<{ id: string; after: boolean } | null>(null)
+  /*
+   * Which row the pointer is on, and where that row is.
+   *
+   * Held for the list rather than by each row, because only one of them is
+   * ever previewed — the picture beside the panel costs one section, not
+   * twelve. Dropped while a drag is happening: a preview following the pointer
+   * through a reorder is in the way of the thing being reordered.
+   */
+  const [peek, setPeek] = useState<{ id: string; at: DOMRect } | null>(null)
+  const shown = !dragging && peek ? list.find((s) => s.id === peek.id) : undefined
+
+  const drawn = list.filter((section) => section.on).length
 
   return (
     <>
+      {/* What the list is, and how much of it the page draws. The count is the
+          one fact the rows cannot say between them: nine names is obvious, nine
+          names of which six are on is not. */}
+      <div className="ls-head">
+        <span className="ls-head__title">Components</span>
+        <span className="ls-head__count">
+          {drawn} on the page
+        </span>
+      </div>
       {list.map((section) => (
         <SectionCard
           key={section.id}
@@ -94,6 +119,7 @@ export function LandingSections({
             setDragging(null)
             setOver(null)
           }}
+          onPeek={(at) => setPeek(at ? { id: section.id, at } : null)}
           onOver={(after) => setOver({ id: section.id, after })}
           onLeave={() => setOver((o) => (o?.id === section.id ? null : o))}
           onDrop={(id, after) => {
@@ -107,6 +133,15 @@ export function LandingSections({
           onRemove={() => arrange(withRemoved(list, section.id))}
         />
       ))}
+      {shown && peek && (
+        <ComponentPeek
+          section={shown}
+          content={l}
+          set={set}
+          context={store.context}
+          anchor={peek.at}
+        />
+      )}
       <AddSection
         onAdd={(type) => arrange(withAdded(list, type))}
         missing={SECTION_TYPES.filter((type) => !list.some((s) => s.type === type))}
@@ -193,8 +228,10 @@ function FooterFields({ store, scope }: { store: CardSetStore; scope: Selector }
  * with the ones the page is not currently showing first — after a block is
  * deleted, putting it back is the likeliest reason anybody opens this.
  *
- * A kind can be added more than once. The second is a new block with its own
- * words, exactly as duplicating gives you.
+ * Most kinds can be added more than once — the second is a new block with its
+ * own words, exactly as duplicating gives you. The few the page can only carry
+ * one of are offered until it has one and then held, rather than taken off the
+ * list: a name that disappears reads as a thing that no longer exists.
  */
 function AddSection({
   onAdd,
@@ -205,6 +242,8 @@ function AddSection({
 }) {
   const [open, setOpen] = useState(false)
   const rest = SECTION_TYPES.filter((type) => !missing.includes(type))
+  /* On the page already, and of a kind the page can only have one of. */
+  const spent = rest.filter(isOnceOnly)
 
   return (
     <div className="ls-add">
@@ -219,13 +258,18 @@ function AddSection({
               type="button"
               className="ls-add__option"
               data-missing={missing.includes(type) || undefined}
+              disabled={spent.includes(type)}
+              title={
+                spent.includes(type)
+                  ? `The page has its ${SECTION_LABEL[type]}, and can only have one`
+                  : undefined
+              }
               onClick={() => {
                 onAdd(type)
                 setOpen(false)
               }}
             >
               {SECTION_LABEL[type]}
-              {!missing.includes(type) && <span className="ls-add__again">another</span>}
             </button>
           ))}
         </div>
@@ -242,6 +286,7 @@ function SectionCard({
   over,
   onDragStart,
   onDragEnd,
+  onPeek,
   onOver,
   onLeave,
   onDrop,
@@ -258,6 +303,8 @@ function SectionCard({
   over: { id: string; after: boolean } | null
   onDragStart: () => void
   onDragEnd: () => void
+  /** Hovered, with the row's own box — or left. */
+  onPeek: (at: DOMRect | null) => void
   onOver: (after: boolean) => void
   onLeave: () => void
   onDrop: (id: string, after: boolean) => void
@@ -297,6 +344,8 @@ function SectionCard({
   const key = (k: string) => (isFirst(section) ? k : undefined)
 
   const label = SECTION_LABEL[section.type]
+  /* A kind the page can only carry one of — so there is nothing to copy. */
+  const once = isOnceOnly(section.type)
 
   return (
     <div
@@ -340,60 +389,121 @@ function SectionCard({
         }
       }}
     >
+      {/* The row, and the fold under it. What a component is made of is on
+          the row itself — its shape, its fields, what can be done to it — so
+          the list can be read without opening anything. */}
       <FieldGroup
-        title={
-          <span className="ls-card__name">
-            <span className="ls-card__grip" aria-hidden="true" />
-            {label}
-            {!isFirst(section) && <span className="ls-card__copy">copy</span>}
-          </span>
-        }
-        aside={<Toggle active={section.on} onChange={onToggle} label={`Show ${label}`} />}
         defaultOpen={false}
+        head={({ open, toggle, id }) => (
+          <div
+            className="ls-row"
+            onMouseEnter={(e) => onPeek(e.currentTarget.getBoundingClientRect())}
+            onMouseLeave={() => onPeek(null)}
+          >
+            <span className="ls-row__grip" aria-hidden="true" />
+
+            {/* The block's proportions rather than a picture of it: a wide bar
+                is a full-width thing, a short one a heading or a button. */}
+            <span className="ls-row__tile" data-off={!section.on || undefined} aria-hidden="true">
+              {SECTION_BARS[section.type].map((width, i) => (
+                <span key={i} className="ls-row__bar" data-lead={i === 0 || undefined} style={{ inlineSize: `${width}%` }} />
+              ))}
+            </span>
+
+            <span className="ls-row__text">
+              <span className="ls-row__line">
+                <button
+                  type="button"
+                  className="ls-row__name"
+                  data-off={!section.on || undefined}
+                  aria-expanded={open}
+                  aria-controls={id}
+                  onClick={toggle}
+                >
+                  {label}
+                </button>
+                {once && <span className="ls-row__once">one only</span>}
+                {!isFirst(section) && <span className="ls-card__copy">copy</span>}
+              </span>
+              <span className="ls-row__made">{SECTION_CONTENTS[section.type]}</span>
+
+              {/* Arriving with the pointer, so the resting list is names and
+                  nothing else. On focus as well, or tabbing into a row would
+                  reach two words nobody can see. */}
+              <span className="ls-row__acts">
+                <button
+                  type="button"
+                  className="ls-row__act"
+                  disabled={once}
+                  title={once ? `The page can only have one ${label}` : `Add another ${label}`}
+                  onClick={onDuplicate}
+                >
+                  Duplicate
+                </button>
+                <button
+                  type="button"
+                  className="ls-row__act"
+                  data-destructive=""
+                  title={
+                    isFirst(section)
+                      ? `Take ${label} off the page — its words stay, and Add a component brings it back`
+                      : 'Delete this copy'
+                  }
+                  onClick={onRemove}
+                >
+                  Delete
+                </button>
+              </span>
+            </span>
+
+            <button
+              type="button"
+              className="ls-row__dot"
+              role="switch"
+              aria-checked={section.on}
+              title={section.on ? `Stop drawing ${label}` : `Draw ${label}`}
+              onClick={() => onToggle(!section.on)}
+            >
+              <span className="ls-row__dot-mark" aria-hidden="true" />
+            </button>
+
+            {/* A second way to the same fold, for the pointer. The name is the
+                one in the tab order; two controls saying the same thing would
+                be two stops for one action. */}
+            <span
+              className="ls-row__chev"
+              data-open={open || undefined}
+              aria-hidden="true"
+              onClick={toggle}
+            >
+              <ChevronIcon size={12} />
+            </span>
+          </div>
+        )}
       >
         {/* The same card the panel wraps a tab or a benefit in, so a component
             reads as one thing rather than a run of loose fields. */}
         <div className="demo__feature">
           <SectionFields section={section} t={t} inst={inst} write={write} keyOf={key} />
         </div>
-      </FieldGroup>
-      {/* Outside the fold, where Remove tabs sits under the tabs: what you do
-          to a component is available whether or not you are looking inside it. */}
-      <div className="ls-card__foot">
-        {/* At the other end from what you do to the component, because it is
-            not one of those things: it leaves this page for the screen that
-            owns the plans. */}
+        {/* Under the fields rather than beside them, because it is where the
+            rest of this component is edited rather than a thing done to it:
+            what the page owns is the heading above the picker, and everything
+            below it belongs to the Subscription screen. */}
         {onEditPlans && (
           <button
             type="button"
-            className="ls-card__away"
+            className="ls-away"
             title="Open the Subscription screen, where the tabs and the plan cards are edited"
             onClick={onEditPlans}
           >
             Edit subscription
+            <span className="ls-away__mark" aria-hidden="true">
+              →
+            </span>
           </button>
         )}
-        <button
-          type="button"
-          className="demo__feature-remove"
-          title={`Add another ${label}`}
-          onClick={onDuplicate}
-        >
-          Duplicate
-        </button>
-        <button
-          type="button"
-          className="demo__feature-remove"
-          title={
-            isFirst(section)
-              ? `Take ${label} off the page — its words stay, and Add a component brings it back`
-              : 'Delete this copy'
-          }
-          onClick={onRemove}
-        >
-          Delete
-        </button>
-      </div>
+      </FieldGroup>
     </div>
   )
 }

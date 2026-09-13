@@ -19,37 +19,54 @@ export function FieldGroup({
   aside,
   children,
   defaultOpen = true,
+  head,
 }: {
-  title: ReactNode
+  title?: ReactNode
   /** Sits at the right of the title — a chip, a count. */
   aside?: ReactNode
   children: ReactNode
   defaultOpen?: boolean
+  /**
+   * A header of the caller's own, in place of the title row.
+   *
+   * Some groups are a heading and a chevron; a landing component is a row with
+   * a grip, a shape, what it is made of and what can be done to it. What the
+   * two have in common is the fold, and the fold is the part worth not writing
+   * twice — so the header is handed what it needs to drive it and draws
+   * whatever it likes.
+   */
+  head?: (fold: { open: boolean; toggle: () => void; id: string }) => ReactNode
 }) {
   const [open, setOpen] = useState(defaultOpen)
   const [moving, setMoving] = useState(false)
   const id = useId()
 
+  const toggle = () => {
+    setMoving(true)
+    setOpen((v) => !v)
+  }
+
   return (
     <section className="fg" data-open={open || undefined}>
-      <div className="fg__head">
-        <button
-          type="button"
-          className="fg__toggle"
-          aria-expanded={open}
-          aria-controls={id}
-          onClick={() => {
-            setMoving(true)
-            setOpen((v) => !v)
-          }}
-        >
-          <span className="fg__chevron" aria-hidden="true">
-            <ChevronIcon size={12} />
-          </span>
-          <span className="fg__title">{title}</span>
-        </button>
-        {aside}
-      </div>
+      {head ? (
+        head({ open, toggle, id })
+      ) : (
+        <div className="fg__head">
+          <button
+            type="button"
+            className="fg__toggle"
+            aria-expanded={open}
+            aria-controls={id}
+            onClick={toggle}
+          >
+            <span className="fg__chevron" aria-hidden="true">
+              <ChevronIcon size={12} />
+            </span>
+            <span className="fg__title">{title}</span>
+          </button>
+          {aside}
+        </div>
+      )}
       <div
         className="fg__body"
         id={id}

@@ -45,6 +45,7 @@ const SCANNED = [
   'src/demo/DefaultPanel.tsx',
   'src/demo/EditPanel.tsx',
   'src/demo/LandingSections.tsx',
+  'src/demo/ComponentPeek.tsx',
   'src/demo/UserFlow.tsx',
   'src/demo/SourceTabs.tsx',
   'src/demo/IconPicker.tsx',

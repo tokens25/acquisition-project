@@ -1,0 +1,40 @@
+/* ── The component, beside the row that names it ───────────────────────────
+   Over everything and outside the panel's own scroll, because the panel is a
+   column 360 wide and this is a picture of a page. Fixed rather than absolute
+   for the same reason: it is placed against the row, not inside it. */
+
+.cpeek {
+  position: fixed;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.cpeek__frame {
+  overflow: hidden;
+  inline-size: 208px;
+  /* As much of the block as is worth seeing. Past this it is a long page in a
+     small box, and what it is is already obvious. */
+  max-block-size: 260px;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  /* The page's own ground, so the picture is of the block rather than of the
+     block on the panel. */
+  background: #060606;
+  box-shadow: 0 16px 40px rgb(0 0 0 / 55%);
+}
+
+/* The page at its own width, shrunk. Scaled rather than rebuilt at a smaller
+   size: a component laid out at 208 is a different component. */
+.cpeek__page {
+  transform-origin: 0 0;
+  /* Scaling leaves the box its full height, so the frame would reserve 375's
+     worth of room for something drawn at 208's. The height is taken back by
+     the wrapper's own clip. */
+  block-size: fit-content;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cpeek {
+    transition: none;
+  }
+}

@@ -122,6 +122,65 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   faqs: 'faq',
 }
 
+/**
+ * The blocks a page can only carry one of.
+ *
+ * Not a style rule. Each of these is the page's answer to a question it only
+ * asks once — what is on, what it costs, what happens if you are outside the
+ * area — and a page that answers one of them twice is a page that contradicts
+ * itself. Everything else is a block of words or pictures, and a page can have
+ * as many of those as it wants.
+ */
+export const ONCE_ONLY: SectionType[] = ['schedule', 'plans', 'area']
+
+export const isOnceOnly = (type: SectionType) => ONCE_ONLY.includes(type)
+
+/**
+ * What each block is made of, in one line.
+ *
+ * The panel lists the page as a run of names, and a name alone does not say
+ * whether "Text block" is a heading or four paragraphs. This is the fields
+ * `SectionFields` actually renders for that type, said as a reader would say
+ * them — so the list can be read without opening anything.
+ */
+export const SECTION_CONTENTS: Record<SectionType, string> = {
+  zip: 'Heading, note, field, button',
+  schedule: 'Heading — fixtures come from DAZN',
+  plans: 'Heading and a line under it',
+  teams: 'Eyebrow, heading, body',
+  area: 'Heading, notice, field, button',
+  multiview: 'Still, eyebrow, heading, button',
+  providers: 'Heading, six providers, button',
+  devices: 'Two headings and a body',
+  faq: 'Heading and five questions',
+  imageCta: 'Picture, heading, body, button',
+  features: 'Eyebrow, heading, rows, button',
+  supported: 'Heading, note, link',
+}
+
+/**
+ * The shape each block draws, as three bars.
+ *
+ * Not an illustration of the component — a reading of its proportions: a wide
+ * bar is a full-width thing, a short one is a heading or a button. Enough for
+ * the eye to find the block it is looking for before it has read the name.
+ * Percentages of the tile's own width.
+ */
+export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
+  zip: [80, 55, 100],
+  schedule: [70, 100, 100],
+  plans: [60, 45, 100],
+  teams: [40, 85, 100],
+  area: [75, 100, 60],
+  multiview: [100, 60, 45],
+  providers: [65, 100, 100],
+  devices: [90, 70, 50],
+  faq: [55, 100, 100],
+  imageCta: [100, 55, 45],
+  features: [45, 100, 100],
+  supported: [70, 100, 45],
+}
+
 /** The page as it ships, in the order node 708:173735 has it. */
 export const SHIPPED_ORDER: SectionType[] = [
   'zip',
