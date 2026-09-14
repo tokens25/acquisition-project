@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Context } from '../rules/content'
 import type { CardSetStore } from '../editor/useCardSet'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
-import { MARKETS, SUBSCRIPTIONS, journeys } from '../rules/journeys'
+import { MARKETS, journeys, subscriptionsFor } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
 
 /**
@@ -69,6 +69,19 @@ export function DefaultPanel({
   const asking = (key: string) => (asked(key) ? [{ value: '', label: 'Choose…' }] : [])
   /** Offered, and inert: adding a market is a job nothing here can do yet. */
   const ADD_MARKET = '__add__'
+
+  /**
+   * The product to carry into a market, given the one on screen.
+   *
+   * A market that does not sell what is selected cannot keep it selected:
+   * leaving MSG+ standing in the UK would show an answer the field below no
+   * longer offers, and name a journey nobody is on. The first product the
+   * market does sell takes its place.
+   */
+  const soldIn = (market: string, current?: string) => {
+    const sold = subscriptionsFor(market)
+    return current && sold.some((s) => s.code === current) ? current : sold[0]?.code
+  }
 
   const answer = (key: string) => {
     answeredThisVisit[key] = true
@@ -146,17 +159,21 @@ export function DefaultPanel({
         onChange={(v) => {
           if (!v || v === ADD_MARKET) return
           answer('market')
-          settle({ ...context, market: v }, status, entryCta)
+          settle(
+            { ...context, market: v, subscription: soldIn(v, context.subscription) },
+            status,
+            entryCta,
+          )
         }}
       />
 
       <SelectField
         label="Subscription"
-        helpText="What is being sold. It picks the journey; nothing else reads it yet."
+        helpText="What is being sold here. Narrowed by the market above — a product is only offered where it is sold. It picks the journey; nothing else reads it yet."
         value={shown('subscription', context.subscription ?? '')}
         options={[
           ...asking('subscription'),
-          ...SUBSCRIPTIONS.map((sub) => ({ value: sub.code, label: sub.label })),
+          ...subscriptionsFor(context.market).map((sub) => ({ value: sub.code, label: sub.label })),
         ]}
         onChange={(v) => {
           if (!v) return

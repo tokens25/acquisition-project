@@ -352,7 +352,7 @@ export interface CardSet {
    * Copy that differs by situation — market, subscription, user status, entry
    * point — as sparse layers over `flow`.
    *
-   * Layers rather than a copy of `flow` per situation: there are 240 of them,
+   * Layers rather than a copy of `flow` per situation: there are 186 of them,
    * and a fix to a shared line has to reach every one that has not deliberately
    * said otherwise. A layer holds only the fields it changes.
    */

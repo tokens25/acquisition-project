@@ -795,9 +795,15 @@ if (import.meta.env.DEV) {
 /* ────────────────────────────────────────────────────────────────────────
    Every situation, each with its own copy of the flow.
 
-   The four questions on the front door multiply out to two hundred and forty
-   situations, and each one gets a journey of its own carrying the same eight
-   steps the MSG+ journey above carries. They are copies today and that is the
+   The four questions on the front door multiply out to a hundred and
+   eighty-six situations — each market times the products it actually sells,
+   times the states and the entry points — and each one gets a journey of its
+   own carrying the same eight steps the MSG+ journey above carries.
+
+   A market that does not sell a product has no journey for it. That is the
+   same refusal the partner storefronts make: a situation nobody can reach is
+   not a gap to fill, and a journey standing in one would be drawn, validated
+   and reviewed on behalf of nobody. They are copies today and that is the
    point: the structure is expected to diverge market by market and state by
    state, and a journey that shares its steps with another cannot diverge
    without dragging that one with it.
@@ -826,13 +832,40 @@ export const MARKETS = [
   { code: 'NHL', label: 'NHL' },
 ] as const
 
-/** What is being sold. */
-export const SUBSCRIPTIONS = [
+/**
+ * What is being sold, and where.
+ *
+ * `markets` omitted means everywhere, exactly as it does on a partner
+ * storefront: most products are sold in every country the front door offers,
+ * and the ones that are not name their own. MSG+ carries New York regional
+ * rights, so it is sold in the US and nowhere else — a fact about the product,
+ * which is why it is written on the product rather than enforced by whichever
+ * screen happens to be listing it.
+ */
+export interface SubscriptionConfig {
+  code: string
+  label: string
+  /** Markets this product is sold in. Omitted means everywhere. */
+  markets?: readonly string[]
+}
+
+export const SUBSCRIPTIONS: readonly SubscriptionConfig[] = [
   { code: 'dazn', label: 'DAZN subscription' },
-  { code: 'msg', label: 'MSG+' },
+  { code: 'msg', label: 'MSG+', markets: ['US'] },
   { code: 'nfl', label: 'NFL' },
   { code: 'nhl', label: 'NHL' },
-] as const
+]
+
+/**
+ * The products a market sells.
+ *
+ * The base — every market at once — sees the whole list, because what is
+ * written there reaches the US along with everywhere else.
+ */
+export function subscriptionsFor(market: string): readonly SubscriptionConfig[] {
+  if (market === '*') return SUBSCRIPTIONS
+  return SUBSCRIPTIONS.filter((s) => !s.markets || s.markets.includes(market))
+}
 
 /** Who is at the door. */
 export const STATUSES = ['logged-out-new', 'logged-out-existing'] as const
@@ -843,7 +876,7 @@ export const ENTRIES = ['Landing page', 'CRM', 'Catalog'] as const
 const slug = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
 export const journeys: Journey[] = MARKETS.flatMap((market) =>
-  SUBSCRIPTIONS.flatMap((subscription) =>
+  subscriptionsFor(market.code).flatMap((subscription) =>
     STATUSES.flatMap((audience) =>
       ENTRIES.map(
         (cta): Journey => ({
