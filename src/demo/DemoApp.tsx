@@ -24,6 +24,7 @@ import { UserFlow } from './UserFlow'
 import { iconArtwork } from '../card/assets'
 import { JourneyFrames } from './JourneyFrames'
 import { Prototype } from './Prototype'
+import { ShareSheet } from './ShareSheet'
 import { SubscriptionSheet } from './SubscriptionSheet'
 import { DeviceSwitch } from './ViewSwitches'
 import type { Mode } from '../rules/pipeline'
@@ -79,6 +80,39 @@ const marketScope = (set: CardSet) => {
   return (ladder.find((r) => isMarketCopy(r.when)) ?? ladder[0])?.when ?? {}
 }
 
+
+/**
+ * Text into the clipboard, by whichever route the browser allows.
+ *
+ * The asynchronous API is the one to want and the one most likely to be
+ * refused — it needs a secure context, a focused document and the browser's
+ * permission, and an automated or background window has none of those. The
+ * old select-and-copy still works in some of those cases, so it is tried
+ * second rather than not at all.
+ */
+async function copied(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    // Fall through to the older way.
+  }
+  const held = document.createElement('textarea')
+  held.value = text
+  held.setAttribute('readonly', '')
+  held.style.cssText = 'position:fixed;inset-block-start:-9999px;opacity:0'
+  document.body.appendChild(held)
+  held.select()
+  let done = false
+  try {
+    done = document.execCommand('copy')
+  } catch {
+    done = false
+  }
+  held.remove()
+  return done
+}
+
 export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const store = useCardSet()
   /*
@@ -104,6 +138,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const editing = single || stepOpen
   const setEditing = setStepOpen
   const [prototype, setPrototype] = useState(false)
+  const [sharing, setSharing] = useState(false)
   /** Which half of the landing page Dev is reading. */
   const [devTab, setDevTab] = useState<'page' | 'hero'>('page')
 
@@ -364,6 +399,34 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     return () => window.removeEventListener('keydown', onKey)
   })
 
+  /**
+   * A link to what is on screen, in the clipboard.
+   *
+   * The situation rides in the address rather than the link being to the tool:
+   * the market, the product and the buyer are what make a page the page you
+   * were looking at, and they live in the set rather than the URL — so they
+   * are written into it here.
+   *
+   * The clipboard can be refused: a page served without a secure context has
+   * no `navigator.clipboard` at all, and a browser can deny the permission.
+   * Either way the link is worth showing rather than swallowing.
+   */
+  const linkTo = (extra?: Record<string, string>) => {
+    const at = new URL(window.location.href)
+    at.searchParams.set('market', store.context.market)
+    if (store.context.subscription) at.searchParams.set('product', store.context.subscription)
+    if (store.context.pageView) at.searchParams.set('view', store.context.pageView)
+    for (const [k, v] of Object.entries(extra ?? {})) at.searchParams.set(k, v)
+    return at.toString()
+  }
+
+  const handOver = async (link: string) => {
+    if (await copied(link)) return
+    // Nothing took it, so the link is put where it can at least be read and
+    // copied by hand. Better than a button that reports success it did not have.
+    window.prompt('Copy this link', link)
+  }
+
   const openStep = (id: string) => {
     store.updateSet({ stepId: id })
     setEditing(true)
@@ -475,17 +538,19 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     </div>
   ) : (
     <div className="demo__actions">
-      {/* Icon only. The label is carried by the tooltip and the accessible
-          name instead, so the toolbar reads as controls rather than as a
-          sentence competing with the gate to its left. */}
+      {/* The address of what is on screen, for somebody else to open. It is
+          the situation as well as the page — the market, the product, the
+          buyer — so what they open is what you were looking at rather than
+          the tool's front door. */}
       <Button
-        appearance="tertiary"
+        appearance="secondary"
         size="md"
-        iconBefore={<Icon svg={iconArtwork.download} size={16} />}
-        aria-label="Export JSON"
-        title="Export JSON — downloads the content as this app stores it, not yet the shape the rule engine reads."
-        onClick={store.exportJson}
-      />
+        iconBefore={<Icon svg={iconArtwork.upload} size={16} />}
+        title="Who can open this page, and the ways to hand it to them"
+        onClick={() => setSharing(true)}
+      >
+        Share
+      </Button>
 
       <Button
         appearance="secondary"
@@ -851,6 +916,17 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
           </aside>
         )}
       </div>
+
+      {/* Who may open this page, and the ways to hand it to them. */}
+      <ShareSheet
+        open={sharing}
+        what={`${DEVICE_LABEL[store.set.device]} · ${single ? 'Landing page' : (step?.shortName ?? step?.name ?? 'Journey')}`}
+        onClose={() => setSharing(false)}
+        onCopyLink={() => void handOver(linkTo())}
+        onCopyDevLink={() => void handOver(linkTo({ mode: 'dev' }))}
+        onCopyPrototypeLink={() => void handOver(linkTo({ walk: '1' }))}
+        onExport={store.exportJson}
+      />
 
       {/* The Subscription screen's own editor, over the page that draws it.
           Outside the panel that offers it, because the panel is a column and
