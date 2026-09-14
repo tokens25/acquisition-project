@@ -3,7 +3,7 @@
    them. They are different questions and the gap between them says so. */
 
 .shr {
-  inline-size: min(560px, 92vw);
+  inline-size: min(520px, 92vw);
   max-inline-size: none;
   padding: 0;
   border: 0;
@@ -24,7 +24,6 @@
 .shr__sheet {
   display: flex;
   flex-direction: column;
-  gap: var(--space-12);
 }
 
 .shr__card {
@@ -34,12 +33,14 @@
   background: var(--color-surface-container-2);
   box-shadow: 0 24px 60px rgb(0 0 0 / 55%);
 }
-/* The ways to hand it over are a list of one-line actions, so the card is
-   tighter than the one above it. */
-.shr__card--acts {
+/* The three ways to hand it over, under a hairline at the foot of the card. */
+.shr__acts {
   display: flex;
-  flex-direction: column;
-  padding: var(--space-8);
+  gap: var(--space-6);
+  align-items: center;
+  margin-block-start: var(--space-20);
+  padding-block-start: var(--space-16);
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
 }
 
 .shr__head {
@@ -53,30 +54,34 @@
   min-inline-size: 0;
   margin: 0;
   overflow: hidden;
-  font-size: var(--font-size-heading-h6);
+  font-size: 22px;
   font-weight: var(--font-weight-bold);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-/* The link itself, at the top where the thing being shared is named. */
+/* The link itself, at the top where the thing being shared is named. The quiet
+   pill the component cards use for Edit subscription, not the brand's yellow:
+   yellow is the tool's accent for the act that matters, and this is not it. */
 .shr__link {
   display: inline-flex;
   flex: none;
   gap: var(--space-6);
   align-items: center;
-  padding: var(--space-6) var(--space-8);
+  block-size: var(--bar-control, 28px);
+  padding-inline: var(--space-10);
   border: 0;
   border-radius: var(--radius-8);
-  background: none;
-  color: var(--color-brand-primary);
+  background: var(--color-surface-container-5);
+  color: var(--color-text-primary);
   font: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: var(--font-weight-bold);
+  white-space: nowrap;
   cursor: pointer;
   transition: background 120ms ease;
 }
 .shr__link:hover {
-  background: var(--color-surface-container-3);
+  background: var(--color-surface-container-4);
 }
 .shr__close {
   display: grid;
@@ -117,7 +122,7 @@
   min-inline-size: 0;
   min-block-size: var(--space-48);
   padding: var(--space-6) var(--space-8);
-  border: var(--border-1) solid var(--color-border-full-color-strong);
+  border: var(--border-1) solid var(--color-text-tertiary);
   border-radius: var(--radius-8);
   background: var(--color-surface-default);
   color: var(--color-text-primary);
@@ -220,6 +225,36 @@
   color: var(--color-text-secondary);
 }
 /* The one that is you, in the brand's own colour rather than the furniture's. */
+/* Four of them, overlapping, each ringed in the card's own surface so the
+   stack reads as a stack rather than as one wide shape. */
+.shr__faces {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+.shr__tiny {
+  display: grid;
+  place-items: center;
+  inline-size: 28px;
+  block-size: 28px;
+  border: 2px solid var(--color-surface-container-2);
+  border-radius: var(--radius-full);
+  color: #fff;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+}
+.shr__tiny + .shr__tiny {
+  margin-inline-start: -10px;
+}
+
+/* 3 — one affordance per behaviour: this one goes somewhere. */
+.shr__go {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--color-text-tertiary);
+}
+
 .shr__mark[data-you] {
   background: var(--color-accent-error-surface);
   color: var(--color-text-primary);
@@ -242,24 +277,28 @@
   font-size: 14px;
 }
 
+/* An outlined chip rather than a row: a small act, drawn small. */
 .shr__act {
-  display: flex;
-  gap: var(--space-12);
+  display: inline-flex;
+  gap: var(--space-6);
   align-items: center;
-  inline-size: 100%;
-  padding: var(--space-12);
-  border: 0;
+  block-size: 32px;
+  padding-inline: var(--space-10);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-8);
   background: none;
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   font: inherit;
-  font-size: 14px;
-  text-align: start;
+  font-size: 12.5px;
+  white-space: nowrap;
   cursor: pointer;
-  transition: background 120ms ease;
+  transition:
+    border-color 120ms ease,
+    color 120ms ease;
 }
 .shr__act:hover {
-  background: var(--color-surface-container-3);
+  border-color: var(--color-text-tertiary);
+  color: var(--color-text-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -308,7 +347,7 @@
   inline-size: 100%;
   block-size: var(--space-48);
   padding-inline: var(--space-12);
-  border: var(--border-1) solid var(--color-border-full-color-strong);
+  border: var(--border-1) solid var(--color-text-tertiary);
   border-radius: var(--radius-8);
   background: none;
   color: var(--color-text-primary);

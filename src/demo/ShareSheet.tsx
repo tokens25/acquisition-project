@@ -311,15 +311,14 @@ export function ShareSheet({
                 <LevelMenu level={asked} onPick={setAsked} />
               )}
             </div>
+            {/* Drawn only when there is somebody to invite. A primary button
+                disabled most of the time is a loud reminder of an act you
+                cannot perform. */}
+            {anyone && (
             <button
               type="button"
               className="shr__ask"
-              disabled={!anyone}
-              title={
-                anyone
-                  ? 'Add them to the file'
-                  : 'Nobody to invite yet — type an address or a name'
-              }
+              title="Add them to the file"
               onClick={() => {
                 const all = invite.trim() === '' ? guests : [...guests, invite.trim()]
                 setPeople((was) => [
@@ -338,6 +337,7 @@ export function ShareSheet({
             >
               Invite
             </button>
+            )}
           </div>
 
           <p className="shr__who">Who has access</p>
@@ -350,46 +350,51 @@ export function ShareSheet({
                 <span className="shr__name">Anyone in DAZN</span>
                 <span className="shr__level">
                   can {access}
-                  <ChevronIcon size={12} direction="right" />
+                  <span className="shr__go" aria-hidden="true">
+                    <ChevronIcon size={12} direction="right" />
+                  </span>
                 </span>
               </button>
             </li>
             <li>
               <button type="button" className="shr__row" onClick={() => setView('people')}>
-                <span className="shr__mark" data-you="" aria-hidden="true">
-                  {ACCOUNT.name.slice(0, 1)}
+                {/* The people themselves, rather than a word standing where a
+                    level goes: four faces and a count say who is in the file. */}
+                <span className="shr__faces" aria-hidden="true">
+                  {people.slice(0, 4).map((one) => (
+                    <span className="shr__tiny" key={one.name} style={{ background: one.tint }}>
+                      {one.name.slice(0, 1)}
+                    </span>
+                  ))}
                 </span>
                 <span className="shr__name">
                   {ACCOUNT.name}
                   {people.length > 1 && ` and ${people.length - 1} others`}
                 </span>
-                <span className="shr__level">
-                  can access
+                <span className="shr__go" aria-hidden="true">
                   <ChevronIcon size={12} direction="right" />
                 </span>
               </button>
             </li>
           </ul>
-        </div>
 
-        {/* The ways to hand it over, under the question of who may have it. */}
-        <div className="shr__card shr__card--acts">
-          <button type="button" className="shr__act" onClick={did('dev', onCopyDevLink)}>
-            <CodeIcon size={14} />
-            {copied === 'dev' ? 'Copied' : 'Copy Dev Mode link'}
-          </button>
-          <button
-            type="button"
-            className="shr__act"
-            onClick={did('proto', onCopyPrototypeLink)}
-          >
-            <PlayIcon />
-            {copied === 'proto' ? 'Copied' : 'Copy prototype link'}
-          </button>
-          <button type="button" className="shr__act" onClick={onExport}>
-            <BraceIcon />
-            Export JSON
-          </button>
+          {/* The ways to hand it over: one row of chips under a hairline
+              rather than a card of their own. Three small acts, and a card
+              gave them the weight of the question above them. */}
+          <div className="shr__acts">
+            <button type="button" className="shr__act" onClick={did('dev', onCopyDevLink)}>
+              <CodeIcon size={13} />
+              {copied === 'dev' ? 'Copied' : 'Copy Dev Mode link'}
+            </button>
+            <button type="button" className="shr__act" onClick={did('proto', onCopyPrototypeLink)}>
+              <PlayIcon />
+              {copied === 'proto' ? 'Copied' : 'Copy prototype link'}
+            </button>
+            <button type="button" className="shr__act" onClick={onExport}>
+              <BraceIcon />
+              Export JSON
+            </button>
+          </div>
         </div>
         </>
         )}
