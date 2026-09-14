@@ -71,9 +71,11 @@ export function TextField({
   // What this market reads here, when it does not read the base.
   const translation = useTranslationMark(pipelineKey)
 
-  // A multiline field is as tall as its text and never shorter than two
-  // lines — `rows` says how much a screen expects, not how much empty box to
-  // draw. Set to auto first so it can shrink back when text is deleted.
+  // A multiline field is as tall as its text and no taller. `rows` says how
+  // much a screen expects of the writer, not how much empty box to draw, so it
+  // decides nothing here: the shell's own height is the resting size and the
+  // text grows it from there. Set to auto first so it shrinks back when text
+  // is deleted.
   const area = useRef<HTMLTextAreaElement>(null)
   useEffect(() => {
     const el = area.current
@@ -109,7 +111,7 @@ export function TextField({
             {label}
           </label>
           {rows ? (
-            <textarea {...shared} rows={Math.min(rows, 2)} ref={area} />
+            <textarea {...shared} rows={1} ref={area} />
           ) : (
             <input {...shared} type={type} step={step} min={min} max={max} />
           )}

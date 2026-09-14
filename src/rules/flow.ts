@@ -228,6 +228,20 @@ export interface LandingFeature {
 }
 
 /** One question in the landing page's FAQ. */
+/**
+ * One game on the schedule, named by its id.
+ *
+ * What a market chooses here is *which* games, not what they say: the stamp,
+ * the teams and the competition all come from whatever is on air, so the only
+ * thing there is to write down is the id to fetch. Everything the preview
+ * draws against one is a placeholder standing in for that fetch.
+ */
+export interface LandingGame {
+  id: string
+  /** The fixture's id in whatever serves the schedule. */
+  gameId: string
+}
+
 export interface LandingQuestion {
   id: string
   question: string
@@ -307,6 +321,8 @@ export interface LandingScreen {
 
   /** The heading over the fixtures DAZN is showing. */
   scheduleHeading?: string
+  scheduleSubheading?: string
+  scheduleGames?: LandingGame[]
 
   /**
    * Over the plan picker. The design breaks the heading itself rather than
@@ -568,6 +584,14 @@ export const defaultFlow: FlowContent = {
     zipCta: 'Sign Up',
 
     scheduleHeading: 'Live and Upcoming Games Schedule',
+    scheduleSubheading: 'Every game, live and on demand',
+    /* The three the design draws, by the ids the schedule knows them as. */
+    scheduleGames: [
+      { id: 'game-1', gameId: 'nba-2026-09-14-nyk-sas' },
+      { id: 'game-2', gameId: 'nhl-2026-09-14-buf-pit' },
+      { id: 'game-3', gameId: 'nba-2026-09-15-bkn-mia' },
+      { id: 'game-4', gameId: 'nhl-2026-09-15-nyr-njd' },
+    ],
 
     plansTitle: "Choose the plan that's\nright for you",
     plansBody: 'The best of NY sports, streaming all in one place.',

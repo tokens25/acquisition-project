@@ -1,4 +1,5 @@
 import { SelectField } from '../components/SelectField'
+import { TrashIcon } from './pipeline/icons'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
@@ -341,6 +342,8 @@ function FlowFields({
                 {/* A card can go, as long as one is left to choose. */}
                 {c.options.length > 1 && (
                   <button
+                    data-icon="trash"
+                    aria-label="Remove"
                     type="button"
                     className="demo__feature-remove"
                     onClick={() =>
@@ -353,7 +356,7 @@ function FlowFields({
                       })
                     }
                   >
-                    Remove
+                    <TrashIcon size={14} />
                   </button>
                 )}
               </div>
@@ -626,13 +629,15 @@ function FlowFields({
                   }
                 />
                 <button
+                  data-icon="trash"
+                  aria-label="Remove"
                   type="button"
                   className="demo__feature-remove"
                   onClick={() =>
                     patch('account', { consents: all.filter((_, j) => j !== i) })
                   }
                 >
-                  Remove
+                  <TrashIcon size={14} />
                 </button>
               </div>
             )
@@ -798,13 +803,15 @@ function FlowFields({
                 {/* A summary with nothing in it is not a summary. */}
                 {all.length > 1 && (
                   <button
+                    data-icon="trash"
+                    aria-label="Remove"
                     type="button"
                     className="demo__feature-remove"
                     onClick={() =>
                       patch('checkout', { lines: all.filter((_, j) => j !== i) })
                     }
                   >
-                    Remove
+                    <TrashIcon size={14} />
                   </button>
                 )}
               </div>
@@ -873,6 +880,8 @@ function FlowFields({
                 />
                 {all.length > 1 && (
                   <button
+                    data-icon="trash"
+                    aria-label="Remove"
                     type="button"
                     className="demo__feature-remove"
                     onClick={() =>
@@ -885,7 +894,7 @@ function FlowFields({
                       })
                     }
                   >
-                    Remove
+                    <TrashIcon size={14} />
                   </button>
                 )}
               </div>

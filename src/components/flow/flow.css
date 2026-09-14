@@ -2387,6 +2387,17 @@
   line-height: 1.25;
   text-overflow: ellipsis;
 }
+/* The line under the heading, in the words a market writes. Its own size
+   rather than the heading's: it is a caption for the row, not a second
+   heading over it. */
+.fl-page__schedule-sub {
+  margin: 0;
+  inline-size: 343px;
+  color: var(--text-subtle, #b3b9bb);
+  font-size: var(--font-size-button-md);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.45;
+}
 .fl-page__schedule-row {
   display: flex;
   gap: var(--space-16);

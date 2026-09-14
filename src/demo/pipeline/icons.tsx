@@ -44,6 +44,19 @@ export const CopyIcon = ({ size = 12 }: { size?: number }) => (
   </svg>
 )
 
+/**
+ * Throwing a thing away. Used wherever a row offers to be rid of itself — the
+ * word said it before, and a column of the same word down the side of a panel
+ * is a column of noise rather than a set of controls.
+ */
+export const TrashIcon = ({ size = 12 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" {...base} strokeWidth={1.6}>
+    <path d="M2.5 4.5h11M6.5 4.5V3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1.5" />
+    <path d="M4 4.5 4.6 13a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9L12 4.5" />
+    <path d="M6.6 7v4M9.4 7v4" />
+  </svg>
+)
+
 export const UndoIcon = ({ size = 12 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 16 16" {...base} strokeWidth={1.6}>
     <path d="M6 4 3 7l3 3" />

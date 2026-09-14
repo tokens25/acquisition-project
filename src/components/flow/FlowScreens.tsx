@@ -9,6 +9,7 @@ import { useImageRatio } from './useImageRatio'
 import type { HeroBanner } from '../../rules/landing'
 import {
   featuresOf,
+  gamesOf,
   heroOf,
   landingText,
   linksOf,
@@ -91,6 +92,7 @@ import checkCircleFilled from '../../assets/flow/ready/check-circle-filled.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type { Device, MarketConfig, PlanTab } from '../../rules/content'
+import type { LandingGame } from '../../rules/flow'
 import { statedMoney } from '../../rules/money'
 import type {
   AccountScreen,
@@ -1085,9 +1087,14 @@ export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
 
 
 /* ── Live and upcoming games — node 731:27543 ────────────────
-   The schedule DAZN is showing, not copy a market writes: the fixtures, their
-   times and their scrub positions come from what is on air. It is drawn as the
-   design draws it and there is nothing here to edit. */
+   Which games are on the schedule is a market's choice; what they say is not.
+   A market writes down the ids it wants and the schedule supplies the rest —
+   the stamp, the teams, the competition, how far a part-watched game has run.
+
+   There is nothing here to fetch that from, so every id is drawn against a
+   placeholder: the same id always draws the same card, so the page reads as a
+   real schedule rather than as one fixture three times, and none of it
+   pretends to be a real kickoff. */
 
 /** One fixture's picture layers, timestamp, and what sits over them. */
 const FIXTURES = [
@@ -1121,16 +1128,40 @@ const FIXTURES = [
   },
 ] as const
 
-function ScheduleSection({ heading }: { heading: string }) {
+/**
+ * The placeholder a game is drawn against.
+ *
+ * By its place in the list rather than by its id. There is nothing here to
+ * fetch a fixture from, so an id cannot be translated into a real one — and
+ * pretending otherwise by hashing it only meant two ids could land on the same
+ * card and a schedule could draw the same game twice. Dealt out in order, four
+ * games are four different cards, which is what a schedule looks like.
+ */
+function fixtureFor(at: number) {
+  return FIXTURES[at % FIXTURES.length]
+}
+
+function ScheduleSection({
+  heading,
+  subheading,
+  games,
+}: {
+  heading: string
+  subheading: string
+  games: LandingGame[]
+}) {
   return (
     <section className="fl-page__schedule">
       {/* The heading's own band, which fades to the page colour at both ends. */}
       <div className="fl-page__schedule-head">
         <p className="fl-page__schedule-title">{heading}</p>
+        {subheading.trim() !== '' && <p className="fl-page__schedule-sub">{subheading}</p>}
       </div>
       <div className="fl-page__schedule-row">
-        {FIXTURES.map((fixture) => (
-          <article className="fl-fixture" key={fixture.id}>
+        {games.map((game, at) => {
+          const fixture = fixtureFor(at)
+          return (
+          <article className="fl-fixture" key={game.id}>
             <div className="fl-fixture__preview">
               <span className="fl-fixture__art" aria-hidden="true">
                 {fixture.art.map((src, i) => (
@@ -1166,7 +1197,8 @@ function ScheduleSection({ heading }: { heading: string }) {
               )}
             </div>
           </article>
-        ))}
+          )
+        })}
       </div>
     </section>
   )
@@ -1496,7 +1528,13 @@ export function PageSectionView({
       )
 
     case 'schedule':
-      return <ScheduleSection heading={text.scheduleHeading} />
+      return (
+        <ScheduleSection
+          heading={text.scheduleHeading}
+          subheading={text.scheduleSubheading}
+          games={gamesOf(content)}
+        />
+      )
 
     /* node 708:173855 — the heading and the picker are one section, 32
        apart, with the section's own 56 above and 40 below. */

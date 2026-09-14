@@ -162,7 +162,7 @@
       'postcode edit glyph': [43,18,4,4], 'postcode button': [50,16,26,8],
       'page plan picker': [0,28,80,34],
       'schedule block': [0,26,80,32], 'schedule heading band': [0,26,80,10],
-      'schedule heading': [4,28,60,6], 'schedule row': [0,38,80,20],
+      'schedule heading': [4,28,60,5], 'schedule subheading': [4,34,54,3], 'schedule row': [0,38,80,20],
       'fixture': [4,38,34,20], 'fixture picture': [4,38,34,12],
       'fixture artwork': [4,38,34,12], 'fixture timestamp': [5,39,10,3],
       'fixture reminder': [33,39,4,4], 'fixture playback': [4,46,34,4],

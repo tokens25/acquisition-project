@@ -259,6 +259,7 @@
       ["schedule block", ".fl-page__schedule", "The fixtures DAZN is showing — node 731:27543. Two bands rather than one section: the heading’s own, and the row under it. The design draws them as two frames, the second starting at 130, which is exactly where the first ends — so they stack with nothing between.", 'flowLandingPage'],
       ["schedule heading band", ".fl-page__schedule-head", "The heading’s band, fading to the page colour at its top and bottom rather than sitting flat on it.", 'flowLandingPage'],
       ["schedule heading", ".fl-page__schedule-title", "\"Live and Upcoming Games Schedule\", at 26 over 1.25 across 343.", 'flowLandingPage'],
+      ["schedule subheading", ".fl-page__schedule-sub", "The line under the schedule’s heading, in the words a market writes. Empty draws none.", 'flowLandingPage'],
       ["schedule row", ".fl-page__schedule-row", "The fixtures, 16 apart, scrolling sideways. What is in it is what is on air, not anything written here.", 'flowLandingPage'],
       ["fixture", ".fl-fixture", "One fixture, 300 wide, its picture 12 above its words.", 'flowLandingPage'],
       ["fixture picture", ".fl-fixture__preview", "The picture, on the design’s own 316 by 177.5 rather than 16:9.", 'flowLandingPage'],

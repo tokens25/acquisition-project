@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 
+import { TrashIcon } from './pipeline/icons'
 import { SelectField } from '../components/SelectField'
 import { SourceTabs } from './SourceTabs'
 import { TextField } from '../components/TextField'
@@ -149,11 +150,13 @@ export function HeroBannerFields({
                   Replace
                 </button>
                 <button
+                  data-icon="trash"
+                  aria-label="Remove"
                   type="button"
                   className="hb-image__act"
                   onClick={() => patch({ heroImage: '' })}
                 >
-                  Remove
+                  <TrashIcon size={14} />
                 </button>
               </div>
             </>

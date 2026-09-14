@@ -2,17 +2,19 @@ import { useState } from 'react'
 
 import { ComponentPeek } from './ComponentPeek'
 import { FieldGroup } from './FieldGroup'
-import { ChevronIcon } from './pipeline/icons'
+import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
 import { articleShot, featureArt, imageCtaArt } from '../components/flow/landingArt'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import {
   blankFeature,
+  blankGame,
   blankLink,
   blankProvider,
   blankQuestion,
   featuresOf,
+  gamesOf,
   landingText,
   linksOf,
   providersOf,
@@ -193,12 +195,14 @@ function FooterFields({ store, scope }: { store: CardSetStore; scope: Selector }
               />
             )}
             <button
+              data-icon="trash"
+              aria-label="Remove"
               type="button"
               className="demo__feature-remove"
               title={`Remove ${link.label || 'this link'}`}
               onClick={() => write({ footerLinks: links.filter((_, j) => j !== i) })}
             >
-              Remove
+              <TrashIcon size={14} />
             </button>
           </div>
         ))}
@@ -399,6 +403,15 @@ function SectionCard({
             className="ls-row"
             onMouseEnter={(e) => onPeek(e.currentTarget.getBoundingClientRect())}
             onMouseLeave={() => onPeek(null)}
+            /* The whole row opens it, not only its name. The row lights up
+               under the pointer, and a thing that lights up and does nothing is
+               a thing that looks broken — everything between the grip and the
+               chevron was arrow-and-nothing. The controls inside it keep their
+               own clicks: a press that lands on one of them is that one's. */
+            onClick={(e) => {
+              if ((e.target as HTMLElement).closest('button')) return
+              toggle()
+            }}
           >
             <span className="ls-row__grip" aria-hidden="true" />
 
@@ -432,15 +445,19 @@ function SectionCard({
                   reach two words nobody can see. */}
               <span className="ls-row__acts">
                 <button
+                  data-icon="copy"
+                  aria-label="Duplicate"
                   type="button"
                   className="ls-row__act"
                   disabled={once}
                   title={once ? `The page can only have one ${label}` : `Add another ${label}`}
                   onClick={onDuplicate}
                 >
-                  Duplicate
+                  <CopyIcon size={14} />
                 </button>
                 <button
+                  data-icon="trash"
+                  aria-label="Delete"
                   type="button"
                   className="ls-row__act"
                   data-destructive=""
@@ -451,7 +468,7 @@ function SectionCard({
                   }
                   onClick={onRemove}
                 >
-                  Delete
+                  <TrashIcon size={14} />
                 </button>
               </span>
             </span>
@@ -476,7 +493,7 @@ function SectionCard({
               aria-hidden="true"
               onClick={toggle}
             >
-              <ChevronIcon size={12} />
+              <ChevronIcon size={14} />
             </span>
           </div>
         )}
@@ -543,8 +560,48 @@ function SectionFields({
     case 'schedule':
       return (
         <>
-
-              <TextField label="Heading" value={t.scheduleHeading} pipelineKey={key('landing.scheduleHeading')} onChange={(v) => write({ scheduleHeading: v })} rows={2} helpText="The fixtures under it are what DAZN is showing, not something written here." />
+              <TextField label="Heading" value={t.scheduleHeading} pipelineKey={key('landing.scheduleHeading')} onChange={(v) => write({ scheduleHeading: v })} rows={2} helpText="The design breaks this line itself — a new line here is the break." />
+              <TextField label="Under the heading" value={t.scheduleSubheading} pipelineKey={key('landing.scheduleSubheading')} onChange={(v) => write({ scheduleSubheading: v })} rows={2} helpText="Empty draws none." />
+              {/* Which games, not what they say: the stamp, the teams and the
+                  competition come from the schedule. What is drawn against an
+                  id here is a placeholder standing in for that. */}
+              {gamesOf(inst).map((one, i) => {
+                const all = gamesOf(inst)
+                return (
+                  <div className="demo__feature" key={one.id}>
+                    <TextField
+                      label={`Game ${i + 1}`}
+                      value={one.gameId}
+                      pipelineKey={key(`landing.scheduleGames[${i}].gameId`)}
+                      onChange={(v) =>
+                        write({
+                          scheduleGames: all.map((g, j) => (j === i ? { ...g, gameId: v } : g)),
+                        })
+                      }
+                      helpText="The fixture's id in the schedule."
+                    />
+                    <button
+                      data-icon="trash"
+                      aria-label="Remove"
+                      type="button"
+                      className="demo__feature-remove"
+                      data-destructive=""
+                      onClick={() => write({ scheduleGames: all.filter((_, j) => j !== i) })}
+                    >
+                      <TrashIcon size={14} />
+                    </button>
+                  </div>
+                )
+              })}
+              <button
+                type="button"
+                className="ed-add"
+                onClick={() =>
+                  write({ scheduleGames: [...gamesOf(inst), blankGame(gamesOf(inst))] })
+                }
+              >
+                Add a game
+              </button>
         </>
       )
 
@@ -626,11 +683,13 @@ function SectionFields({
                       helpText="The name picks the logo. One with no logo shows its name."
                     />
                     <button
+                      data-icon="trash"
+                      aria-label="Remove"
                       type="button"
                       className="demo__feature-remove"
                       onClick={() => write({ providers: all.filter((_, j) => j !== i) })}
                     >
-                      Remove
+                      <TrashIcon size={14} />
                     </button>
                   </div>
                 )
@@ -731,11 +790,13 @@ function SectionFields({
                   rows={3}
                 />
                 <button
+                  data-icon="trash"
+                  aria-label="Remove"
                   type="button"
                   className="demo__feature-remove"
                   onClick={() => write({ features: all.filter((_, j) => j !== i) })}
                 >
-                  Remove
+                  <TrashIcon size={14} />
                 </button>
               </div>
             )
@@ -803,11 +864,13 @@ function SectionFields({
                       helpText="What opening the question shows. Empty leaves it shut."
                     />
                     <button
+                      data-icon="trash"
+                      aria-label="Remove"
                       type="button"
                       className="demo__feature-remove"
                       onClick={() => write({ faqs: all.filter((_, j) => j !== i) })}
                     >
-                      Remove
+                      <TrashIcon size={14} />
                     </button>
                   </div>
                 )

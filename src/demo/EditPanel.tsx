@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { TrashIcon } from './pipeline/icons'
 import { resolveFlow, writeFlow } from '../rules/layers'
 import {
   forgetTab,
@@ -329,6 +330,8 @@ export function EditPanel({
                   than two buttons that would each do the same thing. */}
               {all.length > 2 && (
                 <button
+                  data-icon="trash"
+                  aria-label="Remove"
                   type="button"
                   className="demo__feature-remove"
                   onClick={() => {
@@ -336,7 +339,7 @@ export function EditPanel({
                     forget([one.id])
                   }}
                 >
-                  Remove
+                  <TrashIcon size={14} />
                 </button>
               )}
             </div>
@@ -720,13 +723,15 @@ export function EditPanel({
                   <img className="ed-comp__logo" src={logoArtwork[id]} alt="" />
                   <span className="ed-comp__name">{entry?.name || id}</span>
                   <button
+                    data-icon="trash"
+                    aria-label="Remove"
                     type="button"
                     className="ed-comp__remove"
                     onClick={() =>
                       patchTier({ logoTiles: resolved.logoTiles.filter((l) => l !== id) })
                     }
                   >
-                    Remove
+                    <TrashIcon size={14} />
                   </button>
                 </div>
                 {entry && (
@@ -814,11 +819,13 @@ export function EditPanel({
                 </>
               )}
               <button
+                data-icon="trash"
+                aria-label="Remove"
                 type="button"
                 className="demo__feature-remove"
                 onClick={() => patchTier({ features: resolved.features.filter((_, j) => j !== i) })}
               >
-                Remove
+                <TrashIcon size={14} />
               </button>
             </div>
           )

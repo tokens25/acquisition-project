@@ -176,6 +176,14 @@
 .demo__fields[data-single][data-single] {
   gap: var(--space-10);
 }
+/* Between two component rows, none of it: the rows are divided by their own
+   hairline, and the column's gap on top of that is a second divider made of
+   nothing. Taken back a pair at a time rather than by zeroing the gap, because
+   everything else in this column — the fields above, the palette and the
+   footer below — still wants its ten. */
+.demo__fields[data-single] .ls-card + .ls-card {
+  margin-block-start: calc(var(--space-10) * -1);
+}
 /* All three explain themselves, which is what makes the column even: each
    box sits the same distance below the line under the one before it. A field
    here without help text would show as a short gap among tall ones, so if one

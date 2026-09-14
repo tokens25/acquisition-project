@@ -112,9 +112,16 @@
   transition: visibility 0s 240ms;
 }
 
-/* ── Text and select fields at editor density ── */
+/* ── Text and select fields at editor density ──
+   One height for all of them, whatever is inside: a select, a single line, or
+   a line that has grown to three. `min` rather than a fixed height, so the
+   ones that grow can — the panel is a column of fields and a field that is
+   taller than it needs to be is a field the next one is further down for. */
 .demo__fields .dz-field__input {
-  block-size: var(--ed-shell);
+  /* Auto as well as min: the shell ships at a fixed 56, and a minimum alone
+     cannot make a fixed height smaller. */
+  block-size: auto;
+  min-block-size: var(--ed-shell);
   padding-inline: var(--space-12);
   border-color: var(--ed-line);
   border-radius: var(--ed-radius);
@@ -124,8 +131,14 @@
     background-color 160ms ease,
     box-shadow 160ms ease;
 }
+/* Five either side rather than ten: a field that has grown a second line
+   should be a line taller than one that has not, and the one that has not
+   should be the same 48 as every single-line field beside it. Five, the
+   label's 16, a 20 line box and the shell's own two of border come to 48
+   exactly. Written off the 6 rather than as a bare 5, which is not a step on
+   the spacing scale — here the pixel matters. */
 .demo__fields .dz-field__input[data-multiline] {
-  padding-block: var(--space-10);
+  padding-block: calc(var(--space-6) - 1px);
 }
 .demo__fields .dz-field__input:hover:not(:has(:disabled)):not(:has([readonly])) {
   border-color: var(--color-border-full-color-strong);
@@ -527,6 +540,9 @@
   align-items: flex-start;
   padding-block: var(--space-8);
   border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+  /* The row is the control, so all of it says so. What sits inside it and does
+     something else of its own — the grip, the glyphs — says that instead. */
+  cursor: pointer;
 }
 /* The wash reaches past the row on both sides rather than stopping at it, so
    the grip and the chevron sit inside it with room either side instead of
@@ -581,11 +597,14 @@
   flex-direction: column;
   gap: 3px;
   justify-content: center;
-  inline-size: 40px;
-  block-size: 32px;
-  padding: 5px;
+  /* Thirty by twenty-four, which the three bars and their two gaps fill
+     exactly: 4 + 3 + 3 of bar, 3 + 3 of gap, 4 of padding either side. Bigger
+     than this the tile was reserving room it had nothing to put in. */
+  inline-size: 30px;
+  block-size: 24px;
+  padding: 4px;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
-  border-radius: 5px;
+  border-radius: 4px;
   background: var(--color-surface-container-2);
 }
 .ls-row__tile[data-off] {
@@ -739,7 +758,7 @@
   display: grid;
   place-items: center;
   flex: none;
-  inline-size: 16px;
+  inline-size: 18px;
   block-size: 20px;
   margin-block-start: var(--space-4);
   color: var(--color-text-tertiary);
@@ -933,6 +952,50 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ls-away {
+    transition: none;
+  }
+}
+
+/* ── Remove and duplicate, as glyphs ───────────────────────────────────────
+   The word said it before. A panel of rows each offering "Remove" is a column
+   of the same word down one side; the glyph says the same thing in the space a
+   control should take, and the name it had is still there as its title and its
+   accessible name. */
+.demo__fields .demo__feature-remove[data-icon] {
+  display: grid;
+  place-items: center;
+  inline-size: 28px;
+  block-size: 28px;
+  padding: 0;
+  border-radius: var(--radius-6);
+  transition:
+    color 120ms ease,
+    background 120ms ease;
+}
+.demo__fields .demo__feature-remove[data-icon]:hover {
+  background: var(--color-surface-container-3);
+  color: var(--color-accent-error-text);
+}
+/* The one that copies rather than destroys does not go red for it. */
+.demo__fields .demo__feature-remove[data-icon='copy']:hover {
+  color: var(--color-text-primary);
+}
+
+/* On a component row the pair sit together, so they are tighter than a lone
+   one and take the row's own quiet colour until they are reached for. */
+.ls-row__act[data-icon] {
+  display: grid;
+  place-items: center;
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: var(--radius-4);
+}
+.ls-row__act[data-icon]:hover {
+  background: var(--color-surface-container-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo__fields .demo__feature-remove[data-icon] {
     transition: none;
   }
 }

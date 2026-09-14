@@ -1,5 +1,6 @@
 import type {
   HeroLabelVariant,
+  LandingGame,
   LandingFeature,
   LandingLink,
   LandingProvider,
@@ -152,7 +153,10 @@ type ChoiceKey =
   | 'sectionCopy'
 
 export function landingText(content: LandingScreen): Required<
-  Omit<LandingScreen, 'providers' | 'faqs' | 'features' | 'footerLinks' | HeroKey | ChoiceKey>
+  Omit<
+    LandingScreen,
+    'providers' | 'faqs' | 'features' | 'footerLinks' | 'scheduleGames' | HeroKey | ChoiceKey
+  >
 > {
   const base = defaultFlow.landing
   const of = <K extends keyof LandingScreen>(key: K) =>
@@ -171,6 +175,7 @@ export function landingText(content: LandingScreen): Required<
     zipValue: of('zipValue'),
     zipCta: of('zipCta'),
     scheduleHeading: of('scheduleHeading'),
+    scheduleSubheading: of('scheduleSubheading'),
     plansTitle: of('plansTitle'),
     plansBody: of('plansBody'),
     teamsEyebrow: of('teamsEyebrow'),
@@ -296,6 +301,23 @@ export function questionsOf(content: LandingScreen): LandingQuestion[] {
     saved.length === SUPERSEDED_QUESTIONS.length &&
     saved.every((q, i) => q.question === SUPERSEDED_QUESTIONS[i])
   return untouched ? shipped : saved
+}
+
+/**
+ * The games on the schedule.
+ *
+ * A page saved before the schedule could be chosen has no list, which is not
+ * the same as an empty one: it means nobody has said which games, so the
+ * shipped three stand in. An empty list is a decision — a schedule with
+ * nothing on it — and is left as it is.
+ */
+export function gamesOf(content: LandingScreen): LandingGame[] {
+  return content.scheduleGames ?? defaultFlow.landing.scheduleGames ?? []
+}
+
+/** A new game, with nothing in it yet. */
+export function blankGame(existing: LandingGame[]): LandingGame {
+  return { id: nextId('game', existing), gameId: '' }
 }
 
 /** A new question. */
