@@ -9,7 +9,7 @@
     shell: { vb: '0 0 160 104', parts: {
       'page': [0,0,160,104],
       'top bar': [0,0,160,16], 'brand strip': [0,0,60,16], 'mark': [4,4,8,8],
-      'product title': [15,5,24,6], 'beta chip': [41,5,10,6], 'collapse control': [52,4,6,8],
+      'file group': [15,4,28,8], 'file name': [15,5,24,6], 'beta chip': [45,5,7,6], 'collapse control': [54,4,6,8],
       'status bar': [60,0,100,16], 'publish gate': [63,5,32,6], 'action buttons': [100,4,56,8],
       'dev mode line': [0,18,160,5], 'body': [0,25,160,79], 'rail': [0,25,60,79],
       'panel': [2,27,56,75], 'preview pane': [60,25,100,79],

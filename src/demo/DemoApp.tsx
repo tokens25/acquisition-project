@@ -56,6 +56,7 @@ import type { Finding } from './coach/review/types'
 import { buildSnapshot } from './coach/review/snapshot'
 import type { Review } from './coach/review/types'
 import { titleFor, type Product } from '../product'
+import { FileMenu, FileName, type FileAction } from './FileMenu'
 
 /**
  * The redesigned interface, at /demo.
@@ -133,11 +134,15 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
    * on the set, written before the move. Read while rendering rather than in
    * an effect, so the editor is open on the first paint rather than after it.
    */
-  const arriving = useMemo(() => new URLSearchParams(window.location.search).has('edit'), [])
+  const asked = useMemo(() => new URLSearchParams(window.location.search), [])
+  const arriving = asked.has('edit')
   const [stepOpen, setStepOpen] = useState(arriving)
   const editing = single || stepOpen
   const setEditing = setStepOpen
-  const [prototype, setPrototype] = useState(false)
+  /* A prototype link opens in the walkthrough, which is the whole of what it
+     offers to hand somebody — so it is read before the first paint rather than
+     opening the tool and then covering it. */
+  const [prototype, setPrototype] = useState(() => asked.has('preview'))
   const [sharing, setSharing] = useState(false)
   /** Which half of the landing page Dev is reading. */
   const [devTab, setDevTab] = useState<'page' | 'hero'>('page')
@@ -427,16 +432,32 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     window.prompt('Copy this link', link)
   }
 
+  /** The same, for a menu that wants the word back rather than the link. */
+  const copyLink = async (extra: Record<string, string>) => {
+    const link = linkTo(extra)
+    if (await copied(link)) return 'Copied'
+    window.prompt('Copy this link', link)
+  }
+
   const openStep = (id: string) => {
     store.updateSet({ stepId: id })
     setEditing(true)
   }
 
-  /* Taken out of the address once it has been read, so a reload is a plain
-     visit rather than the same arrival over again. */
+  /* What the address asked for, done once and then taken out of it — a reload
+     is a plain visit rather than the same arrival over again. The mode is set
+     here rather than read into state: it belongs to the handoff and lives on
+     the set, so a link that says Dev leaves the tool in Dev the way pressing
+     the switch would. */
   useEffect(() => {
-    if (arriving) window.history.replaceState(null, '', window.location.pathname)
-  }, [arriving])
+    if (asked.get('mode') === 'dev') pipe.setMode('dev')
+    if (arriving || asked.has('preview') || asked.has('mode')) {
+      window.history.replaceState(null, '', window.location.pathname)
+    }
+    // Once, on the way in: the address is emptied here, and re-running this
+    // against a later render would re-answer a question nobody asked again.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   /*
    * Where the plan picker is actually edited.
@@ -621,6 +642,55 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
 
   // The brand strip carries the collapse control, so it has to survive the
 
+  /**
+   * What can be done to this file, as opposed to what it says.
+   *
+   * Saving is here because people look for it, not because anything waits on
+   * it: every edit is written as it is made, so this writes again and says so.
+   * The two links carry the situation as well as the address — see `linkTo` —
+   * with the one flag that says which way to open it.
+   */
+  const fileActions: FileAction[] = [
+    {
+      id: 'save',
+      label: 'Save',
+      title: 'Every edit is saved as you make it. This writes again and says so.',
+      run: () => (store.save() ? 'Saved' : 'No room to save'),
+    },
+    {
+      id: 'duplicate',
+      label: 'Duplicate',
+      title: 'Downloads a copy of this file, which Import brings back',
+      run: () => {
+        store.duplicate()
+        return 'Copy downloaded'
+      },
+    },
+    {
+      id: 'dev-link',
+      label: 'Copy dev mode link',
+      title: 'Opens on this page in Dev mode',
+      breaks: true,
+      run: () => copyLink({ mode: 'dev' }),
+    },
+    {
+      id: 'proto-link',
+      label: 'Copy prototype link',
+      title: 'Opens straight into the walkthrough',
+      run: () => copyLink({ preview: '1' }),
+    },
+    {
+      id: 'export',
+      label: 'Export JSON',
+      title: 'The whole set as a file, for engineering',
+      breaks: true,
+      run: () => {
+        store.exportJson()
+        return 'Downloaded'
+      },
+    },
+  ]
+
   // collapse — it moves into the top bar rather than disappearing with the
   // panel it closes.
   const brand = (
@@ -628,7 +698,14 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
       <span className="demo__mark">
         <Icon svg={daznLogo} size={24} />
       </span>
-      <h1 className="demo__title">{titleFor(product)}</h1>
+      {/* The name and the verbs that apply to it, kept together: the chevron
+          means "this file", and anywhere else it would mean the tool. */}
+      <div className="demo__file">
+        <h1 className="demo__title">
+          <FileName store={store} fallback={titleFor(product)} />
+        </h1>
+        <FileMenu actions={fileActions} />
+      </div>
       <span className="demo__beta">BETA</span>
       <button
         type="button"

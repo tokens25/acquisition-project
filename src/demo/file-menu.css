@@ -1,0 +1,130 @@
+/* ── The file: its name, and the verbs that apply to a file ────────────────
+   The name reads as the heading it has always been until the pointer is over
+   it, and only then as something you can change. A text box standing open in
+   the brand strip would say "type here" at a person who is not renaming
+   anything, every minute of the day. */
+
+.fm {
+  display: flex;
+  align-items: center;
+  /* The menu hangs from the chevron. */
+  position: relative;
+  /* Never the thing that gives way: a long name shortens, the way into the
+     menu does not. */
+  flex: none;
+}
+
+/* Both states of the name are drawn as the heading itself: same size, same
+   weight, same place. Changing one means the other moves under the pointer. */
+.fm__name,
+.fm__rename {
+  display: block;
+  padding-inline: var(--space-6);
+  padding-block: 1px;
+  border: var(--border-1) solid transparent;
+  border-radius: var(--radius-6);
+  background: none;
+  color: var(--color-text-primary);
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: start;
+  /* Trimmed off the left so the name still starts where the heading did. */
+  margin-inline-start: calc(var(--space-6) * -1 - var(--border-1));
+}
+.fm__name {
+  /* As wide as the name, and no wider than the room the strip has left for it
+     — a name long enough to reach the chevron is cut with an ellipsis rather
+     than pushed through everything to its right. */
+  max-inline-size: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+.fm__name:hover {
+  background: var(--color-surface-container-3);
+}
+.fm__rename {
+  min-inline-size: 4ch;
+  max-inline-size: 100%;
+  border-color: var(--color-border-full-color-default);
+  background: var(--color-surface-container-2);
+  outline: none;
+  /* Where it is understood, the box is exactly as wide as the name in it; the
+     `size` attribute is the approximation everywhere else. */
+  field-sizing: content;
+}
+
+.fm__chev {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 22px;
+  block-size: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-6);
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+}
+.fm__chev:hover,
+.fm__chev[aria-expanded='true'] {
+  background: var(--color-surface-container-3);
+  color: var(--color-text-primary);
+}
+
+/* ── The menu ─────────────────────────────────────────────────────────────
+   Hung under the chevron and over everything: it is the topmost strip in the
+   tool, so anything it opens has to sit above the panel below it. */
+.fm__menu {
+  position: absolute;
+  z-index: 60;
+  inset-block-start: calc(100% + var(--space-6));
+  inset-inline-start: 0;
+  min-inline-size: 216px;
+  padding-block: var(--space-6);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-10);
+  background: var(--color-surface-container-3);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 45%);
+  list-style: none;
+  margin: 0;
+}
+/* A rule above the item, which is how a file menu says that what follows is a
+   different kind of verb: keeping it, copying a way in, taking it away. */
+.fm__row[data-break] {
+  margin-block-start: var(--space-6);
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+  padding-block-start: var(--space-6);
+}
+.fm__item {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+  inline-size: 100%;
+  block-size: 30px;
+  padding-inline: var(--space-12);
+  border: 0;
+  background: none;
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  text-align: start;
+  cursor: pointer;
+}
+.fm__item:hover {
+  background: var(--color-surface-container-5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm__name,
+  .fm__chev {
+    transition: none;
+  }
+}

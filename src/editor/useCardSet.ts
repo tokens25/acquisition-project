@@ -204,6 +204,10 @@ export interface CardSetStore {
   overriddenKeys: (tier: Tier) => string[]
   reset: () => void
   exportJson: () => void
+  /** The same content as a file named "… copy", to come back through Import. */
+  duplicate: () => void
+  /** Writes to storage now and says whether it landed. Edits save themselves. */
+  save: () => boolean
   importJson: (file: File) => Promise<void>
   /** Advances the handoff pipeline. Not an edit: it never withdraws a review. */
   updatePipeline: (fn: (doc: PipelineDoc) => PipelineDoc) => void
@@ -416,15 +420,45 @@ export function useCardSet(): CardSetStore {
     setSeed(SEED_FINGERPRINT)
   }, [])
 
-  const exportJson = useCallback(() => {
-    const blob = new Blob([JSON.stringify(set, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'acquisition-set.json'
-    a.click()
-    URL.revokeObjectURL(url)
-  }, [set])
+  /**
+   * The set as a file on disk, named after itself.
+   *
+   * `extra` is what a duplicate is: the same content under a name that says so.
+   * That is as far as duplicating can honestly go while one browser holds one
+   * set — and it comes back through Import, so the round trip is real.
+   */
+  const download = useCallback(
+    (extra = '') => {
+      const blob = new Blob([JSON.stringify(set, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${(set.name ?? '').trim() || 'acquisition-set'}${extra}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+    },
+    [set],
+  )
+
+  const exportJson = useCallback(() => download(), [download])
+  const duplicate = useCallback(() => download(' copy'), [download])
+
+  /**
+   * Writes now, rather than at the end of the render that changed something.
+   *
+   * Every edit is saved already — the effect above sees to that — so this is
+   * for the person who wants to be told, not for the content. It says whether
+   * the write landed, because the one case where saving does nothing is the
+   * one worth not lying about: a browser with no room, or no storage at all.
+   */
+  const save = useCallback(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ seed, set }))
+      return true
+    } catch {
+      return false
+    }
+  }, [seed, set])
 
   /**
    * Accepts our own export, or the engineering-side one — that export is
@@ -583,6 +617,8 @@ export function useCardSet(): CardSetStore {
     overriddenKeys,
     reset,
     exportJson,
+    duplicate,
+    save,
     importJson,
     importError,
     importNotes,

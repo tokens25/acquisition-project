@@ -339,6 +339,15 @@ export const marketOf = (set: CardSet): MarketConfig | undefined =>
   set.markets.find((m) => m.code === set.context.market)
 
 export interface CardSet {
+  /**
+   * What this file is called — in the brand strip, and on anything it exports.
+   *
+   * Absent means the product's own name, so a set saved before files had names
+   * still says something true, and one nobody has renamed goes on matching the
+   * product as the product is renamed. A label and nothing else: nothing
+   * resolves by it, so two files may share a name without consequence.
+   */
+  name?: string
   markets: MarketConfig[]
   campaigns: CampaignConfig[]
   channels: ChannelConfig[]

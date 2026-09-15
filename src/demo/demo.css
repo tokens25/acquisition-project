@@ -127,11 +127,24 @@
   margin-inline-end: 0;
   color: var(--color-text-primary);
 }
+/* The file's name and the chevron that opens what can be done to it. One
+   group, with only the strip's own gap between it and the BETA chip. */
+.demo__file {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  min-inline-size: 0;
+}
 .demo__title {
   /* 20px, from the design. It is the mobile step of the h6 ramp and this token
      file only ships the desktop step (22px), so the value is literal until the
      ramp is complete. */
   margin: 0;
+  /* What gives way when a name is longer than the strip: it shrinks, and the
+     name inside it is cut to fit. Without this a flex item refuses to go below
+     its content, and a long name walks over the chip and the chevron. */
+  min-inline-size: 0;
+  overflow: hidden;
   color: var(--color-text-primary);
   font-size: 20px;
   font-weight: var(--font-weight-bold);
@@ -141,14 +154,17 @@
    Only the ring is yellow. */
 .demo__beta {
   flex: none;
-  padding-inline: var(--space-6);
+  /* Every dimension in em, so the size of the chip is one number rather than
+     four: at 1em these are the 6px padding, 18px height and 0.12px tracking it
+     was drawn with, and the 0.7 takes 30% off all of them together. */
+  padding-inline: 0.5em;
   border: var(--border-1) solid var(--color-brand-primary);
   border-radius: var(--radius-full);
   color: var(--color-text-primary);
-  font-size: var(--font-size-label-xs);
+  font-size: calc(var(--font-size-label-xs) * 0.7);
   font-weight: var(--font-weight-bold);
-  letter-spacing: 0.12px;
-  line-height: 18px;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
 }
 .demo__fields {
   display: flex;
