@@ -30,6 +30,7 @@ export const HERO_ZOOM_MAX = 200
  * than making it lie about what it returns.
  */
 export const HERO_KEYS = [
+  'heroPreset',
   'heroImage',
   'heroLabelEnabled',
   'heroLabel',

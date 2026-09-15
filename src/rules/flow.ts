@@ -418,12 +418,27 @@ export interface LandingScreen {
      Optional throughout, so a saved page from before they existed still
      loads and simply has none of them on. */
 
-  /** The picture behind the hero, as a data URL. Empty means the shipped one. */
+  /**
+   * The picture behind the hero. Empty means the shipped one.
+   *
+   * A data URL when somebody uploaded it here, and the bundled URL of an
+   * exported file when it came from a hero preset. Both are only ever used as
+   * an `src`, so nothing downstream needs to know which it is.
+   */
   heroImage?: string
   /** The small line above the heading, and what kind of line it is. */
   heroLabelEnabled?: boolean
   heroLabel?: string
   heroLabelVariant?: HeroLabelVariant
+  /**
+   * Which hero this page started from — see `heroes.ts`.
+   *
+   * Kept so the panel can say both which one it was and whether the page still
+   * says what it says. The words are the page's own once picked, so this is a
+   * provenance rather than a link: losing it would only lose the sentence
+   * "from MSG+", not anything the page draws.
+   */
+  heroPreset?: string
   /**
    * Whether the fine print under the buttons is drawn.
    *
