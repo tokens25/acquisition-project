@@ -206,20 +206,42 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Toggles take the same shell ── */
+/* ── Toggles are a line, not a field ─────────────────────────────────────
+   They took the field's shell — a 48 box with a border — so a panel of three
+   switches read as three empty form fields with something sitting in them.
+   A toggle is not a thing you write in: it is a line that says what it does
+   and whether it is on, which is the shape the components list uses for the
+   same question.
+
+   No rule above it: a toggle sits among fields here rather than in a run of
+   its own, and a line drawn over only the toggles is a line about nothing. */
 .demo__fields .tg__row {
-  min-block-size: var(--ed-shell);
-  padding-inline: var(--space-12);
-  border: var(--border-1) solid var(--ed-line);
-  border-radius: var(--ed-radius);
-  background: var(--ed-fill);
-  transition: border-color 160ms ease;
-}
-.demo__fields .tg__row:hover {
-  border-color: var(--color-border-full-color-strong);
+  min-block-size: 40px;
+  padding-inline: var(--space-2);
+  border: 0;
+  background: none;
 }
 .demo__fields .tg__label {
-  font-size: 14px;
+  font-size: 13.5px;
+  font-weight: var(--font-weight-bold);
+}
+/* The hint under it is the row's second line, the way a component's contents
+   line is — so it lines up with the label rather than with a field's inset. */
+.demo__fields .tg__hint {
+  padding-inline: var(--space-2);
+  margin-block-start: calc(var(--space-2) * -1);
+}
+
+/* Smaller, and in the proportions the full-size one has: a 48 × 28 track with
+   a 24 knob becomes 34 × 20 with a 16. Big enough to hit, quiet enough that a
+   column of them is a list rather than a row of levers. */
+.demo__fields .dazn-toggle {
+  inline-size: 34px;
+  block-size: 20px;
+}
+.demo__fields .dazn-toggle__knob {
+  inline-size: 16px;
+  block-size: 16px;
 }
 
 /* ── Who writes the copy: label left, the pills right ── */
