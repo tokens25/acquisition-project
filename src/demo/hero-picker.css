@@ -59,19 +59,27 @@
   border-color: var(--color-border-full-color-default);
 }
 
-/* The window the hero is seen through. Its height is what says how much of
-   the hero a card shows — the words and the button, not the whole 660. */
+/* The window the hero is seen through. Its shape is what says how much of the
+   hero a card shows — the words and the button, not the whole 660 — and it is
+   a ratio rather than a height so the same amount of hero shows whatever width
+   the panel gives the card. */
 .hp__shot {
   display: block;
-  block-size: 168px;
+  aspect-ratio: 12 / 7;
   overflow: hidden;
   background: #060606;
+  container-type: inline-size;
 }
 /* Scaled rather than rebuilt narrow: a hero laid out at 288 is a different
-   hero. The scale is the card's width over the page's. */
+   hero. The scale is the card's own width over the page's, taken from the card
+   rather than assumed here: a number written into this file is right at one
+   panel width and leaves a bare strip down the side at every other. The line
+   above it is that number, for a browser that cannot divide a length by a
+   length — bare strip and all, but never an overflowing page. */
 .hp__page {
   display: block;
   transform: scale(0.768);
+  transform: scale(calc(100cqi / 375px));
   transform-origin: 0 0;
 }
 

@@ -1,8 +1,8 @@
 import type { LandingScreen } from './flow'
 
 import courtsideArt from '../assets/landing/heroes/courtside.jpg'
+import daznGoArt from '../assets/landing/heroes/dazn-go.jpg'
 import msgArt from '../assets/landing/heroes/msg.jpg'
-import ptArt from '../assets/landing/heroes/pt.jpg'
 import wardleyArt from '../assets/landing/heroes/wardley-dubois.jpg'
 import wc26Art from '../assets/landing/heroes/wc26.jpg'
 
@@ -71,13 +71,16 @@ export const HEROES: HeroPreset[] = [
     },
   },
   {
+    /* Named PT when it was written, and pages saved since hold that word as
+       their `heroPreset`. An id is data and a name is a label, so the label is
+       what the rename moves. */
     id: 'pt',
-    name: 'PT',
+    name: 'DAZN GO',
     market: 'ES',
     sport: 'Football',
     note: 'A league season, opened on the fixtures.',
     patch: {
-      heroImage: ptArt,
+      heroImage: daznGoArt,
       title: 'Every matchday, live on DAZN',
       body: 'Every game of the season, live and on demand, wherever you are.',
       cta: 'Subscribe now',

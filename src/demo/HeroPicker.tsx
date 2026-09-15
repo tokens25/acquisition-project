@@ -23,8 +23,14 @@ import './hero-picker.css'
  * already knows which market this is, and a gallery that ignored it would be
  * asking a question the panel had answered two fields earlier.
  */
+/**
+ * What the page is drawn at before it is shrunk.
+ *
+ * How far it is shrunk is the stylesheet's, not this file's: the card is as
+ * wide as the panel makes it, so a number written here would be right at one
+ * panel width and leave a bare strip down the side at every other.
+ */
 const PAGE_WIDTH = 375
-const CARD_WIDTH = 288
 
 export function HeroPicker({
   store,
@@ -92,4 +98,4 @@ export function HeroPicker({
   )
 }
 
-export { CARD_WIDTH, PAGE_WIDTH }
+export { PAGE_WIDTH }
