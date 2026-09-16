@@ -1529,7 +1529,7 @@ export function LandingPageScreen({
  */
 export function PageSectionView({
   section,
-  content,
+  content: page,
   text,
   children,
 }: {
@@ -1538,6 +1538,18 @@ export function PageSectionView({
   text: ReturnType<typeof landingText>
   children?: ReactNode
 }) {
+  /*
+   * What THIS instance says, rather than what the page says.
+   *
+   * A copy keeps its own words under its own id, and `text` already arrives
+   * resolved that way. Everything that is not a string did not: the lists and
+   * the choices were read straight off the page, so two rails on one page drew
+   * the same tiles however differently they were written. Resolved once here,
+   * so every case below reads the instance and none of them has to remember to.
+   */
+  const own = page.sectionCopy?.[section.id]
+  const content = own ? { ...page, ...own } : page
+
   switch (section.type) {
     /* node 708:173789. Its own spacing rather than the page's: 42 above,
        24 below, and 22 between the heading and the row. */
