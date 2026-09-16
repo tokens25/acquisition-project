@@ -20,7 +20,7 @@ import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, filterAcquirableTiers, resolveTier } from '../rules/resolve'
 import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer, priceUnitFor } from '../rules/derive'
-import { formatMoney } from '../rules/money'
+import { CURRENCIES, currencySign, formatMoney } from '../rules/money'
 import { badgeSrc, logoArtwork } from '../card/assets'
 import { BenefitIcon } from './BenefitIcon'
 import { IconPicker } from './IconPicker'
@@ -219,12 +219,22 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const money = (amount: number) =>
     market ? formatMoney(amount, market.locale, market.currency) : String(amount)
   /** "$" — the sign the card will draw, so the field reads like the card. */
-  const currency = market
-    ? new Intl.NumberFormat(market.locale, { style: 'currency', currency: market.currency })
-        .formatToParts(0)
-        .find((part) => part.type === 'currency')?.value
-    : undefined
+  const currency = market ? currencySign(market.locale, market.currency) : undefined
   const currencyMark = currency ? <span className="ed-currency">{currency}</span> : undefined
+
+  /**
+   * Which currency this market sells in.
+   *
+   * Written on the market, not on the price, because it is a fact about the
+   * country rather than about one plan — that is what stops a card carrying a
+   * currency the market it is shown in does not use. So changing it changes
+   * every price in this market at once, which the field says out loud rather
+   * than leaving somebody to discover after typing three of them.
+   */
+  const setCurrency = (code: string) =>
+    updateSet({
+      markets: set.markets.map((m) => (m.code === context.market ? { ...m, currency: code } : m)),
+    })
 
   const patchTier = (p: Parameters<typeof updateTier>[1]) => updateTier(tier.id, p)
 
@@ -540,6 +550,26 @@ export function EditPanel({ store }: { store: CardSetStore }) {
       </FieldGroup>
 
       <FieldGroup title={market ? `Pricing — ${market.currency}` : 'Pricing'}>
+        {market && (
+          <SelectField
+            label="Currency"
+            helpText={`${market.label} sells in this. Every price in this market is shown in it.`}
+            value={market.currency}
+            options={[
+              /* A select shows its first option when its value matches none of
+                 them, so a market carrying a code this list does not have
+                 would silently read as the first currency in it. */
+              ...(CURRENCIES.some((c) => c.code === market.currency)
+                ? []
+                : [{ value: market.currency, label: `${market.currency} — not in the list` }]),
+              ...CURRENCIES.map((c) => ({
+                value: c.code,
+                label: `${c.code} — ${c.name} (${currencySign(market.locale, c.code)})`,
+              })),
+            ]}
+            onChange={setCurrency}
+          />
+        )}
         {offer ? (
           <>
             <TextField
