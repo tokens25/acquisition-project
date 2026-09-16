@@ -301,7 +301,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   cities: 'Places',
   live: "What's live",
   spotlight: 'Spotlight',
-  fightPlan: 'Fight plan',
+  fightPlan: 'Choose the plan',
 }
 
 /** The list this page is arranged into, or the one it has always had. */
