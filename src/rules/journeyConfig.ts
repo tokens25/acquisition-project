@@ -19,6 +19,25 @@ import { usRsnJourneys } from './journeys'
  * move the UK.
  */
 
+/**
+ * A channel's flow, written once and read by every market that sells it.
+ *
+ * Most of what differs between Japan's NFL and the UK's NFL is the price, and
+ * a price is content — the content layer already resolves it by market, as it
+ * does the plan names and the words. So the structure is shared and the
+ * numbers are not, which is the whole reason those are two different things.
+ *
+ * Shared by assignment, never by default. A market reads a template because
+ * the template is assigned to it, and the moment that market needs its own
+ * flow it gets an entry of its own and stops reading this one — the same deal
+ * `layers.ts` makes for copy, where a market's layer is taken at the moment it
+ * is first written to.
+ */
+export const channelTemplates: Record<string, JourneyConfig> = {
+  // Nothing written yet. The US RSN flow is deliberately not here: it is one
+  // American network's journey, not a template for the other six channels.
+}
+
 /** One configured entry. Several journeys because a flow branches by who arrives. */
 export interface JourneyConfig {
   /**
@@ -72,7 +91,17 @@ export type JourneyMiss =
   | { state: 'unconfigured'; scope: 'market' | 'channel'; message: string }
 
 export type JourneyResolution =
-  | { state: 'ok'; scope: 'market' | 'channel'; config: JourneyConfig }
+  | {
+      state: 'ok'
+      scope: 'market' | 'channel'
+      config: JourneyConfig
+      /**
+       * Whether this market is reading the channel's shared flow or one of its
+       * own. Worth showing: someone editing a shared flow is editing it for
+       * every market assigned to it, and that should never be a surprise.
+       */
+      shared: boolean
+    }
   | JourneyMiss
 
 /** The wording the tool shows. One sentence, and it does not apologise. */
@@ -88,7 +117,7 @@ export const UNCONFIGURED_MARKET = 'Journey not configured yet for this market.'
 export function resolveMarketJourney(marketId: string): JourneyResolution {
   const config = marketJourneys[marketId]
   if (!config) return { state: 'unconfigured', scope: 'market', message: UNCONFIGURED_MARKET }
-  return { state: 'ok', scope: 'market', config }
+  return { state: 'ok', scope: 'market', config, shared: false }
 }
 
 /**
@@ -104,14 +133,37 @@ export function resolveChannelJourney(marketId: string, channelId: string): Jour
     const market = marketById(marketId)?.label ?? marketId
     return { state: 'unavailable', message: `${channel} is not available in ${market}.` }
   }
-  const config = channelJourneys[marketId]?.[channelId]
-  if (!config) return { state: 'unconfigured', scope: 'channel', message: UNCONFIGURED_CHANNEL }
-  return { state: 'ok', scope: 'channel', config }
+  // A market's own entry wins over the channel's shared flow, always. That is
+  // what makes forking safe: Japan taking its own NFL flow cannot be undone by
+  // an edit to the shared one, and cannot reach back into the UK's.
+  const own = channelJourneys[marketId]?.[channelId]
+  if (own) return { state: 'ok', scope: 'channel', config: own, shared: false }
+
+  const template = channelTemplates[channelId]
+  if (template) return { state: 'ok', scope: 'channel', config: template, shared: true }
+
+  return { state: 'unconfigured', scope: 'channel', message: UNCONFIGURED_CHANNEL }
+}
+
+/**
+ * How a market comes by its flow for a channel, without resolving it.
+ *
+ * Three answers, and the tool needs all three: `own` is this market's, `shared`
+ * is the channel's flow read here, `none` is a channel that is sold and has
+ * nothing written for it anywhere.
+ */
+export function channelJourneySource(
+  marketId: string,
+  channelId: string,
+): 'own' | 'shared' | 'none' {
+  if (channelJourneys[marketId]?.[channelId]) return 'own'
+  if (channelTemplates[channelId]) return 'shared'
+  return 'none'
 }
 
 /** Whether an entry has been written, without resolving it. */
 export const hasChannelJourney = (marketId: string, channelId: string): boolean =>
-  Boolean(channelJourneys[marketId]?.[channelId])
+  channelJourneySource(marketId, channelId) !== 'none'
 
 export const hasMarketJourney = (marketId: string): boolean => Boolean(marketJourneys[marketId])
 
@@ -123,6 +175,7 @@ export const hasMarketJourney = (marketId: string): boolean => Boolean(marketJou
  */
 export const configuredJourneys: Journey[] = [
   ...Object.values(marketJourneys).flatMap((c) => c.journeys),
+  ...Object.values(channelTemplates).flatMap((c) => c.journeys),
   ...Object.values(channelJourneys).flatMap((byChannel) =>
     Object.values(byChannel).flatMap((c) => c.journeys),
   ),
