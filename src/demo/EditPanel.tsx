@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { resolveFlow, writeFlow } from '../rules/layers'
 import {
   forgetTab,
@@ -18,7 +18,7 @@ import { ToggleField } from '../components/ToggleField'
 import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
-import { excludedTiers, resolveTier } from '../rules/resolve'
+import { excludedTiers, filterAcquirableTiers, resolveTier } from '../rules/resolve'
 import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer, priceUnitFor } from '../rules/derive'
 import { formatMoney } from '../rules/money'
 import { logoArtwork } from '../card/assets'
@@ -130,7 +130,50 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   }, [])
 
   const absent = new Map(excludedTiers(set, context).map((e) => [e.tier.id, e.reason]))
-  const tier = set.tiers.find((t) => t.id === openTier) ?? set.tiers[0]
+
+  /*
+   * The plans this situation sells, which is what the picker is a picker of.
+   *
+   * Availability only — the product and the storefront — and deliberately not
+   * whether a price exists at this cadence: a plan whose price has not been
+   * written is exactly the plan somebody needs to open in order to write it,
+   * and hiding it would put the fix behind the problem.
+   *
+   * The rest of the set is still reachable, a click away, because a plan can
+   * be edited from anywhere it is sold. It is not in the row by default: with
+   * flows built per market and channel, most of the set belongs to somewhere
+   * else, and a row of plans this screen cannot show reads as a mistake.
+   */
+  const sellable = useMemo(
+    () =>
+      new Set(
+        filterAcquirableTiers(set.tiers, {
+          channel: context.channel,
+          subscription: context.subscription,
+        }).map((t) => t.id),
+      ),
+    [set.tiers, context.channel, context.subscription],
+  )
+  const [showOthers, setShowOthers] = useState(false)
+  const elsewhere = set.tiers.filter((t) => !sellable.has(t.id))
+
+  /* Changing situation moves the picker with it. Staying on a plan the new
+     situation does not sell is how the panel comes to be editing one product
+     while the preview beside it draws another. Keyed to the situation alone,
+     so opening one of the other plans by hand is left alone. */
+  useEffect(() => {
+    setOpenTier((open) => {
+      if (open && sellable.has(open)) return open
+      return set.tiers.find((t) => sellable.has(t.id))?.id ?? open
+    })
+    setShowOthers(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.market, context.channel, context.subscription])
+
+  const tier =
+    set.tiers.find((t) => t.id === openTier) ??
+    set.tiers.find((t) => sellable.has(t.id)) ??
+    set.tiers[0]
   if (!tier) return <p className="ed-placeholder">This set has no plans.</p>
 
   const resolved = resolveTier(tier, context)
@@ -241,7 +284,9 @@ export function EditPanel({ store }: { store: CardSetStore }) {
 
       <FieldGroup title="Plans">
         <div className="ed-tabs">
-          {set.tiers.map((t) => (
+          {set.tiers
+            .filter((t) => showOthers || sellable.has(t.id) || t.id === tier.id)
+            .map((t) => (
             <button
               key={t.id}
               type="button"
@@ -255,6 +300,13 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             </button>
           ))}
         </div>
+        {elsewhere.length > 0 && (
+          <button type="button" className="ed-others" onClick={() => setShowOthers((v) => !v)}>
+            {showOthers
+              ? 'Hide plans sold elsewhere'
+              : `Show ${elsewhere.length} plan${elsewhere.length === 1 ? '' : 's'} sold elsewhere`}
+          </button>
+        )}
         <button
           type="button"
           className="ed-add"

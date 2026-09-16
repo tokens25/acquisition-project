@@ -577,3 +577,20 @@ select.ed-field__input {
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption-xs);
 }
+
+/* The way back to the rest of the set. Quiet, because most of the time the
+   plans this situation sells are the only ones worth looking at. */
+.ed-others {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-tertiary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.ed-others:hover {
+  color: var(--color-text-secondary);
+}
