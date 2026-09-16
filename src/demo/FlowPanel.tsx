@@ -278,7 +278,10 @@ function FlowFields({
     const c = flow.cadence
     // What the yearly card will say, so the setting below can show it rather
     // than describe it.
-    const savings = Object.values(cadenceSavings(c))[0] ?? ''
+    // Keyed, so each card can say whether its own line was written or worked
+    // out; the first of them is what the wording control describes.
+    const savingById = cadenceSavings(c)
+    const savings = Object.values(savingById)[0] ?? ''
     return (
       <>
         <FieldGroup title="Screen">
@@ -325,6 +328,19 @@ function FlowFields({
                   onChange={(v) => write({ badge: v })}
                   helpText="Empty draws no ribbon."
                 />
+                <TextField
+                  label="Saving line"
+                  value={option.saving ?? ''}
+                  pipelineKey={`cadence.options[${i}].saving`}
+                  onChange={(v) => write({ saving: v })}
+                  helpText={
+                    option.saving?.trim()
+                      ? 'Written, so this is what is drawn.'
+                      : savingById[option.id]
+                        ? `Empty, so the prices answer it: "${savingById[option.id]}".`
+                        : 'Empty. Nothing is drawn until this is written, or a yearly and a monthly price are both set.'
+                  }
+                />
                 {/* A card can go, as long as one is left to choose. */}
                 {c.options.length > 1 && (
                   <button
@@ -363,9 +379,8 @@ function FlowFields({
             onChange={(v) => patch('cadence', { selected: v })}
           />
 
-          {/* The saving itself is not written anywhere — it is the difference
-              between the yearly price and twelve monthly ones. This is only how
-              that difference is said. */}
+          {/* How the computed saving is worded. A saving typed into a card
+              above wins over both, because a person who typed it meant it. */}
           <SelectField
             label="Saving shown as"
             value={c.savingAs ?? 'amount'}

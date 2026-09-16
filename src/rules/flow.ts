@@ -25,6 +25,19 @@ export interface CadenceOption {
   unit: string
   /** The corner ribbon. Empty for no ribbon. */
   badge: string
+  /**
+   * The saving line, written out.
+   *
+   * Wins over the figure the prices work out to, because a person who has
+   * typed something meant it — the same deal the CTA label and the price
+   * explainer already make. Empty falls back to the computed line, so clearing
+   * the field cannot ship a blank banner, and a saving that is only ever
+   * computed still cannot drift from the two prices it sits between.
+   *
+   * Written per option rather than per screen: it is a line on one card, and
+   * a screen-level field would be a second place the answer lives.
+   */
+  saving?: string
 }
 
 export interface CadenceScreen {

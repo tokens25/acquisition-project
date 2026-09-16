@@ -64,19 +64,29 @@ function money(amount: number, symbol: string, leading: boolean): string {
  * to be saved against — which is the comparison a person actually makes.
  */
 export function cadenceSavings(screen: CadenceScreen): Record<string, string> {
+  // Anything written is the answer, on whichever card it was written on — a
+  // saving nobody can compute is still a saving somebody can state.
+  const written: Record<string, string> = {}
+  for (const option of screen.options) {
+    const typed = option.saving?.trim()
+    if (typed) written[option.id] = typed
+  }
+
   const yearly = screen.options.find((o) => YEARLY.test(o.unit.trim()))
   const monthly = screen.options.find((o) => MONTHLY.test(o.unit.trim()))
-  if (!yearly || !monthly) return {}
+  if (!yearly || !monthly) return written
+  // A written line is not recomputed underneath itself.
+  if (written[yearly.id]) return written
 
   const year = readPrice(yearly.price)
   const month = readPrice(monthly.price)
-  if (!year || !month) return {}
+  if (!year || !month) return written
 
   const overAYear = month.amount * 12
   const saved = overAYear - year.amount
   // Paying yearly costing more is a thing a person can type. It is not a
   // saving, so nothing is drawn rather than a negative one.
-  if (saved <= 0) return {}
+  if (saved <= 0) return written
 
   const leading = yearly.price.trimStart().startsWith(year.symbol) && year.symbol !== ''
   const label =
@@ -84,13 +94,13 @@ export function cadenceSavings(screen: CadenceScreen): Record<string, string> {
       ? `Save ${Math.round((saved / overAYear) * 100)}% /year`
       : `Save ${money(Math.round(saved * 100) / 100, year.symbol, leading)} /year`
 
-  return { [yearly.id]: label }
+  return { ...written, [yearly.id]: label }
 }
 
 /** A new card, ready to be written into. */
 export function blankCadenceOption(existing: CadenceOption[]): CadenceOption {
   let n = existing.length + 1
   while (existing.some((o) => o.id === `option-${n}`)) n += 1
-  return { id: `option-${n}`, title: '', note: '', price: '', unit: '', badge: '' }
+  return { id: `option-${n}`, title: '', note: '', price: '', unit: '', badge: '', saving: '' }
 }
 
