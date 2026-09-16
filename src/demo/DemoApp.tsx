@@ -753,6 +753,10 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                 onStart={() => {
                   if (!draft) {
                     writeStructure(blankStructure(store.context.market, store.context.subscription || undefined))
+                  } else if (draft.state !== 'in-progress') {
+                    // A second way in starts at the first question, which is
+                    // the one that makes it a second way in.
+                    writeStructure({ ...draft, step: 1 })
                   }
                   setSetupOpen(true)
                 }}

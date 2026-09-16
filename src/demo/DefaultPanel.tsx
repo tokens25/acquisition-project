@@ -156,15 +156,11 @@ export function DefaultPanel({
     const options = entryPoints(journeys, next, nextStatus)
     const cta = nextEntry && options.includes(nextEntry) ? nextEntry : options[0]
     const here = allJourneys(store.set)
-    // A flow built here for exactly this market and channel, when the entry
-    // lookup finds nothing — a generated journey is the answer to "what runs
-    // in this situation" even before its CTA has been chosen from the list.
-    const mine = (store.set.journeys ?? []).filter(
-      (j) =>
-        j.when?.market === next.market &&
-        (j.when?.subscription ?? undefined) === (next.subscription || undefined),
-    )
-    const found = journeysMatching(here, next, nextStatus, cta ?? '')[0] ?? mine[0]
+    // No fallback to some other journey in this market and channel. Picking a
+    // user status nobody has written for is how a second variant gets set up:
+    // the answer has to be "nothing runs here yet", or the setup prompt for
+    // that status can never be reached.
+    const found = journeysMatching(here, next, nextStatus, cta ?? '')[0]
     // Naming nothing is the point. Leaving the previous situation's journey id
     // in place is how a market with no flow of its own came to render another
     // market's — and the progress through it belongs to that journey too.

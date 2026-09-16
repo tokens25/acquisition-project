@@ -34,18 +34,25 @@ export function OnboardingStart({
   onStart: () => void
 }) {
   const resuming = draft?.state === 'in-progress'
+  // A structure already built here means this is a second variant — another
+  // kind of user, or another way in — for a market and channel that have a
+  // flow. Worth saying, because the plans it makes are the ones already there.
+  const another = draft?.state === 'ready' || draft?.state === 'structure-saved'
   return (
     <div className="ob">
       <div className="ob-start">
-        <h2 className="ob-start__title">Set up your acquisition flow</h2>
+        <h2 className="ob-start__title">
+          {another ? 'Set up another way in' : 'Set up your acquisition flow'}
+        </h2>
         <p className="ob-start__body">
-          Eight questions: who it is for, how they arrive, and what the screens are made of.
-          At the end the flow is built and ready for its words.
+          {another
+            ? `This market and channel already have a flow for ${STATUS_LABELS[draft.audience] ?? draft.audience}, arriving from ${draft.entry}. Nothing runs for the situation you have picked yet. Setting it up reuses the plans already here — only the screens differ.`
+            : 'Nine questions: who it is for, how they arrive, and what each screen is made of. At the end the flow is built and ready for its words.'}
         </p>
         <p className="ob-start__where">{whereLabel(marketId, channelId)}</p>
         <div className="ob-start__actions">
           <button type="button" className="ob-primary" onClick={onStart}>
-            {resuming ? `Resume setup · step ${draft?.step ?? 1}` : 'Start setup'}
+            {resuming ? `Resume setup · step ${draft?.step ?? 1}` : another ? 'Set it up' : 'Start setup'}
           </button>
         </div>
       </div>
