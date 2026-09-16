@@ -51,6 +51,9 @@ import type { Finding } from './coach/review/types'
 import { buildSnapshot } from './coach/review/snapshot'
 import type { Review } from './coach/review/types'
 import { titleFor, type Product } from '../product'
+import { isConfigured } from '../rules/journey'
+import { blankStructure, structureKey, type FlowStructure } from '../rules/onboarding'
+import { Onboarding, OnboardingStart } from '../onboarding/Onboarding'
 
 /**
  * The redesigned interface, at /demo.
@@ -262,6 +265,33 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
       })
     })
   }
+
+  /* ── Guided setup ──
+     A market and channel nobody has described yet has no flow to preview, so
+     the preview asks for the structure instead of showing an empty frame. The
+     structure is not content: it is what the content will later be poured into.
+
+     Keyed by market and channel together, because the same channel in two
+     markets is two flows that may be laid out differently. */
+  const setupKey = structureKey(store.context.market, store.context.subscription || undefined)
+  const configured = isConfigured(store.journey)
+  const draft = store.set.flowStructures?.[setupKey]
+  const [setupOpen, setSetupOpen] = useState(false)
+
+  /* Moving to another market or channel leaves the wizard — what was on screen
+     was that flow's structure, not this one's. The draft itself is kept. */
+  useEffect(() => {
+    setSetupOpen(false)
+  }, [setupKey])
+
+  const writeStructure = useCallback(
+    (next: FlowStructure) => {
+      store.updateSet({
+        flowStructures: { ...(store.set.flowStructures ?? {}), [setupKey]: next },
+      })
+    },
+    [store, setupKey],
+  )
 
   const journeyPlan = planJourney(store.journey, store.context)
   /*
@@ -658,6 +688,12 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                 />
               )}
 
+              {configured && draft && (
+                <button type="button" className="demo__reset" onClick={() => setSetupOpen(true)}>
+                  Edit flow structure
+                </button>
+              )}
+
               <button type="button" className="demo__reset" onClick={store.reset}>
                 Reset progress
               </button>
@@ -668,7 +704,42 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
 
         <div className="demo__preview">
 
-          {editing && step ? (
+          {!configured || setupOpen ? (
+            setupOpen && draft ? (
+              <Onboarding
+                draft={draft}
+                onChange={writeStructure}
+                warning={
+                  configured
+                    ? 'This flow already has content. Changing its structure can leave parts of that content with nowhere to go.'
+                    : undefined
+                }
+                onFinish={() => {
+                  writeStructure({
+                    ...draft,
+                    // A structure that content already fills is finished, not
+                    // merely described.
+                    state: configured ? 'ready' : 'structure-saved',
+                    updatedAt: new Date().toISOString(),
+                  })
+                  setSetupOpen(false)
+                }}
+                onClose={() => setSetupOpen(false)}
+              />
+            ) : (
+              <OnboardingStart
+                marketId={store.context.market}
+                channelId={store.context.subscription || undefined}
+                draft={draft}
+                onStart={() => {
+                  if (!draft) {
+                    writeStructure(blankStructure(store.context.market, store.context.subscription || undefined))
+                  }
+                  setSetupOpen(true)
+                }}
+              />
+            )
+          ) : editing && step ? (
             <StepPreview
               journey={store.journey}
               // One page, no journey to place it in.

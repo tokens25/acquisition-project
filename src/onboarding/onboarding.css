@@ -1,0 +1,471 @@
+/* Setup — describing a flow before it has any words.
+   Everything here resolves through the DS tokens, as the rest of the app does. */
+
+.ob {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding: var(--space-32);
+  color: var(--color-text-primary);
+}
+
+/* ── The invitation ─────────────────────────────────────────── */
+.ob-start {
+  max-inline-size: 30rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-32);
+  border: 1px solid var(--color-border-full-color-default);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-2);
+}
+.ob-start__title {
+  margin: 0;
+  font-size: var(--font-size-heading-h5);
+  font-weight: var(--font-weight-bold);
+}
+.ob-start__body {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+.ob-start__where {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+}
+.ob-start__actions {
+  display: flex;
+  gap: var(--space-12);
+  margin-block-start: var(--space-8);
+}
+
+/* ── Wizard chrome ──────────────────────────────────────────── */
+.ob__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-12);
+}
+.ob__title {
+  margin: 0;
+  font-size: var(--font-size-heading-h5);
+  font-weight: var(--font-weight-bold);
+}
+.ob__where {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+}
+.ob__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ob__step {
+  padding: var(--space-4) var(--space-12);
+  border: 1px solid var(--color-border-full-color-default);
+  border-radius: 999px;
+  background: none;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+  cursor: pointer;
+}
+.ob__step[data-done] {
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-full-color-subtle);
+}
+.ob__step[aria-current='step'] {
+  color: var(--color-text-inverse);
+  background: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+}
+
+.ob__body {
+  display: grid;
+  grid-template-columns: minmax(16rem, 22rem) 1fr;
+  gap: var(--space-32);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .ob__body {
+    grid-template-columns: 1fr;
+  }
+}
+.ob__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+.ob__blurb {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+.ob__preview {
+  display: flex;
+  gap: var(--space-16);
+  align-items: stretch;
+  overflow-x: auto;
+  padding-block-end: var(--space-8);
+}
+.ob__foot {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+}
+.ob__spacer {
+  flex: 1;
+}
+
+/* ── Controls ───────────────────────────────────────────────── */
+.ob-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.ob-toggle {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  font-size: var(--font-size-caption-sm);
+  color: var(--color-text-primary);
+}
+.ob-toggle[data-nested] {
+  margin-inline-start: var(--space-20);
+  color: var(--color-text-secondary);
+}
+.ob-toggle input {
+  accent-color: var(--color-brand-primary);
+}
+
+/* ── The skeleton card ──────────────────────────────────────── */
+.ob-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  inline-size: 280px;
+  flex: 0 0 auto;
+  padding: var(--space-20);
+  border: 1px solid var(--color-border-full-color-default);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-2);
+  transition: opacity 160ms ease;
+}
+.ob-card[data-highlighted] {
+  border-color: var(--color-brand-secondary);
+}
+.ob-card[data-dimmed] {
+  opacity: 0.8;
+}
+.ob-card[data-selected] {
+  opacity: 1;
+}
+.ob-card__index {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ob-card__ribbon {
+  position: absolute;
+  inset-block-start: calc(var(--space-8) * -1);
+  inset-inline-end: var(--space-12);
+  margin: 0;
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-4);
+  background: var(--color-brand-secondary);
+  color: var(--color-on-brand-gold);
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+}
+.ob-card__divider {
+  margin: 0;
+  border: 0;
+  border-block-start: 1px solid var(--color-border-full-color-default);
+}
+
+/* A named block, not a shimmer: it says what will stand here. */
+.ob-slot {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--space-8);
+  border: 1px dashed var(--color-border-full-color-subtle);
+  border-radius: var(--radius-4);
+  background: var(--color-surface-container-3);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.04em;
+}
+.ob-slot[data-reserved] {
+  visibility: hidden;
+}
+.ob-slot--title {
+  block-size: 28px;
+  font-size: var(--font-size-caption-sm);
+}
+.ob-slot--description {
+  block-size: 34px;
+}
+.ob-slot--caption {
+  block-size: 18px;
+}
+.ob-slot--price {
+  block-size: 32px;
+}
+.ob-slot--legal {
+  block-size: 18px;
+}
+.ob-slot--saving {
+  block-size: 20px;
+  justify-content: center;
+  border-style: solid;
+  border-color: var(--color-accent-success-text);
+  background: var(--color-accent-success-surface-1);
+  color: var(--color-accent-success-text);
+}
+.ob-slot--button {
+  block-size: 40px;
+  justify-content: center;
+  border-style: solid;
+  color: var(--color-text-secondary);
+}
+.ob-slot--feature {
+  block-size: 18px;
+}
+
+.ob-cta {
+  display: flex;
+  flex-direction: column;
+}
+.ob-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ob-logos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.ob-logos__row {
+  display: flex;
+  gap: var(--space-4);
+}
+.ob-logo {
+  inline-size: 40px;
+  block-size: 40px;
+  border: 1px dashed var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-3);
+}
+.ob-logo--count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+
+/* ── Buttons ──
+   Named here rather than borrowed from the pipeline toolbar: setup is not part
+   of that surface, and a shared class would tie two unrelated things together. */
+.ob-primary {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: var(--radius-8);
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  font-family: inherit;
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.ob-primary:hover {
+  filter: brightness(0.9);
+}
+.ob-secondary {
+  padding: 8px 14px;
+  border: 1px solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.ob-secondary:hover {
+  border-color: var(--color-border-full-color-default);
+  color: var(--color-text-primary);
+}
+.ob-primary:focus-visible,
+.ob-secondary:focus-visible,
+.ob__step:focus-visible,
+.ob-review__edit:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+/* ── Counts ── */
+.ob-count {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label-sm);
+}
+.ob-count input {
+  inline-size: 72px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-label-sm);
+}
+
+/* ── Plan × option grid ── */
+.ob-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-block-start: var(--space-8);
+}
+.ob-matrix__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  flex-wrap: wrap;
+}
+.ob-matrix__plan {
+  min-inline-size: 64px;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+}
+
+/* ── Review ── */
+.ob-review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+}
+.ob-review__row {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: baseline;
+  gap: var(--space-12);
+  padding-block: var(--space-8);
+  border-block-end: 1px solid var(--color-border-transparent-subtle);
+}
+.ob-review__row dt {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+}
+.ob-review__row dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-label-sm);
+}
+.ob-review__edit {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-sm);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.ob-review__edit:hover {
+  color: var(--color-text-primary);
+}
+
+/* ── Screen previews (payment, banner, consents) ──
+   A page rather than a card, drawn the same way: labelled placeholders, so it
+   stays obvious that this is a shape and not a design. */
+.ob__preview--stack {
+  align-items: stretch;
+}
+.ob-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  inline-size: 100%;
+  max-inline-size: 320px;
+  padding: var(--space-16);
+  border: 1px dashed var(--color-border-full-color-subtle);
+  border-radius: var(--radius-16);
+  background: var(--color-surface-container-2);
+}
+.ob-screen__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-default);
+  font-weight: var(--font-weight-bold);
+}
+.ob-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8);
+  border: 1px solid var(--color-border-transparent-subtle);
+  border-radius: var(--radius-8);
+}
+.ob-option[data-selected] {
+  border-color: var(--color-border-full-color-default);
+}
+.ob-option__dot {
+  flex: none;
+  inline-size: 14px;
+  block-size: 14px;
+  border: 1px solid var(--color-border-full-color-subtle);
+  border-radius: 50%;
+}
+.ob-option[data-selected] .ob-option__dot {
+  border-width: 4px;
+  border-color: var(--color-text-primary);
+}
+.ob-option .ob-slot,
+.ob-consent .ob-slot {
+  flex: 1;
+}
+.ob-slot--option {
+  block-size: 20px;
+}
+.ob-banner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-12);
+  border: 1px dashed var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-3);
+}
+.ob-consent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.ob__warning {
+  margin: 0;
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-3);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label-sm);
+}

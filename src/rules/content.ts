@@ -12,6 +12,7 @@
 
 import type { FlowContent } from './flow'
 import type { FlowLayer } from './layers'
+import type { FlowStructure } from './onboarding'
 import type { PipelineDoc } from './pipeline'
 
 export type AddOnPurchaseType = 'one_time_payment' | 'discount_code'
@@ -403,6 +404,18 @@ export interface CardSet {
   review?: ReviewState
   /** Where each section stands in the Market → Dev handoff. */
   pipeline?: PipelineDoc
+  /**
+   * The shape of a flow, before it has any words — keyed by market, or by
+   * market and channel.
+   *
+   * Kept with the content because it is the content's own frame: how many
+   * plans there are decides how many plans need writing, and a structure that
+   * lived somewhere else could describe a set the content does not have.
+   *
+   * Keyed rather than nested so one flow's setup can never reach another's,
+   * which is the whole reason these are separate flows.
+   */
+  flowStructures?: Record<string, FlowStructure>
   /**
    * Words that belong to one market, keyed the way the panel keys its fields
    * (`landing.title`, `cadence.options[0].badge`, `tier:msg-plus.description`).
