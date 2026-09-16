@@ -869,9 +869,35 @@ button.acq-feature__info:hover {
 }
 
 /* ── The highlighted plan's gold reaches its feature icons ──
-   The glyphs paint with currentColor, so this is the colour of the row rather
-   than a second set of icons. The words stay white: gold text down the whole
-   list would be a card shouting rather than a plan being recommended. */
-.acq-card[data-highlighted] .acq-feature > .dazn-icon {
+
+   The same two stops the title and the button wear, in the one form a glyph
+   can paint with. The flat colour underneath is the fallback: an icon that
+   inherits rather than declaring `currentColor` still turns gold, it just
+   turns one gold instead of two.
+
+   Matched on the attribute so only the parts that were following the text
+   colour are repainted — an icon's `fill="none"` is its shape, not its
+   colour, and filling it would make a solid blob of an outline.
+
+   The words stay white. Gold text down the whole list would be a card
+   shouting rather than a plan being recommended. */
+.acq-card[data-highlighted] .acq-feature > .dazn-icon,
+.acq-details[data-highlighted] .acq-details__feature > .dazn-icon {
   color: var(--color-brand-secondary);
+}
+.acq-card[data-highlighted] .acq-feature > .dazn-icon [fill='currentColor'],
+.acq-details[data-highlighted] .acq-details__feature > .dazn-icon [fill='currentColor'] {
+  fill: url(#acq-gold);
+}
+.acq-card[data-highlighted] .acq-feature > .dazn-icon [stroke='currentColor'],
+.acq-details[data-highlighted] .acq-details__feature > .dazn-icon [stroke='currentColor'] {
+  stroke: url(#acq-gold);
+}
+
+/* Present to be referred to, never to be seen. */
+.acq-gold-def {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+  pointer-events: none;
 }

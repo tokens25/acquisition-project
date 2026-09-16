@@ -9,6 +9,7 @@ import { AddOn, type AddOnProps } from './AddOn'
 import { CardHeader } from './CardHeader'
 import { LogoTiles, type LogoTilesProps } from './LogoTiles'
 import { PlanCta } from './PlanCta'
+import { GoldGradient } from './GoldGradient'
 import { Pricing, type PricingProps } from './Pricing'
 import type { Device } from './types'
 
@@ -106,6 +107,10 @@ export function AcquisitionCard({
       data-selected={selected || undefined}
       onClick={onSelect}
     >
+      {/* Declared inside the card that uses it, so a card rendered on its own
+          — in Storybook, in a screenshot — carries its own gold with it. */}
+      {highlighted && <GoldGradient />}
+
       {eyebrow && (
         <p className="acq-card__eyebrow">
           <Icon svg={valueIcon} size={16} />

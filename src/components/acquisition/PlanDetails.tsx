@@ -4,6 +4,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import closeIcon from '../../assets/icons/action-close-md.svg?raw'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
+import { GoldGradient } from './GoldGradient'
 import { visibleBand } from './viewport'
 
 export interface PlanDetailsCompetition {
@@ -215,7 +216,15 @@ export function PlanDetails({
   }, [onClose])
 
   return (
-    <div className="acq-details" ref={rootRef} data-scope={scope}>
+    <div
+      className="acq-details"
+      ref={rootRef}
+      data-scope={scope}
+      data-highlighted={highlighted || undefined}
+    >
+      {/* The dialog is its own subtree, so the card's copy of the gradient is
+          not in scope here even when it opened from one. */}
+      {highlighted && <GoldGradient />}
       {/* The scrim is the dismiss target as well as the dim: clicking beside a
           dialog closes it everywhere else, and a bare div would not say so.
           It stays full size for that; the dim itself is drawn over the card. */}

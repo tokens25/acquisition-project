@@ -13,3 +13,4 @@ export {
 export { Pricing, type PricingProps } from './Pricing'
 export type { Device } from './types'
 export { PlanFeatures, type PlanFeaturesProps } from './PlanFeatures'
+export { GoldGradient, GOLD_GRADIENT_ID } from './GoldGradient'
