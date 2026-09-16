@@ -560,3 +560,81 @@
   padding-block-start: var(--space-12);
   border-block-start: 1px solid var(--color-border-full-color-default);
 }
+
+/* ── A rule between two groups of questions in one step ── */
+.ob-rule {
+  inline-size: 100%;
+  margin: var(--space-8) 0;
+  border: 0;
+  border-block-start: 1px solid var(--color-border-transparent-subtle);
+}
+
+/* ── A written field ── */
+.ob-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label-sm);
+}
+.ob-field input,
+.ob-field textarea {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-label-sm);
+  resize: vertical;
+}
+.ob-field input:focus-visible,
+.ob-field textarea:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: -1px;
+}
+
+/* ── What one plan carries ── */
+.ob-plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-12);
+  border: 1px solid var(--color-border-transparent-subtle);
+  border-radius: var(--radius-12);
+}
+.ob-plan__name {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-bold);
+}
+.ob-plan__what {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ob-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+.ob-chip {
+  padding: var(--space-4) var(--space-10);
+  border: 1px solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-sm);
+  cursor: pointer;
+}
+.ob-chip:hover {
+  color: var(--color-text-primary);
+}
+.ob-chip[data-on] {
+  border-color: var(--color-brand-secondary);
+  color: var(--color-text-primary);
+}

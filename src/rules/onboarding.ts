@@ -63,6 +63,17 @@ export interface PlansStructure {
    */
   highlighted: number | null
   selected: number | null
+  /**
+   * What each plan carries, by plan index — catalogue ids, not new content.
+   *
+   * Picked in setup rather than after it because a plan is largely what it
+   * carries: choosing the competitions and the feature lines is describing the
+   * plan, and doing it here means the cards come out of setup looking like
+   * plans instead of like empty boxes. The words on a competition or a feature
+   * line still belong to the catalogue, which is why these are ids.
+   */
+  logos: Record<number, string[]>
+  features: Record<number, string[]>
 }
 
 export interface CadenceStructure {
@@ -84,6 +95,30 @@ export interface BannerStructure {
 export interface ConsentItem {
   required: boolean
   withLink: boolean
+}
+
+/**
+ * A screen somebody either wrote in setup or deliberately left empty.
+ *
+ * `configure: false` is an answer, not a gap. A landing page nobody has words
+ * for yet still exists and is still walked through; it simply says nothing,
+ * and the panel is where it gets its words later. Recording the difference
+ * means the tool can tell "not written yet" from "written to be empty".
+ */
+export interface LandingSetup {
+  configure: boolean
+  title: string
+  body: string
+  cta: string
+  altCta: string
+}
+
+export interface CheckoutSetup {
+  configure: boolean
+  navTitle: string
+  note: string
+  payCta: string
+  legal: string
 }
 
 export interface FlowStructure {
@@ -110,11 +145,13 @@ export interface FlowStructure {
   state: FlowState
   /** Which step of the setup was last open, so leaving and coming back lands there. */
   step: number
+  landing: LandingSetup
   card: CardStructure
   plans: PlansStructure
   cadence: CadenceStructure
   banner: BannerStructure
   consents: ConsentItem[]
+  checkout: CheckoutSetup
   updatedAt: string
 }
 
@@ -137,6 +174,7 @@ export function blankStructure(marketId: string, channelId?: string): FlowStruct
     entry: ENTRY_POINTS[0],
     state: 'in-progress',
     step: 1,
+    landing: { configure: false, title: '', body: '', cta: '', altCta: '' },
     card: {
       title: true,
       description: true,
@@ -152,10 +190,11 @@ export function blankStructure(marketId: string, channelId?: string): FlowStruct
       featureCount: 4,
       details: true,
     },
-    plans: { count: 2, highlighted: null, selected: null },
+    plans: { count: 2, highlighted: null, selected: null, logos: {}, features: {} },
     cadence: { enabled: false, optionCount: 2, defaultOption: null, optionsByPlan: {} },
     banner: { enabled: false, title: true, description: true, link: false },
     consents: [],
+    checkout: { configure: false, navTitle: '', note: '', payCta: '', legal: '' },
     updatedAt: new Date().toISOString(),
   }
 }
@@ -179,8 +218,20 @@ export function settle(card: CardStructure): CardStructure {
 
 /** A plan that is no longer there cannot be the promoted one, or the chosen one. */
 export function settlePlans(plans: PlansStructure): PlansStructure {
-  const within = (n: number | null) => (n !== null && n >= 0 && n < plans.count ? n : null)
-  return { ...plans, count: Math.max(1, plans.count), highlighted: within(plans.highlighted), selected: within(plans.selected) }
+  const count = Math.max(1, plans.count)
+  const within = (n: number | null) => (n !== null && n >= 0 && n < count ? n : null)
+  // What a plan that is no longer there carried goes with it. Keeping it would
+  // hand the next plan to take that index somebody else's competitions.
+  const trim = (by: Record<number, string[]>) =>
+    Object.fromEntries(Object.entries(by).filter(([i]) => Number(i) < count))
+  return {
+    ...plans,
+    count,
+    highlighted: within(plans.highlighted),
+    selected: within(plans.selected),
+    logos: trim(plans.logos),
+    features: trim(plans.features),
+  }
 }
 
 /** What the review step lists, in the order it lists it. */
@@ -200,11 +251,24 @@ export function structureSummary(s: FlowStructure): { label: string; value: stri
     s.card.details && '“All features & content”',
   ].filter(Boolean) as string[]
 
+  const carried = Array.from({ length: s.plans.count }, (_, i) => {
+    const logos = s.plans.logos[i]?.length ?? 0
+    const features = s.plans.features[i]?.length ?? 0
+    if (logos + features === 0) return null
+    const said = [
+      logos ? `${logos} competition${logos === 1 ? '' : 's'}` : null,
+      features ? `${features} feature${features === 1 ? '' : 's'}` : null,
+    ].filter(Boolean)
+    return `Plan ${i + 1}: ${said.join(' and ')}`
+  }).filter(Boolean) as string[]
+
   return [
     { label: 'For', value: STATUS_LABELS[s.audience] ?? s.audience },
     { label: 'Arriving from', value: s.entry },
+    { label: 'Landing page', value: s.landing.configure ? 'Written here' : 'Left blank' },
     { label: 'Card', value: parts.length ? parts.join(' · ') : 'Nothing drawn yet' },
     { label: 'Plans', value: String(s.plans.count) },
+    { label: 'Each plan', value: carried.length ? carried.join(' · ') : 'Nothing picked yet' },
     { label: 'Highlighted', value: named(s.plans.highlighted) },
     { label: 'Selected by default', value: named(s.plans.selected) },
     {
@@ -215,19 +279,30 @@ export function structureSummary(s: FlowStructure): { label: string; value: stri
     },
     { label: 'Login banner', value: on(s.banner.enabled) },
     { label: 'Consents', value: String(s.consents.length) },
+    { label: 'Checkout', value: s.checkout.configure ? 'Written here' : 'Left blank' },
   ]
 }
 
 /** The steps, named once so the wizard and the review cannot disagree. */
+/**
+ * The steps, named once so the wizard and the review cannot disagree.
+ *
+ * Two questions about who is arriving, then the journey's own screens in the
+ * order somebody walks them. Each screen can be written now or left blank —
+ * blank is a real answer, and the panel is where a blank screen gets its words
+ * later. The shape of the plan card is asked on the screen that draws it,
+ * because that is the screen it is a fact about.
+ */
 export const SETUP_STEPS = [
   { n: 1, title: 'Who it is for', blurb: 'Who is at the door. What they already have decides which screens they see.' },
   { n: 2, title: 'How they arrive', blurb: 'What they pressed to get here. Together with the answer above, this is the flow.' },
-  { n: 3, title: 'Card structure', blurb: 'Which parts of a plan card this flow draws.' },
-  { n: 4, title: 'Plans', blurb: 'How many, which is promoted, which is chosen.' },
+  { n: 3, title: 'Landing page', blurb: 'The page they arrive on. Write it now, or leave it blank and write it later.' },
+  { n: 4, title: 'Plan selection', blurb: 'The cards: what they are made of, how many, and what each plan carries.' },
   { n: 5, title: 'Payment', blurb: 'Whether choosing how to pay is its own step.' },
-  { n: 6, title: 'Login banner', blurb: 'Whether the login page carries a notice.' },
-  { n: 7, title: 'Consents', blurb: 'How many, and which are required.' },
-  { n: 8, title: 'Review', blurb: 'What has been described, before any content.' },
+  { n: 6, title: 'Login', blurb: 'Whether the login page carries a notice.' },
+  { n: 7, title: 'Account', blurb: 'The consents on the sign-up form.' },
+  { n: 8, title: 'Checkout', blurb: 'The page they pay on. Write it now, or leave it blank.' },
+  { n: 9, title: 'Review', blurb: 'What has been described, and what building it will make.' },
 ] as const
 
 export const LAST_STEP = SETUP_STEPS.length

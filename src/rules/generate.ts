@@ -4,6 +4,7 @@ import type { Journey, Step } from './journey'
 import { configuredJourneys } from './journeyConfig'
 import type { FlowStructure } from './onboarding'
 import { structureKey } from './onboarding'
+import { writeFlow } from './layers'
 
 /**
  * Turning a described structure into a flow that runs.
@@ -202,15 +203,27 @@ export function journeyFor(s: FlowStructure): Journey {
   }
 }
 
-/** An empty plan slot — a label and a shape, and nothing that reads as content. */
+/**
+ * A plan slot, carrying whatever setup picked for it.
+ *
+ * The name is a label and the price is zero, because those are the parts
+ * nobody has decided yet. The competitions and the feature lines are not: they
+ * were chosen in setup, from the catalogue, and they are what makes the card
+ * come out looking like a plan rather than an empty box.
+ */
 function blankTier(s: FlowStructure, index: number): Tier {
+  const logos = s.plans.logos[index] ?? []
+  const features = s.plans.features[index] ?? []
   return {
     id: tierIdFor(s, index),
     planName: `Plan ${index + 1}`,
     description: '',
-    features: [],
-    logoTiles: [],
-    logoTotal: 0,
+    features,
+    logoTiles: logos,
+    // What the plan carries, as far as anyone has said. A plan with more
+    // competitions than logos supplied is a thing somebody states later; it is
+    // not something setup can know.
+    logoTotal: logos.length,
     logoRows: s.card.logos ? s.card.logoRows : undefined,
     logoOverflow: s.card.logos ? s.card.logoOverflow : undefined,
     // The highlighted plan is the one carrying the badge, which is the
@@ -315,9 +328,43 @@ export function generateFlow(set: CardSet, s: FlowStructure): Generated {
     }
   }
 
+  /*
+   * The words setup was given, laid over this situation.
+   *
+   * Layered rather than written into the base, because the base is what every
+   * other market and product reads: a headline written for Japan's NFL flow
+   * belongs to Japan's NFL flow. A screen left blank writes nothing at all —
+   * that is the difference between "left empty on purpose" and "filled with
+   * emptiness", and only one of them can be told apart from a mistake later.
+   */
+  const scope = { market: s.marketId, subscription: s.channelId ?? '' }
+  let written: CardSet = { ...set, journeys, tiers: nextTiers, offers: [...kept, ...added] }
+  if (s.landing.configure) {
+    written = {
+      ...written,
+      ...writeFlow(written, scope, 'landing', {
+        ...(s.landing.title.trim() ? { title: s.landing.title.trim() } : {}),
+        ...(s.landing.body.trim() ? { body: s.landing.body.trim() } : {}),
+        ...(s.landing.cta.trim() ? { cta: s.landing.cta.trim() } : {}),
+        ...(s.landing.altCta.trim() ? { altCta: s.landing.altCta.trim() } : {}),
+      }),
+    }
+  }
+  if (s.checkout.configure) {
+    written = {
+      ...written,
+      ...writeFlow(written, scope, 'checkout', {
+        ...(s.checkout.navTitle.trim() ? { navTitle: s.checkout.navTitle.trim() } : {}),
+        ...(s.checkout.note.trim() ? { note: s.checkout.note.trim() } : {}),
+        ...(s.checkout.payCta.trim() ? { payCta: s.checkout.payCta.trim() } : {}),
+        ...(s.checkout.legal.trim() ? { legal: s.checkout.legal.trim() } : {}),
+      }),
+    }
+  }
+
   return {
     set: {
-      ...set,
+      ...written,
       journeys,
       tiers: nextTiers,
       offers: [...kept, ...added],

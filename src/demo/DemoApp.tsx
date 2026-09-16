@@ -709,6 +709,8 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
             setupOpen && draft ? (
               <Onboarding
                 draft={draft}
+                logoCatalog={store.set.logoCatalog}
+                featureCatalog={store.set.featureCatalog}
                 onChange={writeStructure}
                 warning={
                   configured

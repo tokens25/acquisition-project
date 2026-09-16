@@ -8,6 +8,7 @@ import type {
   ConsentItem,
   FlowStructure,
 } from '../rules/onboarding'
+import type { CatalogEntry, FeatureEntry } from '../rules/content'
 import { LAST_STEP, SETUP_STEPS, settle, settlePlans, structureSummary } from '../rules/onboarding'
 import { ENTRY_POINTS, STATUS_LABELS, USER_STATUSES } from '../rules/entry'
 import { stepsFor } from '../rules/generate'
@@ -61,12 +62,17 @@ export function OnboardingStart({
 
 export function Onboarding({
   draft,
+  logoCatalog,
+  featureCatalog,
   onChange,
   onFinish,
   onClose,
   warning,
 }: {
   draft: FlowStructure
+  /** What a plan can be given here. Setup picks from these; it never adds. */
+  logoCatalog: CatalogEntry[]
+  featureCatalog: FeatureEntry[]
   onChange: (next: FlowStructure) => void
   onFinish: () => void
   onClose: () => void
@@ -80,6 +86,7 @@ export function Onboarding({
   const go = (n: number) => write({ step: Math.min(Math.max(n, 1), LAST_STEP) })
 
   const plans = draft.plans
+  const card = draft.card
   const cards = useMemo(
     () => Array.from({ length: plans.count }, (_, i) => i),
     [plans.count],
@@ -158,10 +165,27 @@ export function Onboarding({
             </div>
           )}
 
-          {step === 3 && <CardControls card={draft.card} onChange={writeCard} />}
+          {step === 3 && (
+            <ScreenCopy
+              on={draft.landing.configure}
+              onToggle={(v) => write({ landing: { ...draft.landing, configure: v } })}
+              label="Write the landing page now"
+              blank="The page is still part of the flow. It will be built empty, and the panel is where its words go."
+              fields={[
+                { key: 'title', label: 'Headline' },
+                { key: 'body', label: 'Body', rows: 3 },
+                { key: 'cta', label: 'Button' },
+                { key: 'altCta', label: 'Second button' },
+              ]}
+              value={draft.landing}
+              onField={(k, v) => write({ landing: { ...draft.landing, [k]: v } })}
+            />
+          )}
 
           {step === 4 && (
             <>
+              <CardControls card={draft.card} onChange={writeCard} />
+              <hr className="ob-rule" />
               <Count
                 label="How many plans"
                 value={plans.count}
@@ -200,6 +224,34 @@ export function Onboarding({
                   })
                 }
               />
+
+              {(card.logos || card.features) && (
+                <>
+                  <hr className="ob-rule" />
+                  <p className="ob__blurb">
+                    What each plan carries. Picked from what the set already has — setup chooses,
+                    it does not write new competitions or feature lines.
+                  </p>
+                  {cards.map((i) => (
+                    <PlanContents
+                      key={i}
+                      index={i}
+                      showLogos={card.logos}
+                      showFeatures={card.features}
+                      logoCatalog={logoCatalog}
+                      featureCatalog={featureCatalog}
+                      logos={plans.logos[i] ?? []}
+                      features={plans.features[i] ?? []}
+                      onLogos={(ids) =>
+                        write({ plans: { ...plans, logos: { ...plans.logos, [i]: ids } } })
+                      }
+                      onFeatures={(ids) =>
+                        write({ plans: { ...plans, features: { ...plans.features, [i]: ids } } })
+                      }
+                    />
+                  ))}
+                </>
+              )}
             </>
           )}
 
@@ -231,6 +283,23 @@ export function Onboarding({
           )}
 
           {step === 7 && <ConsentControls items={draft.consents} onChange={(c) => write({ consents: c })} />}
+
+          {step === 8 && (
+            <ScreenCopy
+              on={draft.checkout.configure}
+              onToggle={(v) => write({ checkout: { ...draft.checkout, configure: v } })}
+              label="Write the checkout page now"
+              blank="The page is still part of the flow. It will be built empty, and the panel is where its words go."
+              fields={[
+                { key: 'navTitle', label: 'Screen title' },
+                { key: 'note', label: 'Note above the summary', rows: 2 },
+                { key: 'payCta', label: 'Pay button' },
+                { key: 'legal', label: 'Legal line', rows: 2 },
+              ]}
+              value={draft.checkout}
+              onField={(k, v) => write({ checkout: { ...draft.checkout, [k]: v } })}
+            />
+          )}
 
           {step === LAST_STEP && (
             <>
@@ -282,9 +351,9 @@ export function Onboarding({
 
 /** Which step a review row belongs to, so Edit lands where the answer is given. */
 function editStepFor(rowIndex: number): number {
-  // For · Arriving from · Card · Plans · Highlighted · Selected · Payment ·
-  // Banner · Consents
-  return [1, 2, 3, 4, 4, 4, 5, 6, 7][rowIndex] ?? 1
+  // For · Arriving from · Landing · Card · Plans · Each plan · Highlighted ·
+  // Selected · Payment · Banner · Consents · Checkout
+  return [1, 2, 3, 4, 4, 4, 4, 4, 5, 6, 7, 8][rowIndex] ?? 1
 }
 
 function CardControls({
@@ -466,14 +535,17 @@ function ConsentControls({
 /** What the right-hand side shows, which is whatever the step is about. */
 function Preview({ draft, step }: { draft: FlowStructure; step: number }) {
   const { card, plans } = draft
-  const one = step === 3
-  const count = one ? 1 : plans.count
+  const one = false
+  const count = plans.count
 
-  // The first two questions are about the journey rather than the card, so
-  // what they change is the list of screens — show that instead.
+  // Each step previews the screen it is about. The two questions about who is
+  // arriving change the list of screens rather than any one of them, so they
+  // show the list.
   if (step <= 2 || step === LAST_STEP) return <FlowMapPreview draft={draft} />
+  if (step === 3) return <LandingPreview draft={draft} />
   if (step === 6) return <BannerPreview draft={draft} />
   if (step === 7) return <ConsentPreview draft={draft} />
+  if (step === 8) return <CheckoutPreview draft={draft} />
   if (step === 5 && draft.cadence.enabled) return <CadencePreview draft={draft} />
 
   return (
@@ -490,6 +562,167 @@ function Preview({ draft, step }: { draft: FlowStructure; step: number }) {
           reserveLegal={card.legal}
         />
       ))}
+    </div>
+  )
+}
+
+/**
+ * A screen written here, or deliberately left empty.
+ *
+ * The switch comes first and the fields follow it, rather than the fields
+ * being there and ignorable: leaving a screen blank is a decision somebody
+ * makes, and a form that only lets you make it by not typing cannot tell that
+ * decision from an unfinished one.
+ */
+function ScreenCopy<T extends { configure: boolean }>({
+  on,
+  onToggle,
+  label,
+  blank,
+  fields,
+  value,
+  onField,
+}: {
+  on: boolean
+  onToggle: (v: boolean) => void
+  label: string
+  blank: string
+  fields: { key: keyof T & string; label: string; rows?: number }[]
+  value: T
+  onField: (key: string, v: string) => void
+}) {
+  return (
+    <>
+      <Toggle label={label} checked={on} onChange={onToggle} />
+      {on ? (
+        fields.map((f) => (
+          <label className="ob-field" key={f.key}>
+            <span>{f.label}</span>
+            {f.rows ? (
+              <textarea
+                rows={f.rows}
+                value={String(value[f.key] ?? '')}
+                onChange={(e) => onField(f.key, e.target.value)}
+              />
+            ) : (
+              <input
+                type="text"
+                value={String(value[f.key] ?? '')}
+                onChange={(e) => onField(f.key, e.target.value)}
+              />
+            )}
+          </label>
+        ))
+      ) : (
+        <p className="ob__blurb">{blank}</p>
+      )}
+    </>
+  )
+}
+
+/** What one plan carries — picked from the catalogue, never written here. */
+function PlanContents({
+  index,
+  showLogos,
+  showFeatures,
+  logoCatalog,
+  featureCatalog,
+  logos,
+  features,
+  onLogos,
+  onFeatures,
+}: {
+  index: number
+  showLogos: boolean
+  showFeatures: boolean
+  logoCatalog: CatalogEntry[]
+  featureCatalog: FeatureEntry[]
+  logos: string[]
+  features: string[]
+  onLogos: (ids: string[]) => void
+  onFeatures: (ids: string[]) => void
+}) {
+  const toggle = (list: string[], id: string) =>
+    list.includes(id) ? list.filter((x) => x !== id) : [...list, id]
+
+  return (
+    <div className="ob-plan">
+      <p className="ob-plan__name">Plan {index + 1}</p>
+      {showLogos && (
+        <>
+          <p className="ob-plan__what">Competitions</p>
+          <div className="ob-chips">
+            {logoCatalog.map((l) => (
+              <button
+                type="button"
+                key={l.id}
+                className="ob-chip"
+                data-on={logos.includes(l.id) || undefined}
+                onClick={() => onLogos(toggle(logos, l.id))}
+              >
+                {l.name}
+              </button>
+            ))}
+            {logoCatalog.length === 0 && (
+              <p className="ob__blurb">No competitions in this set yet.</p>
+            )}
+          </div>
+        </>
+      )}
+      {showFeatures && (
+        <>
+          <p className="ob-plan__what">Features</p>
+          <div className="ob-chips">
+            {featureCatalog.map((f) => (
+              <button
+                type="button"
+                key={f.id}
+                className="ob-chip"
+                data-on={features.includes(f.id) || undefined}
+                onClick={() => onFeatures(toggle(features, f.id))}
+              >
+                {f.text}
+              </button>
+            ))}
+            {featureCatalog.length === 0 && <p className="ob__blurb">No features in this set yet.</p>}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+function LandingPreview({ draft }: { draft: FlowStructure }) {
+  const l = draft.landing
+  const said = (written: string, slot: string) =>
+    l.configure && written.trim() ? written.trim() : slot
+  return (
+    <div className="ob__preview ob__preview--stack">
+      <div className="ob-screen">
+        <p className="ob-screen__title">Landing</p>
+        <div className="ob-slot ob-slot--title">{said(l.title, 'Headline')}</div>
+        <div className="ob-slot ob-slot--legal">{said(l.body, 'Body')}</div>
+        <div className="ob-slot ob-slot--button">{said(l.cta, 'Button')}</div>
+        <div className="ob-slot ob-slot--button">{said(l.altCta, 'Second button')}</div>
+      </div>
+    </div>
+  )
+}
+
+function CheckoutPreview({ draft }: { draft: FlowStructure }) {
+  const c = draft.checkout
+  const said = (written: string, slot: string) =>
+    c.configure && written.trim() ? written.trim() : slot
+  return (
+    <div className="ob__preview ob__preview--stack">
+      <div className="ob-screen">
+        <p className="ob-screen__title">{said(c.navTitle, 'Checkout')}</p>
+        <div className="ob-slot ob-slot--legal">{said(c.note, 'Note above the summary')}</div>
+        <div className="ob-slot ob-slot--price">Order summary</div>
+        <div className="ob-slot ob-slot--price">Payment details</div>
+        <div className="ob-slot ob-slot--legal">{said(c.legal, 'Legal line')}</div>
+        <div className="ob-slot ob-slot--button">{said(c.payCta, 'Pay button')}</div>
+      </div>
     </div>
   )
 }
