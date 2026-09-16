@@ -22,6 +22,14 @@ export interface MarketConfigEntry {
   /** As the business writes it, prefix included. */
   label: string
   group: MarketGroup
+  /**
+   * The country's flag, as the pricing backend carries it.
+   *
+   * A picture of the answer, not the answer: it sits beside the label in a
+   * picker and nothing reads it. The catch-all gets a globe, because "everyone
+   * else" is not a country and giving it somebody's flag would say it was.
+   */
+  flag: string
   /** Everything not named by another market. Exactly one may say this. */
   catchAll?: true
 }
@@ -37,28 +45,28 @@ export interface MarketConfigEntry {
  */
 export const MARKETS: readonly MarketConfigEntry[] = [
   // Core
-  { id: 'be', label: 'Belgium', group: 'core' },
-  { id: 'at', label: 'DACH: Austria', group: 'core' },
-  { id: 'de', label: 'DACH: Germany', group: 'core' },
-  { id: 'li', label: 'DACH: Liechtenstein', group: 'core' },
-  { id: 'lu', label: 'DACH: Luxembourg', group: 'core' },
-  { id: 'ch', label: 'DACH: Switzerland', group: 'core' },
-  { id: 'fr', label: 'France', group: 'core' },
-  { id: 'it', label: 'Italy', group: 'core' },
-  { id: 'jp', label: 'Japan', group: 'core' },
-  { id: 'pt', label: 'Portugal', group: 'core' },
-  { id: 'es', label: 'Spain', group: 'core' },
-  { id: 'tw', label: 'Taiwan', group: 'core' },
+  { id: 'be', label: 'Belgium', group: 'core', flag: '🇧🇪' },
+  { id: 'at', label: 'DACH: Austria', group: 'core', flag: '🇦🇹' },
+  { id: 'de', label: 'DACH: Germany', group: 'core', flag: '🇩🇪' },
+  { id: 'li', label: 'DACH: Liechtenstein', group: 'core', flag: '🇱🇮' },
+  { id: 'lu', label: 'DACH: Luxembourg', group: 'core', flag: '🇱🇺' },
+  { id: 'ch', label: 'DACH: Switzerland', group: 'core', flag: '🇨🇭' },
+  { id: 'fr', label: 'France', group: 'core', flag: '🇫🇷' },
+  { id: 'it', label: 'Italy', group: 'core', flag: '🇮🇹' },
+  { id: 'jp', label: 'Japan', group: 'core', flag: '🇯🇵' },
+  { id: 'pt', label: 'Portugal', group: 'core', flag: '🇵🇹' },
+  { id: 'es', label: 'Spain', group: 'core', flag: '🇪🇸' },
+  { id: 'tw', label: 'Taiwan', group: 'core', flag: '🇹🇼' },
 
   // Growth
-  { id: 'ca', label: 'Canada', group: 'growth' },
-  { id: 'row', label: 'ROW: Everyone else', group: 'growth', catchAll: true },
-  { id: 'ie', label: 'ROW: Ireland', group: 'growth' },
-  { id: 'mx', label: 'ROW: Mexico', group: 'growth' },
-  { id: 'nl', label: 'ROW: Netherlands', group: 'growth' },
-  { id: 'pl', label: 'ROW: Poland', group: 'growth' },
-  { id: 'gb', label: 'UK', group: 'growth' },
-  { id: 'us', label: 'US', group: 'growth' },
+  { id: 'ca', label: 'Canada', group: 'growth', flag: '🇨🇦' },
+  { id: 'row', label: 'ROW: Everyone else', group: 'growth', catchAll: true, flag: '🌍' },
+  { id: 'ie', label: 'ROW: Ireland', group: 'growth', flag: '🇮🇪' },
+  { id: 'mx', label: 'ROW: Mexico', group: 'growth', flag: '🇲🇽' },
+  { id: 'nl', label: 'ROW: Netherlands', group: 'growth', flag: '🇳🇱' },
+  { id: 'pl', label: 'ROW: Poland', group: 'growth', flag: '🇵🇱' },
+  { id: 'gb', label: 'UK', group: 'growth', flag: '🇬🇧' },
+  { id: 'us', label: 'US', group: 'growth', flag: '🇺🇸' },
 ]
 
 export const MARKET_GROUP_LABELS: Record<MarketGroup, string> = {

@@ -164,7 +164,7 @@ export function DefaultPanel({
           // behind it is a dead end, and published content can be older than
           // the list. The currency is not part of a market's name either — the
           // pricing group's own heading says it, where it is being used.
-          ...MARKETS.map((m) => ({ value: m.id, label: m.label })),
+          ...MARKETS.map((m) => ({ value: m.id, label: `${m.flag}  ${m.label}` })),
           ...(prompt ? [{ value: ADD_MARKET, label: 'Add new' }] : []),
         ]}
         onChange={(v) => {
