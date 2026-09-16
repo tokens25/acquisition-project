@@ -10,7 +10,9 @@ import {
   userStatuses,
 } from '../rules/entry'
 import { MARKETS, MARKET_GROUP_LABELS, channelsFor } from '../rules/catalogue'
-import { configuredJourneys as journeys, resolveChannelJourney, resolveMarketJourney } from '../rules/journeyConfig'
+import { resolveChannelJourney, resolveMarketJourney } from '../rules/journeyConfig'
+import { allJourneys } from '../rules/generate'
+import { structureKey } from '../rules/onboarding'
 import { SelectField } from '../components/SelectField'
 
 /**
@@ -99,9 +101,21 @@ export function DefaultPanel({
    * showing an empty flow with no explanation. Availability and readiness are
    * different states and this keeps them apart.
    */
-  const resolution = context.subscription
-    ? resolveChannelJourney(context.market, context.subscription)
-    : resolveMarketJourney(context.market)
+  /*
+   * Flows built here count as written. A journey generated in the setup wizard
+   * lives on the set rather than in `journeyConfig`, so the two lookups below
+   * would keep calling it unconfigured long after somebody configured it.
+   */
+  const journeys = allJourneys(store.set)
+  const built = Boolean(
+    store.set.flowStructures?.[structureKey(context.market, context.subscription || undefined)]
+      ?.state === 'ready',
+  )
+  const resolution = built
+    ? ({ state: 'ok', scope: context.subscription ? 'channel' : 'market', shared: false } as const)
+    : context.subscription
+      ? resolveChannelJourney(context.market, context.subscription)
+      : resolveMarketJourney(context.market)
 
   // The statuses this situation has journeys for, or the standing questions
   // when it has none. A situation nobody has written for still has a user at
@@ -141,7 +155,16 @@ export function DefaultPanel({
     setContext(next)
     const options = entryPoints(journeys, next, nextStatus)
     const cta = nextEntry && options.includes(nextEntry) ? nextEntry : options[0]
-    const found = journeysMatching(journeys, next, nextStatus, cta ?? '')[0]
+    const here = allJourneys(store.set)
+    // A flow built here for exactly this market and channel, when the entry
+    // lookup finds nothing — a generated journey is the answer to "what runs
+    // in this situation" even before its CTA has been chosen from the list.
+    const mine = (store.set.journeys ?? []).filter(
+      (j) =>
+        j.when?.market === next.market &&
+        (j.when?.subscription ?? undefined) === (next.subscription || undefined),
+    )
+    const found = journeysMatching(here, next, nextStatus, cta ?? '')[0] ?? mine[0]
     // Naming nothing is the point. Leaving the previous situation's journey id
     // in place is how a market with no flow of its own came to render another
     // market's — and the progress through it belongs to that journey too.

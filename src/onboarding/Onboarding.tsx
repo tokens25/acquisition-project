@@ -9,6 +9,8 @@ import type {
   FlowStructure,
 } from '../rules/onboarding'
 import { LAST_STEP, SETUP_STEPS, settle, settlePlans, structureSummary } from '../rules/onboarding'
+import { ENTRY_POINTS, STATUS_LABELS, USER_STATUSES } from '../rules/entry'
+import { stepsFor } from '../rules/generate'
 import { SkeletonCard } from './SkeletonCard'
 
 /** "Japan · NFL", or just the market for a general flow. */
@@ -43,7 +45,8 @@ export function OnboardingStart({
       <div className="ob-start">
         <h2 className="ob-start__title">Set up your acquisition flow</h2>
         <p className="ob-start__body">
-          Choose your card layout, plans, and journey steps before adding your content.
+          Eight questions: who it is for, how they arrive, and what the screens are made of.
+          At the end the flow is built and ready for its words.
         </p>
         <p className="ob-start__where">{whereLabel(marketId, channelId)}</p>
         <div className="ob-start__actions">
@@ -115,9 +118,49 @@ export function Onboarding({
         <div className="ob__controls">
           <p className="ob__blurb">{SETUP_STEPS[step - 1].blurb}</p>
 
-          {step === 1 && <CardControls card={draft.card} onChange={writeCard} />}
+          {step === 1 && (
+            <div className="ob-choices">
+              {USER_STATUSES.map((id) => (
+                <Choice
+                  key={id}
+                  name="ob-audience"
+                  checked={draft.audience === id}
+                  title={STATUS_LABELS[id] ?? id}
+                  body={
+                    id === 'logged-out-new'
+                      ? 'Nobody we know yet. They will need an account before they can pay.'
+                      : 'Has an account already. They log in rather than create one.'
+                  }
+                  onPick={() => write({ audience: id })}
+                />
+              ))}
+            </div>
+          )}
 
           {step === 2 && (
+            <div className="ob-choices">
+              {ENTRY_POINTS.map((cta) => (
+                <Choice
+                  key={cta}
+                  name="ob-entry"
+                  checked={draft.entry === cta}
+                  title={cta}
+                  body={
+                    cta === 'Landing page'
+                      ? 'They pressed a button on a page selling this. Nothing is known yet.'
+                      : cta === 'CRM'
+                        ? 'They followed an email or a push. The campaign may already know the plan.'
+                        : 'They came from inside the catalogue, looking at something they cannot watch.'
+                  }
+                  onPick={() => write({ entry: cta })}
+                />
+              ))}
+            </div>
+          )}
+
+          {step === 3 && <CardControls card={draft.card} onChange={writeCard} />}
+
+          {step === 4 && (
             <>
               <Count
                 label="How many plans"
@@ -160,11 +203,11 @@ export function Onboarding({
             </>
           )}
 
-          {step === 3 && (
+          {step === 5 && (
             <CadenceControls draft={draft} write={write} planCount={plans.count} />
           )}
 
-          {step === 4 && (
+          {step === 6 && (
             <>
               <Toggle
                 label="Show an information banner on the login page"
@@ -187,9 +230,14 @@ export function Onboarding({
             </>
           )}
 
-          {step === 5 && <ConsentControls items={draft.consents} onChange={(c) => write({ consents: c })} />}
+          {step === 7 && <ConsentControls items={draft.consents} onChange={(c) => write({ consents: c })} />}
 
-          {step === 6 && (
+          {step === LAST_STEP && (
+            <>
+            <p className="ob__blurb">
+              “Continue to add content” builds this flow — its screens, and an empty plan
+              card for each plan. Nothing is written for you.
+            </p>
             <dl className="ob-review">
               {structureSummary(draft).map((row, i) => (
                 <div className="ob-review__row" key={row.label}>
@@ -201,6 +249,7 @@ export function Onboarding({
                 </div>
               ))}
             </dl>
+            </>
           )}
         </div>
 
@@ -233,8 +282,9 @@ export function Onboarding({
 
 /** Which step a review row belongs to, so Edit lands where the answer is given. */
 function editStepFor(rowIndex: number): number {
-  // Card · Plans · Highlighted · Selected · Payment · Banner · Consents
-  return [1, 2, 2, 2, 3, 4, 5][rowIndex] ?? 1
+  // For · Arriving from · Card · Plans · Highlighted · Selected · Payment ·
+  // Banner · Consents
+  return [1, 2, 3, 4, 4, 4, 5, 6, 7][rowIndex] ?? 1
 }
 
 function CardControls({
@@ -411,12 +461,15 @@ function ConsentControls({
 /** What the right-hand side shows, which is whatever the step is about. */
 function Preview({ draft, step }: { draft: FlowStructure; step: number }) {
   const { card, plans } = draft
-  const one = step === 1
+  const one = step === 3
   const count = one ? 1 : plans.count
 
-  if (step === 4) return <BannerPreview draft={draft} />
-  if (step === 5) return <ConsentPreview draft={draft} />
-  if (step === 3 && draft.cadence.enabled) return <CadencePreview draft={draft} />
+  // The first two questions are about the journey rather than the card, so
+  // what they change is the list of screens — show that instead.
+  if (step <= 2 || step === LAST_STEP) return <FlowMapPreview draft={draft} />
+  if (step === 6) return <BannerPreview draft={draft} />
+  if (step === 7) return <ConsentPreview draft={draft} />
+  if (step === 5 && draft.cadence.enabled) return <CadencePreview draft={draft} />
 
   return (
     <div className="ob__preview">
@@ -433,6 +486,51 @@ function Preview({ draft, step }: { draft: FlowStructure; step: number }) {
         />
       ))}
     </div>
+  )
+}
+
+/** The screens this flow will have, as it is currently described. */
+function FlowMapPreview({ draft }: { draft: FlowStructure }) {
+  const steps = stepsFor(draft)
+  return (
+    <div className="ob__preview ob__preview--stack">
+      <ol className="ob-map">
+        {steps.map((s, i) => (
+          <li className="ob-map__row" key={s.id}>
+            <span className="ob-map__n">{i + 1}</span>
+            <span className="ob-map__name">{s.shortName ?? s.name}</span>
+          </li>
+        ))}
+      </ol>
+      <p className="ob-map__note">
+        {steps.length} screens. Setup decides what is on them; the words come after.
+      </p>
+    </div>
+  )
+}
+
+/** One of a short list of answers, with the reason it might be the right one. */
+function Choice({
+  name,
+  checked,
+  title,
+  body,
+  onPick,
+}: {
+  name: string
+  checked: boolean
+  title: string
+  body: string
+  onPick: () => void
+}) {
+  return (
+    <label className="ob-choice" data-on={checked || undefined}>
+      <input type="radio" name={name} checked={checked} onChange={onPick} />
+      <span>
+        <strong className="ob-choice__title">{title}</strong>
+        <span className="ob-choice__body">{body}</span>
+      </span>
+    </label>
   )
 }
 

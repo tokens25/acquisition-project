@@ -5,7 +5,7 @@ import { iconArtwork, logoArtwork } from '../card/assets'
 import type { AddOnPurchaseType, CardSet, Tier, TierPatch } from '../rules/content'
 import { DIRECT } from '../rules/content'
 import { journeysFor, resolveJourney } from '../rules/journey'
-import { configuredJourneys as journeys } from '../rules/journeyConfig'
+import { allJourneys } from '../rules/generate'
 import { excludedTiers, marketFor, resolveTier } from '../rules/resolve'
 import { summarise, validateAll, validateContext } from '../rules/validate'
 import { Icon } from '../components/Icon'
@@ -48,6 +48,7 @@ export function SetEditor({ store }: { store: CardSetStore }) {
   const channelsHere = set.channels.filter(
     (c) => !c.markets || c.markets.includes(context.market),
   )
+  const journeys = allJourneys(set)
   const journeysHere = journeysFor(journeys, context)
   const hiddenJourneys = journeys.length - journeysHere.length
 

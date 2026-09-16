@@ -3,8 +3,8 @@ import type { FlowContent } from './flow'
 import { defaultFlow } from './flow'
 import { STATUS_LABELS } from './entry'
 import { channelById, marketById } from './catalogue'
-import { configuredJourneys as journeys } from './journeyConfig'
 import { chosenJourney } from './journey'
+import { allJourneys } from './generate'
 
 /**
  * Which situation content is being written for.
@@ -68,7 +68,7 @@ export function situationOf(set: CardSet): Situation {
   // The journey the editor and the preview are both on, not the id the set
   // happens to name: a set carrying an id that does not run here is showing
   // some other journey, and its copy belongs to the one on screen.
-  const journey = chosenJourney(journeys, set.context, set.journeyId)
+  const journey = chosenJourney(allJourneys(set), set.context, set.journeyId)
   return {
     market: set.context.market,
     subscription: set.context.subscription ?? '',

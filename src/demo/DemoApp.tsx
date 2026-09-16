@@ -53,6 +53,7 @@ import type { Review } from './coach/review/types'
 import { titleFor, type Product } from '../product'
 import { isConfigured } from '../rules/journey'
 import { blankStructure, structureKey, type FlowStructure } from '../rules/onboarding'
+import { generateFlow } from '../rules/generate'
 import { Onboarding, OnboardingStart } from '../onboarding/Onboarding'
 
 /**
@@ -715,13 +716,11 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                     : undefined
                 }
                 onFinish={() => {
-                  writeStructure({
-                    ...draft,
-                    // A structure that content already fills is finished, not
-                    // merely described.
-                    state: configured ? 'ready' : 'structure-saved',
-                    updatedAt: new Date().toISOString(),
-                  })
+                  /* The last button builds the flow.
+                     Generation is a replace-by-id and an add-if-missing, so
+                     coming back through setup after writing half the content
+                     applies the difference rather than starting again. */
+                  store.updateSet(generateFlow(store.set, draft).set)
                   setSetupOpen(false)
                 }}
                 onClose={() => setSetupOpen(false)}

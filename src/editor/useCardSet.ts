@@ -10,7 +10,7 @@ import { readTemplate } from '../rules/sheet'
 import { readWorkbook } from '../rules/xlsx'
 import type { Journey } from '../rules/journey'
 import { applyStepOrder, chosenJourney, isReordered } from '../rules/journey'
-import { configuredJourneys as journeys } from '../rules/journeyConfig'
+import { allJourneys } from '../rules/generate'
 import { findOverride, resolveOffer } from '../rules/resolve'
 import type { RemoteState } from './remote'
 import { loadRemote, publishRemote } from './remote'
@@ -467,7 +467,9 @@ export function useCardSet(): CardSetStore {
 
   // Resolved here, not in each consumer: the editor and the preview must agree
   // on which journey is on screen, and two copies of this line would drift.
-  const chosen = chosenJourney(journeys, context, set.journeyId)
+  // The set's own generated flows are in this list too, so a flow built in
+  // the setup wizard resolves exactly as a committed one does.
+  const chosen = chosenJourney(allJourneys(set), context, set.journeyId)
   // Applied once, here, so the rail, the frames and the preview all walk the
   // same sequence rather than each re-deriving it.
   /**

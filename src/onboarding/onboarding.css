@@ -469,3 +469,87 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-label-sm);
 }
+
+/* ── A short list of answers, each with its reason ──
+   Radios rather than a dropdown: there are two or three of them and the reason
+   one might be right is the part worth reading. */
+.ob-choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.ob-choice {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-start;
+  padding: var(--space-12);
+  border: 1px solid var(--color-border-transparent-subtle);
+  border-radius: var(--radius-12);
+  cursor: pointer;
+}
+.ob-choice:hover {
+  border-color: var(--color-border-full-color-subtle);
+}
+.ob-choice[data-on] {
+  border-color: var(--color-border-full-color-default);
+  background: var(--color-surface-container-2);
+}
+.ob-choice input {
+  margin-block-start: 2px;
+}
+.ob-choice > span {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.ob-choice__title {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-label-sm);
+}
+.ob-choice__body {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.5;
+}
+
+/* ── The screens this flow will have ── */
+.ob-map {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 100%;
+  max-inline-size: 320px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ob-map__row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  padding: var(--space-12);
+  border: 1px dashed var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+}
+.ob-map__n {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 22px;
+  block-size: 22px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-3);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+.ob-map__name {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-label-sm);
+}
+.ob-map__note {
+  margin: 0;
+  max-inline-size: 320px;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+}
