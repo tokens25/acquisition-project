@@ -167,12 +167,13 @@
   flex-direction: column;
 }
 
-.acq-pricing__caption,
 /* A line's worth of room with nothing in it, so a card that explains its price
-   does not push its own button below the ones beside it. */
+   does not push its own button below the ones beside it. Only the small print
+   is ever reserved — the caption is copy, and it is either shown or absent. */
 .acq-pricing__extra[data-reserved] {
   visibility: hidden;
 }
+.acq-pricing__caption,
 .acq-pricing__extra {
   margin: 0;
   color: var(--color-text-secondary);
