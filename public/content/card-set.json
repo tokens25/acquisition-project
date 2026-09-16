@@ -136,6 +136,36 @@
       "iconId": "download",
       "text": "Download to watch on the go",
       "status": "active"
+    },
+    {
+      "id": "fiba-hdr",
+      "iconId": "hdr",
+      "text": "Enjoy HDR and Dolby 5.1 surround sound",
+      "status": "active"
+    },
+    {
+      "id": "fiba-multiview",
+      "iconId": "multiview",
+      "text": "Multiview - watch up to 4 games at once",
+      "status": "active"
+    },
+    {
+      "id": "fiba-devices-5",
+      "iconId": "devices",
+      "text": "Stream on 5 devices in 2 locations",
+      "status": "active"
+    },
+    {
+      "id": "fiba-devices-2",
+      "iconId": "devices",
+      "text": "Stream on 2 devices in 1 location",
+      "status": "active"
+    },
+    {
+      "id": "fiba-download",
+      "iconId": "download",
+      "text": "Download to watch on the go",
+      "status": "active"
     }
   ],
   "addOnCatalog": [
@@ -171,7 +201,13 @@
       "overrides": [],
       "id": "msg-plus",
       "planName": "MSG+",
-      "displayOrder": 1
+      "displayOrder": 1,
+      "subscriptions": [
+        "dazn",
+        "msg",
+        "nfl",
+        "nhl"
+      ]
     },
     {
       "description": "Everything in MSG+ and YES, all in one plan.",
@@ -198,7 +234,13 @@
       "overrides": [],
       "id": "gotham-bundle",
       "planName": "Gotham Bundle",
-      "displayOrder": 2
+      "displayOrder": 2,
+      "subscriptions": [
+        "dazn",
+        "msg",
+        "nfl",
+        "nhl"
+      ]
     },
     {
       "description": "Every local Yankees and Nets game",
@@ -220,7 +262,57 @@
       "overrides": [],
       "id": "yes",
       "planName": "YES",
-      "displayOrder": 3
+      "displayOrder": 3,
+      "subscriptions": [
+        "dazn",
+        "msg",
+        "nfl",
+        "nhl"
+      ]
+    },
+    {
+      "description": "",
+      "features": [
+        "fiba-hdr",
+        "fiba-multiview",
+        "fiba-devices-5",
+        "fiba-download"
+      ],
+      "logoTiles": [],
+      "logoTotal": 0,
+      "ultimate": true,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "id": "fiba-ultimate",
+      "planName": "Ultimate",
+      "subscriptions": [
+        "fiba"
+      ],
+      "displayOrder": 1,
+      "badge": "BEST EXPERIENCE"
+    },
+    {
+      "description": "",
+      "features": [
+        "fiba-devices-2",
+        "fiba-devices-5",
+        "fiba-download"
+      ],
+      "logoTiles": [],
+      "logoTotal": 0,
+      "ultimate": false,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "id": "fiba-standard",
+      "planName": "Standard",
+      "subscriptions": [
+        "fiba"
+      ],
+      "displayOrder": 2
     }
   ],
   "offers": [
@@ -262,6 +354,62 @@
       "tierId": "yes",
       "cadence": "Monthly",
       "standardPrice": 19.99
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "fiba-ultimate-monthly",
+      "tierId": "fiba-ultimate",
+      "cadence": "Monthly",
+      "standardPrice": 13.99,
+      "explainer": "Monthly subscription. Cancel with 30 days' notice."
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "fiba-standard-monthly",
+      "tierId": "fiba-standard",
+      "cadence": "Monthly",
+      "standardPrice": 11.99,
+      "explainer": "Monthly subscription. Cancel with 30 days' notice."
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "fiba-ultimate-yearly",
+      "tierId": "fiba-ultimate",
+      "cadence": "Yearly",
+      "standardPrice": 49.99,
+      "explainer": "Access to Courtside 1891 for a year. 12-month contract. Your subscription auto-renews unless you cancel before the end of the minimum term."
+    },
+    {
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "id": "fiba-standard-yearly",
+      "tierId": "fiba-standard",
+      "cadence": "Yearly",
+      "standardPrice": 44.99,
+      "explainer": "Access to Courtside 1891 for a year. 12-month contract. Your subscription auto-renews unless you cancel before the end of the minimum term."
     }
   ],
   "context": {

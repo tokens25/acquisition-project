@@ -25,7 +25,7 @@ export interface ContextResult {
 }
 
 export const contextLabel = (c: Context) =>
-  [c.market, c.channel, c.cadence, c.campaign].filter(Boolean).join(' · ')
+  [c.market, c.subscription, c.channel, c.cadence, c.campaign].filter(Boolean).join(' · ')
 
 /** S-1 · Max one Ultimate per set. Zero is valid. */
 function checkS1(tiers: Tier[]): Violation[] {

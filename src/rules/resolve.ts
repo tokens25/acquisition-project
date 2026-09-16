@@ -10,6 +10,7 @@ import type {
   TierPatch,
 } from './content'
 import { DIRECT } from './content'
+import { subscriptionsFor } from './journeys'
 
 /**
  * Base plus differences, then joined to a way of paying.
@@ -90,10 +91,15 @@ export function resolveOffer(
  */
 export function filterAcquirableTiers(
   tiers: Tier[],
-  { channel = DIRECT, includeLegacy = false }: { channel?: string; includeLegacy?: boolean } = {},
+  {
+    channel = DIRECT,
+    subscription,
+    includeLegacy = false,
+  }: { channel?: string; subscription?: string; includeLegacy?: boolean } = {},
 ): Tier[] {
   const onDirect = channel === DIRECT
   return tiers.filter((tier) => {
+    if (!sellsTier(tier, subscription)) return false
     const tierChannel = tier.channel || DIRECT
     if (tierChannel === channel) {
       if (onDirect && !includeLegacy && tier.status !== 'live') return false
@@ -104,6 +110,18 @@ export function filterAcquirableTiers(
   })
 }
 
+/**
+ * Whether this product sells this plan.
+ *
+ * No product named is every product, and no product asked for is every plan:
+ * validation runs over contexts that carry no subscription, and a context that
+ * has not said what it is selling cannot be told a plan is the wrong one.
+ */
+export function sellsTier(tier: Tier, subscription?: string): boolean {
+  if (!tier.subscriptions || subscription === undefined) return true
+  return tier.subscriptions.includes(subscription)
+}
+
 export interface ResolvedCard {
   tier: Tier
   offer: CadenceOffer
@@ -111,7 +129,10 @@ export interface ResolvedCard {
 
 /** Tiers this storefront sells at this cadence, in display order. */
 export function resolveSet(set: CardSet, context: Context = set.context): ResolvedCard[] {
-  return filterAcquirableTiers(set.tiers, { channel: context.channel })
+  return filterAcquirableTiers(set.tiers, {
+    channel: context.channel,
+    subscription: context.subscription,
+  })
     .map((tier) => ({ tier: resolveTier(tier, context), offer: resolveOffer(set, tier.id, context) }))
     .filter((r): r is ResolvedCard => r.offer !== null)
     .sort((a, b) => a.tier.displayOrder - b.tier.displayOrder)
@@ -120,15 +141,20 @@ export function resolveSet(set: CardSet, context: Context = set.context): Resolv
 /** Tiers dropped from this view, and why — for the preview's blast radius. */
 export function excludedTiers(set: CardSet, context: Context = set.context) {
   const acquirable = new Set(
-    filterAcquirableTiers(set.tiers, { channel: context.channel }).map((t) => t.id),
+    filterAcquirableTiers(set.tiers, {
+      channel: context.channel,
+      subscription: context.subscription,
+    }).map((t) => t.id),
   )
   return set.tiers
     .filter((t) => !acquirable.has(t.id) || resolveOffer(set, t.id, context) === null)
     .map((t) => ({
       tier: t,
-      reason: !acquirable.has(t.id)
-        ? (`not sold on ${context.channel}` as const)
-        : (`not sold ${context.cadence}` as const),
+      reason: !sellsTier(t, context.subscription)
+        ? (`not sold with ${context.subscription}` as const)
+        : !acquirable.has(t.id)
+          ? (`not sold on ${context.channel}` as const)
+          : (`not sold ${context.cadence}` as const),
     }))
 }
 
@@ -164,20 +190,37 @@ export function marketFor(set: CardSet, code: string) {
   return set.markets.find((m) => m.code === code) ?? set.markets[0]
 }
 
-/** Every context worth validating — markets × channels × cadences, with campaigns. */
+/**
+ * Every context worth validating — markets × products × channels × cadences,
+ * with campaigns.
+ *
+ * The product is here because the set now varies by it. Left out, every context
+ * would resolve every product's plans at once and the set-level rules would be
+ * read over a set nobody is ever shown: two products each with one Ultimate
+ * would fail S-1 together, which is a fact about the sum and not about anything
+ * a customer can see.
+ *
+ * And a product is skipped where it is not sold, for the reason Movistar is
+ * skipped in Germany: a context nobody can reach is not a gap to fill, and a
+ * failure reported there is unfixable by definition.
+ */
 export function allContexts(set: CardSet): Context[] {
   const out: Context[] = []
   for (const market of set.markets) {
-    for (const channel of set.channels) {
-      // A partner storefront belongs to its markets. Validating Movistar in
-      // Germany does not just waste a check — it invents a context nobody can
-      // reach, and a failure reported there is unfixable by definition.
-      if (channel.markets && !channel.markets.includes(market.code)) continue
-      for (const cadence of set.cadences) {
-
-        out.push({ market: market.code, channel: channel.code, cadence })
-        for (const campaign of set.campaigns) {
-          out.push({ market: market.code, channel: channel.code, cadence, campaign: campaign.code })
+    for (const subscription of subscriptionsFor(market.code)) {
+      for (const channel of set.channels) {
+        if (channel.markets && !channel.markets.includes(market.code)) continue
+        for (const cadence of set.cadences) {
+          const base = {
+            market: market.code,
+            subscription: subscription.code,
+            channel: channel.code,
+            cadence,
+          }
+          out.push(base)
+          for (const campaign of set.campaigns) {
+            out.push({ ...base, campaign: campaign.code })
+          }
         }
       }
     }

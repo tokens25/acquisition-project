@@ -118,6 +118,21 @@ export interface Tier {
   displayOrder: number
 
   /**
+   * Which products sell this plan.
+   *
+   * Omitted means every one of them, the way an omitted `markets` does on a
+   * product: most plans predate the question, and answering it for them by
+   * silence is the same as answering it by listing all four.
+   *
+   * A product is not a market and not a channel. MSG+ and FIBA are different
+   * things to buy, with different plans at different prices — not one plan
+   * patched twice — so this selects which plans exist at all rather than
+   * patching the ones that do. An override cannot add a plan or take one away,
+   * which is exactly what telling these two products apart needs.
+   */
+  subscriptions?: readonly string[]
+
+  /**
    * Gates the DIRECT storefront only. `legacy` is closed-book to new direct
    * customers — it does NOT hide the tier from partners, who may still be
    * actively selling it.
