@@ -277,7 +277,7 @@ export const SHIPPED_ORDER: SectionType[] = [
 export const SECTION_LABEL: Record<SectionType, string> = {
   zip: 'Postcode',
   schedule: 'Games schedule',
-  plans: 'Choose the plan',
+  plans: 'Subscription plans',
   teams: 'Meet the teams',
   area: 'Outside the area',
   /* Named for what it is rather than what it happens to be about: a still,
