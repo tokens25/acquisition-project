@@ -136,9 +136,6 @@
   min-inline-size: 0;
 }
 .demo__title {
-  /* 20px, from the design. It is the mobile step of the h6 ramp and this token
-     file only ships the desktop step (22px), so the value is literal until the
-     ramp is complete. */
   margin: 0;
   /* What gives way when a name is longer than the strip: it shrinks, and the
      name inside it is cut to fit. Without this a flex item refuses to go below
@@ -146,7 +143,7 @@
   min-inline-size: 0;
   overflow: hidden;
   color: var(--color-text-primary);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: var(--font-weight-bold);
   line-height: 1.32;
 }

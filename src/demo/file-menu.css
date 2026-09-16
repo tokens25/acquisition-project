@@ -32,13 +32,14 @@
   margin-inline-start: calc(var(--space-6) * -1 - var(--border-1));
 }
 .fm__name {
-  /* As wide as the name, and no wider than the room the strip has left for it
-     — a name long enough to reach the chevron is cut with an ellipsis rather
-     than pushed through everything to its right. */
+  /* As wide as the name, and no wider than the room the strip has left for it:
+     a name long enough to reach the chevron is cut off there rather than
+     pushed through everything to its right. Cut, and not followed by an
+     ellipsis — the three dots cost three characters of the name to say
+     something the cut already says. */
   max-inline-size: 100%;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
   cursor: pointer;
   transition: background 120ms ease;
 }
@@ -46,6 +47,11 @@
   background: var(--color-surface-container-3);
 }
 .fm__rename {
+  /* Against the tool's border-box default, and deliberately. `field-sizing`
+     fits the CONTENT box to the text, so under border-box the padding is taken
+     out of the text's own room and a name sits a few pixels wider than the box
+     that holds it — scrolled, with its first letter cut off. */
+  box-sizing: content-box;
   min-inline-size: 4ch;
   max-inline-size: 100%;
   border-color: var(--color-border-full-color-default);
@@ -117,6 +123,19 @@
   white-space: nowrap;
   text-align: start;
   cursor: pointer;
+}
+/* One box for every glyph, so the labels start on the same line whatever is
+   drawn beside them — and so the tick that replaces one fits where it was. */
+.fm__glyph {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 14px;
+  block-size: 14px;
+  color: var(--color-text-secondary);
+}
+.fm__item:hover .fm__glyph {
+  color: var(--color-text-primary);
 }
 .fm__item:hover {
   background: var(--color-surface-container-5);

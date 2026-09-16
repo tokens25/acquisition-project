@@ -38,7 +38,7 @@ import { TranslateSheet } from '../translate/TranslateSheet'
 import { currentAt, viewSet } from '../translate/apply'
 import { DevStrings } from './pipeline/DevStrings'
 import { ModeToggle } from './pipeline/ModeToggle'
-import { CodeIcon } from './pipeline/icons'
+import { CodeIcon, CopyIcon, DownloadIcon, PencilIcon, PlayIcon, SaveIcon } from './pipeline/icons'
 import { SectionMarker } from './pipeline/SectionMarker'
 import { StatusChip } from './pipeline/StatusChip'
 import { usePipeline } from './pipeline/usePipeline'
@@ -144,6 +144,10 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
      opening the tool and then covering it. */
   const [prototype, setPrototype] = useState(() => asked.has('preview'))
   const [sharing, setSharing] = useState(false)
+  /* Whether the file's name is open for changing. Held here because the two
+     ways in are in different components — the name itself, and Rename in the
+     menu beside it. */
+  const [renaming, setRenaming] = useState(false)
   /** Which half of the landing page Dev is reading. */
   const [devTab, setDevTab] = useState<'page' | 'hero'>('page')
 
@@ -654,12 +658,21 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     {
       id: 'save',
       label: 'Save',
+      icon: <SaveIcon size={13} />,
       title: 'Every edit is saved as you make it. This writes again and says so.',
       run: () => (store.save() ? 'Saved' : 'No room to save'),
     },
     {
+      id: 'rename',
+      label: 'Rename',
+      icon: <PencilIcon size={13} />,
+      title: 'Change what this file is called',
+      run: () => setRenaming(true),
+    },
+    {
       id: 'duplicate',
       label: 'Duplicate',
+      icon: <CopyIcon size={13} />,
       title: 'Downloads a copy of this file, which Import brings back',
       run: () => {
         store.duplicate()
@@ -669,6 +682,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     {
       id: 'dev-link',
       label: 'Copy dev mode link',
+      icon: <CodeIcon size={13} />,
       title: 'Opens on this page in Dev mode',
       breaks: true,
       run: () => copyLink({ mode: 'dev' }),
@@ -676,12 +690,14 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     {
       id: 'proto-link',
       label: 'Copy prototype link',
+      icon: <PlayIcon size={13} />,
       title: 'Opens straight into the walkthrough',
       run: () => copyLink({ preview: '1' }),
     },
     {
       id: 'export',
       label: 'Export JSON',
+      icon: <DownloadIcon size={13} />,
       title: 'The whole set as a file, for engineering',
       breaks: true,
       run: () => {
@@ -702,7 +718,12 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
           means "this file", and anywhere else it would mean the tool. */}
       <div className="demo__file">
         <h1 className="demo__title">
-          <FileName store={store} fallback={titleFor(product)} />
+          <FileName
+            store={store}
+            fallback={titleFor(product)}
+            renaming={renaming}
+            setRenaming={setRenaming}
+          />
         </h1>
         <FileMenu actions={fileActions} />
       </div>

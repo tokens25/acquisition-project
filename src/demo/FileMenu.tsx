@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { CheckIcon, ChevronIcon } from './pipeline/icons'
 import type { CardSetStore } from '../editor/useCardSet'
 import './file-menu.css'
@@ -17,18 +17,28 @@ import './file-menu.css'
  * place that matters while meaning nothing.
  */
 
-/** The name, as the heading — until it is clicked, when it is the name again. */
+/**
+ * The name, as the heading — until it is being changed, when it is a box.
+ *
+ * Whether it is being changed is held above rather than here, because there
+ * are two ways in and they are not near each other: clicking the name, and
+ * Rename in the menu beside it. One flag both can set beats the menu reaching
+ * into this component to press a button nobody can see.
+ */
 export function FileName({
   store,
   /** What the strip said before files had names, and what an unnamed one says. */
   fallback,
+  renaming,
+  setRenaming,
 }: {
   store: CardSetStore
   fallback: string
+  renaming: boolean
+  setRenaming: (on: boolean) => void
 }) {
   const { set, updateSet } = store
   const name = set.name ?? fallback
-  const [renaming, setRenaming] = useState(false)
 
   /**
    * Committing a rename.
@@ -84,6 +94,8 @@ export function FileName({
 export interface FileAction {
   id: string
   label: string
+  /** The glyph at the head of the row. Same box for every item, so they line up. */
+  icon: ReactNode
   /**
    * What it does. Returning a word shows it in place of the label, briefly.
    *
@@ -159,14 +171,13 @@ export function FileMenu({ actions }: { actions: FileAction[] }) {
                 title={action.title}
                 onClick={() => void choose(action)}
               >
-                {said?.id === action.id ? (
-                  <>
-                    <CheckIcon size={13} />
-                    {said.word}
-                  </>
-                ) : (
-                  action.label
-                )}
+                {/* The word an action left behind takes the icon's place as
+                    well as the label's, so the row does not say "duplicate"
+                    beside "Copy downloaded". */}
+                <span className="fm__glyph" aria-hidden="true">
+                  {said?.id === action.id ? <CheckIcon size={13} /> : action.icon}
+                </span>
+                {said?.id === action.id ? said.word : action.label}
               </button>
             </li>
           ))}

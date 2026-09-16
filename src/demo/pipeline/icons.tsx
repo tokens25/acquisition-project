@@ -63,3 +63,40 @@ export const UndoIcon = ({ size = 12 }: { size?: number }) => (
     <path d="M3 7h6.5a3.5 3.5 0 0 1 0 7H8" />
   </svg>
 )
+
+/**
+ * Keeping a file. A floppy disk, which nothing has used in twenty years and
+ * everyone still reads instantly — the one place where the old object beats
+ * any drawing of what saving now actually is.
+ */
+export const SaveIcon = ({ size = 12 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" {...base} strokeWidth={1.6}>
+    <path d="M3.9 2.5h6.6l3 3v6.6a1.4 1.4 0 0 1-1.4 1.4H3.9a1.4 1.4 0 0 1-1.4-1.4V3.9a1.4 1.4 0 0 1 1.4-1.4Z" />
+    <path d="M5.4 2.5v3.1h4.3V2.5" />
+    <path d="M5.4 13.5v-3.2h5.2v3.2" />
+  </svg>
+)
+
+/** Changing what a thing is called. */
+export const PencilIcon = ({ size = 12 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" {...base} strokeWidth={1.6}>
+    <path d="m10.6 2.9 2.5 2.5" />
+    <path d="M3 13.3 3.6 10l6.6-6.6 2.4 2.4L6 12.4l-3 .9Z" />
+  </svg>
+)
+
+/** Running through something rather than reading it — the walkthrough. */
+export const PlayIcon = ({ size = 12 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" {...base} strokeWidth={1.6}>
+    <path d="M5.3 3.3 12 8l-6.7 4.7V3.3Z" />
+  </svg>
+)
+
+/** Off this machine and onto yours. */
+export const DownloadIcon = ({ size = 12 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 16 16" {...base} strokeWidth={1.6}>
+    <path d="M8 2.4v7.4" />
+    <path d="M4.9 6.9 8 10l3.1-3.1" />
+    <path d="M2.8 13.2h10.4" />
+  </svg>
+)
