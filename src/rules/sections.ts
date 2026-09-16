@@ -33,6 +33,10 @@ export type SectionType =
   | 'rail'
   | 'subRail'
   | 'bundles'
+  | 'matchList'
+  | 'dayRail'
+  | 'cardStack'
+  | 'cities'
 
 export interface PageSection {
   /**
@@ -71,6 +75,10 @@ export const SECTION_TYPES: SectionType[] = [
   'rail',
   'subRail',
   'bundles',
+  'matchList',
+  'dayRail',
+  'cardStack',
+  'cities',
 ]
 
 /**
@@ -137,6 +145,20 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   bundlesTitle: 'bundles',
   bundlesBody: 'bundles',
   bundles: 'bundles',
+  matchEyebrow: 'matchList',
+  matchTitle: 'matchList',
+  matchCta: 'matchList',
+  matchGames: 'matchList',
+  dayLabel: 'dayRail',
+  dayDate: 'dayRail',
+  dayMonth: 'dayRail',
+  dayTiles: 'dayRail',
+  featureCards: 'cardStack',
+  citiesEyebrow: 'cities',
+  citiesTitle: 'cities',
+  citiesBody: 'cities',
+  cityTabs: 'cities',
+  cityTiles: 'cities',
 }
 
 /**
@@ -176,6 +198,10 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   rail: 'Title and a row of tiles',
   subRail: 'Heading, a line under it, and the subscriptions',
   bundles: 'Heading, a line under it, and the bundles',
+  matchList: 'Eyebrow, heading, button, and the matches by day',
+  dayRail: 'A date, and the games on it',
+  cardStack: 'A stack of cards',
+  cities: 'Eyebrow, heading, a line, tabs, and the places',
 }
 
 /**
@@ -202,6 +228,10 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   rail: [50, 100, 100],
   subRail: [70, 100, 100],
   bundles: [60, 100, 100],
+  matchList: [45, 70, 100],
+  dayRail: [25, 100, 100],
+  cardStack: [100, 60, 100],
+  cities: [40, 85, 100],
 }
 
 /** The page as it ships, in the order node 708:173735 has it. */
@@ -239,6 +269,10 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   rail: 'Rail',
   subRail: 'More subscriptions',
   bundles: 'Bundles',
+  matchList: 'Match list',
+  dayRail: 'Day schedule',
+  cardStack: 'Feature cards',
+  cities: 'Places',
 }
 
 /** The list this page is arranged into, or the one it has always had. */

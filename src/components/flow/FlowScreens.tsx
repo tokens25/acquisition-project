@@ -9,7 +9,12 @@ import { useImageRatio } from './useImageRatio'
 import type { HeroBanner } from '../../rules/landing'
 import {
   bundlesOf,
+  cardsOf,
+  cityTabsOf,
+  cityTilesOf,
+  dayTilesOf,
   featuresOf,
+  matchesOf,
   gamesOf,
   heroOf,
   landingText,
@@ -98,7 +103,10 @@ import { Icon } from '../Icon'
 import type { Device, MarketConfig, PlanTab } from '../../rules/content'
 import type {
   LandingBundle,
+  LandingCard,
   LandingGame,
+  LandingMatch,
+  LandingTab,
   LandingSubTile,
   LandingTile,
   RailSize,
@@ -1870,6 +1878,40 @@ export function PageSectionView({
         />
       )
 
+    case 'matchList':
+      return (
+        <MatchListSection
+          eyebrow={text.matchEyebrow}
+          title={text.matchTitle}
+          cta={text.matchCta}
+          matches={matchesOf(content)}
+        />
+      )
+
+    case 'dayRail':
+      return (
+        <DaySection
+          label={text.dayLabel}
+          date={text.dayDate}
+          month={text.dayMonth}
+          tiles={dayTilesOf(content)}
+        />
+      )
+
+    case 'cardStack':
+      return <CardStackSection cards={cardsOf(content)} />
+
+    case 'cities':
+      return (
+        <CitiesSection
+          eyebrow={text.citiesEyebrow}
+          title={text.citiesTitle}
+          body={text.citiesBody}
+          tabs={cityTabsOf(content)}
+          tiles={cityTilesOf(content)}
+        />
+      )
+
     case 'faq':
       return <FaqSection content={content} title={text.faqTitle} />
   }
@@ -2031,6 +2073,220 @@ function BundlesSection({
             </span>
           </article>
         ))}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * A day-by-day list of matches — node 1093:51934.
+ *
+ * The day is on the match rather than the list being a list of days, so the
+ * headings are found rather than authored: a run of matches sharing a day is
+ * drawn under one. Which means a day nobody has a match on stops existing on
+ * its own, and moving a match to another day is editing one field.
+ */
+function MatchListSection({
+  eyebrow,
+  title,
+  cta,
+  matches,
+}: {
+  eyebrow: string
+  title: string
+  cta: string
+  matches: LandingMatch[]
+}) {
+  return (
+    <section className="fl-matches">
+      <div className="fl-matches__head">
+        {eyebrow.trim() !== '' && <p className="fl-matches__eyebrow">{eyebrow}</p>}
+        {title.trim() !== '' && <p className="fl-matches__title">{title}</p>}
+        {cta.trim() !== '' && (
+          <span className="fl-matches__cta" role="button">
+            {cta}
+          </span>
+        )}
+      </div>
+      <div className="fl-matches__list">
+        {matches.map((match, at) => (
+          <Fragment key={match.id}>
+            {/* The heading, wherever the day changes — and at the top, so the
+                first run has one as well. */}
+            {match.day.trim() !== '' && match.day !== matches[at - 1]?.day && (
+              <p className="fl-matches__day">{match.day}</p>
+            )}
+            <article className="fl-match">
+              <div className="fl-match__teams">
+                <span className="fl-match__team">
+                  <span className="fl-match__code">{match.home}</span>
+                  <span className="fl-match__crest" aria-hidden="true" />
+                </span>
+                <span className="fl-match__time">{match.time}</span>
+                <span className="fl-match__team" data-away="">
+                  <span className="fl-match__crest" aria-hidden="true" />
+                  <span className="fl-match__code">{match.away}</span>
+                </span>
+              </div>
+              {match.note.trim() !== '' && <p className="fl-match__note">{match.note}</p>}
+            </article>
+          </Fragment>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * One day of the schedule — node 1084:58141.
+ *
+ * The date stands to the left of the games rather than over them, which is
+ * what makes this a day and not a rail: a rail is a row that runs off the
+ * screen, and this is a column of everything on at one date.
+ */
+function DaySection({
+  label,
+  date,
+  month,
+  tiles,
+}: {
+  label: string
+  date: string
+  month: string
+  tiles: LandingTile[]
+}) {
+  return (
+    <section className="fl-day">
+      <div className="fl-day__date">
+        <span className="fl-day__label">{label}</span>
+        <span className="fl-day__number">{date}</span>
+        <span className="fl-day__month">{month}</span>
+      </div>
+      <div className="fl-day__games">
+        {tiles.map((tile, at) => {
+          const fixture = fixtureFor(at)
+          return (
+            <article className="fl-day__game" key={tile.id}>
+              <span className="fl-day__art" aria-hidden="true">
+                {fixture.art.map((src, i) => (
+                  <img src={src} alt="" key={i} />
+                ))}
+                <span className="fl-day__stamp">{fixture.stamp}</span>
+                <span className="fl-day__remind">
+                  <img src={icReminder} alt="" />
+                </span>
+              </span>
+              <p className="fl-day__name">{tile.title}</p>
+              {tile.meta.trim() !== '' && <p className="fl-day__meta">{tile.meta}</p>}
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * A stack of cards — node 1093:55225.
+ *
+ * Four shapes in the design and one here: a card with a number is a statistic,
+ * one with a button is the lead, one with neither is a plain card. Read off
+ * what the card carries rather than declared, so a card cannot say it is one
+ * kind and be written as another.
+ *
+ * A title's own line breaks are kept: "HDR" over "Dolby Atmos" is two things
+ * the subscription gives you, not a sentence that happens to wrap.
+ */
+function CardStackSection({ cards }: { cards: LandingCard[] }) {
+  return (
+    <section className="fl-cards">
+      {cards.map((card) => (
+        <article className="fl-card" key={card.id} data-stat={card.stat.trim() ? '' : undefined}>
+          {card.stat.trim() !== '' && <p className="fl-card__stat">{card.stat}</p>}
+          {card.title.trim() !== '' && (
+            <p className="fl-card__title">
+              {card.title.split('\n').map((line, i) => (
+                <span className="fl-card__line" key={i}>
+                  {line}
+                </span>
+              ))}
+            </p>
+          )}
+          {card.body.trim() !== '' && (
+            <p className="fl-card__body">
+              {card.body.split('\n').map((line, i) => (
+                <span className="fl-card__line" key={i}>
+                  {line}
+                </span>
+              ))}
+            </p>
+          )}
+          {card.cta.trim() !== '' && (
+            <span className="fl-card__cta" role="button">
+              {card.cta}
+            </span>
+          )}
+        </article>
+      ))}
+    </section>
+  )
+}
+
+/**
+ * Places, with tabs over them — node 1093:55226.
+ *
+ * The tabs choose which set of places is shown, and choosing is a thing the
+ * page does rather than a thing this tool does: the first is drawn as the one
+ * chosen, because a preview has to show something and the first is what the
+ * design shows.
+ */
+function CitiesSection({
+  eyebrow,
+  title,
+  body,
+  tabs,
+  tiles,
+}: {
+  eyebrow: string
+  title: string
+  body: string
+  tabs: LandingTab[]
+  tiles: LandingTile[]
+}) {
+  return (
+    <section className="fl-cities">
+      <div className="fl-cities__head">
+        {eyebrow.trim() !== '' && <p className="fl-cities__eyebrow">{eyebrow}</p>}
+        {title.trim() !== '' && <p className="fl-cities__title">{title}</p>}
+        {body.trim() !== '' && <p className="fl-cities__body">{body}</p>}
+      </div>
+      {tabs.length > 0 && (
+        <div className="fl-cities__tabs">
+          {tabs.map((tab, at) => (
+            <span className="fl-cities__tab" key={tab.id} data-on={at === 0 ? '' : undefined}>
+              {tab.label}
+            </span>
+          ))}
+        </div>
+      )}
+      <div className="fl-cities__row">
+        {tiles.map((tile, at) => {
+          const fixture = fixtureFor(at)
+          return (
+            <article className="fl-city" key={tile.id}>
+              <span className="fl-city__art" aria-hidden="true">
+                {fixture.art.map((src, i) => (
+                  <img src={src} alt="" key={i} />
+                ))}
+              </span>
+              <span className="fl-city__wash" aria-hidden="true" />
+              <span className="fl-city__words">
+                <p className="fl-city__name">{tile.title}</p>
+                {tile.meta.trim() !== '' && <p className="fl-city__meta">{tile.meta}</p>}
+              </span>
+            </article>
+          )
+        })}
       </div>
     </section>
   )

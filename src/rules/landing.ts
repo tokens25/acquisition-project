@@ -2,6 +2,9 @@ import type {
   HeroLabelVariant,
   LandingBundle,
   LandingBundleFight,
+  LandingCard,
+  LandingMatch,
+  LandingTab,
   LandingSubTile,
   LandingTile,
   RailSize,
@@ -170,6 +173,11 @@ export function landingText(content: LandingScreen): Required<
     | 'railTiles'
     | 'subRailTiles'
     | 'bundles'
+    | 'matchGames'
+    | 'dayTiles'
+    | 'featureCards'
+    | 'cityTabs'
+    | 'cityTiles'
     | HeroKey
     | ChoiceKey
   >
@@ -229,6 +237,15 @@ export function landingText(content: LandingScreen): Required<
     subRailBody: of('subRailBody'),
     bundlesTitle: of('bundlesTitle'),
     bundlesBody: of('bundlesBody'),
+    matchEyebrow: of('matchEyebrow'),
+    matchTitle: of('matchTitle'),
+    matchCta: of('matchCta'),
+    dayLabel: of('dayLabel'),
+    dayDate: of('dayDate'),
+    dayMonth: of('dayMonth'),
+    citiesEyebrow: of('citiesEyebrow'),
+    citiesTitle: of('citiesTitle'),
+    citiesBody: of('citiesBody'),
     imageCtaTitle: of('imageCtaTitle'),
     imageCtaBody: of('imageCtaBody'),
     imageCtaCta: of('imageCtaCta'),
@@ -385,6 +402,53 @@ export function blankBundle(existing: LandingBundle[]): LandingBundle {
 /** A new night in a bundle. */
 export function blankFight(existing: LandingBundleFight[]): LandingBundleFight {
   return { id: nextId('fight', existing), name: '', when: '' }
+}
+
+/** The matches in the day-by-day list, or the ones it ships with. */
+export function matchesOf(content: LandingScreen): LandingMatch[] {
+  return content.matchGames ?? defaultFlow.landing.matchGames ?? []
+}
+
+/** A new match, on the day the one before it is on: a list runs down a day. */
+export function blankMatch(existing: LandingMatch[]): LandingMatch {
+  return {
+    id: nextId('match', existing),
+    day: existing[existing.length - 1]?.day ?? '',
+    home: '',
+    away: '',
+    time: '',
+    note: '',
+  }
+}
+
+/** The games on the day, or the ones it ships with. */
+export function dayTilesOf(content: LandingScreen): LandingTile[] {
+  return content.dayTiles ?? defaultFlow.landing.dayTiles ?? []
+}
+
+/** The cards in the stack, or the ones it ships with. */
+export function cardsOf(content: LandingScreen): LandingCard[] {
+  return content.featureCards ?? defaultFlow.landing.featureCards ?? []
+}
+
+/** A new card. Plain: a number makes it a statistic, a button makes it the lead. */
+export function blankCard(existing: LandingCard[]): LandingCard {
+  return { id: nextId('card', existing), stat: '', title: '', body: '', cta: '' }
+}
+
+/** The tabs over the places, or the ones it ships with. */
+export function cityTabsOf(content: LandingScreen): LandingTab[] {
+  return content.cityTabs ?? defaultFlow.landing.cityTabs ?? []
+}
+
+/** A new tab, waiting to be named. */
+export function blankTab(existing: LandingTab[]): LandingTab {
+  return { id: nextId('tab', existing), label: '' }
+}
+
+/** The places, or the ones it ships with. */
+export function cityTilesOf(content: LandingScreen): LandingTile[] {
+  return content.cityTiles ?? defaultFlow.landing.cityTiles ?? []
 }
 
 /** A new game, with nothing in it yet. */

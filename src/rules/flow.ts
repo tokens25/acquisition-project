@@ -303,6 +303,51 @@ export interface LandingBundle {
   fights: LandingBundleFight[]
 }
 
+/**
+ * One match in a day-by-day list — node 1093:51934.
+ *
+ * The day is on the match rather than the list being a list of days. Matches
+ * that share a day are drawn under one heading, so moving a match to another
+ * day is editing one field instead of moving it between two lists — and a
+ * day with nothing left in it stops existing on its own.
+ */
+export interface LandingMatch {
+  id: string
+  /** The heading it falls under — "Thursday 11 June 2026". */
+  day: string
+  /** The two sides, as the card abbreviates them: MEX, RSA. */
+  home: string
+  away: string
+  time: string
+  /** The line under the rule — stage, group, stadium and city. */
+  note: string
+}
+
+/** One tab over a carousel — a country, a competition, a month. */
+export interface LandingTab {
+  id: string
+  label: string
+}
+
+/**
+ * One card in a stack of them — node 1093:55225.
+ *
+ * Four shapes in the design and one here, because they differ only in which
+ * parts they carry: a number makes it a statistic, a button makes it the lead
+ * card, and neither makes it a plain one. A card that had to declare which of
+ * the four it was would be a card that could declare the wrong one.
+ */
+export interface LandingCard {
+  id: string
+  /** The big gold number over the title. Empty draws none. */
+  stat: string
+  /** The card's heading. A new line is a second line, as the design draws it. */
+  title: string
+  body: string
+  /** A button at the foot. Empty draws none. */
+  cta: string
+}
+
 export interface LandingQuestion {
   id: string
   question: string
@@ -471,6 +516,33 @@ export interface LandingScreen {
   bundlesTitle?: string
   bundlesBody?: string
   bundles?: LandingBundle[]
+
+  /* A day-by-day list of matches — node 1093:51934. An eyebrow, a heading and
+     a way in, then the fixtures under the day they fall on. */
+  matchEyebrow?: string
+  matchTitle?: string
+  matchCta?: string
+  matchGames?: LandingMatch[]
+
+  /* One day of the schedule — node 1084:58141. The date stands to the left of
+     the games rather than over them, which is what makes it a day and not a
+     rail. */
+  dayLabel?: string
+  dayDate?: string
+  dayMonth?: string
+  dayTiles?: LandingTile[]
+
+  /* A stack of cards — node 1093:55225. What the subscription gives you, said
+     as a number, an icon or a sentence. */
+  featureCards?: LandingCard[]
+
+  /* Places, with tabs over them — node 1093:55226. The tabs choose which set
+     of places is shown; here the first is the one drawn. */
+  citiesEyebrow?: string
+  citiesTitle?: string
+  citiesBody?: string
+  cityTabs?: LandingTab[]
+  cityTiles?: LandingTile[]
 
   /* The image card — node 747:46379. A picture with a heading, a line and a
      button laid over the foot of it. */
@@ -806,6 +878,47 @@ export const defaultFlow: FlowContent = {
           { id: 'fight-3', name: 'Chisora vs. Wilder', when: '21 Feb at 6:00 PM' },
         ],
       },
+    ],
+
+    matchEyebrow: 'Watch every game',
+    matchTitle: '39 days. 104 unmissable matches.',
+    matchCta: 'Get started',
+    matchGames: [
+      { id: 'match-1', day: 'Thursday 11 June 2026', home: 'MEX', away: 'RSA', time: '23:00', note: 'First stage • Group A • Mexico City Stadium (Mexico City)' },
+      { id: 'match-2', day: 'Friday 12 June 2026', home: 'KOR', away: 'DEN/MNE', time: '06:00', note: 'First stage • Group A • Guadalajara Stadium (Guadalajara)' },
+      { id: 'match-3', day: 'Friday 12 June 2026', home: 'CAN', away: 'ITA/NIR', time: '06:00', note: 'First stage • Group A • Toronto Stadium (Toronto)' },
+    ],
+
+    dayLabel: 'Today',
+    dayDate: '29',
+    dayMonth: 'Jun',
+    dayTiles: [
+      { id: 'day-1', title: 'EWC 2026 - Opening Ceremony', meta: 'Esports World Cup' },
+      { id: 'day-2', title: 'DAZN Mundial | Quarter Finals programme', meta: 'FIFA World Cup 2026' },
+      { id: 'day-3', title: '#29 Legends are saying goodbye; Leo Messi holds on', meta: 'Trending Mundial' },
+    ],
+
+    featureCards: [
+      { id: 'card-1', stat: '', title: 'One subscription.\nEvery fight.', body: 'No more one-off payments. No more missing the big fights. DAZN Ultimate gives you unlimited access to every world-class boxing night of the year.', cta: 'Subscribe to Ultimate' },
+      { id: 'card-2', stat: '12+', title: 'World-class PPVs', body: "Every year. All included.\nThat's over $720 in value.", cta: '' },
+      { id: 'card-3', stat: '185+', title: 'Fight Nights', body: 'Live boxing every week.\nNever miss a punch.', cta: '' },
+      { id: 'card-4', stat: '', title: 'HDR\nDolby Atmos', body: 'Cinema-quality picture and sound.\nFeel every moment.', cta: '' },
+      { id: 'card-5', stat: '', title: 'Full archive access', body: 'Cinema-quality picture and sound.\nFeel every moment.', cta: '' },
+    ],
+
+    citiesEyebrow: 'Get to know the place',
+    citiesTitle: 'Hosting Cities',
+    citiesBody: 'From New York City to Mexico City to Toronto — see where football takes over a continent.',
+    cityTabs: [
+      { id: 'tab-1', label: 'Canada' },
+      { id: 'tab-2', label: 'United States' },
+      { id: 'tab-3', label: 'Mexico' },
+    ],
+    cityTiles: [
+      { id: 'city-1', title: 'Shell Energy Stadium', meta: 'Boston • Capacity 85,000' },
+      { id: 'city-2', title: 'Boston Stadium', meta: 'Boston • Capacity 65,000' },
+      { id: 'city-3', title: 'Toronto Stadium', meta: 'Toronto • Capacity 45,000' },
+      { id: 'city-4', title: 'Vancouver Stadium', meta: 'Vancouver • Capacity 54,000' },
     ],
 
     featuresCta: 'Get started',

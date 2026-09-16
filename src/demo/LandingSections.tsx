@@ -10,8 +10,11 @@ import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import {
   blankBundle,
+  blankCard,
   blankFeature,
   blankFight,
+  blankMatch,
+  blankTab,
   blankGame,
   blankLink,
   blankProvider,
@@ -19,7 +22,12 @@ import {
   blankSubTile,
   blankTile,
   bundlesOf,
+  cardsOf,
+  cityTabsOf,
+  cityTilesOf,
+  dayTilesOf,
   featuresOf,
+  matchesOf,
   gamesOf,
   landingText,
   linksOf,
@@ -1019,6 +1027,316 @@ function SectionFields({
             onClick={() => write({ bundles: [...bundlesOf(inst), blankBundle(bundlesOf(inst))] })}
           >
             Add a bundle
+          </button>
+        </>
+      )
+
+    case 'matchList':
+      return (
+        <>
+          <TextField
+            label="Over the heading"
+            value={t.matchEyebrow}
+            pipelineKey={key('landing.matchEyebrow')}
+            onChange={(v) => write({ matchEyebrow: v })}
+            helpText="Set in capitals by the design. Empty draws none."
+          />
+          <TextField
+            label="Heading"
+            value={t.matchTitle}
+            pipelineKey={key('landing.matchTitle')}
+            onChange={(v) => write({ matchTitle: v })}
+            rows={2}
+          />
+          <TextField
+            label="Button"
+            value={t.matchCta}
+            pipelineKey={key('landing.matchCta')}
+            onChange={(v) => write({ matchCta: v })}
+            helpText="Empty draws none."
+          />
+          {matchesOf(inst).map((match, i) => {
+            const all = matchesOf(inst)
+            const edit = (next: Partial<typeof match>) =>
+              write({ matchGames: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={match.id}>
+                <TextField
+                  label={`Match ${i + 1} — day`}
+                  value={match.day}
+                  pipelineKey={key(`landing.matchGames[${i}].day`)}
+                  onChange={(v) => edit({ day: v })}
+                  helpText="The heading it falls under. Matches sharing a day are drawn under one."
+                />
+                <TextField
+                  label="Home"
+                  value={match.home}
+                  pipelineKey={key(`landing.matchGames[${i}].home`)}
+                  onChange={(v) => edit({ home: v })}
+                />
+                <TextField
+                  label="Kick-off"
+                  value={match.time}
+                  pipelineKey={key(`landing.matchGames[${i}].time`)}
+                  onChange={(v) => edit({ time: v })}
+                />
+                <TextField
+                  label="Away"
+                  value={match.away}
+                  pipelineKey={key(`landing.matchGames[${i}].away`)}
+                  onChange={(v) => edit({ away: v })}
+                />
+                <TextField
+                  label="Under the rule"
+                  value={match.note}
+                  pipelineKey={key(`landing.matchGames[${i}].note`)}
+                  onChange={(v) => edit({ note: v })}
+                  rows={2}
+                  helpText="Stage, group, stadium and city."
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ matchGames: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ matchGames: [...matchesOf(inst), blankMatch(matchesOf(inst))] })}
+          >
+            Add a match
+          </button>
+        </>
+      )
+
+    case 'dayRail':
+      return (
+        <>
+          <TextField
+            label="Over the date"
+            value={t.dayLabel}
+            pipelineKey={key('landing.dayLabel')}
+            onChange={(v) => write({ dayLabel: v })}
+            helpText='In gold, in capitals — "Today".'
+          />
+          <TextField
+            label="Date"
+            value={t.dayDate}
+            pipelineKey={key('landing.dayDate')}
+            onChange={(v) => write({ dayDate: v })}
+          />
+          <TextField
+            label="Month"
+            value={t.dayMonth}
+            pipelineKey={key('landing.dayMonth')}
+            onChange={(v) => write({ dayMonth: v })}
+          />
+          {dayTilesOf(inst).map((tile, i) => {
+            const all = dayTilesOf(inst)
+            const edit = (next: Partial<typeof tile>) =>
+              write({ dayTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={tile.id}>
+                <TextField
+                  label={`Game ${i + 1}`}
+                  value={tile.title}
+                  pipelineKey={key(`landing.dayTiles[${i}].title`)}
+                  onChange={(v) => edit({ title: v })}
+                  rows={2}
+                />
+                <TextField
+                  label="Under it"
+                  value={tile.meta}
+                  pipelineKey={key(`landing.dayTiles[${i}].meta`)}
+                  onChange={(v) => edit({ meta: v })}
+                  helpText="The competition it belongs to. Empty draws none."
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ dayTiles: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ dayTiles: [...dayTilesOf(inst), blankTile(dayTilesOf(inst))] })}
+          >
+            Add a game
+          </button>
+        </>
+      )
+
+    case 'cardStack':
+      return (
+        <>
+          {cardsOf(inst).map((card, i) => {
+            const all = cardsOf(inst)
+            const edit = (next: Partial<typeof card>) =>
+              write({ featureCards: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={card.id}>
+                <TextField
+                  label={`Card ${i + 1} — number`}
+                  value={card.stat}
+                  pipelineKey={key(`landing.featureCards[${i}].stat`)}
+                  onChange={(v) => edit({ stat: v })}
+                  helpText="The big gold line, as in 12+. Empty makes it a card of words."
+                />
+                <TextField
+                  label="Heading"
+                  value={card.title}
+                  pipelineKey={key(`landing.featureCards[${i}].title`)}
+                  onChange={(v) => edit({ title: v })}
+                  rows={2}
+                  helpText="A new line is a second line — HDR over Dolby Atmos, not a wrap."
+                />
+                <TextField
+                  label="Under the heading"
+                  value={card.body}
+                  pipelineKey={key(`landing.featureCards[${i}].body`)}
+                  onChange={(v) => edit({ body: v })}
+                  rows={3}
+                />
+                <TextField
+                  label="Button"
+                  value={card.cta}
+                  pipelineKey={key(`landing.featureCards[${i}].cta`)}
+                  onChange={(v) => edit({ cta: v })}
+                  helpText="Gold, at the foot. Empty draws none."
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ featureCards: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ featureCards: [...cardsOf(inst), blankCard(cardsOf(inst))] })}
+          >
+            Add a card
+          </button>
+        </>
+      )
+
+    case 'cities':
+      return (
+        <>
+          <TextField
+            label="Over the heading"
+            value={t.citiesEyebrow}
+            pipelineKey={key('landing.citiesEyebrow')}
+            onChange={(v) => write({ citiesEyebrow: v })}
+            helpText="Set in capitals by the design. Empty draws none."
+          />
+          <TextField
+            label="Heading"
+            value={t.citiesTitle}
+            pipelineKey={key('landing.citiesTitle')}
+            onChange={(v) => write({ citiesTitle: v })}
+          />
+          <TextField
+            label="Under the heading"
+            value={t.citiesBody}
+            pipelineKey={key('landing.citiesBody')}
+            onChange={(v) => write({ citiesBody: v })}
+            rows={3}
+          />
+          {cityTabsOf(inst).map((tab, i) => {
+            const all = cityTabsOf(inst)
+            return (
+              <div className="demo__feature" key={tab.id}>
+                <TextField
+                  label={`Tab ${i + 1}`}
+                  value={tab.label}
+                  pipelineKey={key(`landing.cityTabs[${i}].label`)}
+                  onChange={(v) =>
+                    write({ cityTabs: all.map((one, j) => (j === i ? { ...one, label: v } : one)) })
+                  }
+                  helpText={i === 0 ? 'The first is the one drawn as chosen.' : undefined}
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ cityTabs: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ cityTabs: [...cityTabsOf(inst), blankTab(cityTabsOf(inst))] })}
+          >
+            Add a tab
+          </button>
+          {cityTilesOf(inst).map((tile, i) => {
+            const all = cityTilesOf(inst)
+            const edit = (next: Partial<typeof tile>) =>
+              write({ cityTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={tile.id}>
+                <TextField
+                  label={`Place ${i + 1}`}
+                  value={tile.title}
+                  pipelineKey={key(`landing.cityTiles[${i}].title`)}
+                  onChange={(v) => edit({ title: v })}
+                />
+                <TextField
+                  label="Under it"
+                  value={tile.meta}
+                  pipelineKey={key(`landing.cityTiles[${i}].meta`)}
+                  onChange={(v) => edit({ meta: v })}
+                  helpText="City and capacity, as the design has it."
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ cityTiles: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ cityTiles: [...cityTilesOf(inst), blankTile(cityTilesOf(inst))] })}
+          >
+            Add a place
           </button>
         </>
       )

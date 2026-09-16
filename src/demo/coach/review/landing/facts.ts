@@ -3,6 +3,11 @@ import { resolveFlow } from '../../../../rules/layers'
 import type { LandingScreen } from '../../../../rules/flow'
 import {
   bundlesOf,
+  cardsOf,
+  cityTabsOf,
+  cityTilesOf,
+  dayTilesOf,
+  matchesOf,
   featuresOf,
   heroOf,
   landingText,
@@ -145,6 +150,43 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
           ...bundlesOf(l).flatMap((one) => [one.name, one.note, one.term, one.cta]),
         ],
         cta: bundlesOf(l)[0]?.cta ?? '',
+      }
+    case 'matchList':
+      return {
+        heading: t.matchTitle,
+        words: [
+          t.matchEyebrow,
+          t.matchTitle,
+          t.matchCta,
+          ...matchesOf(l).flatMap((one) => [one.day, one.note]),
+        ],
+        cta: t.matchCta,
+      }
+    case 'dayRail':
+      return {
+        heading: t.dayLabel,
+        words: [t.dayLabel, ...dayTilesOf(l).flatMap((one) => [one.title, one.meta])],
+        cta: '',
+      }
+    case 'cardStack':
+      return {
+        /* The lead card's heading is the stack's: the ones under it are
+           statistics, and a number is not what this block is called. */
+        heading: cardsOf(l)[0]?.title ?? '',
+        words: cardsOf(l).flatMap((one) => [one.title, one.body, one.cta]),
+        cta: cardsOf(l).find((one) => one.cta.trim() !== '')?.cta ?? '',
+      }
+    case 'cities':
+      return {
+        heading: t.citiesTitle,
+        words: [
+          t.citiesEyebrow,
+          t.citiesTitle,
+          t.citiesBody,
+          ...cityTabsOf(l).map((one) => one.label),
+          ...cityTilesOf(l).flatMap((one) => [one.title, one.meta]),
+        ],
+        cta: '',
       }
   }
 }
