@@ -659,21 +659,18 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
       id: 'save',
       label: 'Save',
       icon: <SaveIcon size={13} />,
-      title: 'Every edit is saved as you make it. This writes again and says so.',
       run: () => (store.save() ? 'Saved' : 'No room to save'),
     },
     {
       id: 'rename',
       label: 'Rename',
       icon: <PencilIcon size={13} />,
-      title: 'Change what this file is called',
       run: () => setRenaming(true),
     },
     {
       id: 'duplicate',
       label: 'Duplicate',
       icon: <CopyIcon size={13} />,
-      title: 'Downloads a copy of this file, which Import brings back',
       run: () => {
         store.duplicate()
         return 'Copy downloaded'
@@ -683,7 +680,6 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
       id: 'dev-link',
       label: 'Copy dev mode link',
       icon: <CodeIcon size={13} />,
-      title: 'Opens on this page in Dev mode',
       breaks: true,
       run: () => copyLink({ mode: 'dev' }),
     },
@@ -691,14 +687,12 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
       id: 'proto-link',
       label: 'Copy prototype link',
       icon: <PlayIcon size={13} />,
-      title: 'Opens straight into the walkthrough',
       run: () => copyLink({ preview: '1' }),
     },
     {
       id: 'export',
       label: 'Export JSON',
       icon: <DownloadIcon size={13} />,
-      title: 'The whole set as a file, for engineering',
       breaks: true,
       run: () => {
         store.exportJson()

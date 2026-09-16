@@ -106,7 +106,6 @@ export interface FileAction {
   run: () => string | void | Promise<string | void>
   /** Under a rule from the item above, the way a file menu groups its verbs. */
   breaks?: boolean
-  title?: string
 }
 
 /** What can be done to the file, under the chevron beside its name. */
@@ -168,7 +167,6 @@ export function FileMenu({ actions }: { actions: FileAction[] }) {
                 type="button"
                 className="fm__item"
                 role="menuitem"
-                title={action.title}
                 onClick={() => void choose(action)}
               >
                 {/* The word an action left behind takes the icon's place as
