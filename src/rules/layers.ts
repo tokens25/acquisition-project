@@ -19,6 +19,20 @@ export interface Situation {
   subscription: string
   status: string
   entry: string
+  /**
+   * Which plan is being bought, and how it is being paid for.
+   *
+   * Only the screens after the picker have these: a landing page is not about
+   * one plan, but a checkout page is entirely about one — its renewal note
+   * names a date that depends on the cadence, and its legal line depends on
+   * what is being sold. One set of words for all of them is one set of words
+   * that is wrong for most of them.
+   *
+   * Empty means "no plan in particular", which is what every screen before the
+   * picker is, and what the shared copy is written for.
+   */
+  tier: string
+  cadence: string
 }
 
 /**
@@ -46,7 +60,9 @@ export const isMarketCopy = (scope: Selector) =>
   scope.market !== undefined &&
   scope.subscription === undefined &&
   scope.status === undefined &&
-  scope.entry === undefined
+  scope.entry === undefined &&
+  scope.tier === undefined &&
+  scope.cadence === undefined
 
 /** The fields one layer changes, per screen. Everything else is inherited. */
 export type FlowPatch = { [K in keyof FlowContent]?: Partial<FlowContent[K]> }
@@ -58,7 +74,10 @@ export interface FlowLayer {
   patch: FlowPatch
 }
 
-const KEYS: (keyof Situation)[] = ['market', 'subscription', 'status', 'entry']
+/* Order is the tie-break between two selectors pinning the same number of
+   keys, so market stays the strongest claim and the two newest are the
+   weakest — a plan is a narrowing inside a market, never across markets. */
+const KEYS: (keyof Situation)[] = ['market', 'subscription', 'status', 'entry', 'tier', 'cadence']
 
 /** What the copy is called when it belongs to no market in particular. */
 export const SHARED = 'Shared copy'
@@ -74,6 +93,8 @@ export function situationOf(set: CardSet): Situation {
     subscription: set.context.subscription ?? '',
     status: journey?.audience ?? '',
     entry: journey?.entry.cta ?? '',
+    tier: set.context.tier ?? '',
+    cadence: set.context.cadence,
   }
 }
 
@@ -94,7 +115,15 @@ export function selectorMatches(when: Selector, at: Situation): boolean {
 export function specificity(when: Selector): number {
   const pinned = KEYS.filter((k) => when[k] !== undefined)
   const weight = pinned.reduce((n, k) => n + (1 << (KEYS.length - 1 - KEYS.indexOf(k))), 0)
-  return pinned.length * 16 + weight
+  /*
+   * The multiplier has to clear every weight put together, or the tie-break
+   * stops being a tie-break: with six keys the weights reach 63, and a
+   * multiplier of 16 would let one pinned market outrank two pinned keys —
+   * count would no longer decide, which is the one thing it is for. Derived
+   * from the list rather than written as a number, so adding a seventh key
+   * cannot quietly reintroduce that.
+   */
+  return pinned.length * (1 << KEYS.length) + weight
 }
 
 /** The layers that apply here, least specific first — the order they stack in. */
@@ -209,7 +238,14 @@ function forkFrom(set: CardSet, scope: Selector): FlowContent {
   return resolveFlow(below, { ...blankSituation, ...scope })
 }
 
-const blankSituation: Situation = { market: '', subscription: '', status: '', entry: '' }
+const blankSituation: Situation = {
+  market: '',
+  subscription: '',
+  status: '',
+  entry: '',
+  tier: '',
+  cadence: '',
+}
 
 /** Drops a whole layer, so its situations read what they read before it. */
 export function clearLayer(set: CardSet, scope: Selector): Partial<CardSet> {
@@ -245,6 +281,8 @@ export function selectorLabel(when: Selector): string {
     when.subscription && (channelById(when.subscription)?.label ?? when.subscription),
     when.status && (STATUS_LABELS[when.status] ?? when.status),
     when.entry,
+    when.tier,
+    when.cadence,
   ].filter(Boolean)
   return parts.length ? parts.join(' · ') : SHARED
 }
@@ -260,13 +298,35 @@ export function selectorLabel(when: Selector): string {
  * separate, so a layer spanning them would be one a market with its own copy
  * could never see.
  */
-export function scopeLadder(at: Situation): { when: Selector; label: string }[] {
+export function scopeLadder(
+  at: Situation,
+  /**
+   * Two more rungs, for a screen that is about one plan.
+   *
+   * Offered only where they mean something. A landing page has no plan, so a
+   * rung pinning one there would be a layer nobody could ever see — and the
+   * ladder's whole claim is that every rung on it is reachable.
+   */
+  { plan = false }: { plan?: boolean } = {},
+): { when: Selector; label: string }[] {
+  const situation = {
+    market: at.market,
+    subscription: at.subscription,
+    status: at.status,
+    entry: at.entry,
+  }
   const rungs: Selector[] = [
     {},
     { market: at.market },
     { market: at.market, subscription: at.subscription },
     { market: at.market, subscription: at.subscription, status: at.status },
-    { market: at.market, subscription: at.subscription, status: at.status, entry: at.entry },
+    situation,
+    ...(plan
+      ? [
+          { ...situation, tier: at.tier },
+          { ...situation, tier: at.tier, cadence: at.cadence },
+        ]
+      : []),
   ]
   return rungs
     // A rung pinning something the situation does not know would be a layer

@@ -315,6 +315,15 @@ export interface Context {
   /** Which way of paying is on screen. */
   cadence: string
   /**
+   * Which plan is being bought, on the screens after the picker.
+   *
+   * The checkout page is about one plan: its summary names it, its renewal
+   * note dates from it, its legal line describes it. Absent means no plan in
+   * particular, which is every screen before the picker and the shared copy
+   * those screens read.
+   */
+  tier?: string
+  /**
    * Which tab of the plan picker is on screen.
    *
    * Here with the rest of what is being looked at, because a tab is one: the

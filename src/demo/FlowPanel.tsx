@@ -26,6 +26,7 @@ import {
   writeFlow,
 } from '../rules/layers'
 import { flowFieldLabel } from '../rules/pipeline'
+import { resolveSet } from '../rules/resolve'
 import { HeroBannerFields } from './HeroBannerFields'
 import { useState } from 'react'
 
@@ -83,7 +84,11 @@ export function FlowTabs({
 export function FlowPanel({ store, step }: { store: CardSetStore; step: Step }) {
   const { set, updateSet } = store
   const at = situationOf(set)
-  const ladder = scopeLadder(at)
+  /* The checkout page is about one plan paid for one way, so it gets the two
+     narrower rungs. Every other screen would only be offered a layer nobody
+     could ever see. */
+  const aboutOnePlan = step.renderer === 'checkout'
+  const ladder = scopeLadder(at, { plan: aboutOnePlan })
   const home = ladder.find((r) => isMarketCopy(r.when)) ?? ladder[0]
   const [chosen, setChosen] = useState(home?.label ?? SHARED)
   // Which half of the landing page is being edited. The page, not the banner,
@@ -201,8 +206,13 @@ function FlowFields({
   scope: Selector
   hero?: boolean
 }) {
-  const { set, updateSet } = store
+  const { set, updateSet, context, setContext } = store
   const flow = resolveFlow(set)
+
+  /* The plans on sale in this situation, which is what a checkout page can be
+     checking out. Named by their resolved name, so the menu reads the way the
+     card does. */
+  const plansHere = resolveSet(set, context).map((c) => c.tier)
 
   /** Writes one field of one screen to the chosen scope, and nothing else. */
   const patch = <K extends keyof FlowContent>(screen: K, next: Partial<FlowContent[K]>) =>
@@ -732,6 +742,31 @@ function FlowFields({
     const c = flow.checkout
     return (
       <>
+        {/* What is being bought, on the page that buys it.
+            The page's summary, its dates and its legal line are all about one
+            plan on one billing cycle, so which one is a question the panel has
+            to ask before any of its fields mean anything. Answering it moves
+            the preview as well: you edit what you are looking at. */}
+        <FieldGroup title="What is being bought">
+          <SelectField
+            label="Plan"
+            helpText="The plan this page is checking out."
+            value={context.tier ?? ''}
+            options={[
+              { value: '', label: 'No plan in particular' },
+              ...plansHere.map((t) => ({ value: t.id, label: t.planName || t.id })),
+            ]}
+            onChange={(v) => setContext({ ...context, tier: v || undefined })}
+          />
+          <SelectField
+            label="Payment option"
+            helpText="Its terms and its renewal date follow from this."
+            value={context.cadence}
+            options={set.cadences.map((v) => ({ value: v, label: v }))}
+            onChange={(v) => setContext({ ...context, cadence: v })}
+          />
+        </FieldGroup>
+
         <FieldGroup title="Screen">
           {navTitle('checkout', c.navTitle)}
           <TextField
