@@ -36,7 +36,7 @@ import { SelectField } from '../components/SelectField'
  * door throws the module away with everything else, which is the one thing
  * that should start the questions again.
  */
-const answeredThisVisit: Record<string, boolean> = {}
+const answeredThisVisit = new Set<string>()
 
 export function DefaultPanel({
   store,
@@ -70,7 +70,7 @@ export function DefaultPanel({
   const { context, setContext, updateSet, journey } = store
 
   const [answered, setAnswered] = useState<Record<string, boolean>>(() => ({
-    ...answeredThisVisit,
+    ...Object.fromEntries([...answeredThisVisit].map((k) => [k, true])),
   }))
   const asked = (key: string) => prompt && !answered[key]
   /** The standing answer, or nothing while the question is still being asked. */
@@ -92,7 +92,7 @@ export function DefaultPanel({
     current && channelsFor(market).some((c) => c.id === current) ? current : undefined
 
   const answer = (key: string) => {
-    answeredThisVisit[key] = true
+    answeredThisVisit.add(key)
     setAnswered((prev) => ({ ...prev, [key]: true }))
   }
 

@@ -1,3 +1,4 @@
+import { channelById, marketById } from './catalogue'
 import { ENTRY_POINTS, STATUS_LABELS, USER_STATUSES } from './entry'
 /**
  * The shape of a flow, decided before any of its words exist.
@@ -306,3 +307,10 @@ export const SETUP_STEPS = [
 ] as const
 
 export const LAST_STEP = SETUP_STEPS.length
+
+/** "Japan · NFL", or just the market for a general flow. */
+export function whereLabel(marketId: string, channelId?: string): string {
+  const market = marketById(marketId)?.label ?? marketId
+  const channel = channelId ? (channelById(channelId)?.label ?? channelId) : null
+  return channel ? `${market} · ${channel}` : market
+}

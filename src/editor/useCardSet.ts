@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import type { CadenceOffer, CardSet, Context, Override, Tier, TierPatch } from '../rules/content'
 import type { PipelineDoc } from '../rules/pipeline'
 import { emptyPipeline } from '../rules/pipeline'
@@ -64,6 +64,20 @@ function hydrate(raw: unknown): CardSet {
     // screen, so anything a person wrote wins over the shipped default.
     flow: mergeFlow(input.flow),
   }
+}
+
+/**
+ * A context with a tab on it, when the set draws tabs at all.
+ *
+ * A context naming a tab the set does not have is corrected too: a select shows
+ * its first option when its value matches none, and the panel would scope its
+ * edits to that first tab while the context said otherwise.
+ */
+function withTab(set: CardSet): CardSet {
+  const tabs = tabsOf(set)
+  if (!tabs.length) return set
+  if (tabs.some((t) => t.id === set.context.tab)) return set
+  return { ...set, context: { ...set.context, tab: tabs[0].id } }
 }
 
 /**
@@ -240,7 +254,24 @@ export interface CardSetStore {
 
 export function useCardSet(): CardSetStore {
   const [initial] = useState(read)
-  const [set, setSet] = useState<CardSet>(initial.set)
+  /*
+   * Every write goes through here, so a tab is always in the context.
+   *
+   * The plan picker draws tabs, so something is always on one — and an edit
+   * scoped to a tab is only read back by a context on that tab. Settled at the
+   * point of writing rather than corrected afterwards in an effect, because a
+   * correction after the fact is a render in which the panel and the preview
+   * disagree about which tab is showing, which is the bug itself.
+   *
+   * A reducer with setState's signature, so the sixty call sites read as they
+   * always did and the dispatcher is known stable to the hooks lint.
+   */
+  const [set, setSet] = useReducer(
+    (prev: CardSet, next: CardSet | ((p: CardSet) => CardSet)) =>
+      withTab(typeof next === 'function' ? next(prev) : next),
+    initial.set,
+    withTab,
+  )
   // The seed this content was authored against, carried forward on every write.
   // Stamping the current fingerprint instead would mark stale content as fresh
   // the moment the page loaded, and the warning would never be seen twice.
@@ -264,30 +295,6 @@ export function useCardSet(): CardSetStore {
   const context = set.context
   const editingBase = isBaseContext(context)
 
-  /*
-   * A tab is always on screen, so one is always in the context.
-   *
-   * The panel scopes an edit to the tab it says it is editing, falling back to
-   * the first when the context names none. An override written for a tab is
-   * only read back by a context on that tab — so with no tab in the context
-   * the write landed somewhere nothing could see it, and the field sprang
-   * back to its old value as though the click had not happened. It had; it was
-   * filed under a tab nobody was on.
-   *
-   * Settled here rather than in the panel because the preview reads the same
-   * context, and the two disagreeing about which tab is showing is the bug
-   * itself rather than a symptom of it.
-   */
-  useEffect(() => {
-    const tabs = tabsOf(set)
-    if (!tabs.length) return
-    if (tabs.some((t) => t.id === set.context.tab)) return
-    setSet((prev) => {
-      const here = tabsOf(prev)
-      if (!here.length || here.some((t) => t.id === prev.context.tab)) return prev
-      return { ...prev, context: { ...prev.context, tab: here[0].id } }
-    })
-  }, [set])
 
   const setContext = useCallback((next: Context) => {
     setSet((prev) => {

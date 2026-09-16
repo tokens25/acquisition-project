@@ -94,7 +94,16 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   }
   const updateOffer = (tierId: string, patch: Partial<CadenceOffer>) =>
     writeOffer(tierId, patch, scope)
-  const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
+  /*
+   * Which plan is open, remembered together with the situation it was opened
+   * in. A pick made in Japan · NFL says nothing about what to show in the UK,
+   * so when the situation changes the pick simply stops applying and the
+   * first plan sold here is shown — the same outcome an effect syncing the two
+   * would produce, without a render in between where they disagree.
+   */
+  const situationKey = `${context.market}|${context.channel}|${context.subscription ?? ''}`
+  const [pick, setPick] = useState<{ id: string; at: string } | null>(null)
+  const setOpenTier = (id: string) => setPick({ id, at: situationKey })
 
   /*
    * Someone clicked a part of a card in the preview.
@@ -107,13 +116,20 @@ export function EditPanel({ store }: { store: CardSetStore }) {
    */
   const [asked, setAsked] = useState<EditRequest | null>(null)
   useEffect(() => {
-    const onAsk = (e: Event) => setAsked((e as CustomEvent<EditRequest>).detail)
+    const onAsk = (e: Event) => {
+      const detail = (e as CustomEvent<EditRequest>).detail
+      // The plan opens here, in the handler: it is the event's doing, not a
+      // consequence of state, and the field for another plan is not on the
+      // page to be found until it has.
+      setPick({ id: detail.tierId, at: situationKey })
+      setAsked(detail)
+    }
     window.addEventListener(EDIT_EVENT, onAsk)
     return () => window.removeEventListener(EDIT_EVENT, onAsk)
-  }, [])
+  }, [situationKey])
   useEffect(() => {
     if (!asked) return
-    setOpenTier(asked.tierId)
+    // After the render the pick caused, so the field exists to be found.
     const id = window.requestAnimationFrame(() => {
       revealField(asked.key)
       setAsked(null)
@@ -193,24 +209,17 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         .map((t) => t.id),
     )
   }, [set.tiers, set.offers, context.market, context.channel, context.subscription])
-  const [showOthers, setShowOthers] = useState(false)
+  const [others, setOthers] = useState<{ on: boolean; at: string }>({ on: false, at: '' })
+  const showOthers = others.on && others.at === situationKey
+  const setShowOthers = (fn: (v: boolean) => boolean) =>
+    setOthers({ on: fn(showOthers), at: situationKey })
   const elsewhere = set.tiers.filter((t) => !sellable.has(t.id))
 
-  /* Changing situation moves the picker with it. Staying on a plan the new
-     situation does not sell is how the panel comes to be editing one product
-     while the preview beside it draws another. Keyed to the situation alone,
-     so opening one of the other plans by hand is left alone. */
-  useEffect(() => {
-    setOpenTier((open) => {
-      if (open && sellable.has(open)) return open
-      return set.tiers.find((t) => sellable.has(t.id))?.id ?? open
-    })
-    setShowOthers(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context.market, context.channel, context.subscription])
-
+  // A pick from this situation, if it still names a plan; otherwise the first
+  // plan sold here; otherwise anything at all, so the panel is never empty.
+  const openTier = pick && pick.at === situationKey ? pick.id : undefined
   const tier =
-    set.tiers.find((t) => t.id === openTier) ??
+    (openTier ? set.tiers.find((t) => t.id === openTier) : undefined) ??
     set.tiers.find((t) => sellable.has(t.id)) ??
     set.tiers[0]
   if (!tier) return <p className="ed-placeholder">This set has no plans.</p>

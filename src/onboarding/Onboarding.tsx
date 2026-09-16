@@ -2,24 +2,17 @@ import './onboarding.css'
 
 import { useMemo } from 'react'
 import { SelectField } from '../components/SelectField'
-import { channelById, marketById } from '../rules/catalogue'
 import type {
   CardStructure,
   ConsentItem,
   FlowStructure,
 } from '../rules/onboarding'
 import type { CatalogEntry, FeatureEntry } from '../rules/content'
-import { LAST_STEP, SETUP_STEPS, settle, settlePlans, structureSummary } from '../rules/onboarding'
+import { LAST_STEP, SETUP_STEPS, settle, settlePlans, structureSummary, whereLabel } from '../rules/onboarding'
 import { ENTRY_POINTS, STATUS_LABELS, USER_STATUSES } from '../rules/entry'
 import { stepsFor } from '../rules/generate'
 import { SkeletonCard } from './SkeletonCard'
 
-/** "Japan · NFL", or just the market for a general flow. */
-export function whereLabel(marketId: string, channelId?: string): string {
-  const market = marketById(marketId)?.label ?? marketId
-  const channel = channelId ? (channelById(channelId)?.label ?? channelId) : null
-  return channel ? `${market} · ${channel}` : market
-}
 
 /**
  * The invitation, shown where a flow would be if anyone had described one.

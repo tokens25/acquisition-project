@@ -278,13 +278,13 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const setupKey = structureKey(store.context.market, store.context.subscription || undefined)
   const configured = isConfigured(store.journey)
   const draft = store.set.flowStructures?.[setupKey]
-  const [setupOpen, setSetupOpen] = useState(false)
-
-  /* Moving to another market or channel leaves the wizard — what was on screen
-     was that flow's structure, not this one's. The draft itself is kept. */
-  useEffect(() => {
-    setSetupOpen(false)
-  }, [setupKey])
+  /* Open for one flow, remembered with that flow. Moving to another market or
+     channel leaves the wizard — what was on screen was that flow's structure,
+     not this one's — and it leaves it by the remembered key no longer matching
+     rather than by an effect closing it a render late. The draft is kept. */
+  const [setupFor, setSetupFor] = useState<string | null>(null)
+  const setupOpen = setupFor === setupKey
+  const setSetupOpen = (open: boolean) => setSetupFor(open ? setupKey : null)
 
   const writeStructure = useCallback(
     (next: FlowStructure) => {
