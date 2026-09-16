@@ -3079,3 +3079,444 @@
 .fl-foot__link {
   cursor: pointer;
 }
+
+/* ── Rails ────────────────────────────────────────────────────────────────
+   A title, and a row of tiles that runs past the right edge. One block for
+   the four the design draws — nodes 1084:56990, 1084:57405, 1084:57115 and
+   1093:55236 — because what separates them is the tile and nothing else.
+
+   The sizes, and what each is for:
+     wide     322 × 120, words over the picture — a promotion.
+     fixture  300 wide, 16:9, words under      — a game.
+     story    232 wide, 3:5 tall, words under  — a film.
+     square   250 × 250, words over            — a place. */
+.fl-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  inline-size: 100%;
+  padding-block: var(--space-24);
+}
+.fl-rail__title {
+  margin: 0;
+  padding-inline: var(--space-16);
+  color: var(--color-text-primary);
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.32;
+}
+/* The same scrolling row as the schedule's, and for the same reason: the
+   gutter is the row's padding, so the first tile lines up with the heading
+   and the last one is cut off by the screen rather than by a container. */
+.fl-rail__row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-start;
+  inline-size: 100%;
+  padding-inline: var(--space-16);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-rail__row::-webkit-scrollbar {
+  display: none;
+}
+.fl-rail__tile {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: flex-start;
+  /* Set by the size below. Here so a tile is never zero-width while a size
+     is being read. */
+  inline-size: 300px;
+}
+.fl-rail__art {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-10);
+  overflow: hidden;
+}
+.fl-rail__art img {
+  position: absolute;
+  inset: 0;
+  max-inline-size: none;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.fl-rail__stamp {
+  position: absolute;
+  inset-block-start: var(--space-8);
+  inset-inline-start: var(--space-8);
+  display: flex;
+  align-items: center;
+  block-size: 20px;
+  padding-inline: 6px;
+  border-radius: var(--radius-2);
+  background: #f8fafb;
+  color: #131415;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.fl-rail__words {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  inline-size: 100%;
+}
+.fl-rail__name {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+}
+.fl-rail__meta {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+
+/* Wide and square put their words on the picture, so the tile is the picture
+   and the words are laid over its foot under a wash. */
+.fl-rail[data-size='wide'] .fl-rail__tile,
+.fl-rail[data-size='square'] .fl-rail__tile {
+  position: relative;
+}
+.fl-rail[data-size='wide'] .fl-rail__words,
+.fl-rail[data-size='square'] .fl-rail__words {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  padding: var(--space-12);
+  border-end-start-radius: var(--radius-10);
+  border-end-end-radius: var(--radius-10);
+  background: linear-gradient(to top, rgb(0 0 0 / 82%), rgb(0 0 0 / 0%));
+}
+.fl-rail[data-size='wide'] .fl-rail__tile {
+  inline-size: 322px;
+}
+.fl-rail[data-size='wide'] .fl-rail__art {
+  aspect-ratio: 322 / 120;
+}
+/* Nothing to date on a promotion. */
+.fl-rail[data-size='wide'] .fl-rail__stamp {
+  display: none;
+}
+.fl-rail[data-size='fixture'] .fl-rail__tile {
+  inline-size: 300px;
+}
+.fl-rail[data-size='story'] .fl-rail__tile {
+  inline-size: 232px;
+}
+.fl-rail[data-size='story'] .fl-rail__art {
+  aspect-ratio: 3 / 5;
+}
+.fl-rail[data-size='story'] .fl-rail__stamp {
+  display: none;
+}
+.fl-rail[data-size='square'] .fl-rail__tile {
+  inline-size: 250px;
+}
+.fl-rail[data-size='square'] .fl-rail__art {
+  aspect-ratio: 1;
+}
+.fl-rail[data-size='square'] .fl-rail__stamp {
+  display: none;
+}
+
+/* ── The other subscriptions — node 1084:55909 ────────────────────────────
+   A rail whose tiles are things to buy, so each carries its own way in. */
+.fl-subrail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  inline-size: 100%;
+  padding-block: var(--space-24);
+}
+.fl-subrail__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-inline: var(--space-16);
+}
+.fl-subrail__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.32;
+}
+.fl-subrail__body {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-s);
+  line-height: 1.5;
+}
+.fl-subrail__row {
+  display: flex;
+  gap: var(--space-16);
+  align-items: stretch;
+  inline-size: 100%;
+  padding-inline: var(--space-16);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-subrail__row::-webkit-scrollbar {
+  display: none;
+}
+/* 272 × 408 — 2:3, which the design calls 6:9. */
+.fl-subtile {
+  position: relative;
+  flex: none;
+  inline-size: 272px;
+  aspect-ratio: 272 / 408;
+  border-radius: var(--radius-12);
+  overflow: hidden;
+}
+.fl-subtile__art,
+.fl-subtile__art img {
+  position: absolute;
+  inset: 0;
+  max-inline-size: none;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+/* Dark enough at the foot for a logo and a line to sit on it, and gone by
+   halfway up so the picture is still a picture. */
+.fl-subtile__wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(4 8 11 / 92%) 28%, rgb(4 8 11 / 0%) 62%);
+}
+.fl-subtile__foot {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: center;
+  padding: var(--space-16) var(--space-16) var(--space-20);
+}
+.fl-subtile__logo {
+  inline-size: 72px;
+  block-size: auto;
+}
+.fl-subtile__line {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  line-height: 1.45;
+  text-align: center;
+}
+.fl-subtile__cta {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 48px;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+/* ── Bundles — node 1093:55175 ────────────────────────────────────────────
+   Nights sold together. Side by side because the offer is a comparison. */
+.fl-bundles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  inline-size: 100%;
+  padding-block: var(--space-24);
+}
+.fl-bundles__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-inline: var(--space-16);
+  text-align: center;
+}
+.fl-bundles__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.32;
+}
+.fl-bundles__body {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-s);
+  line-height: 1.5;
+}
+.fl-bundles__row {
+  display: flex;
+  gap: var(--space-16);
+  /* Stretch, so two cards with different numbers of nights in them still
+     have their buttons on one line. */
+  align-items: stretch;
+  inline-size: 100%;
+  padding-inline: var(--space-16);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-bundles__row::-webkit-scrollbar {
+  display: none;
+}
+.fl-bundle {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 280px;
+  padding: var(--space-20);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-1);
+  overflow: hidden;
+}
+.fl-bundle[data-best] {
+  border-color: var(--color-brand-primary);
+}
+/* Across the top right corner, over the card's own edge. */
+.fl-bundle__badge {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  block-size: 22px;
+  padding-inline: var(--space-10);
+  border-end-start-radius: var(--radius-8);
+  background: var(--color-brand-primary);
+  color: #131415;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.fl-bundle__name {
+  margin: 0;
+  padding-inline-end: var(--space-24);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+}
+.fl-bundle__note {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+.fl-bundle__prices {
+  display: flex;
+  gap: var(--space-8);
+  align-items: baseline;
+  margin: var(--space-8) 0 0;
+  flex-wrap: wrap;
+}
+.fl-bundle__price {
+  color: var(--color-text-primary);
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.3;
+}
+.fl-bundle__was {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-body-xs);
+  text-decoration: line-through;
+}
+/* The saving is the whole point of a bundle, so it is the one green thing. */
+.fl-bundle__save {
+  color: #4ade80;
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-bold);
+}
+.fl-bundle__term {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+.fl-bundle__fights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  /* Takes the slack, so the button sits at the foot of every card however
+     many nights are in it. */
+  flex: 1;
+  margin-block-start: var(--space-16);
+}
+.fl-bundle__fight {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+}
+.fl-bundle__shot {
+  position: relative;
+  flex: none;
+  inline-size: 72px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-6);
+  overflow: hidden;
+}
+.fl-bundle__shot img {
+  position: absolute;
+  inset: 0;
+  max-inline-size: none;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.fl-bundle__words {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+.fl-bundle__fight-name {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+}
+.fl-bundle__when {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.4;
+}
+.fl-bundle__cta {
+  display: grid;
+  place-items: center;
+  margin-block-start: var(--space-20);
+  block-size: 48px;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+/* The best-value card sells itself with the button as well as the badge. */
+.fl-bundle[data-best] .fl-bundle__cta {
+  background: var(--color-brand-primary);
+  color: #131415;
+}

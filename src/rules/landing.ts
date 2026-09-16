@@ -1,5 +1,10 @@
 import type {
   HeroLabelVariant,
+  LandingBundle,
+  LandingBundleFight,
+  LandingSubTile,
+  LandingTile,
+  RailSize,
   LandingGame,
   LandingFeature,
   LandingLink,
@@ -152,11 +157,21 @@ type ChoiceKey =
   | 'multiviewImageOff'
   | 'sections'
   | 'sectionCopy'
+  | 'railSize'
 
 export function landingText(content: LandingScreen): Required<
   Omit<
     LandingScreen,
-    'providers' | 'faqs' | 'features' | 'footerLinks' | 'scheduleGames' | HeroKey | ChoiceKey
+    | 'providers'
+    | 'faqs'
+    | 'features'
+    | 'footerLinks'
+    | 'scheduleGames'
+    | 'railTiles'
+    | 'subRailTiles'
+    | 'bundles'
+    | HeroKey
+    | ChoiceKey
   >
 > {
   const base = defaultFlow.landing
@@ -209,6 +224,11 @@ export function landingText(content: LandingScreen): Required<
     featuresEyebrow: of('featuresEyebrow'),
     featuresTitle: of('featuresTitle'),
     featuresCta: of('featuresCta'),
+    railTitle: of('railTitle'),
+    subRailTitle: of('subRailTitle'),
+    subRailBody: of('subRailBody'),
+    bundlesTitle: of('bundlesTitle'),
+    bundlesBody: of('bundlesBody'),
     imageCtaTitle: of('imageCtaTitle'),
     imageCtaBody: of('imageCtaBody'),
     imageCtaCta: of('imageCtaCta'),
@@ -314,6 +334,57 @@ export function questionsOf(content: LandingScreen): LandingQuestion[] {
  */
 export function gamesOf(content: LandingScreen): LandingGame[] {
   return content.scheduleGames ?? defaultFlow.landing.scheduleGames ?? []
+}
+
+/** The tiles in the rail, or the ones it ships with. */
+export function tilesOf(content: LandingScreen): LandingTile[] {
+  return content.railTiles ?? defaultFlow.landing.railTiles ?? []
+}
+
+/** A new tile, waiting for its words. */
+export function blankTile(existing: LandingTile[]): LandingTile {
+  return { id: nextId('tile', existing), title: '', meta: '' }
+}
+
+/** Which size of tile this rail draws. */
+export function railSizeOf(content: LandingScreen): RailSize {
+  return content.railSize ?? defaultFlow.landing.railSize ?? 'fixture'
+}
+
+/** The other subscriptions offered, or the ones it ships with. */
+export function subTilesOf(content: LandingScreen): LandingSubTile[] {
+  return content.subRailTiles ?? defaultFlow.landing.subRailTiles ?? []
+}
+
+/** A new one, with the way in already written: every tile has the same one. */
+export function blankSubTile(existing: LandingSubTile[]): LandingSubTile {
+  return { id: nextId('sub', existing), line: '', cta: 'Subscribe' }
+}
+
+/** The bundles on offer, or the ones it ships with. */
+export function bundlesOf(content: LandingScreen): LandingBundle[] {
+  return content.bundles ?? defaultFlow.landing.bundles ?? []
+}
+
+/** A new bundle, with one night in it: a bundle of none is not an offer. */
+export function blankBundle(existing: LandingBundle[]): LandingBundle {
+  return {
+    id: nextId('bundle', existing),
+    name: '',
+    note: '',
+    price: '',
+    was: '',
+    save: '',
+    term: '',
+    badge: '',
+    cta: 'Get Started',
+    fights: [{ id: 'fight-1', name: '', when: '' }],
+  }
+}
+
+/** A new night in a bundle. */
+export function blankFight(existing: LandingBundleFight[]): LandingBundleFight {
+  return { id: nextId('fight', existing), name: '', when: '' }
 }
 
 /** A new game, with nothing in it yet. */

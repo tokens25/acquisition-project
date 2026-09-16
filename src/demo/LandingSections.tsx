@@ -5,20 +5,29 @@ import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
 import { articleShot, featureArt, imageCtaArt } from '../components/flow/landingArt'
+import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import {
+  blankBundle,
   blankFeature,
+  blankFight,
   blankGame,
   blankLink,
   blankProvider,
   blankQuestion,
+  blankSubTile,
+  blankTile,
+  bundlesOf,
   featuresOf,
   gamesOf,
   landingText,
   linksOf,
   providersOf,
   questionsOf,
+  railSizeOf,
+  subTilesOf,
+  tilesOf,
 } from '../rules/landing'
 import { resolveFlow, writeFlow } from '../rules/layers'
 import {
@@ -38,7 +47,7 @@ import {
   type PageSection,
   type SectionType,
 } from '../rules/sections'
-import type { LandingScreen } from '../rules/flow'
+import type { LandingScreen, RailSize } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { Selector } from '../rules/layers'
 
@@ -742,6 +751,275 @@ function SectionFields({
             onChange={(v) => write({ supportedLink: v })}
             helpText="Follows the line above, in blue. Empty draws none."
           />
+        </>
+      )
+
+    case 'rail':
+      return (
+        <>
+          <TextField
+            label="Title"
+            value={t.railTitle}
+            pipelineKey={key('landing.railTitle')}
+            onChange={(v) => write({ railTitle: v })}
+            helpText="Over the row. Empty draws none."
+          />
+          {/* Named for what each holds rather than for its measurements: the
+              size is the choice of what this rail is for, and nobody reaches
+              for "322 by 120". */}
+          <SelectField
+            label="Tiles"
+            value={railSizeOf(inst)}
+            options={[
+              { value: 'fixture', label: 'Games — 16:9, words underneath' },
+              { value: 'story', label: 'Stories — tall, words underneath' },
+              { value: 'wide', label: 'Promotions — wide and short, words over' },
+              { value: 'square', label: 'Places — square, words over' },
+            ]}
+            onChange={(v) => write({ railSize: v as RailSize })}
+            helpText="What kind of thing the row is showing. It sets the shape of every tile."
+          />
+          {tilesOf(inst).map((tile, i) => {
+            const all = tilesOf(inst)
+            const edit = (next: Partial<typeof tile>) =>
+              write({ railTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={tile.id}>
+                <TextField
+                  label={`Tile ${i + 1}`}
+                  value={tile.title}
+                  pipelineKey={key(`landing.railTiles[${i}].title`)}
+                  onChange={(v) => edit({ title: v })}
+                  rows={2}
+                />
+                <TextField
+                  label="Under it"
+                  value={tile.meta}
+                  pipelineKey={key(`landing.railTiles[${i}].meta`)}
+                  onChange={(v) => edit({ meta: v })}
+                  helpText="The quieter line — a competition, a place, a date. Empty draws none."
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ railTiles: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ railTiles: [...tilesOf(inst), blankTile(tilesOf(inst))] })}
+          >
+            Add a tile
+          </button>
+        </>
+      )
+
+    case 'subRail':
+      return (
+        <>
+          <TextField
+            label="Heading"
+            value={t.subRailTitle}
+            pipelineKey={key('landing.subRailTitle')}
+            onChange={(v) => write({ subRailTitle: v })}
+            rows={2}
+          />
+          <TextField
+            label="Under the heading"
+            value={t.subRailBody}
+            pipelineKey={key('landing.subRailBody')}
+            onChange={(v) => write({ subRailBody: v })}
+            rows={2}
+          />
+          {subTilesOf(inst).map((tile, i) => {
+            const all = subTilesOf(inst)
+            const edit = (next: Partial<typeof tile>) =>
+              write({ subRailTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={tile.id}>
+                <TextField
+                  label={`Subscription ${i + 1}`}
+                  value={tile.line}
+                  pipelineKey={key(`landing.subRailTiles[${i}].line`)}
+                  onChange={(v) => edit({ line: v })}
+                  rows={2}
+                  helpText="The line under the logo, which is what the tile says it sells."
+                />
+                <TextField
+                  label="Button"
+                  value={tile.cta}
+                  pipelineKey={key(`landing.subRailTiles[${i}].cta`)}
+                  onChange={(v) => edit({ cta: v })}
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ subRailTiles: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              write({ subRailTiles: [...subTilesOf(inst), blankSubTile(subTilesOf(inst))] })
+            }
+          >
+            Add a subscription
+          </button>
+        </>
+      )
+
+    case 'bundles':
+      return (
+        <>
+          <TextField
+            label="Heading"
+            value={t.bundlesTitle}
+            pipelineKey={key('landing.bundlesTitle')}
+            onChange={(v) => write({ bundlesTitle: v })}
+            rows={2}
+          />
+          <TextField
+            label="Under the heading"
+            value={t.bundlesBody}
+            pipelineKey={key('landing.bundlesBody')}
+            onChange={(v) => write({ bundlesBody: v })}
+            rows={2}
+          />
+          {bundlesOf(inst).map((bundle, i) => {
+            const all = bundlesOf(inst)
+            const edit = (next: Partial<typeof bundle>) =>
+              write({ bundles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={bundle.id}>
+                <TextField
+                  label={`Bundle ${i + 1}`}
+                  value={bundle.name}
+                  pipelineKey={key(`landing.bundles[${i}].name`)}
+                  onChange={(v) => edit({ name: v })}
+                />
+                <TextField
+                  label="Under the name"
+                  value={bundle.note}
+                  pipelineKey={key(`landing.bundles[${i}].note`)}
+                  onChange={(v) => edit({ note: v })}
+                  rows={2}
+                />
+                <TextField
+                  label="Price"
+                  value={bundle.price}
+                  pipelineKey={key(`landing.bundles[${i}].price`)}
+                  onChange={(v) => edit({ price: v })}
+                />
+                <TextField
+                  label="Was"
+                  value={bundle.was}
+                  pipelineKey={key(`landing.bundles[${i}].was`)}
+                  onChange={(v) => edit({ was: v })}
+                  helpText="Struck through beside the price. Empty draws neither this nor the saving."
+                />
+                <TextField
+                  label="Saving"
+                  value={bundle.save}
+                  pipelineKey={key(`landing.bundles[${i}].save`)}
+                  onChange={(v) => edit({ save: v })}
+                />
+                <TextField
+                  label="What kind of bundle"
+                  value={bundle.term}
+                  pipelineKey={key(`landing.bundles[${i}].term`)}
+                  onChange={(v) => edit({ term: v })}
+                  helpText={'Under the price — "2-fight bundle".'}
+                />
+                <TextField
+                  label="Corner label"
+                  value={bundle.badge}
+                  pipelineKey={key(`landing.bundles[${i}].badge`)}
+                  onChange={(v) => edit({ badge: v })}
+                  helpText="Marks this one out, in gold. Empty draws none."
+                />
+                {bundle.fights.map((fight, f) => (
+                  <div className="demo__feature" key={fight.id}>
+                    <TextField
+                      label={`Night ${f + 1}`}
+                      value={fight.name}
+                      pipelineKey={key(`landing.bundles[${i}].fights[${f}].name`)}
+                      onChange={(v) =>
+                        edit({
+                          fights: bundle.fights.map((one, j) => (j === f ? { ...one, name: v } : one)),
+                        })
+                      }
+                    />
+                    <TextField
+                      label="When"
+                      value={fight.when}
+                      pipelineKey={key(`landing.bundles[${i}].fights[${f}].when`)}
+                      onChange={(v) =>
+                        edit({
+                          fights: bundle.fights.map((one, j) => (j === f ? { ...one, when: v } : one)),
+                        })
+                      }
+                    />
+                    <button
+                      data-icon="trash"
+                      aria-label="Remove"
+                      type="button"
+                      className="demo__feature-remove"
+                      data-destructive=""
+                      onClick={() => edit({ fights: bundle.fights.filter((_, j) => j !== f) })}
+                    >
+                      <TrashIcon size={14} />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="ed-add"
+                  onClick={() => edit({ fights: [...bundle.fights, blankFight(bundle.fights)] })}
+                >
+                  Add a night
+                </button>
+                <TextField
+                  label="Button"
+                  value={bundle.cta}
+                  pipelineKey={key(`landing.bundles[${i}].cta`)}
+                  onChange={(v) => edit({ cta: v })}
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ bundles: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ bundles: [...bundlesOf(inst), blankBundle(bundlesOf(inst))] })}
+          >
+            Add a bundle
+          </button>
         </>
       )
 

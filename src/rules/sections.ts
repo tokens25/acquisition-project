@@ -30,6 +30,9 @@ export type SectionType =
   | 'imageCta'
   | 'features'
   | 'supported'
+  | 'rail'
+  | 'subRail'
+  | 'bundles'
 
 export interface PageSection {
   /**
@@ -65,6 +68,9 @@ export const SECTION_TYPES: SectionType[] = [
   'imageCta',
   'features',
   'supported',
+  'rail',
+  'subRail',
+  'bundles',
 ]
 
 /**
@@ -122,6 +128,15 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   imageCtaCta: 'imageCta',
   faqTitle: 'faq',
   faqs: 'faq',
+  railTitle: 'rail',
+  railSize: 'rail',
+  railTiles: 'rail',
+  subRailTitle: 'subRail',
+  subRailBody: 'subRail',
+  subRailTiles: 'subRail',
+  bundlesTitle: 'bundles',
+  bundlesBody: 'bundles',
+  bundles: 'bundles',
 }
 
 /**
@@ -158,6 +173,9 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   imageCta: 'Picture, heading, body, button',
   features: 'Eyebrow, heading, rows, button',
   supported: 'Heading, note, link',
+  rail: 'Title and a row of tiles',
+  subRail: 'Heading, a line under it, and the subscriptions',
+  bundles: 'Heading, a line under it, and the bundles',
 }
 
 /**
@@ -181,6 +199,9 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   imageCta: [100, 55, 45],
   features: [45, 100, 100],
   supported: [70, 100, 45],
+  rail: [50, 100, 100],
+  subRail: [70, 100, 100],
+  bundles: [60, 100, 100],
 }
 
 /** The page as it ships, in the order node 708:173735 has it. */
@@ -215,6 +236,9 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   imageCta: 'Image CTA',
   features: 'Features list',
   supported: 'Supported devices',
+  rail: 'Rail',
+  subRail: 'More subscriptions',
+  bundles: 'Bundles',
 }
 
 /** The list this page is arranged into, or the one it has always had. */

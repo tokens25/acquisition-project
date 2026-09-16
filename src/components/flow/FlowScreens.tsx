@@ -8,6 +8,7 @@ import { styleOf } from '../../rules/tabs'
 import { useImageRatio } from './useImageRatio'
 import type { HeroBanner } from '../../rules/landing'
 import {
+  bundlesOf,
   featuresOf,
   gamesOf,
   heroOf,
@@ -15,6 +16,9 @@ import {
   linksOf,
   providersOf,
   questionsOf,
+  railSizeOf,
+  subTilesOf,
+  tilesOf,
 } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
 import { articleShot, featureArt, imageCtaArt } from './landingArt'
@@ -92,7 +96,13 @@ import checkCircleFilled from '../../assets/flow/ready/check-circle-filled.svg'
 import { iconArtwork, logoArtwork } from '../../card/assets'
 import { Icon } from '../Icon'
 import type { Device, MarketConfig, PlanTab } from '../../rules/content'
-import type { LandingGame } from '../../rules/flow'
+import type {
+  LandingBundle,
+  LandingGame,
+  LandingSubTile,
+  LandingTile,
+  RailSize,
+} from '../../rules/flow'
 import { statedMoney } from '../../rules/money'
 import type {
   AccountScreen,
@@ -1837,7 +1847,191 @@ export function PageSectionView({
         </section>
       )
 
+    case 'rail':
+      return (
+        <RailSection title={text.railTitle} size={railSizeOf(content)} tiles={tilesOf(content)} />
+      )
+
+    case 'subRail':
+      return (
+        <SubRailSection
+          title={text.subRailTitle}
+          body={text.subRailBody}
+          tiles={subTilesOf(content)}
+        />
+      )
+
+    case 'bundles':
+      return (
+        <BundlesSection
+          title={text.bundlesTitle}
+          body={text.bundlesBody}
+          bundles={bundlesOf(content)}
+        />
+      )
+
     case 'faq':
       return <FaqSection content={content} title={text.faqTitle} />
   }
+}
+
+/**
+ * A rail: a title, and a row of tiles that runs off the edge of the screen.
+ *
+ * The four sizes are one component because they differ in the tile and in
+ * nothing else — the title sits in the same place, the row scrolls the same
+ * way, and the last tile is cut off by the same edge. What the size decides is
+ * how wide a tile is, what shape its picture is, and whether the words sit
+ * under the picture or over it.
+ *
+ * Off the right edge on purpose. A rail whose last tile ends inside the screen
+ * is a row, and a row does not tell you to keep going.
+ */
+function RailSection({
+  title,
+  size,
+  tiles,
+}: {
+  title: string
+  size: RailSize
+  tiles: LandingTile[]
+}) {
+  return (
+    <section className="fl-rail" data-size={size}>
+      {title.trim() !== '' && <p className="fl-rail__title">{title}</p>}
+      <div className="fl-rail__row">
+        {tiles.map((tile, at) => {
+          const fixture = fixtureFor(at)
+          return (
+            <article className="fl-rail__tile" key={tile.id}>
+              <span className="fl-rail__art" aria-hidden="true">
+                {fixture.art.map((src, i) => (
+                  <img src={src} alt="" key={i} />
+                ))}
+                {/* The date rides on the picture where the tile is big enough
+                    to carry it, and the stylesheet hides it where it is not. */}
+                <span className="fl-rail__stamp">{fixture.stamp}</span>
+              </span>
+              <span className="fl-rail__words">
+                <p className="fl-rail__name">{tile.title}</p>
+                {tile.meta.trim() !== '' && <p className="fl-rail__meta">{tile.meta}</p>}
+              </span>
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * The other subscriptions, offered beside this one — node 1084:55909.
+ *
+ * A rail like any other in how it scrolls, and not one in what it holds: each
+ * tile is a thing to buy, so it carries its own way in rather than being a
+ * link into a page that sells it. Which is why the button is on the tile and
+ * there is none under the heading.
+ */
+function SubRailSection({
+  title,
+  body,
+  tiles,
+}: {
+  title: string
+  body: string
+  tiles: LandingSubTile[]
+}) {
+  return (
+    <section className="fl-subrail">
+      <div className="fl-subrail__head">
+        {title.trim() !== '' && <p className="fl-subrail__title">{title}</p>}
+        {body.trim() !== '' && <p className="fl-subrail__body">{body}</p>}
+      </div>
+      <div className="fl-subrail__row">
+        {tiles.map((tile, at) => {
+          const fixture = fixtureFor(at)
+          return (
+            <article className="fl-subtile" key={tile.id}>
+              <span className="fl-subtile__art" aria-hidden="true">
+                {fixture.art.map((src, i) => (
+                  <img src={src} alt="" key={i} />
+                ))}
+              </span>
+              <span className="fl-subtile__wash" aria-hidden="true" />
+              <span className="fl-subtile__foot">
+                <img className="fl-subtile__logo" src={daznLogo} alt="" />
+                <p className="fl-subtile__line">{tile.line}</p>
+                <span className="fl-subtile__cta" role="button">
+                  {tile.cta}
+                </span>
+              </span>
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * Bundles — nights sold together for less than the sum of them.
+ *
+ * Side by side and scrolling, because the offer is a comparison: what is in
+ * each, and what each saves. A bundle with no saving to show draws neither the
+ * old price nor the saving rather than an empty space where they would be —
+ * some bundles are simply a convenient basket.
+ */
+function BundlesSection({
+  title,
+  body,
+  bundles,
+}: {
+  title: string
+  body: string
+  bundles: LandingBundle[]
+}) {
+  return (
+    <section className="fl-bundles">
+      <div className="fl-bundles__head">
+        {title.trim() !== '' && <p className="fl-bundles__title">{title}</p>}
+        {body.trim() !== '' && <p className="fl-bundles__body">{body}</p>}
+      </div>
+      <div className="fl-bundles__row">
+        {bundles.map((bundle) => (
+          <article className="fl-bundle" key={bundle.id} data-best={bundle.badge.trim() ? '' : undefined}>
+            {bundle.badge.trim() !== '' && <span className="fl-bundle__badge">{bundle.badge}</span>}
+            <p className="fl-bundle__name">{bundle.name}</p>
+            <p className="fl-bundle__note">{bundle.note}</p>
+            <p className="fl-bundle__prices">
+              <span className="fl-bundle__price">{bundle.price}</span>
+              {bundle.was.trim() !== '' && <span className="fl-bundle__was">{bundle.was}</span>}
+              {bundle.save.trim() !== '' && <span className="fl-bundle__save">{bundle.save}</span>}
+            </p>
+            <p className="fl-bundle__term">{bundle.term}</p>
+            <div className="fl-bundle__fights">
+              {bundle.fights.map((fight, at) => {
+                const fixture = fixtureFor(at)
+                return (
+                  <div className="fl-bundle__fight" key={fight.id}>
+                    <span className="fl-bundle__shot" aria-hidden="true">
+                      {fixture.art.map((src, i) => (
+                        <img src={src} alt="" key={i} />
+                      ))}
+                    </span>
+                    <span className="fl-bundle__words">
+                      <p className="fl-bundle__fight-name">{fight.name}</p>
+                      <p className="fl-bundle__when">{fight.when}</p>
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+            <span className="fl-bundle__cta" role="button">
+              {bundle.cta}
+            </span>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
 }

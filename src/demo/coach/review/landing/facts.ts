@@ -1,7 +1,17 @@
 import type { CardSet } from '../../../../rules/content'
 import { resolveFlow } from '../../../../rules/layers'
 import type { LandingScreen } from '../../../../rules/flow'
-import { featuresOf, heroOf, landingText, linksOf, providersOf, questionsOf } from '../../../../rules/landing'
+import {
+  bundlesOf,
+  featuresOf,
+  heroOf,
+  landingText,
+  linksOf,
+  providersOf,
+  questionsOf,
+  subTilesOf,
+  tilesOf,
+} from '../../../../rules/landing'
 import { SECTION_LABEL, copyOf, isFirst, sectionsOf, type SectionType } from '../../../../rules/sections'
 
 /**
@@ -112,6 +122,30 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
       }
     case 'supported':
       return { heading: t.supportedTitle, words: [t.supportedTitle, t.supportedNote, t.supportedLink], cta: '' }
+    case 'rail':
+      return {
+        heading: t.railTitle,
+        words: [t.railTitle, ...tilesOf(l).flatMap((one) => [one.title, one.meta])],
+        cta: '',
+      }
+    case 'subRail':
+      return {
+        heading: t.subRailTitle,
+        words: [t.subRailTitle, t.subRailBody, ...subTilesOf(l).flatMap((one) => [one.line, one.cta])],
+        /* Every tile carries the same way in, so the first one is the
+           component's call to action rather than one of many. */
+        cta: subTilesOf(l)[0]?.cta ?? '',
+      }
+    case 'bundles':
+      return {
+        heading: t.bundlesTitle,
+        words: [
+          t.bundlesTitle,
+          t.bundlesBody,
+          ...bundlesOf(l).flatMap((one) => [one.name, one.note, one.term, one.cta]),
+        ],
+        cta: bundlesOf(l)[0]?.cta ?? '',
+      }
   }
 }
 

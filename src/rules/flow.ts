@@ -242,6 +242,67 @@ export interface LandingGame {
   gameId: string
 }
 
+/**
+ * How big the tiles in a rail are, and therefore what a rail is for.
+ *
+ * The design draws five rails and they differ in one thing: the tile. A wide
+ * short tile is a promotion, a 16:9 one with its words under it is a fixture,
+ * a tall one is a story, a square one is a place. So the size is the
+ * component's one real choice rather than five components repeating each
+ * other — and it is named for what it holds, because "322 by 120" tells
+ * nobody which rail to reach for.
+ */
+export type RailSize = 'wide' | 'fixture' | 'story' | 'square'
+
+/** One tile in a rail. The picture is the shipped artwork; these are the words. */
+export interface LandingTile {
+  id: string
+  title: string
+  /** The quieter line: a competition, a city and a capacity, a date. */
+  meta: string
+}
+
+/** One subscription offered beside this one — node 1084:55909. */
+export interface LandingSubTile {
+  id: string
+  /** What it is, in the line the tile carries under the logo. */
+  line: string
+  cta: string
+}
+
+/** One fight inside a bundle, as the bundle card lists it. */
+export interface LandingBundleFight {
+  id: string
+  name: string
+  when: string
+}
+
+/**
+ * One pre-made combination of events, sold as a unit — node 1093:55175.
+ *
+ * A different kind of subscription from the plans: a plan is a tier of the
+ * service, and this is a basket of nights priced against what those nights
+ * would cost separately. Which is why the saving is a field rather than a
+ * decoration — the offer *is* the difference between the two numbers.
+ */
+export interface LandingBundle {
+  id: string
+  name: string
+  /** The line under the name, saying what is in it. */
+  note: string
+  price: string
+  /** What it would have cost. Empty draws no strike-through and no saving. */
+  was: string
+  /** "Save 15%", in the words the market uses for it. */
+  save: string
+  /** "2-fight bundle" — what kind of bundle this is, under the price. */
+  term: string
+  /** "BEST VALUE", across the top corner. Empty draws none. */
+  badge: string
+  cta: string
+  fights: LandingBundleFight[]
+}
+
 export interface LandingQuestion {
   id: string
   question: string
@@ -391,6 +452,25 @@ export interface LandingScreen {
   featuresTitle?: string
   featuresCta?: string
   features?: LandingFeature[]
+
+  /* A rail — a title and a row of tiles that scrolls sideways. One component
+     for all five the design draws, because what separates them is the tile.
+     Nodes 1084:56990, 1084:57405, 1084:57115 and 1093:55236. */
+  railTitle?: string
+  railSize?: RailSize
+  railTiles?: LandingTile[]
+
+  /* The other subscriptions, sold beside this one — node 1084:55909. Tall
+     tiles, each with a line of its own and its own way in. */
+  subRailTitle?: string
+  subRailBody?: string
+  subRailTiles?: LandingSubTile[]
+
+  /* Bundles — node 1093:55175. Nights sold together for less than the sum of
+     them, side by side so the two prices can be compared. */
+  bundlesTitle?: string
+  bundlesBody?: string
+  bundles?: LandingBundle[]
 
   /* The image card — node 747:46379. A picture with a heading, a line and a
      button laid over the foot of it. */
@@ -673,6 +753,61 @@ export const defaultFlow: FlowContent = {
 
     featuresEyebrow: 'Experience more with DAZN',
     featuresTitle: 'All the features every fan needs',
+    /* A fixture rail, which is the one of the four a page is most likely to
+       want — node 1084:57405 draws it under a competition's name. */
+    railTitle: 'Pirelli British Grand Prix 2026',
+    railSize: 'fixture',
+    railTiles: [
+      { id: 'tile-1', title: 'The World Championship takes a turn at Silverstone', meta: 'Código F1' },
+      { id: 'tile-2', title: 'Race | Pirelli British Grand Prix', meta: 'F1' },
+      { id: 'tile-3', title: 'Qualifying | Pirelli British Grand Prix', meta: 'F1' },
+      { id: 'tile-4', title: 'Practice 3 | Pirelli British Grand Prix', meta: 'F1' },
+    ],
+
+    subRailTitle: 'More subscriptions you might like',
+    subRailBody: 'Add additional sports from around the world to your DAZN plan',
+    subRailTiles: [
+      { id: 'sub-1', line: '185+ blockbuster fights a year plus every Lega Serie A match', cta: 'Subscribe' },
+      { id: 'sub-2', line: 'Every game. Every team. All in one place.', cta: 'Subscribe' },
+      { id: 'sub-3', line: 'Every game. Every team. All in one place.', cta: 'Subscribe' },
+    ],
+
+    bundlesTitle: 'Save with a fight bundle',
+    bundlesBody: 'Pre-made combinations — grab a bundle and save.',
+    bundles: [
+      {
+        id: 'bundle-1',
+        name: 'Heavyweight Double',
+        note: 'Two heavyweight showdowns, one price',
+        price: '$161.98',
+        was: '$179.98',
+        save: 'Save 10%',
+        term: '2-fight bundle',
+        badge: '',
+        cta: 'Get Started',
+        fights: [
+          { id: 'fight-1', name: 'Chisora vs. Wilder', when: '21 Feb at 6:00 PM' },
+          { id: 'fight-2', name: 'Wardley vs. Dubois', when: '21 Feb at 6:00 PM' },
+        ],
+      },
+      {
+        id: 'bundle-2',
+        name: 'Spring Triple Header',
+        note: 'Three fights across April and May',
+        price: '$229.47',
+        was: '$269.97',
+        save: 'Save 15%',
+        term: '3-fight bundle',
+        badge: 'Best value',
+        cta: 'Get Started',
+        fights: [
+          { id: 'fight-1', name: 'Itauma vs. Franklin', when: '21 Feb at 6:00 PM' },
+          { id: 'fight-2', name: 'Chisora vs. Wilder', when: '21 Feb at 6:00 PM' },
+          { id: 'fight-3', name: 'Chisora vs. Wilder', when: '21 Feb at 6:00 PM' },
+        ],
+      },
+    ],
+
     featuresCta: 'Get started',
     features: [
       {
