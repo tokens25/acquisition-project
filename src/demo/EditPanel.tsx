@@ -820,7 +820,14 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           className="ed-add"
           disabled={!unusedLogo}
           onClick={() =>
-            unusedLogo && patchTier({ logoTiles: [...resolved.logoTiles, unusedLogo.id] })
+            unusedLogo &&
+            patchTier({
+              logoTiles: [...resolved.logoTiles, unusedLogo.id],
+              // The plan now carries at least this many. Left alone, the total
+              // stays at whatever it was — and a total below the badges on the
+              // plan is the state the rules call an error.
+              logoTotal: Math.max(resolved.logoTotal, resolved.logoTiles.length + 1),
+            })
           }
         >
           Add competition

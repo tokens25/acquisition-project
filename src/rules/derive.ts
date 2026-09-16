@@ -230,7 +230,18 @@ export function deriveCard(
   // Written wins; absent, an add-on panel has taken the second row's space.
   const logoRows: 1 | 2 = tier.logoRows ?? (addOn ? 1 : 2)
   const logoCapacity = LOGO_SLOTS_PER_ROW * logoRows
-  const total = Math.max(tier.logoTotal, 0)
+  /*
+   * How many competitions the plan carries.
+   *
+   * Never fewer than the badges supplied. The total is a commercial fact and
+   * the badges are a selection from it, so the two disagreeing means the total
+   * is out of date — and the reading that draws nothing is the wrong one to
+   * take: a plan with three badges and a total of zero rendered an empty row,
+   * which looked like the badges had not been added rather than like a number
+   * that needed updating. The rules already call that disagreement an error
+   * (C-logos); this makes the card show what the error is about.
+   */
+  const total = Math.max(tier.logoTotal, tier.logoTiles.length)
   const overflows = total > logoCapacity
   // The last slot is either a competition or the count of the ones left out.
   // Spending it on a badge means the row no longer says any are missing, which
@@ -241,7 +252,6 @@ export function deriveCard(
       ? logoCapacity - 1
       : logoCapacity
     : Math.min(total, logoCapacity)
-  const overflowCount = overflows && countsOverflow ? total - (logoCapacity - 1) : 0
 
   // Resolved once, then sliced: the tile shows what fits and the dialog shows
   // all of them, and resolving twice would report every missing reference twice.
@@ -260,6 +270,17 @@ export function deriveCard(
     }
   })
   const logos: DerivedLogo[] = allLogos.slice(0, visibleCount)
+
+  /*
+   * How many the row is not showing — counted from what it actually drew.
+   *
+   * Against the capacity it would have been a guess that the row is full, and
+   * a plan carrying twelve competitions with three badges supplied would have
+   * said "+3" beside three badges: nine hidden, described as three. Counted
+   * this way a full row gives the same number it always did, and a short one
+   * gives the true one.
+   */
+  const overflowCount = overflows && countsOverflow ? Math.max(total - logos.length, 0) : 0
 
   const features: DerivedFeature[] = tier.features.map((id) => {
     const r = resolveFeature(set, id)
