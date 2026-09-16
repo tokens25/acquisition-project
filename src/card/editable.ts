@@ -83,24 +83,44 @@ export function keyForTarget(target: Element, cadence: string): EditRequest | nu
  * to keep. Finding nothing is not an error: the panel may be showing another
  * screen entirely, and the click simply had nowhere to go.
  */
+/**
+ * The element to scroll to and flash.
+ *
+ * Not always the one carrying the key. A control that cannot hold the key
+ * itself is wrapped in a box that is `display: contents` when it has nothing
+ * to mark — which means it generates no box at all, so scrolling to it does
+ * nothing and a shadow drawn on it paints nothing. The thing to show is then
+ * the first child that is actually on the page.
+ */
+function boxOf(el: HTMLElement): HTMLElement {
+  if (el.getClientRects().length) return el
+  for (const child of el.children) {
+    if (child instanceof HTMLElement && child.getClientRects().length) return child
+  }
+  return el
+}
+
 export function revealField(key: string): boolean {
   const panel = document.querySelector('.demo__panel')
-  const field = panel?.querySelector<HTMLElement>(`[data-field="${CSS.escape(key)}"]`)
-  if (!field) return false
+  const found = panel?.querySelector<HTMLElement>(`[data-field="${CSS.escape(key)}"]`)
+  if (!found) return false
 
-  const group = field.closest<HTMLElement>('.fg')
+  const group = found.closest<HTMLElement>('.fg')
   if (group && !group.hasAttribute('data-open')) {
     group.querySelector<HTMLButtonElement>('.fg__toggle')?.click()
   }
 
   window.setTimeout(() => {
-    field.scrollIntoView({ block: 'center', behavior: 'smooth' })
-    field.classList.remove('ed-reveal')
+    // Looked up again: a group that was folded had no boxes inside it until it
+    // opened, so the answer from before the fold may have been the wrapper.
+    const show = boxOf(found)
+    show.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    show.classList.remove('ed-reveal')
     // Read a layout property so removing and adding the class in one frame
     // still restarts the animation rather than being collapsed into no change.
-    void field.offsetWidth
-    field.classList.add('ed-reveal')
-    field.querySelector<HTMLElement>('input, textarea, select, button')?.focus({ preventScroll: true })
+    void show.offsetWidth
+    show.classList.add('ed-reveal')
+    found.querySelector<HTMLElement>('input, textarea, select, button')?.focus({ preventScroll: true })
   }, group ? 180 : 0)
   return true
 }
