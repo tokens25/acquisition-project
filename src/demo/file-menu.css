@@ -94,6 +94,11 @@
   inset-inline-start: 0;
   min-inline-size: 216px;
   padding-block: var(--space-6);
+  /* A list, so it arrives with the 40px indent a browser gives bullets — and
+     it has no bullets. Said outright rather than left to the reset, because
+     the rows carry their own inset and 40 of somebody else's is what pushed
+     every glyph into the middle of the menu. */
+  padding-inline: 0;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-10);
   background: var(--color-surface-container-3);
@@ -114,7 +119,7 @@
   align-items: center;
   inline-size: 100%;
   block-size: 30px;
-  padding-inline: var(--space-12);
+  padding-inline: var(--space-16);
   border: 0;
   background: none;
   color: var(--color-text-primary);
