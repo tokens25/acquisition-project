@@ -854,6 +854,7 @@ export const SUBSCRIPTIONS: readonly SubscriptionConfig[] = [
   { code: 'msg', label: 'MSG+', markets: ['US'] },
   { code: 'nfl', label: 'NFL' },
   { code: 'nhl', label: 'NHL' },
+  { code: 'fiba', label: 'FIBA' },
 ]
 
 /**

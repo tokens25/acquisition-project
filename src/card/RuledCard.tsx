@@ -129,7 +129,12 @@ export function RuledCard({
       features={
         <FeaturesList device={device}>
           {d.features.map((f) => (
-            <Feature key={f.id} icon={featureIcon(set.featureIcons, f.iconId)} device={device}>
+            <Feature
+              key={f.id}
+              icon={featureIcon(set.featureIcons, f.iconId)}
+              onInfo={openDetails}
+              device={device}
+            >
               {f.text}
             </Feature>
           ))}

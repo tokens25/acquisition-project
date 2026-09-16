@@ -12,15 +12,22 @@ const featureIcons = [multiviewIcon, multiCamIcon, hdrIcon, devicesIcon, downloa
 export interface PlanFeaturesProps {
   /** Feature copy, in the order the icons above are assigned. */
   features: readonly string[]
+  /** Opens the full line, on any row the layout had to cut. */
+  onInfo?: () => void
   device?: Device
 }
 
 /** Convenience wrapper that pairs plan feature copy with its DS icon. */
-export function PlanFeatures({ features, device = 'desktop' }: PlanFeaturesProps) {
+export function PlanFeatures({ features, onInfo, device = 'desktop' }: PlanFeaturesProps) {
   return (
     <FeaturesList device={device}>
       {features.map((text, i) => (
-        <Feature key={text} icon={featureIcons[i % featureIcons.length]} device={device}>
+        <Feature
+          key={text}
+          icon={featureIcons[i % featureIcons.length]}
+          onInfo={onInfo}
+          device={device}
+        >
           {text}
         </Feature>
       ))}

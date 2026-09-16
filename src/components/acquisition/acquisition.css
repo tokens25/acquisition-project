@@ -394,14 +394,52 @@
   align-items: center;
 }
 .acq-feature__text {
+  flex: 1 1 auto;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   color: var(--color-text-primary);
-  font-size: var(--font-size-caption-sm);
-  line-height: 1.5;
   text-overflow: ellipsis;
 }
-.acq-feature[data-device='mobile'] .acq-feature__text {
+.acq-feature__text,
+.acq-feature__probe {
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.5;
+}
+/* The result of a measurement, never an authored flag: it is here only because
+   the line above it did not fit, and it opens what the ellipsis swallowed. */
+.acq-feature__info {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+}
+button.acq-feature__info {
+  cursor: pointer;
+}
+button.acq-feature__info:hover {
+  color: var(--color-text-primary);
+}
+/* Off layout and unreadable: it exists to be measured, and it must not be what
+   the reader sees or what the row sizes itself to. Its type is set with the
+   line's below — a probe in a different size measures a different sentence. */
+.acq-feature__probe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.acq-feature {
+  position: relative;
+}
+.acq-feature[data-device='mobile'] .acq-feature__text,
+.acq-feature[data-device='mobile'] .acq-feature__probe {
   font-size: var(--font-size-caption-xs);
   line-height: 1.52;
 }
