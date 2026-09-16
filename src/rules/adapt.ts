@@ -132,7 +132,9 @@ export function adaptEngineContent(input: EngineContent): AdaptResult {
     .map((code) => {
       const known = KNOWN_MARKETS[code]
       if (!known) notes.push(`No locale or currency known for "${code}" — defaulted to en/EUR.`)
-      return { code, ...(known ?? { label: code, locale: 'en', currency: 'EUR' }) }
+      // Their ISO codes are upper case and our market ids are lower — the same
+      // markets under two spellings would resolve to two markets.
+      return { code: code.toLowerCase(), ...(known ?? { label: code, locale: 'en', currency: 'EUR' }) }
     })
 
   const channels = [...new Set(input.tiers.map((t) => t.channel || DIRECT))].map((code) => ({

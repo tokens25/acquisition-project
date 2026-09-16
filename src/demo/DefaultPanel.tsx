@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import type { Context } from '../rules/content'
 import type { CardSetStore } from '../editor/useCardSet'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
-import { MARKETS, journeys, subscriptionsFor } from '../rules/journeys'
+import { MARKETS, channelsFor } from '../rules/catalogue'
+import { configuredJourneys as journeys, resolveChannelJourney, resolveMarketJourney } from '../rules/journeyConfig'
 import { SelectField } from '../components/SelectField'
 
 /**
@@ -71,22 +72,29 @@ export function DefaultPanel({
   const ADD_MARKET = '__add__'
 
   /**
-   * The product to carry into a market, given the one on screen.
+   * The channel to carry into a market, given the one on screen.
    *
-   * A market that does not sell what is selected cannot keep it selected:
-   * leaving MSG+ standing in the UK would show an answer the field below no
-   * longer offers, and name a journey nobody is on. The first product the
-   * market does sell takes its place.
+   * Cleared rather than swapped for a neighbour when the new market does not
+   * carry it: picking a different product on someone's behalf is a decision,
+   * and this is not the place to make it. The RSNs leaving the US is the case
+   * this exists for.
    */
-  const soldIn = (market: string, current?: string) => {
-    const sold = subscriptionsFor(market)
-    return current && sold.some((s) => s.code === current) ? current : sold[0]?.code
-  }
+  const carried = (market: string, current?: string) =>
+    current && channelsFor(market).some((c) => c.id === current) ? current : undefined
 
   const answer = (key: string) => {
     answeredThisVisit[key] = true
     setAnswered((prev) => ({ ...prev, [key]: true }))
   }
+
+  /**
+   * What this situation resolves to, so the panel can say so rather than
+   * showing an empty flow with no explanation. Availability and readiness are
+   * different states and this keeps them apart.
+   */
+  const resolution = context.subscription
+    ? resolveChannelJourney(context.market, context.subscription)
+    : resolveMarketJourney(context.market)
 
   const statuses = userStatuses(journeys, context)
   const status = statuses.includes(journey.audience) ? journey.audience : (statuses[0] ?? '')
@@ -122,7 +130,10 @@ export function DefaultPanel({
     const options = entryPoints(journeys, next, nextStatus)
     const cta = nextEntry && options.includes(nextEntry) ? nextEntry : options[0]
     const found = journeysMatching(journeys, next, nextStatus, cta ?? '')[0]
-    if (found) updateSet({ journeyId: found.id })
+    // Naming nothing is the point. Leaving the previous situation's journey id
+    // in place is how a market with no flow of its own came to render another
+    // market's — and the progress through it belongs to that journey too.
+    updateSet({ journeyId: found?.id ?? '', stepId: found?.steps[0]?.id ?? '' })
   }
 
   /** The same, when only the answer below the context has changed. */
@@ -153,14 +164,14 @@ export function DefaultPanel({
           // behind it is a dead end, and published content can be older than
           // the list. The currency is not part of a market's name either — the
           // pricing group's own heading says it, where it is being used.
-          ...MARKETS.map((m) => ({ value: m.code, label: m.label })),
+          ...MARKETS.map((m) => ({ value: m.id, label: m.label })),
           ...(prompt ? [{ value: ADD_MARKET, label: 'Add new' }] : []),
         ]}
         onChange={(v) => {
           if (!v || v === ADD_MARKET) return
           answer('market')
           settle(
-            { ...context, market: v, subscription: soldIn(v, context.subscription) },
+            { ...context, market: v, subscription: carried(v, context.subscription) },
             status,
             entryCta,
           )
@@ -168,12 +179,20 @@ export function DefaultPanel({
       />
 
       <SelectField
-        label="Subscription"
-        helpText="What is being sold here. Narrowed by the market above — a product is only offered where it is sold. It picks the journey; nothing else reads it yet."
+        label="Channel"
+        helpText={
+          resolution.state === 'ok'
+            ? 'Which product, inside the market above. The two together name the journey.'
+            : resolution.message
+        }
         value={shown('subscription', context.subscription ?? '')}
         options={[
           ...asking('subscription'),
-          ...subscriptionsFor(context.market).map((sub) => ({ value: sub.code, label: sub.label })),
+          // A select shows its first option when its value matches none of
+          // them, so a cleared channel would read as the first channel. The
+          // empty answer has to be an answer the list contains.
+          ...(context.subscription ? [] : [{ value: '', label: 'Choose a channel…' }]),
+          ...channelsFor(context.market).map((c) => ({ value: c.id, label: c.label })),
         ]}
         onChange={(v) => {
           if (!v) return

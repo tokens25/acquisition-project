@@ -10,7 +10,7 @@ import type {
   TierPatch,
 } from './content'
 import { DIRECT } from './content'
-import { subscriptionsFor } from './journeys'
+import { channelsFor } from './catalogue'
 
 /**
  * Base plus differences, then joined to a way of paying.
@@ -207,13 +207,13 @@ export function marketFor(set: CardSet, code: string) {
 export function allContexts(set: CardSet): Context[] {
   const out: Context[] = []
   for (const market of set.markets) {
-    for (const subscription of subscriptionsFor(market.code)) {
+    for (const subscription of channelsFor(market.code)) {
       for (const channel of set.channels) {
         if (channel.markets && !channel.markets.includes(market.code)) continue
         for (const cadence of set.cadences) {
           const base = {
             market: market.code,
-            subscription: subscription.code,
+            subscription: subscription.id,
             channel: channel.code,
             cadence,
           }

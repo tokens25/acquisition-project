@@ -144,7 +144,7 @@ export interface Journey {
 }
 
 /** Reference context for counting: US, direct, so no step is filtered by market. */
-const COUNTING_CONTEXT: Context = { market: 'US', channel: 'direct', cadence: 'Monthly' }
+const COUNTING_CONTEXT: Context = { market: 'us', channel: 'direct', cadence: 'Monthly' }
 
 /** Screens a journey renders — states included, seeded steps excluded. */
 export function screenCount(
@@ -196,8 +196,32 @@ export function journeysFor(all: Journey[], context: Context): Journey[] {
  */
 export function chosenJourney(all: Journey[], context: Context, journeyId: string): Journey {
   const running = journeysFor(all, context)
-  return running.find((j) => j.id === journeyId) ?? running[0] ?? all[0]
+  return running.find((j) => j.id === journeyId) ?? running[0] ?? UNCONFIGURED
 }
+
+/**
+ * What a situation nobody has configured resolves to.
+ *
+ * A journey with no steps, rather than the first journey in the list. The old
+ * fallback handed back whatever happened to be first, which was the US RSN
+ * flow — so every unwritten market and channel rendered MSG+ branding, a TV
+ * provider sign-in and a ZIP check, and looked configured while doing it.
+ *
+ * Empty is the honest answer, and it is structural: there are no steps to
+ * draw, so nothing belonging to one market can appear in another by accident.
+ * The screens read `journeyConfig` for the sentence to show in its place.
+ */
+export const UNCONFIGURED: Journey = {
+  id: '',
+  name: 'Not configured',
+  audience: '',
+  entry: { cta: '', section: '', figmaFrame: '—', figmaSection: '—' },
+  seeds: [],
+  steps: [],
+}
+
+/** Whether what came back is a real journey or the empty stand-in. */
+export const isConfigured = (journey: Journey): boolean => journey.id !== ''
 
 /**
  * A journey with its steps in the order the set says, if it says anything.

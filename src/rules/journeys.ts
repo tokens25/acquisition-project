@@ -96,7 +96,7 @@ function steps(): Step[] {
       figmaFrame: 'Zip code verification',
       renderer: 'zip',
       order: 60,
-      markets: ['US', 'MSG+'],
+      markets: ['us'],
       captures: 'zip',
       states: ['default', 'edit', 'edit results'],
       requires: ['geo.zipKnown'],
@@ -792,124 +792,17 @@ if (import.meta.env.DEV) {
 }
 
 
-/* ────────────────────────────────────────────────────────────────────────
-   Every situation, each with its own copy of the flow.
-
-   The four questions on the front door multiply out to a hundred and
-   eighty-six situations — each market times the products it actually sells,
-   times the states and the entry points — and each one gets a journey of its
-   own carrying the same eight steps the MSG+ journey above carries.
-
-   A market that does not sell a product has no journey for it. That is the
-   same refusal the partner storefronts make: a situation nobody can reach is
-   not a gap to fill, and a journey standing in one would be drawn, validated
-   and reviewed on behalf of nobody. They are copies today and that is the
-   point: the structure is expected to diverge market by market and state by
-   state, and a journey that shares its steps with another cannot diverge
-   without dragging that one with it.
-
-   Nothing is wired to the difference yet. Market, product, state and entry
-   pick a journey and the journey draws the same flow whichever they were —
-   which is what makes the picking safe to build against before the logic
-   behind it exists.
-
-   The Figma-derived journeys above are where this flow came from. They are
-   kept whole rather than edited into shape: when a situation earns its own
-   structure, it will be written the way those were.
-   ──────────────────────────────────────────────────────────────────────── */
-
-/** Countries and leagues the product is sold in. */
-export const MARKETS = [
-  { code: 'GB', label: 'UK' },
-  { code: 'IT', label: 'Italy' },
-  { code: 'DE', label: 'Germany' },
-  { code: 'US', label: 'USA' },
-  { code: 'JP', label: 'Japan' },
-  { code: 'CA', label: 'Canada' },
-  { code: 'FR', label: 'France' },
-  { code: 'ES', label: 'Spain' },
-  { code: 'NFL', label: 'NFL' },
-  { code: 'NHL', label: 'NHL' },
-] as const
-
 /**
- * What is being sold, and where.
+ * The journeys the Figma section draws, all of them one American regional
+ * network's.
  *
- * `markets` omitted means everywhere, exactly as it does on a partner
- * storefront: most products are sold in every country the front door offers,
- * and the ones that are not name their own. MSG+ carries New York regional
- * rights, so it is sold in the US and nowhere else — a fact about the product,
- * which is why it is written on the product rather than enforced by whichever
- * screen happens to be listing it.
+ * They used to be copied across every market and product on the front door —
+ * two hundred and forty-six generated situations that were this flow wearing
+ * somebody else's name. A market that has not been written down now says so
+ * instead. These stay exactly what they always were: the US RSN journey,
+ * assigned to that one entry in `journeyConfig`.
  */
-export interface SubscriptionConfig {
-  code: string
-  label: string
-  /** Markets this product is sold in. Omitted means everywhere. */
-  markets?: readonly string[]
-}
-
-export const SUBSCRIPTIONS: readonly SubscriptionConfig[] = [
-  { code: 'dazn', label: 'DAZN subscription' },
-  { code: 'msg', label: 'MSG+', markets: ['US'] },
-  { code: 'nfl', label: 'NFL' },
-  { code: 'nhl', label: 'NHL' },
-  { code: 'fiba', label: 'FIBA' },
-]
-
-/**
- * The products a market sells.
- *
- * The base — every market at once — sees the whole list, because what is
- * written there reaches the US along with everywhere else.
- */
-export function subscriptionsFor(market: string): readonly SubscriptionConfig[] {
-  if (market === '*') return SUBSCRIPTIONS
-  return SUBSCRIPTIONS.filter((s) => !s.markets || s.markets.includes(market))
-}
-
-/** Who is at the door. */
-export const STATUSES = ['logged-out-new', 'logged-out-existing'] as const
-
-/** Where they came in from. */
-export const ENTRIES = ['Landing page', 'CRM', 'Catalog'] as const
-
-const slug = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-
-export const journeys: Journey[] = MARKETS.flatMap((market) =>
-  subscriptionsFor(market.code).flatMap((subscription) =>
-    STATUSES.flatMap((audience) =>
-      ENTRIES.map(
-        (cta): Journey => ({
-          id: `${slug(market.code)}-${subscription.code}-${slug(audience)}-${slug(cta)}`,
-          name: `${cta} — ${subscription.label}`,
-          audience,
-          when: { market: market.code, subscription: subscription.code },
-          entry: {
-            cta,
-            section: cta,
-            // Not from a frame yet. Named as unknown rather than pointed at
-            // one of the frames this flow was copied from, which would read as
-            // a source it does not have.
-            figmaFrame: '—',
-            figmaSection: '—',
-          },
-          // Nothing is known in advance, so no step drops out: the whole flow
-          // runs for every situation until one of them says otherwise.
-          seeds: [],
-          // And nothing is scoped away either. The ZIP check names the two
-          // markets that have regional blackouts, which is true of the journey
-          // it was copied from and not yet decided for these — leaving it in
-          // place would drop that step from eight markets out of ten before
-          // anyone had said it should. The whole flow, everywhere, until the
-          // logic says otherwise.
-          steps: steps().map((step) => {
-            const whole = { ...step }
-            delete whole.markets
-            return whole
-          }),
-        }),
-      ),
-    ),
-  ),
-)
+export const usRsnJourneys: Journey[] = figmaJourneys.map((j) => ({
+  ...j,
+  when: { ...j.when, market: 'us', subscription: 'rsns' },
+}))

@@ -2,7 +2,8 @@ import type { CardSet } from './content'
 import type { FlowContent } from './flow'
 import { defaultFlow } from './flow'
 import { STATUS_LABELS } from './entry'
-import { MARKETS, SUBSCRIPTIONS, journeys } from './journeys'
+import { channelById, marketById } from './catalogue'
+import { configuredJourneys as journeys } from './journeyConfig'
 import { chosenJourney } from './journey'
 
 /**
@@ -240,9 +241,8 @@ const layerId = (scope: Selector) =>
 /** What a selector covers, in the words the situation fields use. */
 export function selectorLabel(when: Selector): string {
   const parts = [
-    when.market && (MARKETS.find((m) => m.code === when.market)?.label ?? when.market),
-    when.subscription &&
-      (SUBSCRIPTIONS.find((s) => s.code === when.subscription)?.label ?? when.subscription),
+    when.market && (marketById(when.market)?.label ?? when.market),
+    when.subscription && (channelById(when.subscription)?.label ?? when.subscription),
     when.status && (STATUS_LABELS[when.status] ?? when.status),
     when.entry,
   ].filter(Boolean)

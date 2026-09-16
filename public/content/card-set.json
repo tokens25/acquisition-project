@@ -1,38 +1,122 @@
 {
   "markets": [
     {
-      "code": "IE",
-      "label": "Ireland",
-      "locale": "en-IE",
+      "code": "be",
+      "label": "Belgium",
+      "locale": "nl-BE",
       "currency": "EUR"
     },
     {
-      "code": "DE",
-      "label": "Germany",
+      "code": "at",
+      "label": "DACH: Austria",
+      "locale": "de-AT",
+      "currency": "EUR"
+    },
+    {
+      "code": "de",
+      "label": "DACH: Germany",
       "locale": "de-DE",
       "currency": "EUR"
     },
     {
-      "code": "ES",
+      "code": "li",
+      "label": "DACH: Liechtenstein",
+      "locale": "de-LI",
+      "currency": "CHF"
+    },
+    {
+      "code": "lu",
+      "label": "DACH: Luxembourg",
+      "locale": "fr-LU",
+      "currency": "EUR"
+    },
+    {
+      "code": "ch",
+      "label": "DACH: Switzerland",
+      "locale": "de-CH",
+      "currency": "CHF"
+    },
+    {
+      "code": "fr",
+      "label": "France",
+      "locale": "fr-FR",
+      "currency": "EUR"
+    },
+    {
+      "code": "it",
+      "label": "Italy",
+      "locale": "it-IT",
+      "currency": "EUR"
+    },
+    {
+      "code": "jp",
+      "label": "Japan",
+      "locale": "ja-JP",
+      "currency": "JPY"
+    },
+    {
+      "code": "pt",
+      "label": "Portugal",
+      "locale": "pt-PT",
+      "currency": "EUR"
+    },
+    {
+      "code": "es",
       "label": "Spain",
       "locale": "es-ES",
       "currency": "EUR"
     },
     {
-      "code": "GB",
-      "label": "United Kingdom",
-      "locale": "en-GB",
-      "currency": "GBP"
+      "code": "tw",
+      "label": "Taiwan",
+      "locale": "zh-TW",
+      "currency": "TWD"
     },
     {
-      "code": "US",
-      "label": "United States",
+      "code": "ca",
+      "label": "Canada",
+      "locale": "en-CA",
+      "currency": "CAD"
+    },
+    {
+      "code": "row",
+      "label": "ROW: Everyone else",
       "locale": "en-US",
       "currency": "USD"
     },
     {
-      "code": "MSG+",
-      "label": "MSG+",
+      "code": "ie",
+      "label": "ROW: Ireland",
+      "locale": "en-IE",
+      "currency": "EUR"
+    },
+    {
+      "code": "mx",
+      "label": "ROW: Mexico",
+      "locale": "es-MX",
+      "currency": "MXN"
+    },
+    {
+      "code": "nl",
+      "label": "ROW: Netherlands",
+      "locale": "nl-NL",
+      "currency": "EUR"
+    },
+    {
+      "code": "pl",
+      "label": "ROW: Poland",
+      "locale": "pl-PL",
+      "currency": "PLN"
+    },
+    {
+      "code": "gb",
+      "label": "UK",
+      "locale": "en-GB",
+      "currency": "GBP"
+    },
+    {
+      "code": "us",
+      "label": "US",
       "locale": "en-US",
       "currency": "USD"
     }
@@ -52,7 +136,7 @@
       "code": "movistar",
       "label": "Movistar",
       "markets": [
-        "ES"
+        "es"
       ]
     }
   ],
@@ -203,10 +287,7 @@
       "planName": "MSG+",
       "displayOrder": 1,
       "subscriptions": [
-        "dazn",
-        "msg",
-        "nfl",
-        "nhl"
+        "rsns"
       ]
     },
     {
@@ -236,10 +317,7 @@
       "planName": "Gotham Bundle",
       "displayOrder": 2,
       "subscriptions": [
-        "dazn",
-        "msg",
-        "nfl",
-        "nhl"
+        "rsns"
       ]
     },
     {
@@ -264,10 +342,7 @@
       "planName": "YES",
       "displayOrder": 3,
       "subscriptions": [
-        "dazn",
-        "msg",
-        "nfl",
-        "nhl"
+        "rsns"
       ]
     },
     {
@@ -413,7 +488,8 @@
     }
   ],
   "context": {
-    "market": "MSG+",
+    "market": "us",
+    "subscription": "rsns",
     "channel": "direct",
     "cadence": "Monthly"
   },

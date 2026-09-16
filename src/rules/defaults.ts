@@ -10,13 +10,12 @@ import { defaultFlow } from './flow'
 const CADENCES = ['Monthly', 'Yearly Instalments', 'Yearly']
 
 /**
- * The products that sell the New York plans.
+ * The channel the New York plans are sold on.
  *
- * Listed rather than left off, because left off means every product and FIBA
- * is one. DAZN, NFL and NHL are here because they show these cards today and
- * nobody has said otherwise — not because it has been decided that they should.
+ * The RSNs, and nothing else. They used to be listed against every product on
+ * the front door, which is how NFL in Japan came to offer a Knicks package.
  */
-const RSN_PRODUCTS = ['dazn', 'msg', 'nfl', 'nhl']
+const RSN_PRODUCTS = ['rsns']
 
 const logoCatalog = [
   { id: 'yankees', name: 'New York Yankees', altText: 'New York Yankees logo', blurb: 'Every regular-season game on the network, live and on demand.', status: 'active' as const },
@@ -97,22 +96,35 @@ export const defaultSet: CardSet = {
   // sold as its own market. MSG+ used to be here and is now a product — what
   // is sold and where it is sold are two questions, and the front door asks
   // them separately.
+  // The twenty markets, with the formatting each renders its prices in. The
+  // list of which markets exist lives in catalogue.ts; this is what a market
+  // needs in order to draw money, which is content and belongs with content.
   markets: [
-    { code: 'GB', label: 'UK', locale: 'en-GB', currency: 'GBP' },
-    { code: 'IT', label: 'Italy', locale: 'it-IT', currency: 'EUR' },
-    { code: 'DE', label: 'Germany', locale: 'de-DE', currency: 'EUR' },
-    { code: 'US', label: 'USA', locale: 'en-US', currency: 'USD' },
-    { code: 'JP', label: 'Japan', locale: 'ja-JP', currency: 'JPY' },
-    { code: 'CA', label: 'Canada', locale: 'en-CA', currency: 'CAD' },
-    { code: 'FR', label: 'France', locale: 'fr-FR', currency: 'EUR' },
-    { code: 'ES', label: 'Spain', locale: 'es-ES', currency: 'EUR' },
-    { code: 'NFL', label: 'NFL', locale: 'en-US', currency: 'USD' },
-    { code: 'NHL', label: 'NHL', locale: 'en-US', currency: 'USD' },
+    { code: 'be', label: 'Belgium', locale: 'nl-BE', currency: 'EUR' },
+    { code: 'at', label: 'DACH: Austria', locale: 'de-AT', currency: 'EUR' },
+    { code: 'de', label: 'DACH: Germany', locale: 'de-DE', currency: 'EUR' },
+    { code: 'li', label: 'DACH: Liechtenstein', locale: 'de-LI', currency: 'CHF' },
+    { code: 'lu', label: 'DACH: Luxembourg', locale: 'fr-LU', currency: 'EUR' },
+    { code: 'ch', label: 'DACH: Switzerland', locale: 'de-CH', currency: 'CHF' },
+    { code: 'fr', label: 'France', locale: 'fr-FR', currency: 'EUR' },
+    { code: 'it', label: 'Italy', locale: 'it-IT', currency: 'EUR' },
+    { code: 'jp', label: 'Japan', locale: 'ja-JP', currency: 'JPY' },
+    { code: 'pt', label: 'Portugal', locale: 'pt-PT', currency: 'EUR' },
+    { code: 'es', label: 'Spain', locale: 'es-ES', currency: 'EUR' },
+    { code: 'tw', label: 'Taiwan', locale: 'zh-TW', currency: 'TWD' },
+    { code: 'ca', label: 'Canada', locale: 'en-CA', currency: 'CAD' },
+    { code: 'row', label: 'ROW: Everyone else', locale: 'en-US', currency: 'USD' },
+    { code: 'ie', label: 'ROW: Ireland', locale: 'en-IE', currency: 'EUR' },
+    { code: 'mx', label: 'ROW: Mexico', locale: 'es-MX', currency: 'MXN' },
+    { code: 'nl', label: 'ROW: Netherlands', locale: 'nl-NL', currency: 'EUR' },
+    { code: 'pl', label: 'ROW: Poland', locale: 'pl-PL', currency: 'PLN' },
+    { code: 'gb', label: 'UK', locale: 'en-GB', currency: 'GBP' },
+    { code: 'us', label: 'US', locale: 'en-US', currency: 'USD' },
   ],
   campaigns: [{ code: 'wc26', label: 'World Cup 2026' }],
   channels: [
     { code: DIRECT, label: 'Direct' },
-    { code: 'movistar', label: 'Movistar', markets: ['ES'] },
+    { code: 'movistar', label: 'Movistar', markets: ['es'] },
   ],
   cadences: CADENCES,
 
@@ -229,8 +241,11 @@ export const defaultSet: CardSet = {
   // MSG+ is where the work is, so it is where a reset lands. It is also the
   // only market that runs the ZIP check, so the default flow is the whole
   // flow rather than one with a step missing.
-  context: { market: 'GB', subscription: 'dazn', channel: DIRECT, cadence: 'Monthly' },
-  journeyId: 'gb-dazn-logged-out-new-landing-page',
+  // The one situation with a journey written for it. Opening anywhere else
+  // would open on the unconfigured state, which is true but is not a useful
+  // place for the tool to start.
+  context: { market: 'us', subscription: 'rsns', channel: DIRECT, cadence: 'Monthly' },
+  journeyId: 'hero-signup',
   featureIcons: 'feature',
   flow: defaultFlow,
   review: 'draft',
