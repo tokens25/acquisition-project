@@ -43,8 +43,10 @@ export function SkeletonCard({
       data-dimmed={selected === false || undefined}
       onClick={onSelect}
     >
+      {/* The badge sits in the corner, over the card's own edge, because
+          that is where the real one sits. Its words are the plan's to write. */}
+      {highlighted && <p className="ob-card__ribbon">Badge</p>}
       {label && <p className="ob-card__index">{label}</p>}
-      {highlighted && <p className="ob-card__ribbon">Promoted</p>}
 
       {card.title && <div className="ob-slot ob-slot--title">Title</div>}
       {card.description && <div className="ob-slot ob-slot--description">Description</div>}
@@ -82,6 +84,12 @@ export function SkeletonCard({
             </li>
           ))}
         </ul>
+      )}
+
+      {card.details && (
+        <footer className="ob-card__footer">
+          <div className="ob-slot ob-slot--button">All features &amp; content</div>
+        </footer>
       )}
     </article>
   )

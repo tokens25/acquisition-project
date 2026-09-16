@@ -334,6 +334,11 @@ function CardControls({
       {card.features && (
         <Count label="How many features" value={card.featureCount} min={1} max={10} onChange={(v) => onChange({ featureCount: v })} />
       )}
+      <Toggle
+        label="“All features & content” at the foot"
+        checked={card.details}
+        onChange={(v) => onChange({ details: v })}
+      />
     </div>
   )
 }

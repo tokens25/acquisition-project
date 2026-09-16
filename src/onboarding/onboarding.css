@@ -553,3 +553,10 @@
   color: var(--color-text-tertiary);
   font-size: var(--font-size-caption-sm);
 }
+
+/* The card's foot, ruled off from the body exactly as the real one is. */
+.ob-card__footer {
+  margin-block-start: auto;
+  padding-block-start: var(--space-12);
+  border-block-start: 1px solid var(--color-border-full-color-default);
+}

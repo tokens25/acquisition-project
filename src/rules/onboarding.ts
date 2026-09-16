@@ -42,6 +42,15 @@ export interface CardStructure {
   logoOverflow: 'count' | 'logo'
   features: boolean
   featureCount: number
+  /**
+   * The "All features & content" line across the foot of the card.
+   *
+   * A switch like the rest of them, even though the design draws it on every
+   * card: it opens a dialog listing everything the plan carries, and a flow
+   * with nothing more to list than the card already shows has no dialog worth
+   * opening.
+   */
+  details: boolean
 }
 
 export interface PlansStructure {
@@ -141,6 +150,7 @@ export function blankStructure(marketId: string, channelId?: string): FlowStruct
       logoOverflow: 'count',
       features: true,
       featureCount: 4,
+      details: true,
     },
     plans: { count: 2, highlighted: null, selected: null },
     cadence: { enabled: false, optionCount: 2, defaultOption: null, optionsByPlan: {} },
@@ -187,6 +197,7 @@ export function structureSummary(s: FlowStructure): { label: string; value: stri
     s.card.saving && 'savings label',
     s.card.logos && `logos (${s.card.logoRows} row${s.card.logoRows === 1 ? '' : 's'}, ${s.card.logoOverflow === 'count' ? '“+N”' : 'a logo'} last)`,
     s.card.features && `${s.card.featureCount} features`,
+    s.card.details && '“All features & content”',
   ].filter(Boolean) as string[]
 
   return [

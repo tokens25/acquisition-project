@@ -21,26 +21,38 @@ npm run build        # type-check + production bundle
 ### The large component
 
 [`AcquisitionCard`](src/components/acquisition/AcquisitionCard.tsx) is the plan
-card users choose from. It composes every small component below and covers the
-four Figma variants:
+card users choose from. It composes every small component below.
 
-| Variant | Ultimate | Discount | Add-on | Competitions |
-| --- | --- | --- | --- | --- |
-| 1 | ✅ gold edge + eyebrow | ✅ | Included | one row |
-| 2 | — | ✅ | Included | one row |
-| 3 | — | — | — | two rows |
-| 4 | ✅ gold edge + eyebrow | — | — | two rows |
+`Highlighted` is the one axis the design file varies it on — one switch with
+four outputs: the gold edge, the gold title, the gold button and the badge.
+Discount, add-on and row count are not variants; they are what the content
+says, and the card draws them wherever it is asked to.
+
+| | Highlighted=True | Highlighted=False |
+| --- | --- | --- |
+| Edge | gold, 2px | grey, 1px |
+| Title | gold gradient | white |
+| Button | gold gradient | white |
+| Badge | shown | none |
 
 ### The small components
 
+Named for the **Plan card** section of the Figma file
+([📍 DAZN Lab](https://www.figma.com/design/xJRgzIz9zjvRKTMIqnifEy/%F0%9F%93%8D-DAZN-Lab?node-id=520-109856)),
+one component per component:
+
 | Component | Figma | Variants |
 | --- | --- | --- |
-| [`CardHeader`](src/components/acquisition/CardHeader.tsx) | `CardHeader` | Device × Ultimate |
-| [`Pricing`](src/components/acquisition/Pricing.tsx) | `Pricing` | Device |
-| [`PlanCta`](src/components/acquisition/PlanCta.tsx) | `ButtonLabelEyebrow` | Ultimate × Discount × Device |
-| [`LogoTiles`](src/components/acquisition/LogoTiles.tsx) | `Subscription Plan Logo Tile` | Rows = One \| Two \| Two +x |
+| [`CardHeader`](src/components/acquisition/CardHeader.tsx) | `.CardHeader` | Device × Highlighted |
+| [`Pricing`](src/components/acquisition/Pricing.tsx) | `.Pricing` | Device |
+| [`PlanCta`](src/components/acquisition/PlanCta.tsx) | `.PlanCta` | Highlighted × Device |
+| [`LogoTile`](src/components/acquisition/LogoTiles.tsx) | `.LogoTile` | Device × Type = Logo \| +x |
+| [`LogoTiles`](src/components/acquisition/LogoTiles.tsx) | `.LogoTiles` | Rows = One \| Two, × Device |
 | [`AddOn`](src/components/acquisition/AddOn.tsx) | `Add-On` | Type × Device |
-| [`Feature` / `FeaturesList`](src/components/acquisition/Features.tsx) | `Feature`, `FeaturesList` | Device |
+| [`Feature` / `FeaturesList`](src/components/acquisition/Features.tsx) | `.Feature`, `.FeaturesList` | Device |
+
+Rows is how many rows and nothing else. Whether the last slot holds one more
+badge or the count of the ones that did not fit is the tile's own variant.
 
 Supporting primitives — [`Button`](src/components/Button.tsx),
 [`Toggle`](src/components/Toggle.tsx) and [`Icon`](src/components/Icon.tsx) —
