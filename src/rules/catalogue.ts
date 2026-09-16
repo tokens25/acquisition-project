@@ -46,11 +46,11 @@ export interface MarketConfigEntry {
 export const MARKETS: readonly MarketConfigEntry[] = [
   // Core
   { id: 'be', label: 'Belgium', group: 'core', flag: '🇧🇪' },
-  { id: 'at', label: 'DACH: Austria', group: 'core', flag: '🇦🇹' },
-  { id: 'de', label: 'DACH: Germany', group: 'core', flag: '🇩🇪' },
-  { id: 'li', label: 'DACH: Liechtenstein', group: 'core', flag: '🇱🇮' },
-  { id: 'lu', label: 'DACH: Luxembourg', group: 'core', flag: '🇱🇺' },
-  { id: 'ch', label: 'DACH: Switzerland', group: 'core', flag: '🇨🇭' },
+  { id: 'at', label: 'Austria', group: 'core', flag: '🇦🇹' },
+  { id: 'de', label: 'Germany', group: 'core', flag: '🇩🇪' },
+  { id: 'li', label: 'Liechtenstein', group: 'core', flag: '🇱🇮' },
+  { id: 'lu', label: 'Luxembourg', group: 'core', flag: '🇱🇺' },
+  { id: 'ch', label: 'Switzerland', group: 'core', flag: '🇨🇭' },
   { id: 'fr', label: 'France', group: 'core', flag: '🇫🇷' },
   { id: 'it', label: 'Italy', group: 'core', flag: '🇮🇹' },
   { id: 'jp', label: 'Japan', group: 'core', flag: '🇯🇵' },

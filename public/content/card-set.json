@@ -8,31 +8,31 @@
     },
     {
       "code": "at",
-      "label": "DACH: Austria",
+      "label": "Austria",
       "locale": "de-AT",
       "currency": "EUR"
     },
     {
       "code": "de",
-      "label": "DACH: Germany",
+      "label": "Germany",
       "locale": "de-DE",
       "currency": "EUR"
     },
     {
       "code": "li",
-      "label": "DACH: Liechtenstein",
+      "label": "Liechtenstein",
       "locale": "de-LI",
       "currency": "CHF"
     },
     {
       "code": "lu",
-      "label": "DACH: Luxembourg",
+      "label": "Luxembourg",
       "locale": "fr-LU",
       "currency": "EUR"
     },
     {
       "code": "ch",
-      "label": "DACH: Switzerland",
+      "label": "Switzerland",
       "locale": "de-CH",
       "currency": "CHF"
     },

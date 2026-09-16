@@ -42,6 +42,19 @@ export const STATUS_LABELS: Record<string, string> = {
   migrating: 'Being migrated',
 }
 
+/**
+ * Who can be at the door, and where they can have come from.
+ *
+ * Asked whether or not anybody has written a journey for them. Removing the
+ * two hundred and forty-six generated journeys emptied these two fields for
+ * every situation but one, which read as the questions having no answers —
+ * when what is actually true is that the answers have no flow behind them yet.
+ * Availability and readiness are separate states here too.
+ */
+export const USER_STATUSES = ['logged-out-new', 'logged-out-existing']
+
+export const ENTRY_POINTS = ['Landing page', 'CRM', 'Catalog']
+
 /** Journeys that can run at all in this market and storefront. */
 function available(all: Journey[], context: Context): Journey[] {
   return all.filter((j) => journeyApplies(j, context))

@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react'
 import type { Context } from '../rules/content'
 import type { CardSetStore } from '../editor/useCardSet'
-import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
-import { MARKETS, channelsFor } from '../rules/catalogue'
+import {
+  ENTRY_POINTS,
+  entryPoints,
+  journeysMatching,
+  STATUS_LABELS,
+  USER_STATUSES,
+  userStatuses,
+} from '../rules/entry'
+import { MARKETS, MARKET_GROUP_LABELS, channelsFor } from '../rules/catalogue'
 import { configuredJourneys as journeys, resolveChannelJourney, resolveMarketJourney } from '../rules/journeyConfig'
 import { SelectField } from '../components/SelectField'
 
@@ -96,9 +103,14 @@ export function DefaultPanel({
     ? resolveChannelJourney(context.market, context.subscription)
     : resolveMarketJourney(context.market)
 
-  const statuses = userStatuses(journeys, context)
+  // The statuses this situation has journeys for, or the standing questions
+  // when it has none. A situation nobody has written for still has a user at
+  // the door, and the field below says which situation is unconfigured.
+  const written = userStatuses(journeys, context)
+  const statuses = written.length ? written : USER_STATUSES
   const status = statuses.includes(journey.audience) ? journey.audience : (statuses[0] ?? '')
-  const entries = entryPoints(journeys, context, status)
+  const writtenEntries = entryPoints(journeys, context, status)
+  const entries = writtenEntries.length ? writtenEntries : ENTRY_POINTS
   const entryCta = entries.includes(journey.entry.cta) ? journey.entry.cta : (entries[0] ?? '')
 
   /*
@@ -164,7 +176,14 @@ export function DefaultPanel({
           // behind it is a dead end, and published content can be older than
           // the list. The currency is not part of a market's name either — the
           // pricing group's own heading says it, where it is being used.
-          ...MARKETS.map((m) => ({ value: m.id, label: `${m.flag}  ${m.label}` })),
+          // Core and Growth are how the business reads the list, so the list
+          // reads that way too. They are headings and nothing more — a market's
+          // group has never decided anything about its journey.
+          ...MARKETS.map((m) => ({
+            value: m.id,
+            label: `${m.flag}  ${m.label}`,
+            group: MARKET_GROUP_LABELS[m.group],
+          })),
           ...(prompt ? [{ value: ADD_MARKET, label: 'Add new' }] : []),
         ]}
         onChange={(v) => {

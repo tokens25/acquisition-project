@@ -101,11 +101,11 @@ export const defaultSet: CardSet = {
   // needs in order to draw money, which is content and belongs with content.
   markets: [
     { code: 'be', label: 'Belgium', locale: 'nl-BE', currency: 'EUR' },
-    { code: 'at', label: 'DACH: Austria', locale: 'de-AT', currency: 'EUR' },
-    { code: 'de', label: 'DACH: Germany', locale: 'de-DE', currency: 'EUR' },
-    { code: 'li', label: 'DACH: Liechtenstein', locale: 'de-LI', currency: 'CHF' },
-    { code: 'lu', label: 'DACH: Luxembourg', locale: 'fr-LU', currency: 'EUR' },
-    { code: 'ch', label: 'DACH: Switzerland', locale: 'de-CH', currency: 'CHF' },
+    { code: 'at', label: 'Austria', locale: 'de-AT', currency: 'EUR' },
+    { code: 'de', label: 'Germany', locale: 'de-DE', currency: 'EUR' },
+    { code: 'li', label: 'Liechtenstein', locale: 'de-LI', currency: 'CHF' },
+    { code: 'lu', label: 'Luxembourg', locale: 'fr-LU', currency: 'EUR' },
+    { code: 'ch', label: 'Switzerland', locale: 'de-CH', currency: 'CHF' },
     { code: 'fr', label: 'France', locale: 'fr-FR', currency: 'EUR' },
     { code: 'it', label: 'Italy', locale: 'it-IT', currency: 'EUR' },
     { code: 'jp', label: 'Japan', locale: 'ja-JP', currency: 'JPY' },

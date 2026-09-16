@@ -19,15 +19,46 @@ import { Icon } from './Icon'
  * re-earn all of that and would still be the wrong thing on a phone.
  */
 
+export interface SelectOption<T extends string> {
+  value: T
+  label: string
+  /**
+   * The heading this option sits under, when the list has headings.
+   *
+   * Optional, and the headings are drawn from the options rather than passed
+   * separately, so an option cannot end up under a heading that is not there.
+   * Consecutive options naming the same group share one heading; an option
+   * naming none sits above the first, which is where "all of them" belongs.
+   */
+  group?: string
+}
+
 export interface SelectFieldProps<T extends string> {
   label: string
   value: T
-  options: { value: T; label: string }[]
+  options: SelectOption<T>[]
   onChange: (value: T) => void
   helpText?: ReactNode
   error?: boolean
   disabled?: boolean
   inputId?: string
+}
+
+/**
+ * The options in order, split where the heading changes.
+ *
+ * Order is the list's, not the headings' — regrouping would move an option
+ * away from where whoever wrote the list put it, and the list is the thing a
+ * reader is scanning.
+ */
+function groupRuns<T extends string>(options: SelectOption<T>[]) {
+  const runs: { group: string | undefined; options: SelectOption<T>[] }[] = []
+  for (const option of options) {
+    const last = runs[runs.length - 1]
+    if (last && last.group === option.group) last.options.push(option)
+    else runs.push({ group: option.group, options: [option] })
+  }
+  return runs
 }
 
 export function SelectField<T extends string>({
@@ -62,11 +93,23 @@ export function SelectField<T extends string>({
           aria-invalid={error || undefined}
           onChange={(e) => onChange(e.target.value as T)}
         >
-          {options.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
+          {groupRuns(options).map((run) =>
+            run.group === undefined ? (
+              run.options.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))
+            ) : (
+              <optgroup key={run.group} label={run.group}>
+                {run.options.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </optgroup>
+            ),
+          )}
         </select>
 
         <span className="dz-field__trailing dz-field__trailing--select" aria-hidden="true">
