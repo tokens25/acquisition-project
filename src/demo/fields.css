@@ -619,3 +619,17 @@
     box-shadow: 0 0 0 2px var(--color-brand-secondary);
   }
 }
+
+/* Nothing in the panel may be wider than the panel. A field whose content has
+   a large minimum width would otherwise push the whole column sideways rather
+   than wrapping — flex items are allowed to overflow their track by default. */
+.demo__panel > *,
+.demo__fields .dz-field,
+.demo__fields .dz-field__input,
+.demo__fields .dz-field__body {
+  min-inline-size: 0;
+}
+.demo__fields .dz-field__control {
+  inline-size: 100%;
+  min-inline-size: 0;
+}

@@ -175,11 +175,12 @@ export function EditPanel({ store }: { store: CardSetStore }) {
     () =>
       new Set(
         filterAcquirableTiers(set.tiers, {
+          market: context.market,
           channel: context.channel,
           subscription: context.subscription,
         }).map((t) => t.id),
       ),
-    [set.tiers, context.channel, context.subscription],
+    [set.tiers, context.market, context.channel, context.subscription],
   )
   const [showOthers, setShowOthers] = useState(false)
   const elsewhere = set.tiers.filter((t) => !sellable.has(t.id))
@@ -815,6 +816,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                     />
                     <TextField
                       label="Competition name"
+                      rows={2}
                       value={entry.name}
                       pipelineKey={tierKey(tier.id, `competitions[${i}]`)}
                       onChange={(v) => updateLogo(entry.id, { name: v })}
@@ -913,6 +915,10 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 <>
                   <TextField
                     label="Benefit"
+                    // Wraps rather than scrolling sideways. A benefit is a
+                    // sentence, and a sentence you can only read a window of
+                    // is one you cannot check.
+                    rows={2}
                     value={entry.text}
                     onChange={(v) => updateFeature(entry.id, { text: v })}
                     helpText={

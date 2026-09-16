@@ -5,6 +5,7 @@ import { configuredJourneys } from './journeyConfig'
 import type { FlowStructure } from './onboarding'
 import { structureKey } from './onboarding'
 import { writeFlow } from './layers'
+import { flowIdKey, planIdPrefix } from './flowIds'
 
 /**
  * Turning a described structure into a flow that runs.
@@ -39,15 +40,14 @@ const slug = (key: string): string => key.replace(/[^a-z0-9]+/gi, '-').toLowerCa
  * them sell the same plans. Keying the plans to the journey would have given
  * the returning customer a second set of cards to write.
  */
-export const flowIdFor = (s: FlowStructure): string =>
-  `gen-${slug(structureKey(s.marketId, s.channelId))}`
+export const flowIdFor = (s: FlowStructure): string => flowIdKey(s.marketId, s.channelId)
 
 /** The journey — who it is for and where they arrived from, as well. */
 export const journeyIdFor = (s: FlowStructure): string =>
   `${flowIdFor(s)}-${slug(s.audience)}-${slug(s.entry)}`
 
 const tierIdFor = (s: FlowStructure, index: number): string =>
-  `${flowIdFor(s)}-plan-${index + 1}`
+  `${planIdPrefix(s.marketId, s.channelId)}${index + 1}`
 
 /** What this flow is selling, in words — the channel, or DAZN itself. */
 function subject(s: FlowStructure): string {
@@ -311,7 +311,7 @@ export function generateFlow(set: CardSet, s: FlowStructure): Generated {
 
   // Plans this structure used to have and no longer does. Only ones it owns:
   // the id prefix is the flow's own, so nothing else can be caught by this.
-  const prefix = `${flowIdFor(s)}-plan-`
+  const prefix = planIdPrefix(s.marketId, s.channelId)
   const dropped = set.tiers.filter((t) => t.id.startsWith(prefix) && !mine.has(t.id))
   const droppedIds = new Set(dropped.map((t) => t.id))
 
