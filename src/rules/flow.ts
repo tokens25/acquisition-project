@@ -508,6 +508,19 @@ export interface PlansScreen {
   badge: string
 }
 
+/**
+ * The words every situation starts from.
+ *
+ * DAZN's, not one product's. These used to be MSG+'s — the section was drawn
+ * for MSG+ and the copy was lifted from it — which meant a flow for FIBA in
+ * Japan, having written nothing of its own yet, opened saying "MSG+ on DAZN"
+ * and naming seven New York teams. A base that belongs to one product is a
+ * base every other product has to overwrite before it can be looked at.
+ *
+ * MSG+'s own words did not go anywhere: they are a layer now, scoped to the
+ * product they describe, which is what every other product's words will be
+ * too. See `rsnFlowLayer`.
+ */
 export const defaultFlow: FlowContent = {
   landing: {
     // The first button and the second. The names are what they were when the
@@ -515,8 +528,8 @@ export const defaultFlow: FlowContent = {
     // position, which is what they are.
     navExplore: 'Explore',
     navSignUp: 'Sign in',
-    title: 'MSG+ on DAZN',
-    body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
+    title: 'Sport on DAZN',
+    body: 'Stream live sport on DAZN and watch every game live or on demand.',
     cta: 'Sign Up',
     altCta: 'Sign in with your TV provider',
     footnote: 'Nationally broadcast games will not be available on DAZN',
@@ -559,9 +572,9 @@ export const defaultFlow: FlowContent = {
     areaBody: 'Enter your ZIP Code to see which teams you can watch',
     areaFieldLabel: 'Enter ZIP Code',
     areaFieldValue: '43316',
-    areaNotice: "MSG+ and YES aren't available in 43316",
+    areaNotice: "This isn't available in 43316",
     areaNote:
-      "Your area is outside the MSG+ and YES broadcast region. DAZN's national plans are available everywhere in the US, and other regional networks may cover your teams.",
+      "Your area is outside the broadcast region. DAZN's national plans are available everywhere, and other networks may cover your teams.",
     areaCta: 'See Dazn plans',
 
     multiviewEyebrow: 'Multiview',
@@ -573,7 +586,7 @@ export const defaultFlow: FlowContent = {
 
     providersTitle: 'How to connect your\nTV Subscription',
     providersBody:
-      'Once you sign up to DAZN, select your TV provider to get full access to MSG+',
+      'Once you sign up to DAZN, select your TV provider to get full access',
     providersHighlight: 'at no extra cost.',
     providersNote: 'See the full list of TV providers after you log in to DAZN',
     providersCta: 'Sign in with your TV provider',
@@ -637,13 +650,13 @@ export const defaultFlow: FlowContent = {
         id: 'feature-4',
         tag: 'Highlights',
         title: 'Highlights from every game',
-        body: 'Catch up on all the New York sports action the way you want with short highlights and condensed games.',
+        body: 'Catch up on the action the way you want with short highlights and condensed games.',
       },
     ],
 
-    imageCtaTitle: 'Watch the New York sports for free',
+    imageCtaTitle: 'Watch for free',
     imageCtaBody:
-      'Sign up to on-demand content and game highlights from MSG+ and YES. No subscription required',
+      'Sign up to on-demand content and game highlights. No subscription required',
     imageCtaCta: 'Get started',
 
     faqTitle: 'Frequently asked questions',
@@ -652,7 +665,7 @@ export const defaultFlow: FlowContent = {
         id: 'faq-1',
         question: 'I have a Gotham Sports App subscription. Will I need to get a new subscription?',
         answer:
-          'No. Your subscription moves across to DAZN — sign in with the same details and your MSG+ and YES access comes with it. You will not be charged twice.',
+          'No. Your subscription moves across to DAZN — sign in with the same details and your access comes with it. You will not be charged twice.',
       },
       {
         id: 'faq-2',
@@ -664,7 +677,7 @@ export const defaultFlow: FlowContent = {
         id: 'faq-3',
         question: 'What do I get with my subscription on DAZN?',
         answer:
-          'Every MSG+ and YES game your area gets, live, plus highlights, replays and original shows on demand. Multiview comes with Ultimate.',
+          'Every game your area gets, live, plus highlights, replays and original shows on demand. Multiview comes with Ultimate.',
       },
     ],
   },
@@ -700,7 +713,7 @@ export const defaultFlow: FlowContent = {
     ],
     selected: 'upfront',
     cta: 'Continue',
-    footnote: 'Available across the New York and Buffalo DMAs.',
+    footnote: '',
   },
 
   auth: {
@@ -773,7 +786,7 @@ export const defaultFlow: FlowContent = {
   checkout: {
     navTitle: 'Choose how you pay',
     note: 'Your payment is encrypted and you can change how you pay at any time.',
-    summaryTitle: 'MSG+',
+    summaryTitle: '',
     changeCta: 'Change',
     lines: [
       { id: 'line-1', label: 'Pay now', value: '$279.99', unit: 'month' },
@@ -801,8 +814,8 @@ export const defaultFlow: FlowContent = {
 
   ready: {
     navTitle: 'Your subscription is active',
-    title: 'You’re ready to watch MSG+ on DAZN.',
-    body: 'Watch Knicks, Rangers, Islanders, Devils, Sabres and more. all in one place.',
+    title: 'You’re ready to watch on DAZN.',
+    body: 'Everything in your plan, all in one place.',
     cta: 'Open DAZN app',
     altCta: 'Continue in browser',
     logos: ['knicks', 'rangers', 'islanders', 'devils', 'sabres'],
@@ -817,3 +830,41 @@ export type FlowStepId = (typeof FLOW_STEPS)[number]
 export function isFlowStep(id: string): id is FlowStepId {
   return (FLOW_STEPS as readonly string[]).includes(id)
 }
+
+/**
+ * MSG+'s words, scoped to MSG+.
+ *
+ * The section this tool was built from is the US RSN one, so its copy is the
+ * most finished copy there is — and for a long time it was also the copy every
+ * other market and product started from, which is the bug this file's base was
+ * just corrected for. It is written here as what it always was: one product's
+ * flow, in one country, kept whole.
+ *
+ * Only the lines that name MSG+, YES or a New York team are here. Everything
+ * else on those screens is the same sentence for every product, and copying it
+ * would mean a fix to a shared line stopping at the American border.
+ */
+export const RSN_FLOW_PATCH = {
+  landing: {
+    title: 'MSG+ on DAZN',
+    body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
+    areaNotice: "MSG+ and YES aren't available in 43316",
+    areaNote:
+      "Your area is outside the MSG+ and YES broadcast region. DAZN's national plans are available everywhere in the US, and other regional networks may cover your teams.",
+    providersBody:
+      'Once you sign up to DAZN, select your TV provider to get full access to MSG+',
+    imageCtaTitle: 'Watch the New York sports for free',
+    imageCtaBody:
+      'Sign up to on-demand content and game highlights from MSG+ and YES. No subscription required',
+  },
+  cadence: {
+    footnote: 'Available across the New York and Buffalo DMAs.',
+  },
+  checkout: {
+    summaryTitle: 'MSG+',
+  },
+  ready: {
+    title: 'You’re ready to watch MSG+ on DAZN.',
+    body: 'Watch Knicks, Rangers, Islanders, Devils, Sabres and more. all in one place.',
+  },
+} satisfies { [K in keyof FlowContent]?: Partial<FlowContent[K]> }

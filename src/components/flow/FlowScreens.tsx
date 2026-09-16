@@ -704,10 +704,20 @@ export function ZipFlowScreen({
 export function CheckoutFlowScreen({
   content,
   state,
+  planName,
 }: {
   content: CheckoutScreen
   /** empty · filled · payment process · payment verified. */
   state: 'empty' | 'filled' | 'payment process' | 'payment verified'
+  /**
+   * The plan being bought, for the summary to fall back to.
+   *
+   * The heading over the summary is the name of the thing in it. Written it is
+   * whatever somebody wrote; empty it is the plan, because that is what the
+   * summary is a summary of — and hardcoding one product's name as the default
+   * is how every other product's checkout came to say MSG+.
+   */
+  planName?: string
 }) {
   const filled = state !== 'empty'
   const methods = methodsOf(content)
@@ -719,7 +729,9 @@ export function CheckoutFlowScreen({
 
         <div className="fl-checkout__summary">
           <div className="fl-checkout__summary-head">
-            <p className="fl-checkout__summary-title">{content.summaryTitle}</p>
+            <p className="fl-checkout__summary-title">
+              {content.summaryTitle.trim() || planName}
+            </p>
             <span className="fl-checkout__change">{content.changeCta}</span>
           </div>
           {linesOf(content).map((line) => (

@@ -1,6 +1,6 @@
 import type { CadenceOffer, CardSet, Tier } from './content'
 import { DIRECT } from './content'
-import { defaultFlow } from './flow'
+import { RSN_FLOW_PATCH, defaultFlow } from './flow'
 
 /**
  * A starting set shaped like the real thing: tiers separate from the offers
@@ -127,6 +127,21 @@ export const defaultSet: CardSet = {
     { code: 'movistar', label: 'Movistar', markets: ['es'] },
   ],
   cadences: CADENCES,
+
+  /*
+   * The one layer the tool ships with.
+   *
+   * MSG+'s copy, scoped to MSG+, rather than standing as the words every other
+   * product starts from. A market or product that writes nothing now opens on
+   * DAZN's own words instead of on one American regional network's.
+   */
+  flowLayers: [
+    {
+      id: 'rsns',
+      when: { subscription: 'rsns' },
+      patch: RSN_FLOW_PATCH,
+    },
+  ],
 
   logoCatalog,
   featureCatalog,

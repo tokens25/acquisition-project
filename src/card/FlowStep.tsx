@@ -1,4 +1,5 @@
 import type { CardSet } from '../rules/content'
+import { resolveSet } from '../rules/resolve'
 import { resolveFlow } from '../rules/layers'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
@@ -74,6 +75,14 @@ export function FlowStep({
         <CheckoutFlowScreen
           content={flow.checkout ?? defaultFlow.checkout}
           state={state as 'empty' | 'filled' | 'payment process' | 'payment verified'}
+          // The plan the context says is being bought, or the first on sale
+          // here — the summary names what is in it, not a product's name
+          // baked into the words.
+          planName={
+            resolveSet(set, set.context).find(
+              (c) => !set.context.tier || c.tier.id === set.context.tier,
+            )?.tier.planName
+          }
         />
       )
     case 'ready':
