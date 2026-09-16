@@ -31,6 +31,17 @@ export interface AcquisitionCardProps {
   onCtaClick?: () => void
   discount?: boolean
   discountLabel?: string
+  /** Hold the savings eyebrow's room open, because a card beside this one has one. */
+  reserveDiscount?: boolean
+  /**
+   * Whether this is the card being considered.
+   *
+   * Drawn rather than disabled: the others stay every bit as clickable, they
+   * just stop competing for the eye. A set with nothing selected draws every
+   * card at full strength, which is the state a printed comparison is in.
+   */
+  selected?: boolean
+  onSelect?: () => void
 
   logos?: LogoTilesProps
   addOn?: Omit<AddOnProps, 'device'>
@@ -65,6 +76,9 @@ export function AcquisitionCard({
   onCtaClick,
   discount = false,
   discountLabel,
+  reserveDiscount = false,
+  selected,
+  onSelect,
   logos,
   addOn,
   features,
@@ -79,6 +93,8 @@ export function AcquisitionCard({
       className={['acq-card', className].filter(Boolean).join(' ')}
       data-ultimate={ultimate || undefined}
       data-device={device}
+      data-selected={selected || undefined}
+      onClick={onSelect}
     >
       {eyebrow && (
         <p className="acq-card__eyebrow">
@@ -106,6 +122,7 @@ export function AcquisitionCard({
           ultimate={ultimate}
           discount={discount}
           discountLabel={discountLabel}
+          reserveDiscount={reserveDiscount}
           device={device}
           onClick={onCtaClick}
         />

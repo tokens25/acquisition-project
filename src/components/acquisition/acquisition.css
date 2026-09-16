@@ -168,6 +168,11 @@
 }
 
 .acq-pricing__caption,
+/* A line's worth of room with nothing in it, so a card that explains its price
+   does not push its own button below the ones beside it. */
+.acq-pricing__extra[data-reserved] {
+  visibility: hidden;
+}
 .acq-pricing__extra {
   margin: 0;
   color: var(--color-text-secondary);
@@ -216,6 +221,11 @@
 /* The savings eyebrow sits on a green plate that the CTA overlaps. */
 .acq-plan-cta__stack[data-discount] {
   background: var(--color-accent-success-surface-1);
+}
+/* Room without a line. The element is the real one so the two can never round
+   to different heights; it simply has nothing to say on this card. */
+.acq-plan-cta__eyebrow[data-reserved] {
+  visibility: hidden;
 }
 .acq-plan-cta__eyebrow {
   display: flex;
@@ -461,6 +471,21 @@ button.acq-feature__info:hover {
 .acq-set > .acq-card {
   flex: 0 0 auto;
   scroll-snap-align: start;
+  transition: opacity 160ms ease;
+}
+/* Nothing dims until something is chosen — a set with no selection is a
+   comparison, and dimming all of it would be saying nothing about any of them.
+   The unchosen cards stay clickable; they only stop competing for the eye. */
+.acq-set[data-has-selection] > .acq-card {
+  opacity: 0.8;
+}
+.acq-set[data-has-selection] > .acq-card[data-selected] {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .acq-set > .acq-card {
+    transition: none;
+  }
 }
 
 /* S-2 · the whole set shares one description height. Measured in `lh` — the

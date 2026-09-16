@@ -227,12 +227,21 @@ export function deriveCard(
     : null
 
   /* §5 — rows = 1 when an add-on renders, else 2. Capacity follows. */
-  const logoRows: 1 | 2 = addOn ? 1 : 2
+  // Written wins; absent, an add-on panel has taken the second row's space.
+  const logoRows: 1 | 2 = tier.logoRows ?? (addOn ? 1 : 2)
   const logoCapacity = LOGO_SLOTS_PER_ROW * logoRows
   const total = Math.max(tier.logoTotal, 0)
   const overflows = total > logoCapacity
-  const visibleCount = overflows ? logoCapacity - 1 : Math.min(total, logoCapacity)
-  const overflowCount = overflows ? total - (logoCapacity - 1) : 0
+  // The last slot is either a competition or the count of the ones left out.
+  // Spending it on a badge means the row no longer says any are missing, which
+  // is the trade being made — so the count goes rather than being drawn wrong.
+  const countsOverflow = (tier.logoOverflow ?? 'count') === 'count'
+  const visibleCount = overflows
+    ? countsOverflow
+      ? logoCapacity - 1
+      : logoCapacity
+    : Math.min(total, logoCapacity)
+  const overflowCount = overflows && countsOverflow ? total - (logoCapacity - 1) : 0
 
   // Resolved once, then sliced: the tile shows what fits and the dialog shows
   // all of them, and resolving twice would report every missing reference twice.

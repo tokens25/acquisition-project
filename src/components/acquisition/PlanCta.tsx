@@ -14,6 +14,16 @@ export interface PlanCtaProps {
   discount?: boolean
   /** Eyebrow copy, only rendered when `discount` is set. */
   discountLabel?: string
+  /**
+   * Keep the eyebrow's room even though this card has nothing to put in it.
+   *
+   * Set by the row when any card in it carries a saving. A card without one
+   * does not grow a label — it grows the space the label would take, so every
+   * button in the row sits on the same line. Height rather than a measurement:
+   * the reserved element is the real one, hidden, so the two can never round to
+   * different numbers.
+   */
+  reserveDiscount?: boolean
   device?: Device
   onClick?: () => void
 }
@@ -27,14 +37,20 @@ export function PlanCta({
   ultimate = false,
   discount = false,
   discountLabel = 'Save up to €{xx} /year',
+  reserveDiscount = false,
   device = 'desktop',
   onClick,
 }: PlanCtaProps) {
+  const reserving = !discount && reserveDiscount
   return (
     <div className="acq-plan-cta" data-device={device}>
       <div className="acq-plan-cta__stack" data-discount={discount || undefined}>
-        {discount && (
-          <p className="acq-plan-cta__eyebrow">
+        {(discount || reserving) && (
+          <p
+            className="acq-plan-cta__eyebrow"
+            data-reserved={reserving || undefined}
+            aria-hidden={reserving || undefined}
+          >
             <Icon svg={discountIcon} size={16} />
             <span>{discountLabel}</span>
           </p>

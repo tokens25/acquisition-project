@@ -333,6 +333,27 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
           })}
         </div>
         <NumberField label="Total competitions" hint="Drives the derived “+N” tile." value={resolved.logoTotal} min={0} onChange={(v) => patch({ logoTotal: v })} />
+        <SelectField
+          label="Rows"
+          hint="Two unless an add-on panel has taken the space."
+          value={resolved.logoRows ? String(resolved.logoRows) : 'auto'}
+          options={[
+            { value: 'auto', label: 'Let the card decide' },
+            { value: '1', label: 'One row' },
+            { value: '2', label: 'Two rows' },
+          ]}
+          onChange={(v) => patch({ logoRows: v === 'auto' ? undefined : (Number(v) as 1 | 2) })}
+        />
+        <SelectField
+          label="Last tile"
+          hint="When the plan carries more competitions than the rows can show."
+          value={resolved.logoOverflow ?? 'count'}
+          options={[
+            { value: 'count', label: '“+N” — how many are not shown' },
+            { value: 'logo', label: 'One more competition' },
+          ]}
+          onChange={(v) => patch({ logoOverflow: v as 'count' | 'logo' })}
+        />
       </FieldGroup>
 
       <FieldGroup title="Features">

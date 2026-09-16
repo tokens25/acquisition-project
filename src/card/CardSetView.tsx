@@ -99,6 +99,29 @@ export function CardSetView({
   )
   const market = marketFor(set, context.market)
 
+  /**
+   * Whether any card in the row saves money, and which card is being
+   * considered.
+   *
+   * Both are facts about the row rather than about a card, which is why they
+   * are worked out here: a card cannot know that the one beside it carries a
+   * saving, and asking each card to guess is how a row of buttons ends up on
+   * four different lines.
+   */
+  const reserveDiscount = useMemo(() => cards.some((c) => c.offer.discount), [cards])
+  // The explainer is the other thing that moves a button down a line. A card
+  // that discounts always explains, so this is nearly the same question — but
+  // an offer can carry an explainer without a discount, and then only this one
+  // is true.
+  const reserveExtraInfo = useMemo(
+    () => cards.some((c) => c.offer.discount || Boolean(c.offer.explainer?.trim())),
+    [cards],
+  )
+  const [chosen, setChosen] = useState<string | null>(null)
+  // A selection that no longer resolves here — the market changed, or the tier
+  // went — is no selection, rather than a card that cannot be unselected.
+  const selectedId = chosen && cards.some((c) => c.tier.id === chosen) ? chosen : null
+
   useLayoutEffect(() => {
     const root = ref.current
     const probe = probeRef.current
@@ -209,6 +232,7 @@ export function CardSetView({
           className="acq-set"
           ref={ref}
           data-description-lines={descriptionLines}
+          data-has-selection={selectedId ? '' : undefined}
         >
           {cards.map(({ tier, offer }, cardIndex) => (
             <RuledCard
@@ -220,6 +244,10 @@ export function CardSetView({
               context={context}
               device={set.device}
               descriptionLines={descriptionLines}
+              reserveDiscount={reserveDiscount}
+              reserveExtraInfo={reserveExtraInfo}
+              selected={selectedId === tier.id}
+              onSelect={interactive ? () => setChosen(tier.id) : undefined}
               onOpenDetails={
                 interactive ? (d) => setDetails({ ...d, cardIndex }) : undefined
               }

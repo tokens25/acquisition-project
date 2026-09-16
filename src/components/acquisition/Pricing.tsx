@@ -13,6 +13,15 @@ export interface PricingProps {
   installment?: string
   /** Small print under the price. Figma `Show extra info`. */
   extraInfo?: string
+  /**
+   * Keep the small print's line even though this card has none.
+   *
+   * Set by the row when any card in it explains its price. The explainer is
+   * what puts a discounted card's CTA lower than the ones beside it, and a
+   * button that sits on its own line reads as a mistake rather than as a card
+   * with more to say.
+   */
+  reserveExtraInfo?: boolean
   device?: Device
 }
 
@@ -26,8 +35,10 @@ export function Pricing({
   crossedPrice,
   installment = 'month',
   extraInfo,
+  reserveExtraInfo = false,
   device = 'desktop',
 }: PricingProps) {
+  const reserving = !extraInfo && reserveExtraInfo
   return (
     <div className="acq-pricing" data-device={device}>
       {caption && <p className="acq-pricing__caption">{caption}</p>}
@@ -36,7 +47,15 @@ export function Pricing({
         {crossedPrice && <s className="acq-pricing__crossed">{crossedPrice}</s>}
         <span className="acq-pricing__installment">/{installment}</span>
       </p>
-      {extraInfo && <p className="acq-pricing__extra">{extraInfo}</p>}
+      {(extraInfo || reserving) && (
+        <p
+          className="acq-pricing__extra"
+          data-reserved={reserving || undefined}
+          aria-hidden={reserving || undefined}
+        >
+          {extraInfo ?? '\u00a0'}
+        </p>
+      )}
     </div>
   )
 }

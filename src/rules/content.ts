@@ -88,6 +88,26 @@ export interface Tier {
   logoTiles: string[]
   /** Total competitions the plan carries; drives the derived "+N" tile. */
   logoTotal: number
+  /**
+   * One row of competition tiles, or two.
+   *
+   * Absent lets the card decide, which is two rows unless an add-on panel has
+   * taken the space. Written, it is what the card draws — a set of plans that
+   * each carry three competitions reads better on one row than on two with a
+   * half-empty second, and nothing but a person can know that.
+   */
+  logoRows?: 1 | 2
+  /**
+   * What the last tile shows when the plan carries more than fit.
+   *
+   * `count` — the default — gives the last slot to "+N", so the row says how
+   * many it is not showing. `logo` spends that slot on another competition
+   * instead: the row shows one more badge and stops saying there are others.
+   *
+   * A choice rather than a rule because it is a trade between two true things,
+   * and which one matters depends on whether the competitions are the draw.
+   */
+  logoOverflow?: 'count' | 'logo'
   ultimate: boolean
   /**
    * Which tabs of the plan picker this tier appears under.
@@ -219,6 +239,8 @@ export interface TierPatch {
   features?: string[]
   logoTiles?: string[]
   logoTotal?: number
+  logoRows?: 1 | 2
+  logoOverflow?: 'count' | 'logo'
   ultimate?: boolean
   tabs?: string[]
   badge?: string

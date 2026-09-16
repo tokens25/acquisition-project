@@ -27,6 +27,12 @@ export interface RuledCardProps {
    * is a picture and should not offer the control in the first place.
    */
   detailsBlocked?: boolean
+  /** Set by the row, not the card: does any card beside this one save money? */
+  reserveDiscount?: boolean
+  /** And does any of them explain its price? */
+  reserveExtraInfo?: boolean
+  selected?: boolean
+  onSelect?: () => void
 }
 
 /**
@@ -56,6 +62,10 @@ export function RuledCard({
   descriptionLines,
   onOpenDetails,
   detailsBlocked = false,
+  reserveDiscount = false,
+  reserveExtraInfo = false,
+  selected,
+  onSelect,
 }: RuledCardProps) {
   const d = deriveCard(set, tier, offer, market, context)
 
@@ -104,10 +114,14 @@ export function RuledCard({
         crossedPrice: d.struckPrice ?? undefined,
         installment: d.priceUnit,
         extraInfo: d.explainer ?? undefined,
+        reserveExtraInfo,
       }}
       ctaLabel={d.ctaLabel}
       discount={offer.discount}
       discountLabel={d.savingsLabel ?? undefined}
+      reserveDiscount={reserveDiscount}
+      selected={selected}
+      onSelect={onSelect}
       logos={
         logos.length || d.overflowCount
           ? { logos, rows: d.logoRows, overflowCount: d.overflowCount }
