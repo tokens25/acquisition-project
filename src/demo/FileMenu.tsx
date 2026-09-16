@@ -149,8 +149,10 @@ export function FileMenu({ actions }: { actions: FileAction[] }) {
         className="fm__chev"
         aria-haspopup="menu"
         aria-expanded={open}
+        /* Named for a screen reader, which has nothing else to go on, and
+           not with a `title` — the label would arrive late, over the first
+           item of the menu the click has just opened. */
         aria-label="What you can do with this file"
-        title="What you can do with this file"
         onClick={() => setOpen((v) => !v)}
         onKeyDown={(e) => {
           if (e.key === 'Escape') setOpen(false)
