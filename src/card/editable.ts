@@ -65,7 +65,8 @@ export function keyForTarget(target: Element, cadence: string): EditRequest | nu
     // The overflow tile is not a competition; it is the number of the ones
     // that did not fit, which is written in a field of its own.
     if (tile.classList.contains('acq-logo-tiles__tile--overflow')) return tier('competitions.total')
-    return tier(`competitions[${indexAmong(tile, '.acq-logo-tiles__tile')}]`)
+    // The picture, not the name: a badge is what was clicked.
+    return tier(`competitions[${indexAmong(tile, '.acq-logo-tiles__tile')}].image`)
   }
 
   const feature = at('.acq-feature')

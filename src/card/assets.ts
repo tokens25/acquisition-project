@@ -46,6 +46,16 @@ export const logoArtwork: Record<string, string> = {
   sabres: sabresLogo,
 }
 
+/**
+ * The bytes for a competition's badge: what somebody uploaded, or the shipped
+ * one, or nothing.
+ *
+ * One place, so a catalogue entry carrying an uploaded badge draws it
+ * everywhere it is drawn rather than in whichever screens remembered to look.
+ */
+export const badgeSrc = (entry?: { id: string; image?: string }): string =>
+  entry?.image?.trim() || logoArtwork[entry?.id ?? ''] || ''
+
 export const imageArtwork: Record<string, string> = {
   'world-cup': addOnImage,
 }

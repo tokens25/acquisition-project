@@ -1330,3 +1330,81 @@
   outline-offset: 3px;
   border-radius: var(--radius-4);
 }
+
+/* ── A competition's badge, and how to change it ── */
+.ed-badge {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+}
+.ed-badge__shot {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 64px;
+  block-size: 64px;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+  cursor: pointer;
+}
+.ed-badge__shot > img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.ed-badge__none {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+/* Over the picture on hover, because the picture is the control. */
+.ed-badge__over {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--color-fill-scrim) 72%, transparent);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.ed-badge__shot:hover .ed-badge__over,
+.ed-badge__shot:focus-visible .ed-badge__over {
+  opacity: 1;
+}
+.ed-badge__side {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+.ed-badge__what {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+}
+.ed-badge__note {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+}
+/* The real input, kept off screen — the picture above is what you press. */
+.ed-badge__file {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ed-badge__over {
+    transition: none;
+  }
+}

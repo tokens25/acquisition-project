@@ -69,10 +69,14 @@ export function RuledCard({
 }: RuledCardProps) {
   const d = deriveCard(set, tier, offer, market, context)
 
+  // An uploaded badge wins over the shipped one, and counts as artwork: a
+  // competition the catalogue has no bytes for is no longer missing once
+  // somebody has supplied them.
+  const badge = (l: { id: string; image: string | null }) => l.image || logoArtwork[l.id] || ''
   const logos = d.logos.map((l) => ({
-    src: logoArtwork[l.id] ?? '',
+    src: badge(l),
     alt: l.altText,
-    missing: l.state === 'missing' || !logoArtwork[l.id],
+    missing: l.state === 'missing' || !badge(l),
   }))
 
   // Title, description and CTA are the card's own; the competitions are the
@@ -88,7 +92,7 @@ export function RuledCard({
             id: l.id,
             name: l.name,
             blurb: l.blurb,
-            src: logoArtwork[l.id] ?? '',
+            src: badge(l),
             alt: l.altText,
           })),
           features: d.features.map((f) => ({

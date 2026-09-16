@@ -21,9 +21,10 @@ import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, filterAcquirableTiers, resolveTier } from '../rules/resolve'
 import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer, priceUnitFor } from '../rules/derive'
 import { formatMoney } from '../rules/money'
-import { logoArtwork } from '../card/assets'
+import { badgeSrc, logoArtwork } from '../card/assets'
 import { BenefitIcon } from './BenefitIcon'
 import { IconPicker } from './IconPicker'
+import { BadgePicker } from './BadgePicker'
 import { SourceTabs } from './SourceTabs'
 import { FieldGroup } from './FieldGroup'
 import { MarkedField } from '../components/FieldMark'
@@ -266,7 +267,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
    * Two plans carrying the same competition describe it the same way — writing
    * it per tier is how a set ends up saying two things about one competition.
    */
-  const updateLogo = (id: string, p: { name?: string; blurb?: string }) =>
+  const updateLogo = (id: string, p: { name?: string; blurb?: string; image?: string }) =>
     updateSet({ logoCatalog: set.logoCatalog.map((l) => (l.id === id ? { ...l, ...p } : l)) })
 
   /** Drops `id` beside `target`. This order is the order on the card. */
@@ -780,7 +781,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                   }}
                 >
                   <span className="ed-comp__pos">{i + 1}</span>
-                  <img className="ed-comp__logo" src={logoArtwork[id]} alt="" />
+                  <img className="ed-comp__logo" src={badgeSrc(entry) || logoArtwork[id]} alt="" />
                   <span className="ed-comp__name">{entry?.name || id}</span>
                   <button
                     type="button"
@@ -794,6 +795,13 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 </div>
                 {entry && (
                   <>
+                    <BadgePicker
+                      entry={entry}
+                      fieldKey={tierKey(tier.id, `competitions[${i}].image`)}
+                      usedOn={set.tiers.filter((t) => t.logoTiles.includes(id)).length}
+                      onPick={(image) => updateLogo(entry.id, { image })}
+                      onShipped={() => updateLogo(entry.id, { image: '' })}
+                    />
                     <TextField
                       label="Competition name"
                       value={entry.name}
@@ -839,6 +847,27 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           value={String(resolved.logoTotal)}
           pipelineKey={tierKey(tier.id, 'competitions.total')}
           onChange={(v) => patchTier({ logoTotal: Number(v) })}
+        />
+        <SelectField
+          label="Rows"
+          helpText="Five to a row. Two rows unless an add-on panel has taken the space."
+          value={resolved.logoRows ? String(resolved.logoRows) : 'auto'}
+          options={[
+            { value: 'auto', label: 'Let the card decide' },
+            { value: '1', label: 'One row — five at most' },
+            { value: '2', label: 'Two rows — ten at most' },
+          ]}
+          onChange={(v) => patchTier({ logoRows: v === 'auto' ? undefined : (Number(v) as 1 | 2) })}
+        />
+        <SelectField
+          label="Last tile"
+          helpText="When the plan carries more than the rows can show."
+          value={resolved.logoOverflow ?? 'count'}
+          options={[
+            { value: 'count', label: '“+N” — how many are not shown' },
+            { value: 'logo', label: 'One more competition' },
+          ]}
+          onChange={(v) => patchTier({ logoOverflow: v as 'count' | 'logo' })}
         />
       </FieldGroup>
 

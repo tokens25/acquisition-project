@@ -124,6 +124,8 @@ export interface DerivedLogo {
   altText: string
   /** Authored on the catalogue entry; absent for most of them. */
   blurb: string | null
+  /** An uploaded badge, when there is one. Null means the shipped artwork. */
+  image: string | null
   state: Resolution<unknown>['state']
 }
 
@@ -259,13 +261,14 @@ export function deriveCard(
     const r = resolveLogo(set, id)
     if (r.state === 'missing') {
       missingRefs.push(`logo:${id}`)
-      return { id, name: id, altText: 'Artwork not available', blurb: null, state: r.state }
+      return { id, name: id, altText: 'Artwork not available', blurb: null, image: null, state: r.state }
     }
     return {
       id,
       name: r.entry.name,
       altText: r.entry.altText,
       blurb: r.entry.blurb?.trim() || null,
+      image: r.entry.image?.trim() || null,
       state: r.state,
     }
   })

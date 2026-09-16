@@ -30,6 +30,19 @@ export interface CatalogEntry {
   name: string
   altText: string
   /**
+   * A badge somebody uploaded, as a data URL. Absent means the shipped one.
+   *
+   * On the catalogue rather than on a plan, because a competition looks the
+   * same wherever it is carried — the same reason its name and its blurb live
+   * here. Changing it changes it on every plan that carries it, which is the
+   * behaviour, not a side effect of one.
+   *
+   * A data URL rather than a link: Vite fingerprints asset URLs at build time,
+   * so a stored URL would break on the next deploy, and a link to somewhere
+   * else would break when that somewhere else changed.
+   */
+  image?: string
+  /**
    * One line about what the competition gives you. Only the
    * "All features & content" dialog has room for it; the card shows the badge
    * alone. Authored on the catalogue rather than per tier, so the same
