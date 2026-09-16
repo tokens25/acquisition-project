@@ -12,8 +12,10 @@ import {
   heroOf,
   landingText,
   linksOf,
+  liveTeamsOf,
   providersOf,
   questionsOf,
+  spotlightTilesOf,
   subTilesOf,
   tilesOf,
 } from '../../../../rules/landing'
@@ -185,6 +187,29 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
           t.citiesBody,
           ...cityTabsOf(l).map((one) => one.label),
           ...cityTilesOf(l).flatMap((one) => [one.title, one.meta]),
+        ],
+        cta: '',
+      }
+    case 'live':
+      return {
+        heading: t.liveTitle,
+        words: [
+          t.liveTitle,
+          t.liveBody,
+          t.liveFieldLabel,
+          ...liveTeamsOf(l).map((one) => one.name),
+          t.liveCta,
+        ],
+        cta: t.liveCta,
+      }
+    case 'spotlight':
+      return {
+        heading: t.spotlightTitle,
+        words: [
+          t.spotlightLabel,
+          t.spotlightTitle,
+          t.spotlightBody,
+          ...spotlightTilesOf(l).flatMap((one) => [one.title, one.meta]),
         ],
         cta: '',
       }

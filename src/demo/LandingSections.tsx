@@ -15,6 +15,7 @@ import {
   blankFight,
   blankMatch,
   blankTab,
+  blankTeamRow,
   blankGame,
   blankLink,
   blankProvider,
@@ -27,6 +28,7 @@ import {
   cityTilesOf,
   dayTilesOf,
   featuresOf,
+  liveTeamsOf,
   matchesOf,
   gamesOf,
   landingText,
@@ -34,6 +36,7 @@ import {
   providersOf,
   questionsOf,
   railSizeOf,
+  spotlightTilesOf,
   subTilesOf,
   tilesOf,
 } from '../rules/landing'
@@ -1337,6 +1340,156 @@ function SectionFields({
             onClick={() => write({ cityTiles: [...cityTilesOf(inst), blankTile(cityTilesOf(inst))] })}
           >
             Add a place
+          </button>
+        </>
+      )
+
+    case 'live':
+      return (
+        <>
+          <TextField
+            label="Heading"
+            value={t.liveTitle}
+            pipelineKey={key('landing.liveTitle')}
+            onChange={(v) => write({ liveTitle: v })}
+            rows={2}
+          />
+          <TextField
+            label="Under the heading"
+            value={t.liveBody}
+            pipelineKey={key('landing.liveBody')}
+            onChange={(v) => write({ liveBody: v })}
+            rows={2}
+          />
+          <TextField
+            label="Field"
+            value={t.liveFieldLabel}
+            pipelineKey={key('landing.liveFieldLabel')}
+            onChange={(v) => write({ liveFieldLabel: v })}
+          />
+          <TextField
+            label="Code shown"
+            value={t.liveFieldValue}
+            pipelineKey={key('landing.liveFieldValue')}
+            onChange={(v) => write({ liveFieldValue: v })}
+          />
+          {liveTeamsOf(inst).map((team, i) => {
+            const all = liveTeamsOf(inst)
+            const edit = (next: Partial<typeof team>) =>
+              write({ liveTeams: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={team.id}>
+                <TextField
+                  label={`Team ${i + 1}`}
+                  value={team.name}
+                  pipelineKey={key(`landing.liveTeams[${i}].name`)}
+                  onChange={(v) => edit({ name: v })}
+                  helpText="The name picks the crest. One with no crest shows its words alone."
+                />
+                <TextField
+                  label="Competition"
+                  value={team.league}
+                  pipelineKey={key(`landing.liveTeams[${i}].league`)}
+                  onChange={(v) => edit({ league: v })}
+                  helpText="At the right of the row. Empty draws none."
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ liveTeams: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              write({ liveTeams: [...liveTeamsOf(inst), blankTeamRow(liveTeamsOf(inst))] })
+            }
+          >
+            Add a team
+          </button>
+          <TextField
+            label="Button"
+            value={t.liveCta}
+            pipelineKey={key('landing.liveCta')}
+            onChange={(v) => write({ liveCta: v })}
+            helpText="Empty draws none."
+          />
+        </>
+      )
+
+    case 'spotlight':
+      return (
+        <>
+          <TextField
+            label="Label"
+            value={t.spotlightLabel}
+            pipelineKey={key('landing.spotlightLabel')}
+            onChange={(v) => write({ spotlightLabel: v })}
+            helpText="The gold chip over the heading. Empty draws none."
+          />
+          <TextField
+            label="Heading"
+            value={t.spotlightTitle}
+            pipelineKey={key('landing.spotlightTitle')}
+            onChange={(v) => write({ spotlightTitle: v })}
+            rows={2}
+          />
+          <TextField
+            label="Under the heading"
+            value={t.spotlightBody}
+            pipelineKey={key('landing.spotlightBody')}
+            onChange={(v) => write({ spotlightBody: v })}
+            rows={3}
+            helpText="The picture is the page's own hero artwork — change it in the Hero banner tab."
+          />
+          {spotlightTilesOf(inst).map((tile, i) => {
+            const all = spotlightTilesOf(inst)
+            const edit = (next: Partial<typeof tile>) =>
+              write({ spotlightTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" key={tile.id}>
+                <TextField
+                  label={`Game ${i + 1}`}
+                  value={tile.title}
+                  pipelineKey={key(`landing.spotlightTiles[${i}].title`)}
+                  onChange={(v) => edit({ title: v })}
+                />
+                <TextField
+                  label="Under it"
+                  value={tile.meta}
+                  pipelineKey={key(`landing.spotlightTiles[${i}].meta`)}
+                  onChange={(v) => edit({ meta: v })}
+                  helpText="The competition. Empty draws none."
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ spotlightTiles: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() =>
+              write({ spotlightTiles: [...spotlightTilesOf(inst), blankTile(spotlightTilesOf(inst))] })
+            }
+          >
+            Add a game
           </button>
         </>
       )

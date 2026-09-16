@@ -5,6 +5,7 @@ import type {
   LandingCard,
   LandingMatch,
   LandingTab,
+  LandingTeamRow,
   LandingSubTile,
   LandingTile,
   RailSize,
@@ -178,6 +179,8 @@ export function landingText(content: LandingScreen): Required<
     | 'featureCards'
     | 'cityTabs'
     | 'cityTiles'
+    | 'liveTeams'
+    | 'spotlightTiles'
     | HeroKey
     | ChoiceKey
   >
@@ -246,6 +249,14 @@ export function landingText(content: LandingScreen): Required<
     citiesEyebrow: of('citiesEyebrow'),
     citiesTitle: of('citiesTitle'),
     citiesBody: of('citiesBody'),
+    liveTitle: of('liveTitle'),
+    liveBody: of('liveBody'),
+    liveFieldLabel: of('liveFieldLabel'),
+    liveFieldValue: of('liveFieldValue'),
+    liveCta: of('liveCta'),
+    spotlightLabel: of('spotlightLabel'),
+    spotlightTitle: of('spotlightTitle'),
+    spotlightBody: of('spotlightBody'),
     imageCtaTitle: of('imageCtaTitle'),
     imageCtaBody: of('imageCtaBody'),
     imageCtaCta: of('imageCtaCta'),
@@ -449,6 +460,21 @@ export function blankTab(existing: LandingTab[]): LandingTab {
 /** The places, or the ones it ships with. */
 export function cityTilesOf(content: LandingScreen): LandingTile[] {
   return content.cityTiles ?? defaultFlow.landing.cityTiles ?? []
+}
+
+/** The teams the postcode reaches, or the ones it ships with. */
+export function liveTeamsOf(content: LandingScreen): LandingTeamRow[] {
+  return content.liveTeams ?? defaultFlow.landing.liveTeams ?? []
+}
+
+/** A new row. The name picks the crest, so it is the only thing it needs. */
+export function blankTeamRow(existing: LandingTeamRow[]): LandingTeamRow {
+  return { id: nextId('live', existing), name: '', league: '' }
+}
+
+/** The fixtures under the spotlight, or the ones it ships with. */
+export function spotlightTilesOf(content: LandingScreen): LandingTile[] {
+  return content.spotlightTiles ?? defaultFlow.landing.spotlightTiles ?? []
 }
 
 /** A new game, with nothing in it yet. */

@@ -19,9 +19,11 @@ import {
   heroOf,
   landingText,
   linksOf,
+  liveTeamsOf,
   providersOf,
   questionsOf,
   railSizeOf,
+  spotlightTilesOf,
   subTilesOf,
   tilesOf,
 } from '../../rules/landing'
@@ -107,6 +109,7 @@ import type {
   LandingGame,
   LandingMatch,
   LandingTab,
+  LandingTeamRow,
   LandingSubTile,
   LandingTile,
   RailSize,
@@ -1912,6 +1915,28 @@ export function PageSectionView({
         />
       )
 
+    case 'live':
+      return (
+        <LiveSection
+          title={text.liveTitle}
+          body={text.liveBody}
+          fieldLabel={text.liveFieldLabel}
+          fieldValue={text.liveFieldValue}
+          cta={text.liveCta}
+          teams={liveTeamsOf(content)}
+        />
+      )
+
+    case 'spotlight':
+      return (
+        <SpotlightSection
+          label={text.spotlightLabel}
+          title={text.spotlightTitle}
+          body={text.spotlightBody}
+          tiles={spotlightTilesOf(content)}
+        />
+      )
+
     case 'faq':
       return <FaqSection content={content} title={text.faqTitle} />
   }
@@ -2284,6 +2309,143 @@ function CitiesSection({
                 <p className="fl-city__name">{tile.title}</p>
                 {tile.meta.trim() !== '' && <p className="fl-city__meta">{tile.meta}</p>}
               </span>
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * A team's crest, by the name the row is written with.
+ *
+ * Same idea as `providerArt` above it: what somebody types picks the picture,
+ * so nothing has to be chosen twice. A name with no crest draws no crest
+ * rather than somebody else's badge.
+ */
+const teamCrests: Record<string, string> = {
+  'New York Knicks': logoArtwork.knicks,
+  'New York Rangers': logoArtwork.rangers,
+  'New York Islanders': logoArtwork.islanders,
+  'New Jersey Devils': logoArtwork.devils,
+  'Buffalo Sabres': logoArtwork.sabres,
+  'New York Yankees': logoArtwork.yankees,
+  'Brooklyn Nets': logoArtwork.nets,
+}
+
+/**
+ * What a postcode turns out to reach — node 1084:56752.
+ *
+ * The same question the out-of-area block asks and the opposite answer:
+ * there, what a code cannot watch; here, the teams it can. Which is why it is
+ * a component of its own rather than a setting on that one — a page that
+ * welcomes you and a page that turns you away are not one page with a switch.
+ */
+function LiveSection({
+  title,
+  body,
+  fieldLabel,
+  fieldValue,
+  cta,
+  teams,
+}: {
+  title: string
+  body: string
+  fieldLabel: string
+  fieldValue: string
+  cta: string
+  teams: LandingTeamRow[]
+}) {
+  return (
+    <section className="fl-live">
+      <div className="fl-live__card">
+        <div className="fl-live__copy">
+          <p className="fl-live__title">{title}</p>
+          <p className="fl-live__body">{body}</p>
+        </div>
+        <div className="fl-live__field">
+          <span className="fl-live__pin" aria-hidden="true">
+            <img src={actionLocation} alt="" />
+          </span>
+          <span className="fl-live__entry">
+            <span className="fl-live__label">{fieldLabel}</span>
+            <span className="fl-live__value">{fieldValue}</span>
+          </span>
+          <span className="fl-live__clear" aria-hidden="true">
+            <Icon svg={iconArtwork.close} size={24} />
+          </span>
+        </div>
+        <div className="fl-live__teams">
+          {/* A row with no name yet draws nothing: the field is there to be
+              typed into, and the design has no blank in the list. */}
+          {teams
+            .filter((team) => team.name.trim() !== '')
+            .map((team) => (
+              <div className="fl-live__team" key={team.id}>
+                <span className="fl-live__crest" aria-hidden="true">
+                  {teamCrests[team.name] && <img src={teamCrests[team.name]} alt="" />}
+                </span>
+                <span className="fl-live__name">{team.name}</span>
+                {team.league.trim() !== '' && (
+                  <span className="fl-live__league">{team.league}</span>
+                )}
+              </div>
+            ))}
+        </div>
+        {cta.trim() !== '' && (
+          <span className="fl-live__cta" role="button">
+            {cta}
+          </span>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * A spotlight — node 1084:56109.
+ *
+ * One thing, sold with a picture the width of the screen and then the games
+ * that make it up. The picture is the page's own hero artwork rather than a
+ * second upload: a spotlight is the page saying "this, above everything else",
+ * and the page already has a picture of what that is.
+ */
+function SpotlightSection({
+  label,
+  title,
+  body,
+  tiles,
+}: {
+  label: string
+  title: string
+  body: string
+  tiles: LandingTile[]
+}) {
+  return (
+    <section className="fl-spot">
+      <span className="fl-spot__art" aria-hidden="true">
+        <img src={heroArt} alt="" />
+        <span className="fl-spot__wash" />
+      </span>
+      <div className="fl-spot__copy">
+        {label.trim() !== '' && <span className="fl-spot__label">{label}</span>}
+        {title.trim() !== '' && <p className="fl-spot__title">{title}</p>}
+        {body.trim() !== '' && <p className="fl-spot__body">{body}</p>}
+      </div>
+      <div className="fl-spot__row">
+        {tiles.map((tile, at) => {
+          const fixture = fixtureFor(at)
+          return (
+            <article className="fl-spot__tile" key={tile.id}>
+              <span className="fl-spot__shot" aria-hidden="true">
+                {fixture.art.map((src, i) => (
+                  <img src={src} alt="" key={i} />
+                ))}
+                <span className="fl-spot__stamp">{fixture.stamp}</span>
+              </span>
+              <p className="fl-spot__name">{tile.title}</p>
+              {tile.meta.trim() !== '' && <p className="fl-spot__meta">{tile.meta}</p>}
             </article>
           )
         })}

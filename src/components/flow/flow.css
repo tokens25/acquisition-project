@@ -3968,3 +3968,278 @@
   flex-direction: row;
   align-items: flex-start;
 }
+
+/* ── What's live in your area — node 1084:56752 ───────────────────────────
+   The out-of-area card's twin, answering the same question the other way:
+   the teams a code reaches rather than the ones it does not. */
+.fl-live {
+  inline-size: 100%;
+}
+.fl-live__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-20) var(--space-16) var(--space-24);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-1);
+}
+.fl-live__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  text-align: center;
+}
+.fl-live__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 22px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.3;
+}
+.fl-live__body {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-s);
+  line-height: 1.5;
+}
+/* The same 56 field the out-of-area block uses, and for the same reason: it
+   is the one place on the page somebody types. */
+.fl-live__field {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  block-size: 56px;
+  padding-inline: var(--space-16);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+}
+.fl-live__pin {
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.fl-live__pin img {
+  inline-size: 20px;
+  block-size: 20px;
+}
+.fl-live__entry {
+  display: flex;
+  min-inline-size: 0;
+  flex: 1;
+  flex-direction: column;
+}
+.fl-live__label {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.4;
+}
+.fl-live__value {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  line-height: 1.4;
+}
+.fl-live__clear {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--color-text-secondary);
+}
+.fl-live__teams {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.fl-live__team {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  block-size: 64px;
+  padding-inline: var(--space-12);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-2);
+}
+/* A plate the crest sits in, so a team with no artwork leaves a space the
+   size of one rather than sliding its name across. */
+.fl-live__crest {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 40px;
+  block-size: 40px;
+}
+.fl-live__crest img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+.fl-live__name {
+  min-inline-size: 0;
+  flex: 1;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  line-height: 1.4;
+}
+.fl-live__league {
+  flex: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.fl-live__cta {
+  display: grid;
+  place-items: center;
+  block-size: 48px;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+/* ── Spotlight — node 1084:56109 ──────────────────────────────────────────
+   One thing, above everything else: a picture the width of the screen, what
+   it is, and then the games that make it up. */
+.fl-spot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  inline-size: 100%;
+}
+.fl-spot__art {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  /* 3:5 in the design, which is what lets the picture carry the screen. */
+  aspect-ratio: 3 / 5;
+  max-block-size: 320px;
+  overflow: hidden;
+}
+.fl-spot__art img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.fl-spot__wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(4 8 11 / 96%) 2%, rgb(4 8 11 / 0%) 58%);
+}
+.fl-spot__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: flex-start;
+  padding-inline: var(--space-16);
+  /* Pulled up over the foot of the picture, the way the design sets it — and
+     positioned, or it loses: the picture above it is positioned and paints
+     over everything static, which took the top off the label. */
+  position: relative;
+  margin-block-start: calc(var(--space-32) * -1);
+}
+.fl-spot__label {
+  display: flex;
+  align-items: center;
+  block-size: 22px;
+  padding-inline: var(--space-8);
+  border-radius: var(--radius-2);
+  background: var(--color-brand-primary);
+  color: #131415;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+}
+.fl-spot__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.28;
+}
+.fl-spot__body {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-s);
+  line-height: 1.5;
+}
+.fl-spot__row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-start;
+  inline-size: 100%;
+  padding-inline: var(--space-16);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-spot__row::-webkit-scrollbar {
+  display: none;
+}
+.fl-spot__tile {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 300px;
+}
+.fl-spot__shot {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-10);
+  overflow: hidden;
+}
+.fl-spot__shot img {
+  position: absolute;
+  inset: 0;
+  max-inline-size: none;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.fl-spot__stamp {
+  position: absolute;
+  inset-block-start: var(--space-8);
+  inset-inline-start: var(--space-8);
+  display: flex;
+  align-items: center;
+  block-size: 20px;
+  padding-inline: 6px;
+  border-radius: var(--radius-2);
+  background: #f8fafb;
+  color: #131415;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.fl-spot__name {
+  margin: var(--space-8) 0 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+}
+.fl-spot__meta {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+
+/* The page's section rule again: the spotlight runs its picture to both
+   edges, so it cannot take the 16 inset every other component takes. */
+.fl-page .fl-spot {
+  align-items: stretch;
+  gap: var(--space-16);
+  padding-inline: 0;
+}
+.fl-page .fl-live {
+  align-items: stretch;
+}

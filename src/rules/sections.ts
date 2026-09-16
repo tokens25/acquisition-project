@@ -37,6 +37,8 @@ export type SectionType =
   | 'dayRail'
   | 'cardStack'
   | 'cities'
+  | 'live'
+  | 'spotlight'
 
 export interface PageSection {
   /**
@@ -79,6 +81,8 @@ export const SECTION_TYPES: SectionType[] = [
   'dayRail',
   'cardStack',
   'cities',
+  'live',
+  'spotlight',
 ]
 
 /**
@@ -159,6 +163,16 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   citiesBody: 'cities',
   cityTabs: 'cities',
   cityTiles: 'cities',
+  liveTitle: 'live',
+  liveBody: 'live',
+  liveFieldLabel: 'live',
+  liveFieldValue: 'live',
+  liveCta: 'live',
+  liveTeams: 'live',
+  spotlightLabel: 'spotlight',
+  spotlightTitle: 'spotlight',
+  spotlightBody: 'spotlight',
+  spotlightTiles: 'spotlight',
 }
 
 /**
@@ -202,6 +216,8 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   dayRail: 'A date, and the games on it',
   cardStack: 'A stack of cards',
   cities: 'Eyebrow, heading, a line, tabs, and the places',
+  live: 'Heading, field, the teams, button',
+  spotlight: 'Picture, label, heading, a line, and the games',
 }
 
 /**
@@ -232,6 +248,8 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   dayRail: [25, 100, 100],
   cardStack: [100, 60, 100],
   cities: [40, 85, 100],
+  live: [80, 100, 60],
+  spotlight: [100, 70, 100],
 }
 
 /** The page as it ships, in the order node 708:173735 has it. */
@@ -273,6 +291,8 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   dayRail: 'Day schedule',
   cardStack: 'Feature cards',
   cities: 'Places',
+  live: "What's live",
+  spotlight: 'Spotlight',
 }
 
 /** The list this page is arranged into, or the one it has always had. */
