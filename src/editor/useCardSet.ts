@@ -213,7 +213,15 @@ export interface CardSetStore {
   /** Writes to the base tier, or to this context's override. */
   updateTier: (id: string, patch: TierPatch, scope?: Scope) => void
   /** Adds a plan, sold at every cadence, and returns its id. */
-  addTier: () => string
+  /**
+   * A new plan, belonging to the situation it was added from.
+   *
+   * The scope is not a nicety. A plan with no product on it is read everywhere
+   * as sold with all of them, and an offer with no market is a price in every
+   * country — so a plan added without one appears in every flow in the tool,
+   * which is never what pressing "Add a plan" inside one flow means.
+   */
+  addTier: (scope?: { market?: string; subscription?: string }) => string
   /** Removes a plan and everything priced against it. */
   removeTier: (id: string) => void
   /** Edits the offer pricing this tier at the current cadence, market and scope. */
@@ -306,9 +314,11 @@ export function useCardSet(): CardSetStore {
    * cadence the set carries, at what the plan above it costs, for the author to
    * price properly.
    */
-  const addTier = useCallback(() => {
+  const addTier = useCallback((scope?: { market?: string; subscription?: string }) => {
     const id = `tier-${Date.now().toString(36)}`
     setSet((prev) => {
+      const market = scope?.market || undefined
+      const subscription = scope?.subscription || undefined
       const last = prev.tiers[prev.tiers.length - 1]
       const tier: Tier = {
         id,
@@ -319,17 +329,29 @@ export function useCardSet(): CardSetStore {
         logoTotal: 0,
         highlighted: false,
         displayOrder: (last?.displayOrder ?? 0) + 10,
+        // The product this flow sells, so the plan does not turn up in the
+        // others. Absent when the flow is a market's general one, where the
+        // market on the prices below is what keeps it in its own country.
+        subscriptions: subscription ? [subscription] : undefined,
         status: 'live',
         channel: DIRECT,
         visibleToPartners: true,
         overrides: [],
       }
       const offers: CadenceOffer[] = prev.cadences.map((cadence) => {
-        const like = prev.offers.find((o) => o.tierId === last?.id && o.cadence === cadence)
+        // Priced like the plan beside it, which is nearly always closer than
+        // zero and is in this market's own currency.
+        const like = prev.offers.find(
+          (o) =>
+            o.tierId === last?.id &&
+            o.cadence === cadence &&
+            (o.market === undefined || o.market === market),
+        )
         return {
           id: `${id}-${cadence.toLowerCase()}`,
           tierId: id,
           cadence,
+          market,
           standardPrice: like?.standardPrice ?? 0,
           discount: false,
           introPrice: null,

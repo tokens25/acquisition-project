@@ -171,17 +171,28 @@ export function EditPanel({ store }: { store: CardSetStore }) {
    * flows built per market and channel, most of the set belongs to somewhere
    * else, and a row of plans this screen cannot show reads as a mistake.
    */
-  const sellable = useMemo(
-    () =>
-      new Set(
-        filterAcquirableTiers(set.tiers, {
-          market: context.market,
-          channel: context.channel,
-          subscription: context.subscription,
-        }).map((t) => t.id),
-      ),
-    [set.tiers, context.market, context.channel, context.subscription],
-  )
+  const sellable = useMemo(() => {
+    const priced = (t: { id: string }) => set.offers.filter((o) => o.tierId === t.id)
+    return new Set(
+      filterAcquirableTiers(set.tiers, {
+        market: context.market,
+        channel: context.channel,
+        subscription: context.subscription,
+      })
+        .filter((t) => {
+          /*
+           * A plan priced somewhere, but nowhere that could apply here, is a
+           * plan belonging to another market. A plan priced nowhere at all is
+           * a new one, and that is exactly the plan somebody needs to open in
+           * order to give it prices — so the two cases look alike and are not.
+           */
+          const rows = priced(t)
+          if (rows.length === 0) return true
+          return rows.some((o) => o.market === undefined || o.market === context.market)
+        })
+        .map((t) => t.id),
+    )
+  }, [set.tiers, set.offers, context.market, context.channel, context.subscription])
   const [showOthers, setShowOthers] = useState(false)
   const elsewhere = set.tiers.filter((t) => !sellable.has(t.id))
 
@@ -359,7 +370,11 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         <button
           type="button"
           className="ed-add"
-          onClick={() => setOpenTier(addTier())}
+          onClick={() =>
+            setOpenTier(
+              addTier({ market: context.market, subscription: context.subscription }),
+            )
+          }
         >
           Add a plan
         </button>
