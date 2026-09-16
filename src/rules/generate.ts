@@ -1,7 +1,7 @@
-import { channelById, marketById } from './catalogue'
+import { channelById, channelsFor, marketById } from './catalogue'
 import type { CadenceOffer, CardSet, Tier } from './content'
 import type { Journey, Step } from './journey'
-import { configuredJourneys } from './journeyConfig'
+import { configuredJourneys, hasChannelJourney, hasMarketJourney } from './journeyConfig'
 import type { FlowStructure } from './onboarding'
 import { structureKey } from './onboarding'
 import { writeFlow } from './layers'
@@ -265,6 +265,27 @@ function blankOffer(s: FlowStructure, tierId: string, cadence: string): CadenceO
   }
 }
 
+/**
+ * The plan-picker tabs a generated flow starts with: none.
+ *
+ * The shipped tabs are Standard and Ultimate, which are MSG+'s. Nothing in
+ * setup asks about tabs, so a market that gets its first flow from setup would
+ * otherwise inherit two tabs named for another product's plans, and its cards
+ * would sit under headings that mean nothing here.
+ *
+ * Only a market that has not yet taken its own tabs, and has no flow written
+ * into the codebase — the US has both, and MSG+'s tabs are the US's to keep.
+ * Tabs are a market's decision, not a flow's, so this is per market: a second
+ * flow set up in the same market finds the tabs the first one left.
+ */
+function tabsFor(set: CardSet, s: FlowStructure): Pick<CardSet, 'planTabsByMarket'> | {} {
+  if (set.planTabsByMarket?.[s.marketId] !== undefined) return {}
+  if (hasMarketJourney(s.marketId) || channelsFor(s.marketId).some((c) => hasChannelJourney(s.marketId, c.id))) {
+    return {}
+  }
+  return { planTabsByMarket: { ...(set.planTabsByMarket ?? {}), [s.marketId]: [] } }
+}
+
 /** What generating changed, so the tool can say it rather than imply it. */
 export interface GenerationReport {
   journeyId: string
@@ -364,6 +385,8 @@ export function generateFlow(set: CardSet, s: FlowStructure): Generated {
     }
   }
 
+  const firstToWrite = journey.steps.find((st) => st.renderer === 'plans')?.id ?? journey.steps[0].id
+
   return {
     set: {
       ...written,
@@ -379,12 +402,15 @@ export function generateFlow(set: CardSet, s: FlowStructure): Generated {
         },
       },
       journeyId: journey.id,
-      stepId: journey.steps[0].id,
+      // The cards, not the first screen: they are the part with the most to
+      // write, and the part setup has just made empty slots for.
+      stepId: firstToWrite,
       context: { ...set.context, market: s.marketId, subscription: s.channelId },
+      ...tabsFor(written, s),
     },
     report: {
       journeyId: journey.id,
-      firstStepId: journey.steps[0].id,
+      firstStepId: firstToWrite,
       plansAdded: wanted.length - existing.size,
       plansRemoved: dropped.length,
       plansKept: existing.size,

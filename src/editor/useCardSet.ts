@@ -75,7 +75,15 @@ function hydrate(raw: unknown): CardSet {
  */
 function withTab(set: CardSet): CardSet {
   const tabs = tabsOf(set)
-  if (!tabs.length) return set
+  if (!tabs.length) {
+    // No tabs is one screen with nothing dividing it, and a context still
+    // naming a tab from a market that had them would scope edits to a tab
+    // this market cannot show.
+    if (set.context.tab === undefined) return set
+    const rest = { ...set.context }
+    delete rest.tab
+    return { ...set, context: rest }
+  }
   if (tabs.some((t) => t.id === set.context.tab)) return set
   return { ...set, context: { ...set.context, tab: tabs[0].id } }
 }

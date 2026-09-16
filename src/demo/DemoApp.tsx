@@ -738,6 +738,10 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                      applies the difference rather than starting again. */
                   store.updateSet(generateFlow(store.set, draft).set)
                   setSetupOpen(false)
+                  // Straight into the panel, on the cards: the button said
+                  // "add content", so the next screen is where content is
+                  // added, not a row of frames and a menu to find it from.
+                  setEditing(true)
                 }}
                 onClose={() => setSetupOpen(false)}
               />
