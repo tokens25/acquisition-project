@@ -1,4 +1,4 @@
-// url=https://www.figma.com/design/xJRgzIz9zjvRKTMIqnifEy/%F0%9F%9A%80-Acquisition-for-ai?node-id=13-40201
+// url=https://www.figma.com/design/xJRgzIz9zjvRKTMIqnifEy/%F0%9F%93%8D-DAZN-Lab?node-id=520-108890
 // source=src/components/acquisition/Pricing.tsx
 // component=Pricing
 import figma from 'figma'

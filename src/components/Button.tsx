@@ -5,7 +5,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 /**
  * CTA button used by the Acquisition card.
  * Mirrors the DS `Button/CTA` appearances the section needs:
- * `subscribe` (gold gradient, Ultimate plans), `primary` (white) and
+ * `subscribe` (gold gradient, the highlighted plan), `primary` (white) and
  * `tertiary` (transparent, used for the card footer link).
  */
 export type ButtonAppearance = 'primary' | 'secondary' | 'subscribe' | 'tertiary'

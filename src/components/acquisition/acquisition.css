@@ -17,7 +17,7 @@
   overflow: hidden;
   border-radius: var(--radius-18);
   /* The edge is an inset shadow, not a border: 1 on a plain card, 2 on the
-     Ultimate one. Figma draws it inside the frame without taking layout, so a
+     highlighted one. Figma draws it inside the frame without taking layout, so a
      card measures 280 with 240 of content; a real border ate 4 of that and
      left the five 44px logo tiles unable to sit on their 49 pitch.
 
@@ -46,8 +46,8 @@
 .acq-card[data-device='xl'] {
   max-inline-size: 384px;
 }
-/* Ultimate — the flagship plan carries the gold edge. */
-.acq-card[data-ultimate] {
+/* Highlighted — the promoted plan carries the gold edge. */
+.acq-card[data-highlighted] {
   box-shadow: inset 0 0 0 var(--border-2) var(--color-brand-tertiary);
 }
 
@@ -120,8 +120,8 @@
 .acq-card-header[data-device='xl'] .acq-card-header__title {
   font-size: var(--font-size-heading-h5);
 }
-/* Ultimate plans paint the title with the subscribe gold gradient. */
-.acq-card-header__title[data-ultimate] {
+/* The highlighted plan paints its title with the subscribe gold gradient. */
+.acq-card-header__title[data-highlighted] {
   background: var(--gradient-subscribe);
   -webkit-background-clip: text;
   background-clip: text;

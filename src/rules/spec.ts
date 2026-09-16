@@ -25,7 +25,7 @@ export const CARD_FIELDS: FieldSpec[] = [
   { key: 'standardPrice', label: 'Standard price', source: 'authored', note: 'Number + currency, not a formatted string' },
   { key: 'introPrice', label: 'Intro price', source: 'authored', note: 'Primary price while Discount is on' },
   { key: 'logos', label: 'Competition logos', source: 'authored', note: 'CMS order, never sorted client-side' },
-  { key: 'ultimate', label: 'Ultimate', source: 'authored', note: 'Switch — drives 4 outputs' },
+  { key: 'highlighted', label: 'Highlighted', source: 'authored', note: 'Switch — drives 4 outputs' },
   { key: 'discount', label: 'Discount', source: 'authored', note: 'Switch — drives 5 outputs' },
 
   { key: 'explainer', label: 'Price explainer', source: 'derived', note: 'Repeats standardPrice — one number, two positions' },
@@ -38,7 +38,7 @@ export const CARD_FIELDS: FieldSpec[] = [
   { key: 'logoRows', label: 'Logo rows', source: 'derived', note: '1 if add-on present, else 2' },
 
   { key: 'priceCaption', label: '"Starts at"', source: 'static', note: 'Shown when Discount = true' },
-  { key: 'badge', label: '"BEST EXPERIENCE"', source: 'static', note: 'Badge, Ultimate only' },
+  { key: 'badge', label: '"BEST EXPERIENCE"', source: 'static', note: 'Badge, highlighted plan only' },
   { key: 'footer', label: '"All features & content"', source: 'static', note: 'Footer, always present' },
 ]
 

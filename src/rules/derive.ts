@@ -128,7 +128,7 @@ export interface DerivedLogo {
 }
 
 export interface DerivedCard {
-  /* §3 Ultimate — one switch, four outputs */
+  /* §3 Highlighted — one switch, four outputs */
   showBadge: boolean
   badgeText: string | null
   ctaAppearance: 'subscribe' | 'primary'
@@ -270,18 +270,18 @@ export function deriveCard(
     return { id, iconId: r.entry.iconId, text: r.entry.text, state: r.state }
   })
 
-  const { ultimate } = tier
+  const { highlighted } = tier
   const { discount, standardPrice, introPrice } = offer
   const annualSaving = discount && introPrice !== null
     ? Math.max(0, standardPrice - introPrice) * 12
     : 0
 
   return {
-    showBadge: ultimate,
+    showBadge: highlighted,
     // Whether a badge shows is still the switch's call; what it says is
     // authored. An empty field falls back rather than rendering a blank ribbon.
-    badgeText: ultimate ? (tier.badge?.trim() || plans?.badge?.trim() || STATIC.badge) : null,
-    ctaAppearance: ultimate ? 'subscribe' : 'primary',
+    badgeText: highlighted ? (tier.badge?.trim() || plans?.badge?.trim() || STATIC.badge) : null,
+    ctaAppearance: highlighted ? 'subscribe' : 'primary',
 
     // Always. The tiles carry "Starts at" above an undiscounted price too —
     // it says the price is a floor, which is true whether or not an intro

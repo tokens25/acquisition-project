@@ -1,4 +1,4 @@
-// url=https://www.figma.com/design/xJRgzIz9zjvRKTMIqnifEy/%F0%9F%9A%80-Acquisition-for-ai?node-id=29-40476
+// url=https://www.figma.com/design/xJRgzIz9zjvRKTMIqnifEy/%F0%9F%93%8D-DAZN-Lab?node-id=520-108859
 // source=src/components/acquisition/CardHeader.tsx
 // component=CardHeader
 import figma from 'figma'
@@ -10,13 +10,13 @@ const device = instance.getEnum('Device', {
   Desktop: 'desktop',
   'Extra big': 'xl',
 })
-const ultimate = instance.getBoolean('Ultimate')
+const highlighted = instance.getBoolean('Highlighted')
 
 export default {
   example: figma.code`<CardHeader
   title={plan.title}
   description={plan.description}
-  device="${device}"${ultimate ? '\n  ultimate' : ''}
+  device="${device}"${highlighted ? '\n  highlighted' : ''}
 />`,
   imports: ['import { CardHeader } from "./components/acquisition"'],
   id: 'acquisition-card-header',

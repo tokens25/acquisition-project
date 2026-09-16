@@ -83,7 +83,7 @@ export function RuledCard({
           title: d.headerText,
           description: tier.description,
           ctaLabel: d.ctaLabel,
-          ultimate: tier.ultimate,
+          highlighted: tier.highlighted,
           competitions: d.allLogos.map((l) => ({
             id: l.id,
             name: l.name,
@@ -102,7 +102,7 @@ export function RuledCard({
   return (
     <AcquisitionCard
       device={device}
-      ultimate={tier.ultimate}
+      highlighted={tier.highlighted}
       eyebrow={d.badgeText ?? undefined}
       title={d.headerText}
       description={tier.description}

@@ -228,8 +228,20 @@ export function allContexts(set: CardSet): Context[] {
   return out
 }
 
-export function findOverride(tier: Tier, context: Context): Override | undefined {
+/**
+ * The override a write with this selector belongs to, if there is one.
+ *
+ * Matched on the whole selector, tab included. Matching on the market alone
+ * was near enough while nothing was ever written per tab: now that the panel
+ * always names one, it would hand an edit made on Ultimate to the override
+ * Standard is written in, and the two tabs would quietly share a value they
+ * are meant to be able to differ on.
+ */
+export function findOverride(tier: Tier, when: Override['when']): Override | undefined {
   return tier.overrides.find(
-    (o) => o.when.market === context.market && o.when.campaign === context.campaign,
+    (o) =>
+      o.when.market === when.market &&
+      o.when.campaign === when.campaign &&
+      o.when.tab === when.tab,
   )
 }

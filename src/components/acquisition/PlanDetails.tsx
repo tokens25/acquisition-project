@@ -30,7 +30,7 @@ export interface PlanDetailsProps {
   description: string
   /** The card's own CTA copy, so the two cannot disagree. */
   ctaLabel: string
-  ultimate?: boolean
+  highlighted?: boolean
   competitions: PlanDetailsCompetition[]
   features: PlanDetailsFeature[]
   /**
@@ -89,7 +89,7 @@ export function PlanDetails({
   title,
   description,
   ctaLabel,
-  ultimate = false,
+  highlighted = false,
   competitions,
   features,
   anchor,
@@ -311,7 +311,7 @@ export function PlanDetails({
         </div>
 
         <footer className="acq-details__footer">
-          <Button appearance={ultimate ? 'subscribe' : 'primary'} size="lg" block>
+          <Button appearance={highlighted ? 'subscribe' : 'primary'} size="lg" block>
             {ctaLabel}
           </Button>
         </footer>

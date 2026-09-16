@@ -27,15 +27,15 @@ export interface ContextResult {
 export const contextLabel = (c: Context) =>
   [c.market, c.subscription, c.channel, c.cadence, c.campaign].filter(Boolean).join(' · ')
 
-/** S-1 · Max one Ultimate per set. Zero is valid. */
+/** S-1 · Max one highlighted plan per set. Zero is valid. */
 function checkS1(tiers: Tier[]): Violation[] {
-  const ultimates = tiers.filter((t) => t.ultimate)
-  if (ultimates.length <= 1) return []
+  const highlighted = tiers.filter((t) => t.highlighted)
+  if (highlighted.length <= 1) return []
   return [
     {
       rule: 'S-1',
       severity: 'error',
-      message: `${ultimates.length} Ultimate tiers — only one is allowed. Two gold-stroked cards cancel the signal out.`,
+      message: `${highlighted.length} highlighted plans — only one is allowed. Two gold-stroked cards cancel the signal out.`,
     },
   ]
 }

@@ -309,8 +309,8 @@ function TierFields({ tier, store }: { tier: Tier; store: CardSetStore }) {
         <CheckField
           label="Ultimate treatment"
           hint="Gold stroke, badge, gold plan name and gold CTA — max one per set (S-1)."
-          checked={resolved.ultimate}
-          onChange={(v) => patch({ ultimate: v })}
+          checked={resolved.highlighted}
+          onChange={(v) => patch({ highlighted: v })}
         />
       </FieldGroup>
 

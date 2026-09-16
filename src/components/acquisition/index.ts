@@ -2,7 +2,7 @@ export { AcquisitionCard, type AcquisitionCardProps } from './AcquisitionCard'
 export { AddOn, type AddOnProps, type AddOnType } from './AddOn'
 export { CardHeader, type CardHeaderProps } from './CardHeader'
 export { Feature, FeaturesList, type FeatureProps, type FeaturesListProps } from './Features'
-export { LogoTiles, type LogoTilesProps, type PlanLogo } from './LogoTiles'
+export { LogoTile, LogoTiles, type LogoTilesProps, type PlanLogo } from './LogoTiles'
 export { PlanCta, type PlanCtaProps } from './PlanCta'
 export {
   PlanDetails,

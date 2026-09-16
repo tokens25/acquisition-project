@@ -21,7 +21,7 @@ export interface AcquisitionCardProps {
   onMore?: () => void
 
   /** Gold border, gold gradient title and gold CTA. */
-  ultimate?: boolean
+  highlighted?: boolean
   /** Corner eyebrow copy. Omit for none. */
   eyebrow?: string
 
@@ -69,7 +69,7 @@ export function AcquisitionCard({
   description,
   descriptionLines = 1,
   onMore,
-  ultimate = false,
+  highlighted = false,
   eyebrow,
   pricing,
   ctaLabel,
@@ -91,7 +91,7 @@ export function AcquisitionCard({
   return (
     <article
       className={['acq-card', className].filter(Boolean).join(' ')}
-      data-ultimate={ultimate || undefined}
+      data-highlighted={highlighted || undefined}
       data-device={device}
       data-selected={selected || undefined}
       onClick={onSelect}
@@ -109,7 +109,7 @@ export function AcquisitionCard({
           description={description}
           descriptionLines={descriptionLines}
           onMore={onMore}
-          ultimate={ultimate}
+          highlighted={highlighted}
           device={device}
         />
 
@@ -119,7 +119,7 @@ export function AcquisitionCard({
 
         <PlanCta
           label={ctaLabel}
-          ultimate={ultimate}
+          highlighted={highlighted}
           discount={discount}
           discountLabel={discountLabel}
           reserveDiscount={reserveDiscount}

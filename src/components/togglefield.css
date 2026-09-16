@@ -31,7 +31,7 @@
   font-size: var(--font-size-button-lg);
 }
 /* Brand gradient, right to left as the component's transform specifies. */
-.tg__label[data-tone='ultimate'] {
+.tg__label[data-tone='highlighted'] {
   background-image: linear-gradient(
     to left,
     var(--color-brand-tertiary),

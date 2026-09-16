@@ -436,16 +436,16 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           pipelineKey={tierKey(tier.id, 'badge')}
           onChange={(v) => patchTier({ badge: v })}
           helpText={
-            resolved.ultimate
+            resolved.highlighted
               ? `Empty falls back to “${STATIC.badge}”.`
               : 'Only shows on the highlighted tier.'
           }
         />
         <ToggleField
           label="Highlighted Tier"
-          tone="ultimate"
-          checked={resolved.ultimate}
-          onChange={(v) => updateTier(tier.id, { ultimate: v })}
+          tone="highlighted"
+          checked={resolved.highlighted}
+          onChange={(v) => updateTier(tier.id, { highlighted: v })}
         />
         {/* Which tabs the card appears under. Nothing ticked means every tab:
             a plan that is on no tab is sold nowhere, which is what removing it

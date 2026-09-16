@@ -8,8 +8,8 @@ import type { Device } from './types'
 export interface PlanCtaProps {
   /** CTA copy, e.g. "Get Ultimate". */
   label: string
-  /** Figma `Ultimate` — gold gradient CTA instead of the white one. */
-  ultimate?: boolean
+  /** Figma `Highlighted` — gold gradient CTA instead of the white one. */
+  highlighted?: boolean
   /** Figma `Discount` — shows the green savings eyebrow above the button. */
   discount?: boolean
   /** Eyebrow copy, only rendered when `discount` is set. */
@@ -30,11 +30,11 @@ export interface PlanCtaProps {
 
 /**
  * PlanCta — the plan's call to action with an optional savings eyebrow tucked
- * behind its top edge. Figma: `ButtonLabelEyebrow` (Ultimate × Discount × Device).
+ * behind its top edge. Figma: `.PlanCta` (Highlighted × Device).
  */
 export function PlanCta({
   label,
-  ultimate = false,
+  highlighted = false,
   discount = false,
   discountLabel = 'Save up to €{xx} /year',
   reserveDiscount = false,
@@ -58,7 +58,7 @@ export function PlanCta({
         {/* Figma CTA/1 draws the 40 button on the 280 card and the 48 one
             on the wider ones. */}
         <Button
-          appearance={ultimate ? 'subscribe' : 'primary'}
+          appearance={highlighted ? 'subscribe' : 'primary'}
           size={device === 'mobile' ? 'md' : 'lg'}
           block
           onClick={onClick}

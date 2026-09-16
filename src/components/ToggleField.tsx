@@ -29,8 +29,8 @@ export function ToggleField({
   label: ReactNode
   checked: boolean
   onChange: (checked: boolean) => void
-  /** `ultimate` paints the label in the brand gradient; `success` in green. */
-  tone?: 'default' | 'ultimate' | 'success'
+  /** `highlighted` paints the label in the brand gradient; `success` in green. */
+  tone?: 'default' | 'highlighted' | 'success'
   hint?: ReactNode
   leading?: ReactNode
   /**

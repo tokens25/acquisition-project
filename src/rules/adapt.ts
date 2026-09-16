@@ -185,7 +185,7 @@ export function adaptEngineContent(input: EngineContent): AdaptResult {
     // Their schema has no total; without one there is no overflow tile, which is
     // the honest reading of "we only know about the ones listed".
     logoTotal: (t.logoTiles ?? []).length,
-    ultimate: t.ultimate === true,
+    highlighted: t.ultimate === true,
     displayOrder: t.displayOrder ?? 0,
     status: String(t.status).toLowerCase() === 'legacy' ? 'legacy' : 'live',
     channel: t.channel || DIRECT,

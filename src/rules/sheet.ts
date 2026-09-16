@@ -88,7 +88,7 @@ export function readTemplate(sheets: SheetRows): SheetImport {
       planName: at(row, tierCols, 'plan_name'),
       description: at(row, tierCols, 'description'),
       features: list(at(row, tierCols, 'features')),
-      ultimate: bool(at(row, tierCols, 'ultimate')),
+      highlighted: bool(at(row, tierCols, 'ultimate')),
       logoTiles: list(at(row, tierCols, 'logo_tiles')),
       displayOrder: order ?? tiers.length + 1,
       status: at(row, tierCols, 'status').toLowerCase() || 'live',

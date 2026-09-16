@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import type { Device } from './types'
 
 export interface CardHeaderProps {
-  /** Plan Name. Painted with the gold gradient when `ultimate` is set. */
+  /** Plan Name. Painted with the gold gradient when `highlighted` is set. */
   title: string
   /** Full description — never pre-truncated by the author. */
   description: string
@@ -12,8 +12,8 @@ export interface CardHeaderProps {
   descriptionLines?: 1 | 2
   /** Opens the "All features & content" modal. */
   onMore?: () => void
-  /** Figma `Ultimate` — gold gradient title instead of the plain white one. */
-  ultimate?: boolean
+  /** Figma `Highlighted` — gold gradient title instead of the plain white one. */
+  highlighted?: boolean
   device?: Device
 }
 
@@ -21,7 +21,7 @@ const SUFFIX = ' … more'
 
 /**
  * CardHeader — Plan Name + description.
- * Figma: `CardHeader` (Device × Ultimate).
+ * Figma: `.CardHeader` (Device × Highlighted).
  *
  * The description is capped at the set's shared line budget and the trailing
  * "… more" sits inline at the end of the last line. That rules out CSS
@@ -37,7 +37,7 @@ export function CardHeader({
   description,
   descriptionLines = 1,
   onMore,
-  ultimate = false,
+  highlighted = false,
   device = 'desktop',
 }: CardHeaderProps) {
   const boxRef = useRef<HTMLParagraphElement>(null)
@@ -92,7 +92,7 @@ export function CardHeader({
 
   return (
     <header className="acq-card-header" data-device={device}>
-      <h3 className="acq-card-header__title" data-ultimate={ultimate || undefined}>
+      <h3 className="acq-card-header__title" data-highlighted={highlighted || undefined}>
         {title}
       </h3>
       <p className="acq-card-header__description" ref={boxRef}>

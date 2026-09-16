@@ -110,7 +110,15 @@ export interface Tier {
    * and which one matters depends on whether the competitions are the draw.
    */
   logoOverflow?: 'count' | 'logo'
-  ultimate: boolean
+  /**
+   * The promoted plan — Figma `Highlighted`.
+   *
+   * One switch with four outputs: the gold edge, the gold title, the gold
+   * button and the badge. Named for what it means rather than for the plan
+   * that usually carries it: a set can highlight Standard, and calling that
+   * switch `ultimate` made the card lie about which plan it was.
+   */
+  highlighted: boolean
   /**
    * Which tabs of the plan picker this tier appears under.
    *
@@ -243,7 +251,7 @@ export interface TierPatch {
   logoTotal?: number
   logoRows?: 1 | 2
   logoOverflow?: 'count' | 'logo'
-  ultimate?: boolean
+  highlighted?: boolean
   tabs?: string[]
   badge?: string
   descriptionSource?: Tier['descriptionSource']

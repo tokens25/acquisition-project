@@ -11,7 +11,8 @@ import { readWorkbook } from '../rules/xlsx'
 import type { Journey } from '../rules/journey'
 import { applyStepOrder, chosenJourney, isReordered } from '../rules/journey'
 import { allJourneys } from '../rules/generate'
-import { findOverride, resolveOffer } from '../rules/resolve'
+import { tabsOf } from '../rules/tabs'
+import { findOverride, matches, resolveOffer } from '../rules/resolve'
 import type { RemoteState } from './remote'
 import { loadRemote, publishRemote } from './remote'
 
@@ -55,7 +56,7 @@ function hydrate(raw: unknown): CardSet {
     ...defaultSet,
     ...input,
     context: { ...defaultSet.context, ...input.context },
-    tiers: input.tiers.map((t) => ({ ...t, overrides: t.overrides ?? [] })),
+    tiers: input.tiers.map((t) => ({ ...t, ...renamedSwitch(t), overrides: t.overrides ?? [] })),
     logoCatalog: withShippedBlurbs(input.logoCatalog),
     // A screen the saved copy predates. Saved work never reseeds, so content
     // stored before a screen existed would carry a hole where its words go,
@@ -63,6 +64,23 @@ function hydrate(raw: unknown): CardSet {
     // screen, so anything a person wrote wins over the shipped default.
     flow: mergeFlow(input.flow),
   }
+}
+
+/**
+ * `ultimate` was the old name for `highlighted`.
+ *
+ * The switch never changed — one boolean, four gold outputs — only what it is
+ * called, so that a set highlighting Standard stops describing it as the
+ * Ultimate one. Everything already saved says `ultimate`, and reading it as
+ * nothing would quietly un-highlight every plan in every browser and in the
+ * published file. A saved `highlighted` wins, because that is the newer of the
+ * two; the old key is left where it is rather than deleted, so a file written
+ * here still opens in a deployment that has not shipped this yet.
+ */
+function renamedSwitch(tier: unknown): { highlighted?: boolean } {
+  const t = tier as { highlighted?: unknown; ultimate?: unknown }
+  if (typeof t.highlighted === 'boolean') return {}
+  return typeof t.ultimate === 'boolean' ? { highlighted: t.ultimate } : {}
 }
 
 /**
@@ -238,6 +256,31 @@ export function useCardSet(): CardSetStore {
   const context = set.context
   const editingBase = isBaseContext(context)
 
+  /*
+   * A tab is always on screen, so one is always in the context.
+   *
+   * The panel scopes an edit to the tab it says it is editing, falling back to
+   * the first when the context names none. An override written for a tab is
+   * only read back by a context on that tab — so with no tab in the context
+   * the write landed somewhere nothing could see it, and the field sprang
+   * back to its old value as though the click had not happened. It had; it was
+   * filed under a tab nobody was on.
+   *
+   * Settled here rather than in the panel because the preview reads the same
+   * context, and the two disagreeing about which tab is showing is the bug
+   * itself rather than a symptom of it.
+   */
+  useEffect(() => {
+    const tabs = tabsOf(set)
+    if (!tabs.length) return
+    if (tabs.some((t) => t.id === set.context.tab)) return
+    setSet((prev) => {
+      const here = tabsOf(prev)
+      if (!here.length || here.some((t) => t.id === prev.context.tab)) return prev
+      return { ...prev, context: { ...prev.context, tab: here[0].id } }
+    })
+  }, [set])
+
   const setContext = useCallback((next: Context) => {
     setSet((prev) => {
       // A partner storefront belongs to its markets. Carrying `movistar` into
@@ -274,7 +317,7 @@ export function useCardSet(): CardSetStore {
         features: [],
         logoTiles: [],
         logoTotal: 0,
-        ultimate: false,
+        highlighted: false,
         displayOrder: (last?.displayOrder ?? 0) + 10,
         status: 'live',
         channel: DIRECT,
@@ -333,7 +376,7 @@ export function useCardSet(): CardSetStore {
         ...withdrawn(prev),
         tiers: prev.tiers.map((t) => {
           if (t.id !== id) return t
-          const existing = findOverride(t, ctx)
+          const existing = findOverride(t, when)
           if (existing) {
             return {
               ...t,
@@ -397,12 +440,20 @@ export function useCardSet(): CardSetStore {
   const overriddenKeys = useCallback(
     (tier: Tier) => {
       if (editingBase) return []
-      const existing = findOverride(tier, context)
-      return existing
-        ? Object.entries(existing.patch)
-            .filter(([, v]) => v !== undefined)
-            .map(([k]) => k)
-        : []
+      // Every override that applies here, not just the market's: a field
+      // written for this tab is written for this situation too, and marking
+      // only one of the two left the other looking untouched.
+      return [
+        ...new Set(
+          tier.overrides
+            .filter((o) => matches(o, context))
+            .flatMap((o) =>
+              Object.entries(o.patch)
+                .filter(([, v]) => v !== undefined)
+                .map(([k]) => k),
+            ),
+        ),
+      ]
     },
     [context, editingBase],
   )

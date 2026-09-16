@@ -33,7 +33,7 @@
   background: var(--color-surface-inverse);
   color: var(--color-text-inverse);
 }
-/* Gold gradient CTA — Ultimate plans (Dazn/subscribe-gold) */
+/* Gold gradient CTA — the highlighted plan (Dazn/subscribe-gold) */
 .dazn-btn--subscribe {
   background: var(--gradient-subscribe);
   color: var(--color-on-brand-gold);

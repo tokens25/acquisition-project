@@ -1,4 +1,4 @@
-// url=https://www.figma.com/design/xJRgzIz9zjvRKTMIqnifEy/%F0%9F%9A%80-Acquisition-for-ai?node-id=1-25486
+// url=https://www.figma.com/design/xJRgzIz9zjvRKTMIqnifEy/%F0%9F%93%8D-DAZN-Lab?node-id=520-108928
 // source=src/components/acquisition/PlanCta.tsx
 // component=PlanCta
 import figma from 'figma'
@@ -9,7 +9,7 @@ const device = instance.getEnum('Device', {
   Mobile: 'mobile',
   Desktop: 'desktop',
 })
-const ultimate = instance.getBoolean('Ultimate')
+const highlighted = instance.getBoolean('Highlighted')
 // The Figma variant name is spelled "Ture" — map both so either publishes.
 const discount = instance.getEnum('Discount', {
   Ture: true,
@@ -19,7 +19,7 @@ const discount = instance.getEnum('Discount', {
 
 export default {
   example: figma.code`<PlanCta
-  label={\`Get \${plan.name}\`}${ultimate ? '\n  ultimate' : ''}${discount ? '\n  discount' : ''}
+  label={\`Get \${plan.name}\`}${highlighted ? '\n  highlighted' : ''}${discount ? '\n  discount' : ''}
   device="${device}"
 />`,
   imports: ['import { PlanCta } from "./components/acquisition"'],
