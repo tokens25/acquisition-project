@@ -134,6 +134,20 @@ export interface Tier {
    */
   logoOverflow?: 'count' | 'logo'
   /**
+   * Whether the line above the price is drawn — Figma's "Starts at".
+   *
+   * A switch on the plan rather than on the screen, because a set can carry
+   * one plan whose price is a starting point and another whose price is the
+   * price. Absent means it is drawn: every plan written before this could be
+   * turned off was written expecting it.
+   *
+   * What the line says is still the screen's to write — one plan saying
+   * "Starts at" beside another saying "From" is a set contradicting itself
+   * about what a price is.
+   */
+  startsAt?: boolean
+
+  /**
    * The promoted plan — Figma `Highlighted`.
    *
    * One switch with four outputs: the gold edge, the gold title, the gold
@@ -275,6 +289,7 @@ export interface TierPatch {
   logoRows?: 1 | 2
   logoOverflow?: 'count' | 'logo'
   highlighted?: boolean
+  startsAt?: boolean
   tabs?: string[]
   badge?: string
   descriptionSource?: Tier['descriptionSource']

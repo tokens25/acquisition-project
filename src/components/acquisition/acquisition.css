@@ -861,3 +861,17 @@ button.acq-feature__info:hover {
   max-inline-size: calc(100% - 2 * var(--space-16));
   block-size: 600px;
 }
+
+/* A line's worth of room where a plan has turned "Starts at" off, so its
+   price and its button stay level with the cards beside it. */
+.acq-pricing__caption[data-reserved] {
+  visibility: hidden;
+}
+
+/* ── The highlighted plan's gold reaches its feature icons ──
+   The glyphs paint with currentColor, so this is the colour of the row rather
+   than a second set of icons. The words stay white: gold text down the whole
+   list would be a card shouting rather than a plan being recommended. */
+.acq-card[data-highlighted] .acq-feature > .dazn-icon {
+  color: var(--color-brand-secondary);
+}

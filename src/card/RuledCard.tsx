@@ -31,6 +31,8 @@ export interface RuledCardProps {
   reserveDiscount?: boolean
   /** And does any of them explain its price? */
   reserveExtraInfo?: boolean
+  /** A card beside this one says "Starts at", so this one keeps its line. */
+  reserveCaption?: boolean
   selected?: boolean
   onSelect?: () => void
 }
@@ -68,6 +70,7 @@ export function RuledCard({
   detailsBlocked = false,
   reserveDiscount = false,
   reserveExtraInfo = false,
+  reserveCaption = false,
   selected,
   onSelect,
 }: RuledCardProps) {
@@ -124,6 +127,7 @@ export function RuledCard({
         installment: d.priceUnit,
         extraInfo: d.explainer ?? undefined,
         reserveExtraInfo,
+        reserveCaption,
       }}
       ctaLabel={d.ctaLabel}
       discount={offer.discount}

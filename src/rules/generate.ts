@@ -226,8 +226,9 @@ function blankTier(s: FlowStructure, index: number): Tier {
     logoTotal: logos.length,
     logoRows: s.card.logos ? s.card.logoRows : undefined,
     logoOverflow: s.card.logos ? s.card.logoOverflow : undefined,
-    // The highlighted plan is the one carrying the badge, which is the
-    // Ultimate switch's job. Nothing else about it is decided here.
+    startsAt: s.card.startsAt,
+    // The highlighted plan is the one carrying the badge. Nothing else about
+    // it is decided here.
     highlighted: s.plans.highlighted === index,
     displayOrder: index,
     // Only this product sells these plans. Without it a FIBA plan would be on
@@ -304,6 +305,7 @@ export function generateFlow(set: CardSet, s: FlowStructure): Generated {
       // The structure owns these three and nothing else. The words stay put.
       logoRows: s.card.logos ? s.card.logoRows : undefined,
       logoOverflow: s.card.logos ? s.card.logoOverflow : undefined,
+      startsAt: s.card.startsAt,
       highlighted: s.plans.highlighted === i,
       displayOrder: i,
     }

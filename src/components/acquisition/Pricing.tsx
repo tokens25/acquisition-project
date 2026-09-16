@@ -22,6 +22,15 @@ export interface PricingProps {
    * with more to say.
    */
   reserveExtraInfo?: boolean
+  /**
+   * Keep the caption's line though this plan has none.
+   *
+   * Set by the row when any card in it says "Starts at". Without it, turning
+   * the line off on one plan lifts that card's price, its button and
+   * everything under them a line clear of the cards beside it — which reads as
+   * a broken row rather than as one plan having less to say.
+   */
+  reserveCaption?: boolean
   device?: Device
 }
 
@@ -36,12 +45,22 @@ export function Pricing({
   installment = 'month',
   extraInfo,
   reserveExtraInfo = false,
+  reserveCaption = false,
   device = 'desktop',
 }: PricingProps) {
   const reserving = !extraInfo && reserveExtraInfo
+  const holdingCaption = !caption && reserveCaption
   return (
     <div className="acq-pricing" data-device={device}>
-      {caption && <p className="acq-pricing__caption">{caption}</p>}
+      {(caption || holdingCaption) && (
+        <p
+          className="acq-pricing__caption"
+          data-reserved={holdingCaption || undefined}
+          aria-hidden={holdingCaption || undefined}
+        >
+          {caption || '\u00a0'}
+        </p>
+      )}
       <p className="acq-pricing__row">
         <span className="acq-pricing__price">{price}</span>
         {crossedPrice && <s className="acq-pricing__crossed">{crossedPrice}</s>}

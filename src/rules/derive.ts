@@ -318,7 +318,10 @@ export function deriveCard(
     // Always. The tiles carry "Starts at" above an undiscounted price too —
     // it says the price is a floor, which is true whether or not an intro
     // offer is running.
-    priceCaption: plans?.priceCaption?.trim() || STATIC.priceCaption,
+    // Absent means drawn: a plan written before the switch existed was
+    // written expecting the line.
+    priceCaption:
+      tier.startsAt === false ? null : plans?.priceCaption?.trim() || STATIC.priceCaption,
     primaryPrice: money(discount && introPrice !== null ? introPrice : standardPrice),
     struckPrice: discount ? money(standardPrice) : null,
     showExplainer: discount,

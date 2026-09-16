@@ -96,7 +96,17 @@ export function PlanDetails({
   scope = 'card',
   onClose,
 }: PlanDetailsProps) {
+  /*
+   * Two lists, or one.
+   *
+   * A plan with no competitions has nothing behind a Content tab, so the tabs
+   * are two controls where one of them leads to "No competitions on this plan
+   * yet" — a choice offered between something and nothing. The dialog shows
+   * the one list it has instead, without a control to switch away from it.
+   */
+  const both = competitions.length > 0 && features.length > 0
   const [tab, setTab] = useState<'content' | 'features'>('content')
+  const showing = both ? tab : competitions.length > 0 ? 'content' : 'features'
   const headingId = useId()
   const closeRef = useRef<HTMLButtonElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -251,6 +261,7 @@ export function PlanDetails({
               <p className="acq-details__description">{description}</p>
             </div>
 
+            {both && (
             <div className="acq-details__tabs" role="tablist" aria-label="Plan details">
               <button
                 type="button"
@@ -273,12 +284,13 @@ export function PlanDetails({
                 Features
               </button>
             </div>
+            )}
           </div>
 
           {/* The list is the only thing that scrolls — the plan's name, its
               description and the tabs stay put, and the list runs under the
               pinned button exactly as the design draws it. */}
-          {tab === 'content' ? (
+          {showing === 'content' ? (
             <ul className="acq-details__list">
               {competitions.map((c) => (
                 <li className="acq-details__row" key={c.id}>

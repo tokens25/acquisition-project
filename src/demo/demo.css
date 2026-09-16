@@ -1310,6 +1310,7 @@
 .demo__preview .acq-card[data-tier-id] .acq-card__eyebrow,
 .demo__preview .acq-card[data-tier-id] .acq-card-header__title,
 .demo__preview .acq-card[data-tier-id] .acq-card-header__description,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__caption,
 .demo__preview .acq-card[data-tier-id] .acq-pricing__price,
 .demo__preview .acq-card[data-tier-id] .acq-pricing__crossed,
 .demo__preview .acq-card[data-tier-id] .acq-pricing__installment,
@@ -1321,6 +1322,7 @@
 }
 .demo__preview .acq-card[data-tier-id] .acq-card-header__title:hover,
 .demo__preview .acq-card[data-tier-id] .acq-card-header__description:hover,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__caption:hover,
 .demo__preview .acq-card[data-tier-id] .acq-pricing__price:hover,
 .demo__preview .acq-card[data-tier-id] .acq-pricing__installment:hover,
 .demo__preview .acq-card[data-tier-id] .acq-pricing__extra:hover,

@@ -570,6 +570,18 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             onChange={setCurrency}
           />
         )}
+        <MarkedField pipelineKey={tierKey(tier.id, 'startsAt')}>
+          <ToggleField
+            label="“Starts at” above the price"
+            checked={resolved.startsAt !== false}
+            onChange={(v) => patchTier({ startsAt: v })}
+            hint={
+              resolved.startsAt === false
+                ? 'Off. The line still holds its room, so this card stays level with the others.'
+                : 'On. What it says is written under Screen, for every plan at once.'
+            }
+          />
+        </MarkedField>
         {offer ? (
           <>
             <TextField

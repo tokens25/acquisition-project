@@ -53,6 +53,7 @@ export function keyForTarget(target: Element, cadence: string): EditRequest | nu
   if (at('.acq-card-header__title')) return tier('name')
   if (at('.acq-card-header__description')) return tier('description')
 
+  if (at('.acq-pricing__caption')) return tier('startsAt')
   if (at('.acq-pricing__installment')) return price('per')
   if (at('.acq-pricing__price') || at('.acq-pricing__crossed')) return price('full')
   if (at('.acq-pricing__extra')) return price('explainer')

@@ -113,6 +113,9 @@ export function CardSetView({
   // that discounts always explains, so this is nearly the same question — but
   // an offer can carry an explainer without a discount, and then only this one
   // is true.
+  /* A row where one plan says "Starts at" keeps the line open on all of them,
+     so the prices and the buttons under them stay on one baseline. */
+  const reserveCaption = useMemo(() => cards.some((c) => c.tier.startsAt !== false), [cards])
   const reserveExtraInfo = useMemo(
     () => cards.some((c) => c.offer.discount || Boolean(c.offer.explainer?.trim())),
     [cards],
@@ -246,6 +249,7 @@ export function CardSetView({
               descriptionLines={descriptionLines}
               reserveDiscount={reserveDiscount}
               reserveExtraInfo={reserveExtraInfo}
+              reserveCaption={reserveCaption}
               selected={selectedId === tier.id}
               onSelect={interactive ? () => setChosen(tier.id) : undefined}
               onOpenDetails={
