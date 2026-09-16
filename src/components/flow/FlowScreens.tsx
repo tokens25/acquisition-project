@@ -29,6 +29,18 @@ import {
 } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
 import { articleShot, featureArt, imageCtaArt } from './landingArt'
+import {
+  DAY_ART,
+  FIGHT_ART,
+  GAME_ART,
+  PLACE_ART,
+  PROMO_ART,
+  SPOTLIGHT_ART,
+  SPOT_ART,
+  STORY_ART,
+  SUB_ART,
+  artAt,
+} from './newArt'
 import { copyOf, sectionsOf, type PageSection } from '../../rules/sections'
 
 import { Fragment, useState } from 'react'
@@ -1968,16 +1980,16 @@ function RailSection({
       {title.trim() !== '' && <p className="fl-rail__title">{title}</p>}
       <div className="fl-rail__row">
         {tiles.map((tile, at) => {
-          const fixture = fixtureFor(at)
+          /* Each rail has its own pictures out of its own frame in the file —
+             a games rail draws games, a story rail draws films. */
+          const art = size === 'story' ? STORY_ART : size === 'wide' ? PROMO_ART : GAME_ART
           return (
             <article className="fl-rail__tile" key={tile.id}>
               <span className="fl-rail__art" aria-hidden="true">
-                {fixture.art.map((src, i) => (
-                  <img src={src} alt="" key={i} />
-                ))}
+                <img src={artAt(art, at)} alt="" />
                 {/* The date rides on the picture where the tile is big enough
                     to carry it, and the stylesheet hides it where it is not. */}
-                <span className="fl-rail__stamp">{fixture.stamp}</span>
+                <span className="fl-rail__stamp">{fixtureFor(at).stamp}</span>
               </span>
               <span className="fl-rail__words">
                 <p className="fl-rail__name">{tile.title}</p>
@@ -2015,14 +2027,10 @@ function SubRailSection({
         {body.trim() !== '' && <p className="fl-subrail__body">{body}</p>}
       </div>
       <div className="fl-subrail__row">
-        {tiles.map((tile, at) => {
-          const fixture = fixtureFor(at)
-          return (
+        {tiles.map((tile, at) => (
             <article className="fl-subtile" key={tile.id}>
               <span className="fl-subtile__art" aria-hidden="true">
-                {fixture.art.map((src, i) => (
-                  <img src={src} alt="" key={i} />
-                ))}
+                <img src={artAt(SUB_ART, at)} alt="" />
               </span>
               <span className="fl-subtile__wash" aria-hidden="true" />
               <span className="fl-subtile__foot">
@@ -2033,8 +2041,7 @@ function SubRailSection({
                 </span>
               </span>
             </article>
-          )
-        })}
+        ))}
       </div>
     </section>
   )
@@ -2076,22 +2083,17 @@ function BundlesSection({
             </p>
             <p className="fl-bundle__term">{bundle.term}</p>
             <div className="fl-bundle__fights">
-              {bundle.fights.map((fight, at) => {
-                const fixture = fixtureFor(at)
-                return (
+              {bundle.fights.map((fight, at) => (
                   <div className="fl-bundle__fight" key={fight.id}>
                     <span className="fl-bundle__shot" aria-hidden="true">
-                      {fixture.art.map((src, i) => (
-                        <img src={src} alt="" key={i} />
-                      ))}
+                      <img src={artAt(FIGHT_ART, at)} alt="" />
                     </span>
                     <span className="fl-bundle__words">
                       <p className="fl-bundle__fight-name">{fight.name}</p>
                       <p className="fl-bundle__when">{fight.when}</p>
                     </span>
                   </div>
-                )
-              })}
+                ))}
             </div>
             <span className="fl-bundle__cta" role="button">
               {bundle.cta}
@@ -2193,9 +2195,7 @@ function DaySection({
           return (
             <article className="fl-day__game" key={tile.id}>
               <span className="fl-day__art" aria-hidden="true">
-                {fixture.art.map((src, i) => (
-                  <img src={src} alt="" key={i} />
-                ))}
+                <img src={artAt(DAY_ART, at)} alt="" />
                 <span className="fl-day__stamp">{fixture.stamp}</span>
                 <span className="fl-day__remind">
                   <img src={icReminder} alt="" />
@@ -2295,14 +2295,10 @@ function CitiesSection({
         </div>
       )}
       <div className="fl-cities__row">
-        {tiles.map((tile, at) => {
-          const fixture = fixtureFor(at)
-          return (
+        {tiles.map((tile, at) => (
             <article className="fl-city" key={tile.id}>
               <span className="fl-city__art" aria-hidden="true">
-                {fixture.art.map((src, i) => (
-                  <img src={src} alt="" key={i} />
-                ))}
+                <img src={artAt(PLACE_ART, at)} alt="" />
               </span>
               <span className="fl-city__wash" aria-hidden="true" />
               <span className="fl-city__words">
@@ -2310,8 +2306,7 @@ function CitiesSection({
                 {tile.meta.trim() !== '' && <p className="fl-city__meta">{tile.meta}</p>}
               </span>
             </article>
-          )
-        })}
+        ))}
       </div>
     </section>
   )
@@ -2425,7 +2420,7 @@ function SpotlightSection({
   return (
     <section className="fl-spot">
       <span className="fl-spot__art" aria-hidden="true">
-        <img src={heroArt} alt="" />
+        <img src={SPOTLIGHT_ART} alt="" />
         <span className="fl-spot__wash" />
       </span>
       <div className="fl-spot__copy">
@@ -2439,9 +2434,7 @@ function SpotlightSection({
           return (
             <article className="fl-spot__tile" key={tile.id}>
               <span className="fl-spot__shot" aria-hidden="true">
-                {fixture.art.map((src, i) => (
-                  <img src={src} alt="" key={i} />
-                ))}
+                <img src={artAt(SPOT_ART, at)} alt="" />
                 <span className="fl-spot__stamp">{fixture.stamp}</span>
               </span>
               <p className="fl-spot__name">{tile.title}</p>
