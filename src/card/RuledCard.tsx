@@ -102,6 +102,7 @@ export function RuledCard({
   return (
     <AcquisitionCard
       device={device}
+      tierId={tier.id}
       highlighted={tier.highlighted}
       eyebrow={d.badgeText ?? undefined}
       title={d.headerText}

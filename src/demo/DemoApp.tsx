@@ -54,6 +54,7 @@ import { titleFor, type Product } from '../product'
 import { isConfigured } from '../rules/journey'
 import { blankStructure, structureKey, type FlowStructure } from '../rules/onboarding'
 import { generateFlow } from '../rules/generate'
+import { askToEdit, keyForTarget } from '../card/editable'
 import { Onboarding, OnboardingStart } from '../onboarding/Onboarding'
 
 /**
@@ -703,7 +704,20 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
         </div>
         </div>
 
-        <div className="demo__preview">
+        <div
+          className="demo__preview"
+          /* Click a part of a card, land on the field that writes it.
+             Delegated rather than wired into the card: every screen that draws
+             one takes part without knowing this exists, and a part nobody can
+             edit simply matches nothing. The click is not swallowed — choosing
+             a plan still chooses it. */
+          onClick={(e) => {
+            const target = e.target
+            if (!(target instanceof Element)) return
+            const ask = keyForTarget(target, store.context.cadence)
+            if (ask) askToEdit(ask)
+          }}
+        >
 
           {!configured || setupOpen ? (
             setupOpen && draft ? (

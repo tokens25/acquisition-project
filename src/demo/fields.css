@@ -597,3 +597,25 @@
   color: var(--color-text-tertiary);
   font-size: 11.5px;
 }
+
+/* ── Clicked on the card, found in the panel ──
+   Says "this one" and then stops saying it. A permanent mark would compete
+   with the handoff marks, which mean something else entirely. */
+@keyframes ed-reveal {
+  from {
+    box-shadow: 0 0 0 2px var(--color-brand-secondary);
+  }
+  to {
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+.ed-reveal {
+  border-radius: var(--radius-8);
+  animation: ed-reveal 1.4s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ed-reveal {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--color-brand-secondary);
+  }
+}

@@ -52,6 +52,14 @@ export interface AcquisitionCardProps {
   /** Shows the footer control as unavailable rather than absent. */
   footerDisabled?: boolean
 
+  /**
+   * Which plan this card draws.
+   *
+   * Presentation does not use it. It is on the element so that something
+   * outside the card can tell which plan a click landed in without the card
+   * having to know what that something is for.
+   */
+  tierId?: string
   device?: Device
   className?: string
 }
@@ -85,6 +93,7 @@ export function AcquisitionCard({
   footerLabel,
   onFooterClick,
   footerDisabled = false,
+  tierId,
   device = 'desktop',
   className,
 }: AcquisitionCardProps) {
@@ -92,6 +101,7 @@ export function AcquisitionCard({
     <article
       className={['acq-card', className].filter(Boolean).join(' ')}
       data-highlighted={highlighted || undefined}
+      data-tier-id={tierId}
       data-device={device}
       data-selected={selected || undefined}
       onClick={onSelect}

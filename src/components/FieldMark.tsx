@@ -41,9 +41,17 @@ export function MarkedField({
   children: ReactNode
 }) {
   const mark = useFieldMark(pipelineKey)
-  if (!mark) return <>{children}</>
+  // Still a box when there is nothing to mark, so the preview can find this
+  // control by its key. `display: contents` keeps it out of the layout.
+  if (!mark) {
+    return (
+      <div className="fm-wrap" data-bare="" data-field={pipelineKey}>
+        {children}
+      </div>
+    )
+  }
   return (
-    <div className="fm-wrap" data-changed="">
+    <div className="fm-wrap" data-field={pipelineKey} data-changed="">
       {children}
       <FieldMarkNote mark={mark} onRevert={onRevert ? () => onRevert(mark.before) : undefined} />
     </div>

@@ -28,6 +28,7 @@ import { SourceTabs } from './SourceTabs'
 import { FieldGroup } from './FieldGroup'
 import { MarkedField } from '../components/FieldMark'
 import { cadenceKey, tierKey } from '../rules/pipeline'
+import { EDIT_EVENT, revealField, type EditRequest } from '../card/editable'
 
 /** Sentinel for "write a new line here" in the benefit picker. */
 const CUSTOM_FEATURE = '__custom__'
@@ -93,6 +94,31 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const updateOffer = (tierId: string, patch: Partial<CadenceOffer>) =>
     writeOffer(tierId, patch, scope)
   const [openTier, setOpenTier] = useState(set.tiers[0]?.id ?? '')
+
+  /*
+   * Someone clicked a part of a card in the preview.
+   *
+   * The plan is opened first, because the field for another plan's name is not
+   * on the page to be found — and only then is the field looked for, after the
+   * render that the change causes. Landing on nothing is a real outcome: the
+   * part may not be one anybody writes, and the honest answer is that nothing
+   * moves.
+   */
+  const [asked, setAsked] = useState<EditRequest | null>(null)
+  useEffect(() => {
+    const onAsk = (e: Event) => setAsked((e as CustomEvent<EditRequest>).detail)
+    window.addEventListener(EDIT_EVENT, onAsk)
+    return () => window.removeEventListener(EDIT_EVENT, onAsk)
+  }, [])
+  useEffect(() => {
+    if (!asked) return
+    setOpenTier(asked.tierId)
+    const id = window.requestAnimationFrame(() => {
+      revealField(asked.key)
+      setAsked(null)
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [asked])
 
   /** The competition being dragged, and the row it is currently over. */
   const [dragComp, setDragComp] = useState<string | null>(null)

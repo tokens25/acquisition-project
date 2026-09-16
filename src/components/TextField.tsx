@@ -97,6 +97,9 @@ export function TextField({
   return (
     <div
       className="dz-field"
+      // The handle the preview reaches this field by, when someone clicks the
+      // part of the card it writes.
+      data-field={pipelineKey}
       data-filled={filled || undefined}
       data-error={error || undefined}
       data-changed={mark ? '' : undefined}

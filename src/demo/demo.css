@@ -1300,3 +1300,33 @@
     animation: none;
   }
 }
+
+/* ── Parts of a card that lead somewhere ──
+   Only inside the preview: the same card in the product is not a way into an
+   edit panel, and a pointer cursor there would promise something false.
+
+   Scoped to cards that name their plan, because that is exactly the condition
+   the lookup needs — a card with no plan on it has nothing to find. */
+.demo__preview .acq-card[data-tier-id] .acq-card__eyebrow,
+.demo__preview .acq-card[data-tier-id] .acq-card-header__title,
+.demo__preview .acq-card[data-tier-id] .acq-card-header__description,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__price,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__crossed,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__installment,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__extra,
+.demo__preview .acq-card[data-tier-id] .acq-plan-cta,
+.demo__preview .acq-card[data-tier-id] .acq-logo-tiles__tile,
+.demo__preview .acq-card[data-tier-id] .acq-feature {
+  cursor: pointer;
+}
+.demo__preview .acq-card[data-tier-id] .acq-card-header__title:hover,
+.demo__preview .acq-card[data-tier-id] .acq-card-header__description:hover,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__price:hover,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__installment:hover,
+.demo__preview .acq-card[data-tier-id] .acq-pricing__extra:hover,
+.demo__preview .acq-card[data-tier-id] .acq-logo-tiles__tile:hover,
+.demo__preview .acq-card[data-tier-id] .acq-feature:hover {
+  outline: 1px dashed var(--color-border-full-color-subtle);
+  outline-offset: 3px;
+  border-radius: var(--radius-4);
+}

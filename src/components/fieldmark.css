@@ -85,3 +85,9 @@
     animation: none;
   }
 }
+
+/* Present only so the preview can find the control by its key — it must not
+   take part in the layout the marked version establishes. */
+.fm-wrap[data-bare] {
+  display: contents;
+}
