@@ -338,6 +338,71 @@ export interface LandingTeamRow {
   league: string
 }
 
+/** One fight inside a plan card: a still, what it is, and when it is. */
+export interface LandingPlanFight {
+  id: string
+  name: string
+  when: string
+  /** What this one costs on its own. Empty where the offer above prices it. */
+  price: string
+  /** Struck through beside the price. Empty draws neither this nor the saving. */
+  was: string
+  /** What follows the price — "/fight". */
+  unit: string
+  save: string
+}
+
+/** One poster in the rail a yearly card shows its year with. */
+export interface LandingPoster {
+  id: string
+  /** The date printed under the artwork. */
+  when: string
+}
+
+/** One line under a plan card's prices: a tick, or a note with an i. */
+export interface LandingPerk {
+  id: string
+  text: string
+  /** An i rather than a tick: something to know, not something you get. */
+  info: boolean
+}
+
+/**
+ * One card in the fight plan picker — node 1102:53279.
+ *
+ * The design's Variation section draws this card eight times, and every one of
+ * them is this shape with different words in it: no offer, a free trial, a
+ * discount, a month free, and the same four again with a bundle instead of a
+ * single fight. So there is one card here and not eight — what varies is what
+ * is written on it, which is what a market changes anyway.
+ */
+export interface LandingPlanCard {
+  id: string
+  name: string
+  /** Under the name: how it is billed, or what offer is on it. */
+  note: string
+  price: string
+  /** What follows the price — "/month", "/year". */
+  priceUnit: string
+  /** The boxed message under the price. Empty draws none. */
+  notice: string
+  /** A bundle's name over the fights. Empty means the card sells one fight. */
+  offerName: string
+  offerPrice: string
+  offerWas: string
+  offerUnit: string
+  offerSave: string
+  fights: LandingPlanFight[]
+  /** The line over the posters. Empty draws neither it nor them. */
+  postersLine: string
+  posters: LandingPoster[]
+  perks: LandingPerk[]
+  /** Drawn in gold — the year's card, which is the one being sold hardest. */
+  gold: boolean
+  /** Which card the radio is filled on. */
+  chosen: boolean
+}
+
 /** One tab over a carousel — a country, a competition, a month. */
 export interface LandingTab {
   id: string
@@ -575,6 +640,13 @@ export interface LandingScreen {
   spotlightTitle?: string
   spotlightBody?: string
   spotlightTiles?: LandingTile[]
+
+  /* Buying the fight — node 1102:53279. A heading, the plans it can be bought
+     on, a way to see the rest, and the button under them. */
+  planPickTitle?: string
+  planPickMore?: string
+  planPickCta?: string
+  planCards?: LandingPlanCard[]
 
   /* The image card — node 747:46379. A picture with a heading, a line and a
      button laid over the foot of it. */
@@ -909,6 +981,64 @@ export const defaultFlow: FlowContent = {
           { id: 'fight-2', name: 'Chisora vs. Wilder', when: '21 Feb at 6:00 PM' },
           { id: 'fight-3', name: 'Chisora vs. Wilder', when: '21 Feb at 6:00 PM' },
         ],
+      },
+    ],
+
+    planPickTitle: "To watch your fight, you'll need a DAZN plan.",
+    planPickMore: 'See more options to buy',
+    planPickCta: 'Get Standard',
+    planCards: [
+      {
+        id: 'plan-standard',
+        name: 'DAZN Standard',
+        note: "Billed monthly. Cancel with 30 days' notice.",
+        price: '£30.99',
+        priceUnit: '/month',
+        notice: '',
+        offerName: '',
+        offerPrice: '',
+        offerWas: '',
+        offerUnit: '',
+        offerSave: '',
+        fights: [
+          { id: 'pf-1', name: 'Ring V: Inoue vs Picasso', when: '21 Feb at 6:00 PM', price: '£89.99', was: '', unit: '/fight', save: '' },
+        ],
+        postersLine: '',
+        posters: [],
+        perks: [
+          { id: 'perk-1', text: '185+ fights a year from the best promoters', info: false },
+          { id: 'perk-2', text: 'Additional pay-per-views purchased separately', info: true },
+        ],
+        gold: false,
+        chosen: true,
+      },
+      {
+        id: 'plan-ultimate',
+        name: 'DAZN Ultimate',
+        note: '',
+        price: '£449.99',
+        priceUnit: '/year',
+        notice: 'At this time, annual upfront payment is the only option available for this plan.',
+        offerName: '',
+        offerPrice: '',
+        offerWas: '',
+        offerUnit: '',
+        offerSave: '',
+        fights: [],
+        postersLine: 'All these fights and more this year one price.',
+        posters: [
+          { id: 'po-1', when: 'April 4' },
+          { id: 'po-2', when: 'March 28' },
+          { id: 'po-3', when: 'May 2' },
+          { id: 'po-4', when: 'May 23' },
+        ],
+        perks: [
+          { id: 'perk-1', text: 'Over 12 unmissable PPVs a year', info: false },
+          { id: 'perk-2', text: 'HDR and Dolby 5.1 surround sound', info: false },
+          { id: 'perk-3', text: '185+ fights a year from the best promoters', info: false },
+        ],
+        gold: true,
+        chosen: false,
       },
     ],
 

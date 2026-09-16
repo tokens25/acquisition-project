@@ -20,6 +20,7 @@ import {
   landingText,
   linksOf,
   liveTeamsOf,
+  planCardsOf,
   providersOf,
   questionsOf,
   railSizeOf,
@@ -34,6 +35,8 @@ import {
   FIGHT_ART,
   GAME_ART,
   PLACE_ART,
+  PLAN_FIGHT_ART,
+  POSTER_ART,
   PROMO_ART,
   SPOTLIGHT_ART,
   SPOT_ART,
@@ -121,6 +124,7 @@ import type {
   LandingGame,
   LandingMatch,
   LandingTab,
+  LandingPlanCard,
   LandingTeamRow,
   LandingSubTile,
   LandingTile,
@@ -1949,6 +1953,16 @@ export function PageSectionView({
         />
       )
 
+    case 'fightPlan':
+      return (
+        <FightPlanSection
+          title={text.planPickTitle}
+          more={text.planPickMore}
+          cta={text.planPickCta}
+          cards={planCardsOf(content)}
+        />
+      )
+
     case 'faq':
       return <FaqSection content={content} title={text.faqTitle} />
   }
@@ -2443,6 +2457,145 @@ function SpotlightSection({
           )
         })}
       </div>
+    </section>
+  )
+}
+
+/**
+ * Buying the fight — node 1102:53279.
+ *
+ * The design's Variation section draws this card eight times: with no offer,
+ * with a free trial, with a discount, with a month free, and the same four
+ * again selling a bundle rather than a single fight. They are one card with
+ * different words in it, so that is what this is — every variation is reached
+ * by writing, which is what a market would be doing anyway.
+ *
+ * What the card draws follows from what it carries. A bundle name turns the
+ * fights into a bundle's contents priced together; posters turn it into a
+ * year; a struck-through price brings the saving with it. Nothing declares
+ * which of the eight it is, so nothing can declare the wrong one.
+ */
+function FightPlanSection({
+  title,
+  more,
+  cta,
+  cards,
+}: {
+  title: string
+  more: string
+  cta: string
+  cards: LandingPlanCard[]
+}) {
+  return (
+    <section className="fl-plan">
+      {title.trim() !== '' && <p className="fl-plan__title">{title}</p>}
+      <div className="fl-plan__cards">
+        {cards.map((card) => (
+          <article className="fl-plan__card" key={card.id} data-gold={card.gold || undefined}>
+            <div className="fl-plan__head">
+              <p className="fl-plan__name">{card.name}</p>
+              <span className="fl-plan__radio" data-on={card.chosen || undefined} aria-hidden="true" />
+            </div>
+            {card.note.trim() !== '' && <p className="fl-plan__note">{card.note}</p>}
+            {card.price.trim() !== '' && (
+              <p className="fl-plan__price">
+                {card.price}
+                {card.priceUnit.trim() !== '' && (
+                  <span className="fl-plan__unit">{card.priceUnit}</span>
+                )}
+              </p>
+            )}
+            {card.notice.trim() !== '' && (
+              <p className="fl-plan__notice">
+                <Mark svg={actionsInfo} size={16} />
+                <span>{card.notice}</span>
+              </p>
+            )}
+
+            {/* A bundle prices the fights under it together, so its name and
+                price stand over them with the rule the design draws. */}
+            {card.offerName.trim() !== '' && (
+              <div className="fl-plan__offer">
+                <p className="fl-plan__offer-name">{card.offerName}</p>
+                <p className="fl-plan__offer-price">
+                  {card.offerPrice}
+                  {card.offerWas.trim() !== '' && (
+                    <span className="fl-plan__was">{card.offerWas}</span>
+                  )}
+                  {card.offerUnit.trim() !== '' && (
+                    <span className="fl-plan__unit">{card.offerUnit}</span>
+                  )}
+                  {card.offerSave.trim() !== '' && (
+                    <span className="fl-plan__save">{card.offerSave}</span>
+                  )}
+                </p>
+              </div>
+            )}
+
+            {card.fights.map((fight, at) => (
+              <div className="fl-plan__fight" key={fight.id}>
+                <span className="fl-plan__shot" aria-hidden="true">
+                  <img src={artAt(PLAN_FIGHT_ART, at)} alt="" />
+                </span>
+                <span className="fl-plan__fight-words">
+                  <p className="fl-plan__fight-name">{fight.name}</p>
+                  <p className="fl-plan__when">{fight.when}</p>
+                  {fight.price.trim() !== '' && (
+                    <p className="fl-plan__fight-price">
+                      {fight.price}
+                      {fight.was.trim() !== '' && <span className="fl-plan__was">{fight.was}</span>}
+                      {fight.unit.trim() !== '' && (
+                        <span className="fl-plan__unit">{fight.unit}</span>
+                      )}
+                    </p>
+                  )}
+                  {fight.save.trim() !== '' && (
+                    <p className="fl-plan__fight-save">
+                      <span className="fl-plan__save">{fight.save}</span>
+                    </p>
+                  )}
+                </span>
+              </div>
+            ))}
+
+            {card.postersLine.trim() !== '' && (
+              <p className="fl-plan__posters-line">{card.postersLine}</p>
+            )}
+            {card.posters.length > 0 && (
+              <div className="fl-plan__posters">
+                {card.posters.map((poster, at) => (
+                  <span className="fl-plan__poster" key={poster.id}>
+                    <img src={artAt(POSTER_ART, at)} alt="" />
+                    <span className="fl-plan__poster-when">{poster.when}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {card.perks.length > 0 && (
+              <div className="fl-plan__perks">
+                {card.perks.map((perk) => (
+                  <p className="fl-plan__perk" key={perk.id} data-info={perk.info || undefined}>
+                    <Mark svg={perk.info ? actionsInfo : iconArtwork.checkmark} size={16} />
+                    <span>{perk.text}</span>
+                  </p>
+                ))}
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+      {more.trim() !== '' && (
+        <span className="fl-plan__more" role="button">
+          {more}
+          <Icon svg={iconArtwork['chevron-right']} size={16} />
+        </span>
+      )}
+      {cta.trim() !== '' && (
+        <span className="fl-plan__cta" role="button">
+          {cta}
+        </span>
+      )}
     </section>
   )
 }

@@ -5,6 +5,9 @@ import type {
   LandingCard,
   LandingMatch,
   LandingTab,
+  LandingPerk,
+  LandingPlanCard,
+  LandingPlanFight,
   LandingTeamRow,
   LandingSubTile,
   LandingTile,
@@ -181,6 +184,7 @@ export function landingText(content: LandingScreen): Required<
     | 'cityTiles'
     | 'liveTeams'
     | 'spotlightTiles'
+    | 'planCards'
     | HeroKey
     | ChoiceKey
   >
@@ -257,6 +261,9 @@ export function landingText(content: LandingScreen): Required<
     spotlightLabel: of('spotlightLabel'),
     spotlightTitle: of('spotlightTitle'),
     spotlightBody: of('spotlightBody'),
+    planPickTitle: of('planPickTitle'),
+    planPickMore: of('planPickMore'),
+    planPickCta: of('planPickCta'),
     imageCtaTitle: of('imageCtaTitle'),
     imageCtaBody: of('imageCtaBody'),
     imageCtaCta: of('imageCtaCta'),
@@ -475,6 +482,44 @@ export function blankTeamRow(existing: LandingTeamRow[]): LandingTeamRow {
 /** The fixtures under the spotlight, or the ones it ships with. */
 export function spotlightTilesOf(content: LandingScreen): LandingTile[] {
   return content.spotlightTiles ?? defaultFlow.landing.spotlightTiles ?? []
+}
+
+/** The plans a fight can be bought on, or the ones it ships with. */
+export function planCardsOf(content: LandingScreen): LandingPlanCard[] {
+  return content.planCards ?? defaultFlow.landing.planCards ?? []
+}
+
+/** A new card, selling one fight on a monthly plan — the commonest of the eight. */
+export function blankPlanCard(existing: LandingPlanCard[]): LandingPlanCard {
+  return {
+    id: nextId('plan', existing),
+    name: '',
+    note: '',
+    price: '',
+    priceUnit: '/month',
+    notice: '',
+    offerName: '',
+    offerPrice: '',
+    offerWas: '',
+    offerUnit: '',
+    offerSave: '',
+    fights: [{ id: 'pf-1', name: '', when: '', price: '', was: '', unit: '/fight', save: '' }],
+    postersLine: '',
+    posters: [],
+    perks: [],
+    gold: false,
+    chosen: false,
+  }
+}
+
+/** A new fight on a card. */
+export function blankPlanFight(existing: LandingPlanFight[]): LandingPlanFight {
+  return { id: nextId('pf', existing), name: '', when: '', price: '', was: '', unit: '/fight', save: '' }
+}
+
+/** A new line under the prices. A tick: the note is the rarer of the two. */
+export function blankPerk(existing: LandingPerk[]): LandingPerk {
+  return { id: nextId('perk', existing), text: '', info: false }
 }
 
 /** A new game, with nothing in it yet. */

@@ -67,3 +67,17 @@ export const SPOT_ART = [spotOne, spotTwo, spotThree]
 
 /** The one in a list that falls at this place, starting round again at the end. */
 export const artAt = (list: string[], at: number) => list[at % list.length]
+
+import planFightOne from '../../assets/landing/plan/fight1.jpg'
+import planFightTwo from '../../assets/landing/plan/fight2.jpg'
+import planFightThree from '../../assets/landing/plan/fight3.jpg'
+import posterOne from '../../assets/landing/plan/poster1.jpg'
+import posterTwo from '../../assets/landing/plan/poster2.jpg'
+import posterThree from '../../assets/landing/plan/poster3.jpg'
+import posterFour from '../../assets/landing/plan/poster4.jpg'
+
+/** The fights a plan card lists — node 1102:53279. */
+export const PLAN_FIGHT_ART = [planFightOne, planFightTwo, planFightThree]
+
+/** The posters a yearly card shows its year with — node 1102:53279. */
+export const POSTER_ART = [posterOne, posterTwo, posterThree, posterFour]

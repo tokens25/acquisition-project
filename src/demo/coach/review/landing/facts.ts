@@ -8,6 +8,7 @@ import {
   cityTilesOf,
   dayTilesOf,
   matchesOf,
+  planCardsOf,
   featuresOf,
   heroOf,
   landingText,
@@ -212,6 +213,17 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
           ...spotlightTilesOf(l).flatMap((one) => [one.title, one.meta]),
         ],
         cta: '',
+      }
+    case 'fightPlan':
+      return {
+        heading: t.planPickTitle,
+        words: [
+          t.planPickTitle,
+          ...planCardsOf(l).flatMap((one) => [one.name, one.note, one.notice, one.offerName]),
+          t.planPickMore,
+          t.planPickCta,
+        ],
+        cta: t.planPickCta,
       }
   }
 }

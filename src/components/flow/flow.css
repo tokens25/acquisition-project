@@ -4243,3 +4243,288 @@
 .fl-page .fl-live {
   align-items: stretch;
 }
+
+/* ── Buying the fight — node 1102:53279 ───────────────────────────────────
+   A heading, the plans it can be bought on, and the button under them. The
+   design's Variation section is eight drawings of one card: what changes is
+   what is written on it, so one block draws all eight. */
+.fl-plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  inline-size: 100%;
+  padding: var(--space-24) var(--space-16);
+}
+.fl-plan__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 22px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.3;
+}
+.fl-plan__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+.fl-plan__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-16);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-1);
+}
+/* The year's card: gold outline and a gold name, which is the design's way of
+   saying this is the one it is selling hardest. */
+.fl-plan__card[data-gold] {
+  border-color: var(--color-brand-primary);
+}
+.fl-plan__card[data-gold] .fl-plan__name {
+  color: var(--color-brand-primary);
+}
+.fl-plan__head {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+  justify-content: space-between;
+}
+.fl-plan__name {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+}
+/* Which card is chosen. Drawn rather than a real control: this is a preview of
+   a screen, and nothing here is being bought. */
+.fl-plan__radio {
+  flex: none;
+  inline-size: 20px;
+  block-size: 20px;
+  border: 2px solid var(--color-text-tertiary);
+  border-radius: var(--radius-full);
+}
+.fl-plan__radio[data-on] {
+  border-color: var(--color-text-primary);
+  /* The filled middle, drawn with the border rather than a second element. */
+  box-shadow: inset 0 0 0 3px var(--color-surface-container-1);
+  background: var(--color-text-primary);
+}
+.fl-plan__note {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+.fl-plan__price {
+  display: flex;
+  gap: var(--space-4);
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.3;
+}
+/* What follows a price, and quieter than it: "/month", "/fight", "/2 fight". */
+.fl-plan__unit {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-regular);
+}
+.fl-plan__was {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-regular);
+  text-decoration: line-through;
+}
+.fl-plan__save {
+  color: #4ade80;
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-bold);
+}
+.fl-plan__notice {
+  display: flex;
+  gap: var(--space-8);
+  align-items: flex-start;
+  margin: 0;
+  padding: var(--space-12);
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-3);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+/* A bundle's own name and price, over the fights it is made of. */
+.fl-plan__offer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block-start: var(--space-12);
+  border-block-start: var(--border-1) solid var(--color-border-full-color-subtle);
+}
+.fl-plan__offer-name {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+}
+.fl-plan__offer-price {
+  display: flex;
+  gap: var(--space-6);
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-bold);
+}
+.fl-plan__fight {
+  display: flex;
+  gap: var(--space-12);
+  align-items: center;
+}
+.fl-plan__shot {
+  position: relative;
+  flex: none;
+  inline-size: 64px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-6);
+  overflow: hidden;
+}
+.fl-plan__shot img {
+  position: absolute;
+  inset: 0;
+  max-inline-size: none;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.fl-plan__fight-words {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: 1px;
+}
+.fl-plan__fight-name {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+}
+.fl-plan__when {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.4;
+}
+.fl-plan__fight-price {
+  display: flex;
+  gap: var(--space-4);
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+}
+.fl-plan__fight-save {
+  margin: 0;
+}
+.fl-plan__posters-line {
+  margin: var(--space-4) 0 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+/* The year, as its posters. Runs off the card's edge the way a rail does. */
+.fl-plan__posters {
+  display: flex;
+  gap: var(--space-8);
+  margin-inline: calc(var(--space-16) * -1);
+  padding-inline: var(--space-16);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-plan__posters::-webkit-scrollbar {
+  display: none;
+}
+.fl-plan__poster {
+  position: relative;
+  display: block;
+  flex: none;
+  inline-size: 88px;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-6);
+  overflow: hidden;
+}
+.fl-plan__poster img {
+  position: absolute;
+  inset: 0;
+  max-inline-size: none;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+/* The date the design prints across the foot of each poster. */
+.fl-plan__poster-when {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  padding: var(--space-6) var(--space-4);
+  background: linear-gradient(to top, rgb(0 0 0 / 82%), rgb(0 0 0 / 0%));
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+}
+.fl-plan__perks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-block-start: var(--space-8);
+}
+.fl-plan__perk {
+  display: flex;
+  gap: var(--space-8);
+  align-items: flex-start;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+/* Something to know rather than something you get, so it reads quieter. */
+.fl-plan__perk[data-info] {
+  color: var(--color-text-secondary);
+}
+.fl-plan__more {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.fl-plan__cta {
+  display: grid;
+  place-items: center;
+  block-size: 48px;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+/* The page's section rule: this one stretches, like the other new blocks. */
+.fl-page .fl-plan {
+  align-items: stretch;
+}

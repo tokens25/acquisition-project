@@ -39,6 +39,7 @@ export type SectionType =
   | 'cities'
   | 'live'
   | 'spotlight'
+  | 'fightPlan'
 
 export interface PageSection {
   /**
@@ -83,6 +84,7 @@ export const SECTION_TYPES: SectionType[] = [
   'cities',
   'live',
   'spotlight',
+  'fightPlan',
 ]
 
 /**
@@ -173,6 +175,10 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   spotlightTitle: 'spotlight',
   spotlightBody: 'spotlight',
   spotlightTiles: 'spotlight',
+  planPickTitle: 'fightPlan',
+  planPickMore: 'fightPlan',
+  planPickCta: 'fightPlan',
+  planCards: 'fightPlan',
 }
 
 /**
@@ -218,6 +224,7 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   cities: 'Eyebrow, heading, a line, tabs, and the places',
   live: 'Heading, field, the teams, button',
   spotlight: 'Picture, label, heading, a line, and the games',
+  fightPlan: 'Heading, the plans, and the button',
 }
 
 /**
@@ -250,6 +257,7 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   cities: [40, 85, 100],
   live: [80, 100, 60],
   spotlight: [100, 70, 100],
+  fightPlan: [85, 100, 100],
 }
 
 /** The page as it ships, in the order node 708:173735 has it. */
@@ -293,6 +301,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   cities: 'Places',
   live: "What's live",
   spotlight: 'Spotlight',
+  fightPlan: 'Fight plan',
 }
 
 /** The list this page is arranged into, or the one it has always had. */
