@@ -43,12 +43,16 @@ export interface RuledCardProps {
  * so the layout matches what will land — and blocks publish elsewhere.
  */
 /** The icon a feature row draws, under the set's house style. */
-function featureIcon(mode: CardSet['featureIcons'], iconId: string): string | undefined {
+function featureIcon(
+  mode: CardSet['featureIcons'],
+  feature: { iconId: string; icon: string | null },
+): string | undefined {
   if (mode === 'hidden') return undefined
   // The plain DS checkmark, not the circled one — this mode is a tick per
-  // line, not a badge per line.
+  // line, not a badge per line. A tick per line is the house style asserting
+  // itself over every glyph, uploaded ones included.
   if (mode === 'check') return iconArtwork.checkmark
-  return iconArtwork[iconId] ?? iconArtwork.check
+  return feature.icon ?? iconArtwork[feature.iconId] ?? iconArtwork.check
 }
 
 export function RuledCard({
@@ -97,7 +101,7 @@ export function RuledCard({
           })),
           features: d.features.map((f) => ({
             id: f.id,
-            icon: featureIcon(set.featureIcons, f.iconId),
+            icon: featureIcon(set.featureIcons, f),
             text: f.text,
           })),
         })
@@ -150,7 +154,7 @@ export function RuledCard({
           {d.features.map((f) => (
             <Feature
               key={f.id}
-              icon={featureIcon(set.featureIcons, f.iconId)}
+              icon={featureIcon(set.featureIcons, f)}
               onInfo={openDetails}
               device={device}
             >

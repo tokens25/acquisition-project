@@ -242,7 +242,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
     .map((t) => t.name)
   const explainerSource = offer?.explainerSource ?? 'custom'
 
-  const updateFeature = (id: string, p: { text?: string; iconId?: string }) =>
+  const updateFeature = (id: string, p: { text?: string; iconId?: string; icon?: string }) =>
     updateSet({
       featureCatalog: set.featureCatalog.map((f) => (f.id === id ? { ...f, ...p } : f)),
     })
@@ -289,6 +289,17 @@ export function EditPanel({ store }: { store: CardSetStore }) {
     next.splice(to, 0, ...next.splice(from, 1))
     patchTier({ logoTiles: next })
   }
+
+  /**
+   * How many plans carry this benefit.
+   *
+   * The library is shared, so editing a line edits it wherever it is used.
+   * That is the point of a library — the same capability should not be
+   * described two ways — but somebody editing one plan has no reason to
+   * assume it, so the field says so instead of letting them find out.
+   */
+  const benefitUsedOn = (featureId: string) =>
+    set.tiers.filter((t) => t.features.includes(featureId)).length
 
   /** The first competition not already on this plan, or nothing left to add. */
   const unusedLogo = set.logoCatalog.find((l) => !resolved.logoTiles.includes(l.id))
@@ -898,17 +909,25 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 }
               />
               </MarkedField>
-              {entry && isCustom && (
+              {entry && (
                 <>
                   <TextField
                     label="Benefit"
                     value={entry.text}
                     onChange={(v) => updateFeature(entry.id, { text: v })}
-                    helpText="Written here, stored in the library so it can be reused."
+                    helpText={
+                      isCustom
+                        ? 'Written here, stored in the library so it can be reused.'
+                        : benefitUsedOn(entry.id) > 1
+                          ? `From the library, carried by ${benefitUsedOn(entry.id)} plans. Editing it edits all of them.`
+                          : 'From the library. Editing it edits it wherever it is used.'
+                    }
                   />
                   <BenefitIcon
                     entry={entry}
                     onPick={(iconId) => updateFeature(entry.id, { iconId })}
+                    onUpload={(icon) => updateFeature(entry.id, { icon })}
+                    onClearUpload={() => updateFeature(entry.id, { icon: '' })}
                   />
                 </>
               )}

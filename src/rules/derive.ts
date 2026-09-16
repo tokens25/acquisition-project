@@ -112,6 +112,8 @@ export function defaultExplainer(
 
 export interface DerivedFeature {
   iconId: string
+  /** An uploaded glyph, when there is one. Null means the paired icon. */
+  icon: string | null
   text: string
   /** Deprecated artwork still renders; missing artwork shows a placeholder. */
   state: Resolution<unknown>['state']
@@ -289,9 +291,15 @@ export function deriveCard(
     const r = resolveFeature(set, id)
     if (r.state === 'missing') {
       missingRefs.push(`feature:${id}`)
-      return { id, iconId: '', text: id, state: r.state }
+      return { id, iconId: '', icon: null, text: id, state: r.state }
     }
-    return { id, iconId: r.entry.iconId, text: r.entry.text, state: r.state }
+    return {
+      id,
+      iconId: r.entry.iconId,
+      icon: r.entry.icon?.trim() || null,
+      text: r.entry.text,
+      state: r.state,
+    }
   })
 
   const { highlighted } = tier

@@ -60,6 +60,16 @@ export interface CatalogEntry {
 export interface FeatureEntry {
   id: string
   iconId: string
+  /**
+   * An uploaded glyph, as sanitised SVG markup. Absent means `iconId`.
+   *
+   * Markup rather than a data URL because the icons are drawn inline so they
+   * inherit `color`, which is how the whole set is authored — a data URL in an
+   * `<img>` would be a fixed-colour picture beside a row of ones that follow
+   * the theme. Everything that can act is stripped before it is stored; see
+   * `sanitiseSvg`.
+   */
+  icon?: string
   text: string
   status: AssetStatus
 }

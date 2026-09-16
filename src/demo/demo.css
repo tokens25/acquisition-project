@@ -1408,3 +1408,41 @@
     transition: none;
   }
 }
+
+/* ── An uploaded benefit icon, above the shipped row it replaces ── */
+.ed-icons__own {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+}
+.ed-icons__own .ed-icons__note {
+  flex: 1;
+  margin: 0;
+}
+/* The shipped row is still a choice, but it is not the one in force. */
+.ed-icons__row[data-quiet] {
+  opacity: 0.55;
+}
+.ed-icons__row[data-quiet]:hover,
+.ed-icons__row[data-quiet]:focus-within {
+  opacity: 1;
+}
+.ed-icons__upload {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-caption-xs);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.ed-icons__upload:hover {
+  color: var(--color-text-primary);
+}
+.ed-icons__problem {
+  margin: 0;
+  color: var(--color-accent-warning-text);
+  font-size: var(--font-size-caption-xs);
+}
