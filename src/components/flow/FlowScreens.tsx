@@ -12,6 +12,7 @@ import {
   cardsOf,
   cityTabsOf,
   cityTilesOf,
+  devicesOffOf,
   featuresOf,
   matchesOf,
   heroOf,
@@ -26,7 +27,7 @@ import {
   tilesOf,
 } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
-import { articleShot, featureArt, flagFor, imageCtaArt, teamArt } from './landingArt'
+import { articleShot, deviceRows, featureArt, flagFor, imageCtaArt, teamArt } from './landingArt'
 import {
   FIGHT_ART,
   GAME_ART,
@@ -78,19 +79,6 @@ import actionLocation from '../../assets/landing/action-location.svg'
 import statusMini from '../../assets/landing/status-mini.svg'
 import articleIcon from '../../assets/landing/article/icon-multiview.svg?raw'
 import deviceRule from '../../assets/landing/devices/rule.svg'
-import deviceRoku from '../../assets/landing/devices/roku.svg'
-import deviceFireTv from '../../assets/landing/devices/fire-tv.svg'
-import deviceGooglePlay from '../../assets/landing/devices/google-play.svg'
-import deviceSamsung from '../../assets/landing/devices/samsung.svg'
-import deviceAppleTv from '../../assets/landing/devices/apple-tv.svg'
-import devicePanasonic from '../../assets/landing/devices/panasonic.svg'
-import deviceChromecast from '../../assets/landing/devices/chromecast.svg'
-import deviceSony from '../../assets/landing/devices/sony.svg'
-import deviceLg from '../../assets/landing/devices/lg.svg'
-import deviceAppStore from '../../assets/landing/devices/app-store.svg'
-import devicePlaystation from '../../assets/landing/devices/playstation.svg'
-import deviceXbox from '../../assets/landing/devices/xbox.svg'
-import deviceAndroidTv from '../../assets/landing/devices/android-tv.svg'
 import schedP0 from '../../assets/landing/schedule/p0.png'
 import schedP1 from '../../assets/landing/schedule/p1.png'
 import schedP2 from '../../assets/landing/schedule/p2.png'
@@ -1409,38 +1397,6 @@ function FaqSection({ content, title }: { content: LandingScreen; title: string 
 }
 
 /**
- * The wall of device logos — node 853:58657.
- *
- * Four rows of three and a last row of one, each logo 40 tall and its own
- * width. The widths are the design's to a tenth of a pixel: they are what
- * space the row, since the three sit apart rather than in columns.
- */
-const DEVICE_ROWS: { src: string; name: string; w: number }[][] = [
-  [
-    { src: deviceRoku, name: 'Roku', w: 69.6 },
-    { src: deviceFireTv, name: 'Amazon Fire TV', w: 124.8 },
-    { src: deviceGooglePlay, name: 'Google Play', w: 108.8 },
-  ],
-  [
-    { src: deviceSamsung, name: 'Samsung', w: 111.2 },
-    { src: deviceAppleTv, name: 'Apple TV', w: 56.8 },
-    { src: devicePanasonic, name: 'Panasonic', w: 105.6 },
-  ],
-  [
-    { src: deviceChromecast, name: 'Chromecast', w: 123.2 },
-    { src: deviceSony, name: 'Sony', w: 95.2 },
-    { src: deviceLg, name: 'LG', w: 57.6 },
-  ],
-  [
-    { src: deviceAppStore, name: 'App Store', w: 101.6 },
-    { src: devicePlaystation, name: 'PlayStation 5', w: 104.8 },
-    { src: deviceXbox, name: 'Xbox', w: 81.6 },
-  ],
-  [{ src: deviceAndroidTv, name: 'Android TV', w: 126.4 }],
-]
-
-
-/**
  * The whole landing page, hero included.
  *
  * The sections a market writes: the postcode prompt, the teams, Multiview,
@@ -1775,8 +1731,12 @@ export function PageSectionView({
           </p>
           <div className="fl-dev__body">
           <div className="fl-dev__wall">
-            {DEVICE_ROWS.map((row) => (
-              <div className="fl-dev__row" key={row.map((d) => d.name).join()} data-one={row.length === 1 || undefined}>
+            {deviceRows(devicesOffOf(content)).map((row) => (
+              <div
+                className="fl-dev__row"
+                key={row.map((d) => d.name).join()}
+                data-short={row.length < 3 || undefined}
+              >
                 {row.map((device) => (
                   <img
                     className="fl-dev__logo"

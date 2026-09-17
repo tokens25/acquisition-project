@@ -9,7 +9,7 @@ import { ComponentPeek } from './ComponentPeek'
 import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
-import { articleShot, featureArt, flagFor, imageCtaArt, teamArt } from '../components/flow/landingArt'
+import { articleShot, DEVICES, featureArt, flagFor, imageCtaArt, teamArt } from '../components/flow/landingArt'
 import { artAt, SPOTLIGHT_ART, SUB_ART } from '../components/flow/newArt'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
@@ -27,6 +27,7 @@ import {
   cardsOf,
   cityTabsOf,
   cityTilesOf,
+  devicesOffOf,
   featuresOf,
   matchesOf,
   planCardsOf,
@@ -883,8 +884,30 @@ function SectionFields({
             value={t.supportedTitle}
             pipelineKey={key('landing.supportedTitle')}
             onChange={(v) => write({ supportedTitle: v })}
-            helpText="The logos under it are the ones DAZN supports, and are not written here."
           />
+          {/* Every logo the wall knows, each on or off. Names rather than the
+              artwork: a column of thirteen logos is a wall of its own, and
+              what is being answered here is whether this market supports the
+              thing, which is a word. The wall closes the gap itself. */}
+          <div className="demo__feature">
+            {DEVICES.map((device) => {
+              const off = devicesOffOf(inst)
+              return (
+                <ToggleField
+                  key={device.name}
+                  label={device.name}
+                  checked={!off.includes(device.name)}
+                  onChange={(on) =>
+                    write({
+                      supportedOff: on
+                        ? off.filter((name) => name !== device.name)
+                        : [...off, device.name],
+                    })
+                  }
+                />
+              )
+            })}
+          </div>
           <TextField
             label="Under the logos"
             value={t.supportedNote}

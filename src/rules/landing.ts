@@ -182,6 +182,7 @@ export function landingText(content: LandingScreen): Required<
     | 'cityTiles'
     | 'planCards'
     | 'teams'
+    | 'supportedOff'
     | HeroKey
     | ChoiceKey
   >
@@ -353,6 +354,11 @@ export function questionsOf(content: LandingScreen): LandingQuestion[] {
 /** Which rail the schedule draws, or the one it ships with. */
 export function scheduleRailIdOf(content: LandingScreen): string {
   return content.scheduleRailId ?? defaultFlow.landing.scheduleRailId ?? ''
+}
+
+/** The device logos the wall leaves out, or the ones it ships without. */
+export function devicesOffOf(content: LandingScreen): string[] {
+  return content.supportedOff ?? defaultFlow.landing.supportedOff ?? []
 }
 
 /** Which rail the row of tiles draws, or the one it ships with. */

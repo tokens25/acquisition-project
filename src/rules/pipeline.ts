@@ -173,6 +173,9 @@ const NOT_COPY = new Set([
   // Which rail the schedule draws. An address, not words: nobody translates it
   // and nobody writes it twice.
   'railId', 'scheduleRailId', 'spotlightRailId',
+  // Which logos the wall leaves out. Names of devices, not words anybody
+  // writes or translates.
+  'supportedOff',
   // Pictures. Uploaded ones are data URLs, and a handoff listing a megabyte of
   // base64 as a string to implement is a handoff nobody can read.
   'heroImage', 'image', 'imageCtaImage', 'multiviewImage',

@@ -601,6 +601,14 @@ export interface LandingScreen {
   /** The line under the wall, and the words in it that are a link. */
   supportedNote?: string
   supportedLink?: string
+  /**
+   * The logos the wall leaves out, by name.
+   *
+   * The ones left out rather than the ones kept, so a market that supports
+   * everything stores nothing and a logo added to the wall later is on
+   * everywhere until somebody says otherwise. Absent leaves out none.
+   */
+  supportedOff?: string[]
 
   /* The features list — node 852:58100. A run of rows, each a picture, a
      tag, a heading and a line, with a way in under them. */

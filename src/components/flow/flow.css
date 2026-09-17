@@ -1934,9 +1934,11 @@
      code gives each logo is the slot in another frame, not this one. */
   min-block-size: 32px;
 }
-/* The last row is one logo, and the design centres it rather than leaving it
-   at the start of a row that has nothing to space it against. */
-.fl-dev__row[data-one] {
+/* A row the wall could not fill — the last one, which the design draws as a
+   single logo, or one left short because a logo was turned off. Centred at the
+   rows' own spacing rather than spread across a width it has nothing to span. */
+.fl-dev__row[data-short] {
+  gap: var(--space-20);
   justify-content: center;
 }
 /* Drawn at the size it was exported — every logo is 32 tall and its own
