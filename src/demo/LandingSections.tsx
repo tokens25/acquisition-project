@@ -685,7 +685,7 @@ function TeamRows({
               onChange={(v) => edit(i, { city: v })}
             />
             <TextField
-              label={`Team ${i + 1}`}
+              label="Name"
               value={team.name}
               pipelineKey={key(`landing.teams[${i}].name`)}
               onChange={(v) => edit(i, { name: v })}
