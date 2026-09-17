@@ -354,19 +354,25 @@ export function withMoved(list: PageSection[], id: string, delta: number): PageS
   return next
 }
 
-/** The list with one instance dropped before or after another. */
-export function withDropped(
-  list: PageSection[],
+/**
+ * The list with one thing dropped before or after another.
+ *
+ * Written for the page's own components and kept for anything else with an
+ * id: the teams on the rail are dragged the same way, and two copies of this
+ * would be two chances to get it subtly different.
+ */
+export function withDropped<T extends { id: string }>(
+  list: T[],
   id: string,
   onto: string,
   after: boolean,
-): PageSection[] {
+): T[] {
   if (id === onto) return list
-  const from = list.findIndex((s) => s.id === id)
+  const from = list.findIndex((one) => one.id === id)
   if (from < 0) return list
   const next = [...list]
   const [moved] = next.splice(from, 1)
-  const target = next.findIndex((s) => s.id === onto)
+  const target = next.findIndex((one) => one.id === onto)
   if (target < 0) return list
   next.splice(after ? target + 1 : target, 0, moved)
   return next

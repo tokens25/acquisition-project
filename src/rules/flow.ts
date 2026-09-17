@@ -399,6 +399,8 @@ export interface LandingPlanCard {
 export interface LandingTeam {
   id: string
   name: string
+  /** A logo of its own, instead of the one the name brings. A data URL. */
+  logo?: string
 }
 
 /** One tab over a carousel — a country, a competition, a month. */

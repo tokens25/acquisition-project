@@ -67,7 +67,7 @@ import {
   type PageSection,
   type SectionType,
 } from '../rules/sections'
-import type { LandingScreen, RailSize } from '../rules/flow'
+import type { LandingScreen, LandingTeam, RailSize } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { Selector } from '../rules/layers'
 
@@ -581,6 +581,107 @@ function SectionCard({
  */
 const PICKER_WIDTH = 888
 
+/**
+ * The teams on the rail: what each is called, its logo, and what order.
+ *
+ * Its own component because dragging is state, and the fields below are a
+ * switch that returns markup. What it drags is the list itself — the same
+ * gesture and the same drop rule the page's components use, through the same
+ * helper, so the two cannot come to disagree about what "after" means.
+ */
+function TeamRows({
+  teams,
+  write,
+  keyOf: key,
+}: {
+  teams: LandingTeam[]
+  write: (next: Partial<LandingScreen>) => void
+  keyOf: (k: string) => string | undefined
+}) {
+  const [dragging, setDragging] = useState<string | null>(null)
+  /** Which row the pointer is over, and which side of it it would land. */
+  const [over, setOver] = useState<{ id: string; after: boolean } | null>(null)
+
+  const edit = (i: number, next: Partial<LandingTeam>) =>
+    write({ teams: teams.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+
+  return (
+    <>
+      {teams.map((team, i) => (
+        <div
+          className="demo__feature"
+          key={team.id}
+          data-dragging={dragging === team.id || undefined}
+          data-drop={over?.id === team.id ? (over.after ? 'after' : 'before') : undefined}
+          draggable
+          /* Every one of these stops where it is. The component this list
+             belongs to is itself a draggable row, so without that a team
+             picked up here is a whole block picked up there — the outer row
+             overwrites the id being carried and moves the component instead. */
+          onDragStart={(e) => {
+            e.stopPropagation()
+            setDragging(team.id)
+            e.dataTransfer.effectAllowed = 'move'
+            e.dataTransfer.setData('text/plain', team.id)
+          }}
+          onDragEnd={(e) => {
+            e.stopPropagation()
+            setDragging(null)
+            setOver(null)
+          }}
+          onDragOver={(e) => {
+            if (!dragging || dragging === team.id) return
+            e.stopPropagation()
+            e.preventDefault()
+            e.dataTransfer.dropEffect = 'move'
+            // Which half of the row the pointer is over says which side it
+            // lands on, so one gesture reads as above or below.
+            const box = e.currentTarget.getBoundingClientRect()
+            setOver({ id: team.id, after: e.clientY > box.top + box.height / 2 })
+          }}
+          onDragLeave={() => setOver(null)}
+          onDrop={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            const id = e.dataTransfer.getData('text/plain') || dragging
+            if (id) write({ teams: withDropped(teams, id, team.id, over?.after ?? false) })
+            setDragging(null)
+            setOver(null)
+          }}
+        >
+          {/* The whole row drags; this is what says so. */}
+          <span className="demo__grip" aria-hidden="true" />
+          <ImagePicker
+            // 150 square, as the rail draws a tile.
+            aspect="1 / 1"
+            src={team.logo}
+            label="Upload a logo"
+            onPick={(url) => edit(i, { logo: url })}
+            onRemove={() => edit(i, { logo: '' })}
+          />
+          <TextField
+            label={`Team ${i + 1}`}
+            value={team.name}
+            pipelineKey={key(`landing.teams[${i}].name`)}
+            onChange={(v) => edit(i, { name: v })}
+            helpText="The name picks the crest and the colour, unless a logo is uploaded above."
+          />
+          <button
+            data-icon="trash"
+            aria-label="Remove"
+            type="button"
+            className="demo__feature-remove"
+            data-destructive=""
+            onClick={() => write({ teams: teams.filter((_, j) => j !== i) })}
+          >
+            <TrashIcon size={14} />
+          </button>
+        </div>
+      ))}
+    </>
+  )
+}
+
 function SectionFields({
   section,
   t,
@@ -638,32 +739,7 @@ function SectionFields({
               <TextField label="Over the heading" value={t.teamsEyebrow} pipelineKey={key('landing.teamsEyebrow')} onChange={(v) => write({ teamsEyebrow: v })} />
               <TextField label="Heading" value={t.teamsTitle} pipelineKey={key('landing.teamsTitle')} onChange={(v) => write({ teamsTitle: v })} />
               <TextField label="Under the heading" value={t.teamsBody} pipelineKey={key('landing.teamsBody')} onChange={(v) => write({ teamsBody: v })} rows={2} />
-          {teamsOf(inst).map((team, i) => {
-            const all = teamsOf(inst)
-            return (
-              <div className="demo__feature" key={team.id}>
-                <TextField
-                  label={`Team ${i + 1}`}
-                  value={team.name}
-                  pipelineKey={key(`landing.teams[${i}].name`)}
-                  onChange={(v) =>
-                    write({ teams: all.map((one, j) => (j === i ? { ...one, name: v } : one)) })
-                  }
-                  helpText="The name picks the crest and the colour. One with neither draws the tile's own template."
-                />
-                <button
-                  data-icon="trash"
-                  aria-label="Remove"
-                  type="button"
-                  className="demo__feature-remove"
-                  data-destructive=""
-                  onClick={() => write({ teams: all.filter((_, j) => j !== i) })}
-                >
-                  <TrashIcon size={14} />
-                </button>
-              </div>
-            )
-          })}
+          <TeamRows teams={teamsOf(inst)} write={write} keyOf={key} />
           <button
             type="button"
             className="ed-add"

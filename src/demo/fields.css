@@ -593,7 +593,11 @@
 
 /* Six dots in two columns, the grip every list of draggable things uses. It
    sits on the tile's line rather than the name's, which is why the 8. */
-.ls-row__grip {
+/* The six dots that say a thing drags. Two names, one drawing: the page's
+   components and the teams on the rail are dragged the same way, and drawing
+   the dots twice is two chances to draw them differently. */
+.ls-row__grip,
+.demo__grip {
   flex: none;
   inline-size: 10px;
   block-size: 16px;
@@ -606,8 +610,26 @@
   transition: opacity 120ms ease;
 }
 .ls-row:hover .ls-row__grip,
-.ls-row:focus-within .ls-row__grip {
+.ls-row:focus-within .ls-row__grip,
+.demo__feature:hover .demo__grip,
+.demo__feature:focus-within .demo__grip {
   opacity: 0.9;
+}
+/* A row being carried, and the line showing where it would land. The same two
+   states the component rows use, said the same way. */
+.demo__feature[data-dragging] {
+  opacity: 0.45;
+}
+.demo__feature[data-drop='before'] {
+  box-shadow: inset 0 2px 0 var(--color-brand-primary);
+}
+.demo__feature[data-drop='after'] {
+  box-shadow: inset 0 -2px 0 var(--color-brand-primary);
+}
+.demo__grip {
+  /* Top-aligned with the row's first control rather than with the row, which
+     starts with a picture here. */
+  margin-block-start: var(--space-12);
 }
 
 /* The block's proportions, not a picture of it: a wide bar is a full-width

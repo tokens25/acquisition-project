@@ -1292,7 +1292,12 @@ function TeamsRail({
             return (
               <div className="fl-team" key={team.id}>
                 <div className="fl-team__tile" style={art ? { background: art.ground } : undefined}>
-                  {art ? (
+                  {/* A logo somebody chose fills the tile — there is no design
+                      saying how to crop one, so it is shown whole. The name's
+                      own is laid out the way the design lays that team out. */}
+                  {team.logo ? (
+                    <img className="fl-team__own" src={team.logo} alt="" />
+                  ) : art ? (
                     <img
                       className="fl-team__art"
                       src={art.art}

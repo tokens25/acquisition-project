@@ -4500,3 +4500,17 @@
 .fl-page .fl-plan {
   align-items: stretch;
 }
+
+/* A logo somebody uploaded, rather than the one the name brings. Contained
+   rather than covering: a crest cropped to fill a square is a crest with its
+   edges cut off, and there is no design here saying where to cut. */
+.fl-team__own {
+  position: absolute;
+  inset: var(--space-16) var(--space-16) var(--space-40);
+  inline-size: auto;
+  block-size: auto;
+  max-inline-size: calc(100% - var(--space-32));
+  max-block-size: calc(100% - var(--space-56));
+  margin: auto;
+  object-fit: contain;
+}
