@@ -383,7 +383,10 @@ function HeroPicture({ store, scope }: { store: CardSetStore; scope: Selector })
       <div className="hb-aim__side">
         <p className="hb-aim__read">
           Cropped from <strong>{hero.focalX}%</strong> across, <strong>{hero.focalY}%</strong> down
-          <span className="hb-aim__where"> · move it on the preview, under Adjust framing</span>
+          {/* Where it is cropped from is still worth reading; moving it is the
+              hero editor's now, so this no longer sends anybody to a control
+              that is not on the preview any more. */}
+          <span className="hb-aim__where"> · set in the hero editor</span>
         </p>
         <div className="hb-aim__acts">
           <button type="button" className="hb-image__act" onClick={read} disabled={busy}>

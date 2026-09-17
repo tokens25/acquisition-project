@@ -7,10 +7,6 @@ import {
   SubscriptionTabs,
 } from '../components/flow/FlowScreens'
 import { resolveFlow } from '../rules/layers'
-import { HERO_ZOOM_MAX, HERO_ZOOM_MIN, heroOf } from '../rules/landing'
-import heroArt from '../assets/landing/hero.jpg'
-import { FocalDrag } from '../demo/FocalDrag'
-import { useState } from 'react'
 
 import { marketOf, type CardSet, type Context } from '../rules/content'
 import type { Journey } from '../rules/journey'
@@ -33,9 +29,6 @@ export function StepPreview({
   context,
   meta = true,
   onTab,
-  onFocal,
-  onZoom,
-  onReset,
 }: {
   journey: Journey
   set: CardSet
@@ -56,19 +49,7 @@ export function StepPreview({
    * to be looking at the same one.
    */
   onTab?: (tab: string) => void
-  /**
-   * Where the hero's picture is cropped from, when the preview is allowed to
-   * move it. Absent and the handle is not offered at all — the walkthrough and
-   * the tiles show the page, they do not edit it.
-   */
-  onFocal?: (x: number, y: number) => void
-  /** How far into the picture the frame is, where that can be changed. */
-  onZoom?: (zoom: number) => void
-  /** Back to the middle and the whole picture, in one act. */
-  onReset?: () => void
 }) {
-  /** Whether the picture is being moved right now, and which ways it can go. */
-  const [framing, setFraming] = useState(false)
   const tabs = tabsOf(set)
   // A tab that has been renamed keeps its id, but one that has been removed has
   // not — so the chosen tab falls back to the first rather than to nothing.
@@ -109,44 +90,6 @@ export function StepPreview({
         </p>
       )}
 
-      {/* Framing is done on the picture rather than in a field: you are
-          choosing what stays in shot, and the shot is here. */}
-      {step.renderer === 'landing' && onFocal && (
-        <div className="jy__tools">
-          <button
-            type="button"
-            className="jy__tool"
-            data-on={framing || undefined}
-            aria-pressed={framing}
-            onClick={() => setFraming((v) => !v)}
-          >
-            <span className="jy__tool-mark" aria-hidden="true" />
-            Adjust framing
-          </button>
-          {framing && onZoom && (
-            <>
-              <span className="jy__tools-split" aria-hidden="true" />
-              <label className="jy__zoom">
-                <span className="jy__zoom-name">Zoom</span>
-                <input
-                  type="range"
-                  min={HERO_ZOOM_MIN}
-                  max={HERO_ZOOM_MAX}
-                  step={5}
-                  value={heroOf(resolveFlow(set).landing).zoom}
-                  onChange={(e) => onZoom(Number(e.target.value))}
-                  aria-label="How far into the picture"
-                />
-                <span className="jy__zoom-read">{heroOf(resolveFlow(set).landing).zoom}%</span>
-              </label>
-            </>
-          )}
-          <span className="jy__tools-split" aria-hidden="true" />
-          <button type="button" className="jy__tool" onClick={() => onReset?.()}>
-            Reset
-          </button>
-        </div>
-      )}
       {step.renderer === 'landing' ? (
         /* The whole page, which the edit view scrolls. The tiles and the
            walkthrough keep drawing the hero alone: that is the screen a phone
@@ -170,19 +113,6 @@ export function StepPreview({
               content={resolveFlow(set).landing}
               market={marketOf(set)}
               device={set.device}
-              overArt={
-                framing && onFocal ? (
-                  <FocalDrag
-                    focalX={heroOf(resolveFlow(set).landing).focalX}
-                    focalY={heroOf(resolveFlow(set).landing).focalY}
-                    onDrag={onFocal}
-                    /* The picture as drawn — the uploaded one, or the shipped one
-                       it stands in for. What can move depends on which. */
-                    src={heroOf(resolveFlow(set).landing).image || heroArt}
-                    zoom={heroOf(resolveFlow(set).landing).zoom}
-                  />
-                ) : undefined
-              }
             >
               {/* The picker the page carries is the one the Subscription step
                   edits — its tabs and its cards, not a second drawing of them.

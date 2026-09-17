@@ -450,10 +450,8 @@
       'confirmation buttons': [4,58,72,24]
     }},
     stepview: { vb: '0 0 160 96', parts: {
-      'step preview': [0,0,160,96],      'framing tools': [20,2,40,6], 'framing tool': [21,3,22,4],
-      'framing tool mark': [22,4,3,3], 'framing tools divider': [45,3,1,4],
-      'framing zoom': [47,3,16,4], 'framing zoom name': [47,3,5,4], 'framing zoom reading': [59,3,4,4],
- 'entry line': [6,5,100,12], 'step name': [6,5,26,5],
+      'step preview': [0,0,160,96],
+      'entry line': [6,5,100,12], 'step name': [6,5,26,5],
       'step meta': [34,5,40,5], 'inbound seeds': [6,11,50,4],
       'preview stage': [42,18,76,82], 'preview shell': [44,20,72,74], 'preview base': [40,94,80,3], 'preview hinge': [56,92,10,2], 'preview hat': [46,22,68,4], 'viewport': [46,22,68,70], 'placeholder screen': [46,22,68,70],
       'placeholder frame name': [50,26,60,5], 'placeholder states': [50,33,60,4],
