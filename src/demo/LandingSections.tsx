@@ -607,7 +607,11 @@ function TeamRows({
 
   return (
     <>
-      {teams.map((team, i) => (
+      {teams.map((team, i) => {
+        /* The two lines together are what the artwork is keyed by, the same
+           way the rail reads them. */
+        const art = teamArt[[team.city, team.name].map((one) => (one ?? '').trim()).filter(Boolean).join(' ')]
+        return (
         <div
           className="demo__feature"
           /* One line rather than a stack: a logo, a name and a colour are
@@ -660,35 +664,45 @@ function TeamRows({
               It opens on whatever the tile is drawing now — the logo somebody
               uploaded, or the one the name brings — so replacing a picture
               starts from the picture being replaced. */}
-          <ImagePicker
-            aspect="1 / 1"
-            width={100}
-            src={team.logo}
-            shipped={teamArt[team.name.trim()]?.art}
-            label="Logo"
-            onPick={(url) => edit(i, { logo: url })}
-            onRemove={() => edit(i, { logo: '' })}
-          />
           <span className="demo__team-side">
+            {/* 100 square: what is being chosen is a crest, not a still, and a
+                crest at the width of the panel is a crest the size of a
+                poster. It opens on whatever the tile is drawing now, so
+                replacing a picture starts from the picture being replaced. */}
+            <ImagePicker
+              aspect="1 / 1"
+              width={100}
+              src={team.logo}
+              shipped={art?.art}
+              label="Logo"
+              onPick={(url) => edit(i, { logo: url })}
+              onRemove={() => edit(i, { logo: '' })}
+            />
+            <TextField
+              label="Over the name"
+              value={team.city ?? ''}
+              pipelineKey={key(`landing.teams[${i}].city`)}
+              onChange={(v) => edit(i, { city: v })}
+            />
             <TextField
               label={`Team ${i + 1}`}
               value={team.name}
               pipelineKey={key(`landing.teams[${i}].name`)}
               onChange={(v) => edit(i, { name: v })}
             />
-            {/* Opens on the colour the tile is wearing — the one chosen, or
-                the one the name brings — so a shipped team keeps its club's
-                own until somebody moves it. */}
-            <label className="demo__swatch">
-              <input
-                type="color"
-                value={team.ground || teamArt[team.name.trim()]?.ground || '#101112'}
-                onChange={(e) => edit(i, { ground: e.target.value })}
-                aria-label={`What is behind ${team.name || 'this team'}`}
-              />
-              <span className="demo__swatch-name">Ground</span>
-            </label>
           </span>
+          {/* Opens on the colour the tile is wearing — the one chosen, or the
+              one the two lines bring — so a shipped team keeps its club's own
+              until somebody moves it. */}
+          <label className="demo__swatch">
+            <input
+              type="color"
+              value={team.ground || art?.ground || '#101112'}
+              onChange={(e) => edit(i, { ground: e.target.value })}
+              aria-label={`What is behind ${team.name || 'this team'}`}
+            />
+            <span className="demo__swatch-name">Ground</span>
+          </label>
           <button
             data-icon="trash"
             aria-label="Remove"
@@ -700,7 +714,8 @@ function TeamRows({
             <TrashIcon size={14} />
           </button>
         </div>
-      ))}
+        )
+      })}
     </>
   )
 }

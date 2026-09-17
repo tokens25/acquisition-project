@@ -356,6 +356,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hb-image__over {
+    transition: none;
+  }
+
   .fg__body,
   .fg__chevron,
   .fg__toggle,
@@ -435,13 +439,35 @@
   gap: 6px;
   margin-block-start: 8px;
 }
-/* A picker told how wide to stand has less room under it than the two words
-   want. They are cut to fit rather than stacked: stacking costs a line of
-   height on every row, and the row is what was being tightened. */
-.hb-image[data-narrow] .hb-image__act {
-  min-inline-size: 0;
-  padding-inline: var(--space-4);
-  font-size: 10.5px;
+/* A narrow picker has no words under it: the picture is the control. The
+   label rises over it on hover and on keyboard focus, so the pointer is not
+   the only way to find out. */
+.hb-image__swap {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ed-radius);
+  background: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+.hb-image__over {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(4 8 11 / 72%);
+  color: var(--color-text-primary);
+  font-size: 11.5px;
+  font-weight: var(--font-weight-bold);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.hb-image__swap:hover .hb-image__over,
+.hb-image__swap:focus-visible .hb-image__over {
+  opacity: 1;
 }
 .hb-image__act {
   appearance: none;
@@ -632,24 +658,29 @@
   gap: var(--space-10);
   align-items: flex-start;
 }
+/* The logo, and the two lines under it. */
 .demo__team-side {
   display: flex;
   min-inline-size: 0;
   flex: 1;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-8);
 }
 /* The colour behind the crest. A swatch and its name, because a bare colour
    well says nothing about what it colours. */
+/* On the right of the row, under nothing: it colours the whole tile rather
+   than belonging to either line. */
 .demo__swatch {
   display: flex;
-  gap: var(--space-8);
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-4);
   align-items: center;
   cursor: pointer;
 }
 .demo__swatch input {
-  inline-size: 28px;
-  block-size: 28px;
+  inline-size: 36px;
+  block-size: 36px;
   padding: 0;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-6);

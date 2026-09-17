@@ -57,6 +57,8 @@ export function ImagePicker({
 }) {
   const file = useRef<HTMLInputElement>(null)
   const shape = aspect ? { aspectRatio: aspect } : undefined
+  /** Narrow enough that words under the picture would crowd it. */
+  const narrow = width !== undefined && width <= 140
   const showing = off ? '' : src || shipped || ''
 
   const pick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,10 +75,26 @@ export function ImagePicker({
     <div
       className="hb-image"
       /* Narrow enough that the two words under it have to be cut to fit. */
-      data-narrow={width !== undefined && width <= 140 ? '' : undefined}
+      data-narrow={narrow || undefined}
       style={width ? { inlineSize: width } : undefined}
     >
       {showing ? (
+        narrow ? (
+          /* No buttons under it. The picture is the control: hovering says so
+             and clicking opens the file. A picker this size sits in a row of
+             them, and a pair of words under every one is a paragraph of
+             chrome around three logos. */
+          <button
+            type="button"
+            className="hb-image__swap"
+            style={shape}
+            title="Replace this picture"
+            onClick={() => file.current?.click()}
+          >
+            <img className="hb-image__shot" src={showing} alt="" style={shape} />
+            <span className="hb-image__over">Replace</span>
+          </button>
+        ) : (
         <>
           <img className="hb-image__shot" src={showing} alt="" style={shape} />
           <div className="hb-image__acts">
@@ -88,6 +106,7 @@ export function ImagePicker({
             </button>
           </div>
         </>
+        )
       ) : (
         <>
           <button

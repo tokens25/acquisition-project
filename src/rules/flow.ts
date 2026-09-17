@@ -398,6 +398,15 @@ export interface LandingPlanCard {
  */
 export interface LandingTeam {
   id: string
+  /**
+   * The small line over the name — the city, as the design has it.
+   *
+   * Written rather than worked out. It used to be taken off the front of the
+   * name by matching the artwork's city, which is a guess that is right for
+   * the three teams the tool knows and silent about every other.
+   */
+  city?: string
+  /** The large line: the team. */
   name: string
   /** A logo of its own, instead of the one the name brings. A data URL. */
   logo?: string
@@ -881,9 +890,9 @@ export const defaultFlow: FlowContent = {
     /* The three the design fills in. The five it leaves as the tile's own
        template are drawn after them, however many are written here. */
     teams: [
-      { id: 'team-1', name: 'New York Knicks' },
-      { id: 'team-2', name: 'New York Rangers' },
-      { id: 'team-3', name: 'New York Islanders' },
+      { id: 'team-1', city: 'New York', name: 'Knicks' },
+      { id: 'team-2', city: 'New York', name: 'Rangers' },
+      { id: 'team-3', city: 'New York', name: 'Islanders' },
     ],
 
     areaTitle: "See what's live in your area",

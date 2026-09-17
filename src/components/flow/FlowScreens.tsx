@@ -1264,14 +1264,13 @@ function TeamsRail({
           /* A team with no name yet draws nothing rather than an empty tile:
              the field is there to be typed into, and the design's own empty
              tile is the template below. */
-          .filter((team) => team.name.trim() !== '')
+          .filter((team) => team.name.trim() !== '' || (team.city ?? '').trim() !== '')
           .map((team) => {
-            const art = teamArt[team.name.trim()]
-            /* The design sets the city over the name. Where the artwork knows
-               the city and the written name opens with it, the rest is the
-               name; anything else is drawn whole, on one line. */
-            const city = art && team.name.trim().startsWith(art.city) ? art.city : ''
-            const rest = city ? team.name.trim().slice(city.length).trim() : team.name.trim()
+            /* The two lines together are the name the artwork is keyed by, so
+               "New York" over "Knicks" finds the same tile the one-line name
+               used to. */
+            const full = [team.city, team.name].map((one) => (one ?? '').trim()).filter(Boolean).join(' ')
+            const art = teamArt[full]
             return (
               <div className="fl-team" key={team.id}>
                 <div
@@ -1300,8 +1299,10 @@ function TeamsRail({
                       what the name is read against. */}
                   <span className="fl-team__wash" aria-hidden="true" />
                   <span className="fl-team__content">
-                    {city !== '' && <span className="fl-team__city">{city}</span>}
-                    <span className="fl-team__name">{rest}</span>
+                    {(team.city ?? '').trim() !== '' && (
+                      <span className="fl-team__city">{team.city}</span>
+                    )}
+                    <span className="fl-team__name">{team.name}</span>
                   </span>
                 </div>
               </div>
