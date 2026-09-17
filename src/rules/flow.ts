@@ -553,8 +553,6 @@ export interface LandingScreen {
    */
   areaTitle?: string
   areaBody?: string
-  areaFieldLabel?: string
-  areaFieldValue?: string
   areaNotice?: string
   areaNote?: string
   areaCta?: string
@@ -897,8 +895,6 @@ export const defaultFlow: FlowContent = {
 
     areaTitle: "See what's live in your area",
     areaBody: 'Enter your ZIP Code to see which teams you can watch',
-    areaFieldLabel: 'Enter ZIP Code',
-    areaFieldValue: '43316',
     areaNotice: "MSG+ and YES aren't available in 43316",
     areaNote:
       "Your area is outside the MSG+ and YES broadcast region. DAZN's national plans are available everywhere in the US, and other regional networks may cover your teams.",

@@ -1632,10 +1632,9 @@ export function PageSectionView({
               <span className="fl-area__pin" aria-hidden="true">
                 <img src={actionLocation} alt="" />
               </span>
-              <span className="fl-area__entry">
-                <span className="fl-area__label">{text.areaFieldLabel}</span>
-                <span className="fl-area__value">{text.areaFieldValue}</span>
-              </span>
+              {/* Empty. What stood here was a label and a code nobody typed,
+                  and this is the box somebody types their own into. */}
+              <span className="fl-area__entry" />
               <span className="fl-area__clear" aria-hidden="true">
                 <Icon svg={iconArtwork.close} size={24} />
               </span>

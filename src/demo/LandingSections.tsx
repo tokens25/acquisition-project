@@ -794,8 +794,6 @@ function SectionFields({
 
               <TextField label="Heading" value={t.areaTitle} pipelineKey={key('landing.areaTitle')} onChange={(v) => write({ areaTitle: v })} />
               <TextField label="Under the heading" value={t.areaBody} pipelineKey={key('landing.areaBody')} onChange={(v) => write({ areaBody: v })} rows={2} />
-              <TextField label="Field label" value={t.areaFieldLabel} pipelineKey={key('landing.areaFieldLabel')} onChange={(v) => write({ areaFieldLabel: v })} />
-              <TextField label="Code shown" value={t.areaFieldValue} pipelineKey={key('landing.areaFieldValue')} onChange={(v) => write({ areaFieldValue: v })} />
               <TextField label="Notice" value={t.areaNotice} pipelineKey={key('landing.areaNotice')} onChange={(v) => write({ areaNotice: v })} rows={2} />
               <TextField label="Under the notice" value={t.areaNote} pipelineKey={key('landing.areaNote')} onChange={(v) => write({ areaNote: v })} rows={4} />
               <TextField label="Button" value={t.areaCta} pipelineKey={key('landing.areaCta')} onChange={(v) => write({ areaCta: v })} />

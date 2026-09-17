@@ -213,8 +213,6 @@ export function landingText(content: LandingScreen): Required<
     teamsBody: of('teamsBody'),
     areaTitle: of('areaTitle'),
     areaBody: of('areaBody'),
-    areaFieldLabel: of('areaFieldLabel'),
-    areaFieldValue: of('areaFieldValue'),
     areaNotice: of('areaNotice'),
     areaNote: of('areaNote'),
     areaCta: of('areaCta'),
