@@ -484,7 +484,7 @@
       ["what's live league", ".fl-live__league", "NBA, NHL — at the right, in capitals. Empty draws none.", 'flowLandingPage'],
       ["what's live button", ".fl-live__cta", "The white button at the foot. Empty draws none.", 'flowLandingPage'],
       ["spotlight block", ".fl-spot", "One thing above everything else — node 1084:56109. A picture the width of the screen, what it is, and the games that make it up.", 'flowLandingPage'],
-      ["spotlight picture", ".fl-spot__art", "The picture behind the top of it, square and running to both edges, anchored to its top. Artwork like this is people at the top and ground beneath them, so whatever has to go goes from the bottom.", 'flowLandingPage'],
+      ["spotlight picture", ".fl-spot__art", "The picture behind the top of it, three to two and running to both edges, anchored to its top. The file is the players over a stretch of black; this is the band they are in — heads at the top, the ball at the foot, and the label sitting on its bottom edge.", 'flowLandingPage'],
       ["spotlight wash", ".fl-spot__wash", "Dark at the foot of the picture, so the label and the heading have something to sit on.", 'flowLandingPage'],
       ["spotlight copy", ".fl-spot__copy", "The label, the heading and the line under it, pulled up over the foot of the picture.", 'flowLandingPage'],
       ["spotlight label", ".fl-spot__label", "The gold chip — EXCLUSIVE. Empty draws none.", 'flowLandingPage'],

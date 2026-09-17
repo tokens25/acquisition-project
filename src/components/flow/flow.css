@@ -4081,18 +4081,19 @@
   gap: var(--space-16);
   inline-size: 100%;
 }
-/* Square, which is what the design's own picture comes to on a phone: it
-   carries the screen without taking all of it.
+/* Three to two, which is where the artwork ends: the file is the players
+   over a stretch of black, and this is the band the players are in — heads at
+   the top, the ball at the foot, and the label sitting on its bottom edge.
 
-   It was 3:5 capped at 320, and the cap is what did the damage — a 3:5 box
-   with a ceiling is not a 3:5 box, it is a wide one, and a tall picture
-   cropped to the middle of a wide box is the middle of the picture. Which,
-   for artwork of players standing on a pitch, is their legs. */
+   It was 3:5 capped at 320 before, and the cap is what did the damage — a
+   ratio with a ceiling is not that ratio, it is whatever the ceiling makes
+   it, and a tall picture cropped to the middle of a wide box is the middle of
+   the picture. For players standing on a pitch, that is their legs. */
 .fl-spot__art {
   position: relative;
   display: block;
   inline-size: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
 }
 /* And anchored to the top rather than the middle. Artwork like this is people
