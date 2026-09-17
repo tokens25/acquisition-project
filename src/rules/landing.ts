@@ -5,9 +5,7 @@ import type {
   LandingCard,
   LandingMatch,
   LandingTab,
-  LandingPerk,
   LandingPlanCard,
-  LandingPlanFight,
   LandingTeam,
   LandingTeamRow,
   LandingSubTile,
@@ -490,39 +488,6 @@ export function spotlightTilesOf(content: LandingScreen): LandingTile[] {
 /** The plans a fight can be bought on, or the ones it ships with. */
 export function planCardsOf(content: LandingScreen): LandingPlanCard[] {
   return content.planCards ?? defaultFlow.landing.planCards ?? []
-}
-
-/** A new card, selling one fight on a monthly plan — the commonest of the eight. */
-export function blankPlanCard(existing: LandingPlanCard[]): LandingPlanCard {
-  return {
-    id: nextId('plan', existing),
-    name: '',
-    note: '',
-    price: '',
-    priceUnit: '/month',
-    notice: '',
-    offerName: '',
-    offerPrice: '',
-    offerWas: '',
-    offerUnit: '',
-    offerSave: '',
-    fights: [{ id: 'pf-1', name: '', when: '', price: '', was: '', unit: '/fight', save: '' }],
-    postersLine: '',
-    posters: [],
-    perks: [],
-    gold: false,
-    chosen: false,
-  }
-}
-
-/** A new fight on a card. */
-export function blankPlanFight(existing: LandingPlanFight[]): LandingPlanFight {
-  return { id: nextId('pf', existing), name: '', when: '', price: '', was: '', unit: '/fight', save: '' }
-}
-
-/** A new line under the prices. A tick: the note is the rarer of the two. */
-export function blankPerk(existing: LandingPerk[]): LandingPerk {
-  return { id: nextId('perk', existing), text: '', info: false }
 }
 
 /** A new question. */

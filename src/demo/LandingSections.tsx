@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { CSSProperties } from 'react'
 
 import { CardSetView } from '../card/CardSetView'
+import { FightPlanCards } from '../components/flow/FlowScreens'
 import { SubscriptionTabs } from '../components/flow/FlowScreens'
 import { tabsOf } from '../rules/tabs'
 import { ComponentPeek } from './ComponentPeek'
@@ -19,9 +20,6 @@ import {
   blankFight,
   blankMatch,
   blankTab,
-  blankPerk,
-  blankPlanCard,
-  blankPlanFight,
   blankTeam,
   blankTeamRow,
   blankLink,
@@ -578,6 +576,14 @@ function SectionCard({
  * of what the page sells.
  */
 const PICKER_WIDTH = 888
+
+/**
+ * What the fight plan's cards are laid out at inside their thumbnail.
+ *
+ * Two cards side by side rather than the page's one above the other: stacked,
+ * a thumbnail of them is the top of the first card and nothing else.
+ */
+const PLAN_WIDTH = 760
 
 /**
  * The teams on the rail: what each is called, its logo, and what order.
@@ -1611,270 +1617,21 @@ function SectionFields({
             onChange={(v) => write({ planPickTitle: v })}
             rows={2}
           />
-          {planCardsOf(inst).map((card, i) => {
-            const all = planCardsOf(inst)
-            const edit = (next: Partial<typeof card>) =>
-              write({ planCards: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
-            return (
-              <div className="demo__feature" key={card.id}>
-                <TextField
-                  label={`Plan ${i + 1}`}
-                  value={card.name}
-                  pipelineKey={key(`landing.planCards[${i}].name`)}
-                  onChange={(v) => edit({ name: v })}
-                />
-                {/* The four offers the design draws are this line and the
-                    prices below it: no offer, a free trial, a discount, a
-                    month free. Nothing else about the card changes. */}
-                <TextField
-                  label="Under the name"
-                  value={card.note}
-                  pipelineKey={key(`landing.planCards[${i}].note`)}
-                  onChange={(v) => edit({ note: v })}
-                  rows={2}
-                  helpText="How it is billed, or the offer on it — a free trial, a first month free."
-                />
-                <TextField
-                  label="Price"
-                  value={card.price}
-                  pipelineKey={key(`landing.planCards[${i}].price`)}
-                  onChange={(v) => edit({ price: v })}
-                  helpText="Empty on a card that leads with the fight's own price."
-                />
-                <TextField
-                  label="After the price"
-                  value={card.priceUnit}
-                  pipelineKey={key(`landing.planCards[${i}].priceUnit`)}
-                  onChange={(v) => edit({ priceUnit: v })}
-                />
-                <TextField
-                  label="Boxed message"
-                  value={card.notice}
-                  pipelineKey={key(`landing.planCards[${i}].notice`)}
-                  onChange={(v) => edit({ notice: v })}
-                  rows={2}
-                  helpText="Under the price, with an i. Empty draws none."
-                />
-                <TextField
-                  label="Bundle name"
-                  value={card.offerName}
-                  pipelineKey={key(`landing.planCards[${i}].offerName`)}
-                  onChange={(v) => edit({ offerName: v })}
-                  helpText="Fills to sell the fights below as one bundle. Empty sells them singly."
-                />
-                {card.offerName.trim() !== '' && (
-                  <>
-                    <TextField
-                      label="Bundle price"
-                      value={card.offerPrice}
-                      pipelineKey={key(`landing.planCards[${i}].offerPrice`)}
-                      onChange={(v) => edit({ offerPrice: v })}
-                    />
-                    <TextField
-                      label="Bundle was"
-                      value={card.offerWas}
-                      pipelineKey={key(`landing.planCards[${i}].offerWas`)}
-                      onChange={(v) => edit({ offerWas: v })}
-                    />
-                    <TextField
-                      label="After the bundle price"
-                      value={card.offerUnit}
-                      pipelineKey={key(`landing.planCards[${i}].offerUnit`)}
-                      onChange={(v) => edit({ offerUnit: v })}
-                    />
-                    <TextField
-                      label="Bundle saving"
-                      value={card.offerSave}
-                      pipelineKey={key(`landing.planCards[${i}].offerSave`)}
-                      onChange={(v) => edit({ offerSave: v })}
-                    />
-                  </>
-                )}
-                {card.fights.map((fight, f) => {
-                  const fit = (next: Partial<typeof fight>) =>
-                    edit({ fights: card.fights.map((one, j) => (j === f ? { ...one, ...next } : one)) })
-                  return (
-                    <div className="demo__feature" key={fight.id}>
-                      <TextField
-                        label={`Fight ${f + 1}`}
-                        value={fight.name}
-                        pipelineKey={key(`landing.planCards[${i}].fights[${f}].name`)}
-                        onChange={(v) => fit({ name: v })}
-                      />
-                      <TextField
-                        label="When"
-                        value={fight.when}
-                        pipelineKey={key(`landing.planCards[${i}].fights[${f}].when`)}
-                        onChange={(v) => fit({ when: v })}
-                      />
-                      <TextField
-                        label="Price"
-                        value={fight.price}
-                        pipelineKey={key(`landing.planCards[${i}].fights[${f}].price`)}
-                        onChange={(v) => fit({ price: v })}
-                        helpText="Empty where the bundle above prices it."
-                      />
-                      <TextField
-                        label="Was"
-                        value={fight.was}
-                        pipelineKey={key(`landing.planCards[${i}].fights[${f}].was`)}
-                        onChange={(v) => fit({ was: v })}
-                      />
-                      <TextField
-                        label="Saving"
-                        value={fight.save}
-                        pipelineKey={key(`landing.planCards[${i}].fights[${f}].save`)}
-                        onChange={(v) => fit({ save: v })}
-                      />
-                      <button
-                        data-icon="trash"
-                        aria-label="Remove"
-                        type="button"
-                        className="demo__feature-remove"
-                        data-destructive=""
-                        onClick={() => edit({ fights: card.fights.filter((_, j) => j !== f) })}
-                      >
-                        <TrashIcon size={14} />
-                      </button>
-                    </div>
-                  )
-                })}
-                <button
-                  type="button"
-                  className="ed-add"
-                  onClick={() => edit({ fights: [...card.fights, blankPlanFight(card.fights)] })}
-                >
-                  Add a fight
-                </button>
-                <TextField
-                  label="Over the posters"
-                  value={card.postersLine}
-                  pipelineKey={key(`landing.planCards[${i}].postersLine`)}
-                  onChange={(v) => edit({ postersLine: v })}
-                  rows={2}
-                  helpText="Fills on a card selling a whole year. Empty draws neither it nor the posters."
-                />
-                {card.posters.map((poster, q) => (
-                  <div className="demo__feature" key={poster.id}>
-                    <TextField
-                      label={`Poster ${q + 1}`}
-                      value={poster.when}
-                      pipelineKey={key(`landing.planCards[${i}].posters[${q}].when`)}
-                      onChange={(v) =>
-                        edit({
-                          posters: card.posters.map((one, j) => (j === q ? { ...one, when: v } : one)),
-                        })
-                      }
-                      helpText="The date across the foot of the artwork."
-                    />
-                    <button
-                      data-icon="trash"
-                      aria-label="Remove"
-                      type="button"
-                      className="demo__feature-remove"
-                      data-destructive=""
-                      onClick={() => edit({ posters: card.posters.filter((_, j) => j !== q) })}
-                    >
-                      <TrashIcon size={14} />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  className="ed-add"
-                  onClick={() =>
-                    edit({ posters: [...card.posters, { id: `po-${card.posters.length + 1}`, when: '' }] })
-                  }
-                >
-                  Add a poster
-                </button>
-                {card.perks.map((perk, k) => (
-                  <div className="demo__feature" key={perk.id}>
-                    <TextField
-                      label={`Line ${k + 1}`}
-                      value={perk.text}
-                      pipelineKey={key(`landing.planCards[${i}].perks[${k}].text`)}
-                      onChange={(v) =>
-                        edit({ perks: card.perks.map((one, j) => (j === k ? { ...one, text: v } : one)) })
-                      }
-                    />
-                    <ToggleField
-                      label="A note rather than a tick"
-                      checked={perk.info}
-                      onChange={(v) =>
-                        edit({ perks: card.perks.map((one, j) => (j === k ? { ...one, info: v } : one)) })
-                      }
-                      hint="Drawn with an i, and quieter: something to know, not something you get."
-                    />
-                    <button
-                      data-icon="trash"
-                      aria-label="Remove"
-                      type="button"
-                      className="demo__feature-remove"
-                      data-destructive=""
-                      onClick={() => edit({ perks: card.perks.filter((_, j) => j !== k) })}
-                    >
-                      <TrashIcon size={14} />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  className="ed-add"
-                  onClick={() => edit({ perks: [...card.perks, blankPerk(card.perks)] })}
-                >
-                  Add a line
-                </button>
-                <ToggleField
-                  label="The year's card"
-                  checked={card.gold}
-                  onChange={(v) => edit({ gold: v })}
-                  hint="Gold outline and a gold name."
-                />
-                <ToggleField
-                  label="Chosen"
-                  checked={card.chosen}
-                  onChange={(v) =>
-                    write({
-                      /* One filled radio: choosing this one unchooses the rest,
-                         because a picker showing two choices has made none. */
-                      planCards: all.map((one, j) => ({ ...one, chosen: v && j === i })),
-                    })
-                  }
-                />
-                <button
-                  data-icon="trash"
-                  aria-label="Remove"
-                  type="button"
-                  className="demo__feature-remove"
-                  data-destructive=""
-                  onClick={() => write({ planCards: all.filter((_, j) => j !== i) })}
-                >
-                  <TrashIcon size={14} />
-                </button>
-              </div>
-            )
-          })}
-          <button
-            type="button"
-            className="ed-add"
-            onClick={() => write({ planCards: [...planCardsOf(inst), blankPlanCard(planCardsOf(inst))] })}
-          >
-            Add a plan
-          </button>
-          <TextField
-            label="The way to the rest"
-            value={t.planPickMore}
-            pipelineKey={key('landing.planPickMore')}
-            onChange={(v) => write({ planPickMore: v })}
-            helpText="Under the cards, with a chevron. Empty draws none."
-          />
-          <TextField
-            label="Button"
-            value={t.planPickCta}
-            pipelineKey={key('landing.planPickCta')}
-            onChange={(v) => write({ planPickCta: v })}
-          />
+          {/* The cards as they are, rather than fields for them. What the page
+              owns here is the heading; a plan and what it costs belong to
+              whatever sells it, and a set of fields here would be a second
+              answer going out of step with the first. */}
+          <span className="ls-shot" aria-hidden="true">
+            <span className="ls-shot__frame" data-plan="">
+              <span
+                className="ls-shot__page"
+                style={{ inlineSize: PLAN_WIDTH, '--ls-shot-w': `${PLAN_WIDTH}px` } as CSSProperties}
+                inert
+              >
+                <FightPlanCards cards={planCardsOf(inst)} />
+              </span>
+            </span>
+          </span>
         </>
       )
 

@@ -2483,6 +2483,115 @@ function SpotlightSection({
   )
 }
 
+
+/**
+ * The cards a fight can be bought on.
+ *
+ * Its own component because the panel draws them too: the plans fold shows
+ * the set as it is rather than a set of fields for it, and a second drawing
+ * of a card is a second card to keep in step.
+ */
+export function FightPlanCards({ cards }: { cards: LandingPlanCard[] }) {
+  return (
+    <div className="fl-plan__cards">
+      {cards.map((card) => (
+        <article className="fl-plan__card" key={card.id} data-gold={card.gold || undefined}>
+          <div className="fl-plan__head">
+            <p className="fl-plan__name">{card.name}</p>
+            <span className="fl-plan__radio" data-on={card.chosen || undefined} aria-hidden="true" />
+          </div>
+          {card.note.trim() !== '' && <p className="fl-plan__note">{card.note}</p>}
+          {card.price.trim() !== '' && (
+            <p className="fl-plan__price">
+              {card.price}
+              {card.priceUnit.trim() !== '' && (
+                <span className="fl-plan__unit">{card.priceUnit}</span>
+              )}
+            </p>
+          )}
+          {card.notice.trim() !== '' && (
+            <p className="fl-plan__notice">
+              <Mark svg={actionsInfo} size={16} />
+              <span>{card.notice}</span>
+            </p>
+          )}
+
+          {/* A bundle prices the fights under it together, so its name and
+              price stand over them with the rule the design draws. */}
+          {card.offerName.trim() !== '' && (
+            <div className="fl-plan__offer">
+              <p className="fl-plan__offer-name">{card.offerName}</p>
+              <p className="fl-plan__offer-price">
+                {card.offerPrice}
+                {card.offerWas.trim() !== '' && (
+                  <span className="fl-plan__was">{card.offerWas}</span>
+                )}
+                {card.offerUnit.trim() !== '' && (
+                  <span className="fl-plan__unit">{card.offerUnit}</span>
+                )}
+                {card.offerSave.trim() !== '' && (
+                  <span className="fl-plan__save">{card.offerSave}</span>
+                )}
+              </p>
+            </div>
+          )}
+
+          {card.fights.map((fight, at) => (
+            <div className="fl-plan__fight" key={fight.id}>
+              <span className="fl-plan__shot" aria-hidden="true">
+                <img src={artAt(PLAN_FIGHT_ART, at)} alt="" />
+              </span>
+              <span className="fl-plan__fight-words">
+                <p className="fl-plan__fight-name">{fight.name}</p>
+                <p className="fl-plan__when">{fight.when}</p>
+                {fight.price.trim() !== '' && (
+                  <p className="fl-plan__fight-price">
+                    {fight.price}
+                    {fight.was.trim() !== '' && <span className="fl-plan__was">{fight.was}</span>}
+                    {fight.unit.trim() !== '' && (
+                      <span className="fl-plan__unit">{fight.unit}</span>
+                    )}
+                  </p>
+                )}
+                {fight.save.trim() !== '' && (
+                  <p className="fl-plan__fight-save">
+                    <span className="fl-plan__save">{fight.save}</span>
+                  </p>
+                )}
+              </span>
+            </div>
+          ))}
+
+          {card.postersLine.trim() !== '' && (
+            <p className="fl-plan__posters-line">{card.postersLine}</p>
+          )}
+          {card.posters.length > 0 && (
+            <div className="fl-plan__posters">
+              {card.posters.map((poster, at) => (
+                <span className="fl-plan__poster" key={poster.id}>
+                  <img src={artAt(POSTER_ART, at)} alt="" />
+                  <span className="fl-plan__poster-when">{poster.when}</span>
+                </span>
+              ))}
+            </div>
+          )}
+
+          {card.perks.length > 0 && (
+            <div className="fl-plan__perks">
+              {card.perks.map((perk) => (
+                <p className="fl-plan__perk" key={perk.id} data-info={perk.info || undefined}>
+                  <Mark svg={perk.info ? actionsInfo : iconArtwork.checkmark} size={16} />
+                  <span>{perk.text}</span>
+                </p>
+              ))}
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  )
+}
+
 /**
  * Buying the fight — node 1102:53279.
  *
@@ -2511,102 +2620,7 @@ function FightPlanSection({
   return (
     <section className="fl-plan">
       {title.trim() !== '' && <p className="fl-plan__title">{title}</p>}
-      <div className="fl-plan__cards">
-        {cards.map((card) => (
-          <article className="fl-plan__card" key={card.id} data-gold={card.gold || undefined}>
-            <div className="fl-plan__head">
-              <p className="fl-plan__name">{card.name}</p>
-              <span className="fl-plan__radio" data-on={card.chosen || undefined} aria-hidden="true" />
-            </div>
-            {card.note.trim() !== '' && <p className="fl-plan__note">{card.note}</p>}
-            {card.price.trim() !== '' && (
-              <p className="fl-plan__price">
-                {card.price}
-                {card.priceUnit.trim() !== '' && (
-                  <span className="fl-plan__unit">{card.priceUnit}</span>
-                )}
-              </p>
-            )}
-            {card.notice.trim() !== '' && (
-              <p className="fl-plan__notice">
-                <Mark svg={actionsInfo} size={16} />
-                <span>{card.notice}</span>
-              </p>
-            )}
-
-            {/* A bundle prices the fights under it together, so its name and
-                price stand over them with the rule the design draws. */}
-            {card.offerName.trim() !== '' && (
-              <div className="fl-plan__offer">
-                <p className="fl-plan__offer-name">{card.offerName}</p>
-                <p className="fl-plan__offer-price">
-                  {card.offerPrice}
-                  {card.offerWas.trim() !== '' && (
-                    <span className="fl-plan__was">{card.offerWas}</span>
-                  )}
-                  {card.offerUnit.trim() !== '' && (
-                    <span className="fl-plan__unit">{card.offerUnit}</span>
-                  )}
-                  {card.offerSave.trim() !== '' && (
-                    <span className="fl-plan__save">{card.offerSave}</span>
-                  )}
-                </p>
-              </div>
-            )}
-
-            {card.fights.map((fight, at) => (
-              <div className="fl-plan__fight" key={fight.id}>
-                <span className="fl-plan__shot" aria-hidden="true">
-                  <img src={artAt(PLAN_FIGHT_ART, at)} alt="" />
-                </span>
-                <span className="fl-plan__fight-words">
-                  <p className="fl-plan__fight-name">{fight.name}</p>
-                  <p className="fl-plan__when">{fight.when}</p>
-                  {fight.price.trim() !== '' && (
-                    <p className="fl-plan__fight-price">
-                      {fight.price}
-                      {fight.was.trim() !== '' && <span className="fl-plan__was">{fight.was}</span>}
-                      {fight.unit.trim() !== '' && (
-                        <span className="fl-plan__unit">{fight.unit}</span>
-                      )}
-                    </p>
-                  )}
-                  {fight.save.trim() !== '' && (
-                    <p className="fl-plan__fight-save">
-                      <span className="fl-plan__save">{fight.save}</span>
-                    </p>
-                  )}
-                </span>
-              </div>
-            ))}
-
-            {card.postersLine.trim() !== '' && (
-              <p className="fl-plan__posters-line">{card.postersLine}</p>
-            )}
-            {card.posters.length > 0 && (
-              <div className="fl-plan__posters">
-                {card.posters.map((poster, at) => (
-                  <span className="fl-plan__poster" key={poster.id}>
-                    <img src={artAt(POSTER_ART, at)} alt="" />
-                    <span className="fl-plan__poster-when">{poster.when}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {card.perks.length > 0 && (
-              <div className="fl-plan__perks">
-                {card.perks.map((perk) => (
-                  <p className="fl-plan__perk" key={perk.id} data-info={perk.info || undefined}>
-                    <Mark svg={perk.info ? actionsInfo : iconArtwork.checkmark} size={16} />
-                    <span>{perk.text}</span>
-                  </p>
-                ))}
-              </div>
-            )}
-          </article>
-        ))}
-      </div>
+      <FightPlanCards cards={cards} />
       {more.trim() !== '' && (
         <span className="fl-plan__more" role="button">
           {more}

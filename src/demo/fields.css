@@ -1092,6 +1092,22 @@
   overflow: hidden;
   container-type: inline-size;
 }
+/* The fight plan's own shape. Its two cards side by side come out squarer
+   than the subscription set's three, and a window on the set's ratio leaves a
+   band of black under them. */
+.ls-shot__frame[data-plan] {
+  aspect-ratio: 5 / 3;
+}
+/* The fight plan stacks its cards down the page. Side by side in a thumbnail,
+   because stacked it is the top of the first card and nothing else. */
+.ls-shot .fl-plan__cards {
+  flex-direction: row;
+  align-items: flex-start;
+}
+.ls-shot .fl-plan__card {
+  flex: 1;
+  min-inline-size: 0;
+}
 /* Laid out at the width the set needs and scaled by the thumbnail's own, so
    the whole set is in shot whatever width the panel is. */
 .ls-shot__page {
