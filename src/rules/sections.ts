@@ -206,7 +206,7 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   teams: 'Eyebrow, heading, body, and the teams',
   area: 'Heading, a line under it, notice, button',
   multiview: 'Still, eyebrow, heading, button',
-  providers: 'Heading, six providers, button',
+  providers: 'Heading, a line under it, a note, button',
   devices: 'Two headings and a body',
   faq: 'Heading and five questions',
   imageCta: 'Picture, heading, body, button',

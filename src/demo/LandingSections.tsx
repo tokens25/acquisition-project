@@ -25,7 +25,6 @@ import {
   blankTeam,
   blankTeamRow,
   blankLink,
-  blankProvider,
   blankQuestion,
   blankSubTile,
   blankTile,
@@ -40,7 +39,6 @@ import {
   planCardsOf,
   landingText,
   linksOf,
-  providersOf,
   questionsOf,
   railIdOf,
   railSizeOf,
@@ -829,42 +827,9 @@ function SectionFields({
               <TextField label="Heading" value={t.providersTitle} pipelineKey={key('landing.providersTitle')} onChange={(v) => write({ providersTitle: v })} rows={2} helpText="The design breaks this line itself — a new line here is the break." />
               <TextField label="Under the heading" value={t.providersBody} pipelineKey={key('landing.providersBody')} onChange={(v) => write({ providersBody: v })} rows={3} />
               <TextField label="The gold half" value={t.providersHighlight} pipelineKey={key('landing.providersHighlight')} onChange={(v) => write({ providersHighlight: v })} helpText="Follows the sentence above, in gold." />
-              {providersOf(inst).map((provider, i) => {
-                const all = providersOf(inst)
-                return (
-                  <div className="demo__feature" key={provider.id}>
-                    <TextField
-                      label={`Provider ${i + 1}`}
-                      value={provider.name}
-                      pipelineKey={key(`landing.providers[${i}].name`)}
-                      onChange={(v) =>
-                        write({
-                          providers: all.map((p, j) => (j === i ? { ...p, name: v } : p)),
-                        })
-                      }
-                      helpText="The name picks the logo. One with no logo shows its name."
-                    />
-                    <button
-                      data-icon="trash"
-                      aria-label="Remove"
-                      type="button"
-                      className="demo__feature-remove"
-                      onClick={() => write({ providers: all.filter((_, j) => j !== i) })}
-                    >
-                      <TrashIcon size={14} />
-                    </button>
-                  </div>
-                )
-              })}
-              <button
-                type="button"
-                className="ed-add"
-                onClick={() =>
-                  write({ providers: [...providersOf(inst), blankProvider(providersOf(inst))] })
-                }
-              >
-                Add a provider
-              </button>
+              {/* Which providers, and what each is called, is not written here:
+                  the grid is who DAZN has deals with, and a page that listed
+                  them would be a second list going out of step with the first. */}
               <TextField label="Under the grid" value={t.providersNote} pipelineKey={key('landing.providersNote')} onChange={(v) => write({ providersNote: v })} rows={2} />
               <TextField label="Button" value={t.providersCta} pipelineKey={key('landing.providersCta')} onChange={(v) => write({ providersCta: v })} />
         </>

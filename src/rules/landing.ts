@@ -306,11 +306,6 @@ export function providersOf(content: LandingScreen): LandingProvider[] {
   return untouched ? shipped : saved
 }
 
-/** A new provider tile. Named blank, because the name picks the logo. */
-export function blankProvider(existing: LandingProvider[]): LandingProvider {
-  return { id: nextId('provider', existing), name: '' }
-}
-
 /** The words in the footer. */
 export function linksOf(content: LandingScreen): LandingLink[] {
   return content.footerLinks ?? defaultFlow.landing.footerLinks ?? []
