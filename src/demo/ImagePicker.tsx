@@ -84,16 +84,32 @@ export function ImagePicker({
              and clicking opens the file. A picker this size sits in a row of
              them, and a pair of words under every one is a paragraph of
              chrome around three logos. */
-          <button
-            type="button"
-            className="hb-image__swap"
-            style={shape}
-            title="Replace this picture"
-            onClick={() => file.current?.click()}
-          >
-            <img className="hb-image__shot" src={showing} alt="" style={shape} />
-            <span className="hb-image__over">Replace</span>
-          </button>
+          <>
+            <button
+              type="button"
+              className="hb-image__swap"
+              style={shape}
+              title="Replace this picture"
+              onClick={() => file.current?.click()}
+            >
+              <img className="hb-image__shot" src={showing} alt="" style={shape} />
+              <span className="hb-image__over">Replace</span>
+            </button>
+            {/* Beside the picture rather than inside it — a button inside a
+                button is not a thing a browser will draw — and small, in the
+                corner: taking a picture off is rarer than changing it, but a
+                slot that can only ever be changed is a slot nothing can be
+                taken out of. */}
+            <button
+              type="button"
+              className="hb-image__clear"
+              title="Remove this picture"
+              aria-label="Remove this picture"
+              onClick={onRemove}
+            >
+              ×
+            </button>
+          </>
         ) : (
         <>
           <img className="hb-image__shot" src={showing} alt="" style={shape} />

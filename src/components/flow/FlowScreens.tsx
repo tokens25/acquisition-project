@@ -2165,11 +2165,18 @@ function MatchListSection({
               <div className="fl-match__teams">
                 <span className="fl-match__team">
                   <span className="fl-match__code">{match.home}</span>
-                  <span className="fl-match__crest" aria-hidden="true" />
+                  {/* The flag where the match has one, and the empty box where
+                      it has not — which is what the design draws for a side
+                      that is two countries at once. */}
+                  <span className="fl-match__crest" aria-hidden="true">
+                    {match.homeFlag && <img src={match.homeFlag} alt="" />}
+                  </span>
                 </span>
                 <span className="fl-match__time">{match.time}</span>
                 <span className="fl-match__team" data-away="">
-                  <span className="fl-match__crest" aria-hidden="true" />
+                  <span className="fl-match__crest" aria-hidden="true">
+                    {match.awayFlag && <img src={match.awayFlag} alt="" />}
+                  </span>
                   <span className="fl-match__code">{match.away}</span>
                 </span>
               </div>

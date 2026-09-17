@@ -1206,6 +1206,17 @@ function SectionFields({
                   pipelineKey={key(`landing.matchGames[${i}].home`)}
                   onChange={(v) => edit({ home: v })}
                 />
+                {/* Beside the code it belongs to, at the flag's own shape and
+                    small: what is being chosen is the thing next to three
+                    letters, not a still. */}
+                <ImagePicker
+                  aspect="3 / 2"
+                  width={64}
+                  src={match.homeFlag}
+                  label="Home flag"
+                  onPick={(url) => edit({ homeFlag: url })}
+                  onRemove={() => edit({ homeFlag: '' })}
+                />
                 <TextField
                   label="Kick-off"
                   value={match.time}
@@ -1217,6 +1228,14 @@ function SectionFields({
                   value={match.away}
                   pipelineKey={key(`landing.matchGames[${i}].away`)}
                   onChange={(v) => edit({ away: v })}
+                />
+                <ImagePicker
+                  aspect="3 / 2"
+                  width={64}
+                  src={match.awayFlag}
+                  label="Away flag"
+                  onPick={(url) => edit({ awayFlag: url })}
+                  onRemove={() => edit({ awayFlag: '' })}
                 />
                 <TextField
                   label="Under the rule"

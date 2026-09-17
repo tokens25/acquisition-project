@@ -469,6 +469,39 @@
 .hb-image__swap:focus-visible .hb-image__over {
   opacity: 1;
 }
+/* Shown while the pointer is over the picker, and whenever it has the
+   keyboard: a control only the pointer can reach is a control half the people
+   here cannot. */
+.hb-image__clear {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 4px;
+  inset-inline-end: 4px;
+  display: grid;
+  place-items: center;
+  inline-size: 18px;
+  block-size: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: rgb(4 8 11 / 82%);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.hb-image:hover .hb-image__clear,
+.hb-image__clear:focus-visible {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hb-image__clear {
+    transition: none;
+  }
+}
 .hb-image__act {
   appearance: none;
   cursor: pointer;

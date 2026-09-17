@@ -303,6 +303,16 @@ export interface LandingMatch {
   /** The two sides, as the card abbreviates them: MEX, RSA. */
   home: string
   away: string
+  /**
+   * The flag beside each code. A data URL.
+   *
+   * On the match rather than worked out from the code, because a code is an
+   * abbreviation somebody chose and not a country: the design's own list has
+   * DEN/M and ITA/NI, sides that are two countries at once and have no one
+   * flag between them. Absent draws the empty box the design draws for those.
+   */
+  homeFlag?: string
+  awayFlag?: string
   time: string
   /** The line under the rule — stage, group, stadium and city. */
   note: string
