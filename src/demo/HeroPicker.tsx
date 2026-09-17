@@ -1,23 +1,24 @@
+import { useState } from 'react'
+
 import { LandingFlowScreen } from '../components/flow/FlowScreens'
 import type { CardSetStore } from '../editor/useCardSet'
-import type { Selector } from '../rules/layers'
-import { resolveFlow, writeFlow } from '../rules/layers'
+import { resolveFlow } from '../rules/layers'
 import { marketOf } from '../rules/content'
-import { HEROES, heroesFor, type HeroPreset } from '../rules/heroes'
+import { HERO_APP, HEROES, heroesFor, type HeroPreset } from '../rules/heroes'
 import './hero-picker.css'
 
 /**
- * Choosing which hero the page opens with.
+ * The heroes there are, and the way into the one you want to work on.
  *
- * Heroes are authored in the hero studio rather than here, so what this offers
- * is the ones that exist. Picking one writes its words, its settings and its
- * picture into the page — and from that moment they are the page's own, to be
- * edited in the fields this replaces.
+ * Heroes are authored in the hero editor, which is a tool of its own. This
+ * shows what it holds: each card draws the real hero rather than a picture of
+ * one — the same `LandingFlowScreen` the page draws, at the page's own width,
+ * shrunk — so a thumbnail is never out of date, it is in this market's money,
+ * and nothing needs re-exporting when a hero design moves.
  *
- * Each card draws the real hero rather than a picture of one: the same
- * `LandingFlowScreen` the page draws, at the page's own width, scaled down. So
- * a thumbnail is never out of date, it is in this market's money, and nothing
- * needs re-exporting when the hero design moves.
+ * Nothing here edits a hero. Opening one hands over to the editor that owns
+ * it, and says so before it goes: a click that takes the ground out from under
+ * somebody is a click that should have warned them.
  *
  * The market's own heroes come first. The situation at the top of the panel
  * already knows which market this is, and a gallery that ignored it would be
@@ -34,66 +35,110 @@ const PAGE_WIDTH = 375
 
 export function HeroPicker({
   store,
-  scope,
-  onPicked,
+  onBack,
 }: {
   store: CardSetStore
-  scope: Selector
-  /** Chosen — the fields take over from here. */
-  onPicked: () => void
+  /** The way back to the page's own fields, where there is one to go back to. */
+  onBack?: () => void
 }) {
-  const { set, updateSet } = store
+  const { set } = store
   const market = store.context.market
   const list = heroesFor(market)
-
-  const pick = (preset: HeroPreset) => {
-    updateSet(writeFlow(set, scope, 'landing', { ...preset.patch, heroPreset: preset.id }))
-    onPicked()
-  }
+  /** The one being handed over to the editor, while the warning stands. */
+  const [leaving, setLeaving] = useState<HeroPreset | null>(null)
 
   return (
     <div className="hp">
       <div className="hp__head">
         <span className="hp__title">Heroes</span>
-        <span className="hp__count">
-          {HEROES.length} to choose from
-        </span>
+        <span className="hp__count">{HEROES.length} in the editor</span>
+        {onBack && (
+          <button type="button" className="hp__back" onClick={onBack}>
+            Done
+          </button>
+        )}
       </div>
 
       <div className="hp__list">
         {list.map((preset) => (
-          <button
-            type="button"
-            className="hp__card"
-            key={preset.id}
-            data-mine={preset.market === market || undefined}
-            onClick={() => pick(preset)}
-          >
-            {/* The real hero, drawn at the page's width and shrunk — not an
-                export of one. Inert and hidden: it is a picture here. */}
-            <span className="hp__shot" aria-hidden="true">
-              <span className="hp__page" style={{ inlineSize: PAGE_WIDTH }} inert>
-                {/* No phone bar on a card: the hat belongs to the screen
-                    the hero is drawn on, and this is a picture of the hero. */}
-                <LandingFlowScreen
-                  content={{ ...resolveFlow(set).landing, ...preset.patch }}
-                  market={marketOf(set)}
-                  hat={false}
-                />
+          <div className="hp__card" key={preset.id} data-mine={preset.market === market || undefined}>
+            <button
+              type="button"
+              className="hp__open"
+              title={`Open ${preset.name} in the hero editor`}
+              onClick={() => setLeaving(preset)}
+            >
+              {/* The real hero, drawn at the page's width and shrunk — not an
+                  export of one. Inert and hidden: it is a picture here. */}
+              <span className="hp__shot" aria-hidden="true">
+                <span className="hp__page" style={{ inlineSize: PAGE_WIDTH }} inert>
+                  {/* No phone bar on a card: the hat belongs to the screen the
+                      hero is drawn on, and this is a picture of the hero. */}
+                  <LandingFlowScreen
+                    content={{ ...resolveFlow(set).landing, ...preset.patch }}
+                    market={marketOf(set)}
+                    hat={false}
+                  />
+                </span>
               </span>
-            </span>
-            <span className="hp__words">
-              <span className="hp__name">{preset.name}</span>
-              <span className="hp__facts">
-                {preset.market === '*' ? 'Every market' : preset.market}
-                <span className="hp__dot" aria-hidden="true" />
-                {preset.sport}
+              <span className="hp__words">
+                <span className="hp__name">{preset.name}</span>
+                <span className="hp__facts">
+                  {preset.market === '*' ? 'Every market' : preset.market}
+                  <span className="hp__dot" aria-hidden="true" />
+                  {preset.sport}
+                </span>
+                <span className="hp__note">{preset.note}</span>
               </span>
-              <span className="hp__note">{preset.note}</span>
-            </span>
-          </button>
+            </button>
+            {/* Beside the card rather than inside it: a button inside a button
+                is not a thing a browser will draw. It shows on hover, and on
+                keyboard focus as well — a control that only the pointer can
+                find is a control half the people here cannot reach. */}
+            <button
+              type="button"
+              className="hp__edit"
+              title={`Open ${preset.name} in the hero editor`}
+              onClick={() => setLeaving(preset)}
+            >
+              Edit
+            </button>
+          </div>
         ))}
       </div>
+
+      {leaving && (
+        <div className="hp-go" role="dialog" aria-modal="true" aria-label="Leaving for the hero editor">
+          <div className="hp-go__box">
+            <p className="hp-go__title">You will be redirected to Hero editor</p>
+            <p className="hp-go__note">
+              {leaving.name} is authored there. This page stays as it is.
+            </p>
+            {/* Said rather than hidden. The address is not set yet, and a button
+                that looks ready and does nothing is worse than one that says
+                why it cannot go. */}
+            {HERO_APP === '' && (
+              <p className="hp-go__pending">The hero editor's address has not been set yet.</p>
+            )}
+            <div className="hp-go__acts">
+              <button type="button" className="hp-go__cancel" onClick={() => setLeaving(null)}>
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="hp-go__on"
+                disabled={HERO_APP === ''}
+                onClick={() => {
+                  window.open(HERO_APP, '_blank', 'noopener')
+                  setLeaving(null)
+                }}
+              >
+                Open Hero editor
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

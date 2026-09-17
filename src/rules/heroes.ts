@@ -24,6 +24,15 @@ import wc26Art from '../assets/landing/heroes/wc26.jpg'
  * are the real thing rather than an export of it: never stale, in the market's
  * own words, and needing nothing re-exported when the hero design moves.
  */
+/**
+ * Where the hero editor lives.
+ *
+ * Empty until somebody gives us the address, and the gallery says so rather
+ * than offering a way out that goes nowhere. One string to fill in when it
+ * arrives, and every card's Edit starts working.
+ */
+export const HERO_APP = ''
+
 export interface HeroPreset {
   id: string
   /** What it is called, which is the name the studio knows it by. */

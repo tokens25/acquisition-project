@@ -215,7 +215,7 @@ function HeroTab({ store, scope }: { store: CardSetStore; scope: Selector }) {
   const [picking, setPicking] = useState(!from)
 
   if (picking) {
-    return <HeroPicker store={store} scope={scope} onPicked={() => setPicking(false)} />
+    return <HeroPicker store={store} onBack={from ? () => setPicking(false) : undefined} />
   }
 
   return (
@@ -231,10 +231,10 @@ function HeroTab({ store, scope }: { store: CardSetStore; scope: Selector }) {
           <button
             type="button"
             className="hp-from__change"
-            title="Choose a different hero — its words replace the ones below"
+            title="The heroes there are, and the way into the editor that owns them"
             onClick={() => setPicking(true)}
           >
-            Change
+            Heroes
           </button>
         </div>
       )}

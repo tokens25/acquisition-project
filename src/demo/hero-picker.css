@@ -34,6 +34,7 @@
 }
 
 .hp__card {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -49,14 +50,77 @@
     border-color 120ms ease,
     background 120ms ease;
 }
-.hp__card:hover {
+.hp__card:hover,
+.hp__card:focus-within {
   border-color: var(--color-text-tertiary);
   background: var(--color-surface-container-3);
+}
+
+/* The card's own surface is a button filling it, so the whole thing is one
+   target — and the Edit button can sit beside it rather than inside it, which
+   is not a thing a browser will draw. */
+.hp__open {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* Shown when the pointer is over the card or something in it has focus. The
+   keyboard has to be able to find it too: a control only the pointer can
+   reach is a control half the people here cannot. */
+.hp__edit {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: var(--space-8);
+  inset-inline-end: var(--space-8);
+  display: flex;
+  align-items: center;
+  block-size: 28px;
+  padding-inline: var(--space-12);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.hp__card:hover .hp__edit,
+.hp__edit:focus-visible {
+  opacity: 1;
+}
+.hp__back {
+  flex: none;
+  block-size: var(--bar-control, 28px);
+  padding-inline: var(--space-10);
+  border: 0;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-5);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
 }
 /* This market's own, which is what the situation two fields above already
    said — so the list opens where the answer is rather than at the top. */
 .hp__card[data-mine] {
   border-color: var(--color-border-full-color-default);
+}
+
+/* A card is a picture of a hero, not a page you can use: the page's own top
+   bar buttons belong to the page and say nothing about which hero this is. */
+.hp__page .fl-landing__nav-ctas {
+  display: none;
 }
 
 /* The window the hero is seen through. Its shape is what says how much of the
@@ -162,6 +226,92 @@
 @media (prefers-reduced-motion: reduce) {
   .hp__card,
   .hp-from__change {
+    transition: none;
+  }
+}
+
+/* ── Before it hands over ─────────────────────────────────────────────────
+   Opening a hero leaves for another tool, so it says so first.
+
+   Fixed to the window rather than to the gallery. The gallery is a long list
+   inside a column that scrolls, so a warning laid over it sits wherever the
+   list happens to start — which, the first time it was tried, was above the
+   top of the panel and out of sight. What is being left is the whole tool
+   anyway. */
+.hp-go {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-16);
+  background: rgb(4 8 11 / 72%);
+}
+.hp-go__box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  inline-size: 100%;
+  max-inline-size: 380px;
+  padding: var(--space-20);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-12);
+  background: var(--color-surface-container-2);
+  box-shadow: 0 16px 40px rgb(0 0 0 / 50%);
+}
+.hp-go__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+}
+.hp-go__note {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}
+/* Why the way out is shut, said plainly rather than left to be discovered. */
+.hp-go__pending {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.45;
+}
+.hp-go__acts {
+  display: flex;
+  gap: var(--space-8);
+  justify-content: flex-end;
+  margin-block-start: var(--space-8);
+}
+.hp-go__cancel,
+.hp-go__on {
+  block-size: 36px;
+  padding-inline: var(--space-16);
+  border: 0;
+  border-radius: var(--radius-8);
+  font: inherit;
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+.hp-go__cancel {
+  background: var(--color-surface-container-5);
+  color: var(--color-text-primary);
+}
+.hp-go__on {
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+}
+.hp-go__on:disabled {
+  background: var(--color-surface-container-4);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hp__edit {
     transition: none;
   }
 }
