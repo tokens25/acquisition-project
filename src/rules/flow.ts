@@ -612,14 +612,6 @@ export interface LandingScreen {
   matchCta?: string
   matchGames?: LandingMatch[]
 
-  /* One day of the schedule — node 1084:58141. The date stands to the left of
-     the games rather than over them, which is what makes it a day and not a
-     rail. */
-  dayLabel?: string
-  dayDate?: string
-  dayMonth?: string
-  dayTiles?: LandingTile[]
-
   /* A stack of cards — node 1093:55225. What the subscription gives you, said
      as a number, an icon or a sentence. */
   featureCards?: LandingCard[]
@@ -1070,15 +1062,6 @@ export const defaultFlow: FlowContent = {
       { id: 'match-1', day: 'Thursday 11 June 2026', home: 'MEX', away: 'RSA', time: '23:00', note: 'First stage • Group A • Mexico City Stadium (Mexico City)' },
       { id: 'match-2', day: 'Friday 12 June 2026', home: 'KOR', away: 'DEN/MNE', time: '06:00', note: 'First stage • Group A • Guadalajara Stadium (Guadalajara)' },
       { id: 'match-3', day: 'Friday 12 June 2026', home: 'CAN', away: 'ITA/NIR', time: '06:00', note: 'First stage • Group A • Toronto Stadium (Toronto)' },
-    ],
-
-    dayLabel: 'Today',
-    dayDate: '29',
-    dayMonth: 'Jun',
-    dayTiles: [
-      { id: 'day-1', title: 'EWC 2026 - Opening Ceremony', meta: 'Esports World Cup' },
-      { id: 'day-2', title: 'DAZN Mundial | Quarter Finals programme', meta: 'FIFA World Cup 2026' },
-      { id: 'day-3', title: '#29 Legends are saying goodbye; Leo Messi holds on', meta: 'Trending Mundial' },
     ],
 
     featureCards: [

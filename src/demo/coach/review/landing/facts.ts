@@ -6,7 +6,6 @@ import {
   cardsOf,
   cityTabsOf,
   cityTilesOf,
-  dayTilesOf,
   matchesOf,
   planCardsOf,
   featuresOf,
@@ -167,12 +166,6 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
           ...matchesOf(l).flatMap((one) => [one.day, one.note]),
         ],
         cta: t.matchCta,
-      }
-    case 'dayRail':
-      return {
-        heading: t.dayLabel,
-        words: [t.dayLabel, ...dayTilesOf(l).flatMap((one) => [one.title, one.meta])],
-        cta: '',
       }
     case 'cardStack':
       return {

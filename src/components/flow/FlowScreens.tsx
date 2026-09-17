@@ -12,7 +12,6 @@ import {
   cardsOf,
   cityTabsOf,
   cityTilesOf,
-  dayTilesOf,
   featuresOf,
   matchesOf,
   heroOf,
@@ -29,7 +28,6 @@ import {
 import { consentsOf } from '../../rules/consents'
 import { articleShot, featureArt, imageCtaArt, teamArt } from './landingArt'
 import {
-  DAY_ART,
   FIGHT_ART,
   GAME_ART,
   PLACE_ART,
@@ -1926,16 +1924,6 @@ export function PageSectionView({
         />
       )
 
-    case 'dayRail':
-      return (
-        <DaySection
-          label={text.dayLabel}
-          date={text.dayDate}
-          month={text.dayMonth}
-          tiles={dayTilesOf(content)}
-        />
-      )
-
     case 'cardStack':
       return <CardStackSection cards={cardsOf(content)} />
 
@@ -2189,53 +2177,6 @@ function MatchListSection({
             </article>
           </Fragment>
         ))}
-      </div>
-    </section>
-  )
-}
-
-/**
- * One day of the schedule — node 1084:58141.
- *
- * The date stands to the left of the games rather than over them, which is
- * what makes this a day and not a rail: a rail is a row that runs off the
- * screen, and this is a column of everything on at one date.
- */
-function DaySection({
-  label,
-  date,
-  month,
-  tiles,
-}: {
-  label: string
-  date: string
-  month: string
-  tiles: LandingTile[]
-}) {
-  return (
-    <section className="fl-day">
-      <div className="fl-day__date">
-        <span className="fl-day__label">{label}</span>
-        <span className="fl-day__number">{date}</span>
-        <span className="fl-day__month">{month}</span>
-      </div>
-      <div className="fl-day__games">
-        {tiles.map((tile, at) => {
-          const fixture = fixtureFor(at)
-          return (
-            <article className="fl-day__game" key={tile.id}>
-              <span className="fl-day__art" aria-hidden="true">
-                <img src={artAt(DAY_ART, at)} alt="" />
-                <span className="fl-day__stamp">{fixture.stamp}</span>
-                <span className="fl-day__remind">
-                  <img src={icReminder} alt="" />
-                </span>
-              </span>
-              <p className="fl-day__name">{tile.title}</p>
-              {tile.meta.trim() !== '' && <p className="fl-day__meta">{tile.meta}</p>}
-            </article>
-          )
-        })}
       </div>
     </section>
   )

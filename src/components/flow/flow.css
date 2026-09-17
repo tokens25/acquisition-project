@@ -3611,118 +3611,6 @@
   text-align: center;
 }
 
-/* ── One day of the schedule — node 1084:58141 ────────────────────────────
-   The date to the left of the games rather than over them, which is what
-   makes it a day and not a rail. */
-.fl-day {
-  display: flex;
-  gap: var(--space-16);
-  align-items: flex-start;
-  inline-size: 100%;
-  padding: var(--space-24) var(--space-16);
-}
-.fl-day__date {
-  display: flex;
-  flex: none;
-  flex-direction: column;
-  align-items: center;
-  inline-size: 56px;
-}
-.fl-day__label {
-  color: var(--color-brand-primary);
-  font-size: var(--font-size-label-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-}
-.fl-day__number {
-  color: var(--color-text-primary);
-  font-size: 28px;
-  font-weight: var(--font-weight-bold);
-  line-height: 1.2;
-}
-.fl-day__month {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-label-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-}
-.fl-day__games {
-  display: flex;
-  min-inline-size: 0;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--space-16);
-}
-.fl-day__game {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-.fl-day__art {
-  position: relative;
-  display: block;
-  inline-size: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--radius-10);
-  overflow: hidden;
-}
-.fl-day__art img {
-  position: absolute;
-  inset: 0;
-  max-inline-size: none;
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-}
-/* Gold rather than white: on a day's own schedule the time is the thing you
-   are reading the row for. */
-.fl-day__stamp {
-  position: absolute;
-  inset-block-start: var(--space-8);
-  inset-inline-start: var(--space-8);
-  display: flex;
-  align-items: center;
-  block-size: 20px;
-  padding-inline: 6px;
-  border-radius: var(--radius-2);
-  background: var(--color-brand-primary);
-  color: #131415;
-  font-size: var(--font-size-caption-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.12px;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.fl-day__remind {
-  position: absolute;
-  inset-block-start: var(--space-8);
-  inset-inline-end: var(--space-8);
-  display: grid;
-  place-items: center;
-  padding: var(--space-8);
-  border-radius: var(--radius-full);
-  background: rgb(8 14 18 / 64%);
-}
-.fl-day__remind img {
-  inline-size: 20px;
-  block-size: 20px;
-}
-.fl-day__name {
-  margin: var(--space-8) 0 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-body-s);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.4;
-}
-.fl-day__meta {
-  margin: 0;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-body-xs);
-  line-height: 1.45;
-}
-
 /* ── The card stack — node 1093:55225 ─────────────────────────────────────
    What the subscription gives you, one card at a time. The kind of card is
    read off what it carries: a number makes it a statistic, a button makes it
@@ -3935,10 +3823,6 @@
 .fl-page .fl-matches,
 .fl-page .fl-cards {
   align-items: stretch;
-}
-.fl-page .fl-day {
-  flex-direction: row;
-  align-items: flex-start;
 }
 
 /* ── What's live in your area — node 1084:56752 ───────────────────────────

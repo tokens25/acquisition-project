@@ -30,7 +30,6 @@ import {
   cardsOf,
   cityTabsOf,
   cityTilesOf,
-  dayTilesOf,
   featuresOf,
   matchesOf,
   planCardsOf,
@@ -1246,71 +1245,6 @@ function SectionFields({
             onClick={() => write({ matchGames: [...matchesOf(inst), blankMatch(matchesOf(inst))] })}
           >
             Add a match
-          </button>
-        </>
-      )
-
-    case 'dayRail':
-      return (
-        <>
-          <TextField
-            label="Over the date"
-            value={t.dayLabel}
-            pipelineKey={key('landing.dayLabel')}
-            onChange={(v) => write({ dayLabel: v })}
-            helpText='In gold, in capitals — "Today".'
-          />
-          <TextField
-            label="Date"
-            value={t.dayDate}
-            pipelineKey={key('landing.dayDate')}
-            onChange={(v) => write({ dayDate: v })}
-          />
-          <TextField
-            label="Month"
-            value={t.dayMonth}
-            pipelineKey={key('landing.dayMonth')}
-            onChange={(v) => write({ dayMonth: v })}
-          />
-          {dayTilesOf(inst).map((tile, i) => {
-            const all = dayTilesOf(inst)
-            const edit = (next: Partial<typeof tile>) =>
-              write({ dayTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
-            return (
-              <div className="demo__feature" key={tile.id}>
-                <TextField
-                  label={`Game ${i + 1}`}
-                  value={tile.title}
-                  pipelineKey={key(`landing.dayTiles[${i}].title`)}
-                  onChange={(v) => edit({ title: v })}
-                  rows={2}
-                />
-                <TextField
-                  label="Under it"
-                  value={tile.meta}
-                  pipelineKey={key(`landing.dayTiles[${i}].meta`)}
-                  onChange={(v) => edit({ meta: v })}
-                  helpText="The competition it belongs to. Empty draws none."
-                />
-                <button
-                  data-icon="trash"
-                  aria-label="Remove"
-                  type="button"
-                  className="demo__feature-remove"
-                  data-destructive=""
-                  onClick={() => write({ dayTiles: all.filter((_, j) => j !== i) })}
-                >
-                  <TrashIcon size={14} />
-                </button>
-              </div>
-            )
-          })}
-          <button
-            type="button"
-            className="ed-add"
-            onClick={() => write({ dayTiles: [...dayTilesOf(inst), blankTile(dayTilesOf(inst))] })}
-          >
-            Add a game
           </button>
         </>
       )

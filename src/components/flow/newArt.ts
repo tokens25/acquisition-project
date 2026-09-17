@@ -15,10 +15,6 @@ import placeThree from '../../assets/landing/places/p3.jpg'
 import placeFour from '../../assets/landing/places/p4.jpg'
 import placeFive from '../../assets/landing/places/p5.jpg'
 
-import dayOne from '../../assets/landing/day/d1.jpg'
-import dayTwo from '../../assets/landing/day/d2.jpg'
-import dayThree from '../../assets/landing/day/d3.jpg'
-
 import subOne from '../../assets/landing/subs/s1.jpg'
 import subTwo from '../../assets/landing/subs/s2.jpg'
 import subThree from '../../assets/landing/subs/s3.jpg'
@@ -42,9 +38,6 @@ import spotThree from '../../assets/landing/spotlight/g3.jpg'
 
 /** The stadiums the places carousel is drawn with — node 1093:55236. */
 export const PLACE_ART = [placeOne, placeTwo, placeThree, placeFour, placeFive]
-
-/** A day's games — node 1084:58141. */
-export const DAY_ART = [dayOne, dayTwo, dayThree]
 
 /** The other subscriptions — node 1084:55909. */
 export const SUB_ART = [subOne, subTwo, subThree]

@@ -177,7 +177,6 @@ export function landingText(content: LandingScreen): Required<
     | 'subRailTiles'
     | 'bundles'
     | 'matchGames'
-    | 'dayTiles'
     | 'featureCards'
     | 'cityTabs'
     | 'cityTiles'
@@ -241,9 +240,6 @@ export function landingText(content: LandingScreen): Required<
     matchEyebrow: of('matchEyebrow'),
     matchTitle: of('matchTitle'),
     matchCta: of('matchCta'),
-    dayLabel: of('dayLabel'),
-    dayDate: of('dayDate'),
-    dayMonth: of('dayMonth'),
     citiesEyebrow: of('citiesEyebrow'),
     citiesTitle: of('citiesTitle'),
     citiesBody: of('citiesBody'),
@@ -435,11 +431,6 @@ export function blankMatch(existing: LandingMatch[]): LandingMatch {
     time: '',
     note: '',
   }
-}
-
-/** The games on the day, or the ones it ships with. */
-export function dayTilesOf(content: LandingScreen): LandingTile[] {
-  return content.dayTiles ?? defaultFlow.landing.dayTiles ?? []
 }
 
 /** The cards in the stack, or the ones it ships with. */
