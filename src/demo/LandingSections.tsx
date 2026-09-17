@@ -610,6 +610,10 @@ function TeamRows({
       {teams.map((team, i) => (
         <div
           className="demo__feature"
+          /* One line rather than a stack: a logo, a name and a colour are
+             three small things about one team, and stacked they read as three
+             questions. */
+          data-row=""
           key={team.id}
           data-dragging={dragging === team.id || undefined}
           data-drop={over?.id === team.id ? (over.after ? 'after' : 'before') : undefined}
@@ -665,13 +669,26 @@ function TeamRows({
             onPick={(url) => edit(i, { logo: url })}
             onRemove={() => edit(i, { logo: '' })}
           />
-          <TextField
-            label={`Team ${i + 1}`}
-            value={team.name}
-            pipelineKey={key(`landing.teams[${i}].name`)}
-            onChange={(v) => edit(i, { name: v })}
-            helpText="The name picks the crest and the colour, unless a logo is uploaded above."
-          />
+          <span className="demo__team-side">
+            <TextField
+              label={`Team ${i + 1}`}
+              value={team.name}
+              pipelineKey={key(`landing.teams[${i}].name`)}
+              onChange={(v) => edit(i, { name: v })}
+            />
+            {/* Opens on the colour the tile is wearing — the one chosen, or
+                the one the name brings — so a shipped team keeps its club's
+                own until somebody moves it. */}
+            <label className="demo__swatch">
+              <input
+                type="color"
+                value={team.ground || teamArt[team.name.trim()]?.ground || '#101112'}
+                onChange={(e) => edit(i, { ground: e.target.value })}
+                aria-label={`What is behind ${team.name || 'this team'}`}
+              />
+              <span className="demo__swatch-name">Ground</span>
+            </label>
+          </span>
           <button
             data-icon="trash"
             aria-label="Remove"

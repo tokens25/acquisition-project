@@ -401,6 +401,14 @@ export interface LandingTeam {
   name: string
   /** A logo of its own, instead of the one the name brings. A data URL. */
   logo?: string
+  /**
+   * What the tile is coloured behind it.
+   *
+   * Absent means the colour the name brings — a shipped team keeps its club's
+   * own until somebody chooses otherwise, and a team the tool has never heard
+   * of has whatever is picked here rather than the page's black.
+   */
+  ground?: string
 }
 
 /** One tab over a carousel — a country, a competition, a month. */

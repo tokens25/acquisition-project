@@ -278,8 +278,8 @@
 /* ── Repeated items: one kind of card ── */
 .demo__fields .demo__feature,
 .demo__fields .ed-comp {
-  gap: var(--space-8);
-  padding: var(--space-10);
+  gap: var(--space-6);
+  padding: var(--space-8);
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-10);
   background: transparent;
@@ -434,6 +434,14 @@
   display: flex;
   gap: 6px;
   margin-block-start: 8px;
+}
+/* A picker told how wide to stand has less room under it than the two words
+   want. They are cut to fit rather than stacked: stacking costs a line of
+   height on every row, and the row is what was being tightened. */
+.hb-image[data-narrow] .hb-image__act {
+  min-inline-size: 0;
+  padding-inline: var(--space-4);
+  font-size: 10.5px;
 }
 .hb-image__act {
   appearance: none;
@@ -615,6 +623,57 @@
 .demo__feature:focus-within .demo__grip {
   opacity: 0.9;
 }
+/* A row whose parts stand side by side rather than stacking: a logo, a name
+   and a colour are three small things about one team, and a column of them
+   reads as three questions. The middle takes the slack, the two ends take
+   what they need. */
+.demo__fields .demo__feature[data-row] {
+  flex-direction: row;
+  gap: var(--space-10);
+  align-items: flex-start;
+}
+.demo__team-side {
+  display: flex;
+  min-inline-size: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+/* The colour behind the crest. A swatch and its name, because a bare colour
+   well says nothing about what it colours. */
+.demo__swatch {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  cursor: pointer;
+}
+.demo__swatch input {
+  inline-size: 28px;
+  block-size: 28px;
+  padding: 0;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-6);
+  background: none;
+  cursor: pointer;
+}
+/* The well the browser draws inside the control, squared off to the border. */
+.demo__swatch input::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+.demo__swatch input::-webkit-color-swatch {
+  border: 0;
+  border-radius: var(--radius-4);
+}
+.demo__swatch-name {
+  color: var(--color-text-tertiary);
+  font-size: 11.5px;
+}
+/* The trash sits with the fields rather than under them, on a row. */
+.demo__fields .demo__feature[data-row] .demo__feature-remove {
+  align-self: start;
+  margin-block-start: var(--space-4);
+}
+
 /* A row being carried, and the line showing where it would land. The same two
    states the component rows use, said the same way. */
 .demo__feature[data-dragging] {

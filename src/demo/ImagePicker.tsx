@@ -70,7 +70,12 @@ export function ImagePicker({
   }
 
   return (
-    <div className="hb-image" style={width ? { inlineSize: width } : undefined}>
+    <div
+      className="hb-image"
+      /* Narrow enough that the two words under it have to be cut to fit. */
+      data-narrow={width !== undefined && width <= 140 ? '' : undefined}
+      style={width ? { inlineSize: width } : undefined}
+    >
       {showing ? (
         <>
           <img className="hb-image__shot" src={showing} alt="" style={shape} />

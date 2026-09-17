@@ -1274,7 +1274,13 @@ function TeamsRail({
             const rest = city ? team.name.trim().slice(city.length).trim() : team.name.trim()
             return (
               <div className="fl-team" key={team.id}>
-                <div className="fl-team__tile" style={art ? { background: art.ground } : undefined}>
+                <div
+                  className="fl-team__tile"
+                  /* What was chosen, then what the name brings, then nothing —
+                     which is the page's own black, and is what a tile with no
+                     colour anywhere has always been. */
+                  style={team.ground || art ? { background: team.ground || art?.ground } : undefined}
+                >
                   {/* A logo somebody chose fills the tile — there is no design
                       saying how to crop one, so it is shown whole. The name's
                       own is laid out the way the design lays that team out. */}
