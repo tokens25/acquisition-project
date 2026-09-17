@@ -202,8 +202,6 @@ export function landingText(content: LandingScreen): Required<
     footnote: of('footnote'),
     zipHeading: of('zipHeading'),
     zipNote: of('zipNote'),
-    zipLabel: of('zipLabel'),
-    zipValue: of('zipValue'),
     zipCta: of('zipCta'),
     scheduleHeading: of('scheduleHeading'),
     scheduleSubheading: of('scheduleSubheading'),

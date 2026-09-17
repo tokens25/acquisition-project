@@ -1566,43 +1566,15 @@
   align-items: flex-start;
   inline-size: 100%;
 }
-/* The field holds 209 and the button takes what is left. */
+/* The field holds 209 and the button takes what is left. Empty now — what
+   stood in it was a label and a code nobody here typed. */
 .fl-page__zip-field {
-  display: flex;
   flex: none;
-  gap: var(--space-8);
-  align-items: center;
-  justify-content: space-between;
   inline-size: 209px;
   block-size: 40px;
-  padding-inline: 10px var(--space-8);
   /* full-color/inverse — an off-white of its own, not the text white. */
   border: var(--border-1) solid #f8fafb;
   border-radius: var(--radius-10);
-}
-.fl-page__zip-label {
-  color: #b3b9bb;
-  font-size: var(--font-size-button-lg);
-  font-weight: var(--font-weight-regular);
-  line-height: 1.55;
-  white-space: nowrap;
-}
-.fl-page__zip-value {
-  display: flex;
-  gap: var(--space-8);
-  align-items: center;
-  color: #f9fafa;
-  font-size: var(--font-size-button-lg);
-  font-weight: var(--font-weight-regular);
-  line-height: 1.55;
-  white-space: nowrap;
-}
-/* Sat in a 21 by 24 box with 4 of padding above it, which is what drops the
-   glyph off the value's baseline rather than centring it on it. */
-.fl-page__zip-edit {
-  inline-size: 20px;
-  block-size: 20px;
-  margin-block-start: var(--space-4);
 }
 .fl-page__zip-cta {
   display: flex;

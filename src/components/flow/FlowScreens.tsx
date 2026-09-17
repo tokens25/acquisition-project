@@ -78,7 +78,6 @@ import providerBreezeline from '../../assets/landing/providers/breezeline.png'
 import providerMidHudson from '../../assets/landing/providers/mid-hudson.png'
 import heroArt from '../../assets/landing/hero.jpg'
 import daznLogo from '../../assets/landing/logo-dazn.svg'
-import actionEdit from '../../assets/landing/action-edit.svg'
 import actionLocation from '../../assets/landing/action-location.svg'
 import statusMini from '../../assets/landing/status-mini.svg'
 import articleIcon from '../../assets/landing/article/icon-multiview.svg?raw'
@@ -1561,14 +1560,10 @@ export function PageSectionView({
             <p className="fl-page__zip-note">{text.zipNote}</p>
           </div>
           <div className="fl-page__zip-row">
-            {/* The field holds 209 and the button takes what is left. */}
-            <span className="fl-page__zip-field">
-              <span className="fl-page__zip-label">{text.zipLabel}</span>
-              <span className="fl-page__zip-value">
-                {text.zipValue}
-                <img className="fl-page__zip-edit" src={actionEdit} alt="" />
-              </span>
-            </span>
+            {/* The field holds 209 and the button takes what is left. Empty,
+                because the code it used to show was authored: this is the box
+                somebody types their own into, not a code we chose for them. */}
+            <span className="fl-page__zip-field" />
             <span className="fl-page__zip-cta" role="button">
               {text.zipCta}
             </span>

@@ -82,7 +82,7 @@ const PICTURED: SectionType[] = ['features', 'imageCta', 'multiview']
 function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: LandingScreen): { heading: string; words: string[]; cta: string } {
   switch (type) {
     case 'zip':
-      return { heading: t.zipHeading, words: [t.zipHeading, t.zipNote, t.zipLabel, t.zipCta], cta: t.zipCta }
+      return { heading: t.zipHeading, words: [t.zipHeading, t.zipNote, t.zipCta], cta: t.zipCta }
     case 'schedule':
       return { heading: t.scheduleHeading, words: [t.scheduleHeading], cta: '' }
     case 'plans':

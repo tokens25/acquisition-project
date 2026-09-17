@@ -488,8 +488,6 @@ export interface LandingScreen {
   zipHeading?: string
   /** The line under it — what the design calls out about getting it right. */
   zipNote?: string
-  zipLabel?: string
-  zipValue?: string
   zipCta?: string
 
   /**
@@ -850,8 +848,6 @@ export const defaultFlow: FlowContent = {
     // the design puts after "devices." and the one it leaves off "Anywhere".
     zipHeading: 'Your home ZIP code unlocks your teams',
     zipNote: "Check it's right before you continue — it decides which games you get.",
-    zipLabel: 'Zip Code:',
-    zipValue: '10001',
     zipCta: 'Sign Up',
 
     scheduleHeading: 'Live and Upcoming Games Schedule',

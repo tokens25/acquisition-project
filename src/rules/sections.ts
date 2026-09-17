@@ -98,8 +98,6 @@ export const SECTION_TYPES: SectionType[] = [
 export const FIELD_COMPONENT: Record<string, SectionType> = {
   zipHeading: 'zip',
   zipNote: 'zip',
-  zipLabel: 'zip',
-  zipValue: 'zip',
   zipCta: 'zip',
   scheduleHeading: 'schedule',
   scheduleSubheading: 'schedule',
@@ -203,7 +201,7 @@ export const isOnceOnly = (type: SectionType) => ONCE_ONLY.includes(type)
  * them — so the list can be read without opening anything.
  */
 export const SECTION_CONTENTS: Record<SectionType, string> = {
-  zip: 'Heading, note, field, button',
+  zip: 'Heading, note, button',
   schedule: 'Heading, a line under it, and the games',
   plans: 'Heading and a line under it',
   teams: 'Eyebrow, heading, body',

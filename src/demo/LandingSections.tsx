@@ -575,8 +575,6 @@ function SectionFields({
         <>
           <TextField label="Heading" value={t.zipHeading} pipelineKey={key('landing.zipHeading')} onChange={(v) => write({ zipHeading: v })} />
           <TextField label="Under the heading" value={t.zipNote} pipelineKey={key('landing.zipNote')} onChange={(v) => write({ zipNote: v })} rows={2} />
-          <TextField label="Field" value={t.zipLabel} pipelineKey={key('landing.zipLabel')} onChange={(v) => write({ zipLabel: v })} />
-          <TextField label="Code shown" value={t.zipValue} pipelineKey={key('landing.zipValue')} onChange={(v) => write({ zipValue: v })} />
           <TextField label="Button" value={t.zipCta} pipelineKey={key('landing.zipCta')} onChange={(v) => write({ zipCta: v })} />
         </>
       )
