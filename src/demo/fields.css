@@ -1157,6 +1157,19 @@
 .ls-shot__frame[data-plan] {
   aspect-ratio: 5 / 3;
 }
+/* The bundles' own shape, measured rather than picked: 608 by 396 is what
+   two cards come to, the taller of them carrying three nights. Squarer than
+   the subscription set and wider than the fight plan, and a window on either
+   of their ratios would leave a band under these or cut them off. */
+.ls-shot__frame[data-bundle] {
+  aspect-ratio: 608 / 396;
+}
+/* Laid out at the width the two of them need, so there is nothing to scroll
+   to — and a row that can still scroll is a row a thumbnail can be dragged
+   sideways in. */
+.ls-shot .fl-bundles__row {
+  overflow-x: visible;
+}
 /* The fight plan stacks its cards down the page. Side by side in a thumbnail,
    because stacked it is the top of the first card and nothing else. */
 .ls-shot .fl-plan__cards {

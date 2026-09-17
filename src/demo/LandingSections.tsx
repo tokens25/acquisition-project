@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { CSSProperties, DragEvent } from 'react'
 
 import { CardSetView } from '../card/CardSetView'
-import { FightPlanCards } from '../components/flow/FlowScreens'
+import { BundleCards, FightPlanCards } from '../components/flow/FlowScreens'
 import { SubscriptionTabs } from '../components/flow/FlowScreens'
 import { tabsOf } from '../rules/tabs'
 import { ComponentPeek } from './ComponentPeek'
@@ -15,10 +15,8 @@ import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import {
-  blankBundle,
   blankCard,
   blankFeature,
-  blankFight,
   blankMatch,
   blankTab,
   blankTeam,
@@ -584,6 +582,16 @@ const PICKER_WIDTH = 888
 const PLAN_WIDTH = 760
 
 /**
+ * What the bundles are laid out at inside their thumbnail.
+ *
+ * Two cards at 280 with a 16 gutter between them and 16 either side, which is
+ * the row's own arithmetic rather than a number that looked about right. At
+ * the phone's width the row scrolls and the second bundle is off the edge —
+ * the page's behaviour, and the wrong thing for a picture of the set.
+ */
+const BUNDLE_WIDTH = 608
+
+/**
  * Dragging one thing in a list past the others.
  *
  * A hook rather than a second copy of the handlers: the teams and the
@@ -1041,125 +1049,22 @@ function SectionFields({
             onChange={(v) => write({ bundlesBody: v })}
             rows={2}
           />
-          {bundlesOf(inst).map((bundle, i) => {
-            const all = bundlesOf(inst)
-            const edit = (next: Partial<typeof bundle>) =>
-              write({ bundles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
-            return (
-              <div className="demo__feature" key={bundle.id}>
-                <TextField
-                  label={`Bundle ${i + 1}`}
-                  value={bundle.name}
-                  pipelineKey={key(`landing.bundles[${i}].name`)}
-                  onChange={(v) => edit({ name: v })}
-                />
-                <TextField
-                  label="Under the name"
-                  value={bundle.note}
-                  pipelineKey={key(`landing.bundles[${i}].note`)}
-                  onChange={(v) => edit({ note: v })}
-                  rows={2}
-                />
-                <TextField
-                  label="Price"
-                  value={bundle.price}
-                  pipelineKey={key(`landing.bundles[${i}].price`)}
-                  onChange={(v) => edit({ price: v })}
-                />
-                <TextField
-                  label="Was"
-                  value={bundle.was}
-                  pipelineKey={key(`landing.bundles[${i}].was`)}
-                  onChange={(v) => edit({ was: v })}
-                  helpText="Struck through beside the price. Empty draws neither this nor the saving."
-                />
-                <TextField
-                  label="Saving"
-                  value={bundle.save}
-                  pipelineKey={key(`landing.bundles[${i}].save`)}
-                  onChange={(v) => edit({ save: v })}
-                />
-                <TextField
-                  label="What kind of bundle"
-                  value={bundle.term}
-                  pipelineKey={key(`landing.bundles[${i}].term`)}
-                  onChange={(v) => edit({ term: v })}
-                  helpText={'Under the price — "2-fight bundle".'}
-                />
-                <TextField
-                  label="Corner label"
-                  value={bundle.badge}
-                  pipelineKey={key(`landing.bundles[${i}].badge`)}
-                  onChange={(v) => edit({ badge: v })}
-                  helpText="Marks this one out, in gold. Empty draws none."
-                />
-                {bundle.fights.map((fight, f) => (
-                  <div className="demo__feature" key={fight.id}>
-                    <TextField
-                      label={`Night ${f + 1}`}
-                      value={fight.name}
-                      pipelineKey={key(`landing.bundles[${i}].fights[${f}].name`)}
-                      onChange={(v) =>
-                        edit({
-                          fights: bundle.fights.map((one, j) => (j === f ? { ...one, name: v } : one)),
-                        })
-                      }
-                    />
-                    <TextField
-                      label="When"
-                      value={fight.when}
-                      pipelineKey={key(`landing.bundles[${i}].fights[${f}].when`)}
-                      onChange={(v) =>
-                        edit({
-                          fights: bundle.fights.map((one, j) => (j === f ? { ...one, when: v } : one)),
-                        })
-                      }
-                    />
-                    <button
-                      data-icon="trash"
-                      aria-label="Remove"
-                      type="button"
-                      className="demo__feature-remove"
-                      data-destructive=""
-                      onClick={() => edit({ fights: bundle.fights.filter((_, j) => j !== f) })}
-                    >
-                      <TrashIcon size={14} />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  className="ed-add"
-                  onClick={() => edit({ fights: [...bundle.fights, blankFight(bundle.fights)] })}
-                >
-                  Add a night
-                </button>
-                <TextField
-                  label="Button"
-                  value={bundle.cta}
-                  pipelineKey={key(`landing.bundles[${i}].cta`)}
-                  onChange={(v) => edit({ cta: v })}
-                />
-                <button
-                  data-icon="trash"
-                  aria-label="Remove"
-                  type="button"
-                  className="demo__feature-remove"
-                  data-destructive=""
-                  onClick={() => write({ bundles: all.filter((_, j) => j !== i) })}
-                >
-                  <TrashIcon size={14} />
-                </button>
-              </div>
-            )
-          })}
-          <button
-            type="button"
-            className="ed-add"
-            onClick={() => write({ bundles: [...bundlesOf(inst), blankBundle(bundlesOf(inst))] })}
-          >
-            Add a bundle
-          </button>
+          {/* The bundles as they are, rather than fields for them. What the
+              page owns here is the two lines over the set; a bundle, its
+              nights and what it costs belong to whatever sells it, and a run
+              of fields here would be a second answer going out of step with
+              the first. */}
+          <span className="ls-shot" aria-hidden="true">
+            <span className="ls-shot__frame" data-bundle="">
+              <span
+                className="ls-shot__page"
+                style={{ inlineSize: BUNDLE_WIDTH, '--ls-shot-w': `${BUNDLE_WIDTH}px` } as CSSProperties}
+                inert
+              >
+                <BundleCards bundles={bundlesOf(inst)} />
+              </span>
+            </span>
+          </span>
         </>
       )
 

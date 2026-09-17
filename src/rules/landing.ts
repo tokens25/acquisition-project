@@ -1,7 +1,6 @@
 import type {
   HeroLabelVariant,
   LandingBundle,
-  LandingBundleFight,
   LandingCard,
   LandingMatch,
   LandingTab,
@@ -393,27 +392,6 @@ export function blankSubTile(existing: LandingSubTile[]): LandingSubTile {
 /** The bundles on offer, or the ones it ships with. */
 export function bundlesOf(content: LandingScreen): LandingBundle[] {
   return content.bundles ?? defaultFlow.landing.bundles ?? []
-}
-
-/** A new bundle, with one night in it: a bundle of none is not an offer. */
-export function blankBundle(existing: LandingBundle[]): LandingBundle {
-  return {
-    id: nextId('bundle', existing),
-    name: '',
-    note: '',
-    price: '',
-    was: '',
-    save: '',
-    term: '',
-    badge: '',
-    cta: 'Get Started',
-    fights: [{ id: 'fight-1', name: '', when: '' }],
-  }
-}
-
-/** A new night in a bundle. */
-export function blankFight(existing: LandingBundleFight[]): LandingBundleFight {
-  return { id: nextId('fight', existing), name: '', when: '' }
 }
 
 /** The matches in the day-by-day list, or the ones it ships with. */

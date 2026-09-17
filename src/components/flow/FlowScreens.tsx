@@ -2088,38 +2088,51 @@ function BundlesSection({
         {title.trim() !== '' && <p className="fl-bundles__title">{title}</p>}
         {body.trim() !== '' && <p className="fl-bundles__body">{body}</p>}
       </div>
-      <div className="fl-bundles__row">
-        {bundles.map((bundle) => (
-          <article className="fl-bundle" key={bundle.id} data-best={bundle.badge.trim() ? '' : undefined}>
-            {bundle.badge.trim() !== '' && <span className="fl-bundle__badge">{bundle.badge}</span>}
-            <p className="fl-bundle__name">{bundle.name}</p>
-            <p className="fl-bundle__note">{bundle.note}</p>
-            <p className="fl-bundle__prices">
-              <span className="fl-bundle__price">{bundle.price}</span>
-              {bundle.was.trim() !== '' && <span className="fl-bundle__was">{bundle.was}</span>}
-              {bundle.save.trim() !== '' && <span className="fl-bundle__save">{bundle.save}</span>}
-            </p>
-            <p className="fl-bundle__term">{bundle.term}</p>
-            <div className="fl-bundle__fights">
-              {bundle.fights.map((fight, at) => (
-                  <div className="fl-bundle__fight" key={fight.id}>
-                    <span className="fl-bundle__shot" aria-hidden="true">
-                      <img src={artAt(FIGHT_ART, at)} alt="" />
-                    </span>
-                    <span className="fl-bundle__words">
-                      <p className="fl-bundle__fight-name">{fight.name}</p>
-                      <p className="fl-bundle__when">{fight.when}</p>
-                    </span>
-                  </div>
-                ))}
-            </div>
-            <span className="fl-bundle__cta" role="button">
-              {bundle.cta}
-            </span>
-          </article>
-        ))}
-      </div>
+      <BundleCards bundles={bundles} />
     </section>
+  )
+}
+
+/**
+ * The bundles themselves, without the words over them.
+ *
+ * Its own component because the panel draws them too: the bundles fold shows
+ * the set as it is rather than a run of fields for it, and a second drawing of
+ * a card is a second card to keep in step.
+ */
+export function BundleCards({ bundles }: { bundles: LandingBundle[] }) {
+  return (
+    <div className="fl-bundles__row">
+      {bundles.map((bundle) => (
+        <article className="fl-bundle" key={bundle.id} data-best={bundle.badge.trim() ? '' : undefined}>
+          {bundle.badge.trim() !== '' && <span className="fl-bundle__badge">{bundle.badge}</span>}
+          <p className="fl-bundle__name">{bundle.name}</p>
+          <p className="fl-bundle__note">{bundle.note}</p>
+          <p className="fl-bundle__prices">
+            <span className="fl-bundle__price">{bundle.price}</span>
+            {bundle.was.trim() !== '' && <span className="fl-bundle__was">{bundle.was}</span>}
+            {bundle.save.trim() !== '' && <span className="fl-bundle__save">{bundle.save}</span>}
+          </p>
+          <p className="fl-bundle__term">{bundle.term}</p>
+          <div className="fl-bundle__fights">
+            {bundle.fights.map((fight, at) => (
+              <div className="fl-bundle__fight" key={fight.id}>
+                <span className="fl-bundle__shot" aria-hidden="true">
+                  <img src={artAt(FIGHT_ART, at)} alt="" />
+                </span>
+                <span className="fl-bundle__words">
+                  <p className="fl-bundle__fight-name">{fight.name}</p>
+                  <p className="fl-bundle__when">{fight.when}</p>
+                </span>
+              </div>
+            ))}
+          </div>
+          <span className="fl-bundle__cta" role="button">
+            {bundle.cta}
+          </span>
+        </article>
+      ))}
+    </div>
   )
 }
 
