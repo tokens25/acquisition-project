@@ -84,12 +84,10 @@ export function FlowTabs({
 export function FlowPanel({
   store,
   step,
-  onEditPlans,
 }: {
   store: CardSetStore
   step: Step
   /** Handed to the plans component, when there is somewhere for it to go. */
-  onEditPlans?: () => void
 }) {
   const { set, updateSet } = store
   const at = situationOf(set)
@@ -102,7 +100,7 @@ export function FlowPanel({
   const scope = ladder.find((r) => r.label === chosen)?.when ?? {}
   const screen = step.renderer as keyof FlowContent
   if (!(screen in defaultFlow))
-    return <FlowFields store={store} step={step} scope={scope} onEditPlans={onEditPlans} />
+    return <FlowFields store={store} step={step} scope={scope} />
 
   const all = set.flowLayers ?? []
   const applying = layersFor(set, at)
@@ -188,7 +186,7 @@ export function FlowPanel({
       {hasHero && tab === 'hero' ? (
         <HeroPicker store={store} />
       ) : (
-        <FlowFields store={store} step={step} scope={scope} hero={!hasHero} onEditPlans={onEditPlans} />
+        <FlowFields store={store} step={step} scope={scope} hero={!hasHero} />
       )}
     </>
   )
@@ -206,14 +204,12 @@ function FlowFields({
    * other screen splits itself in two.
    */
   hero = true,
-  onEditPlans,
 }: {
   store: CardSetStore
   step: Step
   scope: Selector
   hero?: boolean
   /** Handed on to the plans component — see FlowPanel. */
-  onEditPlans?: () => void
 }) {
   const { set, updateSet } = store
   const flow = resolveFlow(set)
@@ -283,7 +279,7 @@ function FlowFields({
 
         {/* Everything below the hero, as the list of components it is: each
             one can move, be switched off, or be copied. */}
-        <LandingSections store={store} scope={scope} onEditPlans={onEditPlans} />
+        <LandingSections store={store} scope={scope} />
       </>
     )
   }

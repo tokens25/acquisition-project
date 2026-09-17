@@ -86,19 +86,9 @@ import type { Selector } from '../rules/layers'
 export function LandingSections({
   store,
   scope,
-  onEditPlans,
 }: {
   store: CardSetStore
   scope: Selector
-  /**
-   * The way to the plan picker's own editor, when there is one.
-   *
-   * The plans component draws the Subscription screen's tabs and cards, and
-   * none of that is a landing field: what the page owns is the heading over
-   * them. So the card says where the rest of it is edited rather than pretending
-   * the fields are missing.
-   */
-  onEditPlans?: () => void
 }) {
   const { set, updateSet } = store
   const l = resolveFlow(set).landing
@@ -140,7 +130,7 @@ export function LandingSections({
           section={section}
           store={store}
           scope={scope}
-          onEditPlans={section.type === 'plans' ? onEditPlans : undefined}
+         
           dragging={dragging}
           over={over}
           onDragStart={() => setDragging(section.id)}
@@ -325,7 +315,6 @@ function SectionCard({
   onToggle,
   onDuplicate,
   onRemove,
-  onEditPlans,
 }: {
   section: PageSection
   store: CardSetStore
@@ -344,7 +333,6 @@ function SectionCard({
   onDuplicate: () => void
   onRemove: () => void
   /** Only the plans card has one — see LandingSections. */
-  onEditPlans?: () => void
 }) {
   const { set, updateSet } = store
   const l = resolveFlow(set).landing
@@ -544,15 +532,13 @@ function SectionCard({
         {/* The picker itself rather than a button naming it: what the page
             owns here is the heading, and everything under it is the
             Subscription screen's. A drawing of that screen says which plans
-            and which tabs far faster than the words "Edit subscription", and
-            it is the real thing — rename a tab there and it changes here. */}
-        {onEditPlans && (
-          <button
-            type="button"
-            className="ls-shot"
-            title="Open the Subscription screen, where the tabs and the plan cards are edited"
-            onClick={onEditPlans}
-          >
+            and which tabs far faster than words would, and it is the real
+            thing — rename a tab there and it changes here.
+
+            A picture and not a control. It is here to say what the page sells,
+            and the plans are edited where the plans live. */}
+        {section.type === 'plans' && (
+          <span className="ls-shot" aria-hidden="true">
             <span className="ls-shot__frame">
             <span
               className="ls-shot__page"
@@ -569,7 +555,7 @@ function SectionCard({
               <CardSetView set={set} context={store.context} tab={planTab} />
             </span>
             </span>
-          </button>
+          </span>
         )}
       </FieldGroup>
     </div>

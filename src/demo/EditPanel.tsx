@@ -61,17 +61,8 @@ const PURCHASE_TYPES = [
  */
 export function EditPanel({
   store,
-  screen = true,
 }: {
   store: CardSetStore
-  /**
-   * Whether the screen's own title is one of the fields.
-   *
-   * It is the one field here that edits the chrome around the plans rather
-   * than the plans, so a window that draws no chrome does not offer it —
-   * see `SubscriptionSheet`.
-   */
-  screen?: boolean
 }) {
   const {
     set,
@@ -240,20 +231,18 @@ export function EditPanel({
   return (
 
     <>
-      {screen && (
-        <FieldGroup title="Screen">
-          {/* Written and layered like every other line in the flow, so the plan
-              picker is not the one screen whose title lives in the markup. */}
-          <TextField
-            label="Screen title"
-            value={resolveFlow(set).plans.navTitle}
-            onChange={(v) =>
-              updateSet(writeFlow(set, { market: context.market }, 'plans', { navTitle: v }))
-            }
-            helpText="The line in the bar under the status bar."
-          />
-        </FieldGroup>
-      )}
+      <FieldGroup title="Screen">
+        {/* Written and layered like every other line in the flow, so the plan
+            picker is not the one screen whose title lives in the markup. */}
+        <TextField
+          label="Screen title"
+          value={resolveFlow(set).plans.navTitle}
+          onChange={(v) =>
+            updateSet(writeFlow(set, { market: context.market }, 'plans', { navTitle: v }))
+          }
+          helpText="The line in the bar under the status bar."
+        />
+      </FieldGroup>
 
       <FieldGroup title="Plans">
         <div className="ed-tabs">

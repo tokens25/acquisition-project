@@ -960,8 +960,6 @@
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-10);
   background: #060606;
-  cursor: pointer;
-  transition: border-color 120ms ease;
 }
 /* The window the set is seen through, inside that padding.
    
@@ -982,9 +980,6 @@
   overflow: hidden;
   container-type: inline-size;
 }
-.ls-shot:hover {
-  border-color: var(--color-text-tertiary);
-}
 /* Laid out at the width the set needs and scaled by the thumbnail's own, so
    the whole set is in shot whatever width the panel is. */
 .ls-shot__page {
@@ -993,12 +988,6 @@
   transform: scale(calc(100cqi / var(--ls-shot-w, 888px)));
   transform-origin: 0 0;
   text-align: start;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ls-shot {
-    transition: none;
-  }
 }
 
 /* ── Remove and duplicate, as glyphs ───────────────────────────────────────
