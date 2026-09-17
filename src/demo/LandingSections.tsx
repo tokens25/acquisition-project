@@ -1470,13 +1470,20 @@ function SectionFields({
             return (
               <div className="demo__feature" key={feature.id}>
                 {/* The tag brings a picture with it; this is where a row gets
-                    one of its own, or none. */}
+                    one of its own, or none.
+
+                    At the 130 by 83 the row draws it, which is small enough
+                    that the picture is the control: hovering says Replace and
+                    the corner takes it off, rather than two words sitting
+                    under every picture in the list. */}
                 <ImagePicker
-                  // 130 by 83, as the row draws it.
                   aspect="130 / 83"
+                  width={130}
                   src={feature.image}
                   shipped={featureArt[feature.tag]?.photo}
                   off={feature.imageOff}
+                  label="Picture"
+                  aria={`Picture — feature ${i + 1}`}
                   onPick={(url) => edit({ image: url, imageOff: false })}
                   onRemove={() => edit({ image: '', imageOff: true })}
                   onShipped={() => edit({ image: '', imageOff: false })}
