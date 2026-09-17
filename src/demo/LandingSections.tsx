@@ -1205,8 +1205,7 @@ function SectionFields({
                     order the card draws the home side in. */}
                 <div className="demo__match-side">
                   <ImagePicker
-                    aspect="3 / 2"
-                    width={56}
+                    width={72}
                     src={match.homeFlag}
                     shipped={flagFor(match.home)}
                     label="Flag"
@@ -1229,8 +1228,7 @@ function SectionFields({
                 />
                 <div className="demo__match-side">
                   <ImagePicker
-                    aspect="3 / 2"
-                    width={56}
+                    width={72}
                     src={match.awayFlag}
                     shipped={flagFor(match.away)}
                     label="Flag"

@@ -712,6 +712,18 @@
   min-inline-size: 0;
   flex: 1;
 }
+/* The flag stands in a field's shell: the same height and the same corner as
+   the box beside it, so the line reads as one row of two answers rather than
+   a picture that happens to sit near a field. Its width follows from that —
+   72 by 48 is the 3 by 2 the flags are drawn at, so a flag fills the shell
+   without being cut to fit it. */
+.demo__fields .demo__match-side .hb-image__swap,
+.demo__fields .demo__match-side .hb-image__drop,
+.demo__fields .demo__match-side .hb-image__shot {
+  aspect-ratio: auto;
+  block-size: var(--ed-shell);
+  border-radius: var(--ed-radius);
+}
 
 /* The colour behind the crest. A swatch and its name, because a bare colour
    well says nothing about what it colours. */
