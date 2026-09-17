@@ -176,7 +176,7 @@ const NOT_COPY = new Set([
   // Pictures. Uploaded ones are data URLs, and a handoff listing a megabyte of
   // base64 as a string to implement is a handoff nobody can read.
   'heroImage', 'image', 'imageCtaImage', 'multiviewImage',
-  'logo', 'homeFlag', 'awayFlag',
+  'logo', 'homeFlag', 'awayFlag', 'background',
 ])
 
 /** Copy a screen cannot ship without. */

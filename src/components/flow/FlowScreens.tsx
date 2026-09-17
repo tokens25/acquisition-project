@@ -2047,12 +2047,16 @@ function SubRailSection({
       <div className="fl-subrail__row">
         {tiles.map((tile, at) => (
             <article className="fl-subtile" key={tile.id}>
+              {/* The one that was chosen, else the one this place in the rail
+                  ships with. */}
               <span className="fl-subtile__art" aria-hidden="true">
-                <img src={artAt(SUB_ART, at)} alt="" />
+                <img src={tile.background || artAt(SUB_ART, at)} alt="" />
               </span>
               <span className="fl-subtile__wash" aria-hidden="true" />
               <span className="fl-subtile__foot">
-                <img className="fl-subtile__logo" src={daznLogo} alt="" />
+                {tile.logo !== false && (
+                  <img className="fl-subtile__logo" src={daznLogo} alt="" />
+                )}
                 <p className="fl-subtile__line">{tile.line}</p>
                 <span className="fl-subtile__cta" role="button">
                   {tile.cta}

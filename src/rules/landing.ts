@@ -386,7 +386,7 @@ export function subTilesOf(content: LandingScreen): LandingSubTile[] {
 
 /** A new one, with the way in already written: every tile has the same one. */
 export function blankSubTile(existing: LandingSubTile[]): LandingSubTile {
-  return { id: nextId('sub', existing), line: '', cta: 'Subscribe' }
+  return { id: nextId('sub', existing), line: '', cta: 'Subscribe', logo: true }
 }
 
 /** The bundles on offer, or the ones it ships with. */

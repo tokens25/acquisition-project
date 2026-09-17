@@ -10,7 +10,7 @@ import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
 import { articleShot, featureArt, flagFor, imageCtaArt, teamArt } from '../components/flow/landingArt'
-import { SPOTLIGHT_ART } from '../components/flow/newArt'
+import { artAt, SPOTLIGHT_ART, SUB_ART } from '../components/flow/newArt'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -993,6 +993,22 @@ function SectionFields({
               write({ subRailTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
             return (
               <div className="demo__feature" key={tile.id}>
+                {/* At the tile's own 2 by 3 and small: the whole tile is the
+                    picture, so a picker on the page's ratio would be a picker
+                    the size of the panel. It opens on whatever the tile is
+                    drawing now — the picture somebody chose, or the one its
+                    place in the rail ships with — so replacing one starts
+                    from the picture being replaced. */}
+                <ImagePicker
+                  aspect="2 / 3"
+                  width={96}
+                  src={tile.background}
+                  shipped={artAt(SUB_ART, i)}
+                  label="Background"
+                  aria={`Background — subscription ${i + 1}`}
+                  onPick={(url) => edit({ background: url })}
+                  onRemove={() => edit({ background: '' })}
+                />
                 <TextField
                   label={`Subscription ${i + 1}`}
                   value={tile.line}
@@ -1006,6 +1022,14 @@ function SectionFields({
                   value={tile.cta}
                   pipelineKey={key(`landing.subRailTiles[${i}].cta`)}
                   onChange={(v) => edit({ cta: v })}
+                />
+                {/* Absent means drawn, so the switch reads the tile that way
+                    too: only an explicit no turns it off. */}
+                <ToggleField
+                  label="DAZN logo"
+                  checked={tile.logo !== false}
+                  onChange={(on) => edit({ logo: on })}
+                  hint="Over the line at the foot of the tile."
                 />
                 <button
                   data-icon="trash"

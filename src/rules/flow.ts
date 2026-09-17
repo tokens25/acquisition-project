@@ -253,6 +253,21 @@ export interface LandingSubTile {
   /** What it is, in the line the tile carries under the logo. */
   line: string
   cta: string
+  /**
+   * The picture behind it, where one was chosen. A data URL.
+   *
+   * Absent is not blank: the tile draws the shipped picture for its place in
+   * the rail. This is only what somebody put there instead.
+   */
+  background?: string
+  /**
+   * Whether the DAZN mark is drawn over the line at the foot.
+   *
+   * Absent means drawn. Every tile in the design has it, so a tile written
+   * before this was a setting is a tile that wants it — and off has to be
+   * said rather than assumed from a missing field.
+   */
+  logo?: boolean
 }
 
 /** One fight inside a bundle, as the bundle card lists it. */
