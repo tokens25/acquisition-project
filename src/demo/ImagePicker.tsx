@@ -26,6 +26,7 @@ export function ImagePicker({
   onShipped,
   label = 'Upload an image',
   aspect,
+  width,
 }: {
   /** The uploaded picture, if there is one. */
   src?: string
@@ -38,6 +39,14 @@ export function ImagePicker({
   /** Back to the shipped picture. Absent where there is none. */
   onShipped?: () => void
   label?: string
+  /**
+   * How wide it stands, in pixels. Absent and it takes the column.
+   *
+   * A picker for a logo is not a picker for a still: a crest at the width of
+   * the panel is a crest the size of a poster, and what is being chosen is a
+   * small square thing.
+   */
+  width?: number
   /**
    * The shape the picture is drawn in, so what you are choosing looks like
    * what you will get. 16 / 9 unless a slot says otherwise — the image card
@@ -61,7 +70,7 @@ export function ImagePicker({
   }
 
   return (
-    <div className="hb-image">
+    <div className="hb-image" style={width ? { inlineSize: width } : undefined}>
       {showing ? (
         <>
           <img className="hb-image__shot" src={showing} alt="" style={shape} />

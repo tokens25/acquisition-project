@@ -8,7 +8,7 @@ import { ComponentPeek } from './ComponentPeek'
 import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
-import { articleShot, featureArt, imageCtaArt } from '../components/flow/landingArt'
+import { articleShot, featureArt, imageCtaArt, teamArt } from '../components/flow/landingArt'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -651,11 +651,17 @@ function TeamRows({
         >
           {/* The whole row drags; this is what says so. */}
           <span className="demo__grip" aria-hidden="true" />
+          {/* 100 square: what is being chosen is a crest, not a still, and a
+              crest at the width of the panel is a crest the size of a poster.
+              It opens on whatever the tile is drawing now — the logo somebody
+              uploaded, or the one the name brings — so replacing a picture
+              starts from the picture being replaced. */}
           <ImagePicker
-            // 150 square, as the rail draws a tile.
             aspect="1 / 1"
+            width={100}
             src={team.logo}
-            label="Upload a logo"
+            shipped={teamArt[team.name.trim()]?.art}
+            label="Logo"
             onPick={(url) => edit(i, { logo: url })}
             onRemove={() => edit(i, { logo: '' })}
           />

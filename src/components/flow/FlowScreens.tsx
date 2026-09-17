@@ -29,7 +29,7 @@ import {
   tilesOf,
 } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
-import { articleShot, featureArt, imageCtaArt } from './landingArt'
+import { articleShot, featureArt, imageCtaArt, teamArt } from './landingArt'
 import {
   DAY_ART,
   FIGHT_ART,
@@ -104,9 +104,6 @@ import schedP5 from '../../assets/landing/schedule/p5.png'
 import schedP6 from '../../assets/landing/schedule/p6.png'
 import icPlay from '../../assets/landing/schedule/ic-play.svg'
 import icReminder from '../../assets/landing/schedule/ic-reminder.svg'
-import teamKnicks from '../../assets/landing/teams/knicks.png'
-import teamRangers from '../../assets/landing/teams/rangers.png'
-import teamIslanders from '../../assets/landing/teams/islanders.png'
 import teamPlaceholder from '../../assets/landing/teams/tile-placeholder.png'
 import readyKnicks from '../../assets/flow/ready/knicks.png'
 import readyRangers from '../../assets/flow/ready/rangers.png'
@@ -1244,20 +1241,6 @@ function ScheduleSection({
    the tile's own template. Which teams a market shows is not written here —
    the design draws these, so these are what is drawn. */
 
-/**
- * A team's tile, by the name it is written with.
- *
- * Same idea as `providerArt`: what somebody types picks the artwork, so the
- * crest and the colour are not a second thing to choose. A name with no entry
- * draws the tile's own template, which is what the design leaves standing for
- * a team it has not filled in.
- */
-const TEAM_ART: Record<string, { ground: string; art: string; width: number; city: string }> = {
-  'New York Knicks': { ground: '#1b418b', art: teamKnicks, width: 98, city: 'New York' },
-  'New York Rangers': { ground: '#e51937', art: teamRangers, width: 83, city: 'New York' },
-  'New York Islanders': { ground: '#003087', art: teamIslanders, width: 83, city: 'New York' },
-}
-
 function TeamsRail({
   eyebrow,
   title,
@@ -1283,7 +1266,7 @@ function TeamsRail({
              tile is the template below. */
           .filter((team) => team.name.trim() !== '')
           .map((team) => {
-            const art = TEAM_ART[team.name.trim()]
+            const art = teamArt[team.name.trim()]
             /* The design sets the city over the name. Where the artwork knows
                the city and the written name opens with it, the rest is the
                name; anything else is drawn whole, on one line. */

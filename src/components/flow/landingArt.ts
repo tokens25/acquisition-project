@@ -16,8 +16,28 @@ import iconOriginal from '../../assets/landing/features/icon-original.svg?raw'
 import iconHighlights from '../../assets/landing/features/icon-highlights.svg?raw'
 import imageCtaArt from '../../assets/landing/image-cta.png'
 import articleShot from '../../assets/landing/article/shot.jpg'
+import teamKnicks from '../../assets/landing/teams/knicks.png'
+import teamRangers from '../../assets/landing/teams/rangers.png'
+import teamIslanders from '../../assets/landing/teams/islanders.png'
 
 export { imageCtaArt, articleShot }
+
+/**
+ * A team's tile, by the name it is written with.
+ *
+ * Same idea as `featureArt` below: what somebody types picks the artwork, so
+ * the crest and the colour are not a second thing to choose. A name with no
+ * entry draws the tile's own template, which is what the design leaves
+ * standing for a team it has not filled in.
+ *
+ * Here rather than in the screens because the panel needs it too — it shows
+ * the logo a team has before offering to replace it.
+ */
+export const teamArt: Record<string, { ground: string; art: string; width: number; city: string }> = {
+  'New York Knicks': { ground: '#1b418b', art: teamKnicks, width: 98, city: 'New York' },
+  'New York Rangers': { ground: '#e51937', art: teamRangers, width: 83, city: 'New York' },
+  'New York Islanders': { ground: '#003087', art: teamIslanders, width: 83, city: 'New York' },
+}
 
 /**
  * A feature's icon and picture, and how the design lays that picture out.
