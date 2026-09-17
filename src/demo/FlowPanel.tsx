@@ -27,8 +27,6 @@ import {
   writeFlow,
 } from '../rules/layers'
 import { flowFieldLabel } from '../rules/pipeline'
-import { heroById, matches } from '../rules/heroes'
-import { HeroBannerFields } from './HeroBannerFields'
 import { HeroPicker } from './HeroPicker'
 import { useState } from 'react'
 
@@ -188,57 +186,10 @@ export function FlowPanel({
       </FieldGroup>
       )}
       {hasHero && tab === 'hero' ? (
-        <HeroTab store={store} scope={scope} />
+        <HeroPicker store={store} />
       ) : (
         <FlowFields store={store} step={step} scope={scope} hero={!hasHero} onEditPlans={onEditPlans} />
       )}
-    </>
-  )
-}
-
-/**
- * The hero banner: which one, then its words.
- *
- * A hero is authored in the hero studio, so the tab opens on the ones that
- * exist rather than on a blank set of fields. Picking writes the lot into the
- * page and hands over to the fields, which edit the page's own copy of it from
- * then on — so a page and the hero it came from are free to diverge, and the
- * line above the fields says when they have.
- *
- * Kept open on the gallery only until something is picked. A page that already
- * has a hero opens on its fields: the gallery is a decision, and re-asking a
- * decision every time somebody opens a tab is a way of making it again.
- */
-function HeroTab({ store, scope }: { store: CardSetStore; scope: Selector }) {
-  const content = resolveFlow(store.set).landing
-  const from = heroById(content.heroPreset)
-  const [picking, setPicking] = useState(!from)
-
-  if (picking) {
-    return <HeroPicker store={store} onBack={from ? () => setPicking(false) : undefined} />
-  }
-
-  return (
-    <>
-      {from && (
-        <div className="hp-from">
-          <span className="hp-from__name">
-            {from.name}
-            {!matches(from, content) && (
-              <span className="hp-from__drifted"> · edited here</span>
-            )}
-          </span>
-          <button
-            type="button"
-            className="hp-from__change"
-            title="The heroes there are, and the way into the editor that owns them"
-            onClick={() => setPicking(true)}
-          >
-            Heroes
-          </button>
-        </div>
-      )}
-      <HeroBannerFields store={store} scope={scope} />
     </>
   )
 }

@@ -33,14 +33,7 @@ import './hero-picker.css'
  */
 const PAGE_WIDTH = 375
 
-export function HeroPicker({
-  store,
-  onBack,
-}: {
-  store: CardSetStore
-  /** The way back to the page's own fields, where there is one to go back to. */
-  onBack?: () => void
-}) {
+export function HeroPicker({ store }: { store: CardSetStore }) {
   const { set } = store
   const market = store.context.market
   const list = heroesFor(market)
@@ -52,11 +45,6 @@ export function HeroPicker({
       <div className="hp__head">
         <span className="hp__title">Heroes</span>
         <span className="hp__count">{HEROES.length} in the editor</span>
-        {onBack && (
-          <button type="button" className="hp__back" onClick={onBack}>
-            Done
-          </button>
-        )}
       </div>
 
       <div className="hp__list">

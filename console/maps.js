@@ -47,7 +47,6 @@
       'step heading': [6,5,52,7], 'back arrow': [6,5,7,7], 'step title': [16,5,42,7],
       'step status chip': [60,6,14,5], 'nothing ready note': [6,44,68,12],
       'edit tabs': [6,14,68,6], 'edit tab': [6,14,32,6],
-      'hero it came from': [6,36,68,5], 'hero name': [6,36,30,5], 'hero edited here': [30,36,16,5], 'change the hero': [60,36,14,5],
       'component card': [6,44,68,16], 'components heading': [6,38,68,5],
       'components count': [56,38,18,5], 'components label': [6,38,20,5], 'component words': [24,45,36,11], 'component name line': [24,45,36,4], 'component row': [6,44,68,11],
       'component grip': [7,47,3,4], 'component shape': [12,45,9,7],
