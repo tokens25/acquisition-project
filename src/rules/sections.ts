@@ -101,7 +101,7 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   zipCta: 'zip',
   scheduleHeading: 'schedule',
   scheduleSubheading: 'schedule',
-  scheduleGames: 'schedule',
+  scheduleRailId: 'schedule',
   plansTitle: 'plans',
   plansBody: 'plans',
   teamsEyebrow: 'teams',
@@ -202,7 +202,7 @@ export const isOnceOnly = (type: SectionType) => ONCE_ONLY.includes(type)
  */
 export const SECTION_CONTENTS: Record<SectionType, string> = {
   zip: 'Heading, note, button',
-  schedule: 'Heading, a line under it, and the games',
+  schedule: 'Heading, a line under it, and the rail',
   plans: 'Heading and a line under it',
   teams: 'Eyebrow, heading, body',
   area: 'Heading, notice, field, button',

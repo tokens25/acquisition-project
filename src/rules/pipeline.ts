@@ -170,6 +170,9 @@ const FLOW_LABELS: Record<string, string> = {
    be translated and handed to dev. It is a picture; it goes in neither. */
 const NOT_COPY = new Set([
   'id', 'selected', 'chosen', 'marks', 'logos', 'schedule', 'offer',
+  // Which rail the schedule draws. An address, not words: nobody translates it
+  // and nobody writes it twice.
+  'scheduleRailId',
   // Pictures. Uploaded ones are data URLs, and a handoff listing a megabyte of
   // base64 as a string to implement is a handoff nobody can read.
   'heroImage', 'image', 'imageCtaImage', 'multiviewImage',

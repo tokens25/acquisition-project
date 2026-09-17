@@ -15,7 +15,6 @@ import {
   dayTilesOf,
   featuresOf,
   matchesOf,
-  gamesOf,
   heroOf,
   landingText,
   linksOf,
@@ -120,7 +119,6 @@ import type { Device, MarketConfig, PlanTab } from '../../rules/content'
 import type {
   LandingBundle,
   LandingCard,
-  LandingGame,
   LandingMatch,
   LandingTab,
   LandingPlanCard,
@@ -1180,11 +1178,9 @@ function fixtureFor(at: number) {
 function ScheduleSection({
   heading,
   subheading,
-  games,
 }: {
   heading: string
   subheading: string
-  games: LandingGame[]
 }) {
   return (
     <section className="fl-page__schedule">
@@ -1194,10 +1190,11 @@ function ScheduleSection({
         {subheading.trim() !== '' && <p className="fl-page__schedule-sub">{subheading}</p>}
       </div>
       <div className="fl-page__schedule-row">
-        {games.map((game, at) => {
-          const fixture = fixtureFor(at)
-          return (
-          <article className="fl-fixture" key={game.id}>
+        {/* What a rail holds is the rail's, not the page's: the page names
+            which rail and the rail answers with its games. These are the
+            placeholders standing in for that answer. */}
+        {FIXTURES.map((fixture) => (
+          <article className="fl-fixture" key={fixture.id}>
             <div className="fl-fixture__preview">
               <span className="fl-fixture__art" aria-hidden="true">
                 {fixture.art.map((src, i) => (
@@ -1233,8 +1230,7 @@ function ScheduleSection({
               )}
             </div>
           </article>
-          )
-        })}
+        ))}
       </div>
     </section>
   )
@@ -1576,7 +1572,6 @@ export function PageSectionView({
         <ScheduleSection
           heading={text.scheduleHeading}
           subheading={text.scheduleSubheading}
-          games={gamesOf(content)}
         />
       )
 

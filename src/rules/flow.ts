@@ -227,21 +227,6 @@ export interface LandingFeature {
   imageOff?: boolean
 }
 
-/** One question in the landing page's FAQ. */
-/**
- * One game on the schedule, named by its id.
- *
- * What a market chooses here is *which* games, not what they say: the stamp,
- * the teams and the competition all come from whatever is on air, so the only
- * thing there is to write down is the id to fetch. Everything the preview
- * draws against one is a placeholder standing in for that fetch.
- */
-export interface LandingGame {
-  id: string
-  /** The fixture's id in whatever serves the schedule. */
-  gameId: string
-}
-
 /**
  * How big the tiles in a rail are, and therefore what a rail is for.
  *
@@ -506,7 +491,15 @@ export interface LandingScreen {
   /** The heading over the fixtures DAZN is showing. */
   scheduleHeading?: string
   scheduleSubheading?: string
-  scheduleGames?: LandingGame[]
+  /**
+   * Which rail the schedule draws, by the name whatever serves it knows.
+   *
+   * One id rather than a list of game ids: a rail is the thing that decides
+   * what is in it — what is on, in what order, for how long — and a page that
+   * listed the games would be a second answer to a question the rail has
+   * already answered, going stale the moment the fixtures move.
+   */
+  scheduleRailId?: string
 
   /**
    * Over the plan picker. The design breaks the heading itself rather than
@@ -852,13 +845,7 @@ export const defaultFlow: FlowContent = {
 
     scheduleHeading: 'Live and Upcoming Games Schedule',
     scheduleSubheading: 'Every game, live and on demand',
-    /* The three the design draws, by the ids the schedule knows them as. */
-    scheduleGames: [
-      { id: 'game-1', gameId: 'nba-2026-09-14-nyk-sas' },
-      { id: 'game-2', gameId: 'nhl-2026-09-14-buf-pit' },
-      { id: 'game-3', gameId: 'nba-2026-09-15-bkn-mia' },
-      { id: 'game-4', gameId: 'nhl-2026-09-15-nyr-njd' },
-    ],
+    scheduleRailId: 'msg-live-and-upcoming',
 
     plansTitle: "Choose the plan that's\nright for you",
     plansBody: 'The best of NY sports, streaming all in one place.',

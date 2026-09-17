@@ -19,7 +19,6 @@ import {
   blankPlanCard,
   blankPlanFight,
   blankTeamRow,
-  blankGame,
   blankLink,
   blankProvider,
   blankQuestion,
@@ -34,11 +33,11 @@ import {
   liveTeamsOf,
   matchesOf,
   planCardsOf,
-  gamesOf,
   landingText,
   linksOf,
   providersOf,
   questionsOf,
+  railIdOf,
   railSizeOf,
   spotlightTilesOf,
   subTilesOf,
@@ -584,46 +583,16 @@ function SectionFields({
         <>
               <TextField label="Heading" value={t.scheduleHeading} pipelineKey={key('landing.scheduleHeading')} onChange={(v) => write({ scheduleHeading: v })} rows={2} helpText="The design breaks this line itself — a new line here is the break." />
               <TextField label="Under the heading" value={t.scheduleSubheading} pipelineKey={key('landing.scheduleSubheading')} onChange={(v) => write({ scheduleSubheading: v })} rows={2} helpText="Empty draws none." />
-              {/* Which games, not what they say: the stamp, the teams and the
-                  competition come from the schedule. What is drawn against an
-                  id here is a placeholder standing in for that. */}
-              {gamesOf(inst).map((one, i) => {
-                const all = gamesOf(inst)
-                return (
-                  <div className="demo__feature" key={one.id}>
-                    <TextField
-                      label={`Game ${i + 1}`}
-                      value={one.gameId}
-                      pipelineKey={key(`landing.scheduleGames[${i}].gameId`)}
-                      onChange={(v) =>
-                        write({
-                          scheduleGames: all.map((g, j) => (j === i ? { ...g, gameId: v } : g)),
-                        })
-                      }
-                      helpText="The fixture's id in the schedule."
-                    />
-                    <button
-                      data-icon="trash"
-                      aria-label="Remove"
-                      type="button"
-                      className="demo__feature-remove"
-                      data-destructive=""
-                      onClick={() => write({ scheduleGames: all.filter((_, j) => j !== i) })}
-                    >
-                      <TrashIcon size={14} />
-                    </button>
-                  </div>
-                )
-              })}
-              <button
-                type="button"
-                className="ed-add"
-                onClick={() =>
-                  write({ scheduleGames: [...gamesOf(inst), blankGame(gamesOf(inst))] })
-                }
-              >
-                Add a game
-              </button>
+              {/* Which rail, not what is in it: the stamp, the teams and the
+                  competition come from whatever serves it. What is drawn
+                  against an id here is a placeholder standing in for that. */}
+              <TextField
+                label="Rail ID"
+                value={railIdOf(inst)}
+                pipelineKey={key('landing.scheduleRailId')}
+                onChange={(v) => write({ scheduleRailId: v })}
+                helpText="The rail's id in whatever serves the schedule. It decides what is in the row and in what order."
+              />
         </>
       )
 

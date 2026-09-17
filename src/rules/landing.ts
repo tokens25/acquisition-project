@@ -12,7 +12,6 @@ import type {
   LandingSubTile,
   LandingTile,
   RailSize,
-  LandingGame,
   LandingFeature,
   LandingLink,
   LandingProvider,
@@ -165,6 +164,7 @@ type ChoiceKey =
   | 'sections'
   | 'sectionCopy'
   | 'railSize'
+  | 'scheduleRailId'
 
 export function landingText(content: LandingScreen): Required<
   Omit<
@@ -173,7 +173,6 @@ export function landingText(content: LandingScreen): Required<
     | 'faqs'
     | 'features'
     | 'footerLinks'
-    | 'scheduleGames'
     | 'railTiles'
     | 'subRailTiles'
     | 'bundles'
@@ -365,8 +364,9 @@ export function questionsOf(content: LandingScreen): LandingQuestion[] {
  * shipped three stand in. An empty list is a decision — a schedule with
  * nothing on it — and is left as it is.
  */
-export function gamesOf(content: LandingScreen): LandingGame[] {
-  return content.scheduleGames ?? defaultFlow.landing.scheduleGames ?? []
+/** Which rail the schedule draws, or the one it ships with. */
+export function railIdOf(content: LandingScreen): string {
+  return content.scheduleRailId ?? defaultFlow.landing.scheduleRailId ?? ''
 }
 
 /** The tiles in the rail, or the ones it ships with. */
@@ -518,11 +518,6 @@ export function blankPlanFight(existing: LandingPlanFight[]): LandingPlanFight {
 /** A new line under the prices. A tick: the note is the rarer of the two. */
 export function blankPerk(existing: LandingPerk[]): LandingPerk {
   return { id: nextId('perk', existing), text: '', info: false }
-}
-
-/** A new game, with nothing in it yet. */
-export function blankGame(existing: LandingGame[]): LandingGame {
-  return { id: nextId('game', existing), gameId: '' }
 }
 
 /** A new question. */
