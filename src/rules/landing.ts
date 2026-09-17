@@ -164,6 +164,7 @@ type ChoiceKey =
   | 'sectionCopy'
   | 'railSize'
   | 'scheduleRailId'
+  | 'spotlightImage'
 
 export function landingText(content: LandingScreen): Required<
   Omit<

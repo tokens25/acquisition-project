@@ -245,6 +245,8 @@ export interface LandingTile {
   title: string
   /** The quieter line: a competition, a city and a capacity, a date. */
   meta: string
+  /** A picture of its own, instead of the shipped one. A data URL. */
+  image?: string
 }
 
 /** One subscription offered beside this one — node 1084:55909. */
@@ -659,6 +661,8 @@ export interface LandingScreen {
 
   /* A spotlight — node 1084:56109. One thing, sold with a picture the width of
      the screen, and then the fixtures that make it up. */
+  /** The picture behind the top of it. Empty means the shipped one. */
+  spotlightImage?: string
   spotlightLabel?: string
   spotlightTitle?: string
   spotlightBody?: string

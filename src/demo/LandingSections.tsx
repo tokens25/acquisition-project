@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { CSSProperties } from 'react'
+import type { CSSProperties, DragEvent } from 'react'
 
 import { CardSetView } from '../card/CardSetView'
 import { FightPlanCards } from '../components/flow/FlowScreens'
@@ -10,6 +10,7 @@ import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
 import { articleShot, featureArt, imageCtaArt, teamArt } from '../components/flow/landingArt'
+import { SPOTLIGHT_ART, SPOT_ART } from '../components/flow/newArt'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -63,7 +64,7 @@ import {
   type PageSection,
   type SectionType,
 } from '../rules/sections'
-import type { LandingScreen, LandingTeam, RailSize } from '../rules/flow'
+import type { LandingScreen, LandingTeam, LandingTile, RailSize } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { Selector } from '../rules/layers'
 
@@ -586,6 +587,62 @@ const PICKER_WIDTH = 888
 const PLAN_WIDTH = 760
 
 /**
+ * Dragging one thing in a list past the others.
+ *
+ * A hook rather than a second copy of the handlers: the teams and the
+ * spotlight's games are dragged the same way, and two copies of "which half
+ * of the row did the pointer land on" is two chances to answer it
+ * differently. It hands back the props a row needs and keeps the two pieces
+ * of state — what is being carried, and where it would land — to itself.
+ */
+function useRowDrag<T extends { id: string }>(list: T[], settle: (next: T[]) => void) {
+  const [dragging, setDragging] = useState<string | null>(null)
+  const [over, setOver] = useState<{ id: string; after: boolean } | null>(null)
+
+  const rowProps = (id: string) => ({
+    'data-dragging': dragging === id || undefined,
+    'data-drop': over?.id === id ? (over.after ? 'after' : 'before') : undefined,
+    draggable: true,
+    /* Every one of these stops where it is. A list like this sits inside a
+       component row that is itself draggable, so without that a thing picked
+       up here is a whole block picked up there — the outer row overwrites the
+       id being carried and moves the component instead. */
+    onDragStart: (e: DragEvent<HTMLElement>) => {
+      e.stopPropagation()
+      setDragging(id)
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.setData('text/plain', id)
+    },
+    onDragEnd: (e: DragEvent<HTMLElement>) => {
+      e.stopPropagation()
+      setDragging(null)
+      setOver(null)
+    },
+    onDragOver: (e: DragEvent<HTMLElement>) => {
+      if (!dragging || dragging === id) return
+      e.stopPropagation()
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'move'
+      // Which half of the row the pointer is over says which side it lands on,
+      // so one gesture reads as above or below.
+      const box = e.currentTarget.getBoundingClientRect()
+      setOver({ id, after: e.clientY > box.top + box.height / 2 })
+    },
+    onDragLeave: () => setOver(null),
+    onDrop: (e: DragEvent<HTMLElement>) => {
+      e.stopPropagation()
+      e.preventDefault()
+      const carried = e.dataTransfer.getData('text/plain') || dragging
+      if (carried) settle(withDropped(list, carried, id, over?.after ?? false))
+      setDragging(null)
+      setOver(null)
+    },
+  })
+
+  return rowProps
+}
+
+/**
  * The teams on the rail: what each is called, its logo, and what order.
  *
  * Its own component because dragging is state, and the fields below are a
@@ -602,9 +659,7 @@ function TeamRows({
   write: (next: Partial<LandingScreen>) => void
   keyOf: (k: string) => string | undefined
 }) {
-  const [dragging, setDragging] = useState<string | null>(null)
-  /** Which row the pointer is over, and which side of it it would land. */
-  const [over, setOver] = useState<{ id: string; after: boolean } | null>(null)
+  const rowProps = useRowDrag(teams, (next) => write({ teams: next }))
 
   const edit = (i: number, next: Partial<LandingTeam>) =>
     write({ teams: teams.map((one, j) => (j === i ? { ...one, ...next } : one)) })
@@ -623,43 +678,7 @@ function TeamRows({
              questions. */
           data-row=""
           key={team.id}
-          data-dragging={dragging === team.id || undefined}
-          data-drop={over?.id === team.id ? (over.after ? 'after' : 'before') : undefined}
-          draggable
-          /* Every one of these stops where it is. The component this list
-             belongs to is itself a draggable row, so without that a team
-             picked up here is a whole block picked up there — the outer row
-             overwrites the id being carried and moves the component instead. */
-          onDragStart={(e) => {
-            e.stopPropagation()
-            setDragging(team.id)
-            e.dataTransfer.effectAllowed = 'move'
-            e.dataTransfer.setData('text/plain', team.id)
-          }}
-          onDragEnd={(e) => {
-            e.stopPropagation()
-            setDragging(null)
-            setOver(null)
-          }}
-          onDragOver={(e) => {
-            if (!dragging || dragging === team.id) return
-            e.stopPropagation()
-            e.preventDefault()
-            e.dataTransfer.dropEffect = 'move'
-            // Which half of the row the pointer is over says which side it
-            // lands on, so one gesture reads as above or below.
-            const box = e.currentTarget.getBoundingClientRect()
-            setOver({ id: team.id, after: e.clientY > box.top + box.height / 2 })
-          }}
-          onDragLeave={() => setOver(null)}
-          onDrop={(e) => {
-            e.stopPropagation()
-            e.preventDefault()
-            const id = e.dataTransfer.getData('text/plain') || dragging
-            if (id) write({ teams: withDropped(teams, id, team.id, over?.after ?? false) })
-            setDragging(null)
-            setOver(null)
-          }}
+          {...rowProps(team.id)}
         >
           {/* The whole row drags; this is what says so. */}
           <span className="demo__grip" aria-hidden="true" />
@@ -720,6 +739,81 @@ function TeamRows({
         </div>
         )
       })}
+    </>
+  )
+}
+
+/**
+ * The games under a spotlight: a still, what it is, and what order.
+ *
+ * The same row as a team's, and dragged by the same hook — a list of things
+ * with a picture and a line is a list of things with a picture and a line,
+ * whatever it happens to be about.
+ */
+function TileRows({
+  tiles,
+  write,
+  keyOf: key,
+  field,
+  art,
+  label,
+}: {
+  tiles: LandingTile[]
+  write: (next: Partial<LandingScreen>) => void
+  keyOf: (k: string) => string | undefined
+  /** Which list on the screen this is, for writing and for naming its keys. */
+  field: 'spotlightTiles'
+  /** The shipped pictures, dealt out the way the page deals them. */
+  art: string[]
+  label: string
+}) {
+  const rowProps = useRowDrag(tiles, (next) => write({ [field]: next }))
+
+  const edit = (i: number, next: Partial<LandingTile>) =>
+    write({ [field]: tiles.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+
+  return (
+    <>
+      {tiles.map((tile, i) => (
+        <div className="demo__feature" data-row="" key={tile.id} {...rowProps(tile.id)}>
+          <span className="demo__grip" aria-hidden="true" />
+          <span className="demo__team-side">
+            <ImagePicker
+              aspect="16 / 9"
+              width={120}
+              src={tile.image}
+              shipped={art[i % art.length]}
+              label="Still"
+              onPick={(url) => edit(i, { image: url })}
+              onRemove={() => edit(i, { image: '' })}
+            />
+            <TextField
+              label={`${label} ${i + 1}`}
+              value={tile.title}
+              pipelineKey={key(`landing.${field}[${i}].title`)}
+              onChange={(v) => edit(i, { title: v })}
+              rows={2}
+            />
+            <TextField
+              label="Under it"
+              value={tile.meta}
+              pipelineKey={key(`landing.${field}[${i}].meta`)}
+              onChange={(v) => edit(i, { meta: v })}
+              helpText="The competition. Empty draws none."
+            />
+          </span>
+          <button
+            data-icon="trash"
+            aria-label="Remove"
+            type="button"
+            className="demo__feature-remove"
+            data-destructive=""
+            onClick={() => write({ [field]: tiles.filter((_, j) => j !== i) })}
+          >
+            <TrashIcon size={14} />
+          </button>
+        </div>
+      ))}
     </>
   )
 }
@@ -1541,6 +1635,17 @@ function SectionFields({
     case 'spotlight':
       return (
         <>
+          {/* The picture behind the top of it. 3:5, which is the shape the
+              spotlight draws it in. */}
+          <ImagePicker
+            aspect="3 / 5"
+            width={120}
+            src={inst.spotlightImage}
+            shipped={SPOTLIGHT_ART}
+            label="Picture"
+            onPick={(url) => write({ spotlightImage: url })}
+            onRemove={() => write({ spotlightImage: '' })}
+          />
           <TextField
             label="Label"
             value={t.spotlightLabel}
@@ -1561,40 +1666,15 @@ function SectionFields({
             pipelineKey={key('landing.spotlightBody')}
             onChange={(v) => write({ spotlightBody: v })}
             rows={3}
-            helpText="The picture is the page's own hero artwork — change it in the Hero banner tab."
           />
-          {spotlightTilesOf(inst).map((tile, i) => {
-            const all = spotlightTilesOf(inst)
-            const edit = (next: Partial<typeof tile>) =>
-              write({ spotlightTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
-            return (
-              <div className="demo__feature" key={tile.id}>
-                <TextField
-                  label={`Game ${i + 1}`}
-                  value={tile.title}
-                  pipelineKey={key(`landing.spotlightTiles[${i}].title`)}
-                  onChange={(v) => edit({ title: v })}
-                />
-                <TextField
-                  label="Under it"
-                  value={tile.meta}
-                  pipelineKey={key(`landing.spotlightTiles[${i}].meta`)}
-                  onChange={(v) => edit({ meta: v })}
-                  helpText="The competition. Empty draws none."
-                />
-                <button
-                  data-icon="trash"
-                  aria-label="Remove"
-                  type="button"
-                  className="demo__feature-remove"
-                  data-destructive=""
-                  onClick={() => write({ spotlightTiles: all.filter((_, j) => j !== i) })}
-                >
-                  <TrashIcon size={14} />
-                </button>
-              </div>
-            )
-          })}
+          <TileRows
+            tiles={spotlightTilesOf(inst)}
+            write={write}
+            keyOf={key}
+            field="spotlightTiles"
+            art={SPOT_ART}
+            label="Game"
+          />
           <button
             type="button"
             className="ed-add"

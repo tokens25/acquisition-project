@@ -168,6 +168,7 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   liveFieldValue: 'live',
   liveCta: 'live',
   liveTeams: 'live',
+  spotlightImage: 'spotlight',
   spotlightLabel: 'spotlight',
   spotlightTitle: 'spotlight',
   spotlightBody: 'spotlight',

@@ -1968,6 +1968,7 @@ export function PageSectionView({
     case 'spotlight':
       return (
         <SpotlightSection
+          image={content.spotlightImage ?? ''}
           label={text.spotlightLabel}
           title={text.spotlightTitle}
           body={text.spotlightBody}
@@ -2443,11 +2444,13 @@ function LiveSection({
  * and the page already has a picture of what that is.
  */
 function SpotlightSection({
+  image,
   label,
   title,
   body,
   tiles,
 }: {
+  image: string
   label: string
   title: string
   body: string
@@ -2456,7 +2459,7 @@ function SpotlightSection({
   return (
     <section className="fl-spot">
       <span className="fl-spot__art" aria-hidden="true">
-        <img src={SPOTLIGHT_ART} alt="" />
+        <img src={image || SPOTLIGHT_ART} alt="" />
         <span className="fl-spot__wash" />
       </span>
       <div className="fl-spot__copy">
@@ -2470,7 +2473,7 @@ function SpotlightSection({
           return (
             <article className="fl-spot__tile" key={tile.id}>
               <span className="fl-spot__shot" aria-hidden="true">
-                <img src={artAt(SPOT_ART, at)} alt="" />
+                <img src={tile.image || artAt(SPOT_ART, at)} alt="" />
                 <span className="fl-spot__stamp">{fixture.stamp}</span>
               </span>
               <p className="fl-spot__name">{tile.title}</p>
