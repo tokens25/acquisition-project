@@ -18,6 +18,7 @@ import {
   questionsOf,
   spotlightTilesOf,
   subTilesOf,
+  teamsOf,
   tilesOf,
 } from '../../../../rules/landing'
 import { SECTION_LABEL, copyOf, isFirst, sectionsOf, type SectionType } from '../../../../rules/sections'
@@ -88,7 +89,11 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
     case 'plans':
       return { heading: t.plansTitle, words: [t.plansTitle, t.plansBody], cta: '' }
     case 'teams':
-      return { heading: t.teamsTitle, words: [t.teamsEyebrow, t.teamsTitle, t.teamsBody], cta: '' }
+      return {
+        heading: t.teamsTitle,
+        words: [t.teamsEyebrow, t.teamsTitle, t.teamsBody, ...teamsOf(l).map((one) => one.name)],
+        cta: '',
+      }
     case 'area':
       return {
         heading: t.areaTitle,

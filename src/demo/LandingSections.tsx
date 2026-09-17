@@ -22,6 +22,7 @@ import {
   blankPerk,
   blankPlanCard,
   blankPlanFight,
+  blankTeam,
   blankTeamRow,
   blankLink,
   blankProvider,
@@ -45,6 +46,7 @@ import {
   railSizeOf,
   spotlightTilesOf,
   subTilesOf,
+  teamsOf,
   tilesOf,
 } from '../rules/landing'
 import { resolveFlow, writeFlow } from '../rules/layers'
@@ -636,6 +638,39 @@ function SectionFields({
               <TextField label="Over the heading" value={t.teamsEyebrow} pipelineKey={key('landing.teamsEyebrow')} onChange={(v) => write({ teamsEyebrow: v })} />
               <TextField label="Heading" value={t.teamsTitle} pipelineKey={key('landing.teamsTitle')} onChange={(v) => write({ teamsTitle: v })} />
               <TextField label="Under the heading" value={t.teamsBody} pipelineKey={key('landing.teamsBody')} onChange={(v) => write({ teamsBody: v })} rows={2} />
+          {teamsOf(inst).map((team, i) => {
+            const all = teamsOf(inst)
+            return (
+              <div className="demo__feature" key={team.id}>
+                <TextField
+                  label={`Team ${i + 1}`}
+                  value={team.name}
+                  pipelineKey={key(`landing.teams[${i}].name`)}
+                  onChange={(v) =>
+                    write({ teams: all.map((one, j) => (j === i ? { ...one, name: v } : one)) })
+                  }
+                  helpText="The name picks the crest and the colour. One with neither draws the tile's own template."
+                />
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ teams: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ teams: [...teamsOf(inst), blankTeam(teamsOf(inst))] })}
+          >
+            Add a team
+          </button>
         </>
       )
 

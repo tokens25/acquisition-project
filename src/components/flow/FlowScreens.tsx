@@ -25,6 +25,7 @@ import {
   railSizeOf,
   spotlightTilesOf,
   subTilesOf,
+  teamsOf,
   tilesOf,
 } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
@@ -121,6 +122,7 @@ import type {
   LandingCard,
   LandingMatch,
   LandingTab,
+  LandingTeam,
   LandingPlanCard,
   LandingTeamRow,
   LandingSubTile,
@@ -1242,20 +1244,30 @@ function ScheduleSection({
    the tile's own template. Which teams a market shows is not written here —
    the design draws these, so these are what is drawn. */
 
-const TEAMS = [
-  { id: 'knicks', ground: '#1b418b', art: teamKnicks, width: 98, city: 'New York', name: 'Knicks' },
-  { id: 'rangers', ground: '#e51937', art: teamRangers, width: 83, city: 'New York', name: 'Rangers' },
-  { id: 'islanders', ground: '#003087', art: teamIslanders, width: 83, city: 'New York', name: 'Islanders' },
-] as const
+/**
+ * A team's tile, by the name it is written with.
+ *
+ * Same idea as `providerArt`: what somebody types picks the artwork, so the
+ * crest and the colour are not a second thing to choose. A name with no entry
+ * draws the tile's own template, which is what the design leaves standing for
+ * a team it has not filled in.
+ */
+const TEAM_ART: Record<string, { ground: string; art: string; width: number; city: string }> = {
+  'New York Knicks': { ground: '#1b418b', art: teamKnicks, width: 98, city: 'New York' },
+  'New York Rangers': { ground: '#e51937', art: teamRangers, width: 83, city: 'New York' },
+  'New York Islanders': { ground: '#003087', art: teamIslanders, width: 83, city: 'New York' },
+}
 
 function TeamsRail({
   eyebrow,
   title,
   body,
+  teams,
 }: {
   eyebrow: string
   title: string
   body: string
+  teams: LandingTeam[]
 }) {
   return (
     <section className="fl-page__teams">
@@ -1265,25 +1277,42 @@ function TeamsRail({
         <p className="fl-page__teams-body">{body}</p>
       </div>
       <div className="fl-page__teams-rail">
-        {TEAMS.map((team) => (
-          <div className="fl-team" key={team.id}>
-            <div className="fl-team__tile" style={{ background: team.ground }}>
-              <img
-                className="fl-team__art"
-                src={team.art}
-                alt=""
-                style={{ inlineSize: `${team.width}px` }}
-              />
-              {/* 54 of gradient at 60%, from nothing to the page colour — what
-                  the name is read against. */}
-              <span className="fl-team__wash" aria-hidden="true" />
-              <span className="fl-team__content">
-                <span className="fl-team__city">{team.city}</span>
-                <span className="fl-team__name">{team.name}</span>
-              </span>
-            </div>
-          </div>
-        ))}
+        {teams
+          /* A team with no name yet draws nothing rather than an empty tile:
+             the field is there to be typed into, and the design's own empty
+             tile is the template below. */
+          .filter((team) => team.name.trim() !== '')
+          .map((team) => {
+            const art = TEAM_ART[team.name.trim()]
+            /* The design sets the city over the name. Where the artwork knows
+               the city and the written name opens with it, the rest is the
+               name; anything else is drawn whole, on one line. */
+            const city = art && team.name.trim().startsWith(art.city) ? art.city : ''
+            const rest = city ? team.name.trim().slice(city.length).trim() : team.name.trim()
+            return (
+              <div className="fl-team" key={team.id}>
+                <div className="fl-team__tile" style={art ? { background: art.ground } : undefined}>
+                  {art ? (
+                    <img
+                      className="fl-team__art"
+                      src={art.art}
+                      alt=""
+                      style={{ inlineSize: `${art.width}px` }}
+                    />
+                  ) : (
+                    <img className="fl-team__plate" src={teamPlaceholder} alt="" />
+                  )}
+                  {/* 54 of gradient at 60%, from nothing to the page colour —
+                      what the name is read against. */}
+                  <span className="fl-team__wash" aria-hidden="true" />
+                  <span className="fl-team__content">
+                    {city !== '' && <span className="fl-team__city">{city}</span>}
+                    <span className="fl-team__name">{rest}</span>
+                  </span>
+                </div>
+              </div>
+            )
+          })}
         {/* The tile's own template, which the design leaves standing five
             times over rather than filling in. */}
         {[0, 1, 2, 3, 4].map((i) => (
@@ -1589,7 +1618,14 @@ export function PageSectionView({
       ) : null
 
     case 'teams':
-      return <TeamsRail eyebrow={text.teamsEyebrow} title={text.teamsTitle} body={text.teamsBody} />
+      return (
+        <TeamsRail
+          eyebrow={text.teamsEyebrow}
+          title={text.teamsTitle}
+          body={text.teamsBody}
+          teams={teamsOf(content)}
+        />
+      )
 
     /* The answer to a postcode outside the region: what was typed, what is
        not available there, and the plans that are.

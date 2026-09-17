@@ -8,6 +8,7 @@ import type {
   LandingPerk,
   LandingPlanCard,
   LandingPlanFight,
+  LandingTeam,
   LandingTeamRow,
   LandingSubTile,
   LandingTile,
@@ -184,6 +185,7 @@ export function landingText(content: LandingScreen): Required<
     | 'liveTeams'
     | 'spotlightTiles'
     | 'planCards'
+    | 'teams'
     | HeroKey
     | ChoiceKey
   >
@@ -367,6 +369,16 @@ export function questionsOf(content: LandingScreen): LandingQuestion[] {
 /** Which rail the schedule draws, or the one it ships with. */
 export function railIdOf(content: LandingScreen): string {
   return content.scheduleRailId ?? defaultFlow.landing.scheduleRailId ?? ''
+}
+
+/** The teams on the rail, or the ones it ships with. */
+export function teamsOf(content: LandingScreen): LandingTeam[] {
+  return content.teams ?? defaultFlow.landing.teams ?? []
+}
+
+/** A new one. The name is all it needs: the crest and the colour follow it. */
+export function blankTeam(existing: LandingTeam[]): LandingTeam {
+  return { id: nextId('team', existing), name: '' }
 }
 
 /** The tiles in the rail, or the ones it ships with. */

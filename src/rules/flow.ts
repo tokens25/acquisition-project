@@ -388,6 +388,19 @@ export interface LandingPlanCard {
   chosen: boolean
 }
 
+/**
+ * One team on the "Meet the teams" rail.
+ *
+ * The name is the tile's key as well as its label, the way a provider's name
+ * picks its logo: write "New York Knicks" and the crest and the colour
+ * follow. A name with no artwork draws the tile's own template, which is what
+ * the design leaves standing for a team it has not filled in.
+ */
+export interface LandingTeam {
+  id: string
+  name: string
+}
+
 /** One tab over a carousel — a country, a competition, a month. */
 export interface LandingTab {
   id: string
@@ -512,6 +525,8 @@ export interface LandingScreen {
   teamsEyebrow?: string
   teamsTitle?: string
   teamsBody?: string
+  /** Which teams, in the order the rail shows them. */
+  teams?: LandingTeam[]
 
   /**
    * The card that answers a postcode outside the broadcast region: what was
@@ -853,6 +868,13 @@ export const defaultFlow: FlowContent = {
     teamsEyebrow: 'Meet the teams',
     teamsTitle: 'Your teams, one home',
     teamsBody: 'Here are the teams available in your area',
+    /* The three the design fills in. The five it leaves as the tile's own
+       template are drawn after them, however many are written here. */
+    teams: [
+      { id: 'team-1', name: 'New York Knicks' },
+      { id: 'team-2', name: 'New York Rangers' },
+      { id: 'team-3', name: 'New York Islanders' },
+    ],
 
     areaTitle: "See what's live in your area",
     areaBody: 'Enter your ZIP Code to see which teams you can watch',
