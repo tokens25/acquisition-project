@@ -553,6 +553,7 @@ function SectionCard({
             title="Open the Subscription screen, where the tabs and the plan cards are edited"
             onClick={onEditPlans}
           >
+            <span className="ls-shot__frame">
             <span
               className="ls-shot__page"
               /* Laid out wide enough for the whole set to stand side by side
@@ -566,6 +567,7 @@ function SectionCard({
                 <SubscriptionTabs tabs={planTabs} tab={planTab} />
               </div>
               <CardSetView set={set} context={store.context} tab={planTab} />
+            </span>
             </span>
           </button>
         )}

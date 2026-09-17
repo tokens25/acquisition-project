@@ -54,7 +54,7 @@
       'component once only': [52,45,9,4], 'component contents': [24,49,34,3],
       'component actions': [24,52,30,3], 'component action': [24,52,9,3],
       'component switch': [62,45,6,6], 'component switch light': [64,47,2,2],
-      'component chevron': [70,45,4,5], 'component preview': [76,44,22,26], 'the picker, drawn': [10,66,60,24], 'the picker’s page': [10,66,60,24], 'component preview frame': [76,44,22,26], 'component preview page': [76,44,22,40], 'component copy tag': [56,45,8,4],
+      'component chevron': [70,45,4,5], 'component preview': [76,44,22,26], 'the picker, drawn': [10,66,60,24], 'the picker’s window': [11,67,58,22], 'the picker’s page': [11,67,58,22], 'component preview frame': [76,44,22,26], 'component preview page': [76,44,22,40], 'component copy tag': [56,45,8,4],
       'add a component': [6,120,68,14], 'component choices': [6,126,68,8],
       'component choice': [6,126,20,5],       'field group': [6,44,68,16], 'group title': [6,44,26,4],
       'plans group': [6,44,68,16], 'header group': [6,64,68,16],

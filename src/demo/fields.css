@@ -954,19 +954,33 @@
 .ls-shot {
   display: block;
   inline-size: 100%;
-  /* Wide, because what it is showing is the set: three cards side by side,
-     and which one is dearer than which. The shape follows from that — the
-     whole set at the panel's width comes out about three to two. */
-  aspect-ratio: 3 / 2;
   margin-block-start: var(--space-8);
-  padding: 0;
+  /* The set stands inside the card rather than against its edges. */
+  padding: var(--space-8);
   border: var(--border-1) solid var(--color-border-full-color-subtle);
   border-radius: var(--radius-10);
   background: #060606;
-  overflow: hidden;
   cursor: pointer;
-  container-type: inline-size;
   transition: border-color 120ms ease;
+}
+/* The window the set is seen through, inside that padding.
+   
+   Two elements and not one, so the padding and the shape do not have to agree
+   about a width: an inset is a fixed number of pixels and a ratio is a share
+   of one, so a single box carrying both lines up at exactly one panel width
+   and crops or leaves a gap at every other. Here the frame is the ratio and
+   the button around it is the inset, whatever the panel is doing.
+   
+   Wide, because what it is showing is the set: three cards side by side, and
+   which one is dearer than which. Three to two is what the whole set comes to
+   at the panel's width. */
+.ls-shot__frame {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-6);
+  overflow: hidden;
+  container-type: inline-size;
 }
 .ls-shot:hover {
   border-color: var(--color-text-tertiary);
