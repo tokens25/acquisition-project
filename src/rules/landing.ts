@@ -165,6 +165,7 @@ type ChoiceKey =
   | 'railSize'
   | 'scheduleRailId'
   | 'spotlightImage'
+  | 'spotlightRailId'
 
 export function landingText(content: LandingScreen): Required<
   Omit<
@@ -182,7 +183,6 @@ export function landingText(content: LandingScreen): Required<
     | 'cityTabs'
     | 'cityTiles'
     | 'liveTeams'
-    | 'spotlightTiles'
     | 'planCards'
     | 'teams'
     | HeroKey
@@ -481,9 +481,9 @@ export function blankTeamRow(existing: LandingTeamRow[]): LandingTeamRow {
   return { id: nextId('live', existing), name: '', league: '' }
 }
 
-/** The fixtures under the spotlight, or the ones it ships with. */
-export function spotlightTilesOf(content: LandingScreen): LandingTile[] {
-  return content.spotlightTiles ?? defaultFlow.landing.spotlightTiles ?? []
+/** Which rail the spotlight draws, or the one it ships with. */
+export function spotlightRailIdOf(content: LandingScreen): string {
+  return content.spotlightRailId ?? defaultFlow.landing.spotlightRailId ?? ''
 }
 
 /** The plans a fight can be bought on, or the ones it ships with. */

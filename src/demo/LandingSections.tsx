@@ -10,7 +10,7 @@ import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
 import { articleShot, featureArt, imageCtaArt, teamArt } from '../components/flow/landingArt'
-import { SPOTLIGHT_ART, SPOT_ART } from '../components/flow/newArt'
+import { SPOTLIGHT_ART } from '../components/flow/newArt'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -41,7 +41,7 @@ import {
   questionsOf,
   railIdOf,
   railSizeOf,
-  spotlightTilesOf,
+  spotlightRailIdOf,
   subTilesOf,
   teamsOf,
   tilesOf,
@@ -64,7 +64,7 @@ import {
   type PageSection,
   type SectionType,
 } from '../rules/sections'
-import type { LandingScreen, LandingTeam, LandingTile, RailSize } from '../rules/flow'
+import type { LandingScreen, LandingTeam, RailSize } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
 import type { Selector } from '../rules/layers'
 
@@ -739,81 +739,6 @@ function TeamRows({
         </div>
         )
       })}
-    </>
-  )
-}
-
-/**
- * The games under a spotlight: a still, what it is, and what order.
- *
- * The same row as a team's, and dragged by the same hook — a list of things
- * with a picture and a line is a list of things with a picture and a line,
- * whatever it happens to be about.
- */
-function TileRows({
-  tiles,
-  write,
-  keyOf: key,
-  field,
-  art,
-  label,
-}: {
-  tiles: LandingTile[]
-  write: (next: Partial<LandingScreen>) => void
-  keyOf: (k: string) => string | undefined
-  /** Which list on the screen this is, for writing and for naming its keys. */
-  field: 'spotlightTiles'
-  /** The shipped pictures, dealt out the way the page deals them. */
-  art: string[]
-  label: string
-}) {
-  const rowProps = useRowDrag(tiles, (next) => write({ [field]: next }))
-
-  const edit = (i: number, next: Partial<LandingTile>) =>
-    write({ [field]: tiles.map((one, j) => (j === i ? { ...one, ...next } : one)) })
-
-  return (
-    <>
-      {tiles.map((tile, i) => (
-        <div className="demo__feature" data-row="" key={tile.id} {...rowProps(tile.id)}>
-          <span className="demo__grip" aria-hidden="true" />
-          <span className="demo__team-side">
-            <ImagePicker
-              aspect="16 / 9"
-              width={120}
-              src={tile.image}
-              shipped={art[i % art.length]}
-              label="Still"
-              onPick={(url) => edit(i, { image: url })}
-              onRemove={() => edit(i, { image: '' })}
-            />
-            <TextField
-              label={`${label} ${i + 1}`}
-              value={tile.title}
-              pipelineKey={key(`landing.${field}[${i}].title`)}
-              onChange={(v) => edit(i, { title: v })}
-              rows={2}
-            />
-            <TextField
-              label="Under it"
-              value={tile.meta}
-              pipelineKey={key(`landing.${field}[${i}].meta`)}
-              onChange={(v) => edit(i, { meta: v })}
-              helpText="The competition. Empty draws none."
-            />
-          </span>
-          <button
-            data-icon="trash"
-            aria-label="Remove"
-            type="button"
-            className="demo__feature-remove"
-            data-destructive=""
-            onClick={() => write({ [field]: tiles.filter((_, j) => j !== i) })}
-          >
-            <TrashIcon size={14} />
-          </button>
-        </div>
-      ))}
     </>
   )
 }
@@ -1667,23 +1592,16 @@ function SectionFields({
             onChange={(v) => write({ spotlightBody: v })}
             rows={3}
           />
-          <TileRows
-            tiles={spotlightTilesOf(inst)}
-            write={write}
-            keyOf={key}
-            field="spotlightTiles"
-            art={SPOT_ART}
-            label="Game"
+          {/* Which rail, not what is in it. The same as the schedule: the
+              rail decides what is on and in what order, and a page listing
+              the games would be a second answer going stale. */}
+          <TextField
+            label="Rail ID"
+            value={spotlightRailIdOf(inst)}
+            pipelineKey={key('landing.spotlightRailId')}
+            onChange={(v) => write({ spotlightRailId: v })}
+            helpText="The rail's id in whatever serves it. It decides which games are in the row."
           />
-          <button
-            type="button"
-            className="ed-add"
-            onClick={() =>
-              write({ spotlightTiles: [...spotlightTilesOf(inst), blankTile(spotlightTilesOf(inst))] })
-            }
-          >
-            Add a game
-          </button>
         </>
       )
 

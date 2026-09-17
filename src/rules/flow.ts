@@ -245,8 +245,6 @@ export interface LandingTile {
   title: string
   /** The quieter line: a competition, a city and a capacity, a date. */
   meta: string
-  /** A picture of its own, instead of the shipped one. A data URL. */
-  image?: string
 }
 
 /** One subscription offered beside this one — node 1084:55909. */
@@ -666,7 +664,14 @@ export interface LandingScreen {
   spotlightLabel?: string
   spotlightTitle?: string
   spotlightBody?: string
-  spotlightTiles?: LandingTile[]
+  /**
+   * Which rail the spotlight's games come from.
+   *
+   * One id rather than a list of games, the same as the schedule: a rail is
+   * the thing that decides what is in it, and a page that listed them would
+   * be a second answer going stale the moment the fixtures moved.
+   */
+  spotlightRailId?: string
 
   /* Buying the fight — node 1102:53279. A heading, the plans it can be bought
      on, a way to see the rest, and the button under them. */
@@ -1082,11 +1087,7 @@ export const defaultFlow: FlowContent = {
     spotlightTitle: 'Serie A on DAZN until 2029',
     spotlightBody:
       'Serie A, Coppa Italia and Supercoppa Italiana — every match shown in full and available exclusively on DAZN.',
-    spotlightTiles: [
-      { id: 'spot-1', title: 'Sassuolo vs. Torino', meta: 'Serie A' },
-      { id: 'spot-2', title: 'Monza vs. Lecce', meta: 'Serie A' },
-      { id: 'spot-3', title: 'Bologna vs. Como', meta: 'Serie A' },
-    ],
+    spotlightRailId: 'serie-a-2029',
 
     matchEyebrow: 'Watch every game',
     matchTitle: '39 days. 104 unmissable matches.',

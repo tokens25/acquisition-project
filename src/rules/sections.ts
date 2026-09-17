@@ -172,7 +172,7 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   spotlightLabel: 'spotlight',
   spotlightTitle: 'spotlight',
   spotlightBody: 'spotlight',
-  spotlightTiles: 'spotlight',
+  spotlightRailId: 'spotlight',
   planPickTitle: 'fightPlan',
   planPickMore: 'fightPlan',
   planPickCta: 'fightPlan',
@@ -221,7 +221,7 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   cardStack: 'A stack of cards',
   cities: 'Eyebrow, heading, a line, tabs, and the places',
   live: 'Heading, field, the teams, button',
-  spotlight: 'Picture, label, heading, a line, and the games',
+  spotlight: 'Picture, label, heading, a line, and the rail',
   fightPlan: 'Heading, the plans, and the button',
 }
 

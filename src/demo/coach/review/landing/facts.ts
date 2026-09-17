@@ -16,7 +16,6 @@ import {
   liveTeamsOf,
   providersOf,
   questionsOf,
-  spotlightTilesOf,
   subTilesOf,
   teamsOf,
   tilesOf,
@@ -215,7 +214,6 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
           t.spotlightLabel,
           t.spotlightTitle,
           t.spotlightBody,
-          ...spotlightTilesOf(l).flatMap((one) => [one.title, one.meta]),
         ],
         cta: '',
       }

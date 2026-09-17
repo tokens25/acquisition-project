@@ -23,7 +23,6 @@ import {
   providersOf,
   questionsOf,
   railSizeOf,
-  spotlightTilesOf,
   subTilesOf,
   teamsOf,
   tilesOf,
@@ -1972,7 +1971,6 @@ export function PageSectionView({
           label={text.spotlightLabel}
           title={text.spotlightTitle}
           body={text.spotlightBody}
-          tiles={spotlightTilesOf(content)}
         />
       )
 
@@ -2443,18 +2441,29 @@ function LiveSection({
  * second upload: a spotlight is the page saying "this, above everything else",
  * and the page already has a picture of what that is.
  */
+/**
+ * The games a spotlight's rail is drawn with.
+ *
+ * Placeholders, the way the schedule's are: the page names a rail and the
+ * rail answers with its fixtures, so there is nothing here to write down and
+ * these stand in for the answer.
+ */
+const SPOT_FIXTURES = [
+  { id: 'sassuolo-torino', title: 'Sassuolo vs. Torino', meta: 'Serie A' },
+  { id: 'monza-lecce', title: 'Monza vs. Lecce', meta: 'Serie A' },
+  { id: 'bologna-como', title: 'Bologna vs. Como', meta: 'Serie A' },
+] as const
+
 function SpotlightSection({
   image,
   label,
   title,
   body,
-  tiles,
 }: {
   image: string
   label: string
   title: string
   body: string
-  tiles: LandingTile[]
 }) {
   return (
     <section className="fl-spot">
@@ -2468,19 +2477,16 @@ function SpotlightSection({
         {body.trim() !== '' && <p className="fl-spot__body">{body}</p>}
       </div>
       <div className="fl-spot__row">
-        {tiles.map((tile, at) => {
-          const fixture = fixtureFor(at)
-          return (
-            <article className="fl-spot__tile" key={tile.id}>
-              <span className="fl-spot__shot" aria-hidden="true">
-                <img src={tile.image || artAt(SPOT_ART, at)} alt="" />
-                <span className="fl-spot__stamp">{fixture.stamp}</span>
-              </span>
-              <p className="fl-spot__name">{tile.title}</p>
-              {tile.meta.trim() !== '' && <p className="fl-spot__meta">{tile.meta}</p>}
-            </article>
-          )
-        })}
+        {SPOT_FIXTURES.map((game, at) => (
+          <article className="fl-spot__tile" key={game.id}>
+            <span className="fl-spot__shot" aria-hidden="true">
+              <img src={artAt(SPOT_ART, at)} alt="" />
+              <span className="fl-spot__stamp">{fixtureFor(at).stamp}</span>
+            </span>
+            <p className="fl-spot__name">{game.title}</p>
+            <p className="fl-spot__meta">{game.meta}</p>
+          </article>
+        ))}
       </div>
     </section>
   )
