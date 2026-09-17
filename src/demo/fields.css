@@ -954,10 +954,10 @@
 .ls-shot {
   display: block;
   inline-size: 100%;
-  /* Tall enough for the whole card — tabs, price, button, crests, the lines
-     under them and the way to the rest. A shorter window cuts the card off
-     mid-feature, which reads as a card that ends there. */
-  aspect-ratio: 2 / 3;
+  /* Wide, because what it is showing is the set: three cards side by side,
+     and which one is dearer than which. The shape follows from that — the
+     whole set at the panel's width comes out about three to two. */
+  aspect-ratio: 3 / 2;
   margin-block-start: var(--space-8);
   padding: 0;
   border: var(--border-1) solid var(--color-border-full-color-subtle);
@@ -971,12 +971,12 @@
 .ls-shot:hover {
   border-color: var(--color-text-tertiary);
 }
-/* Laid out at the page's width and scaled by the card's own, so the crop is
-   the same whatever width the panel is. */
+/* Laid out at the width the set needs and scaled by the thumbnail's own, so
+   the whole set is in shot whatever width the panel is. */
 .ls-shot__page {
   display: block;
-  transform: scale(0.85);
-  transform: scale(calc(100cqi / 375px));
+  transform: scale(0.36);
+  transform: scale(calc(100cqi / var(--ls-shot-w, 888px)));
   transform-origin: 0 0;
   text-align: start;
 }

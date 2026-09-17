@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { CSSProperties } from 'react'
 
 import { CardSetView } from '../card/CardSetView'
 import { SubscriptionTabs } from '../components/flow/FlowScreens'
@@ -552,7 +553,15 @@ function SectionCard({
             title="Open the Subscription screen, where the tabs and the plan cards are edited"
             onClick={onEditPlans}
           >
-            <span className="ls-shot__page" style={{ inlineSize: 375 }} inert>
+            <span
+              className="ls-shot__page"
+              /* Laid out wide enough for the whole set to stand side by side
+                 rather than at the phone's width, where the third card is off
+                 the edge of a row that scrolls. The stylesheet shrinks it to
+                 the panel by this same number. */
+              style={{ inlineSize: PICKER_WIDTH, '--ls-shot-w': `${PICKER_WIDTH}px` } as CSSProperties}
+              inert
+            >
               <div className="fl-page__plans-tabs">
                 <SubscriptionTabs tabs={planTabs} tab={planTab} />
               </div>
@@ -572,6 +581,16 @@ function SectionCard({
  * labels, the same order, the same help text. What changed is where they write
  * — this instance rather than the page — and that a copy has no pipeline key.
  */
+/**
+ * What the plan picker is laid out at inside its thumbnail.
+ *
+ * The width three cards and their gaps actually take — measured, not guessed.
+ * At the phone's 375 the set is a row that scrolls and the third card is off
+ * the edge, which is the page's behaviour and the wrong thing for a picture
+ * of what the page sells.
+ */
+const PICKER_WIDTH = 888
+
 function SectionFields({
   section,
   t,
