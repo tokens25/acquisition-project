@@ -23,7 +23,6 @@ import {
   blankLink,
   blankQuestion,
   blankSubTile,
-  blankTile,
   bundlesOf,
   cardsOf,
   cityTabsOf,
@@ -34,12 +33,13 @@ import {
   landingText,
   linksOf,
   questionsOf,
+  blankTile,
   railIdOf,
+  scheduleRailIdOf,
   railSizeOf,
   spotlightRailIdOf,
   subTilesOf,
   teamsOf,
-  tilesOf,
 } from '../rules/landing'
 import { resolveFlow, writeFlow } from '../rules/layers'
 import {
@@ -781,7 +781,7 @@ function SectionFields({
                   against an id here is a placeholder standing in for that. */}
               <TextField
                 label="Rail ID"
-                value={railIdOf(inst)}
+                value={scheduleRailIdOf(inst)}
                 pipelineKey={key('landing.scheduleRailId')}
                 onChange={(v) => write({ scheduleRailId: v })}
                 helpText="The rail's id in whatever serves the schedule. It decides what is in the row and in what order."
@@ -927,46 +927,16 @@ function SectionFields({
             onChange={(v) => write({ railSize: v as RailSize })}
             helpText="What kind of thing the row is showing. It sets the shape of every tile."
           />
-          {tilesOf(inst).map((tile, i) => {
-            const all = tilesOf(inst)
-            const edit = (next: Partial<typeof tile>) =>
-              write({ railTiles: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
-            return (
-              <div className="demo__feature" key={tile.id}>
-                <TextField
-                  label={`Tile ${i + 1}`}
-                  value={tile.title}
-                  pipelineKey={key(`landing.railTiles[${i}].title`)}
-                  onChange={(v) => edit({ title: v })}
-                  rows={2}
-                />
-                <TextField
-                  label="Under it"
-                  value={tile.meta}
-                  pipelineKey={key(`landing.railTiles[${i}].meta`)}
-                  onChange={(v) => edit({ meta: v })}
-                  helpText="The quieter line — a competition, a place, a date. Empty draws none."
-                />
-                <button
-                  data-icon="trash"
-                  aria-label="Remove"
-                  type="button"
-                  className="demo__feature-remove"
-                  data-destructive=""
-                  onClick={() => write({ railTiles: all.filter((_, j) => j !== i) })}
-                >
-                  <TrashIcon size={14} />
-                </button>
-              </div>
-            )
-          })}
-          <button
-            type="button"
-            className="ed-add"
-            onClick={() => write({ railTiles: [...tilesOf(inst), blankTile(tilesOf(inst))] })}
-          >
-            Add a tile
-          </button>
+          {/* Which rail, not what is in it: the pictures, the names and the
+              order come from whatever serves it. What is drawn against an id
+              here is a placeholder standing in for that. */}
+          <TextField
+            label="Rail ID"
+            value={railIdOf(inst)}
+            pipelineKey={key('landing.railId')}
+            onChange={(v) => write({ railId: v })}
+            helpText="The rail's id in whatever serves it. It decides what is in the row and in what order."
+          />
         </>
       )
 

@@ -614,6 +614,14 @@ export interface LandingScreen {
      Nodes 1084:56990, 1084:57405, 1084:57115 and 1093:55236. */
   railTitle?: string
   railSize?: RailSize
+  /**
+   * Which rail, rather than what is in it.
+   *
+   * A row of tiles is served, the way the schedule and the spotlight are: the
+   * pictures, the names and the order come from whatever serves it. What is
+   * drawn against an id here stands in for that.
+   */
+  railId?: string
   railTiles?: LandingTile[]
 
   /* The other subscriptions, sold beside this one — node 1084:55909. Tall
@@ -959,6 +967,7 @@ export const defaultFlow: FlowContent = {
        want — node 1084:57405 draws it under a competition's name. */
     railTitle: 'Pirelli British Grand Prix 2026',
     railSize: 'fixture',
+    railId: 'rail_2345id',
     railTiles: [
       { id: 'tile-1', title: 'The World Championship takes a turn at Silverstone', meta: 'Código F1' },
       { id: 'tile-2', title: 'Race | Pirelli British Grand Prix', meta: 'F1' },

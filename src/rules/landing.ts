@@ -161,6 +161,7 @@ type ChoiceKey =
   | 'sections'
   | 'sectionCopy'
   | 'railSize'
+  | 'railId'
   | 'scheduleRailId'
   | 'spotlightImage'
   | 'spotlightRailId'
@@ -350,8 +351,13 @@ export function questionsOf(content: LandingScreen): LandingQuestion[] {
  * nothing on it — and is left as it is.
  */
 /** Which rail the schedule draws, or the one it ships with. */
-export function railIdOf(content: LandingScreen): string {
+export function scheduleRailIdOf(content: LandingScreen): string {
   return content.scheduleRailId ?? defaultFlow.landing.scheduleRailId ?? ''
+}
+
+/** Which rail the row of tiles draws, or the one it ships with. */
+export function railIdOf(content: LandingScreen): string {
+  return content.railId ?? defaultFlow.landing.railId ?? ''
 }
 
 /** The teams on the rail, or the ones it ships with. */
