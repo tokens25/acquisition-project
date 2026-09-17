@@ -1,5 +1,8 @@
 import { useState } from 'react'
 
+import { CardSetView } from '../card/CardSetView'
+import { SubscriptionTabs } from '../components/flow/FlowScreens'
+import { tabsOf } from '../rules/tabs'
 import { ComponentPeek } from './ComponentPeek'
 import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
@@ -347,6 +350,13 @@ function SectionCard({
   const own = l.sectionCopy?.[section.id]
   /** This instance's content: the page's, and its own on top of it. */
   const inst: LandingScreen = own ? { ...l, ...own } : l
+  /* The picker as the page draws it, for the thumbnail at the foot of the
+     plans fold. Its tabs are the Subscription screen's, so a tab renamed
+     there is renamed here. */
+  const planTabs = tabsOf(set)
+  const planTab = planTabs.some((t) => t.id === store.context.tab)
+    ? (store.context.tab as string)
+    : (planTabs[0]?.id ?? '')
   const t = landingText(inst)
 
   /**
@@ -530,16 +540,23 @@ function SectionCard({
             rest of this component is edited rather than a thing done to it:
             what the page owns is the heading above the picker, and everything
             below it belongs to the Subscription screen. */}
+        {/* The picker itself rather than a button naming it: what the page
+            owns here is the heading, and everything under it is the
+            Subscription screen's. A drawing of that screen says which plans
+            and which tabs far faster than the words "Edit subscription", and
+            it is the real thing — rename a tab there and it changes here. */}
         {onEditPlans && (
           <button
             type="button"
-            className="ls-away"
+            className="ls-shot"
             title="Open the Subscription screen, where the tabs and the plan cards are edited"
             onClick={onEditPlans}
           >
-            Edit subscription
-            <span className="ls-away__mark" aria-hidden="true">
-              →
+            <span className="ls-shot__page" style={{ inlineSize: 375 }} inert>
+              <div className="fl-page__plans-tabs">
+                <SubscriptionTabs tabs={planTabs} tab={planTab} />
+              </div>
+              <CardSetView set={set} context={store.context} tab={planTab} />
             </span>
           </button>
         )}

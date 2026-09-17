@@ -943,37 +943,46 @@
    page owns is the heading over the picker, and everything below that belongs
    to the Subscription screen. Not one of the things done to a component, so it
    is not among them — it is the last thing in the component. */
-.ls-away {
-  display: flex;
-  gap: var(--space-6);
-  align-items: center;
-  justify-content: center;
+/* ── The picker, at the foot of the plans fold ─────────────────────────────
+   A drawing of the Subscription screen rather than a button naming it: what
+   the page owns here is the heading, and the rest is that screen's. It is the
+   real thing at the page's own width and shrunk — the same trick the hero
+   gallery uses — so a tab renamed there is renamed here.
+
+   Tall on purpose. The picker is tabs over a card, and a wide crop of it is a
+   row of tabs over the top inch of something. */
+.ls-shot {
+  display: block;
   inline-size: 100%;
-  block-size: var(--bar-control, 28px);
+  /* Tall enough for the whole card — tabs, price, button, crests, the lines
+     under them and the way to the rest. A shorter window cuts the card off
+     mid-feature, which reads as a card that ends there. */
+  aspect-ratio: 2 / 3;
   margin-block-start: var(--space-8);
-  padding-inline: var(--space-12);
-  border: 0;
-  border-radius: var(--radius-8);
-  background: var(--color-surface-container-5);
-  color: var(--color-text-primary);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: var(--font-weight-bold);
-  white-space: nowrap;
+  padding: 0;
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-10);
+  background: #060606;
+  overflow: hidden;
   cursor: pointer;
-  transition: background 120ms ease;
+  container-type: inline-size;
+  transition: border-color 120ms ease;
 }
-.ls-away:hover {
-  background: var(--color-surface-container-4);
+.ls-shot:hover {
+  border-color: var(--color-text-tertiary);
 }
-/* The arrow says it leaves the page rather than changing something on it. */
-.ls-away__mark {
-  font-size: 13px;
-  line-height: 1;
+/* Laid out at the page's width and scaled by the card's own, so the crop is
+   the same whatever width the panel is. */
+.ls-shot__page {
+  display: block;
+  transform: scale(0.85);
+  transform: scale(calc(100cqi / 375px));
+  transform-origin: 0 0;
+  text-align: start;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ls-away {
+  .ls-shot {
     transition: none;
   }
 }
