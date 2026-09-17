@@ -26,7 +26,7 @@ import {
   tilesOf,
 } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
-import { articleShot, featureArt, imageCtaArt, teamArt } from './landingArt'
+import { articleShot, featureArt, flagFor, imageCtaArt, teamArt } from './landingArt'
 import {
   FIGHT_ART,
   GAME_ART,
@@ -2165,17 +2165,21 @@ function MatchListSection({
               <div className="fl-match__teams">
                 <span className="fl-match__team">
                   <span className="fl-match__code">{match.home}</span>
-                  {/* The flag where the match has one, and the empty box where
-                      it has not — which is what the design draws for a side
-                      that is two countries at once. */}
+                  {/* The one that was chosen, else the one the code brings,
+                      else the empty box — which is what the design draws for a
+                      side that is two countries at once. */}
                   <span className="fl-match__crest" aria-hidden="true">
-                    {match.homeFlag && <img src={match.homeFlag} alt="" />}
+                    {(match.homeFlag || flagFor(match.home)) && (
+                      <img src={match.homeFlag || flagFor(match.home)} alt="" />
+                    )}
                   </span>
                 </span>
                 <span className="fl-match__time">{match.time}</span>
                 <span className="fl-match__team" data-away="">
                   <span className="fl-match__crest" aria-hidden="true">
-                    {match.awayFlag && <img src={match.awayFlag} alt="" />}
+                    {(match.awayFlag || flagFor(match.away)) && (
+                      <img src={match.awayFlag || flagFor(match.away)} alt="" />
+                    )}
                   </span>
                   <span className="fl-match__code">{match.away}</span>
                 </span>

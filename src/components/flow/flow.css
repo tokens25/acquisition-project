@@ -3596,6 +3596,12 @@
   background: var(--color-surface-container-4);
   overflow: hidden;
 }
+/* The grey is the empty box. A flag of its own shape — the shipped ones are
+   rounded, with nothing in the corners — would otherwise sit on four grey
+   slivers. */
+.fl-match__crest:has(img) {
+  background: none;
+}
 /* A flag fills the box rather than sitting inside it: what is chosen here is
    a flag, which is the shape of the box, and letterboxing one would draw the
    empty box around it again. */

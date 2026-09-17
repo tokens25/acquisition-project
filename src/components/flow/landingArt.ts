@@ -19,6 +19,10 @@ import articleShot from '../../assets/landing/article/shot.jpg'
 import teamKnicks from '../../assets/landing/teams/knicks.png'
 import teamRangers from '../../assets/landing/teams/rangers.png'
 import teamIslanders from '../../assets/landing/teams/islanders.png'
+import flagMex from '../../assets/landing/flags/mex.png'
+import flagRsa from '../../assets/landing/flags/rsa.png'
+import flagKor from '../../assets/landing/flags/kor.png'
+import flagCan from '../../assets/landing/flags/can.png'
 
 export { imageCtaArt, articleShot }
 
@@ -38,6 +42,27 @@ export const teamArt: Record<string, { ground: string; art: string; width: numbe
   'New York Rangers': { ground: '#e51937', art: teamRangers, width: 83, city: 'New York' },
   'New York Islanders': { ground: '#003087', art: teamIslanders, width: 83, city: 'New York' },
 }
+
+/**
+ * A side's flag, by the code it is written with.
+ *
+ * The same idea as the crests above: what somebody types picks the artwork,
+ * so a match is one thing to fill in rather than two. A code with no entry
+ * draws the empty box — which is what the design draws for DEN/MNE and
+ * ITA/NIR, sides that are two countries at once and have no one flag.
+ *
+ * Here rather than in the screens because the panel needs it too: it shows
+ * the flag a side has before offering to replace it.
+ */
+export const flagArt: Record<string, string> = {
+  MEX: flagMex,
+  RSA: flagRsa,
+  KOR: flagKor,
+  CAN: flagCan,
+}
+
+/** The flag a code brings, however it was typed. */
+export const flagFor = (code: string) => flagArt[code.trim().toUpperCase()]
 
 /**
  * A feature's icon and picture, and how the design lays that picture out.

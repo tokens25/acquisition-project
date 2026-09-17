@@ -9,7 +9,7 @@ import { ComponentPeek } from './ComponentPeek'
 import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
-import { articleShot, featureArt, imageCtaArt, teamArt } from '../components/flow/landingArt'
+import { articleShot, featureArt, flagFor, imageCtaArt, teamArt } from '../components/flow/landingArt'
 import { SPOTLIGHT_ART } from '../components/flow/newArt'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
@@ -1213,6 +1213,7 @@ function SectionFields({
                   aspect="3 / 2"
                   width={64}
                   src={match.homeFlag}
+                  shipped={flagFor(match.home)}
                   label="Home flag"
                   onPick={(url) => edit({ homeFlag: url })}
                   onRemove={() => edit({ homeFlag: '' })}
@@ -1233,6 +1234,7 @@ function SectionFields({
                   aspect="3 / 2"
                   width={64}
                   src={match.awayFlag}
+                  shipped={flagFor(match.away)}
                   label="Away flag"
                   onPick={(url) => edit({ awayFlag: url })}
                   onRemove={() => edit({ awayFlag: '' })}
