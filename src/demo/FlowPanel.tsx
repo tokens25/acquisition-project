@@ -184,7 +184,7 @@ export function FlowPanel({
       </FieldGroup>
       )}
       {hasHero && tab === 'hero' ? (
-        <HeroPicker store={store} />
+        <HeroPicker store={store} scope={scope} />
       ) : (
         <FlowFields store={store} step={step} scope={scope} hero={!hasHero} />
       )}

@@ -103,6 +103,11 @@
 .hp__card[data-mine] {
   border-color: var(--color-border-full-color-default);
 }
+/* The one the page is drawing. After data-mine, so a card that is both is
+   marked as the one in use rather than as one of the market's. */
+.hp__card[data-on] {
+  border-color: var(--color-brand-primary);
+}
 
 /* A card is a picture of a hero, not a page you can use: the page's own top
    bar buttons belong to the page and say nothing about which hero this is. */

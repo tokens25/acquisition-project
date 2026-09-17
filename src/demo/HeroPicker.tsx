@@ -2,9 +2,9 @@ import { useState } from 'react'
 
 import { LandingFlowScreen } from '../components/flow/FlowScreens'
 import type { CardSetStore } from '../editor/useCardSet'
-import { resolveFlow } from '../rules/layers'
+import { resolveFlow, writeFlow, type Selector } from '../rules/layers'
 import { marketOf } from '../rules/content'
-import { HERO_APP, HEROES, heroesFor, type HeroPreset } from '../rules/heroes'
+import { HERO_APP, HEROES, heroesFor, matches, type HeroPreset } from '../rules/heroes'
 import './hero-picker.css'
 
 /**
@@ -16,9 +16,11 @@ import './hero-picker.css'
  * shrunk — so a thumbnail is never out of date, it is in this market's money,
  * and nothing needs re-exporting when a hero design moves.
  *
- * Nothing here edits a hero. Opening one hands over to the editor that owns
- * it, and says so before it goes: a click that takes the ground out from under
- * somebody is a click that should have warned them.
+ * Picking one writes its words, its picture and its settings into the page,
+ * so the screen beside the panel draws it straight away. Editing one is a
+ * different act and a different control: Edit hands over to the studio that
+ * owns the hero, and says so before it goes — a click that takes the ground
+ * out from under somebody is a click that should have warned them.
  *
  * The market's own heroes come first. The situation at the top of the panel
  * already knows which market this is, and a gallery that ignored it would be
@@ -33,12 +35,23 @@ import './hero-picker.css'
  */
 const PAGE_WIDTH = 375
 
-export function HeroPicker({ store }: { store: CardSetStore }) {
-  const { set } = store
+export function HeroPicker({ store, scope }: { store: CardSetStore; scope: Selector }) {
+  const { set, updateSet } = store
   const market = store.context.market
   const list = heroesFor(market)
+  const landing = resolveFlow(set).landing
   /** The one being handed over to the editor, while the warning stands. */
   const [leaving, setLeaving] = useState<HeroPreset | null>(null)
+
+  /**
+   * Onto the page, at whatever scope the panel is writing at.
+   *
+   * The id goes with the words: from here the page's hero is the page's own
+   * and free to be edited away from the studio's, and the id is what lets the
+   * gallery still say which one it came from.
+   */
+  const pick = (preset: HeroPreset) =>
+    updateSet(writeFlow(set, scope, 'landing', { ...preset.patch, heroPreset: preset.id }))
 
   return (
     <div className="hp">
@@ -49,12 +62,17 @@ export function HeroPicker({ store }: { store: CardSetStore }) {
 
       <div className="hp__list">
         {list.map((preset) => (
-          <div className="hp__card" key={preset.id} data-mine={preset.market === market || undefined}>
+          <div
+            className="hp__card"
+            key={preset.id}
+            data-mine={preset.market === market || undefined}
+            data-on={matches(preset, landing) || undefined}
+          >
             <button
               type="button"
               className="hp__open"
-              title={`Open ${preset.name} in the hero editor`}
-              onClick={() => setLeaving(preset)}
+              title={`Open the page with ${preset.name}`}
+              onClick={() => pick(preset)}
             >
               {/* The real hero, drawn at the page's width and shrunk — not an
                   export of one. Inert and hidden: it is a picture here. */}
