@@ -589,7 +589,6 @@ function SectionFields({
               <TextField
                 label="Rail ID"
                 value={railIdOf(inst)}
-                placeholder="enter rail id here"
                 pipelineKey={key('landing.scheduleRailId')}
                 onChange={(v) => write({ scheduleRailId: v })}
                 helpText="The rail's id in whatever serves the schedule. It decides what is in the row and in what order."

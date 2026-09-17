@@ -845,9 +845,7 @@ export const defaultFlow: FlowContent = {
 
     scheduleHeading: 'Live and Upcoming Games Schedule',
     scheduleSubheading: 'Every game, live and on demand',
-    /* Empty as shipped: which rail this is belongs to whoever is building the
-       page, and a plausible id standing in the box is one nobody checks. */
-    scheduleRailId: '',
+    scheduleRailId: 'schedule_2345id',
 
     plansTitle: "Choose the plan that's\nright for you",
     plansBody: 'The best of NY sports, streaming all in one place.',
