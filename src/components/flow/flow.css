@@ -4081,19 +4081,28 @@
   gap: var(--space-16);
   inline-size: 100%;
 }
+/* Square, which is what the design's own picture comes to on a phone: it
+   carries the screen without taking all of it.
+
+   It was 3:5 capped at 320, and the cap is what did the damage — a 3:5 box
+   with a ceiling is not a 3:5 box, it is a wide one, and a tall picture
+   cropped to the middle of a wide box is the middle of the picture. Which,
+   for artwork of players standing on a pitch, is their legs. */
 .fl-spot__art {
   position: relative;
   display: block;
   inline-size: 100%;
-  /* 3:5 in the design, which is what lets the picture carry the screen. */
-  aspect-ratio: 3 / 5;
-  max-block-size: 320px;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
 }
+/* And anchored to the top rather than the middle. Artwork like this is people
+   at the top and ground beneath them: whatever has to go, it goes from the
+   bottom. */
 .fl-spot__art img {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
+  object-position: top;
 }
 .fl-spot__wash {
   position: absolute;
