@@ -308,21 +308,6 @@ export interface LandingMatch {
   note: string
 }
 
-/**
- * One team a postcode turns out to reach — node 1084:56752.
- *
- * The name is the row's key as well as its label, the way a provider's name
- * picks its logo and a feature's tag picks its icon: write "New York Knicks"
- * and the crest follows. A name with no crest draws its words alone rather
- * than somebody else's badge.
- */
-export interface LandingTeamRow {
-  id: string
-  name: string
-  /** The competition badge at the right — NBA, NHL. Empty draws none. */
-  league: string
-}
-
 /** One fight inside a plan card: a still, what it is, and when it is. */
 export interface LandingPlanFight {
   id: string
@@ -652,10 +637,7 @@ export interface LandingScreen {
      cannot watch; here, the teams you can. */
   liveTitle?: string
   liveBody?: string
-  liveFieldLabel?: string
-  liveFieldValue?: string
   liveCta?: string
-  liveTeams?: LandingTeamRow[]
 
   /* A spotlight — node 1084:56109. One thing, sold with a picture the width of
      the screen, and then the fixtures that make it up. */
@@ -1073,15 +1055,7 @@ export const defaultFlow: FlowContent = {
 
     liveTitle: "See what's live in your area",
     liveBody: 'Enter your zip code to see which teams you have access to.',
-    liveFieldLabel: 'Enter ZIP Code',
-    liveFieldValue: '01001',
     liveCta: 'Sign Up',
-    liveTeams: [
-      { id: 'live-1', name: 'New York Knicks', league: 'NBA' },
-      { id: 'live-2', name: 'New York Islanders', league: 'NHL' },
-      { id: 'live-3', name: 'New Jersey Devils', league: 'NHL' },
-      { id: 'live-4', name: 'New York Rangers', league: 'NHL' },
-    ],
 
     spotlightLabel: 'Exclusive',
     spotlightTitle: 'Serie A on DAZN until 2029',

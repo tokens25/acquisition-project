@@ -328,8 +328,6 @@
       "what's live field": [8,689,64,7],
       "what's live pin": [10,691,4,4],
       "what's live entry": [16,690,48,5],
-      "what's live field label": [16,690,48,2],
-      "what's live value": [16,692,48,3],
       "what's live clear": [66,691,4,4],
       "what's live teams": [8,698,64,16],
       "what's live team": [8,698,64,4],

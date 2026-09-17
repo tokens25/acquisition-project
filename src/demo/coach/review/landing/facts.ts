@@ -13,7 +13,6 @@ import {
   heroOf,
   landingText,
   linksOf,
-  liveTeamsOf,
   providersOf,
   questionsOf,
   subTilesOf,
@@ -201,8 +200,6 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
         words: [
           t.liveTitle,
           t.liveBody,
-          t.liveFieldLabel,
-          ...liveTeamsOf(l).map((one) => one.name),
           t.liveCta,
         ],
         cta: t.liveCta,

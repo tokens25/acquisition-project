@@ -18,7 +18,6 @@ import {
   heroOf,
   landingText,
   linksOf,
-  liveTeamsOf,
   planCardsOf,
   providersOf,
   questionsOf,
@@ -120,7 +119,6 @@ import type {
   LandingTab,
   LandingTeam,
   LandingPlanCard,
-  LandingTeamRow,
   LandingSubTile,
   LandingTile,
   RailSize,
@@ -1957,10 +1955,7 @@ export function PageSectionView({
         <LiveSection
           title={text.liveTitle}
           body={text.liveBody}
-          fieldLabel={text.liveFieldLabel}
-          fieldValue={text.liveFieldValue}
           cta={text.liveCta}
-          teams={liveTeamsOf(content)}
         />
       )
 
@@ -2354,6 +2349,13 @@ function CitiesSection({
  * so nothing has to be chosen twice. A name with no crest draws no crest
  * rather than somebody else's badge.
  */
+const LIVE_TEAMS = [
+  { id: 'knicks', name: 'New York Knicks', league: 'NBA' },
+  { id: 'islanders', name: 'New York Islanders', league: 'NHL' },
+  { id: 'devils', name: 'New Jersey Devils', league: 'NHL' },
+  { id: 'rangers', name: 'New York Rangers', league: 'NHL' },
+] as const
+
 const teamCrests: Record<string, string> = {
   'New York Knicks': logoArtwork.knicks,
   'New York Rangers': logoArtwork.rangers,
@@ -2375,17 +2377,11 @@ const teamCrests: Record<string, string> = {
 function LiveSection({
   title,
   body,
-  fieldLabel,
-  fieldValue,
   cta,
-  teams,
 }: {
   title: string
   body: string
-  fieldLabel: string
-  fieldValue: string
   cta: string
-  teams: LandingTeamRow[]
 }) {
   return (
     <section className="fl-live">
@@ -2398,10 +2394,9 @@ function LiveSection({
           <span className="fl-live__pin" aria-hidden="true">
             <img src={actionLocation} alt="" />
           </span>
-          <span className="fl-live__entry">
-            <span className="fl-live__label">{fieldLabel}</span>
-            <span className="fl-live__value">{fieldValue}</span>
-          </span>
+          {/* Empty. What stood here was a label and a code nobody typed,
+              and this is where somebody types their own. */}
+          <span className="fl-live__entry" />
           <span className="fl-live__clear" aria-hidden="true">
             <Icon svg={iconArtwork.close} size={24} />
           </span>
@@ -2409,9 +2404,7 @@ function LiveSection({
         <div className="fl-live__teams">
           {/* A row with no name yet draws nothing: the field is there to be
               typed into, and the design has no blank in the list. */}
-          {teams
-            .filter((team) => team.name.trim() !== '')
-            .map((team) => (
+          {LIVE_TEAMS.map((team) => (
               <div className="fl-live__team" key={team.id}>
                 <span className="fl-live__crest" aria-hidden="true">
                   {teamCrests[team.name] && <img src={teamCrests[team.name]} alt="" />}

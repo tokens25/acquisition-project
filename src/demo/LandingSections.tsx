@@ -22,7 +22,6 @@ import {
   blankMatch,
   blankTab,
   blankTeam,
-  blankTeamRow,
   blankLink,
   blankQuestion,
   blankSubTile,
@@ -33,7 +32,6 @@ import {
   cityTilesOf,
   dayTilesOf,
   featuresOf,
-  liveTeamsOf,
   matchesOf,
   planCardsOf,
   landingText,
@@ -1493,60 +1491,6 @@ function SectionFields({
             onChange={(v) => write({ liveBody: v })}
             rows={2}
           />
-          <TextField
-            label="Field"
-            value={t.liveFieldLabel}
-            pipelineKey={key('landing.liveFieldLabel')}
-            onChange={(v) => write({ liveFieldLabel: v })}
-          />
-          <TextField
-            label="Code shown"
-            value={t.liveFieldValue}
-            pipelineKey={key('landing.liveFieldValue')}
-            onChange={(v) => write({ liveFieldValue: v })}
-          />
-          {liveTeamsOf(inst).map((team, i) => {
-            const all = liveTeamsOf(inst)
-            const edit = (next: Partial<typeof team>) =>
-              write({ liveTeams: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
-            return (
-              <div className="demo__feature" key={team.id}>
-                <TextField
-                  label={`Team ${i + 1}`}
-                  value={team.name}
-                  pipelineKey={key(`landing.liveTeams[${i}].name`)}
-                  onChange={(v) => edit({ name: v })}
-                  helpText="The name picks the crest. One with no crest shows its words alone."
-                />
-                <TextField
-                  label="Competition"
-                  value={team.league}
-                  pipelineKey={key(`landing.liveTeams[${i}].league`)}
-                  onChange={(v) => edit({ league: v })}
-                  helpText="At the right of the row. Empty draws none."
-                />
-                <button
-                  data-icon="trash"
-                  aria-label="Remove"
-                  type="button"
-                  className="demo__feature-remove"
-                  data-destructive=""
-                  onClick={() => write({ liveTeams: all.filter((_, j) => j !== i) })}
-                >
-                  <TrashIcon size={14} />
-                </button>
-              </div>
-            )
-          })}
-          <button
-            type="button"
-            className="ed-add"
-            onClick={() =>
-              write({ liveTeams: [...liveTeamsOf(inst), blankTeamRow(liveTeamsOf(inst))] })
-            }
-          >
-            Add a team
-          </button>
           <TextField
             label="Button"
             value={t.liveCta}
