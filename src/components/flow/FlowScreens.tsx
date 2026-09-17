@@ -1308,16 +1308,6 @@ function TeamsRail({
               </div>
             )
           })}
-        {/* The tile's own template, which the design leaves standing five
-            times over rather than filling in. */}
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div className="fl-team" key={`slot-${i}`}>
-            <div className="fl-team__tile">
-              <img className="fl-team__plate" src={teamPlaceholder} alt="" />
-            </div>
-            <p className="fl-team__label">Title</p>
-          </div>
-        ))}
       </div>
     </section>
   )
