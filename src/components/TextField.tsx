@@ -38,6 +38,15 @@ export interface TextFieldProps {
   max?: number
   /** Renders a textarea that grows, keeping the same shell. */
   rows?: number
+  /**
+   * A hint inside the box, shown only once the label has floated clear.
+   *
+   * The label is the field's name and sits where a placeholder would while the
+   * box is empty, so the two cannot both be there. Focus lifts the label; this
+   * is what takes its place, for a field whose name does not say what shape an
+   * answer takes.
+   */
+  placeholder?: string
   inputId?: string
   /**
    * The string's key in the Market → Dev handoff. With one, the field shows
@@ -61,6 +70,7 @@ export function TextField({
   min,
   max,
   rows,
+  placeholder,
   inputId,
   pipelineKey,
 }: TextFieldProps) {
@@ -90,8 +100,10 @@ export function TextField({
     value,
     disabled,
     readOnly,
-    // The label is the accessible name; it is visually a floating label rather
-    // than a placeholder, so no placeholder is set.
+    // The label is the accessible name and sits where a placeholder would
+    // while the box is empty. Any hint given here is hidden until the label
+    // floats clear of it — see the stylesheet.
+    placeholder,
     'aria-invalid': error || undefined,
     onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange?.(e.target.value),
   }

@@ -242,3 +242,15 @@
   translate: 0 -50%;
   pointer-events: none;
 }
+
+/* A hint inside the box, and the label standing in the same place while the
+   box is empty. Only one of them at a time: the label is the field's name, so
+   it wins until focus lifts it clear — and then the hint is there to say what
+   shape an answer takes. A field holding a value shows neither. */
+.dz-field__control::placeholder {
+  color: var(--color-text-tertiary);
+  opacity: 0;
+}
+.dz-field__input:focus-within .dz-field__control::placeholder {
+  opacity: 1;
+}
