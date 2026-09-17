@@ -2166,8 +2166,8 @@ function MatchListSection({
                 <span className="fl-match__team">
                   <span className="fl-match__code">{match.home}</span>
                   {/* The one that was chosen, else the one the code brings,
-                      else the empty box — which is what the design draws for a
-                      side that is two countries at once. */}
+                      else the empty box the design leaves standing for a side
+                      nobody has filled in. */}
                   <span className="fl-match__crest" aria-hidden="true">
                     {(match.homeFlag || flagFor(match.home)) && (
                       <img src={match.homeFlag || flagFor(match.home)} alt="" />

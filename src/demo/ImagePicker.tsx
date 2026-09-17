@@ -25,6 +25,7 @@ export function ImagePicker({
   onRemove,
   onShipped,
   label = 'Upload an image',
+  aria,
   aspect,
   width,
 }: {
@@ -39,6 +40,16 @@ export function ImagePicker({
   /** Back to the shipped picture. Absent where there is none. */
   onShipped?: () => void
   label?: string
+  /**
+   * What the slot is called, where the words in it are not enough to tell it
+   * from its neighbour.
+   *
+   * Two flags on one match are both labelled Flag, because the field beside
+   * each says which side it is — and a label that said so too would be two
+   * words in a box 56 wide. Somebody listening rather than looking has no
+   * field beside it, so they get the longer name.
+   */
+  aria?: string
   /**
    * How wide it stands, in pixels. Absent and it takes the column.
    *
@@ -152,7 +163,7 @@ export function ImagePicker({
         accept="image/*"
         className="hb-image__file"
         onChange={pick}
-        aria-label={label}
+        aria-label={aria ?? label}
       />
     </div>
   )

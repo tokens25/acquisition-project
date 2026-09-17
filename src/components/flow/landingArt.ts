@@ -23,6 +23,8 @@ import flagMex from '../../assets/landing/flags/mex.png'
 import flagRsa from '../../assets/landing/flags/rsa.png'
 import flagKor from '../../assets/landing/flags/kor.png'
 import flagCan from '../../assets/landing/flags/can.png'
+import flagDen from '../../assets/landing/flags/den.svg'
+import flagIta from '../../assets/landing/flags/ita.svg'
 
 export { imageCtaArt, articleShot }
 
@@ -48,8 +50,8 @@ export const teamArt: Record<string, { ground: string; art: string; width: numbe
  *
  * The same idea as the crests above: what somebody types picks the artwork,
  * so a match is one thing to fill in rather than two. A code with no entry
- * draws the empty box — which is what the design draws for DEN/MNE and
- * ITA/NIR, sides that are two countries at once and have no one flag.
+ * draws the empty box, which is what the design leaves standing for a side
+ * it has not filled in.
  *
  * Here rather than in the screens because the panel needs it too: it shows
  * the flag a side has before offering to replace it.
@@ -59,10 +61,22 @@ export const flagArt: Record<string, string> = {
   RSA: flagRsa,
   KOR: flagKor,
   CAN: flagCan,
+  DEN: flagDen,
+  ITA: flagIta,
 }
 
-/** The flag a code brings, however it was typed. */
-export const flagFor = (code: string) => flagArt[code.trim().toUpperCase()]
+/**
+ * The flag a code brings, however it was typed.
+ *
+ * A side that is still two teams is written with both — DEN/MNE, ITA/NIR —
+ * and flies the first of them, which is the one the fixture is listed under.
+ * Whole code first, so a code that ever has a slash in its own name is still
+ * found before the halves are tried.
+ */
+export const flagFor = (code: string) => {
+  const written = code.trim().toUpperCase()
+  return flagArt[written] ?? flagArt[written.split('/')[0].trim()]
+}
 
 /**
  * A feature's icon and picture, and how the design lays that picture out.

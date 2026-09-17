@@ -1200,45 +1200,51 @@ function SectionFields({
                   onChange={(v) => edit({ day: v })}
                   helpText="The heading it falls under. Matches sharing a day are drawn under one."
                 />
-                <TextField
-                  label="Home"
-                  value={match.home}
-                  pipelineKey={key(`landing.matchGames[${i}].home`)}
-                  onChange={(v) => edit({ home: v })}
-                />
-                {/* Beside the code it belongs to, at the flag's own shape and
-                    small: what is being chosen is the thing next to three
-                    letters, not a still. */}
-                <ImagePicker
-                  aspect="3 / 2"
-                  width={64}
-                  src={match.homeFlag}
-                  shipped={flagFor(match.home)}
-                  label="Home flag"
-                  onPick={(url) => edit({ homeFlag: url })}
-                  onRemove={() => edit({ homeFlag: '' })}
-                />
+                {/* A flag and three letters are one fact about one side, and
+                    stacked they read as two. The flag goes first, which is the
+                    order the card draws the home side in. */}
+                <div className="demo__match-side">
+                  <ImagePicker
+                    aspect="3 / 2"
+                    width={56}
+                    src={match.homeFlag}
+                    shipped={flagFor(match.home)}
+                    label="Flag"
+                    aria={`Home flag — match ${i + 1}`}
+                    onPick={(url) => edit({ homeFlag: url })}
+                    onRemove={() => edit({ homeFlag: '' })}
+                  />
+                  <TextField
+                    label="Home"
+                    value={match.home}
+                    pipelineKey={key(`landing.matchGames[${i}].home`)}
+                    onChange={(v) => edit({ home: v })}
+                  />
+                </div>
                 <TextField
                   label="Kick-off"
                   value={match.time}
                   pipelineKey={key(`landing.matchGames[${i}].time`)}
                   onChange={(v) => edit({ time: v })}
                 />
-                <TextField
-                  label="Away"
-                  value={match.away}
-                  pipelineKey={key(`landing.matchGames[${i}].away`)}
-                  onChange={(v) => edit({ away: v })}
-                />
-                <ImagePicker
-                  aspect="3 / 2"
-                  width={64}
-                  src={match.awayFlag}
-                  shipped={flagFor(match.away)}
-                  label="Away flag"
-                  onPick={(url) => edit({ awayFlag: url })}
-                  onRemove={() => edit({ awayFlag: '' })}
-                />
+                <div className="demo__match-side">
+                  <ImagePicker
+                    aspect="3 / 2"
+                    width={56}
+                    src={match.awayFlag}
+                    shipped={flagFor(match.away)}
+                    label="Flag"
+                    aria={`Away flag — match ${i + 1}`}
+                    onPick={(url) => edit({ awayFlag: url })}
+                    onRemove={() => edit({ awayFlag: '' })}
+                  />
+                  <TextField
+                    label="Away"
+                    value={match.away}
+                    pipelineKey={key(`landing.matchGames[${i}].away`)}
+                    onChange={(v) => edit({ away: v })}
+                  />
+                </div>
                 <TextField
                   label="Under the rule"
                   value={match.note}

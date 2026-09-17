@@ -86,6 +86,7 @@
       ['components heading', '.ls-head', 'The line above the list: what it is, and how many of its blocks the page is actually drawing. The count is the one fact the rows cannot say between them.', 'panelEdit'],
       ['components count', '.ls-head__count', 'How many of the components on the list are drawn. Switching one off moves it.', 'panelEdit'],
       ['component row', '.ls-row', 'One block, said in a line: the grip, its shape, its name, what it is made of, and whether it is drawn. Everything that can be done to it arrives with the pointer.', 'panelEdit'],
+      ['match side', '.demo__match-side', 'One side of a match in the list: the flag it flies and the three letters it is written with. A code brings its own flag — MEX brings Mexico’s — and the picker is there to put a different one in its place.', 'panelEdit'],
       ['team row fields', '.demo__team-side', 'The name and the colour beside a team’s logo. A logo, a name and a colour are three small things about one team, so they stand on one line rather than as a column of three questions.', 'panelEdit'],
       ['team ground', '.demo__swatch', 'What the tile is coloured behind the crest. It opens on the colour the tile is wearing — the one chosen, or the one the name brings — so a shipped team keeps its club’s own until somebody moves it.', 'panelEdit'],
       ['team ground name', '.demo__swatch-name', 'The word beside the well. A bare colour says nothing about what it colours.', 'panelEdit'],

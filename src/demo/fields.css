@@ -699,6 +699,20 @@
   flex-direction: column;
   gap: var(--space-8);
 }
+/* A side of a match: its flag and its three letters. One fact, so one line —
+   the flag first, which is the order the home side is drawn in. Centred rather
+   than top-aligned: the field is taller than the flag, and a flag hung from
+   the top of it sits under the word rather than beside the letters. */
+.demo__fields .demo__match-side {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+}
+.demo__fields .demo__match-side .dz-field {
+  min-inline-size: 0;
+  flex: 1;
+}
+
 /* The colour behind the crest. A swatch and its name, because a bare colour
    well says nothing about what it colours. */
 /* On the right of the row, under nothing: it colours the whole tile rather

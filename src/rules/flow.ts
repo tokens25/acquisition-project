@@ -304,12 +304,10 @@ export interface LandingMatch {
   home: string
   away: string
   /**
-   * The flag beside each code. A data URL.
+   * The flag beside each code, where one was chosen. A data URL.
    *
-   * On the match rather than worked out from the code, because a code is an
-   * abbreviation somebody chose and not a country: the design's own list has
-   * DEN/M and ITA/NI, sides that are two countries at once and have no one
-   * flag between them. Absent draws the empty box the design draws for those.
+   * Absent is not flagless: the code brings its own, the way a team's name
+   * brings its crest. This is only what somebody put there instead.
    */
   homeFlag?: string
   awayFlag?: string
