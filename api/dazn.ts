@@ -13,7 +13,7 @@
  * Cached in memory for an hour per market, because prices change daily at
  * most and the content pages are heavy. A cold call takes a few seconds.
  */
-import { buildMarket, fetchContent, fetchMarket, MARKETS, BASE_LOCALE, HEADERS, offersUrl, type LiveMarket, type ContentBody, type Product } from '../src/rules/dazn/index.js'
+import { buildMarket, fetchContent, fetchMarket, MARKETS, BASE_LOCALE, HEADERS, offersUrl, lastCalls, type LiveMarket, type ContentBody, type Product } from '../src/rules/dazn/index.js'
 
 const TTL_MS = 60 * 60 * 1000
 
@@ -50,6 +50,18 @@ export default async function handler(request: Request): Promise<Response> {
   // The offers service as it answers, for one product group — what the Dev
   // view reads when a plan on screen and DAZN's catalogue disagree. The
   // browser cannot ask the service itself: it answers only to dazn.com.
+  // One call, timed and reported as it answered, for telling apart "DAZN
+  // refuses this server" from "this server cannot reach DAZN".
+  if (url.searchParams.get('probe') === '1') {
+    const started = Date.now()
+    try {
+      const res = await fetch(offersUrl(market, 'DAZN'), { headers: HEADERS, signal: AbortSignal.timeout(8000) })
+      const text = await res.text()
+      return json({ ok: res.ok, status: res.status, ms: Date.now() - started, region: process.env.VERCEL_REGION ?? null, body: text.slice(0, 300) }, 200)
+    } catch (error) {
+      return json({ ok: false, ms: Date.now() - started, region: process.env.VERCEL_REGION ?? null, error: describe(error) }, 200)
+    }
+  }
   const raw = url.searchParams.get('raw')
   if (raw) {
     const res = await fetch(offersUrl(market, raw as Product), { headers: HEADERS })
@@ -68,7 +80,13 @@ export default async function handler(request: Request): Promise<Response> {
       // The offers service answered with nothing — DAZN's APIs are up but this
       // market sells nothing through them, or the route was refused.
       const anyOffers = Object.keys(pull.offers).length > 0
-      if (!anyOffers) return json({ ok: false, error: `DAZN's offers service returned nothing for ${market.toUpperCase()}.`, market }, 502)
+      if (!anyOffers) {
+        // Say what each call answered — a 403 from every one is DAZN refusing
+        // this server; a timeout from every one is a dropped connection.
+        const calls = lastCalls.slice(-20)
+        const summary = [...new Set(calls.map((c) => String(c.status)))].join(', ')
+        return json({ ok: false, error: `DAZN's offers service returned nothing for ${market.toUpperCase()} (answers: ${summary || 'none'}).`, market, calls }, 502)
+      }
     }
     markets.set(market, { at: Date.now(), value: live })
     return json({ ok: true, market, live, cached: false, fetchedAt: pull.fetchedAt })

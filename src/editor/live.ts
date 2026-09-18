@@ -21,8 +21,16 @@ export async function fetchLiveMarket(market: string, refresh = false): Promise<
     if (!res.headers.get('content-type')?.includes('json')) {
       return { ok: false, market, error: 'No live route on this server.' }
     }
-    const body = (await res.json()) as Partial<LiveResult> & { error?: string }
-    if (!res.ok || !body.ok) return { ok: false, market, error: body.error ?? `The live route returned ${res.status}.` }
+    const body = (await res.json()) as Partial<LiveResult> & { error?: string | { code?: string; message?: string } }
+    if (!res.ok || !body.ok) {
+      // Vercel's own failures arrive as { error: { code, message } } — a
+      // function that ran out of time, most often. Read as an object, that
+      // was "[object Object]" on screen.
+      const e = body.error
+      const reason =
+        typeof e === 'string' ? e : e && typeof e === 'object' ? [e.code, e.message].filter(Boolean).join(': ') : ''
+      return { ok: false, market, error: reason || `The live route returned ${res.status}.` }
+    }
     return body as LiveResult
   } catch (error) {
     return { ok: false, market, error: error instanceof Error ? error.message : String(error) }

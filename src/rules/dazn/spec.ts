@@ -191,15 +191,33 @@ export interface MarketPull {
   fetchedAt: string
 }
 
-export type Fetch = (url: string, init?: { headers?: Record<string, string> }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>
+export type Fetch = (url: string, init?: { headers?: Record<string, string>; signal?: AbortSignal }) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>
+
+/**
+ * How long one call to DAZN may take. A connection DAZN's edge quietly drops
+ * would otherwise hang until the function around it is killed, and a killed
+ * function says nothing about which call hung.
+ */
+export const CALL_TIMEOUT_MS = 8000
+
+/** What each call to DAZN answered, for the route to report when a market comes back empty. */
+export const lastCalls: { url: string; status: number | string; ms: number }[] = []
 
 /** One GET; a non-JSON or non-200 answer is `null`, never a throw. */
 async function get<T>(fetchFn: Fetch, url: string): Promise<T | null> {
+  const started = Date.now()
+  const note = (status: number | string) => {
+    lastCalls.push({ url: url.replace(/^https:\/\//, '').slice(0, 90), status, ms: Date.now() - started })
+    if (lastCalls.length > 40) lastCalls.splice(0, lastCalls.length - 40)
+  }
   try {
-    const res = await fetchFn(url, { headers: HEADERS })
+    const signal = typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal ? AbortSignal.timeout(CALL_TIMEOUT_MS) : undefined
+    const res = await fetchFn(url, { headers: HEADERS, ...(signal ? { signal } : {}) })
+    note(res.status)
     if (!res.ok) return null
     return (await res.json()) as T
-  } catch {
+  } catch (error) {
+    note(error instanceof Error ? (error.name === 'TimeoutError' ? 'timeout' : error.message) : String(error))
     return null
   }
 }
