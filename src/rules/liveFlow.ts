@@ -14,6 +14,7 @@
 import type { CadenceOffer, CardSet, Context, MarketConfig, Tier } from './content'
 import type { CadenceOption, CadenceScreen, CheckoutLine, CheckoutScreen } from './flow'
 import { formatMoney, formatMoneyWhole } from './money'
+import { billingLabel } from './derive'
 import { marketFor, resolveOffer, resolveSet } from './resolve'
 
 /** The plan the context says is being bought, or the first on sale here. */
@@ -95,10 +96,17 @@ export function liveCadenceScreen(set: CardSet, context: Context, authored: Cade
             : `Save ${formatMoneyWhole(saved, market.locale, market.currency)} /year`
       }
     }
+    // The under-25 rate for this way to pay, where DAZN sells one: the same
+    // plan's youth SKU, priced here at this cadence.
+    const youth = set.tiers.find((t) => t.id === `${tier.id}-yp`)
+    const youthOffer = youth ? resolveOffer(set, youth.id, { ...context, cadence }) : null
+    const youthNote = youthOffer
+      ? ` Under-25: ${formatMoney(paid(youthOffer), market.locale, market.currency)}/${billingLabel(cadence, youthOffer.termMonths).unit}.`
+      : ''
     return {
       id: cadence,
       title: written?.title?.trim() || words.title,
-      note: written?.note?.trim() || words.note,
+      note: (written?.note?.trim() || words.note) + youthNote,
       price: formatMoney(paid(offer), market.locale, market.currency),
       unit: words.unit,
       badge: written?.badge ?? (kindOf(cadence) === 'yearly' && saving ? 'BEST VALUE' : ''),

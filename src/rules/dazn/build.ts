@@ -58,7 +58,15 @@ export const tierIdFor = (product: string, entitlementSetId: string) => `${slug(
  * different benefit. Derived from the words, so two markets building
  * separately land on the same id for the same line.
  */
-const canon = (text: string) => text.replace(/\s+/g, ' ').replace(/[.\u200b]+$/g, '').trim()
+const canon = (text: string) =>
+  text
+    // Markdown the CMS lets through — "## Streaming…", "**live**", "- line".
+    .replace(/^\s*(#{1,6}|[-*•])\s*/, '')
+    .replace(/\s*#{1,6}\s*$/, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\s+/g, ' ')
+    .replace(/[.\u200b]+$/g, '')
+    .trim()
 function hash(s: string): string {
   let h = 5381
   for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0

@@ -47,9 +47,9 @@ export interface AcquisitionCardProps {
 
   logos?: LogoTilesProps
   /**
-   * The catalogue's facts: other ways to pay, the under-25 rate, limits and
-   * add-ons. Split around the CTA — the prices with the price, the limits
-   * with what is included.
+   * The catalogue's facts drawn on the card face: what can be added to the
+   * plan here. The other ways to pay belong to the payment step, and the
+   * limits are already benefit lines, so neither is drawn twice.
    */
   facts?: Omit<PlanFactsProps, 'device' | 'highlighted'>
   addOn?: Omit<AddOnProps, 'device'>
@@ -140,10 +140,6 @@ export function AcquisitionCard({
 
         <Pricing {...pricing} device={device} />
 
-        {facts && (facts.billing || facts.youth) && (
-          <PlanFacts billing={facts.billing} youth={facts.youth} highlighted={highlighted} device={device} />
-        )}
-
         <PlanCta
           label={ctaLabel}
           highlighted={highlighted}
@@ -156,9 +152,9 @@ export function AcquisitionCard({
 
         {logos && <LogoTiles {...logos} />}
 
-        {facts && (facts.limits || facts.canAdd) && (
-          <PlanFacts limits={facts.limits} canAdd={facts.canAdd} highlighted={highlighted} device={device} />
-        )}
+        {facts?.canAdd?.length ? (
+          <PlanFacts canAdd={facts.canAdd} highlighted={highlighted} device={device} />
+        ) : null}
 
         {addOn && <AddOn {...addOn} device={device} />}
 
