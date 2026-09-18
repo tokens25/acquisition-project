@@ -33,6 +33,12 @@ export interface RuledCardProps {
   reserveExtraInfo?: boolean
   /** A card beside this one says "Starts at", so this one keeps its line. */
   reserveCaption?: boolean
+  /** The longest benefit list in the row; shorter lists keep the room. */
+  reserveFeatures?: number
+  /** A card in the row has a "Can add" line, so every card keeps its line. */
+  reserveFacts?: boolean
+  /** A card in the row draws competitions, so a card with none keeps the row. */
+  reserveLogos?: boolean
   selected?: boolean
   onSelect?: () => void
 }
@@ -71,6 +77,9 @@ export function RuledCard({
   reserveDiscount = false,
   reserveExtraInfo = false,
   reserveCaption = false,
+  reserveFeatures,
+  reserveFacts = false,
+  reserveLogos = false,
   selected,
   onSelect,
 }: RuledCardProps) {
@@ -102,7 +111,7 @@ export function RuledCard({
             src: badge(l),
             alt: l.altText,
           })),
-          features: d.features.map((f) => ({
+          features: d.allFeatures.map((f) => ({
             id: f.id,
             icon: featureIcon(set.featureIcons, f),
             text: f.text,
@@ -136,11 +145,11 @@ export function RuledCard({
       selected={selected}
       onSelect={onSelect}
       logos={
-        logos.length || d.overflowCount
+        logos.length || d.overflowCount || reserveLogos
           ? { logos, rows: d.logoRows, overflowCount: d.overflowCount }
           : undefined
       }
-      facts={{ canAdd: d.canAdd }}
+      facts={{ canAdd: d.canAdd, reserve: reserveFacts }}
       addOn={
         d.addOn
           ? {
@@ -155,7 +164,7 @@ export function RuledCard({
           : undefined
       }
       features={
-        <FeaturesList device={device}>
+        <FeaturesList device={device} reserveRows={reserveFeatures}>
           {d.features.map((f) => (
             <Feature
               key={f.id}

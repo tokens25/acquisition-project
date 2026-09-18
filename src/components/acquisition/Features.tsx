@@ -1,7 +1,7 @@
 import './acquisition.css'
 
 import { useLayoutEffect, useRef, useState } from 'react'
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import infoIcon from '../../assets/icons/action-info.svg?raw'
 import { Icon } from '../Icon'
 import type { Device } from './types'
@@ -109,12 +109,25 @@ export function Feature({ icon, children, onInfo, device = 'desktop' }: FeatureP
 export interface FeaturesListProps {
   children: ReactNode
   device?: Device
+  /**
+   * Rows to keep room for, whatever this card lists.
+   *
+   * Set by the row to the longest list in it, so every card's footer sits the
+   * same 32px under its last line and the cards come out the same height —
+   * the space a shorter list leaves is inside the list, not between the list
+   * and the footer.
+   */
+  reserveRows?: number
 }
 
 /** FeaturesList — the stack of `Feature` rows. Figma: `FeaturesList` (Device). */
-export function FeaturesList({ children, device = 'desktop' }: FeaturesListProps) {
+export function FeaturesList({ children, device = 'desktop', reserveRows }: FeaturesListProps) {
   return (
-    <ul className="acq-features" data-device={device}>
+    <ul
+      className="acq-features"
+      data-device={device}
+      style={reserveRows ? ({ '--acq-feature-rows': reserveRows } as CSSProperties) : undefined}
+    >
       {children}
     </ul>
   )

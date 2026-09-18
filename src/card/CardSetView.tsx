@@ -1,3 +1,4 @@
+import { FEATURE_SLOTS } from '../rules/derive'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { tierOnTab } from '../rules/tabs'
 import { PlanDetails, type PlanDetailsProps } from '../components/acquisition'
@@ -120,6 +121,15 @@ export function CardSetView({
     () => cards.some((c) => c.offer.discount || Boolean(c.offer.explainer?.trim())),
     [cards],
   )
+  /* The longest benefit list, and whether any card has an add-on line: the
+     two things left that would make one card's footer sit lower than the
+     next's. Every card keeps the room, so the footers meet. */
+  const reserveFeatures = useMemo(
+    () => Math.min(FEATURE_SLOTS, Math.max(0, ...cards.map((c) => c.tier.features.length))),
+    [cards],
+  )
+  const reserveFacts = useMemo(() => cards.some((c) => (c.offer.canAdd?.length ?? 0) > 0), [cards])
+  const reserveLogos = useMemo(() => cards.some((c) => c.tier.logoTiles.length > 0 || c.tier.logoTotal > 0), [cards])
   const [chosen, setChosen] = useState<string | null>(null)
   // A selection that no longer resolves here — the market changed, or the tier
   // went — is no selection, rather than a card that cannot be unselected.
@@ -250,6 +260,9 @@ export function CardSetView({
               reserveDiscount={reserveDiscount}
               reserveExtraInfo={reserveExtraInfo}
               reserveCaption={reserveCaption}
+              reserveFeatures={reserveFeatures}
+              reserveFacts={reserveFacts}
+              reserveLogos={reserveLogos}
               selected={selectedId === tier.id}
               onSelect={interactive ? () => setChosen(tier.id) : undefined}
               onOpenDetails={

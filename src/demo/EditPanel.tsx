@@ -19,7 +19,7 @@ import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, filterAcquirableTiers, resolveTier } from '../rules/resolve'
-import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer, priceUnitFor, limitsFor } from '../rules/derive'
+import { FEATURE_SLOTS, SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer, priceUnitFor, limitsFor } from '../rules/derive'
 import { CURRENCIES, currencySign, formatMoney } from '../rules/money'
 import { badgeSrc, logoArtwork } from '../card/assets'
 import { BenefitIcon } from './BenefitIcon'
@@ -42,7 +42,7 @@ const CUSTOM_PREFIX = 'feature-custom-'
  * list is what gives — so the limit belongs where the lines are chosen rather
  * than as a surprise when the card is drawn.
  */
-const MAX_BENEFITS = 5
+const MAX_BENEFITS = FEATURE_SLOTS
 
 const PURCHASE_TYPES = [
   { value: 'one_time_payment' as const, label: 'One time payment' },

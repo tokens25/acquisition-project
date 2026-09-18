@@ -1,4 +1,5 @@
 import './acquisition.css'
+import type { CSSProperties } from 'react'
 
 export interface PlanLogo {
   src: string
@@ -52,7 +53,7 @@ export function LogoTile({ logo, count }: { logo?: PlanLogo; count?: number }) {
  */
 export function LogoTiles({ logos, rows = 1, overflowCount = 0 }: LogoTilesProps) {
   return (
-    <ul className="acq-logo-tiles" data-rows={rows}>
+    <ul className="acq-logo-tiles" data-rows={rows} style={{ '--acq-logo-rows': rows } as CSSProperties}>
       {logos.map((logo, i) => (
         <LogoTile logo={logo} key={`${logo.alt}-${i}`} />
       ))}

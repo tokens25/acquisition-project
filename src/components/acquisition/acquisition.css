@@ -41,7 +41,7 @@
   max-inline-size: 280px; /* 240 content + 40 padding, the edge drawn inside */
 }
 .acq-card[data-device='mobile'] .acq-card__body {
-  padding: var(--space-20);
+  padding: var(--space-20) var(--space-20) var(--space-32);
 }
 .acq-card[data-device='xl'] {
   max-inline-size: 384px;
@@ -79,7 +79,8 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: var(--space-24);
+  /* 32 under the last line to the footer, as drawn. */
+  padding: var(--space-24) var(--space-24) var(--space-32);
 }
 
 .acq-card__divider {
@@ -252,6 +253,10 @@
 .acq-logo-tiles {
   display: grid;
   grid-template-columns: repeat(5, 44px);
+  /* The rows are always there, filled or not: a card with no competitions
+     beside one with five keeps the row's height, so the two footers meet. */
+  grid-auto-rows: 44px;
+  grid-template-rows: repeat(var(--acq-logo-rows, 1), 44px);
   justify-content: space-between;
   row-gap: 5px;
   margin: 0;
@@ -397,6 +402,11 @@
   margin: 0;
   padding: var(--space-12) 0 0;
   list-style: none;
+  /* Room for the row's longest list: 18px a line, 8 between. Rows are 18 at
+     12/1.52 on every device, which is what the sum counts on. */
+  min-block-size: calc(
+    var(--space-12) + var(--acq-feature-rows, 0) * 18px + max(var(--acq-feature-rows, 1) - 1, 0) * var(--space-8)
+  );
 }
 /* A row is its line and no more: 18 at 12/1.52, as drawn. */
 .acq-feature {
@@ -500,6 +510,11 @@ button.acq-feature__info:hover {
 }
 .acq-card-header__description {
   min-block-size: calc(var(--acq-description-lines, 1) * 1lh);
+  /* And no more: the trimming above is measured in script, and a line that
+     slips past it — a font arriving late, a word too long to break — must
+     not push this card's footer under its neighbours'. */
+  max-block-size: calc(var(--acq-description-lines, 1) * 1lh);
+  overflow: hidden;
 }
 /* Off-layout twin used to test candidate strings before committing one. */
 .acq-card-header__probe {
@@ -956,6 +971,15 @@ button.acq-feature__info:hover {
 }
 .acq-facts__tag--add {
   border-style: dashed;
+  /* One line, whatever the market bolts on: a third add-on cannot push this
+     card's footer under its neighbours'. The dialog has the full list. */
+  display: block;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.acq-facts--reserved {
+  visibility: hidden;
 }
 .acq-facts[data-device='mobile'] .acq-facts__tag {
   padding-inline: var(--space-4);

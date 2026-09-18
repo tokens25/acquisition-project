@@ -16,6 +16,8 @@ export const STATIC = {
 } as const
 
 export const LOGO_SLOTS_PER_ROW = 5
+/** Benefit lines the card face shows. The rest are in "All features & content". */
+export const FEATURE_SLOTS = 5
 
 /**
  * What a cadence reads as beside a price, before anyone writes it.
@@ -168,7 +170,10 @@ export interface DerivedCard {
    */
   allLogos: DerivedLogo[]
 
+  /** The lines the card face shows — the first `FEATURE_SLOTS`. */
   features: DerivedFeature[]
+  /** Every line, for the dialog. */
+  allFeatures: DerivedFeature[]
 
   /** The add-on panel this offer produces, if any. */
   addOn: {
@@ -388,7 +393,7 @@ export function deriveCard(
    */
   const overflowCount = overflows && countsOverflow ? Math.max(total - logos.length, 0) : 0
 
-  const features: DerivedFeature[] = tier.features.map((id) => {
+  const allFeatures: DerivedFeature[] = tier.features.map((id) => {
     const r = resolveFeature(set, id)
     if (r.state === 'missing') {
       missingRefs.push(`feature:${id}`)
@@ -402,6 +407,9 @@ export function deriveCard(
       state: r.state,
     }
   })
+
+  // The face lists five at most, as the card is drawn; the dialog has them all.
+  const features = allFeatures.slice(0, FEATURE_SLOTS)
 
   const { highlighted } = tier
   const { discount, standardPrice, introPrice } = offer
@@ -448,6 +456,7 @@ export function deriveCard(
     allLogos,
 
     features,
+    allFeatures,
     addOn,
     footerLabel: plans?.footer?.trim() || STATIC.footer,
 

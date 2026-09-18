@@ -63,11 +63,11 @@ export function PlanFacts({ billing, youth, limits, canAdd, highlighted = false,
               <span className="acq-facts__v">{l.value}</span>
             </span>
           ))}
-          {canAdd?.map((line) => (
-            <span key={line} className="acq-facts__tag acq-facts__tag--add" data-field="canAdd">
-              + {line}
+          {canAdd && canAdd.length > 0 && (
+            <span className="acq-facts__tag acq-facts__tag--add" data-field="canAdd" title={canAdd.join('\n')}>
+              + {canAdd.join(' · ')}
             </span>
-          ))}
+          )}
         </div>
       )}
     </div>
