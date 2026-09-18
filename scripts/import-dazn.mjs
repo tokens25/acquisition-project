@@ -40,10 +40,11 @@ const CHANNEL_OF = {
   RallyTV: 'rallytv',
   NationalLeagueTV: 'national-league',
 }
+/** As DAZN markets them, from the Atlas dataset. FIBA sells as Courtside 1891. */
 const CHANNEL_LABEL = {
-  nfl: 'NFL',
-  nhl: 'NHL',
-  fiba: 'FIBA',
+  nfl: 'NFL Game Pass',
+  nhl: 'NHL.TV',
+  fiba: 'Courtside 1891',
   'college-sports': 'College Sports',
   rallytv: 'Rally TV',
   'national-league': 'National League TV',
@@ -68,6 +69,41 @@ const LOCALE_FALLBACK = { 'fr-LU': 'fr-FR', 'nl-NL': 'nl-BE', 'pl-PL': 'en-GB' }
 const BASE_LOCALE = 'en-GB'
 
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
+/* ── The Atlas dataset ────────────────────────────────────────────────── */
+
+/**
+ * Curated English names, descriptions and benefit lines from the DAZN Package
+ * Atlas (data/dazn/atlas.json), kept by hand by whoever runs that dashboard.
+ *
+ * Used for what the content service does not have: the six league products'
+ * cards, and a description where a market's card ships without one. Never
+ * over what the content service does have — the CMS is what the site shows,
+ * in the market's own language, and a curated English line is not an
+ * improvement on the Italian a customer in Italy reads.
+ */
+async function loadAtlas() {
+  let d
+  try {
+    d = await readJson(join(DATA, 'atlas.json'))
+  } catch {
+    return { league: new Map(), dazn: new Map(), youthNote: false }
+  }
+  const league = new Map() // `${product}|${entSet}` → { name, inc, tags }
+  const dazn = new Map() // `${cc}|${entSet}` → { name, desc, inc, badge, hl }
+  for (const [cc, m] of Object.entries(d.markets ?? {})) {
+    for (const t of m.tiers ?? []) {
+      dazn.set(`${cc.toLowerCase()}|${t.id}`, { name: t.name, desc: t.desc, inc: t.inc ?? [], badge: t.badge, hl: Boolean(t.hl) })
+    }
+    for (const p of m.products ?? []) {
+      for (const t of p.tiers ?? []) {
+        const k = `${p.pg}|${t.id}`
+        if (!league.has(k)) league.set(k, { product: p.name, name: t.name, inc: t.inc ?? [], tags: t.tags ?? [] })
+      }
+    }
+  }
+  return { league, dazn }
+}
 
 /* ── Read ─────────────────────────────────────────────────────────────── */
 
@@ -190,6 +226,7 @@ async function main() {
     return contentByLocale.get(want)
   }
   const base = await content(BASE_LOCALE)
+  const atlas = await loadAtlas()
 
   const report = { markets: [], plans: [], unnamed: [], kept: [], offersSkipped: 0 }
 
@@ -277,15 +314,32 @@ async function main() {
       const tier = tiers.get(tierId)
       tier.displayOrder = Math.max(tier.displayOrder, rank)
       const best = cardsFor(local, market, entSet)[0] ?? cardsFor(base, market, entSet)[0]
-      if (!best) continue
+      if (!best) {
+        // No card in the CMS. The Atlas has one for every league product, and
+        // it is the same in every market, so it becomes the base — once.
+        const curated = atlas.league.get(`${product}|${entSet}`) ?? atlas.dazn.get(`${market}|${entSet}`)
+        if (curated && !tier.planName) {
+          tier.planName = curated.name
+          tier.description = curated.desc?.trim() ?? ''
+          tier.features = curated.inc.map((line) => featureId(line))
+          if (curated.badge) tier.badge = curated.badge
+          tier.highlighted = Boolean(curated.hl || curated.badge)
+          tier._curated = true
+        }
+        continue
+      }
       const f = best.item.fields
       const source = local ?? base
       const lines = benefitsOf(source, best.item)
       const badges = logosOf(source, best.item)
       for (const l of badges) logos.set(l.id, l)
+      const curatedHere = atlas.dazn.get(`${market}|${entSet}`)
       const patch = {
         planName: f.title?.trim() || undefined,
-        description: f.description?.trim() || undefined,
+        // The CMS's own words first; the Atlas's curated line only where the
+        // card ships without one, because a card with no description is a
+        // card the publish gate refuses.
+        description: f.description?.trim() || curatedHere?.desc?.trim() || undefined,
         // The card has one switch for the gold treatment and the badge; the CMS
         // has two. A card DAZN badges is a card DAZN is pointing at.
         highlighted: Boolean(f.isCardHighlighted || (f.showEyebrow && f.eyebrowText) || (f.showBestValueBadge && f.bestValueBadgeText)),
@@ -314,11 +368,36 @@ async function main() {
   for (const tier of tiers.values()) {
     if (!tier.planName && tier._pendingBase) Object.assign(tier, tier._pendingBase)
     delete tier._pendingBase
+    const ent = tier._source.entitlementSetId
+    /*
+     * Two kinds of plan the main picker does not show, priced though they are.
+     *
+     * A youth plan (`…_yp`) is the same plan at an under-25 rate for a year,
+     * sold from a youth page. A bundle (`tier_bundle_…`) is DAZN plus a league
+     * pass, sold as an upsell. Both are real, both are kept, and both are
+     * `legacy` — priced but not offered to a new customer from the picker —
+     * with names that say what they are, so nobody opening the file has to
+     * decode an id.
+     */
+    if (/_yp$/.test(ent)) {
+      tier.status = 'legacy'
+      const parent = tiers.get(tier.id.replace(/-yp$/, ''))
+      if (!tier.planName) tier.planName = parent?.planName ?? ''
+      if (tier.planName && !/Youth$/.test(tier.planName)) tier.planName += ' · Youth'
+      for (const o of tier.overrides) if (o.patch.planName && !/Youth$/.test(o.patch.planName)) o.patch.planName += ' · Youth'
+    }
+    if (/^tier_bundle_/.test(ent)) {
+      tier.status = 'legacy'
+      const s = ent.toLowerCase()
+      const basePlan = /_ul_|unlimited/.test(s) ? 'DAZN Unlimited' : /_full_/.test(s) ? 'DAZN Full' : /_std_|standard/.test(s) ? 'DAZN Standard' : 'DAZN'
+      const add = /nflult/.test(s) ? 'NFL Ultimate' : /nflpro/.test(s) ? 'NFL Pro' : /nfl/.test(s) ? 'NFL Game Pass' : /nhl/.test(s) ? 'NHL.TV' : ''
+      tier.planName = add ? `${basePlan} + ${add}` : basePlan
+      tier.description = tier.description || 'Two subscriptions in one payment.'
+    }
     if (!tier.planName) {
       // A DAZN set the DAZN page has no card for is priced but not on sale to
-      // a new customer from the page — a bundle upsell, a closed plan. That is
-      // what `legacy` means here. A league set with no card is different: its
-      // page has not been pulled yet, and it stays live under a placeholder.
+      // a new customer from the page — a closed plan, a duplicate SKU. That is
+      // what `legacy` means here.
       if (tier._source.product === 'DAZN') tier.status = 'legacy'
       // Named from the id, honestly: "tier_fiba_pro" → "FIBA Pro".
       tier.planName = tier._source.entitlementSetId
@@ -338,7 +417,7 @@ async function main() {
     tier.overrides = tier.overrides.filter((o) =>
       Object.entries(o.patch).some(([k, v]) => JSON.stringify(v) !== JSON.stringify(tier[k])),
     )
-    report.plans.push(`${tier.id}: "${tier.planName}" · ${tier.overrides.length} market patches`)
+    report.plans.push(`${tier.id}: "${tier.planName}"${tier._curated ? ' (Atlas)' : ''}${tier.status === 'legacy' ? ' [legacy]' : ''} · ${tier.overrides.length} market patches`)
   }
 
   /* One highlighted plan per row (S-1). A row is one market's plans for one
@@ -386,7 +465,7 @@ async function main() {
       ...(current.logoCatalog ?? []).filter((l) => keptLogoIds.has(l.id)),
       ...[...logos.values()].map((l) => ({ id: l.id, name: l.name, altText: `${l.name} logo`, status: 'active', image: l.url })),
     ],
-    tiers: [...keptTiers, ...[...tiers.values()].map(({ _source, ...t }) => ({ ...t, source: _source }))],
+    tiers: [...keptTiers, ...[...tiers.values()].map(({ _source, _curated, ...t }) => ({ ...t, source: { ..._source, ...(_curated ? { copy: 'atlas' } : {}) } }))],
     offers: [...keptOffers, ...offers],
     // Start where the data is richest.
     context: { ...(current.context ?? {}), market: 'gb', subscription: undefined, cadence: 'Monthly' },

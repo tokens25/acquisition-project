@@ -1,5 +1,5 @@
 {
-  "pulledAt": "2026-09-18T07:42:18.071Z",
+  "pulledAt": "2026-09-18T08:20:03.032Z",
   "offers": [
     {
       "market": "be",
@@ -1034,129 +1034,1032 @@
   "content": [
     {
       "locale": "nl-BE",
+      "page": "DAZN",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "nl-BE",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "nl-BE",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "nl-BE",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "nl-BE",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "nl-BE",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "nl-BE",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-AT",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "de-AT",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "de-AT",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "de-AT",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "de-AT",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-AT",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-AT",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-DE",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "de-DE",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "de-DE",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "de-DE",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "de-DE",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-DE",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-DE",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-LI",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "de-LI",
+      "page": "NFL",
       "status": 200,
       "ok": true,
-      "items": 91
+      "items": 11
+    },
+    {
+      "locale": "de-LI",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "de-LI",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "de-LI",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-LI",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-LI",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
     },
     {
       "locale": "fr-LU",
+      "page": "DAZN",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "fr-LU",
+      "page": "NFL",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "fr-LU",
+      "page": "NHL",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "fr-LU",
+      "page": "FIBA",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "fr-LU",
+      "page": "CollegeSports",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "fr-LU",
+      "page": "RallyTV",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "fr-LU",
+      "page": "NationalLeagueTV",
       "status": 400,
       "ok": false,
       "items": 0
     },
     {
       "locale": "de-CH",
+      "page": "DAZN",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "de-CH",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "de-CH",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "de-CH",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "de-CH",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-CH",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "de-CH",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "fr-FR",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "fr-FR",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "fr-FR",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "fr-FR",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "fr-FR",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "fr-FR",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "fr-FR",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "it-IT",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "it-IT",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "it-IT",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "it-IT",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "it-IT",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "it-IT",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "it-IT",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "ja-JP",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "ja-JP",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "ja-JP",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "ja-JP",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "ja-JP",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "ja-JP",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "ja-JP",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "pt-PT",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "pt-PT",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "pt-PT",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "pt-PT",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "pt-PT",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "pt-PT",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "pt-PT",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "es-ES",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "es-ES",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "es-ES",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "es-ES",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "es-ES",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "es-ES",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "es-ES",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "zh-TW",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "zh-TW",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "zh-TW",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "zh-TW",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "zh-TW",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "zh-TW",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "zh-TW",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-CA",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "en-CA",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "en-CA",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "en-CA",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "en-CA",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-CA",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-CA",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-IE",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "en-IE",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "en-IE",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "en-IE",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "en-IE",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-IE",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-IE",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "es-MX",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "es-MX",
+      "page": "NFL",
       "status": 200,
       "ok": true,
-      "items": 91
+      "items": 11
+    },
+    {
+      "locale": "es-MX",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "es-MX",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "es-MX",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "es-MX",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "es-MX",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
     },
     {
       "locale": "nl-NL",
+      "page": "DAZN",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "nl-NL",
+      "page": "NFL",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "nl-NL",
+      "page": "NHL",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "nl-NL",
+      "page": "FIBA",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "nl-NL",
+      "page": "CollegeSports",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "nl-NL",
+      "page": "RallyTV",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "nl-NL",
+      "page": "NationalLeagueTV",
       "status": 400,
       "ok": false,
       "items": 0
     },
     {
       "locale": "pl-PL",
+      "page": "DAZN",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "pl-PL",
+      "page": "NFL",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "pl-PL",
+      "page": "NHL",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "pl-PL",
+      "page": "FIBA",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "pl-PL",
+      "page": "CollegeSports",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "pl-PL",
+      "page": "RallyTV",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "pl-PL",
+      "page": "NationalLeagueTV",
       "status": 400,
       "ok": false,
       "items": 0
     },
     {
       "locale": "en-GB",
+      "page": "DAZN",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "en-GB",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "en-GB",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "en-GB",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "en-GB",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-GB",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-GB",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-US",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "en-US",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "en-US",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "en-US",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "en-US",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-US",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-US",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-AU",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "en-AU",
+      "page": "NFL",
+      "status": 200,
+      "ok": true,
+      "items": 11
+    },
+    {
+      "locale": "en-AU",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "en-AU",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "en-AU",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-AU",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "en-AU",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "pt-BR",
+      "page": "DAZN",
       "status": 200,
       "ok": true,
       "items": 91
     },
     {
       "locale": "pt-BR",
+      "page": "NFL",
       "status": 200,
       "ok": true,
-      "items": 91
+      "items": 11
+    },
+    {
+      "locale": "pt-BR",
+      "page": "NHL",
+      "status": 200,
+      "ok": true,
+      "items": 2
+    },
+    {
+      "locale": "pt-BR",
+      "page": "FIBA",
+      "status": 200,
+      "ok": true,
+      "items": 4
+    },
+    {
+      "locale": "pt-BR",
+      "page": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "pt-BR",
+      "page": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
+    },
+    {
+      "locale": "pt-BR",
+      "page": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "items": 0
     }
   ]
 }

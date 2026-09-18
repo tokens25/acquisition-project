@@ -105,9 +105,11 @@ export interface ChannelConfigEntry {
  * not. Nothing else in this list is decided by hand.
  */
 export const CHANNELS: readonly ChannelConfigEntry[] = [
-  { id: 'fiba', label: 'FIBA' },
-  { id: 'nfl', label: 'NFL', notSoldIn: ['ca'] },
-  { id: 'nhl', label: 'NHL', soldOnlyIn: ['at', 'ch', 'de', 'fr', 'gb', 'ie', 'jp', 'li', 'lu', 'pl', 'pt', 'tw'] },
+  // Labelled as DAZN sells them, not as the API groups them: the product group
+  // is FIBA, the thing a customer buys is Courtside 1891.
+  { id: 'fiba', label: 'Courtside 1891' },
+  { id: 'nfl', label: 'NFL Game Pass', notSoldIn: ['ca'] },
+  { id: 'nhl', label: 'NHL.TV', soldOnlyIn: ['at', 'ch', 'de', 'fr', 'gb', 'ie', 'jp', 'li', 'lu', 'pl', 'pt', 'tw'] },
   { id: 'college-sports', label: 'College Sports', notSoldIn: ['ca', 'us'] },
   { id: 'rallytv', label: 'Rally TV', notSoldIn: ['fr', 'jp', 'pl', 'pt'] },
   { id: 'national-league', label: 'National League TV' },
