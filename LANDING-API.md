@@ -61,9 +61,45 @@ this system does what our `flowLayers` do:
 | `fields.environment` | `Live` — so there is a non-live environment alongside it |
 | `locale` | Language, separately from country |
 
+### environment
+
+Two unrelated things in that URL are called environment, and only one of them
+is Contentful's.
+
+`environments/master` in the **path** is Contentful's own — a branch of the
+space carrying both the content model and the content. Everything read here
+came from `master`; nothing suggests a second one is in use.
+
+`fields.environment` is a field **DAZN added to the content type**, and it is a
+list rather than a value. Across all 954 `LPRootConfig` entries it is an array
+every time, drawn from three names:
+
+| | configs carrying it |
+| --- | --- |
+| `Test` | 840 |
+| `Live` | 685 |
+| `Beta` | 114 |
+
+They overlap, which is the point — 509 configs are `Live+Test`, 258 are `Test`
+alone, 73 `Live` alone, 72 all three, 31 `Beta+Live`, 10 `Beta` alone. So it is
+not a deployment tier a page moves through. It is **who is allowed to see this
+page**, and a page can be visible to several audiences at once. The public site
+asks for `Live`; a page still being worked on carries `Test` and simply is not
+in the answer.
+
+`fields.pages` works the same way — an array on 949 of the 954, so one config
+can answer to several slugs (`msg`, `p/msg`, `welcome/msg`, `/msg` are one
+entry). And `includedCountries` is a list too.
+
+Which makes the whole filter a set intersection: give me the config whose
+`pages` contains this slug, whose `includedCountries` contains this country or
+`ALL`, and whose `environment` contains `Live`. Three lists on the entry, not
+three layers over a base — see the disagreements at the end.
+
 **The environment field is not one field.** `LPRootConfig` filters on
 `fields.environment[in]=Live`. `CommonContentTierGroup` filters on
-`fields.env[in]=production` — a different field name *and* a different value.
+`fields.env[in]=production` — a different field name *and* a different
+vocabulary, with no `Live` in it at all.
 Asking a tier group for `Live` returns 0 items and a 200, which reads exactly
 like an empty market. Checked both ways round: `env=production` gives 91 groups
 and 202 tier items for `en-GB`, `env=Live` gives nothing.
