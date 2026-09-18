@@ -162,11 +162,25 @@ function mergeFlow(stored: FlowContent | undefined): FlowContent {
     // words on every market's screens; the shipped DAZN-generic base is what
     // it should have been.
     const rsnBase = saved && isRsnCopy(saved)
-    out[key] = (saved && !rsnBase ? { ...shipped, ...saved } : shipped) as never
+    const merged = saved && !rsnBase ? { ...shipped, ...saved } : shipped
+    // A checkout line saved with a date typed into it — "renews on
+    // 01/10/2027" — is the old default, written before the figures came
+    // from the offer. It would be wrong tomorrow; the shipped line with its
+    // tokens is right every day.
+    if (key === 'checkout' && merged !== shipped) {
+      const c = merged as Record<string, unknown>
+      const stale = (v: unknown) => typeof v === 'string' && DATED.test(v) && !/\{\w+\}/.test(v)
+      for (const field of ['renewalNote', 'legal', 'payCta', 'note'] as const) {
+        if (stale(c[field])) c[field] = (shipped as unknown as Record<string, unknown>)[field]
+      }
+    }
+    out[key] = merged as never
   }
   return out
 }
 
+/** A date typed into copy, in any of the ways a person types one. */
+const DATED = /\b\d{1,2}[/.]\d{1,2}[/.]\d{2,4}\b/
 const RSN_WORDS = /MSG\+|TV provider|Knicks|Yankees|Gotham|YES Network|Buffalo DMA|NY sports|Nationally broadcast/i
 const isRsnCopy = (screen: unknown) => RSN_WORDS.test(JSON.stringify(screen))
 

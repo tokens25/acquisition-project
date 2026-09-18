@@ -284,7 +284,9 @@ export function liveCheckoutScreen(set: CardSet, context: Context, authored: Che
     summaryTitle: authored.summaryTitle.trim() ? fill(authored.summaryTitle) : tier.planName,
     lines,
     renewalNote: fill(authored.renewalNote),
-    legal: fill(authored.legal),
+    // DAZN's own terms for this way of paying, where the CMS has them;
+    // otherwise the authored line with this offer's figures filled in.
+    legal: offer.legal ?? fill(authored.legal),
     payCta: fill(authored.payCta),
     ...(methods ? { methods, chosen: authored.chosen && methods.some((m) => m.id === authored.chosen) ? authored.chosen : methods[0].id } : {}),
   }

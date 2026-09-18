@@ -170,6 +170,37 @@ function logosOf(content: Content, item: ContentfulEntry): CatalogEntry[] {
     })
 }
 
+/**
+ * Terms the CMS attaches to a way of paying for a plan.
+ *
+ * `LPBillingPlans` entries name entitlement sets (sometimes with an
+ * `#autoRenew:false` suffix) and a billing period, and a few carry
+ * `termsandconditions` — the season passes, mostly. Read as plain text:
+ * the HTML link and the `&nbsp;` are the CMS's, not the words'.
+ */
+function legalOf(content: Content | null): Map<string, string> {
+  const out = new Map<string, string>() // `${entSet}|${cadence}` → text
+  if (!content) return out
+  for (const e of content.entries.values()) {
+    if (e.sys.contentType.sys.id !== 'LPBillingPlans') continue
+    const f = e.fields
+    const text = str(f.termsandconditions)
+      .replace(/<[^>]+>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+    if (!text) continue
+    const cadence = CADENCE[str(f.billingPeriodType)]
+    if (!cadence) continue
+    for (const raw of arr<unknown>(f.tiers)) {
+      if (typeof raw !== 'string') continue
+      const entSet = raw.split('#')[0]
+      if (!out.has(`${entSet}|${cadence}`)) out.set(`${entSet}|${cadence}`, text)
+    }
+  }
+  return out
+}
+
 /* ── Facts from the offers service ────────────────────────────────────── */
 
 function limitsOf(e: RawEntitlement, video: string | null): PlanLimits {
@@ -348,6 +379,18 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
           canAdd.set(req, list)
         }
       }
+    }
+
+    /* Terms the CMS states for a way of paying, where it states any. */
+    const legal = legalOf(local)
+    const legalBase = legalOf(base)
+    for (const o of offers) {
+      if (o.legal) continue
+      const t = tiers.get(o.tierId)
+      const ent = t?.source?.entitlementSetId
+      if (!ent) continue
+      const text = legal.get(`${ent}|${o.cadence}`) ?? legalBase.get(`${ent}|${o.cadence}`)
+      if (text) o.legal = text
     }
 
     /* This market's words for each plan. */

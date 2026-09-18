@@ -288,6 +288,13 @@ export interface CadenceOffer {
   termMonths?: number
   freeTrialMonths?: number
   /**
+   * The terms DAZN's CMS attaches to this way of paying for this plan, as
+   * plain text, where it has any — the season passes carry one; most plans
+   * do not, and the checkout then reads its authored legal line with the
+   * offer's figures filled in.
+   */
+  legal?: string
+  /**
    * What can be bolted on to this plan in this market, priced. DAZN sells
    * these as recurring add-ons conditional on the plan held; the card says so
    * in one line — "Can add: Baloncesto €9.99/mo" — and the price is this
