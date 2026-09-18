@@ -1501,6 +1501,11 @@
 .demo__live[data-state='unreachable'] .demo__live-dot {
   background: var(--color-accent-error-text);
 }
+/* The shared copy standing in for the catalogue: amber, not red — the prices
+   are DAZN's, from the last import, and only the freshness is in question. */
+.demo__live[data-state='shared'] .demo__live-dot {
+  background: var(--color-accent-warning-text);
+}
 .demo__live-refresh {
   padding: 0;
   border: 0;

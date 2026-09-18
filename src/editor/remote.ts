@@ -27,7 +27,7 @@ export type RemoteState =
  * account. Publishing is committing the file — by hand for now, or by the
  * route above once a token exists.
  */
-async function loadFile(): Promise<RemoteState | null> {
+export async function loadFile(): Promise<RemoteState | null> {
   try {
     const res = await fetch(CONTENT_FILE, { headers: { accept: 'application/json' } })
     if (!res.ok) return null
@@ -43,7 +43,9 @@ async function loadFile(): Promise<RemoteState | null> {
 export async function loadRemote(): Promise<RemoteState> {
 
   try {
-    const res = await fetch('/api/content', { headers: { accept: 'application/json' } })
+    // Bounded: a store that hangs (a token whose GitHub call never answers)
+    // must not hold the page blank. The file below is the fallback either way.
+    const res = await fetch('/api/content', { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(6000) })
     if (!res.ok) return (await loadFile()) ?? { kind: 'unreachable', reason: `The content store returned ${res.status}.` }
     const body = (await res.json()) as {
       configured: boolean

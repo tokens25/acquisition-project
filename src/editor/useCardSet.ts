@@ -15,7 +15,7 @@ import { allJourneys } from '../rules/liveJourneys'
 import { tabsOf } from '../rules/tabs'
 import { findOverride, matches, resolveOffer } from '../rules/resolve'
 import type { RemoteState } from './remote'
-import { loadRemote, publishRemote } from './remote'
+import { loadFile, loadRemote, publishRemote } from './remote'
 import { MARKETS as LIVE_MARKETS } from '../rules/dazn/spec'
 import { mergeLive } from '../rules/dazn/build'
 import { fetchLiveMarket, type LiveStatus } from './live'
@@ -700,10 +700,29 @@ export function useCardSet(): CardSetStore {
    */
   useEffect(() => {
     let cancelled = false
+    // The shared file first. It is a static file on every deployment, back in
+    // milliseconds, and it carries every market's plans as of the last import
+    // — so the page has plans to show before the content store or DAZN's
+    // catalogue have answered, and a slow or failing store cannot leave it
+    // saying "no plans here". The published copy follows and wins.
+    let fileShown: string | null = null
+    void loadFile().then((state) => {
+      if (cancelled || state?.kind !== 'file') return
+      const text = JSON.stringify(state.set)
+      if (!initial.hadLocal || JSON.stringify(initial.set) === text) {
+        fileShown = text
+        setSet(hydrate(state.set))
+        setSeed(SEED_FINGERPRINT)
+        pulled.current.clear()
+        void pullLive(state.set.context?.market ?? initial.set.context.market)
+      }
+    })
     loadRemote().then((state) => {
       if (cancelled) return
       setRemote(state)
       if (state.kind !== 'published' && state.kind !== 'file') return
+      // The same bytes the file already put on screen: nothing to do again.
+      if (state.kind === 'file' && fileShown !== null && JSON.stringify(state.set) === fileShown) return
 
       // The file has no sha, so it can be read but not written back through
       // the API — publishing it means committing it.

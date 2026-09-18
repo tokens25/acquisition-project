@@ -14,6 +14,7 @@ export type LiveResult =
 export async function fetchLiveMarket(market: string, refresh = false): Promise<LiveResult> {
   try {
     const res = await fetch(`/api/dazn?market=${encodeURIComponent(market)}${refresh ? '&refresh=1' : ''}`, {
+      signal: AbortSignal.timeout(65000),
       headers: { accept: 'application/json' },
     })
     // A dev server with no API routes answers with the app's own HTML.

@@ -538,7 +538,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
         {brand}
         <div className="demo__statusbar">
           <MarketLanguages tx={tx} onAdd={() => setTranslating(true)} />
-          <LiveChip live={store.live} onRefresh={store.refreshLive} />
+          <LiveChip live={store.live} onRefresh={store.refreshLive} sharedAt={store.set.live?.[store.context.market]} />
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}
           <span className="demo__gate" data-state={gate.state} title={gate.title}>
