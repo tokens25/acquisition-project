@@ -1,7 +1,8 @@
 # The live landing page's API
 
 What `www.dazn.com` actually calls to draw a landing page, read off the running
-site on 2026-09-18 from `en-CA` (`/en-CA/welcome`), anonymous, web.
+site on 2026-09-18, anonymous, web. The call-by-call detail is `en-CA`
+(`/en-CA/welcome`); the list of component types is read across eight markets.
 
 Written down because this editor's content model was built from Figma, and the
 two have to meet somewhere. Every component we ship has a counterpart here, and
@@ -70,6 +71,49 @@ pages · includedCountries · components
 `components` is an ordered list of links. That ordering is the page — the same
 job our `sections` array does. (`prductGroup` is misspelled in the model itself,
 not here.)
+
+### Every component type in production
+
+Read across eight markets' `welcome` pages (CA, US, GB, ES, IT, DE, JP, FR),
+all eight answering. Seventeen names, and which markets were using each at the
+time of reading:
+
+| `componentType` | Markets | Ours |
+| --- | --- | --- |
+| `Banners` | US GB IT FR | Hero banner |
+| `BoxedHeroBanners` | CA ES DE JP | Hero banner |
+| `ContentTiers` | CA ES IT DE JP FR | Subscription plans |
+| `SubscriptionsRail` | CA US GB DE JP FR | More subscriptions |
+| `SpotlightRail` | CA US GB ES IT JP | Spotlight |
+| `StandardRail` | JP | Rail |
+| `StandardRailV2` | DE | Rail |
+| `ComingUpRail` | DE | Games schedule |
+| `CompetitionCarousel` | ES DE JP FR | Rail — Places |
+| `SectionFeatures` | CA ES JP | Features list |
+| `SupportedDevices` | CA US GB IT DE | Supported devices |
+| `ZipCodeBreather` | US | Postcode |
+| `IntroductionBanner` | IT DE JP FR | Text block (unconfirmed) |
+| `FreemiumBanner` | CA US GB ES DE JP FR | — |
+| `StickyPpvHeader` | ES | — |
+| `FAQs` | all eight | FAQs |
+| `Footer` | all eight | Footer |
+
+Three things fall out of that table.
+
+**`Banners` and `BoxedHeroBanners` are disjoint** — four markets each, none
+with both. That is a hero rollout caught mid-flight, not two components.
+`StandardRail` / `StandardRailV2` is the same story on a smaller scale.
+
+**`FAQs` and `Footer` are the only two everywhere.** Everything else is a
+market's own decision, which is the thing our per-market layering exists to
+express.
+
+**`ZipCodeBreather` is US-only**, which is our Postcode component and the RSN
+journey it belongs to.
+
+The mapping column is our reading, not theirs — `ComingUpRail`,
+`CompetitionCarousel` and `IntroductionBanner` were named from their
+component type and their place in the order, not from a rendered page.
 
 ### The components on the `en-CA` welcome page
 
