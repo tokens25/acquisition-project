@@ -244,6 +244,7 @@ export function CardSetView({
         <div
           className="acq-set"
           ref={ref}
+          data-device={set.device}
           data-description-lines={descriptionLines}
           data-has-selection={selectedId ? '' : undefined}
         >

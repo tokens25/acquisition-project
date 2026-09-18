@@ -468,16 +468,30 @@ button.acq-feature__info:hover {
 /* ── Set-level layout (S-2, S-3) ───────────────────────────── */
 
 /* S-3 · every card renders at the tallest card's height — stretch does it.
-   The row scrolls sideways rather than wrapping: a set is read across, and a
-   card dropping to a second line would break the comparison it exists for. */
+   Where there is room for more than one card the set wraps, so every plan a
+   market sells is on screen at once — six plans are six cards, not three and
+   a scrollbar. Every card keeps room for the row's tallest content, so a
+   second line is the same height as the first. In a phone-wide frame the row
+   scrolls sideways instead: the screen is one card wide, and that is how
+   dazn.com draws it. Decided by the width the set is drawn in, not by which
+   device the cards are styled for. */
+.acq-set-scroll {
+  container-type: inline-size;
+}
 .acq-set {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-24);
   align-items: stretch;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
   padding-block-end: var(--space-8);
-  scroll-snap-type: x proximity;
+}
+@container (max-width: 719px) {
+  .acq-set {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
 }
 .acq-set > .acq-card {
   flex: 0 0 auto;
