@@ -404,12 +404,11 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
   for (const tier of tiers.values()) {
     const ent = tier.source!.entitlementSetId
     /*
-     * Two kinds of plan the main picker does not show, priced though they are.
-     * A youth plan (`…_yp`) is the same plan at an under-25 rate for a year;
-     * a bundle (`tier_bundle_…`) is DAZN plus a league pass, sold as an
-     * upsell. Both are `legacy` — priced, drawn on the parent's card as a
-     * line, but not offered from the picker — with names that say what they
-     * are.
+     * Two kinds of plan the APIs name only by id. A youth plan (`…_yp`) is
+     * the same plan at an under-25 rate for a year — `legacy`, priced, drawn
+     * on the parent's card as a line, not a card of its own. A bundle
+     * (`tier_bundle_…`) is DAZN plus a league pass in one payment — a plan
+     * on the picker, named for what it holds.
      */
     if (/_yp$/.test(ent)) {
       tier.status = 'legacy'
@@ -424,7 +423,9 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
       if (tier.features.length === 0 && parent) tier.features = parent.features
     }
     if (/^tier_bundle_/.test(ent)) {
-      tier.status = 'legacy'
+      // Sold from the DAZN page as a plan of its own — DAZN plus a league pass
+      // in one payment — so it is on the picker, as the Atlas lists it. It
+      // takes no gold: the highlighted plan is the market's own.
       tier.highlighted = false
       tier.visibleToPartners = false
       const s = ent.toLowerCase()
@@ -432,6 +433,18 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
       const add = /nflult/.test(s) ? 'NFL Ultimate' : /nflpro/.test(s) ? 'NFL Pro' : /nfl/.test(s) ? 'NFL Game Pass' : /nhl/.test(s) ? 'NHL.TV' : ''
       tier.planName = add ? `${basePlan} + ${add}` : basePlan
       tier.description = tier.description || 'Two subscriptions in one payment.'
+      // What is in it is what is in its two halves: the market's top DAZN
+      // plan and the NFL pass it is sold with. The CMS has no card for a
+      // bundle, so the lines come from the cards it has.
+      if (tier.features.length === 0) {
+        const daznHalf = [...tiers.values()]
+          .filter((t) => t.source!.product === 'DAZN' && !/^tier_bundle_|_yp$/.test(t.source!.entitlementSetId) && t.status === 'live')
+          .sort((a, b) => b.displayOrder - a.displayOrder)[0]
+        const nflHalf = tiers.get(tierIdFor('NFL', /nflult/.test(s) ? 'tier_nfl_ultimate' : 'tier_nfl_pro'))
+        tier.features = uniq([...(daznHalf?.features.slice(0, 3) ?? []), ...(nflHalf?.features.slice(0, 2) ?? [])])
+        tier.logoTiles = uniq([...(daznHalf?.logoTiles.slice(0, 3) ?? []), ...(nflHalf?.logoTiles.slice(0, 2) ?? [])])
+        tier.logoTotal = tier.logoTiles.length
+      }
     }
     if (!tier.planName) {
       // A DAZN set the DAZN page has no card for is priced but not on sale to

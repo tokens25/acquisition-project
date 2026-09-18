@@ -138,13 +138,35 @@ export interface ResolvedCard {
   offer: CadenceOffer
 }
 
-/** Tiers this storefront sells at this cadence, in display order. */
+/**
+ * The price a plan's card shows: its offer at the cadence on screen, or,
+ * when it is not sold that way, the first way it is sold — in the set's
+ * cadence order, so monthly before yearly.
+ *
+ * The picker is a picker of plans, not of plans sold monthly. DAZN Ultimate
+ * in the UK is sold yearly only, and a picker set to Monthly that dropped it
+ * would be hiding a plan rather than a price. The card says "Starts at" and
+ * carries the unit of the offer it shows, so a yearly price beside monthly
+ * ones reads as what it is.
+ */
+export function offerForCard(set: CardSet, tierId: string, context: Context): CadenceOffer | null {
+  const at = resolveOffer(set, tierId, context)
+  if (at) return at
+  for (const cadence of set.cadences) {
+    if (cadence === context.cadence) continue
+    const other = resolveOffer(set, tierId, { ...context, cadence })
+    if (other) return other
+  }
+  return null
+}
+
+/** Tiers this storefront sells, in display order, each with the price its card shows. */
 export function resolveSet(set: CardSet, context: Context = set.context): ResolvedCard[] {
   return filterAcquirableTiers(set.tiers, {
     channel: context.channel,
     subscription: context.subscription,
   })
-    .map((tier) => ({ tier: resolveTier(tier, context), offer: resolveOffer(set, tier.id, context) }))
+    .map((tier) => ({ tier: resolveTier(tier, context), offer: offerForCard(set, tier.id, context) }))
     .filter((r): r is ResolvedCard => r.offer !== null)
     .sort((a, b) => a.tier.displayOrder - b.tier.displayOrder)
 }

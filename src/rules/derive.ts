@@ -297,7 +297,9 @@ export function deriveCard(
   const { locale, currency } = market
   const money = (amount: number) => formatMoney(amount, locale, currency)
 
-  const priceUnit = priceUnitFor(set, context.cadence, locale)
+  // The unit of the offer on the card, which is the cadence on screen unless
+  // the plan is not sold that way — then the first way it is.
+  const priceUnit = priceUnitFor(set, offer.cadence, locale)
   // The plan screen's standing words. Content now, so a market reads them in
   // its own language; the old constants are the floor when nothing is written.
   const plans = set.flow?.plans
@@ -437,7 +439,7 @@ export function deriveCard(
     priceUnit,
     // Written if someone wrote it, built from the numbers if not.
     explainer: discount
-      ? (offer.explainer?.trim() || defaultExplainer(offer, market, context.cadence))
+      ? (offer.explainer?.trim() || defaultExplainer(offer, market, offer.cadence))
       : null,
     ctaArea: discount ? 'ButtonLabelEyebrow' : 'Button/CTA',
     savingsLabel: discount
