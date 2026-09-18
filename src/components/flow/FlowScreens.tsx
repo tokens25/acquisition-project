@@ -116,7 +116,10 @@ import type {
 function Mark({ svg, size, className }: { svg: string; size: number; className?: string }) {
   return (
     <span
-      className={className}
+      // `fl-mark` scales the drawing to the box: the SVGs carry their own 24
+      // in their attributes, and a 16 box around a 24 drawing is a tag lying
+      // over the words beside it.
+      className={className ? `fl-mark ${className}` : 'fl-mark'}
       style={{ display: 'grid', placeItems: 'center', inlineSize: size, blockSize: size }}
       aria-hidden="true"
       dangerouslySetInnerHTML={{ __html: svg }}
@@ -515,10 +518,14 @@ export function CadenceFlowScreen({
         </div>
         <Cta>{content.cta}</Cta>
       </div>
-      <p className="fl-cadence__footnote">
-        <Mark svg={actionsInfo} size={16} />
-        {content.footnote}
-      </p>
+      {/* No footnote, no mark: an information sign with nothing after it
+          says something has gone missing. */}
+      {content.footnote.trim() && (
+        <p className="fl-cadence__footnote">
+          <Mark svg={actionsInfo} size={16} />
+          {content.footnote}
+        </p>
+      )}
     </Screen>
   )
 }

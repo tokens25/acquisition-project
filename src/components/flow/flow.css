@@ -328,6 +328,12 @@
   margin-inline-start: var(--space-12);
   color: #6ddb96;
   font-size: var(--font-size-caption-xs);
+  line-height: 1;
+}
+/* A mark is its box: the drawing inside scales to it. */
+.fl-mark > svg {
+  inline-size: 100%;
+  block-size: 100%;
 }
 .fl-cadence__note {
   margin: 0;
