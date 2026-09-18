@@ -11,7 +11,7 @@ import {
   withTabRemoved,
   writeTabs,
 } from '../rules/tabs'
-import type { CadenceOffer, PlanTab, TierPatch } from '../rules/content'
+import type { CadenceOffer, PlanTab, Tier, TierPatch } from '../rules/content'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
@@ -221,6 +221,29 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   // A pick from this situation, if it still names a plan; otherwise the first
   // plan sold here; otherwise anything at all, so the panel is never empty.
   const openTier = pick && pick.at === situationKey ? pick.id : undefined
+
+  /** The chips, grouped under the tab that shows each when there is more than one tab. */
+  const shownTiers = set.tiers.filter((t) => showOthers || sellable.has(t.id) || (openTier && t.id === openTier))
+  // Which tabs a plan sits on is a fact the market can override — a live
+  // market's tabs arrive as its patch — so it is read off the plan as it
+  // resolves here, not off the base.
+  const tabsOfTier = (t: Tier) => resolveTier(t, context).tabs ?? []
+  const planGroups: { name: string; tab: string | null; tiers: Tier[] }[] =
+    planTabs.length > 1
+      ? [
+          // A plan on every tab has no one tab to sit under.
+          ...(shownTiers.some((t) => tabsOfTier(t).length === 0)
+            ? [{ name: 'Every tab', tab: null, tiers: shownTiers.filter((t) => tabsOfTier(t).length === 0) }]
+            : []),
+          ...planTabs
+            .map((tab) => ({
+              name: tab.name,
+              tab: tab.id,
+              tiers: shownTiers.filter((t) => tabsOfTier(t).includes(tab.id)),
+            }))
+            .filter((g) => g.tiers.length > 0),
+        ]
+      : [{ name: '', tab: null, tiers: shownTiers }]
   const tier =
     (openTier ? set.tiers.find((t) => t.id === openTier) : undefined) ??
     set.tiers.find((t) => sellable.has(t.id)) ??
@@ -355,23 +378,37 @@ export function EditPanel({ store }: { store: CardSetStore }) {
       </FieldGroup>
 
       <FieldGroup title="Plans">
-        <div className="ed-tabs">
-          {set.tiers
-            .filter((t) => showOthers || sellable.has(t.id) || t.id === tier.id)
-            .map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              className="ed-tab"
-              data-on={openTier === t.id || undefined}
-              data-absent={absent.has(t.id) || undefined}
-              title={absent.get(t.id)}
-              onClick={() => setOpenTier(t.id)}
-            >
-              {resolveTier(t, context).planName || t.id}
-            </button>
-          ))}
-        </div>
+        {/* Under their tabs, when the market has more than one. Spain sells
+            "Motor" twice — the standard card and the Youth −30 card — and two
+            identical chips in one row read as a duplicate, not as two prices
+            for two audiences. Under the tab that shows each, they read as
+            what they are. */}
+        {planGroups.map((group) => (
+          <div key={group.tab ?? ''} className="ed-tab-group">
+            {group.name && <span className="ed-tab-group__name">{group.name}</span>}
+            <div className="ed-tabs">
+              {group.tiers.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className="ed-tab"
+                  data-on={openTier === t.id || undefined}
+                  data-absent={absent.has(t.id) || undefined}
+                  title={absent.get(t.id)}
+                  onClick={() => {
+                    // Opening a plan the current tab does not show switches to
+                    // one that does, or the fields open over a card that is
+                    // not there.
+                    if (group.tab && group.tab !== tabScope) setContext({ ...context, tab: group.tab })
+                    setOpenTier(t.id)
+                  }}
+                >
+                  {resolveTier(t, context).planName || t.id}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
         {elsewhere.length > 0 && (
           <button type="button" className="ed-others" onClick={() => setShowOthers((v) => !v)}>
             {showOthers

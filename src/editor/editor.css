@@ -209,6 +209,21 @@
   flex-wrap: wrap;
   gap: var(--space-4);
 }
+/* Chips under the tab that shows them, one group per tab. */
+.ed-tab-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.ed-tab-group + .ed-tab-group {
+  margin-block-start: var(--space-8);
+}
+.ed-tab-group__name {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 .ed-tab {
   padding: var(--space-6) var(--space-12);
   border: var(--border-1) solid var(--color-border-full-color-subtle);
