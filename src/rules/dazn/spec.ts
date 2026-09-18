@@ -89,9 +89,11 @@ export const stringsUrl = (cc: string, lang: string) =>
  * And the account screen's consents: DAZN's own marketing permission, worded
  * per market (`signup_allowMarketingEmails`), and the partner's for a league
  * sold through DAZN (`signup_allowNFLMarketingEmails`, …FIBA…, …NHL…).
+ * And the page after payment (`paymentcomplete_welcome_*`, the NFL's own
+ * `nfl_sac_pac_payment_confirmation_desc_1`).
  */
 export const CHECKOUT_KEYS =
-  /^(payment_termsWarning(_extended|_klarnaPayOverTime|_weekly)?|payment_ROWexclusion|payment_terms_acceptance_\w+|signUp_cancelSentence_\w+|signUp_\w+_cancelSentence_\w+|signup_cancelation_youthoffer_\w+|auth_payment_cancelSentence_\w+|signin_\w*migrated_user_header\w*|auth_refined_consentOption_label|signup_allow\w*MarketingEmails|signup_Terms_PrivacyPolicy_CookieNotice)$/
+  /^(payment_termsWarning(_extended|_klarnaPayOverTime|_weekly)?|payment_ROWexclusion|payment_terms_acceptance_\w+|signUp_cancelSentence_\w+|signUp_\w+_cancelSentence_\w+|signup_cancelation_youthoffer_\w+|auth_payment_cancelSentence_\w+|signin_\w*migrated_user_header\w*|auth_refined_consentOption_label|signup_allow\w*MarketingEmails|signup_Terms_PrivacyPolicy_CookieNotice|paymentcomplete_welcome_\w+|nfl_sac_pac_payment_confirmation_desc_\d)$/
 
 export const contentUrl = (locale: string, pageId: string = 'DAZN') =>
   `https://dazn-content-proxy.sd.indazn.com/spaces/vhp9jnid12wf/environments/master/entries` +

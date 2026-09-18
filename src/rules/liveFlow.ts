@@ -12,11 +12,11 @@
  * screen whose plan has no offers here is drawn exactly as authored.
  */
 import type { CadenceOffer, CardSet, Context, MarketConfig, Tier } from './content'
-import type { AccountScreen, AuthScreen, CadenceOption, CadenceScreen, CheckoutLine, CheckoutScreen, Consent, PaymentMethod } from './flow'
+import type { AccountScreen, AuthScreen, CadenceOption, CadenceScreen, CheckoutLine, CheckoutScreen, Consent, PaymentMethod, ReadyScreen } from './flow'
 import { formatMoney, formatMoneyWhole } from './money'
 import { billingLabel } from './derive'
 import { daznCheckoutCopy } from './daznCopy'
-import { marketFor, offerForCard, resolveOffer, resolveSet } from './resolve'
+import { marketFor, offerForCard, resolveOffer, resolveSet, resolveTier } from './resolve'
 import { consentsOf } from './consents'
 
 /**
@@ -449,4 +449,48 @@ export function liveAccountScreen(set: CardSet, context: Context, authored: Acco
   }))
   const heading = strings.auth_refined_consentOption_label?.trim()
   return { ...authored, ...(heading ? { notifyHeading: heading } : {}), consents }
+}
+
+/* ── Ready: the page after payment ───────────────────────────────────── */
+
+/** Which of DAZN's strings the page after payment reads, for the panel to say. */
+export function readySources(set: CardSet, context: Context): { titleKey: string | null; bodyKey: string | null } {
+  const strings = marketFor(set, context.market).checkoutCopy?.strings ?? {}
+  const has = (k: string) => Boolean(strings[k]?.trim())
+  const bodyKeys = [
+    ...(context.subscription === 'nfl' ? ['nfl_sac_pac_payment_confirmation_desc_1'] : []),
+    'paymentcomplete_welcome_body',
+  ]
+  return {
+    titleKey: has('paymentcomplete_welcome_header') ? 'paymentcomplete_welcome_header' : null,
+    bodyKey: bodyKeys.find(has) ?? null,
+  }
+}
+
+/**
+ * The page after payment, for the plan bought in this market.
+ *
+ * The circles are the plan's own competitions — what was just paid for,
+ * as the card showed them — rather than a fixed set of crests. The words
+ * are DAZN's for the market where it has them (the NFL has a line of its
+ * own), else the authored ones with their tokens filled. A plan with no
+ * badges draws none: the New York crests belong to the RSN flow alone.
+ */
+export function liveReadyScreen(set: CardSet, context: Context, authored: ReadyScreen): ReadyScreen {
+  const tier = chosenTier(set, context)
+  const tokens = checkoutTokens(set, context) ?? {}
+  const fill = (text: string) => fillTokens(text, tokens)
+  const strings = marketFor(set, context.market).checkoutCopy?.strings ?? {}
+  const { titleKey, bodyKey } = readySources(set, context)
+  const known = new Set(set.logoCatalog.map((l) => l.id))
+  const own = tier ? (resolveTier(tier, context).logoTiles ?? []).filter((id) => known.has(id)).slice(0, 5) : []
+  const logos = own.length > 0 ? own : context.subscription === 'rsns' ? authored.logos : []
+  return {
+    ...authored,
+    title: titleKey ? strings[titleKey].trim() : fill(authored.title),
+    body: bodyKey ? strings[bodyKey].trim() : fill(authored.body),
+    cta: fill(authored.cta),
+    altCta: fill(authored.altCta),
+    logos,
+  }
 }

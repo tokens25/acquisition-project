@@ -2,7 +2,7 @@ import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
-import { authSource, checkoutSources, chosenTier, consentSources, liveAccountScreen, liveAuthScreen, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
+import { authSource, checkoutSources, chosenTier, consentSources, liveAccountScreen, liveAuthScreen, liveCadenceScreen, liveCheckoutScreen, liveReadyScreen, readySources } from '../rules/liveFlow'
 
 /** What the checkout's authored lines may stand in for. */
 const TOKENS_HELP = 'Tokens fill in from the plan and payment option being bought: {plan} {cadence} {price} {unit} {today} {next} {renewal} {term} {market}.'
@@ -1158,10 +1158,34 @@ function FlowFields({
   }
 
   const r = flow.ready
+  const liveReady = liveReadyScreen(set, context, r)
+  const readyKeys = readySources(set, context)
+  const boughtPlan = chosenTier(set, context)
   return (
     <>
       <FieldGroup title="Screen">
         {navTitle('ready', r.navTitle)}
+        <p className="ed-absent ed-live">
+          {boughtPlan ? (
+            <>
+              The circles are <strong>{boughtPlan.planName}</strong>'s competitions in{' '}
+              {marketFor(set, context.market).label}
+              {liveReady.logos.length === 0 ? ' — it has none, so no row is drawn' : ''}.{' '}
+            </>
+          ) : (
+            <>No plan is being bought here, so no competitions are drawn. </>
+          )}
+          {readyKeys.titleKey || readyKeys.bodyKey ? (
+            <>
+              The words are dazn.com's own for this market
+              {readyKeys.titleKey ? <> (<code>{readyKeys.titleKey}</code></> : ' ('}
+              {readyKeys.bodyKey ? <>{readyKeys.titleKey ? ', ' : ''}<code>{readyKeys.bodyKey}</code></> : ''}
+              ): “{liveReady.title}” / “{liveReady.body}”. The lines below show where DAZN has none.
+            </>
+          ) : (
+            <>DAZN has no words for this page in this market yet; the lines below are read, with their tokens filled. {TOKENS_HELP}</>
+          )}
+        </p>
         <TextField label="Heading" value={r.title} pipelineKey={'ready.title'} onChange={(v) => patch('ready', { title: v })} rows={2} />
         <TextField
           label="Under the heading"

@@ -901,7 +901,14 @@ const READY_CRESTS: Record<
   sabres: { ground: '#00468c', art: readySabres, width: 44.761, height: 45.111 },
 }
 
-export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
+export function ReadyFlowScreen({
+  content,
+  art,
+}: {
+  content: ReadyScreen
+  /** Badge bytes by catalogue id, for competitions the shipped crests do not cover. */
+  art?: Record<string, string>
+}) {
   const middle = Math.floor(content.logos.length / 2)
   return (
     <Screen title={content.navTitle} mark={checkCircleFilled} name="ready">
@@ -909,8 +916,18 @@ export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
         <div className="fl-ready__content">
           {/* The row spreads across the 343 and fades out at both ends — the
               design masks it rather than cropping it, so the outer circles go
-              quiet instead of stopping. */}
-          <div className="fl-ready__logos">
+              quiet instead of stopping. A plan with no badges keeps the one
+              circle, with DAZN's own mark in it: the page is still a welcome,
+              and a heading floating in the dark is not one. */}
+          {content.logos.length === 0 && (
+            <div className="fl-ready__logos" data-count="1">
+              <span className="fl-ready__logo fl-ready__logo--dazn" data-lead="">
+                <Mark svg={daznRubik} size={40} />
+              </span>
+            </div>
+          )}
+          {content.logos.length > 0 && (
+          <div className="fl-ready__logos" data-count={content.logos.length}>
             {content.logos.map((id, i) => {
               const crest = READY_CRESTS[id]
               return (
@@ -921,7 +938,7 @@ export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
                   style={crest ? { background: crest.ground } : undefined}
                 >
                   <img
-                    src={crest?.art ?? logoArtwork[id]}
+                    src={crest?.art ?? art?.[id] ?? logoArtwork[id]}
                     alt=""
                     style={
                       crest
@@ -933,6 +950,7 @@ export function ReadyFlowScreen({ content }: { content: ReadyScreen }) {
               )
             })}
           </div>
+          )}
           <div className="fl-ready__words">
             <h3 className="fl-ready__title">{content.title}</h3>
             <p className="fl-ready__body">{content.body}</p>

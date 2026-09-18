@@ -1,5 +1,6 @@
 import type { CardSet } from '../rules/content'
-import { chosenTier, liveAccountScreen, liveAuthScreen, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
+import { chosenTier, liveAccountScreen, liveAuthScreen, liveCadenceScreen, liveCheckoutScreen, liveReadyScreen } from '../rules/liveFlow'
+import { badgeSrc } from './assets'
 import { resolveFlow } from '../rules/layers'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
@@ -83,7 +84,12 @@ export function FlowStep({
         />
       )
     case 'ready':
-      return <ReadyFlowScreen content={flow.ready ?? defaultFlow.ready} />
+      return (
+        <ReadyFlowScreen
+          content={liveReadyScreen(set, set.context, flow.ready ?? defaultFlow.ready)}
+          art={Object.fromEntries(set.logoCatalog.map((l) => [l.id, badgeSrc(l)]))}
+        />
+      )
     default:
       return null
   }
