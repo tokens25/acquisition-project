@@ -17,10 +17,26 @@ import { formatMoney, formatMoneyWhole } from './money'
 import { billingLabel } from './derive'
 import { marketFor, resolveOffer, resolveSet } from './resolve'
 
-/** The plan the context says is being bought, or the first on sale here. */
+/**
+ * The plan the context says is being bought.
+ *
+ * Nothing named means the plan DAZN is pointing at — the highlighted one —
+ * because that is the card a person is most likely to have pressed, and
+ * because it is usually the one sold every way: a screen drawn for a
+ * monthly-only entry plan would show one option and look broken. Failing a
+ * highlighted plan, the one sold the most ways; failing that, the first.
+ */
 export function chosenTier(set: CardSet, context: Context): Tier | null {
   const cards = resolveSet(set, context)
-  return (cards.find((c) => !context.tier || c.tier.id === context.tier) ?? cards[0])?.tier ?? null
+  if (cards.length === 0) return null
+  if (context.tier) {
+    const named = cards.find((c) => c.tier.id === context.tier)
+    if (named) return named.tier
+  }
+  const lit = cards.find((c) => c.tier.highlighted)
+  if (lit) return lit.tier
+  const ways = (id: string) => set.cadences.filter((cadence) => resolveOffer(set, id, { ...context, cadence })).length
+  return cards.slice().sort((a, b) => ways(b.tier.id) - ways(a.tier.id))[0].tier
 }
 
 type Kind = 'monthly' | 'instalments' | 'yearly' | 'other'

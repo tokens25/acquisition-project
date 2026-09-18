@@ -28,7 +28,7 @@ import {
   writeFlow,
 } from '../rules/layers'
 import { flowFieldLabel } from '../rules/pipeline'
-import { resolveSet } from '../rules/resolve'
+import { resolveOffer, resolveSet } from '../rules/resolve'
 import { HeroBannerFields } from './HeroBannerFields'
 import { useState } from 'react'
 
@@ -318,11 +318,22 @@ function FlowFields({
 
         <FieldGroup title="Ways to pay">
           {isLive && (
-            <p className="ed-absent ed-live">
-              Priced from <strong>{chosenTier(set, context)?.planName}</strong>'s offers here — one option
-              per way it is sold. Change the plan under "What is being bought" to see another's.
-              The words are yours; the prices are DAZN's.
-            </p>
+            <>
+              {/* Which plan's ways to pay are on screen. The step prices one
+                  plan — the one picked on the cards — and nothing picked
+                  reads as the highlighted plan, so this says which and lets
+                  it be changed. */}
+              <SelectField
+                label="Plan"
+                helpText="The plan whose ways to pay are shown. The words are yours; the prices are DAZN's."
+                value={chosenTier(set, context)?.id ?? ''}
+                options={plansHere.map((t) => {
+                  const ways = set.cadences.filter((cadence) => resolveOffer(set, t.id, { ...context, cadence })).length
+                  return { value: t.id, label: `${t.planName || t.id} · ${ways} way${ways === 1 ? '' : 's'} to pay` }
+                })}
+                onChange={(v) => setContext({ ...context, tier: v || undefined })}
+              />
+            </>
           )}
           {options.map((option, i) => {
             const authored = c.options.find((o) => o.id === option.id)
