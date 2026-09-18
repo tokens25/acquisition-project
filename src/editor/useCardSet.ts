@@ -53,13 +53,23 @@ export const isBaseContext = (c: Context) => c.market === BASE_MARKET && !c.camp
  */
 function hydrate(raw: unknown): CardSet {
   if (typeof raw !== 'object' || raw === null) return defaultSet
-  const input = raw as Partial<CardSet>
+  const input = raw as Partial<CardSet> & { flowStructures?: unknown; journeys?: unknown }
   if (!Array.isArray(input.tiers) || !Array.isArray(input.offers)) return defaultSet
+  // Plans the setup wizard once generated, and the wizard's own records. The
+  // wizard is gone and the catalogue supplies the plans now; a browser that
+  // still holds its empty cards would show them beside the real ones.
+  const generated = new Set(input.tiers.filter((t) => /^gen-/.test(t.id)).map((t) => t.id))
+  const kept: Partial<CardSet> & { flowStructures?: unknown; journeys?: unknown } = { ...input }
+  delete kept.flowStructures
+  delete kept.journeys
   return {
     ...defaultSet,
-    ...input,
+    ...kept,
     context: { ...defaultSet.context, ...input.context },
-    tiers: input.tiers.map((t) => ({ ...t, ...renamedSwitch(t), overrides: t.overrides ?? [] })),
+    tiers: input.tiers
+      .filter((t) => !generated.has(t.id))
+      .map((t) => ({ ...t, ...renamedSwitch(t), overrides: t.overrides ?? [] })),
+    offers: input.offers.filter((o) => !generated.has(o.tierId)),
     logoCatalog: withShippedBlurbs(input.logoCatalog),
     // A screen the saved copy predates. Saved work never reseeds, so content
     // stored before a screen existed would carry a hole where its words go,

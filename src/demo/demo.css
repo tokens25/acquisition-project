@@ -1470,3 +1470,48 @@
 .demo__unconfigured p {
   margin: 0;
 }
+
+/* ── Live chip ──────────────────────────────────────────────
+   Whether the plans on screen are DAZN's catalogue as of a time, or the
+   shared file. Sits in the status bar beside the gate. */
+.demo__live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-4) var(--space-12);
+  border: var(--border-1) solid var(--color-border-transparent-subtle);
+  border-radius: var(--radius-8);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+  white-space: nowrap;
+}
+.demo__live-dot {
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--color-text-tertiary);
+}
+.demo__live[data-state='live'] .demo__live-dot {
+  background: var(--color-accent-success-text);
+}
+.demo__live[data-state='loading'] .demo__live-dot {
+  background: var(--color-accent-warning-text);
+  animation: demo-live-pulse 1.2s ease-in-out infinite;
+}
+.demo__live[data-state='unreachable'] .demo__live-dot {
+  background: var(--color-accent-error-text);
+}
+.demo__live-refresh {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-primary);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+@keyframes demo-live-pulse {
+  50% {
+    opacity: 0.3;
+  }
+}

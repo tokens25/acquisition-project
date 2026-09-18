@@ -53,6 +53,7 @@ import type { Review } from './coach/review/types'
 import { titleFor, type Product } from '../product'
 import { isConfigured } from '../rules/journey'
 import { askToEdit, keyForTarget } from '../card/editable'
+import { LiveChip } from './LiveChip'
 
 /**
  * The redesigned interface, at /demo.
@@ -537,6 +538,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
         {brand}
         <div className="demo__statusbar">
           <MarketLanguages tx={tx} onAdd={() => setTranslating(true)} />
+          <LiveChip live={store.live} onRefresh={store.refreshLive} />
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}
           <span className="demo__gate" data-state={gate.state} title={gate.title}>
