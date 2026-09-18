@@ -673,9 +673,18 @@
   line-height: 1.32;
 }
 .fl-checkout__change {
+  /* A button, drawn as one: the word sits in the middle of its box. As a
+     block the text sat on the box's top line, with the rest of the 32 under
+     it. */
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  justify-content: center;
   block-size: 32px;
   padding-inline: var(--space-12);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
   border: var(--border-1) solid #353a40;
   border-radius: var(--radius-8);
   background: none;
