@@ -13,7 +13,7 @@
  * Cached in memory for an hour per market, because prices change daily at
  * most and the content pages are heavy. A cold call takes a few seconds.
  */
-import { buildMarket, fetchContent, fetchMarket, MARKETS, BASE_LOCALE, HEADERS, offersUrl, type LiveMarket, type ContentBody, type Product } from '../src/rules/dazn'
+import { buildMarket, fetchContent, fetchMarket, MARKETS, BASE_LOCALE, HEADERS, offersUrl, type LiveMarket, type ContentBody, type Product } from '../src/rules/dazn/index.js'
 
 const TTL_MS = 60 * 60 * 1000
 

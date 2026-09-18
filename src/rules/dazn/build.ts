@@ -30,7 +30,7 @@ import type {
   Tier,
   TierPatch,
 } from '../content'
-import { ATLAS_DAZN, ATLAS_LEAGUE } from './atlas'
+import { ATLAS_DAZN, ATLAS_LEAGUE } from './atlas.js'
 import {
   BASE_LOCALE,
   CADENCE,
@@ -48,7 +48,7 @@ import {
   type OffersBody,
   type RawEntitlement,
   type RawOffer,
-} from './spec'
+} from './spec.js'
 
 /* ── Ids ──────────────────────────────────────────────────────────────── */
 
