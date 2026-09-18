@@ -286,14 +286,16 @@
 /* Chosen: a white edge, and the name stays the white it is unchosen — the
    edge and the filled dot are what say which one is picked.
 
-   Except on the option being pushed, which is gold throughout: gold edge,
-   gold name. The ribbon is what marks that option, so the ribbon is what
-   turns this on rather than a second thing to keep in step with it. */
+   The option being pushed wears its ribbon's gold on the edge whether or
+   not it is chosen — the same way the highlighted plan card does — and
+   chosen, its name turns gold too. The ribbon is what marks that option,
+   so the ribbon is what turns this on rather than a second thing to keep
+   in step with it. */
 .fl-cadence__option[data-on] {
   border-color: #f8f8f8;
 }
-.fl-cadence__option[data-on][data-promoted] {
-  border-color: #fbed7d;
+.fl-cadence__option[data-promoted] {
+  border-color: var(--color-brand-tertiary);
 }
 .fl-cadence__option[data-on][data-promoted] .fl-cadence__name {
   background: linear-gradient(270deg, #fbed7d 0%, #f2af3d 100%);
