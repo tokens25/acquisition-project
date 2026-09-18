@@ -21,13 +21,28 @@ export const CHANNEL_OF: Partial<Record<Product, string>> = {
   NationalLeagueTV: 'national-league',
 }
 
-/** BillingPeriod → the cadence names the tool already uses. */
+/** BillingPeriod → the cadence names the tool uses. Instalments also count their term. */
 export const CADENCE: Record<string, string> = {
+  Week: 'Weekly',
   Month: 'Monthly',
   Instalments: 'Yearly Instalments',
   Annual: 'Yearly',
+  Seasonal: 'Seasonal',
 }
-export const CADENCES = ['Monthly', 'Yearly Instalments', 'Yearly']
+/**
+ * The cadence an offer is sold at. Instalment plans differ by how many:
+ * twelve is the yearly plan paid monthly, twenty-four Germany's two-year
+ * one, five the NFL's season in five payments — different commitments, so
+ * different cadences, or the second would overwrite the first.
+ */
+export function cadenceOf(billingPeriod: string | null | undefined, termMonths?: number | null): string | null {
+  if (billingPeriod === 'Instalments' && termMonths && termMonths !== 12) {
+    return termMonths === 24 ? '2-Year Instalments' : `${termMonths} Instalments`
+  }
+  return CADENCE[billingPeriod ?? ''] ?? null
+}
+/** Every cadence DAZN sells at, in the order the tool lists them: shortest commitment first. */
+export const CADENCES = ['Weekly', 'Monthly', '5 Instalments', 'Yearly Instalments', '2-Year Instalments', 'Yearly', 'Seasonal']
 
 export const MARKET_LABEL: Record<string, string> = {
   be: 'Belgium', at: 'Austria', de: 'Germany', li: 'Liechtenstein', lu: 'Luxembourg',
@@ -55,6 +70,18 @@ export const offersUrl = (cc: string, product: Product) =>
   `https://tiered-pricing-offer-service.ar.indazn.com/v1/offers/${cc.toUpperCase()}` +
   `?Platform=web&Brand=DAZN&ProductGroup=${product}&IsTiering=true&IncludeBundleOffers=true&BillingRouting=billing2`
 
+/**
+ * The resource strings the web checkout reads its words from: localised
+ * templates keyed by situation, with `%{placeholder}` figures and markdown
+ * links. `eu` in the path is where the service runs, not the market.
+ */
+export const stringsUrl = (cc: string, lang: string) =>
+  `https://resource-strings.acc.indazn.com/v1/eu/live?region=${cc}&LanguageCode=${lang}&Platform=web`
+
+/** The families of keys the checkout draws from. Everything else stays behind. */
+export const CHECKOUT_KEYS =
+  /^(payment_termsWarning(_extended|_klarnaPayOverTime|_weekly)?|payment_ROWexclusion|payment_terms_acceptance_\w+|signUp_cancelSentence_\w+|signUp_\w+_cancelSentence_\w+|signup_cancelation_youthoffer_\w+|auth_payment_cancelSentence_\w+)$/
+
 export const contentUrl = (locale: string, pageId: string = 'DAZN') =>
   `https://dazn-content-proxy.sd.indazn.com/spaces/vhp9jnid12wf/environments/master/entries` +
   `?content_type=CommonContentTierGroup&locale=${locale}&include=10&fields.env[in]=production&fields.pageIds[in]=${pageId}`
@@ -79,6 +106,7 @@ export interface RawOffer {
   Instalment?: { TermInMonths?: number } | null
   FreeTrialMonths?: number
   Purchasable?: boolean
+  BillingType?: string
 }
 
 export interface RawAddon {
@@ -122,13 +150,27 @@ export interface ContentBody {
   includes?: { Entry?: ContentfulEntry[]; Asset?: ContentfulAsset[] }
 }
 
-/** Everything fetched for one market: seven offer bodies, and its locale's content pages. */
+export interface StringsBody {
+  Strings?: Record<string, string>
+  Links?: Record<string, string>
+  Metadata?: { Version?: string; LabelsLastUpdated?: string }
+}
+
+/** The checkout's words for a market, as the strings service states them. */
+export interface CheckoutStrings {
+  strings: Record<string, string>
+  links: Record<string, string>
+  version?: string
+}
+
+/** Everything fetched for one market: seven offer bodies, its locale's content pages, its checkout words. */
 export interface MarketPull {
   market: string
   offers: Partial<Record<Product, OffersBody>>
   /** The market's own locale (after fallback), then the English base. */
   content: ContentBody[]
   base: ContentBody[]
+  strings?: CheckoutStrings | null
   fetchedAt: string
 }
 
@@ -153,6 +195,16 @@ export async function fetchContent(fetchFn: Fetch, locale: string): Promise<Cont
   return bodies.filter((b): b is ContentBody => b !== null)
 }
 
+/** The checkout's words for a market, in its own language, trimmed to the keys the checkout reads. */
+export async function fetchStrings(fetchFn: Fetch, market: string): Promise<CheckoutStrings | null> {
+  const lang = (LOCALE[market] ?? BASE_LOCALE).split('-')[0]
+  const body = await get<StringsBody>(fetchFn, stringsUrl(market, lang))
+  if (!body?.Strings) return null
+  const strings: Record<string, string> = {}
+  for (const [k, v] of Object.entries(body.Strings)) if (CHECKOUT_KEYS.test(k) && typeof v === 'string') strings[k] = v
+  return { strings, links: body.Links ?? {}, version: body.Metadata?.Version }
+}
+
 export async function fetchOffers(fetchFn: Fetch, market: string): Promise<Partial<Record<Product, OffersBody>>> {
   const bodies = await Promise.all(PRODUCTS.map((p) => get<OffersBody>(fetchFn, offersUrl(market, p))))
   const out: Partial<Record<Product, OffersBody>> = {}
@@ -170,10 +222,11 @@ export async function fetchOffers(fetchFn: Fetch, market: string): Promise<Parti
  */
 export async function fetchMarket(fetchFn: Fetch, market: string, base?: ContentBody[]): Promise<MarketPull> {
   const locale = LOCALE[market] ?? BASE_LOCALE
-  const [offers, content, baseContent] = await Promise.all([
+  const [offers, content, baseContent, strings] = await Promise.all([
     fetchOffers(fetchFn, market),
     fetchContent(fetchFn, locale),
     base ? Promise.resolve(base) : locale === BASE_LOCALE ? Promise.resolve(null) : fetchContent(fetchFn, BASE_LOCALE),
+    fetchStrings(fetchFn, market),
   ])
-  return { market, offers, content, base: baseContent ?? content, fetchedAt: new Date().toISOString() }
+  return { market, offers, content, base: baseContent ?? content, strings, fetchedAt: new Date().toISOString() }
 }

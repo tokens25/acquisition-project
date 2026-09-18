@@ -7,7 +7,7 @@ import { RSN_FLOW_PATCH, defaultFlow } from './flow'
  * that price them, three cadences, and a partner storefront alongside direct.
  */
 
-const CADENCES = ['Monthly', 'Yearly Instalments', 'Yearly']
+const CADENCES = ['Weekly', 'Monthly', '5 Instalments', 'Yearly Instalments', '2-Year Instalments', 'Yearly', 'Seasonal']
 
 /**
  * The channel the New York plans are sold on.

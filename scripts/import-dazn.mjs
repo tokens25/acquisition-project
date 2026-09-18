@@ -43,7 +43,11 @@ async function pullFromFiles(market, base) {
   for (const f of [`${locale}.json`, ...PRODUCTS.filter((p) => p !== 'DAZN').map((p) => `${locale}--${p}.json`)]) {
     try { content.push(await readJson(join(DATA, 'content', f))) } catch { /* no page */ }
   }
-  return { market, offers, content, base: base ?? content, fetchedAt: new Date().toISOString() }
+  let strings = null
+  try {
+    strings = await readJson(join(DATA, 'strings', `${market}.json`))
+  } catch { /* not pulled */ }
+  return { market, offers, content, base: base ?? content, strings, fetchedAt: new Date().toISOString() }
 }
 
 const current = await readJson(OUT).catch(() => null)

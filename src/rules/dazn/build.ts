@@ -34,6 +34,7 @@ import {
   BASE_LOCALE,
   CADENCE,
   CADENCES,
+  cadenceOf,
   CHANNEL_OF,
   LOCALE,
   MARKET_LABEL,
@@ -377,8 +378,10 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
     const ranks = new Map<string, number>()
 
     for (const o of body.Offers ?? []) {
-      if (o.ProductType && o.ProductType !== 'SUBSCRIPTION') continue
-      const cadence = CADENCE[o.BillingPeriod ?? '']
+      // A subscription, or a pass — the NFL's weekly pass is a one-off buy of
+      // the same plan for a week, and a way to pay for it all the same.
+      if (o.ProductType && o.ProductType !== 'SUBSCRIPTION' && o.ProductType !== 'PASS') continue
+      const cadence = cadenceOf(o.BillingPeriod, o.Instalment?.TermInMonths)
       if (!cadence) continue
       const key = `${o.EntitlementSetId}|${cadence}`
       // The service repeats an offer once per payment method; one row will do.
@@ -426,6 +429,7 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
       const term = o.Instalment?.TermInMonths
       if (typeof term === 'number' && term > 1) offer.termMonths = term
       if (o.FreeTrialMonths) offer.freeTrialMonths = o.FreeTrialMonths
+      if (o.BillingType === 'OneOff' || o.ProductType === 'PASS') offer.oneOff = true
       offers.push(offer)
     }
 
@@ -628,6 +632,9 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
       locale,
       currency,
       ...(paymentMethods.length ? { paymentMethods } : {}),
+      ...(pull.strings && Object.keys(pull.strings.strings).length
+        ? { checkoutCopy: { strings: pull.strings.strings, links: pull.strings.links, ...(pull.strings.version ? { version: pull.strings.version } : {}) } }
+        : {}),
     },
     tiers: [...tiers.values()],
     offers,
@@ -710,7 +717,9 @@ export function mergeLive(set: CardSet, live: LiveMarket): CardSet {
     ...set,
     markets,
     ...(planTabsByMarket ? { planTabsByMarket } : {}),
-    cadences: uniq([...set.cadences, ...CADENCES]),
+    // In the tool's order — shortest commitment first — with anything a set
+    // names that DAZN does not after.
+    cadences: [...CADENCES, ...set.cadences.filter((c) => !CADENCES.includes(c))],
     featureCatalog: replace(set.featureCatalog, live.featureCatalog),
     logoCatalog: replace(set.logoCatalog, keepUploaded(set.logoCatalog, live.logoCatalog)),
     tiers,

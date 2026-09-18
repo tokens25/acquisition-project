@@ -289,6 +289,8 @@ export interface CadenceOffer {
    */
   termMonths?: number
   freeTrialMonths?: number
+  /** A one-off buy — a weekly pass — rather than a subscription: nothing renews. */
+  oneOff?: boolean
   /**
    * The terms DAZN's CMS attaches to this way of paying for this plan, as
    * plain text, where it has any — the season passes carry one; most plans
@@ -419,6 +421,19 @@ export interface MarketConfig {
    * written by hand; the checkout then draws its authored methods.
    */
   paymentMethods?: string[]
+  /**
+   * The checkout's words for this market, from DAZN's strings service: the
+   * terms under the payment method and the purchase-summary sentence, as
+   * localised templates keyed by situation (`payment_termsWarning`,
+   * `signUp_cancelSentence_instalments_motor`, …) with `%{placeholder}`
+   * figures. Resolved per plan and cadence at the checkout. Absent on a
+   * market written by hand.
+   */
+  checkoutCopy?: {
+    strings: Record<string, string>
+    links: Record<string, string>
+    version?: string
+  }
 }
 
 export interface CampaignConfig {

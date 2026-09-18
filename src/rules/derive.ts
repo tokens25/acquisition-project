@@ -29,7 +29,13 @@ export const FEATURE_SLOTS = 5
  * whose name is already the period.
  */
 const UNIT_DEFAULTS: Record<string, string> = {
+  Weekly: 'week',
   Monthly: 'month',
+  '5 Instalments': 'month',
+  'Yearly Instalments': 'month',
+  '2-Year Instalments': 'month',
+  Yearly: 'year',
+  Seasonal: 'season',
 }
 
 /**
@@ -224,6 +230,8 @@ export function billingLabel(cadence: string, termMonths?: number): { label: str
   const c = cadence.toLowerCase()
   if (termMonths && /instal/.test(c)) return { label: `${termMonths}×`, unit: 'mo' }
   if (/instal/.test(c)) return { label: 'Instalments', unit: 'mo' }
+  if (/week/.test(c)) return { label: 'Weekly', unit: 'wk' }
+  if (/season/.test(c)) return { label: 'Season', unit: 'season' }
   if (/year|annual/.test(c)) return { label: 'Annual', unit: 'yr' }
   if (/month/.test(c)) return { label: 'Monthly', unit: 'mo' }
   return { label: cadence, unit: c }

@@ -15,7 +15,8 @@ import type { CadenceOffer, CardSet, Context, MarketConfig, Tier } from './conte
 import type { CadenceOption, CadenceScreen, CheckoutLine, CheckoutScreen, PaymentMethod } from './flow'
 import { formatMoney, formatMoneyWhole } from './money'
 import { billingLabel } from './derive'
-import { marketFor, resolveOffer, resolveSet } from './resolve'
+import { daznCheckoutCopy } from './daznCopy'
+import { marketFor, offerForCard, resolveOffer, resolveSet } from './resolve'
 
 /**
  * The plan the context says is being bought.
@@ -39,10 +40,12 @@ export function chosenTier(set: CardSet, context: Context): Tier | null {
   return cards.slice().sort((a, b) => ways(b.tier.id) - ways(a.tier.id))[0].tier
 }
 
-type Kind = 'monthly' | 'instalments' | 'yearly' | 'other'
+type Kind = 'weekly' | 'monthly' | 'instalments' | 'yearly' | 'seasonal' | 'other'
 const kindOf = (cadence: string): Kind => {
   const c = cadence.toLowerCase()
   if (/instal/.test(c)) return 'instalments'
+  if (/week/.test(c)) return 'weekly'
+  if (/season/.test(c)) return 'seasonal'
   if (/year|annual/.test(c)) return 'yearly'
   if (/month/.test(c)) return 'monthly'
   return 'other'
@@ -51,13 +54,20 @@ const kindOf = (cadence: string): Kind => {
 /** The standing words for a way to pay, before anyone writes better ones. */
 function standing(cadence: string, offer: CadenceOffer): Pick<CadenceOption, 'title' | 'note' | 'unit'> {
   switch (kindOf(cadence)) {
+    case 'weekly':
+      return offer.oneOff
+        ? { title: 'Weekly pass', note: 'One payment for seven days. Does not renew.', unit: 'week' }
+        : { title: 'Pay weekly', note: 'A week at a time. Renews every week until cancelled.', unit: 'week' }
     case 'monthly':
       return { title: 'Pay monthly', note: 'Renews every month. Cancel any time.', unit: 'month' }
     case 'yearly':
       return { title: 'Pay for the year', note: 'One payment now. Renews yearly.', unit: 'year' }
+    case 'seasonal':
+      return { title: 'Pay for the season', note: 'One payment for the whole season.', unit: 'season' }
     case 'instalments': {
       const n = offer.termMonths ?? 12
-      return { title: `Pay yearly in ${n} instalments`, note: `${n} monthly payments. ${n}-month contract.`, unit: 'month' }
+      const span = n === 12 ? 'yearly' : n === 24 ? 'for two years' : 'for the season'
+      return { title: `Pay ${span} in ${n} instalments`, note: `${n} monthly payments. ${n}-month contract.`, unit: 'month' }
     }
     default:
       return { title: `Pay ${cadence.toLowerCase()}`, note: '', unit: cadence.toLowerCase() }
@@ -69,12 +79,14 @@ const paid = (o: CadenceOffer) => (o.discount && o.introPrice !== null ? o.intro
 /** What a way to pay costs over a year, for the saving beside it. */
 function overAYear(cadence: string, o: CadenceOffer): number {
   switch (kindOf(cadence)) {
+    case 'weekly':
+      return paid(o) * 52
     case 'monthly':
       return paid(o) * 12
     case 'instalments':
-      return paid(o) * (o.termMonths ?? 12)
-    case 'yearly':
-      return paid(o)
+      // A two-year plan's yearly cost is half its total; a five-payment
+      // season's is its total — either way, the year is what is compared.
+      return (paid(o) * (o.termMonths ?? 12)) / Math.max(1, (o.termMonths ?? 12) / 12)
     default:
       return paid(o)
   }
@@ -135,9 +147,11 @@ export function liveCadenceScreen(set: CardSet, context: Context, authored: Cade
   return { ...authored, options, selected }
 }
 
-const dateIn = (locale: string, months: number) => {
+/** A date `months` from today — or, for a weekly plan, seven days on. */
+const dateIn = (locale: string, months: number, days = 0) => {
   const d = new Date()
   d.setMonth(d.getMonth() + months)
+  d.setDate(d.getDate() + days)
   try {
     return new Intl.DateTimeFormat(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }).format(d)
   } catch {
@@ -197,22 +211,22 @@ export function liveMethods(market: MarketConfig): PaymentMethod[] | null {
 export function checkoutTokens(set: CardSet, context: Context): Record<string, string> | null {
   const tier = chosenTier(set, context)
   if (!tier) return null
-  const offer = resolveOffer(set, tier.id, context)
+  const offer = offerForCard(set, tier.id, context)
   if (!offer) return null
   const market = marketFor(set, context.market)
   const money = (n: number) => formatMoney(n, market.locale, market.currency)
-  const kind = kindOf(context.cadence)
-  const words = standing(context.cadence, offer)
+  const kind = kindOf(offer.cadence)
+  const words = standing(offer.cadence, offer)
   const every = kind === 'yearly' ? 12 : 1
-  const term = kind === 'instalments' ? (offer.termMonths ?? 12) : kind === 'yearly' ? 12 : 1
+  const term = kind === 'instalments' ? (offer.termMonths ?? 12) : kind === 'yearly' || kind === 'seasonal' ? 12 : 1
   return {
     plan: tier.planName,
     cadence: words.title.replace(/^Pay /, '').toLowerCase(),
     price: money(offer.standardPrice),
     unit: words.unit,
     today: money(paid(offer)),
-    next: dateIn(market.locale, every),
-    renewal: dateIn(market.locale, term),
+    next: kind === 'weekly' ? dateIn(market.locale, 0, 7) : dateIn(market.locale, every),
+    renewal: kind === 'weekly' ? dateIn(market.locale, 0, 7) : dateIn(market.locale, term),
     term: String(term),
     market: market.label,
   }
@@ -232,15 +246,27 @@ export const fillTokens = (text: string, tokens: Record<string, string>) =>
  * line on the screen has its tokens filled, so the legal names this price
  * and this renewal date. A plan with no price here is drawn as authored.
  */
+/** Which of DAZN's strings the checkout on screen is reading, for the panel to say. */
+export function checkoutSources(set: CardSet, context: Context): { summaryKey: string | null; termsKey: string | null } | null {
+  const tier = chosenTier(set, context)
+  if (!tier) return null
+  const offer = offerForCard(set, tier.id, context)
+  if (!offer) return null
+  const c = daznCheckoutCopy(context, tier, offer, marketFor(set, context.market))
+  return { summaryKey: c.summaryKey, termsKey: c.termsKey }
+}
+
 export function liveCheckoutScreen(set: CardSet, context: Context, authored: CheckoutScreen): CheckoutScreen {
   const tier = chosenTier(set, context)
   if (!tier) return authored
-  const offer = resolveOffer(set, tier.id, context)
+  // The offer at the cadence on screen, or the first way the plan is sold —
+  // a checkout is always for a price that exists.
+  const offer = offerForCard(set, tier.id, context)
   if (!offer) return authored
   const market: MarketConfig = marketFor(set, context.market)
   const money = (n: number) => formatMoney(n, market.locale, market.currency)
-  const kind = kindOf(context.cadence)
-  const words = standing(context.cadence, offer)
+  const kind = kindOf(offer.cadence)
+  const words = standing(offer.cadence, offer)
   const every = kind === 'yearly' ? 12 : 1
   const tokens = checkoutTokens(set, context) ?? {}
   const fill = (text: string) => fillTokens(text, tokens)
@@ -271,24 +297,31 @@ export function liveCheckoutScreen(set: CardSet, context: Context, authored: Che
       unit: words.unit,
     },
     { id: 'live-today', label: 'Today you pay', value: money(offer.freeTrialMonths ? 0 : paid(offer)) },
-    {
+  )
+  // A pass is paid once; there is no next payment to name.
+  if (!offer.oneOff) {
+    lines.push({
       id: 'live-next',
-      label: `Next payment on ${dateIn(market.locale, offer.freeTrialMonths || every)}`,
+      label: `Next payment on ${kind === 'weekly' && !offer.freeTrialMonths ? dateIn(market.locale, 0, 7) : dateIn(market.locale, offer.freeTrialMonths || every)}`,
       value: money(offer.introMonths > 1 && offer.introPrice !== null ? offer.introPrice : offer.standardPrice),
       schedule: true,
-    },
-  )
+    })
+  }
   const methods = liveMethods(market)
+  // What dazn.com's own checkout says here, for this plan and cadence, in
+  // the market's language: the summary sentence under the totals and the
+  // terms under the payment method. The authored lines are the fallback.
+  const dazn = daznCheckoutCopy(context, tier, offer, market)
 
   return {
     ...authored,
     note: fill(authored.note),
     summaryTitle: authored.summaryTitle.trim() ? fill(authored.summaryTitle) : tier.planName,
     lines,
-    renewalNote: fill(authored.renewalNote),
-    // DAZN's own terms for this way of paying, where the CMS has them;
-    // otherwise the authored line with this offer's figures filled in.
-    legal: offer.legal ?? fill(authored.legal),
+    renewalNote: dazn.summary ?? fill(authored.renewalNote),
+    // The CMS's terms for this way of paying where it has them; else the
+    // market's own checkout terms; else the authored line with the figures.
+    legal: offer.legal ?? dazn.terms ?? fill(authored.legal),
     payCta: fill(authored.payCta),
     ...(methods ? { methods, chosen: authored.chosen && methods.some((m) => m.id === authored.chosen) ? authored.chosen : methods[0].id } : {}),
   }

@@ -2,7 +2,7 @@ import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
-import { chosenTier, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
+import { checkoutSources, chosenTier, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
 
 /** What the checkout's authored lines may stand in for. */
 const TOKENS_HELP = 'Tokens fill in from the plan and payment option being bought: {plan} {cadence} {price} {unit} {today} {next} {renewal} {term} {market}.'
@@ -854,9 +854,20 @@ function FlowFields({
               The summary lines are worked out from{' '}
               <strong>{chosenTier(set, context)?.planName}</strong> at <strong>{context.cadence}</strong>:
               {liveCheckout.lines.map((l) => ` ${l.label} ${l.value}${l.unit ? `/${l.unit}` : ''}`).join(' ·')}.
-              The ways to pay are {marketFor(set, context.market).label}'s, from DAZN. Change the plan or
-              payment option under "What is being bought" to see another's. The lines written below are the
-              fallback for a plan with no price here.
+              The ways to pay are {marketFor(set, context.market).label}'s, from DAZN.
+              {(() => {
+                const src = checkoutSources(set, context)
+                return src?.summaryKey || src?.termsKey ? (
+                  <>
+                    {' '}The summary sentence and the terms are dazn.com's own for this market
+                    {src.summaryKey ? <> (<code>{src.summaryKey}</code></> : ''}
+                    {src.termsKey ? <>{src.summaryKey ? ', ' : ' ('}<code>{src.termsKey}</code>)</> : src.summaryKey ? ')' : ''}.
+                  </>
+                ) : (
+                  <> DAZN has no checkout words for this market; the lines below are read.</>
+                )
+              })()}{' '}
+              Change the plan or payment option under "What is being bought" to see another's.
             </p>
           )}
           {linesOf(c).map((line, i) => {

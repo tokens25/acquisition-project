@@ -207,7 +207,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
         })
         .map((t) => t.id),
     )
-  }, [set.tiers, set.offers, context.market, context.channel, context.subscription])
+  }, [set.tiers, set.offers, context])
   const [others, setOthers] = useState<{ on: boolean; at: string }>({ on: false, at: '' })
   const showOthers = others.on && others.at === situationKey
   const setShowOthers = (fn: (v: boolean) => boolean) =>

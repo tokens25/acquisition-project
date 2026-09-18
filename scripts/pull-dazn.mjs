@@ -44,6 +44,12 @@ const offersUrl = (cc, product) =>
   `https://tiered-pricing-offer-service.ar.indazn.com/v1/offers/${cc.toUpperCase()}` +
   `?Platform=web&Brand=DAZN&ProductGroup=${product}&IsTiering=true&IncludeBundleOffers=true&BillingRouting=billing2`
 
+/* The checkout's words: localised templates, per market and language. */
+const stringsUrl = (cc, lang) =>
+  `https://resource-strings.acc.indazn.com/v1/eu/live?region=${cc}&LanguageCode=${lang}&Platform=web`
+const CHECKOUT_KEYS =
+  /^(payment_termsWarning(_extended|_klarnaPayOverTime|_weekly)?|payment_ROWexclusion|payment_terms_acceptance_\w+|signUp_cancelSentence_\w+|signUp_\w+_cancelSentence_\w+|signup_cancelation_youthoffer_\w+|auth_payment_cancelSentence_\w+)$/
+
 const contentUrl = (locale, pageId = 'DAZN') =>
   `https://dazn-content-proxy.sd.indazn.com/spaces/vhp9jnid12wf/environments/master/entries` +
   `?content_type=CommonContentTierGroup&locale=${locale}&include=10&fields.env[in]=production&fields.pageIds[in]=${pageId}`
@@ -61,7 +67,8 @@ async function pull(url) {
 async function main() {
   await mkdir(join(OUT, 'offers'), { recursive: true })
   await mkdir(join(OUT, 'content'), { recursive: true })
-  const manifest = { pulledAt: new Date().toISOString(), offers: [], content: [] }
+  await mkdir(join(OUT, 'strings'), { recursive: true })
+  const manifest = { pulledAt: new Date().toISOString(), offers: [], content: [], strings: [] }
 
   for (const [cc] of Object.entries(MARKETS)) {
     for (const product of PRODUCTS) {
@@ -87,6 +94,19 @@ async function main() {
       process.stdout.write(`${r.ok && items ? '✓' : '·'} content ${locale.padEnd(6)} ${page.padEnd(17)} ${r.status}  ${items} entries\n`)
       await sleep(150)
     }
+  }
+
+  // The checkout's words, trimmed to the keys the checkout reads — the full
+  // response is twenty thousand strings, most of them the app's own UI.
+  for (const [cc, locale] of Object.entries(MARKETS)) {
+    const r = await pull(stringsUrl(cc, locale.split('-')[0]))
+    const all = r.body?.Strings ?? {}
+    const strings = Object.fromEntries(Object.entries(all).filter(([k]) => CHECKOUT_KEYS.test(k)))
+    const n = Object.keys(strings).length
+    manifest.strings.push({ market: cc, status: r.status, ok: r.ok, keys: n, version: r.body?.Metadata?.Version, note: r.text })
+    if (r.ok && n) await writeFile(join(OUT, 'strings', `${cc}.json`), JSON.stringify({ strings, links: r.body.Links ?? {}, version: r.body.Metadata?.Version }, null, 2))
+    process.stdout.write(`${r.ok && n ? '✓' : '·'} strings ${cc.toUpperCase().padEnd(3)} ${r.status}  ${n} checkout keys\n`)
+    await sleep(150)
   }
 
   await writeFile(join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2))
