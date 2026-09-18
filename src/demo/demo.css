@@ -1465,7 +1465,7 @@
 .demo__unconfigured h2 {
   margin: 0;
   color: var(--color-text-primary);
-  font-size: var(--font-size-heading-sm, 1.25rem);
+  font-size: var(--font-size-heading-h6);
 }
 .demo__unconfigured p {
   margin: 0;
