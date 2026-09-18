@@ -7,7 +7,7 @@ import { DIRECT } from '../rules/content'
 import { journeysFor, resolveJourney } from '../rules/journey'
 import { allJourneys } from '../rules/generate'
 import { excludedTiers, marketFor, resolveTier } from '../rules/resolve'
-import { summarise, validateAll, validateContext } from '../rules/validate'
+import { problemsOf, summarise, validateAll, validateContext, whereProblem } from '../rules/validate'
 import { Icon } from '../components/Icon'
 import { CheckField, FieldGroup, NumberField, SelectField, TextArea, TextField } from './Field'
 import { StepPicker } from './StepPicker'
@@ -62,7 +62,11 @@ export function SetEditor({ store }: { store: CardSetStore }) {
   // is a fix you cannot reach.
   const absent = new Map(excludedTiers(set, context).map((e) => [e.tier.id, e.reason]))
 
-  const coverage = summarise(validateAll(set))
+  const checked = validateAll(set)
+  const coverage = summarise(checked)
+  // One row per thing wrong, not per market it is wrong in.
+  const problems = problemsOf(set, checked)
+  const blocking = problems.filter((p) => p.severity === 'error')
   const here = validateContext(set, context)
   const hereErrors = here.filter((v) => v.severity === 'error')
 
@@ -106,13 +110,40 @@ export function SetEditor({ store }: { store: CardSetStore }) {
         data-state={coverage.failing.length ? 'blocked' : coverage.warning.length ? 'warn' : 'clear'}
       >
         <p className="ed-gate__headline">
-          {coverage.failing.length
-            ? `Publish blocked — ${coverage.failing.length} of ${coverage.total} contexts failing`
-            : `Publish ready — ${coverage.total} contexts checked`}
+          {blocking.length
+            ? `Publish blocked — ${blocking.length} thing${blocking.length === 1 ? '' : 's'} to fix`
+            : `Publish ready — checked in every market and way to pay`}
         </p>
-        {coverage.failing.length > 0 && (
-          <p className="ed-gate__contexts">Failing: {coverage.failingLabels.slice(0, 6).join(', ')}
-            {coverage.failing.length > 6 && ` and ${coverage.failing.length - 6} more`}</p>
+        {blocking.length > 0 && (
+          <>
+            <p className="ed-gate__contexts">
+              Each one fails in every market that sells the plan — that is the {coverage.failing.length} of{' '}
+              {coverage.total} combinations. Pick a row to go to it.
+            </p>
+            <ul className="ed-gate__problems">
+              {blocking.slice(0, 8).map((p) => (
+                <li key={`${p.rule}|${p.tierId}|${p.message}`}>
+                  <button
+                    type="button"
+                    className="ed-gate__problem"
+                    onClick={() => {
+                      setContext({
+                        ...context,
+                        market: p.at.market,
+                        subscription: p.at.subscription,
+                        cadence: p.at.cadence,
+                      })
+                      if (p.tierId) setOpenTier(p.tierId)
+                    }}
+                  >
+                    <strong>{p.plan}</strong> — {p.message.replace(/\.$/, '')}{' '}
+                    <span className="ed-gate__card">{whereProblem(p)}</span>
+                  </button>
+                </li>
+              ))}
+              {blocking.length > 8 && <li className="ed-gate__card">and {blocking.length - 8} more</li>}
+            </ul>
+          </>
         )}
         {here.length > 0 && (
           <ul className="ed-gate__list">

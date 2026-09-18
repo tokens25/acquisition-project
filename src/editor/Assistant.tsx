@@ -2,7 +2,7 @@ import './assistant.css'
 
 import { useEffect, useRef, useState } from 'react'
 import type { CardSetStore } from './useCardSet'
-import { summarise, validateAll } from '../rules/validate'
+import { describeProblems, problemsOf, summarise, validateAll } from '../rules/validate'
 
 /**
  * A conversation about the content, beside the content.
@@ -92,14 +92,15 @@ export function Assistant({ store }: { store: CardSetStore }) {
     setBusy(true)
     setError(null)
     try {
-      const coverage = summarise(validateAll(store.set))
+      const checked = validateAll(store.set)
+      const coverage = summarise(checked)
       const res = await fetch('/api/assistant', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           messages: next.map((t) => ({ role: t.role, content: t.content })),
           set: store.set,
-          failing: coverage.failingLabels.slice(0, 12).join(', '),
+          failing: describeProblems(problemsOf(store.set, checked), 8) || coverage.failingLabels.slice(0, 12).join(', '),
         }),
       })
       const body = (await res.json()) as {

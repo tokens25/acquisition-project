@@ -10,7 +10,7 @@ import { StepPreview } from '../card/StepPreview'
 import { Icon } from '../components/Icon'
 import { useCardSet } from '../editor/useCardSet'
 import { planJourney } from '../rules/journey'
-import { summarise, validateAll } from '../rules/validate'
+import { describeProblems, problemsOf, summarise, validateAll } from '../rules/validate'
 import { Button } from '../components/Button'
 import { DefaultPanel } from './DefaultPanel'
 import { EditPanel } from './EditPanel'
@@ -308,7 +308,9 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   const planned = product === 'landing' ? (landingStep ? [landingStep] : []) : journeyPlan
   const steps = planned.filter((p) => !p.skipped).map((p) => p.step)
   const step = steps.find((s) => s.id === store.set.stepId) ?? steps[0]
-  const coverage = summarise(validateAll(store.set))
+  const checked = validateAll(store.set)
+  const coverage = summarise(checked)
+  const problems = problemsOf(store.set, checked).filter((p) => p.severity === 'error')
 
   /* ── Market / Dev handoff ──
      Flow sections are named after their steps, as the journey names them. */
@@ -432,12 +434,13 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   }, [tx.entries, tx.state, tx.current.name, store.set, store.context.market])
 
   const gate =
-    coverage.failing.length > 0
+    problems.length > 0
       ? {
           state: 'blocked' as const,
-          text: `${coverage.failing.length} of ${coverage.total} contexts failing`,
+          text: `${problems.length} to fix before publishing`,
+          title: describeProblems(problems, 5),
         }
-      : { state: 'clear' as const, text: `${coverage.total} contexts checked` }
+      : { state: 'clear' as const, text: `Checked in every market — nothing to fix`, title: `${coverage.total} market and payment combinations checked` }
 
   const actions = editing && !single ? (
     <div className="demo__actions">
@@ -561,7 +564,7 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
           <MarketLanguages tx={tx} onAdd={() => setTranslating(true)} />
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}
-          <span className="demo__gate" data-state={gate.state}>
+          <span className="demo__gate" data-state={gate.state} title={gate.title}>
             {gate.text}
           </span>
           {actions}

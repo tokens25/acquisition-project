@@ -280,6 +280,34 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption-xs);
 }
+.ed-gate__problems {
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-4);
+  font-size: var(--font-size-caption-xs);
+}
+.ed-gate__problem {
+  inline-size: 100%;
+  padding: var(--space-4) var(--space-8);
+  border: 0;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  line-height: 1.5;
+  text-align: start;
+  cursor: pointer;
+}
+.ed-gate__problem:hover,
+.ed-gate__problem:focus-visible {
+  background: var(--color-surface-container-2);
+  color: var(--color-text-primary);
+}
+.ed-gate__problem strong {
+  color: var(--color-text-primary);
+}
 
 /* ── Step picker ───────────────────────────────────────────── */
 

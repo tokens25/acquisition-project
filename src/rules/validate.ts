@@ -1,6 +1,7 @@
 import type { CadenceOffer, CardSet, Context, Tier } from './content'
 import { deriveCard } from './derive'
 import { allContexts, marketFor, resolveOffer, resolveSet, resolveTier } from './resolve'
+import { CHANNELS, MARKETS } from './catalogue'
 
 /**
  * The rules that can reject a publish.
@@ -141,6 +142,105 @@ export function summarise(results: ContextResult[]) {
     failingLabels: failing.map((r) => contextLabel(r.context)),
     warningLabels: warning.map((r) => contextLabel(r.context)),
   }
+}
+
+/**
+ * One thing wrong, said once.
+ *
+ * The checks run per context, so a plan with no description fails in every
+ * market that sells it — dozens of "failing contexts" that are a single
+ * missing sentence. This folds the same violation across contexts into one
+ * row: what is wrong, on which plan, and where, so the fix is one click away
+ * rather than a list of market codes to decode.
+ */
+export interface Problem {
+  rule: string
+  severity: Severity
+  tierId?: string
+  /** The plan's name, or the id when it has none. */
+  plan: string
+  message: string
+  /** How many contexts show it. */
+  contexts: number
+  markets: string[]
+  channels: string[]
+  cadences: string[]
+  /** The first context it failed in — where to go to fix it. */
+  at: Context
+}
+
+const label = (list: ReadonlyArray<{ id: string; label: string }>, id: string) =>
+  list.find((x) => x.id === id)?.label ?? id
+
+/** "in 21 markets", "in Germany and Spain", "for Monthly in the US" */
+export function whereProblem(p: Problem): string {
+  const markets =
+    p.markets.length > 3
+      ? `${p.markets.length} markets`
+      : p.markets.map((m) => label(MARKETS, m)).join(p.markets.length === 2 ? ' and ' : ', ')
+  const via = p.channels.filter(Boolean)
+  const channel =
+    via.length === 1 && p.channels.length === 1 ? ` via ${label(CHANNELS, via[0])}` : ''
+  // Offer rules are about one way to pay; card rules fail on every cadence,
+  // so naming the cadence there would only repeat what the count says.
+  const cadence =
+    p.rule.startsWith('O-') &&
+    p.cadences.length > 0 &&
+    p.cadences.length <= 2 &&
+    !p.cadences.some((c) => p.message.includes(c))
+      ? `for ${p.cadences.join(' and ')} `
+      : ''
+  return `${cadence}in ${markets}${channel}`
+}
+
+export function problemsOf(set: CardSet, results: ContextResult[]): Problem[] {
+  const byKey = new Map<string, Problem>()
+  const seen = new Map<string, { markets: Set<string>; channels: Set<string>; cadences: Set<string> }>()
+  for (const r of results) {
+    for (const v of r.violations) {
+      const key = `${v.rule}|${v.tierId ?? ''}|${v.message}`
+      let p = byKey.get(key)
+      if (!p) {
+        const tier = v.tierId ? set.tiers.find((t) => t.id === v.tierId) : undefined
+        p = {
+          rule: v.rule,
+          severity: v.severity,
+          tierId: v.tierId,
+          plan: tier ? tier.planName.trim() || tier.id : v.tierId ?? 'Whole set',
+          message: v.message,
+          contexts: 0,
+          markets: [],
+          channels: [],
+          cadences: [],
+          at: r.context,
+        }
+        byKey.set(key, p)
+        seen.set(key, { markets: new Set(), channels: new Set(), cadences: new Set() })
+      }
+      const s = seen.get(key)!
+      p.contexts += 1
+      s.markets.add(r.context.market)
+      s.channels.add(r.context.subscription ?? '')
+      if (r.context.cadence) s.cadences.add(r.context.cadence)
+    }
+  }
+  const out = [...byKey.entries()].map(([key, p]) => {
+    const s = seen.get(key)!
+    return { ...p, markets: [...s.markets], channels: [...s.channels], cadences: [...s.cadences] }
+  })
+  // Errors first, then the ones that block the most.
+  return out.sort((a, b) =>
+    a.severity === b.severity ? b.contexts - a.contexts : a.severity === 'error' ? -1 : 1,
+  )
+}
+
+/** One sentence for a log line or a status chip: the blocking problems, named. */
+export function describeProblems(problems: Problem[], max = 3): string {
+  const errors = problems.filter((p) => p.severity === 'error')
+  if (errors.length === 0) return ''
+  const named = errors.slice(0, max).map((p) => `${p.plan}: ${p.message.replace(/\.$/, '')} (${whereProblem(p)})`)
+  const rest = errors.length - named.length
+  return named.join('; ') + (rest > 0 ? `; and ${rest} more` : '')
 }
 
 export { resolveTier, resolveOffer }

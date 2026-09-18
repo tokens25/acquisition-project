@@ -2,7 +2,7 @@ import type { ProgressBus } from './progressBus'
 import type { CardSet, Context } from '../rules/content'
 import type { Journey } from '../rules/journey'
 import { planJourney } from '../rules/journey'
-import { summarise, validateAll } from '../rules/validate'
+import { describeProblems, problemsOf, summarise, validateAll } from '../rules/validate'
 import { loadRemote } from '../editor/remote'
 import { buildSnapshot } from '../demo/coach/review/snapshot'
 import { runCoach } from '../demo/coach/review/coach'
@@ -124,12 +124,19 @@ export async function prepare(bus: ProgressBus, job: Job): Promise<Prepared> {
 
   const checks = (async () => {
     bus.report({ kind: 'checks:start' })
-    const summary = summarise(validateAll(job.set))
+    const results = validateAll(job.set)
+    const summary = summarise(results)
+    const problems = problemsOf(job.set, results).filter((p) => p.severity === 'error')
     bus.report({
       kind: 'checks:done',
       contexts: summary.total,
       failing: summary.failing.length,
+      problems: problems.length,
       labels: summary.failingLabels,
+      // Said as what is wrong rather than where: one missing sentence fails
+      // in every market that sells the plan, and a list of market codes
+      // does not say which sentence.
+      named: describeProblems(problems, 2),
     })
     return { contexts: summary.total, failing: summary.failing.length }
   })()

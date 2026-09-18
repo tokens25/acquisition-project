@@ -278,7 +278,7 @@ function blankOffer(s: FlowStructure, tierId: string, cadence: string): CadenceO
  * Tabs are a market's decision, not a flow's, so this is per market: a second
  * flow set up in the same market finds the tabs the first one left.
  */
-function tabsFor(set: CardSet, s: FlowStructure): Pick<CardSet, 'planTabsByMarket'> | {} {
+function tabsFor(set: CardSet, s: FlowStructure): Partial<Pick<CardSet, 'planTabsByMarket'>> {
   if (set.planTabsByMarket?.[s.marketId] !== undefined) return {}
   if (hasMarketJourney(s.marketId) || channelsFor(s.marketId).some((c) => hasChannelJourney(s.marketId, c.id))) {
     return {}

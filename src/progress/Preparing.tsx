@@ -111,15 +111,17 @@ function narrate(event: ProgressEvent): Narration | null {
     case 'checks:done': {
       const failing = Number(event.failing)
       const total = Number(event.contexts)
+      const problems = Number(event.problems)
+      const named = String(event.named ?? '')
       return {
         lane: 'checks',
         text: failing
-          ? `${failing} of the ${total} market and payment combinations have a problem`
+          ? `${problems} thing${problems === 1 ? '' : 's'} to fix before this can go live — ${named}`
           : `Checked all ${total} market and payment combinations. Nothing wrong`,
         record: failing
-          ? `${failing} of ${total} combinations failing: ${(event.labels as string[]).slice(0, 3).join(', ')}`
+          ? `${problems} problem${problems === 1 ? '' : 's'} across ${failing} of ${total} combinations: ${named}`
           : `${total} combinations checked, all fine`,
-        laneStatus: failing ? `${failing} with problems` : 'all fine',
+        laneStatus: failing ? `${problems} to fix` : 'all fine',
         tone: failing ? 'retry' : 'ok',
       }
     }
