@@ -142,7 +142,7 @@ function mergeFlow(stored: FlowContent | undefined): FlowContent {
   return out
 }
 
-const RSN_WORDS = /MSG\+|TV provider|Knicks|Yankees|Gotham|YES Network/i
+const RSN_WORDS = /MSG\+|TV provider|Knicks|Yankees|Gotham|YES Network|Buffalo DMA|NY sports|Nationally broadcast/i
 const isRsnCopy = (screen: unknown) => RSN_WORDS.test(JSON.stringify(screen))
 
 /**

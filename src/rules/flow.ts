@@ -531,8 +531,8 @@ export const defaultFlow: FlowContent = {
     title: 'Sport on DAZN',
     body: 'Stream live sport on DAZN and watch every game live or on demand.',
     cta: 'Sign Up',
-    altCta: 'Sign in with your TV provider',
-    footnote: 'Nationally broadcast games will not be available on DAZN',
+    altCta: 'Log in',
+    footnote: '',
     // The hero controls start off, so the page looks exactly as it does now
     // until somebody turns one on. The words are the hero tool's own
     // placeholders, which is what its fields show when empty.
@@ -562,7 +562,7 @@ export const defaultFlow: FlowContent = {
     scheduleHeading: 'Live and Upcoming Games Schedule',
 
     plansTitle: "Choose the plan that's\nright for you",
-    plansBody: 'The best of NY sports, streaming all in one place.',
+    plansBody: 'Live sport, streaming all in one place.',
 
     teamsEyebrow: 'Meet the teams',
     teamsTitle: 'Your teams, one home',
@@ -847,6 +847,9 @@ export function isFlowStep(id: string): id is FlowStepId {
 export const RSN_FLOW_PATCH = {
   landing: {
     title: 'MSG+ on DAZN',
+    altCta: 'Sign in with your TV provider',
+    footnote: 'Nationally broadcast games will not be available on DAZN',
+    plansBody: 'The best of NY sports, streaming all in one place.',
     body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
     areaNotice: "MSG+ and YES aren't available in 43316",
     areaNote:
