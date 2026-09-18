@@ -51,7 +51,7 @@ export interface AcquisitionCardProps {
    * plan here. The other ways to pay belong to the payment step, and the
    * limits are already benefit lines, so neither is drawn twice.
    */
-  facts?: Omit<PlanFactsProps, 'device' | 'highlighted'> & { reserve?: boolean }
+  facts?: Omit<PlanFactsProps, 'device' | 'highlighted'>
   addOn?: Omit<AddOnProps, 'device'>
   features?: ReactNode
 
@@ -154,12 +154,6 @@ export function AcquisitionCard({
 
         {facts?.canAdd?.length ? (
           <PlanFacts canAdd={facts.canAdd} highlighted={highlighted} device={device} />
-        ) : facts?.reserve ? (
-          <div className="acq-facts acq-facts--reserved" aria-hidden="true">
-            <div className="acq-facts__row">
-              <span className="acq-facts__tag">{'\u00a0'}</span>
-            </div>
-          </div>
         ) : null}
 
         {addOn && <AddOn {...addOn} device={device} />}

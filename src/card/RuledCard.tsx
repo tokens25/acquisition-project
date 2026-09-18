@@ -35,10 +35,7 @@ export interface RuledCardProps {
   reserveCaption?: boolean
   /** The longest benefit list in the row; shorter lists keep the room. */
   reserveFeatures?: number
-  /** A card in the row has a "Can add" line, so every card keeps its line. */
-  reserveFacts?: boolean
-  /** A card in the row draws competitions, so a card with none keeps the row. */
-  reserveLogos?: boolean
+
   selected?: boolean
   onSelect?: () => void
 }
@@ -78,8 +75,6 @@ export function RuledCard({
   reserveExtraInfo = false,
   reserveCaption = false,
   reserveFeatures,
-  reserveFacts = false,
-  reserveLogos = false,
   selected,
   onSelect,
 }: RuledCardProps) {
@@ -145,11 +140,11 @@ export function RuledCard({
       selected={selected}
       onSelect={onSelect}
       logos={
-        logos.length || d.overflowCount || reserveLogos
+        logos.length || d.overflowCount
           ? { logos, rows: d.logoRows, overflowCount: d.overflowCount }
           : undefined
       }
-      facts={{ canAdd: d.canAdd, reserve: reserveFacts }}
+      facts={{ canAdd: d.canAdd }}
       addOn={
         d.addOn
           ? {

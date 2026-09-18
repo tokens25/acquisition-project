@@ -403,7 +403,11 @@
   padding: var(--space-12) 0 0;
   list-style: none;
   /* Room for the row's longest list: 18px a line, 8 between. Rows are 18 at
-     12/1.52 on every device, which is what the sum counts on. */
+     12/1.52 on every device, which is what the sum counts on. And the list
+     takes whatever height the card has left, so a card with no competitions
+     row starts its list where its button ends and the slack sits under it,
+     rather than as an empty band between the two. */
+  flex: 1 0 auto;
   min-block-size: calc(
     var(--space-12) + var(--acq-feature-rows, 0) * 18px + max(var(--acq-feature-rows, 1) - 1, 0) * var(--space-8)
   );
@@ -937,8 +941,11 @@ button.acq-feature__info:hover {
    rather than as a second list of features. */
 .acq-facts {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-8);
+  padding-block-start: var(--space-12);
 }
 .acq-facts__row {
   display: flex;
@@ -991,9 +998,6 @@ button.acq-feature__info:hover {
   max-inline-size: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.acq-facts--reserved {
-  visibility: hidden;
 }
 .acq-facts[data-device='mobile'] .acq-facts__tag {
   padding-inline: var(--space-4);
