@@ -33,13 +33,14 @@ async function englishBase(): Promise<ContentBody[]> {
   return value
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {
       status,
       headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
     })
-  const url = new URL(request.url)
+  // Absolute from Vercel's Web runtime, relative from anything else.
+  const url = new URL(request.url, 'http://localhost')
   const market = (url.searchParams.get('market') ?? '').toLowerCase()
   const refresh = url.searchParams.get('refresh') === '1'
 
@@ -115,3 +116,13 @@ function describe(error: unknown): string {
 
 /** Longer than Vercel's default: one market is some twenty calls to DAZN, and a slow one must not become a blank page. */
 export const config = { maxDuration: 60 }
+export const maxDuration = 60
+
+/*
+ * Vercel reads the Web-standard signature — a Request in, a Response out —
+ * only from handlers exported by HTTP method. A default export is taken for
+ * the Node style (req, res), which hands over a relative URL and ignores a
+ * returned Response: deployed, this route hung until it was killed. The
+ * dev server's own plugin reads whichever of these it finds.
+ */
+export const GET = handler

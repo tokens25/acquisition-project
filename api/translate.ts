@@ -65,7 +65,7 @@ const BATCH = 24
 const LANES = 6
 
 function isDeployed(): boolean {
-  return Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+  return Boolean(process.env.VERCEL || process.env.VERCEL_ENV || process.env.VERCEL_REGION || process.env.AWS_LAMBDA_FUNCTION_NAME)
 }
 
 const TOOL = {
@@ -183,7 +183,7 @@ function askViaCli(system: string, user: string): Promise<{ strings: unknown[] }
   })
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } })
 
@@ -263,3 +263,13 @@ export default async function handler(request: Request): Promise<Response> {
     return json({ error: error instanceof Error ? error.message : String(error) }, 502)
   }
 }
+
+/*
+ * Vercel reads the Web-standard signature — a Request in, a Response out —
+ * only from handlers exported by HTTP method. A default export is taken for
+ * the Node style (req, res), which hands over a relative URL and ignores a
+ * returned Response: deployed, this route hung until it was killed. The
+ * dev server's own plugin reads whichever of these it finds.
+ */
+export const GET = handler
+export const POST = handler

@@ -39,9 +39,14 @@ function apiRoutes(): Plugin {
         if (!/^[a-z0-9-]+$/.test(name)) return next()
 
         try {
-          const module = (await server.ssrLoadModule(`/api/${name}.ts`)) as {
-            default: (request: Request) => Promise<Response>
-          }
+          type Handler = (request: Request) => Promise<Response>
+          const module = (await server.ssrLoadModule(`/api/${name}.ts`)) as Partial<Record<'default' | 'GET' | 'POST' | 'PUT', Handler>>
+          // The route by the method asked for, as Vercel reads it; any method
+          // it exports otherwise, since every route answers a wrong method
+          // itself with a 405.
+          const method = (req.method ?? 'GET').toUpperCase() as 'GET' | 'POST' | 'PUT'
+          const handler = module[method] ?? module.default ?? module.GET ?? module.POST ?? module.PUT
+          if (!handler) return next()
 
           const body =
             req.method === 'GET' || req.method === 'HEAD'
@@ -59,7 +64,7 @@ function apiRoutes(): Plugin {
             ),
             body,
           })
-          const response = await module.default(request)
+          const response = await handler(request)
 
           res.statusCode = response.status
           response.headers.forEach((value, key) => res.setHeader(key, value))

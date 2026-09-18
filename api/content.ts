@@ -73,7 +73,7 @@ async function writeFile(token: string, text: string, sha: string | null, messag
   return { conflict: false as const, sha: body.content.sha, commit: body.commit.sha }
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   const token = process.env.GITHUB_TOKEN
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {
@@ -121,3 +121,13 @@ export default async function handler(request: Request): Promise<Response> {
     return json({ error: error instanceof Error ? error.message : String(error) }, 502)
   }
 }
+
+/*
+ * Vercel reads the Web-standard signature — a Request in, a Response out —
+ * only from handlers exported by HTTP method. A default export is taken for
+ * the Node style (req, res), which hands over a relative URL and ignores a
+ * returned Response: deployed, this route hung until it was killed. The
+ * dev server's own plugin reads whichever of these it finds.
+ */
+export const GET = handler
+export const PUT = handler
