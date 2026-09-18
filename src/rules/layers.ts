@@ -4,7 +4,7 @@ import { defaultFlow } from './flow'
 import { STATUS_LABELS } from './entry'
 import { channelById, marketById } from './catalogue'
 import { chosenJourney } from './journey'
-import { allJourneys } from './generate'
+import { allJourneys } from './liveJourneys'
 
 /**
  * Which situation content is being written for.

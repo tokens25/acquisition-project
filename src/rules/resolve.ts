@@ -11,7 +11,6 @@ import type {
 } from './content'
 import { DIRECT } from './content'
 import { channelsFor } from './catalogue'
-import { fromAnotherFlow } from './flowIds'
 
 /**
  * Base plus differences, then joined to a way of paying.
@@ -93,13 +92,10 @@ export function resolveOffer(
 export function filterAcquirableTiers(
   tiers: Tier[],
   {
-    market,
     channel = DIRECT,
     subscription,
     includeLegacy = false,
   }: {
-    /** Needed only to tell a generated plan's flow from another's. */
-    market?: string
     channel?: string
     subscription?: string
     includeLegacy?: boolean
@@ -108,10 +104,6 @@ export function filterAcquirableTiers(
   const onDirect = channel === DIRECT
   return tiers.filter((tier) => {
     if (!sellsTier(tier, subscription)) return false
-    // A plan setup built for another flow is not on sale here, whatever its
-    // own fields say — a general market flow's plans carry no product, and
-    // every product reads that as "sold with all of them".
-    if (market && fromAnotherFlow(tier.id, market, subscription || undefined)) return false
     const tierChannel = tier.channel || DIRECT
     if (tierChannel === channel) {
       if (onDirect && !includeLegacy && tier.status !== 'live') return false
@@ -149,7 +141,6 @@ export interface ResolvedCard {
 /** Tiers this storefront sells at this cadence, in display order. */
 export function resolveSet(set: CardSet, context: Context = set.context): ResolvedCard[] {
   return filterAcquirableTiers(set.tiers, {
-    market: context.market,
     channel: context.channel,
     subscription: context.subscription,
   })
@@ -162,7 +153,6 @@ export function resolveSet(set: CardSet, context: Context = set.context): Resolv
 export function excludedTiers(set: CardSet, context: Context = set.context) {
   const acquirable = new Set(
     filterAcquirableTiers(set.tiers, {
-      market: context.market,
       channel: context.channel,
       subscription: context.subscription,
     }).map((t) => t.id),

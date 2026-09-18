@@ -12,8 +12,6 @@
 
 import type { FlowContent } from './flow'
 import type { FlowLayer } from './layers'
-import type { Journey } from './journey'
-import type { FlowStructure } from './onboarding'
 import type { PipelineDoc } from './pipeline'
 
 export type AddOnPurchaseType = 'one_time_payment' | 'discount_code'
@@ -526,31 +524,6 @@ export interface CardSet {
   review?: ReviewState
   /** Where each section stands in the Market → Dev handoff. */
   pipeline?: PipelineDoc
-  /**
-   * The shape of a flow, before it has any words — keyed by market, or by
-   * market and channel.
-   *
-   * Kept with the content because it is the content's own frame: how many
-   * plans there are decides how many plans need writing, and a structure that
-   * lived somewhere else could describe a set the content does not have.
-   *
-   * Keyed rather than nested so one flow's setup can never reach another's,
-   * which is the whole reason these are separate flows.
-   */
-  flowStructures?: Record<string, FlowStructure>
-  /**
-   * Flows built from those structures, rather than written into the codebase.
-   *
-   * A journey configured in `journeyConfig` is a decision somebody committed;
-   * one here was generated in the tool by whoever set the flow up, and belongs
-   * with their content for the same reason the structure does — it describes a
-   * set that this content, and no other, has to fill.
-   *
-   * Resolved through `allJourneys`, alongside the committed ones, so a
-   * generated flow is picked the same way and by the same rules. Nothing here
-   * can shadow a configured journey: they are separate ids in one list.
-   */
-  journeys?: Journey[]
   /**
    * Words that belong to one market, keyed the way the panel keys its fields
    * (`landing.title`, `cadence.options[0].badge`, `tier:msg-plus.description`).

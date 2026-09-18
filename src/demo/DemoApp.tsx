@@ -52,10 +52,7 @@ import { buildSnapshot } from './coach/review/snapshot'
 import type { Review } from './coach/review/types'
 import { titleFor, type Product } from '../product'
 import { isConfigured } from '../rules/journey'
-import { blankStructure, structureKey, type FlowStructure } from '../rules/onboarding'
-import { generateFlow } from '../rules/generate'
 import { askToEdit, keyForTarget } from '../card/editable'
-import { Onboarding, OnboardingStart } from '../onboarding/Onboarding'
 
 /**
  * The redesigned interface, at /demo.
@@ -268,32 +265,10 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     })
   }
 
-  /* ── Guided setup ──
-     A market and channel nobody has described yet has no flow to preview, so
-     the preview asks for the structure instead of showing an empty frame. The
-     structure is not content: it is what the content will later be poured into.
-
-     Keyed by market and channel together, because the same channel in two
-     markets is two flows that may be laid out differently. */
-  const setupKey = structureKey(store.context.market, store.context.subscription || undefined)
+  /* A market has a journey once the catalogue has given it plans; until
+     then — the live route unreachable, or a country DAZN does not sell in —
+     there is nothing to preview, and the frame says so. */
   const configured = isConfigured(store.journey)
-  const draft = store.set.flowStructures?.[setupKey]
-  /* Open for one flow, remembered with that flow. Moving to another market or
-     channel leaves the wizard — what was on screen was that flow's structure,
-     not this one's — and it leaves it by the remembered key no longer matching
-     rather than by an effect closing it a render late. The draft is kept. */
-  const [setupFor, setSetupFor] = useState<string | null>(null)
-  const setupOpen = setupFor === setupKey
-  const setSetupOpen = (open: boolean) => setSetupFor(open ? setupKey : null)
-
-  const writeStructure = useCallback(
-    (next: FlowStructure) => {
-      store.updateSet({
-        flowStructures: { ...(store.set.flowStructures ?? {}), [setupKey]: next },
-      })
-    },
-    [store, setupKey],
-  )
 
   const journeyPlan = planJourney(store.journey, store.context)
   /*
@@ -693,12 +668,6 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
                 />
               )}
 
-              {configured && draft && (
-                <button type="button" className="demo__reset" onClick={() => setSetupOpen(true)}>
-                  Edit flow structure
-                </button>
-              )}
-
               <button type="button" className="demo__reset" onClick={store.reset}>
                 Reset progress
               </button>
@@ -722,49 +691,22 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
           }}
         >
 
-          {!configured || setupOpen ? (
-            setupOpen && draft ? (
-              <Onboarding
-                draft={draft}
-                logoCatalog={store.set.logoCatalog}
-                featureCatalog={store.set.featureCatalog}
-                onChange={writeStructure}
-                warning={
-                  configured
-                    ? 'This flow already has content. Changing its structure can leave parts of that content with nowhere to go.'
-                    : undefined
-                }
-                onFinish={() => {
-                  /* The last button builds the flow.
-                     Generation is a replace-by-id and an add-if-missing, so
-                     coming back through setup after writing half the content
-                     applies the difference rather than starting again. */
-                  store.updateSet(generateFlow(store.set, draft).set)
-                  setSetupOpen(false)
-                  // Straight into the panel, on the cards: the button said
-                  // "add content", so the next screen is where content is
-                  // added, not a row of frames and a menu to find it from.
-                  setEditing(true)
-                }}
-                onClose={() => setSetupOpen(false)}
-              />
-            ) : (
-              <OnboardingStart
-                marketId={store.context.market}
-                channelId={store.context.subscription || undefined}
-                draft={draft}
-                onStart={() => {
-                  if (!draft) {
-                    writeStructure(blankStructure(store.context.market, store.context.subscription || undefined))
-                  } else if (draft.state !== 'in-progress') {
-                    // A second way in starts at the first question, which is
-                    // the one that makes it a second way in.
-                    writeStructure({ ...draft, step: 1 })
-                  }
-                  setSetupOpen(true)
-                }}
-              />
-            )
+          {!configured ? (
+            <div className="demo__unconfigured">
+              <h2>No plans here yet</h2>
+              <p>
+                {store.live.state === 'loading'
+                  ? 'Asking DAZN for this market’s plans…'
+                  : store.live.state === 'unreachable'
+                    ? `DAZN’s catalogue could not be reached (${store.live.reason}). The plans and journey appear once it can.`
+                    : 'DAZN sells nothing here through its catalogue, and nobody has drawn a journey for it.'}
+              </p>
+              {store.live.state === 'unreachable' && (
+                <button type="button" className="demo__reset" onClick={store.refreshLive}>
+                  Try again
+                </button>
+              )}
+            </div>
           ) : editing && step ? (
             <StepPreview
               journey={store.journey}

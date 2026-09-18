@@ -11,8 +11,8 @@ import {
 } from '../rules/entry'
 import { MARKETS, MARKET_GROUP_LABELS, channelsFor } from '../rules/catalogue'
 import { resolveChannelJourney, resolveMarketJourney } from '../rules/journeyConfig'
-import { allJourneys } from '../rules/generate'
-import { structureKey } from '../rules/onboarding'
+import { allJourneys } from '../rules/liveJourneys'
+import { journeyApplies } from '../rules/journey'
 import { SelectField } from '../components/SelectField'
 
 /**
@@ -102,16 +102,13 @@ export function DefaultPanel({
    * different states and this keeps them apart.
    */
   /*
-   * Flows built here count as written. A journey generated in the setup wizard
-   * lives on the set rather than in `journeyConfig`, so the two lookups below
-   * would keep calling it unconfigured long after somebody configured it.
+   * A market with live plans has a direct journey without anyone writing
+   * one, so the two lookups below — which only know `journeyConfig` — are
+   * asked only when the catalogue has given this situation nothing.
    */
   const journeys = allJourneys(store.set)
-  const built = Boolean(
-    store.set.flowStructures?.[structureKey(context.market, context.subscription || undefined)]
-      ?.state === 'ready',
-  )
-  const resolution = built
+  const live = journeys.some((j) => j.id.startsWith('direct-') && journeyApplies(j, context))
+  const resolution = live
     ? ({ state: 'ok', scope: context.subscription ? 'channel' : 'market', shared: false } as const)
     : context.subscription
       ? resolveChannelJourney(context.market, context.subscription)

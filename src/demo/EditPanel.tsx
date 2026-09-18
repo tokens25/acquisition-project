@@ -191,7 +191,6 @@ export function EditPanel({ store }: { store: CardSetStore }) {
     const priced = (t: { id: string }) => set.offers.filter((o) => o.tierId === t.id)
     return new Set(
       filterAcquirableTiers(set.tiers, {
-        market: context.market,
         channel: context.channel,
         subscription: context.subscription,
       })
