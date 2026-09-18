@@ -29,7 +29,7 @@ import { SourceTabs } from './SourceTabs'
 import { FieldGroup } from './FieldGroup'
 import { MarkedField } from '../components/FieldMark'
 import { cadenceKey, tierKey } from '../rules/pipeline'
-import { EDIT_EVENT, revealField, type EditRequest } from '../card/editable'
+import { askToReveal, EDIT_EVENT, revealField, type EditRequest } from '../card/editable'
 
 /** Sentinel for "write a new line here" in the benefit picker. */
 const CUSTOM_FEATURE = '__custom__'
@@ -103,7 +103,11 @@ export function EditPanel({ store }: { store: CardSetStore }) {
    */
   const situationKey = `${context.market}|${context.channel}|${context.subscription ?? ''}`
   const [pick, setPick] = useState<{ id: string; at: string } | null>(null)
-  const setOpenTier = (id: string) => setPick({ id, at: situationKey })
+  const setOpenTier = (id: string) => {
+    setPick({ id, at: situationKey })
+    // After the render, so a plan the row is not yet drawing is there to find.
+    if (id) window.requestAnimationFrame(() => askToReveal(id))
+  }
 
   /*
    * Someone clicked a part of a card in the preview.

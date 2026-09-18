@@ -6,6 +6,7 @@ import { isWholeInView } from '../components/acquisition/viewport'
 import type { CardSet, Context } from '../rules/content'
 import { marketFor, resolveSet } from '../rules/resolve'
 import { RuledCard } from './RuledCard'
+import { REVEAL_EVENT } from './editable'
 import chevronLeft from '../assets/icons/nav-chevron-left-md.svg?raw'
 import chevronRight from '../assets/icons/nav-chevron-right-md.svg?raw'
 import { Icon } from '../components/Icon'
@@ -196,6 +197,31 @@ export function CardSetView({
     const step = (card?.offsetWidth ?? row.clientWidth) + gap
     row.scrollBy({ left: direction * step, behavior: 'smooth' })
   }, [])
+
+  // The panel opened a plan: bring its card into the row's view. Measured
+  // against the row rather than `scrollIntoView`, which would also drag the
+  // page and the pane around the card, and a plan opened by name should move
+  // only the row it sits in.
+  useEffect(() => {
+    const row = ref.current
+    if (!row) return
+    const onReveal = (e: Event) => {
+      const tierId = (e as CustomEvent<string>).detail
+      const card = Array.from(row.querySelectorAll<HTMLElement>(':scope > .acq-card')).find(
+        (c) => c.dataset.tierId === tierId,
+      )
+      if (!card) return
+      const left = card.offsetLeft - row.offsetLeft
+      const right = left + card.offsetWidth
+      const view = row.scrollLeft
+      const viewEnd = view + row.clientWidth
+      if (left >= view && right <= viewEnd) return
+      const target = left < view ? left : right - row.clientWidth
+      row.scrollTo({ left: Math.max(0, target), behavior: 'smooth' })
+    }
+    window.addEventListener(REVEAL_EVENT, onReveal)
+    return () => window.removeEventListener(REVEAL_EVENT, onReveal)
+  }, [cards])
 
   // A wheel turned over the row moves it sideways. The row is the only thing
   // here that scrolls horizontally, and a mouse wheel has no sideways; without

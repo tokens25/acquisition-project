@@ -28,6 +28,20 @@ export function askToEdit(request: EditRequest): void {
   window.dispatchEvent(new CustomEvent<EditRequest>(EDIT_EVENT, { detail: request }))
 }
 
+/**
+ * The other direction: the panel opened a plan, and the row should show it.
+ *
+ * A row wider than the pane hides its fourth card, and a chip that opens that
+ * card's fields while the card itself stays out of sight leaves the editor
+ * writing into the dark. The row that carries the plan scrolls it into view;
+ * a row that does not carry it does nothing.
+ */
+export const REVEAL_EVENT = 'acq:reveal-plan'
+
+export function askToReveal(tierId: string): void {
+  window.dispatchEvent(new CustomEvent<string>(REVEAL_EVENT, { detail: tierId }))
+}
+
 /** Position of an element among the siblings that share its class. */
 function indexAmong(el: Element, selector: string): number {
   const parent = el.parentElement

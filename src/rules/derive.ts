@@ -115,6 +115,11 @@ export function defaultExplainer(
 ): string {
   const unit = cadence.toLocaleLowerCase(market.locale)
   const price = formatMoney(offer.standardPrice, market.locale, market.currency)
+  // No months on the offer means the lower price is not a run-in: it is the
+  // price, against the one it undercuts. "For the first 0 months" is a claim
+  // nobody makes.
+  if (!(offer.introMonths > 0)) return `Instead of ${price}/${unit}`
+  if (offer.introMonths === 1) return `For the first month, then ${price}/${unit}`
   return `For the first ${offer.introMonths} months, then ${price}/${unit}`
 }
 
