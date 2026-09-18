@@ -3516,7 +3516,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_be",
-        "fetchedAt": "2026-09-18T15:46:14.012Z"
+        "fetchedAt": "2026-09-18T15:55:19.915Z"
       },
       "limits": {
         "streams": 1,
@@ -3871,7 +3871,7 @@
       "source": {
         "product": "NFL",
         "entitlementSetId": "tier_nfl_pro",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4294,7 +4294,7 @@
       "source": {
         "product": "NFL",
         "entitlementSetId": "tier_nfl_ultimate",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4682,7 +4682,7 @@
       "source": {
         "product": "FIBA",
         "entitlementSetId": "tier_fiba_pro",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5105,7 +5105,7 @@
       "source": {
         "product": "FIBA",
         "entitlementSetId": "tier_fiba_ultimate",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5146,7 +5146,7 @@
       "source": {
         "product": "CollegeSports",
         "entitlementSetId": "tier_collegesports_pro",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5186,7 +5186,7 @@
       "source": {
         "product": "CollegeSports",
         "entitlementSetId": "tier_collegesports_ultimate",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5224,7 +5224,7 @@
       "source": {
         "product": "RallyTV",
         "entitlementSetId": "tier_rallytv_pro",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5262,7 +5262,7 @@
       "source": {
         "product": "NationalLeagueTV",
         "entitlementSetId": "tier_nationalleaguetv_pro",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5311,7 +5311,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_at",
-        "fetchedAt": "2026-09-18T15:46:14.062Z"
+        "fetchedAt": "2026-09-18T15:55:19.976Z"
       },
       "limits": {
         "streams": 2,
@@ -5357,7 +5357,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_at",
-        "fetchedAt": "2026-09-18T15:46:14.062Z"
+        "fetchedAt": "2026-09-18T15:55:19.976Z"
       },
       "limits": {
         "streams": 2,
@@ -5391,7 +5391,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_at",
-        "fetchedAt": "2026-09-18T15:46:14.062Z",
+        "fetchedAt": "2026-09-18T15:55:19.976Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5426,7 +5426,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_at",
-        "fetchedAt": "2026-09-18T15:46:14.062Z",
+        "fetchedAt": "2026-09-18T15:55:19.976Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5595,7 +5595,7 @@
       "source": {
         "product": "NHL",
         "entitlementSetId": "tier_nhl_pro",
-        "fetchedAt": "2026-09-18T15:46:14.413Z",
+        "fetchedAt": "2026-09-18T15:55:20.358Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5788,7 +5788,7 @@
       "source": {
         "product": "NHL",
         "entitlementSetId": "tier_nhl_ultimate",
-        "fetchedAt": "2026-09-18T15:46:14.413Z",
+        "fetchedAt": "2026-09-18T15:55:20.358Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5842,7 +5842,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_de",
-        "fetchedAt": "2026-09-18T15:46:14.116Z"
+        "fetchedAt": "2026-09-18T15:55:20.030Z"
       },
       "limits": {
         "streams": 1,
@@ -5891,7 +5891,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_supersport_de",
-        "fetchedAt": "2026-09-18T15:46:14.116Z"
+        "fetchedAt": "2026-09-18T15:55:20.030Z"
       },
       "limits": {
         "streams": 2,
@@ -5940,7 +5940,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_de",
-        "fetchedAt": "2026-09-18T15:46:14.116Z"
+        "fetchedAt": "2026-09-18T15:55:20.030Z"
       },
       "limits": {
         "streams": 2,
@@ -5972,7 +5972,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_de",
-        "fetchedAt": "2026-09-18T15:46:14.116Z",
+        "fetchedAt": "2026-09-18T15:55:20.030Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -6020,7 +6020,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_de_wc_2",
-        "fetchedAt": "2026-09-18T15:46:14.116Z"
+        "fetchedAt": "2026-09-18T15:55:20.030Z"
       },
       "limits": {
         "streams": 3,
@@ -6053,7 +6053,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_de",
-        "fetchedAt": "2026-09-18T15:46:14.116Z",
+        "fetchedAt": "2026-09-18T15:55:20.030Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6088,7 +6088,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_de",
-        "fetchedAt": "2026-09-18T15:46:14.116Z",
+        "fetchedAt": "2026-09-18T15:55:20.030Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6125,7 +6125,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_li",
-        "fetchedAt": "2026-09-18T15:46:14.156Z"
+        "fetchedAt": "2026-09-18T15:55:20.078Z"
       },
       "limits": {
         "streams": 2,
@@ -6160,7 +6160,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_lu",
-        "fetchedAt": "2026-09-18T15:46:14.176Z"
+        "fetchedAt": "2026-09-18T15:55:20.114Z"
       },
       "limits": {
         "streams": 2,
@@ -6207,7 +6207,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_ch",
-        "fetchedAt": "2026-09-18T15:46:14.194Z"
+        "fetchedAt": "2026-09-18T15:55:20.133Z"
       },
       "limits": {
         "streams": 2,
@@ -6254,7 +6254,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_supersports_ch",
-        "fetchedAt": "2026-09-18T15:46:14.194Z"
+        "fetchedAt": "2026-09-18T15:55:20.133Z"
       },
       "limits": {
         "streams": 2,
@@ -6300,7 +6300,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_ch",
-        "fetchedAt": "2026-09-18T15:46:14.194Z"
+        "fetchedAt": "2026-09-18T15:55:20.133Z"
       },
       "limits": {
         "streams": 2,
@@ -6345,7 +6345,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_wc_2_ch",
-        "fetchedAt": "2026-09-18T15:46:14.194Z"
+        "fetchedAt": "2026-09-18T15:55:20.133Z"
       },
       "limits": {
         "streams": 3,
@@ -6378,7 +6378,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_ch",
-        "fetchedAt": "2026-09-18T15:46:14.194Z",
+        "fetchedAt": "2026-09-18T15:55:20.133Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6413,7 +6413,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_ch",
-        "fetchedAt": "2026-09-18T15:46:14.194Z",
+        "fetchedAt": "2026-09-18T15:55:20.133Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6460,7 +6460,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_yp_fr",
-        "fetchedAt": "2026-09-18T15:46:14.214Z"
+        "fetchedAt": "2026-09-18T15:55:20.153Z"
       },
       "limits": {
         "streams": 1,
@@ -6507,7 +6507,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_super_sports_fr",
-        "fetchedAt": "2026-09-18T15:46:14.214Z"
+        "fetchedAt": "2026-09-18T15:55:20.153Z"
       },
       "limits": {
         "streams": 1,
@@ -6548,7 +6548,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_leagueoneplus_fr",
-        "fetchedAt": "2026-09-18T15:46:14.214Z"
+        "fetchedAt": "2026-09-18T15:55:20.153Z"
       },
       "limits": {
         "streams": 2,
@@ -6593,7 +6593,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_fr",
-        "fetchedAt": "2026-09-18T15:46:14.214Z"
+        "fetchedAt": "2026-09-18T15:55:20.153Z"
       },
       "limits": {
         "streams": 2,
@@ -6633,7 +6633,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_fr",
-        "fetchedAt": "2026-09-18T15:46:14.214Z"
+        "fetchedAt": "2026-09-18T15:55:20.153Z"
       },
       "limits": {
         "streams": null,
@@ -6672,7 +6672,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_fr",
-        "fetchedAt": "2026-09-18T15:46:14.214Z"
+        "fetchedAt": "2026-09-18T15:55:20.153Z"
       },
       "limits": {
         "streams": null,
@@ -6716,7 +6716,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bronze_it",
-        "fetchedAt": "2026-09-18T15:46:14.233Z"
+        "fetchedAt": "2026-09-18T15:55:20.173Z"
       },
       "limits": {
         "streams": 2,
@@ -6758,7 +6758,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_goalpass_it",
-        "fetchedAt": "2026-09-18T15:46:14.233Z"
+        "fetchedAt": "2026-09-18T15:55:20.173Z"
       },
       "limits": {
         "streams": 2,
@@ -6793,7 +6793,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_it",
-        "fetchedAt": "2026-09-18T15:46:14.233Z",
+        "fetchedAt": "2026-09-18T15:55:20.173Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6831,7 +6831,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_myclubpass_it",
-        "fetchedAt": "2026-09-18T15:46:14.233Z",
+        "fetchedAt": "2026-09-18T15:55:20.173Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6889,7 +6889,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_it",
-        "fetchedAt": "2026-09-18T15:46:14.233Z"
+        "fetchedAt": "2026-09-18T15:55:20.173Z"
       },
       "limits": {
         "streams": 2,
@@ -6946,7 +6946,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_it",
-        "fetchedAt": "2026-09-18T15:46:14.233Z"
+        "fetchedAt": "2026-09-18T15:55:20.173Z"
       },
       "limits": {
         "streams": 2,
@@ -6985,7 +6985,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_full_nflpro_it",
-        "fetchedAt": "2026-09-18T15:46:14.233Z"
+        "fetchedAt": "2026-09-18T15:55:20.173Z"
       },
       "limits": {
         "streams": null,
@@ -7024,7 +7024,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_full_nflult_it",
-        "fetchedAt": "2026-09-18T15:46:14.233Z"
+        "fetchedAt": "2026-09-18T15:55:20.173Z"
       },
       "limits": {
         "streams": null,
@@ -7058,7 +7058,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_vito_jp",
-        "fetchedAt": "2026-09-18T15:46:14.251Z"
+        "fetchedAt": "2026-09-18T15:55:20.190Z"
       },
       "limits": {
         "streams": 2,
@@ -7095,7 +7095,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baseball_jp",
-        "fetchedAt": "2026-09-18T15:46:14.251Z"
+        "fetchedAt": "2026-09-18T15:55:20.190Z"
       },
       "limits": {
         "streams": 2,
@@ -7134,7 +7134,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_jp",
-        "fetchedAt": "2026-09-18T15:46:14.251Z"
+        "fetchedAt": "2026-09-18T15:55:20.190Z"
       },
       "limits": {
         "streams": 2,
@@ -7173,7 +7173,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_std_nflpro_jp",
-        "fetchedAt": "2026-09-18T15:46:14.251Z"
+        "fetchedAt": "2026-09-18T15:55:20.190Z"
       },
       "limits": {
         "streams": null,
@@ -7211,7 +7211,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_std_nflult_jp",
-        "fetchedAt": "2026-09-18T15:46:14.251Z"
+        "fetchedAt": "2026-09-18T15:55:20.190Z"
       },
       "limits": {
         "streams": null,
@@ -7256,7 +7256,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_pt",
-        "fetchedAt": "2026-09-18T15:46:14.270Z"
+        "fetchedAt": "2026-09-18T15:55:20.210Z"
       },
       "limits": {
         "streams": 2,
@@ -7306,7 +7306,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bronze_pt",
-        "fetchedAt": "2026-09-18T15:46:14.270Z"
+        "fetchedAt": "2026-09-18T15:55:20.210Z"
       },
       "limits": {
         "streams": 2,
@@ -7357,7 +7357,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_pt",
-        "fetchedAt": "2026-09-18T15:46:14.270Z"
+        "fetchedAt": "2026-09-18T15:55:20.210Z"
       },
       "limits": {
         "streams": 2,
@@ -7396,7 +7396,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_us_es",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7407,11 +7407,14 @@
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
-      }
+      },
+      "tabs": [
+        "standard-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-us-es-yp",
-      "planName": "Made in USA · Youth",
+      "planName": "Made in USA",
       "description": "El plan para quienes vibran con el deporte estadounidense. Desde las canastas imposibles de la NBA hasta la potencia de los motores de la NASCAR, pasando por la emoción de los mejores touchdowns de la NFL. Todo en español y en un solo lugar.",
       "features": [
         "f-nba-180-partidos-de-la-liga-regular-all--171wp19",
@@ -7427,14 +7430,14 @@
       "logoTotal": 2,
       "highlighted": false,
       "displayOrder": 5,
-      "status": "legacy",
+      "status": "live",
       "channel": "direct",
       "visibleToPartners": false,
       "overrides": [],
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_us_es_yp",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7445,7 +7448,10 @@
         "ppvs": 0,
         "multiview": false,
         "video": null
-      }
+      },
+      "tabs": [
+        "youth-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-motor-es",
@@ -7481,7 +7487,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_es",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7492,11 +7498,14 @@
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
-      }
+      },
+      "tabs": [
+        "standard-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-motor-es-yp",
-      "planName": "Motor · Youth",
+      "planName": "Motor",
       "description": "Para los amantes de la adrenalina sobre ruedas: disfruta de todo el motor en directo y a la carta, y descubre las historias detrás del volante con previas, análisis, programas especiales y documentales.",
       "features": [
         "f-todo-el-mundial-de-formula-1-pemgfo",
@@ -7516,14 +7525,14 @@
       "logoTotal": 4,
       "highlighted": false,
       "displayOrder": 10,
-      "status": "legacy",
+      "status": "live",
       "channel": "direct",
       "visibleToPartners": false,
       "overrides": [],
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_es_yp",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7534,11 +7543,14 @@
         "ppvs": 0,
         "multiview": false,
         "video": null
-      }
+      },
+      "tabs": [
+        "youth-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-baloncesto-es-yp",
-      "planName": "Baloncesto · Youth",
+      "planName": "Baloncesto",
       "description": "Para los  auténticos aficionados al baloncesto. Este plan te sumerge en el mundo de la cancha con partidos en directo y a la carta, análisis tácticos, entrevistas exclusivas y contenido especial que va más allá del directo.",
       "features": [
         "f-todas-las-competiciones-acb-liga-endesa--kix1vy",
@@ -7556,14 +7568,14 @@
       "logoTotal": 3,
       "highlighted": false,
       "displayOrder": 15,
-      "status": "legacy",
+      "status": "live",
       "channel": "direct",
       "visibleToPartners": false,
       "overrides": [],
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baloncesto_es_yp",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7574,7 +7586,10 @@
         "ppvs": 0,
         "multiview": false,
         "video": null
-      }
+      },
+      "tabs": [
+        "youth-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-baloncesto-es",
@@ -7604,7 +7619,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baloncesto_es",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7615,11 +7630,14 @@
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
-      }
+      },
+      "tabs": [
+        "standard-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-futbol-es-yp",
-      "planName": "Fútbol · Youth",
+      "planName": "Fútbol",
       "description": "Vive todas las grandes ligas de Europa en directo y a la carta, previas detalladas, análisis tácticos, post partidos y documentales que muestran el lado más humano del fútbol.",
       "features": [
         "f-laliga-5-partidos-en-35-de-las-38-jornad-6bp8vu",
@@ -7640,14 +7658,14 @@
       "logoTotal": 6,
       "highlighted": false,
       "displayOrder": 20,
-      "status": "legacy",
+      "status": "live",
       "channel": "direct",
       "visibleToPartners": false,
       "overrides": [],
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_futbol_es_yp",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7658,7 +7676,10 @@
         "ppvs": 0,
         "multiview": false,
         "video": null
-      }
+      },
+      "tabs": [
+        "youth-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-futbol-es",
@@ -7693,7 +7714,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_futbol_es",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7705,11 +7726,14 @@
         "multiview": false,
         "video": "HD"
       },
-      "badge": "Más vendido"
+      "badge": "Más vendido",
+      "tabs": [
+        "standard-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-premium-es-yp",
-      "planName": "Premium · Youth",
+      "planName": "Premium",
       "description": "El plan más completo para quienes no quieren perderse nada. Reúne todo el deporte de DAZN en un solo lugar, con la mejor experiencia en directo y a la carta. El acceso definitivo para disfrutar del mejor deporte sin límites.....",
       "features": [
         "f-disfruta-todo-el-deporte-de-dazn-con-el--1ivy5dj",
@@ -7734,16 +7758,16 @@
         "logo-eredivisie"
       ],
       "logoTotal": 9,
-      "highlighted": false,
+      "highlighted": true,
       "displayOrder": 45,
-      "status": "legacy",
+      "status": "live",
       "channel": "direct",
       "visibleToPartners": false,
       "overrides": [],
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_premium_es_yp",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7755,7 +7779,10 @@
         "multiview": false,
         "video": null
       },
-      "badge": "Oferta Especial"
+      "badge": "Oferta Especial",
+      "tabs": [
+        "youth-offers-cta"
+      ]
     },
     {
       "id": "dazn-tier-premium-es",
@@ -7795,7 +7822,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_premium_es",
-        "fetchedAt": "2026-09-18T15:46:14.288Z"
+        "fetchedAt": "2026-09-18T15:55:20.232Z"
       },
       "limits": {
         "streams": 2,
@@ -7807,7 +7834,10 @@
         "multiview": false,
         "video": "HD"
       },
-      "badge": "Oferta Especial"
+      "badge": "Oferta Especial",
+      "tabs": [
+        "standard-offers-cta"
+      ]
     },
     {
       "id": "dazn-base-ent-set",
@@ -7954,7 +7984,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "base_ent_set",
-        "fetchedAt": "2026-09-18T15:46:14.463Z",
+        "fetchedAt": "2026-09-18T15:55:20.415Z",
         "copy": "atlas"
       },
       "limits": {
@@ -7988,7 +8018,7 @@
         "logo-carabao-cup"
       ],
       "logoTotal": 8,
-      "highlighted": false,
+      "highlighted": true,
       "displayOrder": 10,
       "status": "live",
       "channel": "direct",
@@ -7997,7 +8027,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_ca",
-        "fetchedAt": "2026-09-18T15:46:14.327Z"
+        "fetchedAt": "2026-09-18T15:55:20.270Z"
       },
       "limits": {
         "streams": 2,
@@ -8009,7 +8039,10 @@
         "multiview": false,
         "video": "HD"
       },
-      "badge": "Recommended"
+      "badge": "Recommended",
+      "tabs": [
+        "standard-tier-cta"
+      ]
     },
     {
       "id": "dazn-tier-daznplus-ca",
@@ -8042,7 +8075,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_daznplus_ca",
-        "fetchedAt": "2026-09-18T15:46:14.327Z"
+        "fetchedAt": "2026-09-18T15:55:20.270Z"
       },
       "limits": {
         "streams": 2,
@@ -8053,7 +8086,10 @@
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
-      }
+      },
+      "tabs": [
+        "standard-tier-cta"
+      ]
     },
     {
       "id": "dazn-tier-dazn-ca-ul",
@@ -8084,7 +8120,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_ca_ul",
-        "fetchedAt": "2026-09-18T15:46:14.327Z"
+        "fetchedAt": "2026-09-18T15:55:20.270Z"
       },
       "limits": {
         "streams": 3,
@@ -8096,7 +8132,10 @@
         "multiview": false,
         "video": "HD"
       },
-      "badge": "Recommended"
+      "badge": "Recommended",
+      "tabs": [
+        "ultimate-tier-cta"
+      ]
     },
     {
       "id": "dazn-tier-daznplus-ca-ul",
@@ -8129,7 +8168,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_daznplus_ca_ul",
-        "fetchedAt": "2026-09-18T15:46:14.327Z"
+        "fetchedAt": "2026-09-18T15:55:20.270Z"
       },
       "limits": {
         "streams": 3,
@@ -8140,7 +8179,10 @@
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
-      }
+      },
+      "tabs": [
+        "ultimate-tier-cta"
+      ]
     },
     {
       "id": "dazn-tier-ult",
@@ -8251,7 +8293,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_ult",
-        "fetchedAt": "2026-09-18T15:46:14.463Z"
+        "fetchedAt": "2026-09-18T15:55:20.415Z"
       },
       "limits": {
         "streams": 2,
@@ -18118,26 +18160,54 @@
   "stepId": "",
   "device": "mobile",
   "live": {
-    "be": "2026-09-18T15:46:14.012Z",
-    "at": "2026-09-18T15:46:14.062Z",
-    "de": "2026-09-18T15:46:14.116Z",
-    "li": "2026-09-18T15:46:14.156Z",
-    "lu": "2026-09-18T15:46:14.176Z",
-    "ch": "2026-09-18T15:46:14.194Z",
-    "fr": "2026-09-18T15:46:14.214Z",
-    "it": "2026-09-18T15:46:14.233Z",
-    "jp": "2026-09-18T15:46:14.251Z",
-    "pt": "2026-09-18T15:46:14.270Z",
-    "es": "2026-09-18T15:46:14.288Z",
-    "tw": "2026-09-18T15:46:14.309Z",
-    "ca": "2026-09-18T15:46:14.327Z",
-    "ie": "2026-09-18T15:46:14.344Z",
-    "mx": "2026-09-18T15:46:14.362Z",
-    "nl": "2026-09-18T15:46:14.381Z",
-    "pl": "2026-09-18T15:46:14.396Z",
-    "gb": "2026-09-18T15:46:14.413Z",
-    "us": "2026-09-18T15:46:14.430Z",
-    "au": "2026-09-18T15:46:14.447Z",
-    "br": "2026-09-18T15:46:14.463Z"
+    "be": "2026-09-18T15:55:19.915Z",
+    "at": "2026-09-18T15:55:19.976Z",
+    "de": "2026-09-18T15:55:20.030Z",
+    "li": "2026-09-18T15:55:20.078Z",
+    "lu": "2026-09-18T15:55:20.114Z",
+    "ch": "2026-09-18T15:55:20.133Z",
+    "fr": "2026-09-18T15:55:20.153Z",
+    "it": "2026-09-18T15:55:20.173Z",
+    "jp": "2026-09-18T15:55:20.190Z",
+    "pt": "2026-09-18T15:55:20.210Z",
+    "es": "2026-09-18T15:55:20.232Z",
+    "tw": "2026-09-18T15:55:20.251Z",
+    "ca": "2026-09-18T15:55:20.270Z",
+    "ie": "2026-09-18T15:55:20.288Z",
+    "mx": "2026-09-18T15:55:20.306Z",
+    "nl": "2026-09-18T15:55:20.322Z",
+    "pl": "2026-09-18T15:55:20.340Z",
+    "gb": "2026-09-18T15:55:20.358Z",
+    "us": "2026-09-18T15:55:20.380Z",
+    "au": "2026-09-18T15:55:20.398Z",
+    "br": "2026-09-18T15:55:20.415Z"
+  },
+  "planTabsByMarket": {
+    "es": [
+      {
+        "id": "standard-offers-cta",
+        "name": "Tarifas Estándar",
+        "style": "plain",
+        "preselected": true
+      },
+      {
+        "id": "youth-offers-cta",
+        "name": "Tarifa Joven -30",
+        "style": "celebratory"
+      }
+    ],
+    "ca": [
+      {
+        "id": "standard-tier-cta",
+        "name": "Standard",
+        "style": "plain"
+      },
+      {
+        "id": "ultimate-tier-cta",
+        "name": "Ultimate",
+        "style": "celebratory",
+        "preselected": true
+      }
+    ]
   }
 }

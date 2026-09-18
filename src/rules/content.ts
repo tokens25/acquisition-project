@@ -92,6 +92,8 @@ export interface PlanTab {
    * Absent on tabs written before the choice existed; see `styleOf`.
    */
   style?: 'plain' | 'celebratory'
+  /** The tab the picker opens on. Absent on every tab means the first. */
+  preselected?: boolean
 }
 
 /**

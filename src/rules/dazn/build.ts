@@ -25,6 +25,7 @@ import type {
   FeatureEntry,
   MarketConfig,
   PlanLimits,
+  PlanTab,
   Tier,
   TierPatch,
 } from '../content'
@@ -170,6 +171,68 @@ function logosOf(content: Content, item: ContentfulEntry): CatalogEntry[] {
     })
 }
 
+/** The tier group a market's DAZN page draws — the best-scoring one for it. */
+function groupFor(content: Content | null, market: string): ContentfulEntry | null {
+  if (!content) return null
+  let best: { score: number; group: ContentfulEntry } | null = null
+  for (const g of content.groups) {
+    const f = g.fields
+    if (!arr<string>(f.env).includes('production')) continue
+    if (!arr<string>(f.pageIds).includes('DAZN')) continue
+    const tags = arr<string>(f.tags).map(norm)
+    const name = norm(f.displayName)
+    let score = 0
+    if (tags.includes(market)) score += 100
+    else if (tags.some((t) => t === 'common' || t.endsWith('common'))) score += 40
+    else continue
+    if (/exclude|promo|test|welcome|black ?friday|stag/.test(name)) score -= 30
+    if (/sign ?up|tiering unified|prod/.test(name)) score += 10
+    if (!best || score > best.score) best = { score, group: g }
+  }
+  return best?.group ?? null
+}
+
+/** A CMS label, without the ##markdown## and zero-width marks it comes wrapped in. */
+const label = (x: unknown) => str(x).replace(/#/g, '').replace(/\u200b/g, '').trim()
+
+/**
+ * The tabs over a market's plan picker, as the CMS draws them.
+ *
+ * A tier group with `showTierTypeSwitcher` lists `tierTypes`: each one a
+ * tab with a label, a tier type (Standard, or Ultimate for the gold one),
+ * and the entitlement sets it shows — Spain's "Tarifas Estándar" and
+ * "Tarifa Joven -30", Canada's "Standard" and "Ultimate". `defaultTierType`
+ * says which the picker opens on. A group without the switcher has no tabs,
+ * and the plans sit in one row.
+ */
+function tabsOf(content: Content | null, market: string): { tabs: PlanTab[]; onTab: Map<string, string[]> } | null {
+  const group = groupFor(content, market)
+  if (!group || !group.fields.showTierTypeSwitcher) return null
+  const defaultType = str(group.fields.defaultTierType)
+  const tabs: PlanTab[] = []
+  const onTab = new Map<string, string[]>() // entitlement set → tab ids
+  for (const link of arr<ContentfulLink>(group.fields.tierTypes)) {
+    const plan = content!.entries.get(link.sys.id)
+    if (!plan || plan.sys.contentType.sys.id !== 'LPBillingPlans') continue
+    const f = plan.fields
+    const sets = arr<unknown>(f.tiers).filter((x): x is string => typeof x === 'string')
+    if (sets.length === 0) continue
+    const id = slug(str(f.itemId) || label(f.label) || `tab-${tabs.length + 1}`)
+    const type = str(f.tierType)
+    tabs.push({
+      id,
+      name: label(f.label) || label(f.displayTitle) || type || id,
+      style: type === 'Ultimate' ? 'celebratory' : 'plain',
+      ...(defaultType && type === defaultType ? { preselected: true } : {}),
+    })
+    for (const raw of sets) {
+      const entSet = raw.split('#')[0]
+      onTab.set(entSet, [...(onTab.get(entSet) ?? []), id])
+    }
+  }
+  return tabs.length > 1 ? { tabs, onTab } : null
+}
+
 /**
  * Terms the CMS attaches to a way of paying for a plan.
  *
@@ -273,6 +336,8 @@ export interface LiveMarket {
   featureCatalog: FeatureEntry[]
   logoCatalog: CatalogEntry[]
   fetchedAt: string
+  /** The tabs the CMS draws over this market's picker; absent for one row. */
+  tabs?: PlanTab[]
   /** What the words fell back on, per plan, for the report. */
   notes: string[]
 }
@@ -443,6 +508,22 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
     }
   }
 
+  /* The tabs the DAZN page draws, and which plans sit on which. A plan the
+     CMS puts on a tab is on sale from the picker — the youth plans in Spain
+     are sold from their own tab, not tucked behind the standard ones. */
+  const tabbed = tabsOf(local, market) ?? tabsOf(base, market)
+  const onATab = new Set<string>()
+  if (tabbed) {
+    for (const tier of tiers.values()) {
+      if (tier.source!.product !== 'DAZN') continue
+      const ids = tabbed.onTab.get(tier.source!.entitlementSetId)
+      if (ids) {
+        tier.tabs = ids
+        onATab.add(tier.id)
+      }
+    }
+  }
+
   /* Names the APIs leave implicit. */
   for (const tier of tiers.values()) {
     const ent = tier.source!.entitlementSetId
@@ -454,14 +535,17 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
      * on the picker, named for what it holds.
      */
     if (/_yp$/.test(ent)) {
-      tier.status = 'legacy'
-      // Drawn as a line on the parent's card, never as a card of its own — so
-      // it takes no gold and no partner storefront.
-      tier.highlighted = false
-      tier.visibleToPartners = false
+      // On a tab of its own — Spain's "Tarifa Joven -30" — it is a card like
+      // any other, under the plan's own name. Otherwise it is a line on the
+      // parent's card: legacy, no gold, no partner storefront.
       const parent = tiers.get(tier.id.replace(/-yp$/, ''))
       if (!tier.planName) tier.planName = parent?.planName ?? ''
-      if (tier.planName && !/Youth$/.test(tier.planName)) tier.planName += ' · Youth'
+      tier.visibleToPartners = false
+      if (!onATab.has(tier.id)) {
+        tier.status = 'legacy'
+        tier.highlighted = false
+        if (tier.planName && !/Youth$/.test(tier.planName)) tier.planName += ' · Youth'
+      }
       if (!tier.description) tier.description = parent?.description ?? ''
       if (tier.features.length === 0 && parent) tier.features = parent.features
     }
@@ -524,12 +608,17 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
   }
 
   /* One highlighted plan per row (S-1): a row is one product's live plans
-     here, so the highest-ranked keeps it. */
-  for (const product of products) {
-    const row = [...tiers.values()]
-      .filter((t) => t.source!.product === product && t.status === 'live' && t.highlighted)
-      .sort((a, b) => b.displayOrder - a.displayOrder)
-    for (const t of row.slice(1)) t.highlighted = false
+     on one tab, so the highest-ranked on each keeps it. */
+  const rows = new Map<string, Tier[]>()
+  for (const t of tiers.values()) {
+    if (t.status !== 'live' || !t.highlighted) continue
+    for (const tab of t.tabs?.length ? t.tabs : ['']) {
+      const key = `${t.source!.product}|${tab}`
+      rows.set(key, [...(rows.get(key) ?? []), t])
+    }
+  }
+  for (const row of rows.values()) {
+    for (const t of row.sort((a, b) => b.displayOrder - a.displayOrder).slice(1)) t.highlighted = false
   }
 
   return {
@@ -545,6 +634,7 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
     featureCatalog: [...features.values()],
     logoCatalog: [...logos.values()],
     fetchedAt: pull.fetchedAt,
+    ...(tabbed ? { tabs: tabbed.tabs } : {}),
     notes,
   }
 }
@@ -552,7 +642,7 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
 /* ── Folding a market into the set ───────────────────────────────────── */
 
 /** The plan facts DAZN owns. Everything else on a tier is the tool's. */
-const FACTS = ['planName', 'description', 'features', 'logoTiles', 'logoTotal', 'highlighted', 'badge', 'status'] as const
+const FACTS = ['planName', 'description', 'features', 'logoTiles', 'logoTotal', 'highlighted', 'badge', 'status', 'tabs'] as const
 type Fact = (typeof FACTS)[number]
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null)
@@ -609,9 +699,17 @@ export function mergeLive(set: CardSet, live: LiveMarket): CardSet {
     })
   const markets = [...set.markets.filter((m) => m.code !== market), live.market]
 
+  // The tabs the CMS draws over this market's picker replace whatever the
+  // market had; a market the CMS draws in one row keeps its own tabs, if
+  // anyone wrote some.
+  const planTabsByMarket = live.tabs
+    ? { ...(set.planTabsByMarket ?? {}), [market]: live.tabs }
+    : set.planTabsByMarket
+
   return {
     ...set,
     markets,
+    ...(planTabsByMarket ? { planTabsByMarket } : {}),
     cadences: uniq([...set.cadences, ...CADENCES]),
     featureCatalog: replace(set.featureCatalog, live.featureCatalog),
     logoCatalog: replace(set.logoCatalog, keepUploaded(set.logoCatalog, live.logoCatalog)),

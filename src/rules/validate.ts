@@ -2,6 +2,7 @@ import type { CadenceOffer, CardSet, Context, Tier } from './content'
 import { deriveCard } from './derive'
 import { allContexts, marketFor, resolveOffer, resolveSet, resolveTier } from './resolve'
 import { CHANNELS, MARKETS } from './catalogue'
+import { tabsOf, tiersOnTab } from './tabs'
 
 /**
  * The rules that can reject a publish.
@@ -104,8 +105,14 @@ function checkTier(set: CardSet, tier: Tier, offer: CadenceOffer, context: Conte
 
 export function validateContext(set: CardSet, context: Context): Violation[] {
   const cards = resolveSet(set, context)
+  // One highlighted plan per screen. A market with tabs shows one tab at a
+  // time, so each tab is its own row and may carry its own gold card.
+  const tabs = tabsOf(set, context.market)
+  const rows = tabs.length
+    ? tabs.map((tab) => tiersOnTab(cards.map((c) => c.tier), tab.id))
+    : [cards.map((c) => c.tier)]
   return [
-    ...checkS1(cards.map((c) => c.tier)),
+    ...rows.flatMap((row) => checkS1(row)),
     ...cards.flatMap(({ tier, offer }) => checkTier(set, tier, offer, context)),
   ]
 }

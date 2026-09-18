@@ -79,14 +79,14 @@ dazn-tier-motor-pt: "MOTORES" · 0 market patches
 dazn-tier-bronze-pt: "BASE" · 0 market patches
 dazn-tier-silver-pt: "TOTAL" · 0 market patches
 dazn-tier-us-es: "Made in USA" · 0 market patches
-dazn-tier-us-es-yp: "Made in USA · Youth" [legacy] · 0 market patches
+dazn-tier-us-es-yp: "Made in USA" · 0 market patches
 dazn-tier-motor-es: "Motor" · 0 market patches
-dazn-tier-motor-es-yp: "Motor · Youth" [legacy] · 0 market patches
-dazn-tier-baloncesto-es-yp: "Baloncesto · Youth" [legacy] · 0 market patches
+dazn-tier-motor-es-yp: "Motor" · 0 market patches
+dazn-tier-baloncesto-es-yp: "Baloncesto" · 0 market patches
 dazn-tier-baloncesto-es: "Baloncesto" · 0 market patches
-dazn-tier-futbol-es-yp: "Fútbol · Youth" [legacy] · 0 market patches
+dazn-tier-futbol-es-yp: "Fútbol" · 0 market patches
 dazn-tier-futbol-es: "Fútbol" · 0 market patches
-dazn-tier-premium-es-yp: "Premium · Youth" [legacy] · 0 market patches
+dazn-tier-premium-es-yp: "Premium" · 0 market patches
 dazn-tier-premium-es: "Premium" · 0 market patches
 dazn-base-ent-set: "DAZN Standard" (atlas) · 8 market patches
 dazn-tier-dazn-ca: "DAZN" · 0 market patches

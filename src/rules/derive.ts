@@ -263,14 +263,14 @@ export function billingFor(set: CardSet, tier: Tier, market: MarketConfig, conte
  * where that cadence has one, or the first that does.
  */
 export function youthFor(set: CardSet, tier: Tier, market: MarketConfig, context: Context): string | null {
-  const youth = set.tiers.find((t) => t.id === `${tier.id}-yp`)
+  const youth = set.tiers.find((t) => t.id === `${tier.id}-yp` && t.status === 'legacy')
   if (!youth) return null
   const at = resolveOffer(set, youth.id, context) ?? set.cadences.map((c) => resolveOffer(set, youth.id, { ...context, cadence: c })).find(Boolean)
   if (!at) return null
   const price = at.discount && at.introPrice !== null ? at.introPrice : at.standardPrice
   const { unit } = billingLabel(at.cadence, at.termMonths)
   const term = at.termMonths ? ` · ${at.termMonths} mo` : ''
-  return `Under-25: ${formatMoney(price, market.locale, market.currency)}/${unit}${term}`
+  return `Youth rate: ${formatMoney(price, market.locale, market.currency)}/${unit}${term}`
 }
 
 /** The limits row: Streams 2 · IP 1 · Video HD. Only what is known. */

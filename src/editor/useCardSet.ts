@@ -123,7 +123,9 @@ function withTab(set: CardSet): CardSet {
     return { ...set, context: rest }
   }
   if (tabs.some((t) => t.id === set.context.tab)) return set
-  return { ...set, context: { ...set.context, tab: tabs[0].id } }
+  // The tab the picker opens on: the one the market says, or the first.
+  const opening = tabs.find((t) => t.preselected) ?? tabs[0]
+  return { ...set, context: { ...set.context, tab: opening.id } }
 }
 
 /**

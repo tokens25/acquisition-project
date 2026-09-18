@@ -114,10 +114,12 @@ export function liveCadenceScreen(set: CardSet, context: Context, authored: Cade
     }
     // The under-25 rate for this way to pay, where DAZN sells one: the same
     // plan's youth SKU, priced here at this cadence.
-    const youth = set.tiers.find((t) => t.id === `${tier.id}-yp`)
+    // A youth SKU with no tab of its own is a rate on this plan, and is said
+    // here. One with a tab is a card of its own on the picker, and says itself.
+    const youth = set.tiers.find((t) => t.id === `${tier.id}-yp` && t.status === 'legacy')
     const youthOffer = youth ? resolveOffer(set, youth.id, { ...context, cadence }) : null
     const youthNote = youthOffer
-      ? ` Under-25: ${formatMoney(paid(youthOffer), market.locale, market.currency)}/${billingLabel(cadence, youthOffer.termMonths).unit}.`
+      ? ` Youth rate: ${formatMoney(paid(youthOffer), market.locale, market.currency)}/${billingLabel(cadence, youthOffer.termMonths).unit}.`
       : ''
     return {
       id: cadence,
