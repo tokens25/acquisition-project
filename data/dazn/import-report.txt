@@ -35,8 +35,8 @@ collegesports-tier-collegesports-pro: "Pro" (entitlements) · 0 market patches
 collegesports-tier-collegesports-ultimate: "Ultimate" (entitlements) · 0 market patches
 rallytv-tier-rallytv-pro: "Standard" (entitlements) · 0 market patches
 nationalleaguetv-tier-nationalleaguetv-pro: "Standard" (entitlements) · 0 market patches
-dazn-tier-mobile-at: "Mobile Pass" · 0 market patches
 dazn-tier-gold-at: "DAZN" · 0 market patches
+dazn-tier-mobile-at: "Mobile Pass" · 0 market patches
 dazn-tier-bundle-ul-nflpro-at: "DAZN Unlimited + NFL Pro" (atlas) · 0 market patches
 dazn-tier-bundle-ul-nflult-at: "DAZN Unlimited + NFL Ultimate" (atlas) · 0 market patches
 nhl-tier-nhl-pro: "Standard" (entitlements) · 8 market patches
@@ -50,23 +50,23 @@ dazn-tier-bundle-ul-nflpro-de: "DAZN Unlimited + NFL Pro" (atlas) · 0 market pa
 dazn-tier-bundle-ul-nflult-de: "DAZN Unlimited + NFL Ultimate" (atlas) · 0 market patches
 dazn-tier-gold-li: "DAZN" · 0 market patches
 dazn-tier-gold-lu: "DAZN" · 0 market patches
-dazn-tier-mobile-ch: "Mobile Pass" · 0 market patches
 dazn-tier-supersports-ch: "Super Sports" · 0 market patches
+dazn-tier-mobile-ch: "Mobile Pass" · 0 market patches
 dazn-tier-unlimited-ch: "Unlimited" · 0 market patches
 dazn-tier-unlimited-wc-2-ch: "Unlimited Plus" · 0 market patches
 dazn-tier-bundle-ul-nflpro-ch: "DAZN Unlimited + NFL Pro" (atlas) · 0 market patches
 dazn-tier-bundle-ul-nflult-ch: "DAZN Unlimited + NFL Ultimate" (atlas) · 0 market patches
-dazn-tier-unlimited-yp-fr: "Pass -26 ans" · 0 market patches
-dazn-tier-super-sports-fr: "DAZN" · 0 market patches
 dazn-tier-leagueoneplus-fr: "Ligue 1+" · 0 market patches
 dazn-tier-unlimited-fr: "DAZN et Ligue 1+" · 0 market patches
 dazn-tier-bundle-ul-nflpro-fr: "DAZN Unlimited + NFL Pro" · 0 market patches
+dazn-tier-unlimited-yp-fr: "Pass -26 ans" · 0 market patches
+dazn-tier-super-sports-fr: "DAZN" · 0 market patches
 dazn-tier-bundle-ul-nflult-fr: "DAZN Unlimited + NFL Ultimate" · 0 market patches
+dazn-tier-silver-it: "Full" · 0 market patches
 dazn-tier-bronze-it: "Sports" · 0 market patches
 dazn-tier-goalpass-it: "Goal" · 0 market patches
 dazn-tier-mobile-it: "Mobile" (atlas) · 0 market patches
 dazn-tier-myclubpass-it: "MyClubPass" (atlas) · 0 market patches
-dazn-tier-silver-it: "Full" · 0 market patches
 dazn-tier-gold-it: "Family" · 0 market patches
 dazn-tier-bundle-full-nflpro-it: "DAZN Full + NFL Pro" · 0 market patches
 dazn-tier-bundle-full-nflult-it: "DAZN Full + NFL Ultimate" · 0 market patches
@@ -75,22 +75,22 @@ dazn-tier-baseball-jp: "ベースボール" · 0 market patches
 dazn-tier-dazn-jp: "スタンダード" · 0 market patches
 dazn-tier-bundle-std-nflpro-jp: "DAZN Standard + NFL Pro" · 0 market patches
 dazn-tier-bundle-std-nflult-jp: "DAZN Standard + NFL Ultimate" · 0 market patches
-dazn-tier-motor-pt: "MOTORES" · 0 market patches
 dazn-tier-bronze-pt: "BASE" · 0 market patches
 dazn-tier-silver-pt: "TOTAL" · 0 market patches
-dazn-tier-us-es: "Made in USA" · 0 market patches
+dazn-tier-motor-pt: "MOTORES" · 0 market patches
 dazn-tier-us-es-yp: "Made in USA" · 0 market patches
-dazn-tier-motor-es: "Motor" · 0 market patches
 dazn-tier-motor-es-yp: "Motor" · 0 market patches
 dazn-tier-baloncesto-es-yp: "Baloncesto" · 0 market patches
-dazn-tier-baloncesto-es: "Baloncesto" · 0 market patches
 dazn-tier-futbol-es-yp: "Fútbol" · 0 market patches
 dazn-tier-futbol-es: "Fútbol" · 0 market patches
 dazn-tier-premium-es-yp: "Premium" · 0 market patches
 dazn-tier-premium-es: "Premium" · 0 market patches
+dazn-tier-us-es: "Made in USA" · 0 market patches
+dazn-tier-motor-es: "Motor" · 0 market patches
+dazn-tier-baloncesto-es: "Baloncesto" · 0 market patches
 dazn-base-ent-set: "DAZN Standard" (atlas) · 8 market patches
-dazn-tier-dazn-ca: "DAZN" · 0 market patches
-dazn-tier-daznplus-ca: "DAZN+" · 0 market patches
 dazn-tier-dazn-ca-ul: "DAZN Ultimate" · 0 market patches
 dazn-tier-daznplus-ca-ul: "DAZN+ Ultimate" · 0 market patches
+dazn-tier-dazn-ca: "DAZN" · 0 market patches
+dazn-tier-daznplus-ca: "DAZN+" · 0 market patches
 dazn-tier-ult: "DAZN Ultimate" · 5 market patches

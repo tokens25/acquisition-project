@@ -287,9 +287,11 @@ export function liveCheckoutScreen(set: CardSet, context: Context, authored: Che
           offer: true,
           struck: money(offer.standardPrice),
           note:
-            months >= (offer.termMonths ?? 12) && kind === 'instalments'
-              ? `discounted for the whole ${months}-month contract`
-              : `first ${months === 1 ? 'month' : `${months} months`} discounted`,
+            offer.introPrice === 0
+              ? `first ${months === 1 ? 'month' : `${months} months`} free`
+              : months >= (offer.termMonths ?? 12) && kind === 'instalments'
+                ? `discounted for the whole ${months}-month contract`
+                : `first ${months === 1 ? 'month' : `${months} months`} discounted`,
         }
       : {}),
     ...(offer.freeTrialMonths
@@ -297,9 +299,15 @@ export function liveCheckoutScreen(set: CardSet, context: Context, authored: Che
       : {}),
   })
   // Anything bundled into the offer, marked as included rather than priced.
-  for (const id of offer.includedAddOnIds ?? []) {
+  // Three at most by name; a plan bundling a season of pay-per-views says so
+  // in one line rather than a column of them.
+  const included = offer.includedAddOnIds ?? []
+  for (const id of included.slice(0, 3)) {
     const entry = set.addOnCatalog.find((a) => a.id === id)
     lines.push({ id: `live-included-${id}`, label: entry?.title ?? id, value: 'Included', included: true })
+  }
+  if (included.length > 3) {
+    lines.push({ id: 'live-included-more', label: `${included.length - 3} more pay-per-view events`, value: 'Included', included: true })
   }
   lines.push({ id: 'live-today', label: 'Today you pay', value: money(offer.freeTrialMonths ? 0 : paid(offer)) })
   // A pass is paid once; there is no next payment to name.

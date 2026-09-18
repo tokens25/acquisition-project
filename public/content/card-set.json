@@ -1611,6 +1611,20 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6qJHdps6ov4jYSn3r8uCGC/c1c01c140c4587d865847c055c5ffc2b/Frame_2147225624.svg"
     },
     {
+      "id": "logo-ligue-1-mcdonald-s",
+      "name": "Ligue 1 McDonald's",
+      "altText": "Ligue 1 McDonald's logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/58dzFpYfgYH0QmZIYpWb85/09c53ee9c4b746ca2411e9df9fd9ae3d/Ligue_1__.png"
+    },
+    {
+      "id": "logo-ligue-3-betclic",
+      "name": "Ligue 3 Betclic",
+      "altText": "Ligue 3 Betclic logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4gl9xL128Ne1dKDEFQhaAC/2d26a47c6f011835e39d4b13ae98caff/LIGUE3_COLOR_107x107.png"
+    },
+    {
       "id": "logo-coppa-italia",
       "name": "Coppa Italia",
       "altText": "Coppa Italia logo",
@@ -1632,18 +1646,18 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2kIekYrJprYcMM22JSGCjg/c1f3879e93be2cf791e620c847543bb1/RSL.jpg"
     },
     {
-      "id": "logo-ligue-1-mcdonald-s",
-      "name": "Ligue 1 McDonald's",
-      "altText": "Ligue 1 McDonald's logo",
+      "id": "logo-serie-bkt",
+      "name": "Serie BKT",
+      "altText": "Serie BKT logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/58dzFpYfgYH0QmZIYpWb85/09c53ee9c4b746ca2411e9df9fd9ae3d/Ligue_1__.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/rzx8b9AknZjeA9yXlqnnA/be39f4125b760b726e2b3fdb0b15f8fe/image_14.png"
     },
     {
-      "id": "logo-ligue-3-betclic",
-      "name": "Ligue 3 Betclic",
-      "altText": "Ligue 3 Betclic logo",
+      "id": "logo-laliga-easports",
+      "name": "LaLiga EASports",
+      "altText": "LaLiga EASports logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4gl9xL128Ne1dKDEFQhaAC/2d26a47c6f011835e39d4b13ae98caff/LIGUE3_COLOR_107x107.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3iHKJmZeHCqQvD1PC7i9tJ/54a56445a364b1f3532eca98ee62a078/image_11.png"
     },
     {
       "id": "logo-cev-volleyball-champions-league",
@@ -1653,53 +1667,11 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5md55Yuvj6UqkDukyA02A2/d645c7af526b0f1c767755ea327f22f8/image_10.png"
     },
     {
-      "id": "logo-superlega",
-      "name": "SuperLega",
-      "altText": "SuperLega logo",
+      "id": "logo-fa-cup",
+      "name": "FA Cup",
+      "altText": "FA Cup logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1C7rZaeBYLDMwHpBWHTrSK/8ea4f798a994f2ed6eb5b507d50f6a75/image_9.png"
-    },
-    {
-      "id": "logo-australian-open",
-      "name": "Australian Open",
-      "altText": "Australian Open logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/nS4WTkjmnimCyXd7Pdgc6/b3baa82107c72f57d83e93204c1da98d/image__1_.jpeg"
-    },
-    {
-      "id": "logo-pga-tour",
-      "name": "PGA Tour",
-      "altText": "PGA Tour logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2sRuJpKtNxK9T3p8QTQ0Ok/57be998e39df96925f627cc4cda59c3d/pgaTourLogo.png"
-    },
-    {
-      "id": "logo-ufc",
-      "name": "UFC",
-      "altText": "UFC logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5N1UyLAJqascXPhMBuoVwe/0b8d1a532a0acb6ba40db17b9c654108/UFC_r.png"
-    },
-    {
-      "id": "logo-serie-a-women",
-      "name": "Serie A Women",
-      "altText": "Serie A Women logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5B9rfysCvLK8A905e0EzBK/3a6080cba8c4a65a41fcd4fe63ceb3c4/SERIE_A_WOMEN_ATHORA_CMYK.jpg"
-    },
-    {
-      "id": "logo-serie-a1-tigot",
-      "name": "Serie A1 Tigotà",
-      "altText": "Serie A1 Tigotà logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2ibsGqrbqsHxyGpI8pShJc/54de3d0d517d4e03850acbc1e5a1391d/image.jpeg"
-    },
-    {
-      "id": "logo-laliga-easports",
-      "name": "LaLiga EASports",
-      "altText": "LaLiga EASports logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3iHKJmZeHCqQvD1PC7i9tJ/54a56445a364b1f3532eca98ee62a078/image_11.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7cky9fRC8iTrHWWvBi1lBF/5a2adf13701903a3422815dded2b2919/FA-Cup_logo-boxed.jpg"
     },
     {
       "id": "logo-liga-portugal-betclic",
@@ -1716,13 +1688,6 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/73q8Jm2VlWxKqOkI2M9rdg/d453d146588e1492d23c3e6e2d457e92/image__3_.png"
     },
     {
-      "id": "logo-fa-cup",
-      "name": "FA Cup",
-      "altText": "FA Cup logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7cky9fRC8iTrHWWvBi1lBF/5a2adf13701903a3422815dded2b2919/FA-Cup_logo-boxed.jpg"
-    },
-    {
       "id": "logo-fifa",
       "name": "FIFA+",
       "altText": "FIFA+ logo",
@@ -1730,11 +1695,11 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5npvjnT6FyLGYLMsGd4gU1/304e2bd7f95c48308e46f004f3b72dae/FIFA_.png"
     },
     {
-      "id": "logo-serie-bkt",
-      "name": "Serie BKT",
-      "altText": "Serie BKT logo",
+      "id": "logo-serie-a-women",
+      "name": "Serie A Women",
+      "altText": "Serie A Women logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/rzx8b9AknZjeA9yXlqnnA/be39f4125b760b726e2b3fdb0b15f8fe/image_14.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5B9rfysCvLK8A905e0EzBK/3a6080cba8c4a65a41fcd4fe63ceb3c4/SERIE_A_WOMEN_ATHORA_CMYK.jpg"
     },
     {
       "id": "logo-roland-garros",
@@ -1744,11 +1709,46 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/14V2cGlN3d4xmK3E8ZECMO/18a96abb7e3ad5680afa1bd602bedf0a/image_3.png"
     },
     {
+      "id": "logo-australian-open",
+      "name": "Australian Open",
+      "altText": "Australian Open logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/nS4WTkjmnimCyXd7Pdgc6/b3baa82107c72f57d83e93204c1da98d/image__1_.jpeg"
+    },
+    {
       "id": "logo-il-meglio-del-ciclismo",
       "name": "Il meglio del ciclismo ",
       "altText": "Il meglio del ciclismo  logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4laC1WQ9saiOmTwdhMowYG/f96b71c47ed0dad3ea161f7c8dbbd516/image_2.png"
+    },
+    {
+      "id": "logo-ufc",
+      "name": "UFC",
+      "altText": "UFC logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5N1UyLAJqascXPhMBuoVwe/0b8d1a532a0acb6ba40db17b9c654108/UFC_r.png"
+    },
+    {
+      "id": "logo-pga-tour",
+      "name": "PGA Tour",
+      "altText": "PGA Tour logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2sRuJpKtNxK9T3p8QTQ0Ok/57be998e39df96925f627cc4cda59c3d/pgaTourLogo.png"
+    },
+    {
+      "id": "logo-superlega",
+      "name": "SuperLega",
+      "altText": "SuperLega logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1C7rZaeBYLDMwHpBWHTrSK/8ea4f798a994f2ed6eb5b507d50f6a75/image_9.png"
+    },
+    {
+      "id": "logo-serie-a1-tigot",
+      "name": "Serie A1 Tigotà",
+      "altText": "Serie A1 Tigotà logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2ibsGqrbqsHxyGpI8pShJc/54de3d0d517d4e03850acbc1e5a1391d/image.jpeg"
     },
     {
       "id": "logo-kings-league-italia",
@@ -1779,6 +1779,27 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4XynmZpyldvQof6c6ywhVZ/c9421286f9bc0e42a67bb38ca6717cf3/NFL.png"
     },
     {
+      "id": "logo-laliga",
+      "name": "LALIGA ",
+      "altText": "LALIGA  logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4b1DXbDbwCMmPdsgvu6dP7/0c9e015825e3fc62fc462b098cc2278a/small_logo-9.png"
+    },
+    {
+      "id": "logo-formula-1",
+      "name": "Formula 1",
+      "altText": "Formula 1 logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/19uJDv1goMXPkLJXepYyQQ/d0b3e5df6e3082fbc644b2d4d4180f15/logos.png"
+    },
+    {
+      "id": "logo-europa-conference-league",
+      "name": "Europa & Conference League",
+      "altText": "Europa & Conference League logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6OqAywDLwhyWmr8Oh4Nza/0991674d32535af172d0185778b9e4be/small_logo-10.png"
+    },
+    {
       "id": "logo-formula-2",
       "name": "Formula 2",
       "altText": "Formula 2 logo",
@@ -1786,11 +1807,11 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2Je4ZTcXzcTlbx45EfgJ3g/df628f1252416932520a3aad5c0a7263/small_logo.png"
     },
     {
-      "id": "logo-superbikes",
-      "name": "Superbikes",
-      "altText": "Superbikes logo",
+      "id": "logo-formula-3",
+      "name": "Formula 3",
+      "altText": "Formula 3 logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/59OKWqNNYD9ETH6Xg20uAl/2216c48606c16dc1228dee3bdf405377/Logo.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1DGtZdc3JulCzPxdLZPME8/4ba57ea00b318372e5e553cf80898b6f/small_logo-2.png"
     },
     {
       "id": "logo-formula-e",
@@ -1798,13 +1819,6 @@
       "altText": "Formula E logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3gj52hGnVtabCgGMhC702v/57c168cfc06a1a7728d8c85af83855a6/small_logo-3.png"
-    },
-    {
-      "id": "logo-formula-3",
-      "name": "Formula 3",
-      "altText": "Formula 3 logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1DGtZdc3JulCzPxdLZPME8/4ba57ea00b318372e5e553cf80898b6f/small_logo-2.png"
     },
     {
       "id": "logo-f1-academy",
@@ -1828,27 +1842,6 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5tGm0tb2hesE1d9pZllLaE/b6dfddb7f1acd0fe6c55621c9fe30630/small_logo-7.png"
     },
     {
-      "id": "logo-laliga",
-      "name": "LALIGA ",
-      "altText": "LALIGA  logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4b1DXbDbwCMmPdsgvu6dP7/0c9e015825e3fc62fc462b098cc2278a/small_logo-9.png"
-    },
-    {
-      "id": "logo-formula-1",
-      "name": "Formula 1",
-      "altText": "Formula 1 logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/19uJDv1goMXPkLJXepYyQQ/d0b3e5df6e3082fbc644b2d4d4180f15/logos.png"
-    },
-    {
-      "id": "logo-europa-conference-league",
-      "name": "Europa & Conference League",
-      "altText": "Europa & Conference League logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6OqAywDLwhyWmr8Oh4Nza/0991674d32535af172d0185778b9e4be/small_logo-10.png"
-    },
-    {
       "id": "logo-f4-italian",
       "name": "F4 Italian",
       "altText": "F4 Italian logo",
@@ -1861,6 +1854,13 @@
       "altText": "MF & DAZN: X Series logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3Ha9oYguXK3lTae1Saf5rY/7ad6f7cbdf85b0dc5414caec4390339b/big_logo-2.png"
+    },
+    {
+      "id": "logo-superbikes",
+      "name": "Superbikes",
+      "altText": "Superbikes logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/59OKWqNNYD9ETH6Xg20uAl/2216c48606c16dc1228dee3bdf405377/Logo.png"
     },
     {
       "id": "logo-nascar",
@@ -1896,34 +1896,6 @@
       "altText": "WorldSBK logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4z8DopfexALcaj593cDaN0/e3f68d6d416bd7959e5fe6bf2a746846/image.png"
-    },
-    {
-      "id": "logo-moto2",
-      "name": "Moto2",
-      "altText": "Moto2 logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6YvaQ3o5UlgK2ITVP1zIl8/3cbff13f7e961941bcbda3764eefa62e/3_1.png"
-    },
-    {
-      "id": "logo-moto3",
-      "name": "Moto3",
-      "altText": "Moto3 logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3DirbecK5AJ8wAuFCRHpeg/5da901509e6e6f68f993d36f166b7e4f/4_1.png"
-    },
-    {
-      "id": "logo-f2-tm-logo-white",
-      "name": "F2 TM Logo White",
-      "altText": "F2 TM Logo White logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3WscCy6QZ4ySd6NDwvmc5W/1520271ca76d2f44dd9fac1e7bfa9a71/2_1.png"
-    },
-    {
-      "id": "logo-f3-tm-logo-white",
-      "name": "F3 TM Logo White",
-      "altText": "F3 TM Logo White logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3u7zXJwotYPNL2aYKQWD71/b38d1d3c6db028730dcdd1645fc37826/1_1.png"
     },
     {
       "id": "logo-supercopa-endesa",
@@ -2010,6 +1982,34 @@
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5KpNSuxYBEjLWpg4Z9ycAh/d7ead873abcaaff169ff67c7bf8ad798/Serie_A.png"
     },
     {
+      "id": "logo-moto2",
+      "name": "Moto2",
+      "altText": "Moto2 logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6YvaQ3o5UlgK2ITVP1zIl8/3cbff13f7e961941bcbda3764eefa62e/3_1.png"
+    },
+    {
+      "id": "logo-moto3",
+      "name": "Moto3",
+      "altText": "Moto3 logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3DirbecK5AJ8wAuFCRHpeg/5da901509e6e6f68f993d36f166b7e4f/4_1.png"
+    },
+    {
+      "id": "logo-f2-tm-logo-white",
+      "name": "F2 TM Logo White",
+      "altText": "F2 TM Logo White logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3WscCy6QZ4ySd6NDwvmc5W/1520271ca76d2f44dd9fac1e7bfa9a71/2_1.png"
+    },
+    {
+      "id": "logo-f3-tm-logo-white",
+      "name": "F3 TM Logo White",
+      "altText": "F3 TM Logo White logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3u7zXJwotYPNL2aYKQWD71/b38d1d3c6db028730dcdd1645fc37826/1_1.png"
+    },
+    {
       "id": "logo-uefa-europa-league",
       "name": "UEFA Europa league",
       "altText": "UEFA Europa league logo",
@@ -2070,7 +2070,7 @@
       "name": "UEFA Champions League",
       "altText": "UEFA Champions League logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7hxGL2QyMPjSJaevlzlQZ9/fda666c7c78b6654f36c4f272817ed1b/UEFA_Champions_League_r.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/v30BhHFKDzeFF5Nvo4HCj/3aa5101d0fd5d82d0eaca180b0990519/Champions-League.png"
     },
     {
       "id": "logo-serie-a",
@@ -2142,6 +2142,12 @@
       "status": "active"
     },
     {
+      "id": "f-alle-laliga-spiele-wo468s",
+      "iconId": "check",
+      "text": "Alle LALIGA-Spiele",
+      "status": "active"
+    },
+    {
       "id": "f-alle-inhalte-von-dazn-1v4t1pk",
       "iconId": "check",
       "text": "Alle Inhalte von DAZN",
@@ -2151,12 +2157,6 @@
       "id": "f-dein-abo-f-r-unterwegs-qsnsmn",
       "iconId": "check",
       "text": "Dein Abo für unterwegs",
-      "status": "active"
-    },
-    {
-      "id": "f-alle-laliga-spiele-wo468s",
-      "iconId": "check",
-      "text": "Alle LALIGA-Spiele",
       "status": "active"
     },
     {
@@ -2358,27 +2358,9 @@
       "status": "active"
     },
     {
-      "id": "f-streaming-ausschlie-lich-auf-handys-1m2h0oi",
-      "iconId": "check",
-      "text": "Streaming ausschließlich auf Handys",
-      "status": "active"
-    },
-    {
       "id": "f-neu-ausgew-hlte-laliga-spiele-1mxj2l9",
       "iconId": "check",
       "text": "NEU: ausgewählte LALIGA-Spiele",
-      "status": "active"
-    },
-    {
-      "id": "f-near-live-clips-auf-deinem-handy-1jji5ad",
-      "iconId": "check",
-      "text": "Near-Live Clips auf deinem Handy",
-      "status": "active"
-    },
-    {
-      "id": "f-news-stats-fanzone-und-mehr-krr0el",
-      "iconId": "check",
-      "text": "News, Stats, Fanzone und mehr",
       "status": "active"
     },
     {
@@ -2397,6 +2379,24 @@
       "id": "f-ufc-fa-cup-pdc-darts-mehr-1opjhm9",
       "iconId": "check",
       "text": "UFC, FA Cup, PDC Darts & mehr",
+      "status": "active"
+    },
+    {
+      "id": "f-streaming-ausschlie-lich-auf-handys-1m2h0oi",
+      "iconId": "check",
+      "text": "Streaming ausschließlich auf Handys",
+      "status": "active"
+    },
+    {
+      "id": "f-near-live-clips-auf-deinem-handy-1jji5ad",
+      "iconId": "check",
+      "text": "Near-Live Clips auf deinem Handy",
+      "status": "active"
+    },
+    {
+      "id": "f-news-stats-fanzone-und-mehr-krr0el",
+      "iconId": "check",
+      "text": "News, Stats, Fanzone und mehr",
       "status": "active"
     },
     {
@@ -2628,66 +2628,6 @@
       "status": "active"
     },
     {
-      "id": "f-maintenant-100-des-matchs-de-ligue-1-mcd-1d0n9qu",
-      "iconId": "check",
-      "text": "Maintenant 100% des matchs de Ligue 1 McDonald's et de la nouvelle Ligue 3 Betclic sur Ligue 1+",
-      "status": "active"
-    },
-    {
-      "id": "f-foot-laliga-copa-del-rey-serie-a-coppa-i-1y29orv",
-      "iconId": "check",
-      "text": "Foot : LALIGA*, Copa del Rey, Serie A, Coppa Italia, Supercoppa, Eredivisie, Jupiler Pro League, Saudi Pro League",
-      "status": "active"
-    },
-    {
-      "id": "f-basket-la-betclic-lite-son-play-in-et-se-1aov4df",
-      "iconId": "check",
-      "text": "Basket : la Betclic ÉLITE, son Play-In et ses Playoffs, la Liga ACB en Espagne",
-      "status": "active"
-    },
-    {
-      "id": "f-fifa-le-liv-golf-plus-180-combats-de-box-1ckq21k",
-      "iconId": "check",
-      "text": "FIFA+, le LIV Golf, plus 180 combats de boxe par an, et bien plus",
-      "status": "active"
-    },
-    {
-      "id": "f-exclusivement-sur-mobile-tablette-et-ord-9c8mey",
-      "iconId": "check",
-      "text": "Exclusivement sur mobile, tablette et ordinateur",
-      "status": "active"
-    },
-    {
-      "id": "f-1-connexion-sans-engagement-1vzx8kl",
-      "iconId": "check",
-      "text": "1 connexion. Sans engagement",
-      "status": "active"
-    },
-    {
-      "id": "f-basket-la-betclic-lite-avec-son-play-in--1i4qli9",
-      "iconId": "check",
-      "text": "Basket : la Betclic ÉLITE, avec son Play-In et ses Playoffs, ainsi que la Liga ACB en Espagne",
-      "status": "active"
-    },
-    {
-      "id": "f-boxe-les-v-nements-de-matchroom-queensbe-jhcgi5",
-      "iconId": "check",
-      "text": "Boxe : les événements de Matchroom, Queensberry, Misfits, Golden Boy,",
-      "status": "active"
-    },
-    {
-      "id": "f-les-contenus-de-l-gende-sur-fifa-le-liv--12bm8j3",
-      "iconId": "check",
-      "text": "Les contenus de légende sur FIFA+. Le LIV Golf. Et bien plus",
-      "status": "active"
-    },
-    {
-      "id": "f-1-connexion-12r2zpj",
-      "iconId": "check",
-      "text": "1 connexion",
-      "status": "active"
-    },
-    {
       "id": "f-maintenant-100-des-matchs-de-ligue-1-mcd-1lwj6o0",
       "iconId": "check",
       "text": "Maintenant 100% des matchs de Ligue 1 McDonald's en direct",
@@ -2715,6 +2655,66 @@
       "id": "f-2-connexions-en-simultan-1i3f6jo",
       "iconId": "check",
       "text": "2 connexions en simultané",
+      "status": "active"
+    },
+    {
+      "id": "f-maintenant-100-des-matchs-de-ligue-1-mcd-1d0n9qu",
+      "iconId": "check",
+      "text": "Maintenant 100% des matchs de Ligue 1 McDonald's et de la nouvelle Ligue 3 Betclic sur Ligue 1+",
+      "status": "active"
+    },
+    {
+      "id": "f-foot-laliga-copa-del-rey-serie-a-coppa-i-1y29orv",
+      "iconId": "check",
+      "text": "Foot : LALIGA*, Copa del Rey, Serie A, Coppa Italia, Supercoppa, Eredivisie, Jupiler Pro League, Saudi Pro League",
+      "status": "active"
+    },
+    {
+      "id": "f-basket-la-betclic-lite-son-play-in-et-se-1aov4df",
+      "iconId": "check",
+      "text": "Basket : la Betclic ÉLITE, son Play-In et ses Playoffs, la Liga ACB en Espagne",
+      "status": "active"
+    },
+    {
+      "id": "f-boxe-les-v-nements-de-matchroom-queensbe-jhcgi5",
+      "iconId": "check",
+      "text": "Boxe : les événements de Matchroom, Queensberry, Misfits, Golden Boy,",
+      "status": "active"
+    },
+    {
+      "id": "f-les-contenus-de-l-gende-sur-fifa-le-liv--12bm8j3",
+      "iconId": "check",
+      "text": "Les contenus de légende sur FIFA+. Le LIV Golf. Et bien plus",
+      "status": "active"
+    },
+    {
+      "id": "f-fifa-le-liv-golf-plus-180-combats-de-box-1ckq21k",
+      "iconId": "check",
+      "text": "FIFA+, le LIV Golf, plus 180 combats de boxe par an, et bien plus",
+      "status": "active"
+    },
+    {
+      "id": "f-exclusivement-sur-mobile-tablette-et-ord-9c8mey",
+      "iconId": "check",
+      "text": "Exclusivement sur mobile, tablette et ordinateur",
+      "status": "active"
+    },
+    {
+      "id": "f-1-connexion-sans-engagement-1vzx8kl",
+      "iconId": "check",
+      "text": "1 connexion. Sans engagement",
+      "status": "active"
+    },
+    {
+      "id": "f-basket-la-betclic-lite-avec-son-play-in--1i4qli9",
+      "iconId": "check",
+      "text": "Basket : la Betclic ÉLITE, avec son Play-In et ses Playoffs, ainsi que la Liga ACB en Espagne",
+      "status": "active"
+    },
+    {
+      "id": "f-1-connexion-12r2zpj",
+      "iconId": "check",
+      "text": "1 connexion",
       "status": "active"
     },
     {
@@ -2898,15 +2898,27 @@
       "status": "active"
     },
     {
+      "id": "f-fanzone-interagisci-e-gioca-con-gli-altr-b9c1m2",
+      "iconId": "check",
+      "text": "FanZone: interagisci e gioca con gli altri tifosi durante gli eventi",
+      "status": "active"
+    },
+    {
       "id": "f-guarda-sui-tuoi-dispositivi-ovunque-ti-t-1slghn6",
       "iconId": "check",
       "text": "Guarda sui tuoi dispositivi, ovunque ti trovi",
       "status": "active"
     },
     {
-      "id": "f-fanzone-interagisci-e-gioca-con-gli-altr-b9c1m2",
+      "id": "f-canali-eurosport-3-4-5-e-6-acquistabili--ly3tas",
       "iconId": "check",
-      "text": "FanZone: interagisci e gioca con gli altri tifosi durante gli eventi",
+      "text": "Canali Eurosport 3, 4, 5 e 6 acquistabili separatamente",
+      "status": "active"
+    },
+    {
+      "id": "f-1-utente-aggiuntivo-acquistabile-quando--1emjcph",
+      "iconId": "check",
+      "text": "+1 utente aggiuntivo acquistabile quando vuoi",
       "status": "active"
     },
     {
@@ -2937,18 +2949,6 @@
       "id": "f-contenuti-e-approfondimenti-sulla-tua-sq-nskkwx",
       "iconId": "check",
       "text": "Contenuti e approfondimenti sulla tua squadra del cuore",
-      "status": "active"
-    },
-    {
-      "id": "f-canali-eurosport-3-4-5-e-6-acquistabili--ly3tas",
-      "iconId": "check",
-      "text": "Canali Eurosport 3, 4, 5 e 6 acquistabili separatamente",
-      "status": "active"
-    },
-    {
-      "id": "f-1-utente-aggiuntivo-acquistabile-quando--1emjcph",
-      "iconId": "check",
-      "text": "+1 utente aggiuntivo acquistabile quando vuoi",
       "status": "active"
     },
     {
@@ -3258,36 +3258,6 @@
       "status": "active"
     },
     {
-      "id": "f-f1-f2-f3-porsche-supercup-formula-e-e-mu-13nk7uc",
-      "iconId": "check",
-      "text": "F1, F2, F3 Porsche Supercup, Formula E e muito mais",
-      "status": "active"
-    },
-    {
-      "id": "f-motogp-e-wsbk-exclusivo-em-2027-soa2t2",
-      "iconId": "check",
-      "text": "MotoGP e WSBK exclusivo em 2027",
-      "status": "active"
-    },
-    {
-      "id": "f-v-o-piloto-portugu-s-miguel-oliveira-no--rnuin0",
-      "iconId": "check",
-      "text": "Vê o piloto Português Miguel Oliveira no Campeonato do Mundo de Superbikes",
-      "status": "active"
-    },
-    {
-      "id": "f-acesso-ao-canal-dazn-5-exclusivo-de-moto-1rw5x9k",
-      "iconId": "check",
-      "text": "Acesso ao canal DAZN 5 exclusivo de Motores",
-      "status": "active"
-    },
-    {
-      "id": "f-1-acesso-em-simult-neo-e-at-4-dispositiv-woyjxg",
-      "iconId": "check",
-      "text": "1 acesso em simultâneo e até 4 dispositivos registados",
-      "status": "active"
-    },
-    {
       "id": "f-300-jogos-da-champions-europa-e-conferen-1urzm69",
       "iconId": "check",
       "text": "+ 300 jogos da Champions, Europa e Conference",
@@ -3312,6 +3282,12 @@
       "status": "active"
     },
     {
+      "id": "f-1-acesso-em-simult-neo-e-at-4-dispositiv-woyjxg",
+      "iconId": "check",
+      "text": "1 acesso em simultâneo e até 4 dispositivos registados",
+      "status": "active"
+    },
+    {
       "id": "f-o-melhor-do-desporto-de-combate-boxe-mma-fw4a6b",
       "iconId": "check",
       "text": "O melhor do desporto de combate, boxe, MMA",
@@ -3327,6 +3303,30 @@
       "id": "f-2-acessos-em-simult-neo-e-at-6-dispositi-ggqogq",
       "iconId": "check",
       "text": "2 acessos em simultâneo e até 6 dispositivos registados",
+      "status": "active"
+    },
+    {
+      "id": "f-f1-f2-f3-porsche-supercup-formula-e-e-mu-13nk7uc",
+      "iconId": "check",
+      "text": "F1, F2, F3 Porsche Supercup, Formula E e muito mais",
+      "status": "active"
+    },
+    {
+      "id": "f-motogp-e-wsbk-exclusivo-em-2027-soa2t2",
+      "iconId": "check",
+      "text": "MotoGP e WSBK exclusivo em 2027",
+      "status": "active"
+    },
+    {
+      "id": "f-v-o-piloto-portugu-s-miguel-oliveira-no--rnuin0",
+      "iconId": "check",
+      "text": "Vê o piloto Português Miguel Oliveira no Campeonato do Mundo de Superbikes",
+      "status": "active"
+    },
+    {
+      "id": "f-acesso-ao-canal-dazn-5-exclusivo-de-moto-1rw5x9k",
+      "iconId": "check",
+      "text": "Acesso ao canal DAZN 5 exclusivo de Motores",
       "status": "active"
     },
     {
@@ -4639,6 +4639,41 @@
       "subtitle": "Covering all 104 matches",
       "price": 19,
       "imageId": "world-cup"
+    },
+    {
+      "id": "ppv-garcia-benn",
+      "title": "Garcia Benn",
+      "subtitle": "Pay-per-view included",
+      "price": null,
+      "imageId": ""
+    },
+    {
+      "id": "ppv-aew-all-in",
+      "title": "Aew All In",
+      "subtitle": "Pay-per-view included",
+      "price": null,
+      "imageId": ""
+    },
+    {
+      "id": "ppv-till-romero",
+      "title": "Till Romero",
+      "subtitle": "Pay-per-view included",
+      "price": null,
+      "imageId": ""
+    },
+    {
+      "id": "ppv-dubois-wardley-2",
+      "title": "Wardley vs Dubois 2",
+      "subtitle": "Pay-per-view included",
+      "price": null,
+      "imageId": ""
+    },
+    {
+      "id": "ppv-canelo-mbilli",
+      "title": "Canelo vs Mbilli",
+      "subtitle": "Pay-per-view included",
+      "price": null,
+      "imageId": ""
     }
   ],
   "tiers": [
@@ -4748,7 +4783,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_be",
-        "fetchedAt": "2026-09-18T17:21:11.377Z"
+        "fetchedAt": "2026-09-18T17:55:35.417Z"
       },
       "limits": {
         "streams": 1,
@@ -5103,7 +5138,7 @@
       "source": {
         "product": "NFL",
         "entitlementSetId": "tier_nfl_pro",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5526,7 +5561,7 @@
       "source": {
         "product": "NFL",
         "entitlementSetId": "tier_nfl_ultimate",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5914,7 +5949,7 @@
       "source": {
         "product": "FIBA",
         "entitlementSetId": "tier_fiba_pro",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -6337,7 +6372,7 @@
       "source": {
         "product": "FIBA",
         "entitlementSetId": "tier_fiba_ultimate",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -6378,7 +6413,7 @@
       "source": {
         "product": "CollegeSports",
         "entitlementSetId": "tier_collegesports_pro",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -6418,7 +6453,7 @@
       "source": {
         "product": "CollegeSports",
         "entitlementSetId": "tier_collegesports_ultimate",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -6456,7 +6491,7 @@
       "source": {
         "product": "RallyTV",
         "entitlementSetId": "tier_rallytv_pro",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -6494,7 +6529,7 @@
       "source": {
         "product": "NationalLeagueTV",
         "entitlementSetId": "tier_nationalleaguetv_pro",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -6503,54 +6538,6 @@
         "policy": null,
         "downloads": false,
         "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      }
-    },
-    {
-      "id": "dazn-tier-mobile-at",
-      "planName": "Mobile Pass",
-      "description": "Genieße Live-Sport, Near-Live Clips, News, Highlights und mehr direkt auf deinem Handy.",
-      "features": [
-        "f-streaming-ausschlie-lich-auf-handys-1m2h0oi",
-        "f-alle-inhalte-von-dazn-1v4t1pk",
-        "f-near-live-clips-auf-deinem-handy-1jji5ad",
-        "f-news-stats-fanzone-und-mehr-krr0el",
-        "f-dein-abo-f-r-unterwegs-qsnsmn",
-        "f-full-hd-video-n05a3f",
-        "f-mobile-only-phone-and-tablet-19o0af0"
-      ],
-      "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-ufc",
-        "logo-pdc-darts",
-        "logo-ligue-1",
-        "logo-fa-cup",
-        "logo-coppa-italia",
-        "logo-copa-del-rey",
-        "logo-uefa-l-nderspiele",
-        "logo-weitere-inhalte"
-      ],
-      "logoTotal": 10,
-      "highlighted": false,
-      "displayOrder": 10,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_mobile_at",
-        "fetchedAt": "2026-09-18T17:21:11.417Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": false,
-        "mobileOnly": true,
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
@@ -6589,7 +6576,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_at",
-        "fetchedAt": "2026-09-18T17:21:11.417Z"
+        "fetchedAt": "2026-09-18T17:55:35.490Z"
       },
       "limits": {
         "streams": 2,
@@ -6602,6 +6589,54 @@
         "video": "HD"
       },
       "badge": "BESTSELLER"
+    },
+    {
+      "id": "dazn-tier-mobile-at",
+      "planName": "Mobile Pass",
+      "description": "Genieße Live-Sport, Near-Live Clips, News, Highlights und mehr direkt auf deinem Handy.",
+      "features": [
+        "f-streaming-ausschlie-lich-auf-handys-1m2h0oi",
+        "f-alle-inhalte-von-dazn-1v4t1pk",
+        "f-near-live-clips-auf-deinem-handy-1jji5ad",
+        "f-news-stats-fanzone-und-mehr-krr0el",
+        "f-dein-abo-f-r-unterwegs-qsnsmn",
+        "f-full-hd-video-n05a3f",
+        "f-mobile-only-phone-and-tablet-19o0af0"
+      ],
+      "logoTiles": [
+        "logo-laliga",
+        "logo-serie-a",
+        "logo-ufc",
+        "logo-pdc-darts",
+        "logo-ligue-1",
+        "logo-fa-cup",
+        "logo-coppa-italia",
+        "logo-copa-del-rey",
+        "logo-uefa-l-nderspiele",
+        "logo-weitere-inhalte"
+      ],
+      "logoTotal": 10,
+      "highlighted": false,
+      "displayOrder": 10,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_mobile_at",
+        "fetchedAt": "2026-09-18T17:55:35.490Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": false,
+        "mobileOnly": true,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      }
     },
     {
       "id": "dazn-tier-bundle-ul-nflpro-at",
@@ -6623,7 +6658,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_at",
-        "fetchedAt": "2026-09-18T17:21:11.417Z",
+        "fetchedAt": "2026-09-18T17:55:35.490Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6658,7 +6693,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_at",
-        "fetchedAt": "2026-09-18T17:21:11.417Z",
+        "fetchedAt": "2026-09-18T17:55:35.490Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6827,7 +6862,7 @@
       "source": {
         "product": "NHL",
         "entitlementSetId": "tier_nhl_pro",
-        "fetchedAt": "2026-09-18T17:21:11.882Z",
+        "fetchedAt": "2026-09-18T17:55:36.118Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -7020,7 +7055,7 @@
       "source": {
         "product": "NHL",
         "entitlementSetId": "tier_nhl_ultimate",
-        "fetchedAt": "2026-09-18T17:21:11.882Z",
+        "fetchedAt": "2026-09-18T17:55:36.118Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -7074,7 +7109,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_de",
-        "fetchedAt": "2026-09-18T17:21:11.460Z"
+        "fetchedAt": "2026-09-18T17:55:35.583Z"
       },
       "limits": {
         "streams": 1,
@@ -7123,7 +7158,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_supersport_de",
-        "fetchedAt": "2026-09-18T17:21:11.460Z"
+        "fetchedAt": "2026-09-18T17:55:35.583Z"
       },
       "limits": {
         "streams": 2,
@@ -7172,7 +7207,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_de",
-        "fetchedAt": "2026-09-18T17:21:11.460Z"
+        "fetchedAt": "2026-09-18T17:55:35.583Z"
       },
       "limits": {
         "streams": 2,
@@ -7204,7 +7239,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_de",
-        "fetchedAt": "2026-09-18T17:21:11.460Z",
+        "fetchedAt": "2026-09-18T17:55:35.583Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -7252,7 +7287,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_de_wc_2",
-        "fetchedAt": "2026-09-18T17:21:11.460Z"
+        "fetchedAt": "2026-09-18T17:55:35.583Z"
       },
       "limits": {
         "streams": 3,
@@ -7285,7 +7320,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_de",
-        "fetchedAt": "2026-09-18T17:21:11.460Z",
+        "fetchedAt": "2026-09-18T17:55:35.583Z",
         "copy": "atlas"
       },
       "limits": {
@@ -7320,7 +7355,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_de",
-        "fetchedAt": "2026-09-18T17:21:11.460Z",
+        "fetchedAt": "2026-09-18T17:55:35.583Z",
         "copy": "atlas"
       },
       "limits": {
@@ -7357,7 +7392,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_li",
-        "fetchedAt": "2026-09-18T17:21:11.498Z"
+        "fetchedAt": "2026-09-18T17:55:35.652Z"
       },
       "limits": {
         "streams": 2,
@@ -7392,12 +7427,59 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_lu",
-        "fetchedAt": "2026-09-18T17:21:11.537Z"
+        "fetchedAt": "2026-09-18T17:55:35.712Z"
       },
       "limits": {
         "streams": 2,
         "networks": null,
         "policy": "multi",
+        "downloads": false,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      }
+    },
+    {
+      "id": "dazn-tier-supersports-ch",
+      "planName": "Super Sports",
+      "description": "Erlebe die Bundesliga inkl. Konferenz, UFC, ausgewählte Spiele aus LALIGA & Serie A und mehr.",
+      "features": [
+        "f-neu-ausgew-hlte-laliga-spiele-1mxj2l9",
+        "f-spiele-aus-serie-a-und-ligue-1-1rjvzp3",
+        "f-bundesliga-konferenz-sonntagsspiele-live-xfphof",
+        "f-ufc-fa-cup-pdc-darts-mehr-1opjhm9",
+        "f-full-hd-video-n05a3f",
+        "f-stream-on-2-devices-in-1-location-1c1ly3o"
+      ],
+      "logoTiles": [
+        "logo-ufc",
+        "logo-laliga",
+        "logo-serie-a",
+        "logo-ligue-1",
+        "logo-fa-cup",
+        "logo-coppa-italia",
+        "logo-copa-del-rey",
+        "logo-uefa-l-nderspiele",
+        "logo-pdc-darts",
+        "logo-weitere-inhalte"
+      ],
+      "logoTotal": 10,
+      "highlighted": false,
+      "displayOrder": 25,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_supersports_ch",
+        "fetchedAt": "2026-09-18T17:55:35.781Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
         "downloads": false,
         "mobileOnly": false,
         "ppvs": 0,
@@ -7439,7 +7521,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_ch",
-        "fetchedAt": "2026-09-18T17:21:11.574Z"
+        "fetchedAt": "2026-09-18T17:55:35.781Z"
       },
       "limits": {
         "streams": 2,
@@ -7447,53 +7529,6 @@
         "policy": "single",
         "downloads": false,
         "mobileOnly": true,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      }
-    },
-    {
-      "id": "dazn-tier-supersports-ch",
-      "planName": "Super Sports",
-      "description": "Erlebe die Bundesliga inkl. Konferenz, UFC, ausgewählte Spiele aus LALIGA & Serie A und mehr.",
-      "features": [
-        "f-neu-ausgew-hlte-laliga-spiele-1mxj2l9",
-        "f-spiele-aus-serie-a-und-ligue-1-1rjvzp3",
-        "f-bundesliga-konferenz-sonntagsspiele-live-xfphof",
-        "f-ufc-fa-cup-pdc-darts-mehr-1opjhm9",
-        "f-full-hd-video-n05a3f",
-        "f-stream-on-2-devices-in-1-location-1c1ly3o"
-      ],
-      "logoTiles": [
-        "logo-ufc",
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-ligue-1",
-        "logo-fa-cup",
-        "logo-coppa-italia",
-        "logo-copa-del-rey",
-        "logo-uefa-l-nderspiele",
-        "logo-pdc-darts",
-        "logo-weitere-inhalte"
-      ],
-      "logoTotal": 10,
-      "highlighted": false,
-      "displayOrder": 25,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_supersports_ch",
-        "fetchedAt": "2026-09-18T17:21:11.574Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": false,
-        "mobileOnly": false,
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
@@ -7532,7 +7567,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_ch",
-        "fetchedAt": "2026-09-18T17:21:11.574Z"
+        "fetchedAt": "2026-09-18T17:55:35.781Z"
       },
       "limits": {
         "streams": 2,
@@ -7577,7 +7612,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_wc_2_ch",
-        "fetchedAt": "2026-09-18T17:21:11.574Z"
+        "fetchedAt": "2026-09-18T17:55:35.781Z"
       },
       "limits": {
         "streams": 3,
@@ -7610,7 +7645,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_ch",
-        "fetchedAt": "2026-09-18T17:21:11.574Z",
+        "fetchedAt": "2026-09-18T17:55:35.781Z",
         "copy": "atlas"
       },
       "limits": {
@@ -7645,7 +7680,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_ch",
-        "fetchedAt": "2026-09-18T17:21:11.574Z",
+        "fetchedAt": "2026-09-18T17:55:35.781Z",
         "copy": "atlas"
       },
       "limits": {
@@ -7659,6 +7694,132 @@
         "video": "HD"
       },
       "badge": "Bundle"
+    },
+    {
+      "id": "dazn-tier-leagueoneplus-fr",
+      "planName": "Ligue 1+",
+      "description": "Toute la Ligue 1 McDonald's en direct. Et bien plus.",
+      "features": [
+        "f-maintenant-100-des-matchs-de-ligue-1-mcd-1lwj6o0",
+        "f-100-des-matchs-de-la-nouvelle-ligue-3-be-1r04ek0",
+        "f-les-missions-et-magazines-13sywjj",
+        "f-les-missions-magazines-et-docus-exclusif-1u73qdb",
+        "f-2-connexions-en-simultan-1i3f6jo",
+        "f-full-hd-video-n05a3f",
+        "f-watch-on-2-devices-in-2-locations-j8zagz",
+        "f-download-to-watch-offline-ysgb3u"
+      ],
+      "logoTiles": [
+        "logo-ligue-1-mcdonald-s",
+        "logo-ligue-3-betclic"
+      ],
+      "logoTotal": 2,
+      "highlighted": false,
+      "displayOrder": 15,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_leagueoneplus_fr",
+        "fetchedAt": "2026-09-18T17:55:35.846Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 2,
+        "policy": "multi",
+        "downloads": true,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      }
+    },
+    {
+      "id": "dazn-tier-unlimited-fr",
+      "planName": "DAZN et Ligue 1+",
+      "description": "Tout DAZN. En plus de Ligue 1+.",
+      "features": [
+        "f-maintenant-100-des-matchs-de-ligue-1-mcd-1d0n9qu",
+        "f-foot-laliga-copa-del-rey-serie-a-coppa-i-1y29orv",
+        "f-basket-la-betclic-lite-son-play-in-et-se-1aov4df",
+        "f-boxe-les-v-nements-de-matchroom-queensbe-jhcgi5",
+        "f-les-contenus-de-l-gende-sur-fifa-le-liv--12bm8j3",
+        "f-2-connexions-en-simultan-1i3f6jo",
+        "f-full-hd-video-n05a3f",
+        "f-watch-on-2-devices-in-2-locations-j8zagz",
+        "f-download-to-watch-offline-ysgb3u"
+      ],
+      "logoTiles": [
+        "logo-laliga",
+        "logo-serie-a",
+        "logo-copa-del-rey",
+        "logo-coppa-italia",
+        "logo-betclic-elite"
+      ],
+      "logoTotal": 5,
+      "highlighted": true,
+      "displayOrder": 20,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_unlimited_fr",
+        "fetchedAt": "2026-09-18T17:55:35.846Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 2,
+        "policy": "multi",
+        "downloads": true,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      },
+      "badge": "Recommandé"
+    },
+    {
+      "id": "dazn-tier-bundle-ul-nflpro-fr",
+      "planName": "DAZN Unlimited + NFL Pro",
+      "description": "Two subscriptions in one payment.",
+      "features": [
+        "f-maintenant-100-des-matchs-de-ligue-1-mcd-1d0n9qu",
+        "f-foot-laliga-copa-del-rey-serie-a-coppa-i-1y29orv",
+        "f-basket-la-betclic-lite-son-play-in-et-se-1aov4df",
+        "f-regardez-tous-les-matchs-en-direct-et-la-n4cdyg",
+        "f-vivez-l-authentique-exp-rience-am-ricain-xh36qf"
+      ],
+      "logoTiles": [
+        "logo-laliga",
+        "logo-serie-a",
+        "logo-copa-del-rey"
+      ],
+      "logoTotal": 3,
+      "highlighted": false,
+      "displayOrder": 500,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": false,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_bundle_ul_nflpro_fr",
+        "fetchedAt": "2026-09-18T17:55:35.846Z"
+      },
+      "limits": {
+        "streams": null,
+        "networks": null,
+        "policy": null,
+        "downloads": false,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": null
+      }
     },
     {
       "id": "dazn-tier-unlimited-yp-fr",
@@ -7692,7 +7853,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_yp_fr",
-        "fetchedAt": "2026-09-18T17:21:11.609Z"
+        "fetchedAt": "2026-09-18T17:55:35.846Z"
       },
       "limits": {
         "streams": 1,
@@ -7739,7 +7900,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_super_sports_fr",
-        "fetchedAt": "2026-09-18T17:21:11.609Z"
+        "fetchedAt": "2026-09-18T17:55:35.846Z"
       },
       "limits": {
         "streams": 1,
@@ -7750,132 +7911,6 @@
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
-      }
-    },
-    {
-      "id": "dazn-tier-leagueoneplus-fr",
-      "planName": "Ligue 1+",
-      "description": "Toute la Ligue 1 McDonald's en direct. Et bien plus.",
-      "features": [
-        "f-maintenant-100-des-matchs-de-ligue-1-mcd-1lwj6o0",
-        "f-100-des-matchs-de-la-nouvelle-ligue-3-be-1r04ek0",
-        "f-les-missions-et-magazines-13sywjj",
-        "f-les-missions-magazines-et-docus-exclusif-1u73qdb",
-        "f-2-connexions-en-simultan-1i3f6jo",
-        "f-full-hd-video-n05a3f",
-        "f-watch-on-2-devices-in-2-locations-j8zagz",
-        "f-download-to-watch-offline-ysgb3u"
-      ],
-      "logoTiles": [
-        "logo-ligue-1-mcdonald-s",
-        "logo-ligue-3-betclic"
-      ],
-      "logoTotal": 2,
-      "highlighted": false,
-      "displayOrder": 15,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_leagueoneplus_fr",
-        "fetchedAt": "2026-09-18T17:21:11.609Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 2,
-        "policy": "multi",
-        "downloads": true,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      }
-    },
-    {
-      "id": "dazn-tier-unlimited-fr",
-      "planName": "DAZN et Ligue 1+",
-      "description": "Tout DAZN. En plus de Ligue 1+.",
-      "features": [
-        "f-maintenant-100-des-matchs-de-ligue-1-mcd-1d0n9qu",
-        "f-foot-laliga-copa-del-rey-serie-a-coppa-i-1y29orv",
-        "f-basket-la-betclic-lite-son-play-in-et-se-1aov4df",
-        "f-boxe-les-v-nements-de-matchroom-queensbe-jhcgi5",
-        "f-les-contenus-de-l-gende-sur-fifa-le-liv--12bm8j3",
-        "f-2-connexions-en-simultan-1i3f6jo",
-        "f-full-hd-video-n05a3f",
-        "f-watch-on-2-devices-in-2-locations-j8zagz",
-        "f-download-to-watch-offline-ysgb3u"
-      ],
-      "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-copa-del-rey",
-        "logo-coppa-italia",
-        "logo-betclic-elite"
-      ],
-      "logoTotal": 5,
-      "highlighted": true,
-      "displayOrder": 20,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_unlimited_fr",
-        "fetchedAt": "2026-09-18T17:21:11.609Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 2,
-        "policy": "multi",
-        "downloads": true,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      },
-      "badge": "Recommandé"
-    },
-    {
-      "id": "dazn-tier-bundle-ul-nflpro-fr",
-      "planName": "DAZN Unlimited + NFL Pro",
-      "description": "Two subscriptions in one payment.",
-      "features": [
-        "f-maintenant-100-des-matchs-de-ligue-1-mcd-1d0n9qu",
-        "f-foot-laliga-copa-del-rey-serie-a-coppa-i-1y29orv",
-        "f-basket-la-betclic-lite-son-play-in-et-se-1aov4df",
-        "f-regardez-tous-les-matchs-en-direct-et-la-n4cdyg",
-        "f-vivez-l-authentique-exp-rience-am-ricain-xh36qf"
-      ],
-      "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-copa-del-rey"
-      ],
-      "logoTotal": 3,
-      "highlighted": false,
-      "displayOrder": 500,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": false,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_bundle_ul_nflpro_fr",
-        "fetchedAt": "2026-09-18T17:21:11.609Z"
-      },
-      "limits": {
-        "streams": null,
-        "networks": null,
-        "policy": null,
-        "downloads": false,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": null
       }
     },
     {
@@ -7904,7 +7939,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_fr",
-        "fetchedAt": "2026-09-18T17:21:11.609Z"
+        "fetchedAt": "2026-09-18T17:55:35.846Z"
       },
       "limits": {
         "streams": null,
@@ -7915,166 +7950,6 @@
         "ppvs": 0,
         "multiview": false,
         "video": null
-      }
-    },
-    {
-      "id": "dazn-tier-bronze-it",
-      "planName": "Sports",
-      "description": "Contenuti sportivi extra calcistici. Simultaneamente su 1 rete \ndomestica.",
-      "features": [
-        "f-streaming-simultaneo-su-1-rete-domestica-1ypvmc2",
-        "f-guarda-sui-tuoi-dispositivi-ovunque-ti-t-1slghn6",
-        "f-fanzone-interagisci-e-gioca-con-gli-altr-b9c1m2",
-        "f-full-hd-video-n05a3f"
-      ],
-      "logoTiles": [
-        "logo-cev-volleyball-champions-league",
-        "logo-superlega",
-        "logo-australian-open",
-        "logo-nfl",
-        "logo-liv-golf",
-        "logo-pga-tour",
-        "logo-ufc",
-        "logo-serie-a-women",
-        "logo-serie-a1-tigot"
-      ],
-      "logoTotal": 9,
-      "highlighted": false,
-      "displayOrder": 10,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_bronze_it",
-        "fetchedAt": "2026-09-18T17:21:11.694Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": false,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      }
-    },
-    {
-      "id": "dazn-tier-goalpass-it",
-      "planName": "Goal",
-      "description": "Il calcio nazionale e internazionale disponibile su DAZN, simultaneamente su 1 rete \ndomestica.",
-      "features": [
-        "f-streaming-simultaneo-su-1-rete-domestica-1ypvmc2",
-        "f-guarda-sui-tuoi-dispositivi-ovunque-ti-t-1slghn6",
-        "f-fanzone-interagisci-e-gioca-con-gli-altr-b9c1m2",
-        "f-full-hd-video-n05a3f"
-      ],
-      "logoTiles": [
-        "logo-laliga-easports",
-        "logo-copa-del-rey",
-        "logo-liga-portugal-betclic",
-        "logo-jupiler-pro-league",
-        "logo-fa-cup",
-        "logo-fifa",
-        "logo-serie-a-women"
-      ],
-      "logoTotal": 7,
-      "highlighted": false,
-      "displayOrder": 20,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_goalpass_it",
-        "fetchedAt": "2026-09-18T17:21:11.694Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": false,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      }
-    },
-    {
-      "id": "dazn-tier-mobile-it",
-      "planName": "Mobile",
-      "description": "Mobile-only viewing of the DAZN catalogue.",
-      "features": [
-        "f-mobile-only-access-phone-tablet-6rihsk",
-        "f-full-dazn-sport-catalogue-on-the-go-2de9y",
-        "f-full-hd-video-n05a3f",
-        "f-stream-on-2-devices-in-1-location-1c1ly3o",
-        "f-download-to-watch-offline-ysgb3u"
-      ],
-      "logoTiles": [],
-      "logoTotal": 0,
-      "highlighted": false,
-      "displayOrder": 25,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_mobile_it",
-        "fetchedAt": "2026-09-18T17:21:11.694Z",
-        "copy": "atlas"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": true,
-        "mobileOnly": true,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      },
-      "badge": "Mobile only"
-    },
-    {
-      "id": "dazn-tier-myclubpass-it",
-      "planName": "MyClubPass",
-      "description": "Your favourite club's Serie A matches.",
-      "features": [
-        "f-tutte-le-partite-di-serie-a-enilive-dell-1iaqzk7",
-        "f-gli-highlights-di-tutte-le-partite-della-vhx0sg",
-        "f-contenuti-e-approfondimenti-sulla-tua-sq-nskkwx",
-        "f-full-hd-video-n05a3f",
-        "f-stream-on-2-devices-in-1-location-1c1ly3o",
-        "f-download-to-watch-offline-ysgb3u"
-      ],
-      "logoTiles": [],
-      "logoTotal": 0,
-      "highlighted": false,
-      "displayOrder": 27,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_myclubpass_it",
-        "fetchedAt": "2026-09-18T17:21:11.694Z",
-        "copy": "atlas"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": true,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
       }
     },
     {
@@ -8121,7 +7996,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_it",
-        "fetchedAt": "2026-09-18T17:21:11.694Z"
+        "fetchedAt": "2026-09-18T17:55:35.875Z"
       },
       "limits": {
         "streams": 2,
@@ -8134,6 +8009,166 @@
         "video": "HD"
       },
       "badge": "IL PIÙ VENDUTO"
+    },
+    {
+      "id": "dazn-tier-bronze-it",
+      "planName": "Sports",
+      "description": "Contenuti sportivi extra calcistici. Simultaneamente su 1 rete \ndomestica.",
+      "features": [
+        "f-streaming-simultaneo-su-1-rete-domestica-1ypvmc2",
+        "f-guarda-sui-tuoi-dispositivi-ovunque-ti-t-1slghn6",
+        "f-fanzone-interagisci-e-gioca-con-gli-altr-b9c1m2",
+        "f-full-hd-video-n05a3f"
+      ],
+      "logoTiles": [
+        "logo-cev-volleyball-champions-league",
+        "logo-superlega",
+        "logo-australian-open",
+        "logo-nfl",
+        "logo-liv-golf",
+        "logo-pga-tour",
+        "logo-ufc",
+        "logo-serie-a-women",
+        "logo-serie-a1-tigot"
+      ],
+      "logoTotal": 9,
+      "highlighted": false,
+      "displayOrder": 10,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_bronze_it",
+        "fetchedAt": "2026-09-18T17:55:35.875Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": false,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      }
+    },
+    {
+      "id": "dazn-tier-goalpass-it",
+      "planName": "Goal",
+      "description": "Il calcio nazionale e internazionale disponibile su DAZN, simultaneamente su 1 rete \ndomestica.",
+      "features": [
+        "f-streaming-simultaneo-su-1-rete-domestica-1ypvmc2",
+        "f-guarda-sui-tuoi-dispositivi-ovunque-ti-t-1slghn6",
+        "f-fanzone-interagisci-e-gioca-con-gli-altr-b9c1m2",
+        "f-full-hd-video-n05a3f"
+      ],
+      "logoTiles": [
+        "logo-laliga-easports",
+        "logo-copa-del-rey",
+        "logo-liga-portugal-betclic",
+        "logo-jupiler-pro-league",
+        "logo-fa-cup",
+        "logo-fifa",
+        "logo-serie-a-women"
+      ],
+      "logoTotal": 7,
+      "highlighted": false,
+      "displayOrder": 20,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_goalpass_it",
+        "fetchedAt": "2026-09-18T17:55:35.875Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": false,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      }
+    },
+    {
+      "id": "dazn-tier-mobile-it",
+      "planName": "Mobile",
+      "description": "Mobile-only viewing of the DAZN catalogue.",
+      "features": [
+        "f-mobile-only-access-phone-tablet-6rihsk",
+        "f-full-dazn-sport-catalogue-on-the-go-2de9y",
+        "f-full-hd-video-n05a3f",
+        "f-stream-on-2-devices-in-1-location-1c1ly3o",
+        "f-download-to-watch-offline-ysgb3u"
+      ],
+      "logoTiles": [],
+      "logoTotal": 0,
+      "highlighted": false,
+      "displayOrder": 25,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_mobile_it",
+        "fetchedAt": "2026-09-18T17:55:35.875Z",
+        "copy": "atlas"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": true,
+        "mobileOnly": true,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      },
+      "badge": "Mobile only"
+    },
+    {
+      "id": "dazn-tier-myclubpass-it",
+      "planName": "MyClubPass",
+      "description": "Your favourite club's Serie A matches.",
+      "features": [
+        "f-tutte-le-partite-di-serie-a-enilive-dell-1iaqzk7",
+        "f-gli-highlights-di-tutte-le-partite-della-vhx0sg",
+        "f-contenuti-e-approfondimenti-sulla-tua-sq-nskkwx",
+        "f-full-hd-video-n05a3f",
+        "f-stream-on-2-devices-in-1-location-1c1ly3o",
+        "f-download-to-watch-offline-ysgb3u"
+      ],
+      "logoTiles": [],
+      "logoTotal": 0,
+      "highlighted": false,
+      "displayOrder": 27,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_myclubpass_it",
+        "fetchedAt": "2026-09-18T17:55:35.875Z",
+        "copy": "atlas"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": true,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      }
     },
     {
       "id": "dazn-tier-gold-it",
@@ -8178,7 +8213,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_it",
-        "fetchedAt": "2026-09-18T17:21:11.694Z"
+        "fetchedAt": "2026-09-18T17:55:35.875Z"
       },
       "limits": {
         "streams": 2,
@@ -8217,7 +8252,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_full_nflpro_it",
-        "fetchedAt": "2026-09-18T17:21:11.694Z"
+        "fetchedAt": "2026-09-18T17:55:35.875Z"
       },
       "limits": {
         "streams": null,
@@ -8256,7 +8291,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_full_nflult_it",
-        "fetchedAt": "2026-09-18T17:21:11.694Z"
+        "fetchedAt": "2026-09-18T17:55:35.875Z"
       },
       "limits": {
         "streams": null,
@@ -8290,7 +8325,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_vito_jp",
-        "fetchedAt": "2026-09-18T17:21:11.720Z"
+        "fetchedAt": "2026-09-18T17:55:35.897Z"
       },
       "limits": {
         "streams": 2,
@@ -8327,7 +8362,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baseball_jp",
-        "fetchedAt": "2026-09-18T17:21:11.720Z"
+        "fetchedAt": "2026-09-18T17:55:35.897Z"
       },
       "limits": {
         "streams": 2,
@@ -8366,7 +8401,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_jp",
-        "fetchedAt": "2026-09-18T17:21:11.720Z"
+        "fetchedAt": "2026-09-18T17:55:35.897Z"
       },
       "limits": {
         "streams": 2,
@@ -8405,7 +8440,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_std_nflpro_jp",
-        "fetchedAt": "2026-09-18T17:21:11.720Z"
+        "fetchedAt": "2026-09-18T17:55:35.897Z"
       },
       "limits": {
         "streams": null,
@@ -8443,7 +8478,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_std_nflult_jp",
-        "fetchedAt": "2026-09-18T17:21:11.720Z"
+        "fetchedAt": "2026-09-18T17:55:35.897Z"
       },
       "limits": {
         "streams": null,
@@ -8454,51 +8489,6 @@
         "ppvs": 0,
         "multiview": false,
         "video": null
-      }
-    },
-    {
-      "id": "dazn-tier-motor-pt",
-      "planName": "MOTORES",
-      "description": "Toda a emoção da Formula 1 e muito mais",
-      "features": [
-        "f-f1-f2-f3-porsche-supercup-formula-e-e-mu-13nk7uc",
-        "f-motogp-e-wsbk-exclusivo-em-2027-soa2t2",
-        "f-v-o-piloto-portugu-s-miguel-oliveira-no--rnuin0",
-        "f-acesso-ao-canal-dazn-5-exclusivo-de-moto-1rw5x9k",
-        "f-1-acesso-em-simult-neo-e-at-4-dispositiv-woyjxg",
-        "f-full-hd-video-n05a3f"
-      ],
-      "logoTiles": [
-        "logo-formula-2",
-        "logo-superbikes",
-        "logo-formula-e",
-        "logo-dtm",
-        "logo-formula-3",
-        "logo-f1-academy",
-        "logo-porsche-supercup",
-        "logo-f4-spanish"
-      ],
-      "logoTotal": 8,
-      "highlighted": false,
-      "displayOrder": 5,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_motor_pt",
-        "fetchedAt": "2026-09-18T17:21:11.740Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": false,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
       }
     },
     {
@@ -8538,7 +8528,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bronze_pt",
-        "fetchedAt": "2026-09-18T17:21:11.740Z"
+        "fetchedAt": "2026-09-18T17:55:35.934Z"
       },
       "limits": {
         "streams": 2,
@@ -8589,7 +8579,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_pt",
-        "fetchedAt": "2026-09-18T17:21:11.740Z"
+        "fetchedAt": "2026-09-18T17:55:35.934Z"
       },
       "limits": {
         "streams": 2,
@@ -8603,22 +8593,28 @@
       }
     },
     {
-      "id": "dazn-tier-us-es",
-      "planName": "Made in USA",
-      "description": "El plan para quienes vibran con el deporte estadounidense. Desde las canastas imposibles de la NBA hasta la potencia de los motores de la NASCAR, pasando por la emoción de los mejores touchdowns de la NFL. Todo en español y en un solo lugar.",
+      "id": "dazn-tier-motor-pt",
+      "planName": "MOTORES",
+      "description": "Toda a emoção da Formula 1 e muito mais",
       "features": [
-        "f-nba-180-partidos-de-la-liga-regular-all--171wp19",
-        "f-nfl-5-partidos-semanales-los-playoffs-y--114kjfs",
-        "f-todas-las-carreras-de-la-nascar-1yf6kw1",
-        "f-todas-las-competiciones-de-los-canales-d-h3l3zg",
-        "f-full-hd-video-n05a3f",
-        "f-stream-on-2-devices-in-1-location-1c1ly3o"
+        "f-f1-f2-f3-porsche-supercup-formula-e-e-mu-13nk7uc",
+        "f-motogp-e-wsbk-exclusivo-em-2027-soa2t2",
+        "f-v-o-piloto-portugu-s-miguel-oliveira-no--rnuin0",
+        "f-acesso-ao-canal-dazn-5-exclusivo-de-moto-1rw5x9k",
+        "f-1-acesso-em-simult-neo-e-at-4-dispositiv-woyjxg",
+        "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-nascar",
-        "logo-eurosport"
+        "logo-formula-2",
+        "logo-superbikes",
+        "logo-formula-e",
+        "logo-dtm",
+        "logo-formula-3",
+        "logo-f1-academy",
+        "logo-porsche-supercup",
+        "logo-f4-spanish"
       ],
-      "logoTotal": 2,
+      "logoTotal": 8,
       "highlighted": false,
       "displayOrder": 5,
       "status": "live",
@@ -8627,8 +8623,8 @@
       "overrides": [],
       "source": {
         "product": "DAZN",
-        "entitlementSetId": "tier_us_es",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
+        "entitlementSetId": "tier_motor_pt",
+        "fetchedAt": "2026-09-18T17:55:35.934Z"
       },
       "limits": {
         "streams": 2,
@@ -8639,10 +8635,7 @@
         "ppvs": 0,
         "multiview": false,
         "video": "HD"
-      },
-      "tabs": [
-        "standard-offers-cta"
-      ]
+      }
     },
     {
       "id": "dazn-tier-us-es-yp",
@@ -8669,7 +8662,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_us_es_yp",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
       },
       "limits": {
         "streams": 2,
@@ -8683,56 +8676,6 @@
       },
       "tabs": [
         "youth-offers-cta"
-      ]
-    },
-    {
-      "id": "dazn-tier-motor-es",
-      "planName": "Motor",
-      "description": "Para los amantes de la adrenalina sobre ruedas: disfruta de todo el motor en directo y a la carta, y descubre las historias detrás del volante con previas, análisis, programas especiales y documentales.",
-      "features": [
-        "f-todo-el-mundial-de-formula-1-pemgfo",
-        "f-todo-el-mundial-de-motogp-14kb9fb",
-        "f-nascar-wsbk-y-dtm-1wuwz1a",
-        "f-contenido-especial-previas-entrevistas-y-vb889v",
-        "f-todas-las-competiciones-de-los-canales-d-h3l3zg",
-        "f-todo-el-contenido-del-plan-premium-sin-c-mzy3ba",
-        "f-full-hd-video-n05a3f",
-        "f-stream-on-2-devices-in-1-location-1c1ly3o"
-      ],
-      "logoTiles": [
-        "logo-dtm",
-        "logo-nascar",
-        "logo-eurosport-1-y-2",
-        "logo-worldsbk",
-        "logo-moto2",
-        "logo-moto3",
-        "logo-f2-tm-logo-white",
-        "logo-f3-tm-logo-white"
-      ],
-      "logoTotal": 8,
-      "highlighted": false,
-      "displayOrder": 10,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_motor_es",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": false,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      },
-      "tabs": [
-        "standard-offers-cta"
       ]
     },
     {
@@ -8764,7 +8707,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_es_yp",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
       },
       "limits": {
         "streams": 2,
@@ -8807,7 +8750,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baloncesto_es_yp",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
       },
       "limits": {
         "streams": 2,
@@ -8821,50 +8764,6 @@
       },
       "tabs": [
         "youth-offers-cta"
-      ]
-    },
-    {
-      "id": "dazn-tier-baloncesto-es",
-      "planName": "Baloncesto",
-      "description": "Para los  auténticos aficionados al baloncesto. Este plan te sumerge en el mundo de la cancha con partidos en directo y a la carta, análisis tácticos, entrevistas exclusivas y contenido especial que va más allá del directo.",
-      "features": [
-        "f-todas-las-competiciones-acb-liga-endesa--kix1vy",
-        "f-nba-180-partidos-de-la-liga-regular-all--171wp19",
-        "f-contenido-especial-previas-entrevistas-y-vb889v",
-        "f-todas-las-competiciones-de-los-canales-d-h3l3zg",
-        "f-todo-el-contenido-del-plan-premium-sin-c-glwiwv",
-        "f-full-hd-video-n05a3f",
-        "f-stream-on-2-devices-in-1-location-1c1ly3o"
-      ],
-      "logoTiles": [
-        "logo-supercopa-endesa",
-        "logo-copa-del-rey",
-        "logo-eurosport"
-      ],
-      "logoTotal": 3,
-      "highlighted": false,
-      "displayOrder": 15,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_baloncesto_es",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": false,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      },
-      "tabs": [
-        "standard-offers-cta"
       ]
     },
     {
@@ -8897,7 +8796,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_futbol_es_yp",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
       },
       "limits": {
         "streams": 2,
@@ -8946,7 +8845,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_futbol_es",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
       },
       "limits": {
         "streams": 2,
@@ -8999,7 +8898,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_premium_es_yp",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
       },
       "limits": {
         "streams": 2,
@@ -9054,7 +8953,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_premium_es",
-        "fetchedAt": "2026-09-18T17:21:11.758Z"
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
       },
       "limits": {
         "streams": 2,
@@ -9067,6 +8966,142 @@
         "video": "HD"
       },
       "badge": "Oferta Especial",
+      "tabs": [
+        "standard-offers-cta"
+      ]
+    },
+    {
+      "id": "dazn-tier-us-es",
+      "planName": "Made in USA",
+      "description": "El plan para quienes vibran con el deporte estadounidense. Desde las canastas imposibles de la NBA hasta la potencia de los motores de la NASCAR, pasando por la emoción de los mejores touchdowns de la NFL. Todo en español y en un solo lugar.",
+      "features": [
+        "f-nba-180-partidos-de-la-liga-regular-all--171wp19",
+        "f-nfl-5-partidos-semanales-los-playoffs-y--114kjfs",
+        "f-todas-las-carreras-de-la-nascar-1yf6kw1",
+        "f-todas-las-competiciones-de-los-canales-d-h3l3zg",
+        "f-full-hd-video-n05a3f",
+        "f-stream-on-2-devices-in-1-location-1c1ly3o"
+      ],
+      "logoTiles": [
+        "logo-nascar",
+        "logo-eurosport"
+      ],
+      "logoTotal": 2,
+      "highlighted": false,
+      "displayOrder": 5,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_us_es",
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": false,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      },
+      "tabs": [
+        "standard-offers-cta"
+      ]
+    },
+    {
+      "id": "dazn-tier-motor-es",
+      "planName": "Motor",
+      "description": "Para los amantes de la adrenalina sobre ruedas: disfruta de todo el motor en directo y a la carta, y descubre las historias detrás del volante con previas, análisis, programas especiales y documentales.",
+      "features": [
+        "f-todo-el-mundial-de-formula-1-pemgfo",
+        "f-todo-el-mundial-de-motogp-14kb9fb",
+        "f-nascar-wsbk-y-dtm-1wuwz1a",
+        "f-contenido-especial-previas-entrevistas-y-vb889v",
+        "f-todas-las-competiciones-de-los-canales-d-h3l3zg",
+        "f-todo-el-contenido-del-plan-premium-sin-c-mzy3ba",
+        "f-full-hd-video-n05a3f",
+        "f-stream-on-2-devices-in-1-location-1c1ly3o"
+      ],
+      "logoTiles": [
+        "logo-dtm",
+        "logo-nascar",
+        "logo-eurosport-1-y-2",
+        "logo-worldsbk",
+        "logo-moto2",
+        "logo-moto3",
+        "logo-f2-tm-logo-white",
+        "logo-f3-tm-logo-white"
+      ],
+      "logoTotal": 8,
+      "highlighted": false,
+      "displayOrder": 10,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_motor_es",
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": false,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      },
+      "tabs": [
+        "standard-offers-cta"
+      ]
+    },
+    {
+      "id": "dazn-tier-baloncesto-es",
+      "planName": "Baloncesto",
+      "description": "Para los  auténticos aficionados al baloncesto. Este plan te sumerge en el mundo de la cancha con partidos en directo y a la carta, análisis tácticos, entrevistas exclusivas y contenido especial que va más allá del directo.",
+      "features": [
+        "f-todas-las-competiciones-acb-liga-endesa--kix1vy",
+        "f-nba-180-partidos-de-la-liga-regular-all--171wp19",
+        "f-contenido-especial-previas-entrevistas-y-vb889v",
+        "f-todas-las-competiciones-de-los-canales-d-h3l3zg",
+        "f-todo-el-contenido-del-plan-premium-sin-c-glwiwv",
+        "f-full-hd-video-n05a3f",
+        "f-stream-on-2-devices-in-1-location-1c1ly3o"
+      ],
+      "logoTiles": [
+        "logo-supercopa-endesa",
+        "logo-copa-del-rey",
+        "logo-eurosport"
+      ],
+      "logoTotal": 3,
+      "highlighted": false,
+      "displayOrder": 15,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_baloncesto_es",
+        "fetchedAt": "2026-09-18T17:55:35.958Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": false,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      },
       "tabs": [
         "standard-offers-cta"
       ]
@@ -9216,7 +9251,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "base_ent_set",
-        "fetchedAt": "2026-09-18T17:21:11.934Z",
+        "fetchedAt": "2026-09-18T17:55:36.196Z",
         "copy": "atlas"
       },
       "limits": {
@@ -9229,99 +9264,6 @@
         "multiview": true,
         "video": "HD"
       }
-    },
-    {
-      "id": "dazn-tier-dazn-ca",
-      "planName": "DAZN",
-      "description": "Get every NFL game from every team, UEFA Champions League, boxing (PPVs not included) and more.",
-      "features": [
-        "f-full-hd-video-n05a3f",
-        "f-stream-on-2-devices-in-1-location-1c1ly3o",
-        "f-download-to-watch-offline-ysgb3u"
-      ],
-      "logoTiles": [
-        "logo-uefa-europa-league",
-        "logo-bundesliga",
-        "logo-uefa-national-team-games",
-        "logo-ncaa",
-        "logo-liv-golf",
-        "logo-dazn-boxing",
-        "logo-efl",
-        "logo-carabao-cup"
-      ],
-      "logoTotal": 8,
-      "highlighted": true,
-      "displayOrder": 10,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_dazn_ca",
-        "fetchedAt": "2026-09-18T17:21:11.792Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": true,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      },
-      "badge": "Recommended",
-      "tabs": [
-        "standard-tier-cta"
-      ]
-    },
-    {
-      "id": "dazn-tier-daznplus-ca",
-      "planName": "DAZN+",
-      "description": "The complete sports package including: NFL Game Pass, the best European soccer, boxing (PPVs not included), rugby and much more.",
-      "features": [
-        "f-full-hd-video-n05a3f",
-        "f-stream-on-2-devices-in-1-location-1c1ly3o",
-        "f-download-to-watch-offline-ysgb3u"
-      ],
-      "logoTiles": [
-        "logo-uefa-champions-league",
-        "logo-serie-a",
-        "logo-uefa-europa-league",
-        "logo-bundesliga",
-        "logo-uefa-national-team-games",
-        "logo-ncaa",
-        "logo-liv-golf",
-        "logo-dazn-boxing",
-        "logo-efl",
-        "logo-carabao-cup"
-      ],
-      "logoTotal": 10,
-      "highlighted": false,
-      "displayOrder": 30,
-      "status": "live",
-      "channel": "direct",
-      "visibleToPartners": true,
-      "overrides": [],
-      "source": {
-        "product": "DAZN",
-        "entitlementSetId": "tier_daznplus_ca",
-        "fetchedAt": "2026-09-18T17:21:11.792Z"
-      },
-      "limits": {
-        "streams": 2,
-        "networks": 1,
-        "policy": "single",
-        "downloads": true,
-        "mobileOnly": false,
-        "ppvs": 0,
-        "multiview": false,
-        "video": "HD"
-      },
-      "tabs": [
-        "standard-tier-cta"
-      ]
     },
     {
       "id": "dazn-tier-dazn-ca-ul",
@@ -9352,7 +9294,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_ca_ul",
-        "fetchedAt": "2026-09-18T17:21:11.792Z"
+        "fetchedAt": "2026-09-18T17:55:36.001Z"
       },
       "limits": {
         "streams": 3,
@@ -9400,7 +9342,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_daznplus_ca_ul",
-        "fetchedAt": "2026-09-18T17:21:11.792Z"
+        "fetchedAt": "2026-09-18T17:55:36.001Z"
       },
       "limits": {
         "streams": 3,
@@ -9414,6 +9356,99 @@
       },
       "tabs": [
         "ultimate-tier-cta"
+      ]
+    },
+    {
+      "id": "dazn-tier-dazn-ca",
+      "planName": "DAZN",
+      "description": "Get every NFL game from every team, UEFA Champions League, boxing (PPVs not included) and more.",
+      "features": [
+        "f-full-hd-video-n05a3f",
+        "f-stream-on-2-devices-in-1-location-1c1ly3o",
+        "f-download-to-watch-offline-ysgb3u"
+      ],
+      "logoTiles": [
+        "logo-uefa-europa-league",
+        "logo-bundesliga",
+        "logo-uefa-national-team-games",
+        "logo-ncaa",
+        "logo-liv-golf",
+        "logo-dazn-boxing",
+        "logo-efl",
+        "logo-carabao-cup"
+      ],
+      "logoTotal": 8,
+      "highlighted": true,
+      "displayOrder": 10,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_dazn_ca",
+        "fetchedAt": "2026-09-18T17:55:36.001Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": true,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      },
+      "badge": "Recommended",
+      "tabs": [
+        "standard-tier-cta"
+      ]
+    },
+    {
+      "id": "dazn-tier-daznplus-ca",
+      "planName": "DAZN+",
+      "description": "The complete sports package including: NFL Game Pass, the best European soccer, boxing (PPVs not included), rugby and much more.",
+      "features": [
+        "f-full-hd-video-n05a3f",
+        "f-stream-on-2-devices-in-1-location-1c1ly3o",
+        "f-download-to-watch-offline-ysgb3u"
+      ],
+      "logoTiles": [
+        "logo-uefa-champions-league",
+        "logo-serie-a",
+        "logo-uefa-europa-league",
+        "logo-bundesliga",
+        "logo-uefa-national-team-games",
+        "logo-ncaa",
+        "logo-liv-golf",
+        "logo-dazn-boxing",
+        "logo-efl",
+        "logo-carabao-cup"
+      ],
+      "logoTotal": 10,
+      "highlighted": false,
+      "displayOrder": 30,
+      "status": "live",
+      "channel": "direct",
+      "visibleToPartners": true,
+      "overrides": [],
+      "source": {
+        "product": "DAZN",
+        "entitlementSetId": "tier_daznplus_ca",
+        "fetchedAt": "2026-09-18T17:55:36.001Z"
+      },
+      "limits": {
+        "streams": 2,
+        "networks": 1,
+        "policy": "single",
+        "downloads": true,
+        "mobileOnly": false,
+        "ppvs": 0,
+        "multiview": false,
+        "video": "HD"
+      },
+      "tabs": [
+        "standard-tier-cta"
       ]
     },
     {
@@ -9525,7 +9560,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_ult",
-        "fetchedAt": "2026-09-18T17:21:11.934Z"
+        "fetchedAt": "2026-09-18T17:55:36.196Z"
       },
       "limits": {
         "streams": 2,
@@ -9581,6 +9616,21 @@
       "standardPrice": 19.99
     },
     {
+      "id": "dazn-tier-silver-be-be-yearly-instalments",
+      "tierId": "dazn-tier-silver-be",
+      "cadence": "Yearly Instalments",
+      "market": "be",
+      "standardPrice": 24.99,
+      "discount": true,
+      "introPrice": 14.99,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-tier-silver-be-be-monthly",
       "tierId": "dazn-tier-silver-be",
       "cadence": "Monthly",
@@ -9593,21 +9643,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-silver-be-be-yearly-instalments",
-      "tierId": "dazn-tier-silver-be",
-      "cadence": "Yearly Instalments",
-      "market": "be",
-      "standardPrice": 24.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "nfl-tier-nfl-pro-be-weekly",
@@ -9980,6 +10015,29 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-tier-gold-at-at-yearly-instalments",
+      "tierId": "dazn-tier-gold-at",
+      "cadence": "Yearly Instalments",
+      "market": "at",
+      "standardPrice": 19.99,
+      "discount": true,
+      "introPrice": 14.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12,
+      "canAdd": [
+        {
+          "id": "concurrency_addon",
+          "name": "Concurrency Addon",
+          "price": 20,
+          "cadence": "Monthly"
+        }
+      ]
+    },
+    {
       "id": "dazn-tier-mobile-at-at-monthly",
       "tierId": "dazn-tier-mobile-at",
       "cadence": "Monthly",
@@ -10014,29 +10072,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": [],
-      "canAdd": [
-        {
-          "id": "concurrency_addon",
-          "name": "Concurrency Addon",
-          "price": 20,
-          "cadence": "Monthly"
-        }
-      ]
-    },
-    {
-      "id": "dazn-tier-gold-at-at-yearly-instalments",
-      "tierId": "dazn-tier-gold-at",
-      "cadence": "Yearly Instalments",
-      "market": "at",
-      "standardPrice": 19.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12,
       "canAdd": [
         {
           "id": "concurrency_addon",
@@ -12117,6 +12152,21 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-tier-supersports-ch-ch-yearly-instalments",
+      "tierId": "dazn-tier-supersports-ch",
+      "cadence": "Yearly Instalments",
+      "market": "ch",
+      "standardPrice": 24.9,
+      "discount": true,
+      "introPrice": 14.9,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-tier-mobile-ch-ch-monthly",
       "tierId": "dazn-tier-mobile-ch",
       "cadence": "Monthly",
@@ -12143,21 +12193,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-supersports-ch-ch-yearly-instalments",
-      "tierId": "dazn-tier-supersports-ch",
-      "cadence": "Yearly Instalments",
-      "market": "ch",
-      "standardPrice": 24.9,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-tier-unlimited-ch-ch-monthly",
@@ -12674,6 +12709,59 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-tier-leagueoneplus-fr-fr-yearly-instalments",
+      "tierId": "dazn-tier-leagueoneplus-fr",
+      "cadence": "Yearly Instalments",
+      "market": "fr",
+      "standardPrice": 19.99,
+      "discount": true,
+      "introPrice": 9.99,
+      "introMonths": 2,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-unlimited-fr-fr-yearly-instalments",
+      "tierId": "dazn-tier-unlimited-fr",
+      "cadence": "Yearly Instalments",
+      "market": "fr",
+      "standardPrice": 22.99,
+      "discount": true,
+      "introPrice": 14.99,
+      "introMonths": 2,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12,
+      "canAdd": [
+        {
+          "id": "concurrency_addon_2",
+          "name": "Concurrency Addon 2",
+          "price": 20,
+          "cadence": "Monthly"
+        }
+      ]
+    },
+    {
+      "id": "dazn-tier-bundle-ul-nflpro-fr-fr-yearly-instalments",
+      "tierId": "dazn-tier-bundle-ul-nflpro-fr",
+      "cadence": "Yearly Instalments",
+      "market": "fr",
+      "standardPrice": 30.99,
+      "discount": true,
+      "introPrice": 22.99,
+      "introMonths": 2,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-tier-unlimited-yp-fr-fr-monthly",
       "tierId": "dazn-tier-unlimited-yp-fr",
       "cadence": "Monthly",
@@ -12747,21 +12835,6 @@
       "includedAddOnIds": []
     },
     {
-      "id": "dazn-tier-leagueoneplus-fr-fr-yearly-instalments",
-      "tierId": "dazn-tier-leagueoneplus-fr",
-      "cadence": "Yearly Instalments",
-      "market": "fr",
-      "standardPrice": 19.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
       "id": "dazn-tier-leagueoneplus-fr-fr-yearly",
       "tierId": "dazn-tier-leagueoneplus-fr",
       "cadence": "Yearly",
@@ -12798,29 +12871,6 @@
       ]
     },
     {
-      "id": "dazn-tier-unlimited-fr-fr-yearly-instalments",
-      "tierId": "dazn-tier-unlimited-fr",
-      "cadence": "Yearly Instalments",
-      "market": "fr",
-      "standardPrice": 22.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12,
-      "canAdd": [
-        {
-          "id": "concurrency_addon_2",
-          "name": "Concurrency Addon 2",
-          "price": 20,
-          "cadence": "Monthly"
-        }
-      ]
-    },
-    {
       "id": "dazn-tier-unlimited-fr-fr-yearly",
       "tierId": "dazn-tier-unlimited-fr",
       "cadence": "Yearly",
@@ -12841,21 +12891,6 @@
           "cadence": "Monthly"
         }
       ]
-    },
-    {
-      "id": "dazn-tier-bundle-ul-nflpro-fr-fr-yearly-instalments",
-      "tierId": "dazn-tier-bundle-ul-nflpro-fr",
-      "cadence": "Yearly Instalments",
-      "market": "fr",
-      "standardPrice": 30.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-tier-bundle-ul-nflult-fr-fr-yearly-instalments",
@@ -13256,6 +13291,41 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-tier-silver-it-it-yearly-instalments",
+      "tierId": "dazn-tier-silver-it",
+      "cadence": "Yearly Instalments",
+      "market": "it",
+      "standardPrice": 36.99,
+      "discount": true,
+      "introPrice": 19.99,
+      "introMonths": 3,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12,
+      "canAdd": [
+        {
+          "id": "ext_sky_it_linearchannel",
+          "name": "Ext Sky It Linearchannel",
+          "price": 10,
+          "cadence": "Monthly"
+        },
+        {
+          "id": "ip_addon",
+          "name": "Ip Addon",
+          "price": 25,
+          "cadence": "Monthly"
+        },
+        {
+          "id": "eurosp_addon_it",
+          "name": "Eurosp Addon It",
+          "price": 2.99,
+          "cadence": "Monthly"
+        }
+      ]
+    },
+    {
       "id": "dazn-tier-bronze-it-it-monthly",
       "tierId": "dazn-tier-bronze-it",
       "cadence": "Monthly",
@@ -13404,28 +13474,6 @@
       "includedAddOnIds": []
     },
     {
-      "id": "dazn-tier-myclubpass-it-it-monthly",
-      "tierId": "dazn-tier-myclubpass-it",
-      "cadence": "Monthly",
-      "market": "it",
-      "standardPrice": 39.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "canAdd": [
-        {
-          "id": "eurosp_all_addon_it",
-          "name": "Eurosp All Addon It",
-          "price": 4.99,
-          "cadence": "Monthly"
-        }
-      ]
-    },
-    {
       "id": "dazn-tier-myclubpass-it-it-yearly-instalments",
       "tierId": "dazn-tier-myclubpass-it",
       "cadence": "Yearly Instalments",
@@ -13483,41 +13531,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": [],
-      "canAdd": [
-        {
-          "id": "ext_sky_it_linearchannel",
-          "name": "Ext Sky It Linearchannel",
-          "price": 10,
-          "cadence": "Monthly"
-        },
-        {
-          "id": "ip_addon",
-          "name": "Ip Addon",
-          "price": 25,
-          "cadence": "Monthly"
-        },
-        {
-          "id": "eurosp_addon_it",
-          "name": "Eurosp Addon It",
-          "price": 2.99,
-          "cadence": "Monthly"
-        }
-      ]
-    },
-    {
-      "id": "dazn-tier-silver-it-it-yearly-instalments",
-      "tierId": "dazn-tier-silver-it",
-      "cadence": "Yearly Instalments",
-      "market": "it",
-      "standardPrice": 36.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12,
       "canAdd": [
         {
           "id": "ext_sky_it_linearchannel",
@@ -13669,6 +13682,28 @@
       "addOnDiscountPercent": null,
       "includedAddOnIds": [],
       "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-myclubpass-it-it-monthly",
+      "tierId": "dazn-tier-myclubpass-it",
+      "cadence": "Monthly",
+      "market": "it",
+      "standardPrice": 39.99,
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 0,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "canAdd": [
+        {
+          "id": "eurosp_all_addon_it",
+          "name": "Eurosp All Addon It",
+          "price": 4.99,
+          "cadence": "Monthly"
+        }
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-it-weekly",
@@ -14588,6 +14623,36 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-tier-bronze-pt-pt-yearly-instalments",
+      "tierId": "dazn-tier-bronze-pt",
+      "cadence": "Yearly Instalments",
+      "market": "pt",
+      "standardPrice": 19.99,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-silver-pt-pt-yearly-instalments",
+      "tierId": "dazn-tier-silver-pt",
+      "cadence": "Yearly Instalments",
+      "market": "pt",
+      "standardPrice": 25.99,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-tier-motor-pt-pt-monthly",
       "tierId": "dazn-tier-motor-pt",
       "cadence": "Monthly",
@@ -14645,21 +14710,6 @@
       "includedAddOnIds": []
     },
     {
-      "id": "dazn-tier-bronze-pt-pt-yearly-instalments",
-      "tierId": "dazn-tier-bronze-pt",
-      "cadence": "Yearly Instalments",
-      "market": "pt",
-      "standardPrice": 19.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
       "id": "dazn-tier-bronze-pt-pt-yearly",
       "tierId": "dazn-tier-bronze-pt",
       "cadence": "Yearly",
@@ -14686,21 +14736,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-silver-pt-pt-yearly-instalments",
-      "tierId": "dazn-tier-silver-pt",
-      "cadence": "Yearly Instalments",
-      "market": "pt",
-      "standardPrice": 25.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-tier-silver-pt-pt-yearly",
@@ -15098,20 +15133,6 @@
       "includedAddOnIds": []
     },
     {
-      "id": "dazn-tier-us-es-es-monthly",
-      "tierId": "dazn-tier-us-es",
-      "cadence": "Monthly",
-      "market": "es",
-      "standardPrice": 7.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
       "id": "dazn-tier-us-es-yp-es-monthly",
       "tierId": "dazn-tier-us-es-yp",
       "cadence": "Monthly",
@@ -15139,6 +15160,210 @@
       "addOnDiscountPercent": null,
       "includedAddOnIds": [],
       "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-motor-es-yp-es-monthly",
+      "tierId": "dazn-tier-motor-es-yp",
+      "cadence": "Monthly",
+      "market": "es",
+      "standardPrice": 29.99,
+      "discount": true,
+      "introPrice": 20.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
+      "id": "dazn-tier-motor-es-yp-es-yearly-instalments",
+      "tierId": "dazn-tier-motor-es-yp",
+      "cadence": "Yearly Instalments",
+      "market": "es",
+      "standardPrice": 19.99,
+      "discount": true,
+      "introPrice": 13.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-baloncesto-es-yp-es-monthly",
+      "tierId": "dazn-tier-baloncesto-es-yp",
+      "cadence": "Monthly",
+      "market": "es",
+      "standardPrice": 14.99,
+      "discount": true,
+      "introPrice": 10.49,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
+      "id": "dazn-tier-baloncesto-es-yp-es-yearly-instalments",
+      "tierId": "dazn-tier-baloncesto-es-yp",
+      "cadence": "Yearly Instalments",
+      "market": "es",
+      "standardPrice": 5.99,
+      "discount": true,
+      "introPrice": 4.19,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-futbol-es-yp-es-monthly",
+      "tierId": "dazn-tier-futbol-es-yp",
+      "cadence": "Monthly",
+      "market": "es",
+      "standardPrice": 29.99,
+      "discount": true,
+      "introPrice": 20.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
+      "id": "dazn-tier-futbol-es-es-yearly-instalments",
+      "tierId": "dazn-tier-futbol-es",
+      "cadence": "Yearly Instalments",
+      "market": "es",
+      "standardPrice": 19.99,
+      "discount": true,
+      "introPrice": 14.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12,
+      "canAdd": [
+        {
+          "id": "tier_baloncesto_es",
+          "name": "Baloncesto",
+          "price": 9.99,
+          "cadence": "Monthly"
+        }
+      ]
+    },
+    {
+      "id": "dazn-tier-futbol-es-yp-es-yearly-instalments",
+      "tierId": "dazn-tier-futbol-es-yp",
+      "cadence": "Yearly Instalments",
+      "market": "es",
+      "standardPrice": 19.99,
+      "discount": true,
+      "introPrice": 13.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-futbol-es-es-yearly",
+      "tierId": "dazn-tier-futbol-es",
+      "cadence": "Yearly",
+      "market": "es",
+      "standardPrice": 219.99,
+      "discount": true,
+      "introPrice": 164.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "canAdd": [
+        {
+          "id": "tier_baloncesto_es",
+          "name": "Baloncesto",
+          "price": 9.99,
+          "cadence": "Monthly"
+        }
+      ]
+    },
+    {
+      "id": "dazn-tier-premium-es-yp-es-monthly",
+      "tierId": "dazn-tier-premium-es-yp",
+      "cadence": "Monthly",
+      "market": "es",
+      "standardPrice": 44.99,
+      "discount": true,
+      "introPrice": 31.49,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
+      "id": "dazn-tier-premium-es-es-yearly-instalments",
+      "tierId": "dazn-tier-premium-es",
+      "cadence": "Yearly Instalments",
+      "market": "es",
+      "standardPrice": 31.99,
+      "discount": true,
+      "introPrice": 25.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-premium-es-yp-es-yearly-instalments",
+      "tierId": "dazn-tier-premium-es-yp",
+      "cadence": "Yearly Instalments",
+      "market": "es",
+      "standardPrice": 31.99,
+      "discount": true,
+      "introPrice": 22.39,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-premium-es-es-yearly",
+      "tierId": "dazn-tier-premium-es",
+      "cadence": "Yearly",
+      "market": "es",
+      "standardPrice": 351.99,
+      "discount": true,
+      "introPrice": 285.99,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
+      "id": "dazn-tier-us-es-es-monthly",
+      "tierId": "dazn-tier-us-es",
+      "cadence": "Monthly",
+      "market": "es",
+      "standardPrice": 7.99,
+      "discount": false,
+      "introPrice": null,
+      "introMonths": 0,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
     },
     {
       "id": "dazn-tier-us-es-es-yearly-instalments",
@@ -15192,20 +15417,6 @@
       ]
     },
     {
-      "id": "dazn-tier-motor-es-yp-es-monthly",
-      "tierId": "dazn-tier-motor-es-yp",
-      "cadence": "Monthly",
-      "market": "es",
-      "standardPrice": 29.99,
-      "discount": true,
-      "introPrice": 20.99,
-      "introMonths": 12,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
       "id": "dazn-tier-motor-es-es-yearly-instalments",
       "tierId": "dazn-tier-motor-es",
       "cadence": "Yearly Instalments",
@@ -15229,21 +15440,6 @@
       ]
     },
     {
-      "id": "dazn-tier-motor-es-yp-es-yearly-instalments",
-      "tierId": "dazn-tier-motor-es-yp",
-      "cadence": "Yearly Instalments",
-      "market": "es",
-      "standardPrice": 19.99,
-      "discount": true,
-      "introPrice": 13.99,
-      "introMonths": 12,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
       "id": "dazn-tier-motor-es-es-yearly",
       "tierId": "dazn-tier-motor-es",
       "cadence": "Yearly",
@@ -15264,20 +15460,6 @@
           "cadence": "Monthly"
         }
       ]
-    },
-    {
-      "id": "dazn-tier-baloncesto-es-yp-es-monthly",
-      "tierId": "dazn-tier-baloncesto-es-yp",
-      "cadence": "Monthly",
-      "market": "es",
-      "standardPrice": 14.99,
-      "discount": true,
-      "introPrice": 10.49,
-      "introMonths": 12,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
     },
     {
       "id": "dazn-tier-baloncesto-es-es-monthly",
@@ -15309,21 +15491,6 @@
       "termMonths": 12
     },
     {
-      "id": "dazn-tier-baloncesto-es-yp-es-yearly-instalments",
-      "tierId": "dazn-tier-baloncesto-es-yp",
-      "cadence": "Yearly Instalments",
-      "market": "es",
-      "standardPrice": 5.99,
-      "discount": true,
-      "introPrice": 4.19,
-      "introMonths": 12,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
       "id": "dazn-tier-baloncesto-es-es-yearly",
       "tierId": "dazn-tier-baloncesto-es",
       "cadence": "Yearly",
@@ -15332,20 +15499,6 @@
       "discount": false,
       "introPrice": null,
       "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-futbol-es-yp-es-monthly",
-      "tierId": "dazn-tier-futbol-es-yp",
-      "cadence": "Monthly",
-      "market": "es",
-      "standardPrice": 29.99,
-      "discount": true,
-      "introPrice": 20.99,
-      "introMonths": 12,
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
@@ -15374,129 +15527,11 @@
       ]
     },
     {
-      "id": "dazn-tier-futbol-es-es-yearly-instalments",
-      "tierId": "dazn-tier-futbol-es",
-      "cadence": "Yearly Instalments",
-      "market": "es",
-      "standardPrice": 19.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12,
-      "canAdd": [
-        {
-          "id": "tier_baloncesto_es",
-          "name": "Baloncesto",
-          "price": 9.99,
-          "cadence": "Monthly"
-        }
-      ]
-    },
-    {
-      "id": "dazn-tier-futbol-es-yp-es-yearly-instalments",
-      "tierId": "dazn-tier-futbol-es-yp",
-      "cadence": "Yearly Instalments",
-      "market": "es",
-      "standardPrice": 19.99,
-      "discount": true,
-      "introPrice": 13.99,
-      "introMonths": 12,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
-      "id": "dazn-tier-futbol-es-es-yearly",
-      "tierId": "dazn-tier-futbol-es",
-      "cadence": "Yearly",
-      "market": "es",
-      "standardPrice": 219.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "canAdd": [
-        {
-          "id": "tier_baloncesto_es",
-          "name": "Baloncesto",
-          "price": 9.99,
-          "cadence": "Monthly"
-        }
-      ]
-    },
-    {
-      "id": "dazn-tier-premium-es-yp-es-monthly",
-      "tierId": "dazn-tier-premium-es-yp",
-      "cadence": "Monthly",
-      "market": "es",
-      "standardPrice": 44.99,
-      "discount": true,
-      "introPrice": 31.49,
-      "introMonths": 12,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
       "id": "dazn-tier-premium-es-es-monthly",
       "tierId": "dazn-tier-premium-es",
       "cadence": "Monthly",
       "market": "es",
       "standardPrice": 44.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-premium-es-es-yearly-instalments",
-      "tierId": "dazn-tier-premium-es",
-      "cadence": "Yearly Instalments",
-      "market": "es",
-      "standardPrice": 31.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
-      "id": "dazn-tier-premium-es-yp-es-yearly-instalments",
-      "tierId": "dazn-tier-premium-es-yp",
-      "cadence": "Yearly Instalments",
-      "market": "es",
-      "standardPrice": 31.99,
-      "discount": true,
-      "introPrice": 22.39,
-      "introMonths": 12,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
-      "id": "dazn-tier-premium-es-es-yearly",
-      "tierId": "dazn-tier-premium-es",
-      "cadence": "Yearly",
-      "market": "es",
-      "standardPrice": 351.99,
       "discount": false,
       "introPrice": null,
       "introMonths": 0,
@@ -16345,6 +16380,92 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-tier-dazn-ca-ul-ca-monthly",
+      "tierId": "dazn-tier-dazn-ca-ul",
+      "cadence": "Monthly",
+      "market": "ca",
+      "standardPrice": 39.99,
+      "discount": true,
+      "introPrice": 35.99,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
+      "id": "dazn-tier-dazn-ca-ul-ca-yearly-instalments",
+      "tierId": "dazn-tier-dazn-ca-ul",
+      "cadence": "Yearly Instalments",
+      "market": "ca",
+      "standardPrice": 29.99,
+      "discount": true,
+      "introPrice": 25.99,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-dazn-ca-ul-ca-yearly",
+      "tierId": "dazn-tier-dazn-ca-ul",
+      "cadence": "Yearly",
+      "market": "ca",
+      "standardPrice": 269.99,
+      "discount": true,
+      "introPrice": 255,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
+      "id": "dazn-tier-daznplus-ca-ul-ca-monthly",
+      "tierId": "dazn-tier-daznplus-ca-ul",
+      "cadence": "Monthly",
+      "market": "ca",
+      "standardPrice": 59.99,
+      "discount": true,
+      "introPrice": 55.99,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
+      "id": "dazn-tier-daznplus-ca-ul-ca-yearly-instalments",
+      "tierId": "dazn-tier-daznplus-ca-ul",
+      "cadence": "Yearly Instalments",
+      "market": "ca",
+      "standardPrice": 49.99,
+      "discount": true,
+      "introPrice": 45.99,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
+      "id": "dazn-tier-daznplus-ca-ul-ca-yearly",
+      "tierId": "dazn-tier-daznplus-ca-ul",
+      "cadence": "Yearly",
+      "market": "ca",
+      "standardPrice": 469.99,
+      "discount": true,
+      "introPrice": 455,
+      "introMonths": 12,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": []
+    },
+    {
       "id": "dazn-tier-dazn-ca-ca-monthly",
       "tierId": "dazn-tier-dazn-ca",
       "cadence": "Monthly",
@@ -16422,92 +16543,6 @@
       "cadence": "Yearly",
       "market": "ca",
       "standardPrice": 449.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-dazn-ca-ul-ca-monthly",
-      "tierId": "dazn-tier-dazn-ca-ul",
-      "cadence": "Monthly",
-      "market": "ca",
-      "standardPrice": 39.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-dazn-ca-ul-ca-yearly-instalments",
-      "tierId": "dazn-tier-dazn-ca-ul",
-      "cadence": "Yearly Instalments",
-      "market": "ca",
-      "standardPrice": 29.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
-      "id": "dazn-tier-dazn-ca-ul-ca-yearly",
-      "tierId": "dazn-tier-dazn-ca-ul",
-      "cadence": "Yearly",
-      "market": "ca",
-      "standardPrice": 269.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-daznplus-ca-ul-ca-monthly",
-      "tierId": "dazn-tier-daznplus-ca-ul",
-      "cadence": "Monthly",
-      "market": "ca",
-      "standardPrice": 59.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-tier-daznplus-ca-ul-ca-yearly-instalments",
-      "tierId": "dazn-tier-daznplus-ca-ul",
-      "cadence": "Yearly Instalments",
-      "market": "ca",
-      "standardPrice": 49.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
-    },
-    {
-      "id": "dazn-tier-daznplus-ca-ul-ca-yearly",
-      "tierId": "dazn-tier-daznplus-ca-ul",
-      "cadence": "Yearly",
-      "market": "ca",
-      "standardPrice": 469.99,
       "discount": false,
       "introPrice": null,
       "introMonths": 0,
@@ -16689,6 +16724,21 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-base-ent-set-ie-yearly-instalments",
+      "tierId": "dazn-base-ent-set",
+      "cadence": "Yearly Instalments",
+      "market": "ie",
+      "standardPrice": 15.99,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-base-ent-set-ie-monthly",
       "tierId": "dazn-base-ent-set",
       "cadence": "Monthly",
@@ -16701,21 +16751,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-base-ent-set-ie-yearly-instalments",
-      "tierId": "dazn-base-ent-set",
-      "cadence": "Yearly Instalments",
-      "market": "ie",
-      "standardPrice": 15.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-base-ent-set-ie-yearly",
@@ -16743,7 +16778,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ],
       "termMonths": 12
     },
     {
@@ -16758,7 +16799,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": []
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-ie-weekly",
@@ -17185,6 +17232,21 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-base-ent-set-mx-yearly-instalments",
+      "tierId": "dazn-base-ent-set",
+      "cadence": "Yearly Instalments",
+      "market": "mx",
+      "standardPrice": 199,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-base-ent-set-mx-monthly",
       "tierId": "dazn-base-ent-set",
       "cadence": "Monthly",
@@ -17197,21 +17259,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-base-ent-set-mx-yearly-instalments",
-      "tierId": "dazn-base-ent-set",
-      "cadence": "Yearly Instalments",
-      "market": "mx",
-      "standardPrice": 199,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-base-ent-set-mx-yearly",
@@ -17239,7 +17286,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ],
       "termMonths": 12
     },
     {
@@ -17254,7 +17307,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": []
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-mx-weekly",
@@ -17627,6 +17686,21 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-base-ent-set-nl-yearly-instalments",
+      "tierId": "dazn-base-ent-set",
+      "cadence": "Yearly Instalments",
+      "market": "nl",
+      "standardPrice": 14.99,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-base-ent-set-nl-monthly",
       "tierId": "dazn-base-ent-set",
       "cadence": "Monthly",
@@ -17639,21 +17713,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-base-ent-set-nl-yearly-instalments",
-      "tierId": "dazn-base-ent-set",
-      "cadence": "Yearly Instalments",
-      "market": "nl",
-      "standardPrice": 14.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-base-ent-set-nl-yearly",
@@ -17681,7 +17740,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ],
       "termMonths": 12
     },
     {
@@ -17696,7 +17761,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": []
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-nl-weekly",
@@ -18069,6 +18140,21 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-base-ent-set-pl-yearly-instalments",
+      "tierId": "dazn-base-ent-set",
+      "cadence": "Yearly Instalments",
+      "market": "pl",
+      "standardPrice": 29.99,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-base-ent-set-pl-monthly",
       "tierId": "dazn-base-ent-set",
       "cadence": "Monthly",
@@ -18081,21 +18167,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-base-ent-set-pl-yearly-instalments",
-      "tierId": "dazn-base-ent-set",
-      "cadence": "Yearly Instalments",
-      "market": "pl",
-      "standardPrice": 29.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-base-ent-set-pl-yearly",
@@ -18123,7 +18194,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ],
       "termMonths": 12
     },
     {
@@ -18138,7 +18215,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": []
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-pl-weekly",
@@ -18524,6 +18607,21 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-base-ent-set-gb-yearly-instalments",
+      "tierId": "dazn-base-ent-set",
+      "cadence": "Yearly Instalments",
+      "market": "gb",
+      "standardPrice": 15.99,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-base-ent-set-gb-monthly",
       "tierId": "dazn-base-ent-set",
       "cadence": "Monthly",
@@ -18536,21 +18634,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-base-ent-set-gb-yearly-instalments",
-      "tierId": "dazn-base-ent-set",
-      "cadence": "Yearly Instalments",
-      "market": "gb",
-      "standardPrice": 15.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-base-ent-set-gb-yearly",
@@ -18578,7 +18661,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ],
       "termMonths": 12
     },
     {
@@ -18593,7 +18682,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": []
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-gb-weekly",
@@ -19022,6 +19117,21 @@
       "termMonths": 12
     },
     {
+      "id": "dazn-base-ent-set-us-yearly-instalments",
+      "tierId": "dazn-base-ent-set",
+      "cadence": "Yearly Instalments",
+      "market": "us",
+      "standardPrice": 24.99,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-base-ent-set-us-monthly",
       "tierId": "dazn-base-ent-set",
       "cadence": "Monthly",
@@ -19034,21 +19144,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-base-ent-set-us-yearly-instalments",
-      "tierId": "dazn-base-ent-set",
-      "cadence": "Yearly Instalments",
-      "market": "us",
-      "standardPrice": 24.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-base-ent-set-us-yearly",
@@ -19076,7 +19171,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ],
       "termMonths": 12
     },
     {
@@ -19091,7 +19192,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": []
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-us-weekly",
@@ -19295,6 +19402,21 @@
       "includedAddOnIds": []
     },
     {
+      "id": "dazn-base-ent-set-au-yearly-instalments",
+      "tierId": "dazn-base-ent-set",
+      "cadence": "Yearly Instalments",
+      "market": "au",
+      "standardPrice": 24.99,
+      "discount": true,
+      "introPrice": 0,
+      "introMonths": 1,
+      "addOnId": null,
+      "addOnPurchaseType": null,
+      "addOnDiscountPercent": null,
+      "includedAddOnIds": [],
+      "termMonths": 12
+    },
+    {
       "id": "dazn-base-ent-set-au-monthly",
       "tierId": "dazn-base-ent-set",
       "cadence": "Monthly",
@@ -19307,21 +19429,6 @@
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
       "includedAddOnIds": []
-    },
-    {
-      "id": "dazn-base-ent-set-au-yearly-instalments",
-      "tierId": "dazn-base-ent-set",
-      "cadence": "Yearly Instalments",
-      "market": "au",
-      "standardPrice": 24.99,
-      "discount": false,
-      "introPrice": null,
-      "introMonths": 0,
-      "addOnId": null,
-      "addOnPurchaseType": null,
-      "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
-      "termMonths": 12
     },
     {
       "id": "dazn-base-ent-set-au-yearly",
@@ -19349,7 +19456,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ],
       "termMonths": 12
     },
     {
@@ -19364,7 +19477,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": []
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-au-weekly",
@@ -19776,7 +19895,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": [],
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ],
       "termMonths": 12
     },
     {
@@ -19791,7 +19916,13 @@
       "addOnId": null,
       "addOnPurchaseType": null,
       "addOnDiscountPercent": null,
-      "includedAddOnIds": []
+      "includedAddOnIds": [
+        "ppv-garcia-benn",
+        "ppv-aew-all-in",
+        "ppv-till-romero",
+        "ppv-dubois-wardley-2",
+        "ppv-canelo-mbilli"
+      ]
     },
     {
       "id": "nfl-tier-nfl-pro-br-weekly",
@@ -20175,27 +20306,27 @@
   "stepId": "",
   "device": "mobile",
   "live": {
-    "be": "2026-09-18T17:21:11.377Z",
-    "at": "2026-09-18T17:21:11.417Z",
-    "de": "2026-09-18T17:21:11.460Z",
-    "li": "2026-09-18T17:21:11.498Z",
-    "lu": "2026-09-18T17:21:11.537Z",
-    "ch": "2026-09-18T17:21:11.574Z",
-    "fr": "2026-09-18T17:21:11.609Z",
-    "it": "2026-09-18T17:21:11.694Z",
-    "jp": "2026-09-18T17:21:11.720Z",
-    "pt": "2026-09-18T17:21:11.740Z",
-    "es": "2026-09-18T17:21:11.758Z",
-    "tw": "2026-09-18T17:21:11.774Z",
-    "ca": "2026-09-18T17:21:11.792Z",
-    "ie": "2026-09-18T17:21:11.813Z",
-    "mx": "2026-09-18T17:21:11.829Z",
-    "nl": "2026-09-18T17:21:11.845Z",
-    "pl": "2026-09-18T17:21:11.865Z",
-    "gb": "2026-09-18T17:21:11.882Z",
-    "us": "2026-09-18T17:21:11.901Z",
-    "au": "2026-09-18T17:21:11.915Z",
-    "br": "2026-09-18T17:21:11.934Z"
+    "be": "2026-09-18T17:55:35.417Z",
+    "at": "2026-09-18T17:55:35.490Z",
+    "de": "2026-09-18T17:55:35.583Z",
+    "li": "2026-09-18T17:55:35.652Z",
+    "lu": "2026-09-18T17:55:35.712Z",
+    "ch": "2026-09-18T17:55:35.781Z",
+    "fr": "2026-09-18T17:55:35.846Z",
+    "it": "2026-09-18T17:55:35.875Z",
+    "jp": "2026-09-18T17:55:35.897Z",
+    "pt": "2026-09-18T17:55:35.934Z",
+    "es": "2026-09-18T17:55:35.958Z",
+    "tw": "2026-09-18T17:55:35.979Z",
+    "ca": "2026-09-18T17:55:36.001Z",
+    "ie": "2026-09-18T17:55:36.026Z",
+    "mx": "2026-09-18T17:55:36.051Z",
+    "nl": "2026-09-18T17:55:36.078Z",
+    "pl": "2026-09-18T17:55:36.097Z",
+    "gb": "2026-09-18T17:55:36.118Z",
+    "us": "2026-09-18T17:55:36.153Z",
+    "au": "2026-09-18T17:55:36.174Z",
+    "br": "2026-09-18T17:55:36.196Z"
   },
   "planTabsByMarket": {
     "es": [

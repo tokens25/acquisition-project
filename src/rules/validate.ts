@@ -50,7 +50,8 @@ function checkOffer(offer: CadenceOffer, tier: Tier): Violation[] {
   if (!(offer.standardPrice > 0)) {
     out.push({ rule: 'O-price', severity: 'error', message: `No price for ${offer.cadence}.`, tierId: id })
   }
-  if (offer.discount && (offer.introPrice === null || !(offer.introPrice > 0))) {
+  // Zero is a price: a first month free is a real offer, and DAZN runs them.
+  if (offer.discount && (offer.introPrice === null || !(offer.introPrice >= 0))) {
     out.push({ rule: 'O-intro', severity: 'error', message: 'Discount is on but no discount price is set.', tierId: id })
   }
   if (offer.discount && offer.introPrice !== null && offer.introPrice >= offer.standardPrice) {

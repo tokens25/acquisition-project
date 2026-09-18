@@ -18,6 +18,7 @@
  * uploaded artwork, the "Starts at" switch — is kept.
  */
 import type {
+  AddOnEntry,
   AddOnLine,
   CadenceOffer,
   CardSet,
@@ -46,6 +47,7 @@ import {
   type MarketPull,
   type OffersBody,
   type RawEntitlement,
+  type RawOffer,
 } from './spec'
 
 /* ── Ids ──────────────────────────────────────────────────────────────── */
@@ -336,6 +338,8 @@ export interface LiveMarket {
   offers: CadenceOffer[]
   featureCatalog: FeatureEntry[]
   logoCatalog: CatalogEntry[]
+  /** The pay-per-views a plan here bundles in, named. */
+  addOnCatalog: AddOnEntry[]
   fetchedAt: string
   /** The tabs the CMS draws over this market's picker; absent for one row. */
   tabs?: PlanTab[]
@@ -364,6 +368,7 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
   const offers: CadenceOffer[] = []
   const features = new Map<string, FeatureEntry>()
   const logos = new Map<string, CatalogEntry>()
+  const addOns = new Map<string, AddOnEntry>()
   const notes: string[] = []
   const feature = (text: string) => {
     const id = featureIdFor(text)
@@ -377,7 +382,17 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
     const seen = new Set<string>()
     const ranks = new Map<string, number>()
 
-    for (const o of body.Offers ?? []) {
+    // The service lists the same rate plan more than once — plain, and again
+    // with a running promotion's discount on it (`…_#rule`). The promoted row
+    // is the offer the site shows, so it goes first and the plain one is
+    // the repeat. Purchasable rows before ones that are not.
+    const discounted = (o: RawOffer) => typeof o.ChargeTiers?.[0]?.Discount?.Price === 'number'
+    const ordered = [...(body.Offers ?? [])].sort((a, b) => {
+      const p = Number(b.Purchasable !== false) - Number(a.Purchasable !== false)
+      return p !== 0 ? p : Number(discounted(b)) - Number(discounted(a))
+    })
+
+    for (const o of ordered) {
       // A subscription, or a pass — the NFL's weekly pass is a one-off buy of
       // the same plan for a week, and a way to pay for it all the same.
       if (o.ProductType && o.ProductType !== 'SUBSCRIPTION' && o.ProductType !== 'PASS') continue
@@ -460,6 +475,42 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
       if (!ent) continue
       const text = legal.get(`${ent}|${o.cadence}`) ?? legalBase.get(`${ent}|${o.cadence}`)
       if (text) o.legal = text
+    }
+
+    /* Pay-per-views bundled into a plan, named from the market's own PPV
+       offers — "billing2_ES_PPV_CANELO_VS_MBILLI" is Canelo vs Mbilli. A
+       paired bundle id names two events and is skipped: each is listed on
+       its own. */
+    const ppvName = new Map<string, string>()
+    for (const a of body.Addons ?? []) {
+      if (a.ProductType !== 'ppv' || !a.Id) continue
+      const m = /_PPV_(.+)$/.exec(a.Id)
+      if (!m) continue
+      const name = m[1]
+        .toLowerCase()
+        .split('_')
+        .map((w) => (w === 'vs' ? 'vs' : w.charAt(0).toUpperCase() + w.slice(1)))
+        .join(' ')
+      ppvName.set(a.EntitlementSetId, name)
+    }
+    const includedBySet = new Map<string, string[]>()
+    for (const e of body.Entitlements ?? []) {
+      const ids = (e.ppvsIncluded ?? []).filter((x): x is string => typeof x === 'string' && !x.includes('_bundle_'))
+      if (ids.length) includedBySet.set(e.setId, ids)
+    }
+    for (const o of offers) {
+      const t = tiers.get(o.tierId)
+      const ent = t?.source?.entitlementSetId
+      const ids = ent ? includedBySet.get(ent) : undefined
+      if (!ids?.length || o.includedAddOnIds.length) continue
+      for (const id of ids) {
+        const catalogId = `ppv-${slug(id.replace(/^ppv_t_/, ''))}`
+        if (!addOns.has(catalogId)) {
+          const name = ppvName.get(id) ?? id.replace(/^ppv_t_/, '').split('_').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+          addOns.set(catalogId, { id: catalogId, title: name, subtitle: 'Pay-per-view included', price: null, imageId: '' })
+        }
+        o.includedAddOnIds.push(catalogId)
+      }
     }
 
     /* This market's words for each plan. */
@@ -640,6 +691,7 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
     offers,
     featureCatalog: [...features.values()],
     logoCatalog: [...logos.values()],
+    addOnCatalog: [...addOns.values()],
     fetchedAt: pull.fetchedAt,
     ...(tabbed ? { tabs: tabbed.tabs } : {}),
     notes,
@@ -722,6 +774,7 @@ export function mergeLive(set: CardSet, live: LiveMarket): CardSet {
     cadences: [...CADENCES, ...set.cadences.filter((c) => !CADENCES.includes(c))],
     featureCatalog: replace(set.featureCatalog, live.featureCatalog),
     logoCatalog: replace(set.logoCatalog, keepUploaded(set.logoCatalog, live.logoCatalog)),
+    addOnCatalog: replace(set.addOnCatalog ?? [], live.addOnCatalog),
     tiers,
     offers,
     live: { ...(set.live ?? {}), [market]: live.fetchedAt },
