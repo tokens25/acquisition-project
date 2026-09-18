@@ -260,6 +260,14 @@ export interface CadenceOffer {
   cadence: string
   /** Omitted applies everywhere; a market code narrows it, and wins. */
   market?: string
+  /**
+   * The feature lines the card shows when it shows this way of paying, when
+   * they differ from the plan's own. DAZN writes some benefit lines for one
+   * billing period only — the yearly card says "including the 2027 World Cup
+   * Qualifiers", the monthly one does not — and a card drawn at a price shows
+   * the lines that go with that price. Absent means the plan's lines.
+   */
+  features?: string[]
 
   /**
    * Which tab this price is for. Omitted applies on every tab, and a

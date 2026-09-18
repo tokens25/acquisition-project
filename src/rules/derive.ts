@@ -408,7 +408,8 @@ export function deriveCard(
    */
   const overflowCount = overflows && countsOverflow ? Math.max(total - logos.length, 0) : 0
 
-  const allFeatures: DerivedFeature[] = tier.features.map((id) => {
+  // The lines that go with the price shown, where the way of paying has its own.
+  const allFeatures: DerivedFeature[] = (offer.features ?? tier.features).map((id) => {
     const r = resolveFeature(set, id)
     if (r.state === 'missing') {
       missingRefs.push(`feature:${id}`)

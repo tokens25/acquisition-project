@@ -53,7 +53,9 @@ export function CardSetView({
   const scrollRef = useRef<HTMLDivElement>(null)
   const [hasMore, setHasMore] = useState(false)
   const [hasLess, setHasLess] = useState(false)
-  const [descriptionLines, setDescriptionLines] = useState<1 | 2>(1)
+  // 0 when no card in the row has a description: the space a line would take
+  // is not reserved for a line nobody wrote.
+  const [descriptionLines, setDescriptionLines] = useState<0 | 1 | 2>(1)
   /**
    * The open dialog's contents, or null.
    *
@@ -145,10 +147,18 @@ export function CardSetView({
     if (!root || !probe) return
 
     const measure = () => {
+      if (!cards.some(({ tier }) => tier.description.trim())) {
+        setDescriptionLines((prev) => (prev === 0 ? prev : 0))
+        return
+      }
       const sample = root.querySelector<HTMLElement>('.acq-card-header__description')
       if (!sample) return
       const width = sample.clientWidth
-      if (!width) return
+      if (!width) {
+        // Hidden by a previous "none" — show it, and measure on the next pass.
+        setDescriptionLines((prev) => (prev === 0 ? 1 : prev))
+        return
+      }
 
       const style = getComputedStyle(sample)
       const lineHeight = parseFloat(style.lineHeight) || 21

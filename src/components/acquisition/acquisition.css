@@ -574,6 +574,9 @@ button.acq-feature__info:hover {
 /* S-2 · the whole set shares one description height. Measured in `lh` — the
    element's own line box — because the card is drawn at two type scales and a
    pixel constant sized for one leaves a gap under the other. */
+.acq-set[data-description-lines='0'] .acq-card-header__description {
+  display: none;
+}
 .acq-set[data-description-lines='1'] {
   --acq-description-lines: 1;
 }

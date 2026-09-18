@@ -14,7 +14,7 @@ export interface RuledCardProps {
   context: Context
   device: Device
   /** Shared across the set by S-2. */
-  descriptionLines: 1 | 2
+  descriptionLines: 0 | 1 | 2
   /**
    * Asks for the "All features & content" dialog, handing over everything it
    * shows. Built here because this is where the card is derived — a dialog that

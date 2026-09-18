@@ -52,6 +52,9 @@ export const isBaseContext = (c: Context) => c.market === BASE_MARKET && !c.camp
  * not upgraded: it starts fresh, and its old key is left untouched in case
  * anything needs recovering by hand.
  */
+/** Plans once shipped by hand that DAZN's catalogue now supplies. */
+const LEGACY_TIERS = new Set(['fiba-ultimate', 'fiba-standard'])
+
 function hydrate(raw: unknown): CardSet {
   if (typeof raw !== 'object' || raw === null) return defaultSet
   const input = raw as Partial<CardSet> & { flowStructures?: unknown; journeys?: unknown }
@@ -59,7 +62,10 @@ function hydrate(raw: unknown): CardSet {
   // Plans the setup wizard once generated, and the wizard's own records. The
   // wizard is gone and the catalogue supplies the plans now; a browser that
   // still holds its empty cards would show them beside the real ones.
-  const generated = new Set(input.tiers.filter((t) => /^gen-/.test(t.id)).map((t) => t.id))
+  // Plans transcribed from Figma before the catalogue supplied them go the
+  // same way: Courtside's two hand-written cards beside its two live ones
+  // showed a market four plans where it sells two.
+  const generated = new Set(input.tiers.filter((t) => /^gen-/.test(t.id) || LEGACY_TIERS.has(t.id)).map((t) => t.id))
   const kept: Partial<CardSet> & { flowStructures?: unknown; journeys?: unknown } = { ...input }
   delete kept.flowStructures
   delete kept.journeys

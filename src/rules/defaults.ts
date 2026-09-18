@@ -39,21 +39,6 @@ const featureCatalog = [
   { id: 'benefit-original-shows', iconId: 'video', text: 'Original shows and on demand content', status: 'active' as const },
   { id: 'benefit-devices', iconId: 'devices', text: 'Stream on 2 devices in 1 locations', status: 'active' as const },
   { id: 'benefit-download', iconId: 'download', text: 'Download to watch on the go', status: 'active' as const },
-
-  /**
-   * FIBA's lines, as its cards draw them.
-   *
-   * Two of the five are cut off in the Figma frame itself — the design shows
-   * "Watch live and on demand action fr…" and "Watch legendary games, player
-   * pro…" with the info mark beside them, which is the truncation working, not
-   * the string. They are left out rather than guessed at: a line invented here
-   * would read as signed-off copy, and §7 keeps authored values authored.
-   */
-  { id: 'fiba-hdr', iconId: 'hdr', text: 'Enjoy HDR and Dolby 5.1 surround sound', status: 'active' as const },
-  { id: 'fiba-multiview', iconId: 'multiview', text: 'Multiview - watch up to 4 games at once', status: 'active' as const },
-  { id: 'fiba-devices-5', iconId: 'devices', text: 'Stream on 5 devices in 2 locations', status: 'active' as const },
-  { id: 'fiba-devices-2', iconId: 'devices', text: 'Stream on 2 devices in 1 location', status: 'active' as const },
-  { id: 'fiba-download', iconId: 'download', text: 'Download to watch on the go', status: 'active' as const },
 ]
 
 const addOnCatalog = [
@@ -185,30 +170,6 @@ export const defaultSet: CardSet = {
       logoTiles: ['yankees', 'nets'],
       logoTotal: 2,
     }),
-
-    /**
-     * FIBA — two plans, not three, and no competition tiles.
-     *
-     * Figma: "FIBA – Full Flow - New / Logged out user" → Tiers. The cards
-     * carry a plan name and a feature list and nothing between them, so the
-     * description is empty rather than filled with something plausible.
-     */
-    tier({
-      id: 'fiba-ultimate',
-      planName: 'Ultimate',
-      subscriptions: ['fiba'],
-      displayOrder: 1,
-      highlighted: true,
-      badge: 'BEST EXPERIENCE',
-      features: ['fiba-hdr', 'fiba-multiview', 'fiba-devices-5', 'fiba-download'],
-    }),
-    tier({
-      id: 'fiba-standard',
-      planName: 'Standard',
-      subscriptions: ['fiba'],
-      displayOrder: 2,
-      features: ['fiba-devices-2', 'fiba-devices-5', 'fiba-download'],
-    }),
   ],
 
   // One price each, at the cadence the tiles are drawn at. No discount: the
@@ -217,41 +178,6 @@ export const defaultSet: CardSet = {
     offer({ id: 'msg-plus-monthly', tierId: 'msg-plus', cadence: 'Monthly', standardPrice: 29.99 }),
     offer({ id: 'gotham-bundle-monthly', tierId: 'gotham-bundle', cadence: 'Monthly', standardPrice: 34.99 }),
     offer({ id: 'yes-monthly', tierId: 'yes', cadence: 'Monthly', standardPrice: 19.99 }),
-
-    // FIBA is sold two ways in the design — "Monthly flex" and "Pay Upfront" —
-    // read here as the cadences that already exist. The third tab, "Pay
-    // monthly", is drawn as a copy of Pay Upfront with the same yearly prices,
-    // so there is no third price to write and no row is invented for it.
-    offer({
-      id: 'fiba-ultimate-monthly',
-      tierId: 'fiba-ultimate',
-      cadence: 'Monthly',
-      standardPrice: 13.99,
-      explainer: "Monthly subscription. Cancel with 30 days' notice.",
-    }),
-    offer({
-      id: 'fiba-standard-monthly',
-      tierId: 'fiba-standard',
-      cadence: 'Monthly',
-      standardPrice: 11.99,
-      explainer: "Monthly subscription. Cancel with 30 days' notice.",
-    }),
-    offer({
-      id: 'fiba-ultimate-yearly',
-      tierId: 'fiba-ultimate',
-      cadence: 'Yearly',
-      standardPrice: 49.99,
-      explainer:
-        'Access to Courtside 1891 for a year. 12-month contract. Your subscription auto-renews unless you cancel before the end of the minimum term.',
-    }),
-    offer({
-      id: 'fiba-standard-yearly',
-      tierId: 'fiba-standard',
-      cadence: 'Yearly',
-      standardPrice: 44.99,
-      explainer:
-        'Access to Courtside 1891 for a year. 12-month contract. Your subscription auto-renews unless you cancel before the end of the minimum term.',
-    }),
   ],
 
   // MSG+ is where the work is, so it is where a reset lands. It is also the

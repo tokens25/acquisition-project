@@ -9,7 +9,7 @@ export interface CardHeaderProps {
   /** Full description — never pre-truncated by the author. */
   description: string
   /** Lines the set has agreed on (S-2). All cards in a set share one value. */
-  descriptionLines?: 1 | 2
+  descriptionLines?: 0 | 1 | 2
   /** Opens the "All features & content" modal. */
   onMore?: () => void
   /** Figma `Highlighted` — gold gradient title instead of the plain white one. */

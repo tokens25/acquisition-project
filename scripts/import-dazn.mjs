@@ -100,6 +100,7 @@ const used = { features: new Set(), logos: new Set() }
 for (const t of set.tiers) {
   for (const id of t.features) used.features.add(id)
   for (const id of t.logoTiles) used.logos.add(id)
+  for (const o of set.offers) for (const id of o.features ?? []) used.features.add(id)
   for (const o of t.overrides) {
     for (const id of o.patch.features ?? []) used.features.add(id)
     for (const id of o.patch.logoTiles ?? []) used.logos.add(id)

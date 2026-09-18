@@ -19,7 +19,7 @@ export interface AcquisitionCardProps {
   title: string
   description: string
   /** Shared line budget for the set (S-2). */
-  descriptionLines?: 1 | 2
+  descriptionLines?: 0 | 1 | 2
   onMore?: () => void
 
   /** Gold border, gold gradient title and gold CTA. */

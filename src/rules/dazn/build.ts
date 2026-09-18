@@ -146,12 +146,37 @@ function cardsFor(content: Content | null, market: string, entSetId: string) {
   return scored.sort((a, b) => b.score - a.score)
 }
 
-function benefitsOf(content: Content, item: ContentfulEntry): string[] {
+/** One benefit line, and the billing period it is written for — most are for all of them. */
+interface Benefit {
+  text: string
+  period: string | null
+}
+
+function benefitsOf(content: Content, item: ContentfulEntry): Benefit[] {
   return arr<ContentfulLink>(item.fields.benefits)
     .map((l) => content.entries.get(l.sys.id))
     .filter((e): e is ContentfulEntry => Boolean(e))
-    .map((e) => str(e.fields.value).replace(/\u200b/g, '').trim())
-    .filter(Boolean)
+    .map((e) => ({
+      text: str(e.fields.value).replace(/\u200b/g, '').trim(),
+      period: str(e.fields.billingPeriodBenefit) || null,
+    }))
+    .filter((b) => Boolean(b.text))
+}
+
+/**
+ * Whether a benefit written for a billing period belongs on a card drawn at
+ * this cadence. The CMS names the period the way the offers service does
+ * (Month, Annual, Instalments, Week); a benefit for none belongs everywhere.
+ */
+function benefitShows(b: Benefit, cadence: string): boolean {
+  if (!b.period) return true
+  const p = b.period.toLowerCase()
+  if (p.startsWith('month')) return cadence === 'Monthly'
+  if (p.startsWith('week')) return cadence === 'Weekly'
+  if (p.startsWith('annual') || p.startsWith('year')) return cadence === 'Yearly'
+  if (p.startsWith('instal')) return /instalments/i.test(cadence)
+  if (p.startsWith('season')) return cadence === 'Seasonal'
+  return true
 }
 
 /** A CMS asset's description, as one line: it arrives with hard wraps and stray trailing spaces. */
@@ -567,7 +592,7 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
           // Line for line, when the two cards list the same number of them.
           if (nativeLines.length === lines.length) {
             lines.forEach((line, i) => {
-              if (nativeLines[i]) words[`features.${featureIdFor(line)}`] = canon(nativeLines[i])
+              if (nativeLines[i]) words[`features.${featureIdFor(line.text)}`] = canon(nativeLines[i].text)
             })
           }
           // The same assets, described in the market's language.
@@ -591,7 +616,19 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
         tier.highlighted = Boolean(f.isCardHighlighted || eyebrow || bestValue)
         const badge = eyebrow || bestValue
         if (badge) tier.badge = badge
-        tier.features = uniq(lines.map(feature))
+        // The lines for every way of paying are the plan's. A line DAZN
+        // writes for one billing period rides on that period's offer, so the
+        // card shows the lines that go with the price it is drawn at — and
+        // three near-identical "Watch live and on-demand action…" lines, one
+        // per period, stop appearing together.
+        tier.features = uniq(lines.filter((b) => !b.period).map((b) => feature(b.text)))
+        if (lines.some((b) => b.period)) {
+          for (const o of offers) {
+            if (o.tierId !== tierId) continue
+            const shown = lines.filter((b) => benefitShows(b, o.cadence)).map((b) => feature(b.text))
+            o.features = uniq(shown)
+          }
+        }
         tier.logoTiles = badges.map((l) => l.id)
         tier.logoTotal = badges.length
       } else if (curated) {
@@ -694,15 +731,24 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
     }
     /* The facts fill in what the words leave out. */
     if (tier.limits) {
-      const said = (re: RegExp) => tier.features.some((id) => re.test(features.get(id)?.text ?? ''))
-      const missing = limitLines(tier.limits).filter((line) => {
-        if (/device|stream/i.test(line)) return !said(SAYS.streams)
-        if (/download/i.test(line)) return !said(SAYS.downloads)
-        if (/mobile/i.test(line)) return !said(SAYS.mobile)
-        if (/pay-per-view/i.test(line)) return !said(SAYS.ppv)
-        return !said(SAYS.video)
-      })
+      const missingFrom = (ids: string[]) => {
+        const said = (re: RegExp) => ids.some((id) => re.test(features.get(id)?.text ?? ''))
+        return limitLines(tier.limits!).filter((line) => {
+          if (/device|stream/i.test(line)) return !said(SAYS.streams)
+          if (/download/i.test(line)) return !said(SAYS.downloads)
+          if (/mobile/i.test(line)) return !said(SAYS.mobile)
+          if (/pay-per-view/i.test(line)) return !said(SAYS.ppv)
+          return !said(SAYS.video)
+        })
+      }
+      const missing = missingFrom(tier.features)
       if (missing.length) tier.features = uniq([...tier.features, ...missing.map(feature)])
+      // And on each way of paying that carries its own lines.
+      for (const o of offers) {
+        if (o.tierId !== tier.id || !o.features) continue
+        const gaps = missingFrom(o.features)
+        if (gaps.length) o.features = uniq([...o.features, ...gaps.map(feature)])
+      }
       if (!tier.description.trim()) {
         tier.description = limitLines(tier.limits).slice(0, 3).join(' · ')
         tier.source!.copy = 'entitlements'
