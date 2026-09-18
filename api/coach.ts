@@ -276,7 +276,7 @@ The baseline questions, always: completion; decision clarity; package comprehens
 Answer only by calling report_findings.`
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {
       status,
@@ -402,3 +402,13 @@ export default async function handler(request: Request): Promise<Response> {
     return json({ error: error instanceof Error ? error.message : String(error) }, 502)
   }
 }
+
+/*
+ * Vercel reads the Web-standard signature — a Request in, a Response out —
+ * only from handlers exported by HTTP method. A default export is taken for
+ * the Node style (req, res), which hands over a relative URL and ignores a
+ * returned Response: deployed, this route hung until it was killed. The
+ * dev server's own plugin reads whichever of these it finds.
+ */
+export const GET = handler
+export const POST = handler

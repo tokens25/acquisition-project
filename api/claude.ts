@@ -73,7 +73,7 @@ function framePrompt(ask: Ask): string {
     .join('\n')
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   // Availability probe. The console calls this on load and hides its send
   // buttons when it gets no answer — which is what happens when the page is
   // opened as a published artifact rather than from the dev server.
@@ -199,3 +199,13 @@ function run(prompt: string): Promise<Response> {
     child.stdin.end()
   })
 }
+
+/*
+ * Vercel reads the Web-standard signature — a Request in, a Response out —
+ * only from handlers exported by HTTP method. A default export is taken for
+ * the Node style (req, res), which hands over a relative URL and ignores a
+ * returned Response: deployed, this route hung until it was killed. The
+ * dev server's own plugin reads whichever of these it finds.
+ */
+export const GET = handler
+export const POST = handler

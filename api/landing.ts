@@ -273,6 +273,7 @@ async function handler(request: Request): Promise<Response> {
  * Vercel reads the Web-standard signature — a Request in, a Response out —
  * only from handlers exported by HTTP method. A default export is taken for
  * the Node style (req, res), which hands over a relative URL and ignores a
- * returned Response.
+ * returned Response: deployed, this route hung until it was killed. The
+ * dev server's own plugin reads whichever of these it finds.
  */
 export const GET = handler
