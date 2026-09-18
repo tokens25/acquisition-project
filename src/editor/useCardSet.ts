@@ -9,6 +9,7 @@ import { adaptEngineContent, isEngineContent } from '../rules/adapt'
 import { readTemplate } from '../rules/sheet'
 import { readWorkbook } from '../rules/xlsx'
 import type { Journey } from '../rules/journey'
+import type { FlowLayer, FlowPatch } from '../rules/layers'
 import { applyStepOrder, chosenJourney, isReordered } from '../rules/journey'
 import { allJourneys } from '../rules/liveJourneys'
 import { tabsOf } from '../rules/tabs'
@@ -76,7 +77,31 @@ function hydrate(raw: unknown): CardSet {
     // and everything that reads the flow would find nothing there. Merged per
     // screen, so anything a person wrote wins over the shipped default.
     flow: mergeFlow(input.flow),
+    flowLayers: mergeLayers(input.flowLayers),
   }
+}
+
+/**
+ * The saved layers, with the shipped ones they predate and without the MSG+
+ * words that were written into other markets' layers while MSG+ was still
+ * the base copy: a market's layer saying "New York and Buffalo DMAs" on a
+ * Spanish payment screen is that history, not a decision. A layer scoped to
+ * the RSNs keeps every word it has.
+ */
+function mergeLayers(stored: FlowLayer[] | undefined): FlowLayer[] {
+  const shipped = defaultSet.flowLayers ?? []
+  const kept = (stored ?? []).flatMap((layer) => {
+    if (layer.when.subscription === 'rsns') return [layer]
+    const patch: FlowPatch = {}
+    for (const [screen, fields] of Object.entries(layer.patch) as [keyof FlowPatch, Record<string, unknown> | undefined][]) {
+      if (!fields) continue
+      const clean = Object.fromEntries(Object.entries(fields).filter(([, v]) => !RSN_WORDS.test(JSON.stringify(v))))
+      if (Object.keys(clean).length) (patch as Record<string, unknown>)[screen] = clean
+    }
+    return Object.keys(patch).length ? [{ ...layer, patch }] : []
+  })
+  const ids = new Set(kept.map((l) => l.id))
+  return [...kept, ...shipped.filter((l) => !ids.has(l.id))]
 }
 
 /**
