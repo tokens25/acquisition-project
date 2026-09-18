@@ -2,6 +2,8 @@ import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
+import { chosenTier, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
+import type { CadenceOption } from '../rules/flow'
 import { blankConsent, consentsOf } from '../rules/consents'
 import { blankLine, blankMethod, chosenMethod, linesOf, methodsOf } from '../rules/checkout'
 import { FieldGroup } from './FieldGroup'
@@ -286,12 +288,28 @@ function FlowFields({
 
   if (step.renderer === 'cadence') {
     const c = flow.cadence
-    // What the yearly card will say, so the setting below can show it rather
-    // than describe it.
-    // Keyed, so each card can say whether its own line was written or worked
-    // out; the first of them is what the wording control describes.
-    const savingById = cadenceSavings(c)
+    /*
+     * Priced from the plan being bought, when it has prices here.
+     *
+     * The options are then one per cadence the plan is sold at, and the
+     * numbers on them are the offers' — so the panel edits the words and
+     * shows the price, rather than offering a field for a figure the card
+     * would disagree with. Written words are kept per cadence, so a title
+     * typed for "Yearly" reads on every plan's yearly option.
+     */
+    const live = liveCadenceScreen(set, context, c)
+    const isLive = live !== c
+    const options = live.options
+    const savingById = cadenceSavings(live)
     const savings = Object.values(savingById)[0] ?? ''
+    const writeOption = (option: CadenceOption, next: Partial<CadenceOption>) => {
+      const has = c.options.some((o) => o.id === option.id)
+      patch('cadence', {
+        options: has
+          ? c.options.map((o) => (o.id === option.id ? { ...o, ...next } : o))
+          : [...c.options, { id: option.id, title: '', note: '', price: '', unit: '', badge: '', saving: '', ...next }],
+      })
+    }
     return (
       <>
         <FieldGroup title="Screen">
@@ -299,52 +317,73 @@ function FlowFields({
         </FieldGroup>
 
         <FieldGroup title="Ways to pay">
-          {c.options.map((option, i) => {
-            const write = (next: Partial<typeof option>) =>
-              patch('cadence', {
-                options: c.options.map((o, j) => (j === i ? { ...o, ...next } : o)),
-              })
+          {isLive && (
+            <p className="ed-absent ed-live">
+              Priced from <strong>{chosenTier(set, context)?.planName}</strong>'s offers here — one option
+              per way it is sold. Change the plan under "What is being bought" to see another's.
+              The words are yours; the prices are DAZN's.
+            </p>
+          )}
+          {options.map((option, i) => {
+            const authored = c.options.find((o) => o.id === option.id)
+            const write = (next: Partial<CadenceOption>) =>
+              isLive
+                ? writeOption(option, next)
+                : patch('cadence', {
+                    options: c.options.map((o, j) => (j === i ? { ...o, ...next } : o)),
+                  })
             return (
               <div className="demo__feature" key={option.id}>
                 <TextField
-                  label={`Option ${i + 1}`}
-                  value={option.title}
+                  label={isLive ? option.id : `Option ${i + 1}`}
+                  value={isLive ? (authored?.title ?? '') : option.title}
                   pipelineKey={`cadence.options[${i}].title`}
                   onChange={(v) => write({ title: v })}
+                  helpText={isLive && !authored?.title?.trim() ? `Empty reads "${option.title}".` : undefined}
                 />
                 <TextField
                   label="Under the name"
-                  value={option.note}
+                  value={isLive ? (authored?.note ?? '') : option.note}
                   pipelineKey={`cadence.options[${i}].note`}
                   onChange={(v) => write({ note: v })}
+                  helpText={isLive && !authored?.note?.trim() ? `Empty reads "${option.note}".` : undefined}
                 />
-                <TextField
-                  label="Price"
-                  value={option.price}
-                  pipelineKey={`cadence.options[${i}].price`}
-                  onChange={(v) => write({ price: v })}
-                />
-                <TextField
-                  label="How to pay"
-                  value={option.unit}
-                  pipelineKey={`cadence.options[${i}].unit`}
-                  onChange={(v) => write({ unit: v })}
-                  helpText={`Reads as ${option.price}/${option.unit || '…'}.`}
-                />
+                {isLive ? (
+                  <p className="ed-absent">
+                    Price from the offer: <strong>{option.price}/{option.unit}</strong>
+                    {savingById[option.id] ? ` · ${savingById[option.id]}` : ''}
+                  </p>
+                ) : (
+                  <>
+                    <TextField
+                      label="Price"
+                      value={option.price}
+                      pipelineKey={`cadence.options[${i}].price`}
+                      onChange={(v) => write({ price: v })}
+                    />
+                    <TextField
+                      label="How to pay"
+                      value={option.unit}
+                      pipelineKey={`cadence.options[${i}].unit`}
+                      onChange={(v) => write({ unit: v })}
+                      helpText={`Reads as ${option.price}/${option.unit || '…'}.`}
+                    />
+                  </>
+                )}
                 <TextField
                   label="Ribbon"
-                  value={option.badge}
+                  value={isLive ? (authored?.badge ?? option.badge) : option.badge}
                   pipelineKey={`cadence.options[${i}].badge`}
                   onChange={(v) => write({ badge: v })}
                   helpText="Empty draws no ribbon."
                 />
                 <TextField
                   label="Saving line"
-                  value={option.saving ?? ''}
+                  value={authored?.saving ?? (isLive ? '' : option.saving ?? '')}
                   pipelineKey={`cadence.options[${i}].saving`}
                   onChange={(v) => write({ saving: v })}
                   helpText={
-                    option.saving?.trim()
+                    (isLive ? authored?.saving : option.saving)?.trim()
                       ? 'Written, so this is what is drawn.'
                       : savingById[option.id]
                         ? `Empty, so the prices answer it: "${savingById[option.id]}".`
@@ -352,7 +391,7 @@ function FlowFields({
                   }
                 />
                 {/* A card can go, as long as one is left to choose. */}
-                {c.options.length > 1 && (
+                {!isLive && c.options.length > 1 && (
                   <button
                     type="button"
                     className="demo__feature-remove"
@@ -372,22 +411,26 @@ function FlowFields({
               </div>
             )
           })}
-          <button
-            type="button"
-            className="ed-add"
-            onClick={() =>
-              patch('cadence', { options: [...c.options, blankCadenceOption(c.options)] })
-            }
-          >
-            Add a way to pay
-          </button>
+          {!isLive && (
+            <button
+              type="button"
+              className="ed-add"
+              onClick={() =>
+                patch('cadence', { options: [...c.options, blankCadenceOption(c.options)] })
+              }
+            >
+              Add a way to pay
+            </button>
+          )}
 
-          <SelectField
-            label="Pre-selected"
-            value={c.selected}
-            options={c.options.map((o) => ({ value: o.id, label: o.title }))}
-            onChange={(v) => patch('cadence', { selected: v })}
-          />
+          {!isLive && (
+            <SelectField
+              label="Pre-selected"
+              value={c.selected}
+              options={c.options.map((o) => ({ value: o.id, label: o.title }))}
+              onChange={(v) => patch('cadence', { selected: v })}
+            />
+          )}
 
           {/* How the computed saving is worded. A saving typed into a card
               above wins over both, because a person who typed it meant it. */}
@@ -740,6 +783,7 @@ function FlowFields({
 
   if (step.renderer === 'checkout') {
     const c = flow.checkout
+    const liveCheckout = liveCheckoutScreen(set, context, c)
     return (
       <>
         {/* What is being bought, on the page that buys it.
@@ -791,6 +835,15 @@ function FlowFields({
             pipelineKey={'checkout.changeCta'}
             onChange={(v) => patch('checkout', { changeCta: v })}
           />
+          {liveCheckout !== c && (
+            <p className="ed-absent ed-live">
+              The summary lines and the renewal note are worked out from{' '}
+              <strong>{chosenTier(set, context)?.planName}</strong> at <strong>{context.cadence}</strong>:
+              {liveCheckout.lines.map((l) => ` ${l.label} ${l.value}${l.unit ? `/${l.unit}` : ''}`).join(' ·')}.
+              Change the plan or payment option under "What is being bought" to see another's. The lines
+              written below are the fallback for a plan with no price here.
+            </p>
+          )}
           {linesOf(c).map((line, i) => {
             const all = linesOf(c)
             const write = (next: Partial<typeof line>) =>

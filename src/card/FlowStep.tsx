@@ -1,5 +1,5 @@
 import type { CardSet } from '../rules/content'
-import { resolveSet } from '../rules/resolve'
+import { chosenTier, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
 import { resolveFlow } from '../rules/layers'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
@@ -47,7 +47,8 @@ export function FlowStep({
     case 'cadence':
       return (
         <CadenceFlowScreen
-          content={flow.cadence ?? defaultFlow.cadence}
+          // The plan being bought, priced at every cadence it is sold here.
+          content={liveCadenceScreen(set, set.context, flow.cadence ?? defaultFlow.cadence)}
           selected={chosen?.cadence}
         />
       )
@@ -73,16 +74,12 @@ export function FlowStep({
     case 'checkout':
       return (
         <CheckoutFlowScreen
-          content={flow.checkout ?? defaultFlow.checkout}
+          // The plan the context says is being bought, at the cadence it says,
+          // totalled from its offer — the words are the layers' for this
+          // plan and cadence, the numbers are the offer's.
+          content={liveCheckoutScreen(set, set.context, flow.checkout ?? defaultFlow.checkout)}
           state={state as 'empty' | 'filled' | 'payment process' | 'payment verified'}
-          // The plan the context says is being bought, or the first on sale
-          // here — the summary names what is in it, not a product's name
-          // baked into the words.
-          planName={
-            resolveSet(set, set.context).find(
-              (c) => !set.context.tier || c.tier.id === set.context.tier,
-            )?.tier.planName
-          }
+          planName={chosenTier(set, set.context)?.planName}
         />
       )
     case 'ready':

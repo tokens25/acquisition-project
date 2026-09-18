@@ -97,7 +97,7 @@ export function Prototype({
    * row too, where they are pictures of what was written and hold nothing.
    * Empty means the authored choice stands, which is what a screen opens on.
    */
-  const [chosen, setChosen] = useState<{ cadence?: string }>({})
+  const [chosen, setChosen] = useState<{ tier?: string; cadence?: string }>({})
   /**
    * What has been typed, by screen and field.
    *
@@ -259,6 +259,10 @@ export function Prototype({
     if (el.closest(SCREEN_OWN)) return
     if (el.closest(HOTSPOT)) {
       e.preventDefault()
+      // A plan's CTA is a choice as well as a step forward: the screens after
+      // it price what was picked here, so the pick is kept with the cadence.
+      const tier = el.closest<HTMLElement>('[data-tier-id]')?.dataset.tierId
+      if (tier) setChosen((prev) => (prev.tier === tier ? prev : { ...prev, tier }))
       // A CTA commits to what the screen was asking, so it leaves the screen
       // for good rather than moving to the next drawing of it.
       const to = current.step.renderer === 'plans' ? afterThisStep() : at + 1
@@ -343,7 +347,17 @@ export function Prototype({
                 <FlowStep
                   step={current.step}
                   state={current.state ?? 'default'}
-                  set={set}
+                  // The screens after the picker price what was picked on it:
+                  // the plan, and then the way to pay. Nothing picked yet reads
+                  // as the context's own choice, as the frames row does.
+                  set={{
+                    ...set,
+                    context: {
+                      ...set.context,
+                      tier: chosen.tier ?? set.context.tier,
+                      cadence: chosen.cadence ?? set.context.cadence,
+                    },
+                  }}
                   chosen={chosen}
                 />
               </FlowInputContext.Provider>
