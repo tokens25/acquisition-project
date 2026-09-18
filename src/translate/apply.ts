@@ -91,6 +91,7 @@ export function applyCopy(set: CardSet, words: Record<string, string>): CardSet 
   let tabsTouched = false
   let tiers = set.tiers
   let featureCatalog = set.featureCatalog
+  let logoCatalog = set.logoCatalog
   let priceUnits = set.priceUnits
 
   for (const [key, text] of Object.entries(words)) {
@@ -110,6 +111,11 @@ export function applyCopy(set: CardSet, words: Record<string, string>): CardSet 
       featureCatalog = featureCatalog.map((f) => (f.id === feature[1] ? { ...f, text } : f))
       continue
     }
+    const logo = /^logos\.(.+)\.blurb$/.exec(key)
+    if (logo) {
+      logoCatalog = logoCatalog.map((l) => (l.id === logo[1] ? { ...l, blurb: text } : l))
+      continue
+    }
     const tab = /^planTabs\.([^.]+)\.name$/.exec(key)
     if (tab) {
       tabs = tabs.map((t) => (t.id === tab[1] ? { ...t, name: text } : t))
@@ -125,6 +131,7 @@ export function applyCopy(set: CardSet, words: Record<string, string>): CardSet 
     flowLayers: [],
     tiers,
     featureCatalog,
+    logoCatalog,
     priceUnits,
     planTabsByMarket: tabsTouched ? { ...set.planTabsByMarket, [set.context.market]: tabs } : set.planTabsByMarket,
   }
@@ -140,6 +147,8 @@ export function currentAt(set: CardSet, key: string): string | undefined {
   }
   const feature = /^features\.(.+)$/.exec(key)
   if (feature) return set.featureCatalog.find((f) => f.id === feature[1])?.text
+  const logo = /^logos\.(.+)\.blurb$/.exec(key)
+  if (logo) return set.logoCatalog.find((l) => l.id === logo[1])?.blurb
   const unit = /^priceUnits\.(.+)$/.exec(key)
   if (unit) return priceUnitFor(set, unit[1], 'en')
   const tab = /^planTabs\.([^.]+)\.name$/.exec(key)
@@ -158,12 +167,14 @@ export function readAt(root: unknown, key: string): string | undefined {
 }
 
 /** A promoted translation, as the patches the store already understands. */
-export function promotion(set: CardSet, key: string, text: string): { flow?: FlowContent; featureCatalog?: CardSet['featureCatalog']; priceUnits?: CardSet['priceUnits']; tiers: { id: string; patch: TierPatch }[] } {
+export function promotion(set: CardSet, key: string, text: string): { flow?: FlowContent; featureCatalog?: CardSet['featureCatalog']; logoCatalog?: CardSet['logoCatalog']; priceUnits?: CardSet['priceUnits']; tiers: { id: string; patch: TierPatch }[] } {
   const tier = /^plans\.([^.]+)\.(description|badge)$/.exec(key)
   if (tier) return { tiers: [{ id: tier[1], patch: { [tier[2]]: text } as TierPatch }] }
   const unit = /^priceUnits\.(.+)$/.exec(key)
   if (unit) return { priceUnits: { ...set.priceUnits, [unit[1]]: text }, tiers: [] }
   const feature = /^features\.(.+)$/.exec(key)
   if (feature) return { featureCatalog: set.featureCatalog.map((f) => (f.id === feature[1] ? { ...f, text } : f)), tiers: [] }
+  const logo = /^logos\.(.+)\.blurb$/.exec(key)
+  if (logo) return { logoCatalog: set.logoCatalog.map((l) => (l.id === logo[1] ? { ...l, blurb: text } : l)), tiers: [] }
   return { flow: put(set.flow ?? defaultFlow, key, text), tiers: [] }
 }

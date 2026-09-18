@@ -482,20 +482,17 @@ button.acq-feature__info:hover {
 .acq-set-scroll {
   container-type: inline-size;
 }
+/* One row, always. The plans are compared side by side — a fourth card
+   belongs at the end of the row, reached by scrolling, not under the first. */
 .acq-set {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-24);
   align-items: stretch;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
   padding-block-end: var(--space-8);
-}
-@container (max-width: 719px) {
-  .acq-set {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x proximity;
-  }
 }
 .acq-set > .acq-card {
   flex: 0 0 auto;

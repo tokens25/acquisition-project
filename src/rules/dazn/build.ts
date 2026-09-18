@@ -154,7 +154,18 @@ function benefitsOf(content: Content, item: ContentfulEntry): string[] {
     .filter(Boolean)
 }
 
-function logosOf(content: Content, item: ContentfulEntry): CatalogEntry[] {
+/** A CMS asset's description, as one line: it arrives with hard wraps and stray trailing spaces. */
+const blurbOf = (a: ContentfulAsset) => str(a.fields.description).replace(/\s+/g, ' ').trim()
+
+/**
+ * The badge id carries the asset's own id as well as its name. "Serie A" is
+ * the title of a dozen assets — one per market, each with its own artwork and
+ * its own line about what it gives you — and a badge named for its title alone
+ * would let the last market pulled overwrite every other's.
+ */
+const logoIdFor = (a: ContentfulAsset) => `logo-${slug(a.fields.title ?? a.sys.id)}-${slug(a.sys.id)}`
+
+function logoAssetsOf(content: Content, item: ContentfulEntry): ContentfulAsset[] {
   // The small row of competition badges is `overrideLogos`; `bigLogos` is the
   // larger strip some markets draw instead. The card wants the small row.
   const f = item.fields
@@ -168,10 +179,23 @@ function logosOf(content: Content, item: ContentfulEntry): CatalogEntry[] {
   return links
     .map((l) => content.assets.get(l.sys.id))
     .filter((a): a is ContentfulAsset => Boolean(a?.fields.file?.url))
-    .map((a) => {
-      const name = a.fields.title ?? a.sys.id
-      return { id: `logo-${slug(name)}`, name, altText: `${name} logo`, status: 'active' as const, image: `https:${a.fields.file!.url}` }
-    })
+}
+
+function logosOf(content: Content, item: ContentfulEntry): CatalogEntry[] {
+  return logoAssetsOf(content, item).map((a) => {
+    const name = a.fields.title ?? a.sys.id
+    // The asset's description is the one line the dialog's Content tab shows
+    // under the competition — where the CMS has written one.
+    const blurb = blurbOf(a)
+    return {
+      id: logoIdFor(a),
+      name,
+      altText: `${name} logo`,
+      status: 'active' as const,
+      image: `https:${a.fields.file!.url}`,
+      ...(blurb ? { blurb } : {}),
+    }
+  })
 }
 
 /** The tier group a market's DAZN page draws — the best-scoring one for it. */
@@ -545,6 +569,11 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
             lines.forEach((line, i) => {
               if (nativeLines[i]) words[`features.${featureIdFor(line)}`] = canon(nativeLines[i])
             })
+          }
+          // The same assets, described in the market's language.
+          for (const a of logoAssetsOf(local, native.item)) {
+            const blurb = blurbOf(a)
+            if (blurb) words[`logos.${logoIdFor(a)}.blurb`] = blurb
           }
         }
         const badges = logosOf(source, best.item)

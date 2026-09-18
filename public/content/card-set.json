@@ -65,12 +65,23 @@
           "features.f-bundesliga-konferenz-sunday-games-live-i05a8c": "Bundesliga Konferenz + Sonntagsspiele live",
           "features.f-all-games-from-serie-a-ligue-1-3xhch1": "Alle Spiele aus Serie A & Ligue 1",
           "features.f-ufc-fa-cup-pdc-darts-and-much-more-1go2a1e": "UFC, FA Cup, PDC Darts & mehr",
+          "logos.logo-serie-a-rtzivscbv2fnfnaz7fhna.blurb": "Alle Spiele der Serie A - wahlweise mit Originalkommentar - plus Shows und Dokus aus Italien.",
+          "logos.logo-ufc-5n1uylajqascxphmbuovwe.blurb": "Alle Numbered Events & Fight Nights, live und auf Abruf",
+          "logos.logo-pdc-darts-6ckucjufguttvwilgjlvhn.blurb": "Alle Turniere live, inklusive des World Darts Championship",
+          "logos.logo-ligue-1-tcpvkgygkpnogeuwfb4xq.blurb": "Alle Spiele der Ligue 1 in der Sprache deiner Wahl (französischer, englischer und deutscher Kommentar)",
+          "logos.logo-fa-cup-6lmylkrec5d6igfndsvb8q.blurb": "Ausgewählte Spiele der 3. Runde, sowie alle Achtel-, Viertel- und Halbfinal-Spiele und das Finale live. Dazu jedes Jahr den FA Community Shield.",
+          "logos.logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2.blurb": "Ausgewählte Spiele der ersten Runden sowie alle Viertel-, Halb- und Finalspiele – nur auf DAZN.",
+          "logos.logo-copa-del-rey-1sh71dwls02cgnbtel1b0d.blurb": "Ausgewählte Spiele der ersten Runden sowie alle Viertel-, Halb- und Finalspiele – nur auf DAZN.",
+          "logos.logo-uefa-l-nderspiele-3w8xkotpewytka2r2amlga.blurb": "Alle Spiele verfügbar (deutsche Spiele zeitversetzt)",
+          "logos.logo-weitere-inhalte-6qjhdps6ov4jysn3r8ucgc.blurb": "Genieße noch mehr Sport, mit den größten Boxkämpfen, Frauenfußball, Tennis, Golf, Handball u.v.m.",
           "plans.dazn-tier-mobile-at.description": "Genieße Live-Sport, Near-Live Clips, News, Highlights und mehr direkt auf deinem Handy.",
           "features.f-streaming-limited-only-to-mobile-phones-1o6pvy9": "Streaming ausschließlich auf Handys",
           "features.f-all-content-from-dazn-1vtynmi": "Alle Inhalte von DAZN",
           "features.f-near-live-clips-in-realtime-on-your-mobi-lzzmz": "Near-Live Clips auf deinem Handy",
           "features.f-news-stats-mini-games-and-more-features-10ip2xh": "News, Stats, Fanzone und mehr",
           "features.f-your-option-for-on-the-go-1peq0rs": "Dein Abo für unterwegs",
+          "logos.logo-laliga-4njchywgvdmluawbqevzrm.blurb": "Alle 10 Spiele jeden Spieltag live und exklusiv, wahlweise auch mit spanischem Originalkommentar",
+          "logos.logo-serie-a-1mh5zdg0yk1edeikiynu0x.blurb": "Alle Spiele der Serie A, Coppa Italia und Supercoppa Italiana",
           "features.f-watch-every-game-including-nfl-redzone-t-11qsmc3": "Schaue alle Spiele live & auf Abruf, einschließlich NFL RedZone, Playoffs und Super Bowl LX",
           "features.f-get-the-authentic-american-commentary-1ddigve": "Mit original US-Übertragung",
           "features.f-watch-in-1080p-full-hd-video-resolution-1xxlmfb": "Schaue in Full HD Auflösung",
@@ -124,9 +135,25 @@
           "features.f-near-live-clips-from-bundesliga-champion-osad7l": "Near-Live-Clips von Bundesliga & Champions League noch während des Spiels",
           "features.f-laliga-serie-a-darts-and-more-live-sport-2ddg67": "LALIGA, Serie A, Darts und mehr Sport live",
           "features.f-football-news-match-stats-und-live-updat-7hwt2p": "Fußball News, Match Stats und Live-Ticker direkt in deiner App",
+          "logos.logo-bundesliga-konferenz-2zclkgcgfqckpnu0pao5de.blurb": "Die legendäre Samstagskonferenz nur auf DAZN - dazu alle Spiele des Bundesliga-Spieltags, inkl. Top-Spiel und Freitagsspiel, direkt nach Abpfiff auf Abruf (Highlights & in voller Länge)",
+          "logos.logo-laliga-4njchywgvdmluawbqevzrm.blurb": "Alle 10 Spiele jeden Spieltag live und exklusiv, wahlweise auch mit spanischem Originalkommentar",
+          "logos.logo-ufc-5n1uylajqascxphmbuovwe.blurb": "Alle Numbered Events & Fight Nights, live und auf Abruf",
+          "logos.logo-serie-a-1mh5zdg0yk1edeikiynu0x.blurb": "Alle Spiele der Serie A, Coppa Italia und Supercoppa Italiana",
+          "logos.logo-fa-cup-6lmylkrec5d6igfndsvb8q.blurb": "Ausgewählte Spiele der 3. Runde, sowie alle Achtel-, Viertel- und Halbfinal-Spiele und das Finale live. Dazu jedes Jahr den FA Community Shield.",
+          "logos.logo-pdc-darts-6ckucjufguttvwilgjlvhn.blurb": "Alle Turniere live, inklusive des World Darts Championship",
+          "logos.logo-ligue-1-tcpvkgygkpnogeuwfb4xq.blurb": "Alle Spiele der Ligue 1 in der Sprache deiner Wahl (französischer, englischer und deutscher Kommentar)",
+          "logos.logo-uefa-l-nderspiele-3w8xkotpewytka2r2amlga.blurb": "Alle Spiele verfügbar (deutsche Spiele zeitversetzt)",
+          "logos.logo-copa-del-rey-1sh71dwls02cgnbtel1b0d.blurb": "Ausgewählte Spiele der ersten Runden sowie alle Viertel-, Halb- und Finalspiele – nur auf DAZN.",
+          "logos.logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2.blurb": "Ausgewählte Spiele der ersten Runden sowie alle Viertel-, Halb- und Finalspiele – nur auf DAZN.",
+          "logos.logo-frauen-bundesliga-50fwoc0zuhmukovqu4e9wo.blurb": "Alle Spiele live, alle Highlights auf Abruf und exklusive Shows & Dokus",
+          "logos.logo-eurosport-1-2-22tzubdopjsomjdksxz9y0.blurb": "Zwei Grand-Slam-Turniere im Tennis, jede Menge Wintersport, die Tour de France und alle anderen Highlights aus dem Programm von Eurosport 1 & Eurosport 2.",
+          "logos.logo-weitere-inhalte-6qjhdps6ov4jysn3r8ucgc.blurb": "Genieße noch mehr Sport, mit den größten Boxkämpfen, Frauenfußball, Tennis, Golf, Handball u.v.m.",
           "plans.dazn-tier-supersport-de.description": "Erlebe die Bundesliga Konferenz, internationalen Fußball, Darts, UFC und vieles mehr.",
           "features.f-all-9-bundesliga-games-on-demand-straigh-cy222z": "Alle 9 Spiele des Bundesliga-Spieltags direkt nach Abpfiff auf Abruf",
           "features.f-laliga-serie-a-ligue-1-fa-cup-uefa-natio-1s2j454": "LALIGA, Serie A, Ligue 1, FA Cup, UEFA-Länderspiele, UFC, Darts und mehr",
+          "logos.logo-laliga-3o07aypw2wp0qfvpanobac.blurb": "Alle 10 Spiele jeden Spieltag live und exklusiv, wahlweise auch mit spanischem Originalkommentar",
+          "logos.logo-serie-a-1oprlcl1nz89ftj0oqagih.blurb": "Alle Spiele der Serie A, Coppa Italia und Supercoppa Italiana",
+          "logos.logo-fa-cup-izld4dxwj2tbrxudcy5s6.blurb": "Ausgewählte Spiele der 3. Runde, sowie alle Achtel-, Viertel- und Halbfinal-Spiele und das Finale live. Dazu jedes Jahr den FA Community Shield.",
           "plans.dazn-tier-gold-de.description": "Schaue die UEFA Champions League garantiert bis 2027, Bundesliga und alles weitere von DAZN.",
           "plans.dazn-tier-gold-de.badge": "BESTSELLER",
           "features.f-uefa-champions-league-live-guaranteed-un-9h2237": "UEFA Champions League live - garantiert bis Sommer 2027 (>90% aller Spiele)",
@@ -443,6 +470,16 @@
           "features.f-selected-games-from-serie-a-ligue-1-41nu2d": "Spiele aus Serie A und Ligue 1",
           "features.f-bundesliga-konferenz-sunday-games-live-i05a8c": "Bundesliga Konferenz + Sonntagsspiele live",
           "features.f-ufc-fa-cup-pdc-darts-more-1opjq9k": "UFC, FA Cup, PDC Darts & mehr",
+          "logos.logo-ufc-5n1uylajqascxphmbuovwe.blurb": "Alle Numbered Events & Fight Nights, live und auf Abruf",
+          "logos.logo-laliga-5c9hmqggifctuygkzvp5as.blurb": "Ausgewählte Spiele der LALIGA live",
+          "logos.logo-serie-a-5kpnsuxybejlwpg4z9ycah.blurb": "Ausgewählte Spiele der Serie A live",
+          "logos.logo-ligue-1-7ufpkyjx6lmcavidgsi7rs.blurb": "Ausgewählte Spiele der Ligue 1 live",
+          "logos.logo-fa-cup-6lmylkrec5d6igfndsvb8q.blurb": "Ausgewählte Spiele der 3. Runde, sowie alle Achtel-, Viertel- und Halbfinal-Spiele und das Finale live. Dazu jedes Jahr den FA Community Shield.",
+          "logos.logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2.blurb": "Ausgewählte Spiele der ersten Runden sowie alle Viertel-, Halb- und Finalspiele – nur auf DAZN.",
+          "logos.logo-copa-del-rey-1sh71dwls02cgnbtel1b0d.blurb": "Ausgewählte Spiele der ersten Runden sowie alle Viertel-, Halb- und Finalspiele – nur auf DAZN.",
+          "logos.logo-uefa-l-nderspiele-3w8xkotpewytka2r2amlga.blurb": "Alle Spiele verfügbar (Schweizer Spiele zeitversetzt)",
+          "logos.logo-pdc-darts-6ckucjufguttvwilgjlvhn.blurb": "Alle Turniere live, inklusive des World Darts Championship",
+          "logos.logo-weitere-inhalte-6qjhdps6ov4jysn3r8ucgc.blurb": "Genieße noch mehr Sport, mit den größten Boxkämpfen, Frauenfußball, Tennis, Golf, Handball u.v.m.",
           "plans.dazn-tier-mobile-ch.description": "Genieße ausgewählten Live-Sport, Near-Live Clips, News, Highlights und mehr direkt auf deinem Handy.",
           "features.f-streaming-limited-only-to-mobile-phones-1o6pvy9": "Streaming ausschließlich auf Handys",
           "features.f-near-live-clips-on-your-mobile-phone-1h4vce9": "Near-Live Clips auf deinem Handy",
@@ -452,6 +489,8 @@
           "features.f-new-all-games-from-laliga-16pn85p": "NEU: Alle LALIGA-Spiele",
           "features.f-all-games-from-serie-a-ligue-1-3xhch1": "Alle Spiele aus Serie A & Ligue 1",
           "features.f-ufc-fa-cup-pdc-darts-and-much-more-1go2a1e": "UFC, FA Cup, PDC Darts & mehr",
+          "logos.logo-bundesliga-43d3grjccgc8xjwhbgwky3.blurb": "Bundesliga Konferenz am Samstag + alle Sonntagsspiele live – dazu alle Spiele des Bundesliga-Spieltags, inkl. Top-Spiel und Freitagsspiel, direkt nach Abpfiff auf Abruf (Highlights & in voller Länge)",
+          "logos.logo-ligue-1-tcpvkgygkpnogeuwfb4xq.blurb": "Alle Spiele der Ligue 1 in der Sprache deiner Wahl (französischer, englischer und deutscher Kommentar)",
           "plans.dazn-tier-unlimited-wc-2-ch.description": "Erlebe das ganze Angebot von DAZN und schaue auf 2 Geräten zur gleichen Zeit.",
           "features.f-all-content-on-dazn-same-as-in-the-unlim-qgyj18": "Alle Inhalte von DAZN (wie Unlimited Paket)",
           "features.f-2-streams-at-the-same-time-hr63xd": "Schaue auf 2 Streams gleichzeitig",
@@ -512,6 +551,8 @@
           "features.f-shows-and-magazine-programs-1uevnur": "Les émissions et magazines",
           "features.f-shows-and-exclusive-documentaries-rq38qr": "Les émissions, magazines et docus exclusifs",
           "features.f-2-simultaneous-streams-1j74igv": "2 connexions en simultané",
+          "logos.logo-ligue-1-mcdonald-s-58dzfpyfgyh0qmziypwb85.blurb": "Vivez maintenant en direct l'intégralité des matchs de Ligue 1 McDonald's, toute la saison.",
+          "logos.logo-ligue-3-betclic-4gl9xl128ne1dkdefqhaac.blurb": "Découvrez la toute nouvelle Ligue 3 Betclic, avec tous ses matchs en direct.",
           "plans.dazn-tier-unlimited-fr.description": "Tout DAZN. En plus de Ligue 1+.",
           "plans.dazn-tier-unlimited-fr.badge": "Recommandé",
           "features.f-now-every-ligue-1-mcdonald-s-game-live-a-1hafj2n": "Maintenant 100% des matchs de Ligue 1 McDonald's et de la nouvelle Ligue 3 Betclic sur Ligue 1+",
@@ -519,12 +560,22 @@
           "features.f-basketball-betclic-lite-including-the-pl-ooplqd": "Basket : la Betclic ÉLITE, avec son Play-In et ses Playoffs, ainsi que la Liga ACB en Espagne",
           "features.f-boxing-events-from-matchroom-queensberry-epp2f4": "Boxe : les événements de Matchroom, Queensberry, Misfits, Golden Boy,",
           "features.f-legendary-content-on-fifa-liv-golf-and-m-nhts5q": "Les contenus de légende sur FIFA+. Le LIV Golf. Et bien plus",
+          "logos.logo-laliga-1knqzty1axtf0ez1vq9plq.blurb": "LaLiga – Follow all games of the LaLiga, plus exclusive interviews and documentaries on demand.",
+          "logos.logo-serie-a-1mh5zdg0yk1edeikiynu0x.blurb": "Foot : streamez tous les matchs du championnat de italien.",
+          "logos.logo-copa-del-rey-39lclnyjbj0frvs60xplcq.blurb": "Foot : streamez les matchs de la Coupe d'Espagne.",
+          "logos.logo-coppa-italia-15qtxnfhbtf3bwdnxud0vv.blurb": "Foot : streamez les matchs de la Coupe d'Italie.",
+          "logos.logo-betclic-elite-525lyoktjvbywpw8zxwfg4.blurb": "Basket : toute la Betclic ÉLITE, avec son All Star Game et ses Playoffs.",
           "plans.dazn-tier-unlimited-yp-fr.description": "Tout DAZN. Tout Ligue 1+. Seulement pour les moins de 26 ans. Sans aucun engagement.",
           "features.f-fifa-liv-golf-180-boxing-fights-per-year-1wrsutn": "FIFA+, le LIV Golf, plus 180 combats de boxe par an, et bien plus",
           "features.f-exclusively-on-mobile-tablet-and-desktop-1gze1ws": "Exclusivement sur mobile, tablette et ordinateur",
           "features.f-1-stream-cancel-anytime-mww6r1": "1 connexion. Sans engagement",
           "plans.dazn-tier-super-sports-fr.description": "Foot, basket, boxe, et bien plus.",
           "features.f-1-stream-sxomo2": "1 connexion",
+          "logos.logo-serie-a-6vwdmb0xwwt0dchtnlseo4.blurb": "Foot : streamez tous les matchs du championnat de italien.",
+          "logos.logo-roshn-saudi-league-2kiekyrjprycmm22jsgcjg.blurb": "Foot : streamez le championnat d'Arabie Saoudite.",
+          "logos.logo-jupiler-pro-league-15takkvl5he8ddk83fckel.blurb": "Foot : streamez le championnat de Belgique.",
+          "logos.logo-eredivisie-5xqp6cvvnke6suwadn21rz.blurb": "Foot : streamez 3 matchs phares du championnat néerlandais chaque week-end.",
+          "logos.logo-fifa-5npvjnt6fylgylmsgd4gu1.blurb": "Revivez les moments qui ont fait l'histoire du foot dans des archives et des documentaires exceptionnels.",
           "features.f-watch-every-game-including-nfl-redzone-t-11qsmc3": "Regardez tous les matchs en direct et à la demande, y compris NFL RedZone, les playoffs et le Super Bowl LX",
           "features.f-get-the-authentic-american-commentary-1ddigve": "Vivez l'authentique expérience américaine",
           "features.f-watch-in-1080p-full-hd-video-resolution-1xxlmfb": "Regardez en résolution vidéo 1080p (Full HD)",
@@ -734,14 +785,37 @@
           "features.f-watch-on-your-devices-wherever-you-are-pealv8": "Guarda sui tuoi dispositivi, ovunque ti trovi",
           "features.f-eurosport-channels-3-4-5-and-6-available-5h3oh3": "Canali Eurosport 3, 4, 5 e 6 acquistabili separatamente",
           "features.f-1-extra-member-available-to-purchase-any-1wabplf": "+1 utente aggiuntivo acquistabile quando vuoi",
+          "logos.logo-serie-bkt-rzx8b9aknzjea9yxlqnna.blurb": "Tutta la Serie BKT è su DAZN, inclusi playoff e playout.",
+          "logos.logo-eurosport-22tzubdopjsomjdksxz9y0.blurb": "Eurosport 1 e Eurosport 2 sono inclusi nel tuo piano",
+          "logos.logo-laliga-easports-3ihkjmzehcqqvd1pc7i9tj.blurb": "Tutta LaLiga EASports è in esclusiva su DAZN.",
+          "logos.logo-copa-del-rey-1sh71dwls02cgnbtel1b0d.blurb": "utta la Copa del Rey in esclusiva su DAZN",
+          "logos.logo-cev-volleyball-champions-league-5md55yuvj6uqkdukya02a2.blurb": "Il campionato europeo per Club di volley è su DAZN.",
+          "logos.logo-fa-cup-7cky9frc8itrhwwvbi1lbf.blurb": "Le emozioni della Emirates FA Cup, la coppa più antica del mondo, su DAZN",
+          "logos.logo-liga-portugal-betclic-7je6921vsgsgpm91sidjha.blurb": "Il meglio del campionato di calcio portoghese.",
+          "logos.logo-jupiler-pro-league-73q8jm2vlwxkqoki2m9rdg.blurb": "Il meglio del campionato di calcio belga.",
+          "logos.logo-fifa-5npvjnt6fylgylmsgd4gu1.blurb": "Le partite più iconiche dei Mondiali FIFA™ e storie e documentari da tutto il mondo.",
+          "logos.logo-serie-a-women-5b9rfyscvlk8a905e0ezbk.blurb": "Tutta la Serie A Women è su DAZN, con 4 match a giornata in esclusiva.",
+          "logos.logo-nfl-4tzql3gryp4oxoeauagr2t.blurb": "Guarda su DAZN una selezione di partite di NFL.",
+          "logos.logo-roland-garros-14v2cgln3d4xmk3e8zecmo.blurb": "Tutti i match di Roland Garros disponibili sui canali Eurosport.",
+          "logos.logo-australian-open-ns4wtkjmnimcyxd7pdgc6.blurb": "Tutti i match di Australian Open disponibili sui canali Eurosport.",
+          "logos.logo-il-meglio-del-ciclismo-4lac1wq9saiomtwdhmowyg.blurb": "Tutte le tappe di Giro d'Italia, Tour de France e Vuelta disponibili sui canali Eurosport.",
+          "logos.logo-ufc-5n1uylajqascxphmbuovwe.blurb": "Tutti gli eventi UFC sono disponibili sui canali Eurosport.",
+          "logos.logo-pga-tour-2srujpktnxk9t3p8qtq0ok.blurb": "Tutte le buche del PGA Tour sono disponibili sui canali Eurosport.",
+          "logos.logo-liv-golf-6bhqid9si3iqg4w9ouuutk.blurb": "Tutte le emozioni del LIV Golf sono solo su DAZN.",
+          "logos.logo-superlega-1c7rzaebyldmwhpbwhtrsk.blurb": "Il meglio del massimo campionato italiano maschile di volley è disponibile su DAZN.",
+          "logos.logo-serie-a1-tigot-2ibsgqrbqshxygpi8pshjc.blurb": "Il meglio del massimo campionato italiano femminile di volley è disponibile su DAZN.",
+          "logos.logo-kings-league-italia-6rr5wwh273vjmpyemr9f2u.blurb": "Tutte le partite della Kings League Italia con commento in italiano",
           "plans.dazn-tier-bronze-it.description": "Contenuti sportivi extra calcistici. Simultaneamente su 1 rete \ndomestica.",
           "plans.dazn-tier-goalpass-it.description": "Il calcio nazionale e internazionale disponibile su DAZN, simultaneamente su 1 rete \ndomestica.",
+          "logos.logo-liga-portugal-betclic-1llbmxnypoe9u5qfyqfuko.blurb": "Il meglio del campionato di calcio portoghese.",
+          "logos.logo-serie-a-women-6mqamyiu48lbkn63yzjg8d.blurb": "Tutta la Serie A Women è su DAZN, con 4 match a giornata in esclusiva.",
           "features.f-all-serie-a-enilive-matches-of-your-favo-ugpqlk": "Tutte le partite di Serie A Enilive della tua squadra del cuore",
           "features.f-highlights-of-all-serie-a-enilive-matche-15jww3s": "Gli highlights di tutte le partite della Serie A Enilive",
           "features.f-content-and-insights-about-your-favorite-1f78wkt": "Contenuti e approfondimenti sulla tua squadra del cuore",
           "plans.dazn-tier-gold-it.description": "Accesso completo a tutti gli sport e a tutte le competizioni. Simultaneamente su 2 reti domestiche.",
           "features.f-simultaneously-on-2-home-networks-1p21aug": "Streaming simultaneo su 2 reti domestiche",
           "features.f-eurosport-channels-3-4-5-and-6-already-i-17lrb9w": "Canali Eurosport 3, 4, 5 e 6 già inclusi nell'abbonamento",
+          "logos.logo-eurosport-7agkwjkurzn6t8qvvz98kk.blurb": "Tutti i contenuti di Eurosport sono disponibili su DAZN",
           "features.f-watch-every-game-including-nfl-redzone-t-11qsmc3": "Guarda tutte le partite live e on-demand, inclusi NFL RedZone, i playoff e il Super Bowl LX",
           "features.f-get-the-authentic-american-commentary-1ddigve": "Guarda le trasmissioni americane originali",
           "features.f-watch-in-1080p-full-hd-video-resolution-1xxlmfb": "Guarda in risoluzione video 1080p (Full HD)",
@@ -932,9 +1006,13 @@
           "plans.dazn-tier-baseball-jp.description": "“野球だけ”を楽しむ特別なプラン。プロ野球（広島東洋カープ主催試合を含む一部試合を除く）、プロ野球ファーム、みやざきフェニックス・リーグ、その他プロ野球関連コンテンツが見放題",
           "features.f-watch-on-2-devices-simultaneously-in-the-1yqgtg3": "最大2台のデバイスで1ロケーションから同時視聴が可能",
           "features.f-annual-subscription-monthly-installment-ct9nbk": "年間プラン（月々払い）",
+          "logos.logo-farm-pfm37nswtunzdivh3r3md.blurb": "プロ野球ファームリーグ。 プロ野球ファームリーグの熱戦をLive on DAZN！",
           "plans.dazn-tier-dazn-jp.description": "DAZN をお得に楽しむならこのプラン。ブンデスリーガを筆頭とする欧州サッカーに加え、Jリーグ、プロ野球、Bリーグ、リーグワンもいつでもどこでも見放題",
           "plans.dazn-tier-dazn-jp.badge": "おすすめ",
           "features.f-monthly-or-annual-subscription-monthly-i-oody8p": "月間または年間プラン（月々払いまたは一括払い）",
+          "logos.logo--1knqzty1axtf0ez1vq9plq.blurb": "2026/27シーズン 全試合ライブ配信",
+          "logos.logo-b-4xynmzpyldvqof6c6ywhvz.blurb": "国内バスケットボール最高峰の戦いをLive on DAZN!",
+          "logos.logo--4nlpucxky8tkbbjyb2cinp.blurb": "ディビジョン1・2・3 全試合ライブ配信",
           "features.f-watch-every-game-including-nfl-redzone-t-11qsmc3": "NFL RedZone、プレーオフ、第61回スーパーボウルを含むすべての試合をライブとオンデマンドで視聴可能",
           "features.f-get-the-authentic-american-commentary-1ddigve": "本場アメリカの実況（日本語実況は一部の試合にのみ提供されます。日本語字幕はありません）",
           "features.f-watch-in-1080p-full-hd-video-resolution-1xxlmfb": "1080p（フル HD）画質で視聴",
@@ -1129,11 +1207,26 @@
           "features.f-tv-channels-podcasts-interviews-highligh-jsf34n": "Canais TV, Podcasts, entrevistas, resumos, documentários e muito mais (incluí os canais DAZN 1 a 5)",
           "features.f-multiview-fanzone-news-stats-scores-aler-zz8qgo": "Multiview, Fanzone, Notícias, Resultados e Estatísticas, Alertas dos teus jogos e competições favoritas e muito mais",
           "features.f-1-simultaneous-stream-and-up-to-4-regist-nb0hez": "1 acesso em simultâneo e até 4 dispositivos registados",
+          "logos.logo-premier-league-38bt916becp713loys7gdr.blurb": "Todos os 380 jogos da Premier League disponíveis na DAZN, jogos em direto, repetições completas, highlights, programas de análise/ comentário e muito mais.",
+          "logos.logo-laliga-4b1dxbdbwcmmpdsgvu6dp7.blurb": "Todos os 380 jogos da LALIGA disponíveis na DAZN, jogos em direto, repetições completas, highlights, programas de análise/ comentário e muito mais.",
+          "logos.logo-formula-1-19ujdv1gomxpkljxepyyqq.blurb": "Todos os Treinos, Qualificações e corridas da Formula 1 disponíveis na DAZN (canal DAZN 5 e DAZN App)",
+          "logos.logo-bundesliga-7arb7hbh7pbml0cdxcgbku.blurb": "Todos os 306 jogos da Bundesliga disponíveis na DAZN, jogos em direto, repetições completas, highlights, programas de análise/ comentário e muito mais.",
+          "logos.logo-europa-conference-league-6oqaywdlwhywmr8oh4nza.blurb": "Mais de 300 jogos da UEFA Europa & Conference League disponíveis na DAZN, jogos em direto, repetições completas, highlights, programas de análise/ comentário e muito mais. Transmitimos em direto todos os jogos excepto o principal de uma ou outra competição (ex.: FC Porto).",
+          "logos.logo-formula-2-2je4ztcxzctlbx45efgj3g.blurb": "Treinos, Qualificações e corridas da Formula 2 disponíveis na DAZN (canal DAZN 5 e DAZN App)",
+          "logos.logo-formula-3-1dgtzdc3julczpxdlzpme8.blurb": "Treinos, Qualificações e corridas da Formula 3 disponíveis na DAZN (canal DAZN 5 e DAZN App)",
+          "logos.logo-formula-e-3gj52hgnvtabcggmhc702v.blurb": "Todos os Treinos, Qualificações e corridas da Formula E disponíveis na DAZN (canal DAZN 5 e DAZN App)",
+          "logos.logo-f1-academy-3sffvszr74a3sgrhbnd9sg.blurb": "Treinos, Qualificações e corridas da F1 Academy disponíveis na DAZN.",
+          "logos.logo-porsche-supercup-5wwpyudjbrmmgk2em6vyq5.blurb": "Acompanha a Porsche SuperCup na DAZN.",
+          "logos.logo-dtm-3zdkai6utap7pbcrguojgw.blurb": "Acompanha o DTM na DAZN.",
+          "logos.logo-f4-spanish-5tgm0tb2hese1d9pzlllae.blurb": "Acompanha a F4 Espanha na DAZN.",
+          "logos.logo-f4-italian-qwbdptrmzmhmtzn5xl0mm.blurb": "Acompanha a F4 Itália na DAZN.",
           "plans.dazn-tier-silver-pt.description": "Produto completo: Futebol, Motores, MMA, Boxe e muto mais.",
           "features.f-the-best-of-combat-sports-boxing-and-mma-cyzhvv": "O melhor do desporto de combate, boxe, MMA",
           "features.f-all-base-motors-content-1hzjilf": "Todo o conteúdo do BASE + MOTORES",
           "features.f-multiview-fanzone-news-results-statistic-r0b3w7": "Multiview, Fanzone, Notícias, Resultados e Estatísticas, Alertas dos teus jogos e competições favoritas e muito mais",
           "features.f-2-simultaneous-streams-and-up-to-6-regis-1fjvxep": "2 acessos em simultâneo e até 6 dispositivos registados",
+          "logos.logo-mf-dazn-x-series-3ha9oyguxk3ltae1saf5ry.blurb": "Acompanha eventos da Misfits na DAZN.",
+          "logos.logo-uefa-champions-league-5u7ruurccugfolhscw58ru.blurb": "Mais de 150 jogos da UEFA Champions League disponíveis na DAZN, jogos em direto, repetições completas, highlights, programas de análise/ comentário e muito mais. Transmitimos em direto todos os jogos excepto os dois principais (ex.: SL Benfica e Sporting CP).",
           "plans.dazn-tier-motor-pt.description": "Toda a emoção da Formula 1 e muito mais",
           "features.f-f1-f2-f3-porsche-supercup-formula-e-and--646dbq": "F1, F2, F3 Porsche Supercup, Formula E e muito mais",
           "features.f-exclusive-motogp-and-worldsbk-in-2027-1x1u7o0": "MotoGP e WSBK exclusivo em 2027",
@@ -1195,29 +1288,53 @@
           "features.f-nfl-5-weekly-matches-playoffs-and-superb-u42ek9": "NFL: 5 partidos semanales, los playoffs y la Super Bowl. Todo en español. También RedZone en inglés",
           "features.f-full-nascar-competition-23oqmz": "Todas las carreras de la NASCAR",
           "features.f-all-competitions-on-red-bull-tv-and-euro-1nbno9l": "Todas las competiciones de los canales de Red Bull TV y Eurosport: Australian Open, Roland Garros, combates seleccionados de UFC, todo el ciclismo…",
+          "logos.logo-nascar-469rkzxmgvmfx8wgxv6g0t.blurb": "La competición automovilística más popular de Estados Unidos. Vive la adrenalina de las carreras de stock cars en circuitos ovales, con más de 30 eventos por temporada. Sigue a los mejores pilotos, los adelantamientos imposibles y la lucha por el campeonato.​",
+          "logos.logo-eurosport-6pujdp1q8kcbhtdp5s9td2.blurb": "Cobertura total de los grandes eventos deportivos internacionales: tenis, ciclismo, deportes de invierno, atletismo y mucho más. Todo el contenido de Eurosport 1 y 2, sin límites",
           "plans.dazn-tier-motor-es-yp.description": "Para los amantes de la adrenalina sobre ruedas: disfruta de todo el motor en directo y a la carta, y descubre las historias detrás del volante con previas, análisis, programas especiales y documentales.",
           "features.f-formula-1-world-championship-1fr9ssl": "Todo el Mundial de Formula 1®",
           "features.f-motogp-world-championship-revdew": "Todo el Mundial de MotoGP™",
           "features.f-nascar-wsbk-and-dtm-dm515k": "NASCAR, WSBK y DTM",
           "features.f-special-features-match-previews-intervie-1ylf5qb": "Contenido especial: previas, entrevistas y documentales",
           "features.f-all-content-from-plan-premium-without-ex-1tc6sur": "Todo el contenido del plan Premium sin coste extra, fuera de la temporada de motor",
+          "logos.logo-dtm-4tjbky6djw3ku6kl7dksjc.blurb": "¡Vive la emoción de la velocidad con el DTM, donde la precisión, la potencia y la pasión se encuentran!",
+          "logos.logo-eurosport-1-y-2-3kxsfvnrxpawmdye0qzobb.blurb": "Todo el contenido de Eurosport, sin límites",
+          "logos.logo-worldsbk-4z8dopfexalcaj593cdan0.blurb": "El Campeonato Mundial de Superbikes (WorldSBK) es la máxima competición internacional de motos de serie, donde velocidad, tecnología y talento se enfrentan en cada curva.",
           "plans.dazn-tier-baloncesto-es-yp.description": "Para los  auténticos aficionados al baloncesto. Este plan te sumerge en el mundo de la cancha con partidos en directo y a la carta, análisis tácticos, entrevistas exclusivas y contenido especial que va más allá del directo.",
           "features.f-full-coverage-of-liga-endesa-acb-copa-de-1lmhebq": "Todas las competiciones acb: Liga Endesa, Copa del Rey y Supercopa Endesa",
           "features.f-all-content-from-plan-premium-without-ex-1iydbr": "Todo el contenido del plan Premium sin coste extra, fuera de la temporada de baloncesto",
+          "logos.logo-supercopa-endesa-4o3rv9cmfjvmmhtotfvtvn.blurb": "El primer gran título de la temporada. Cuatro equipos de referencia se enfrentan en un formato directo y emocionante. Semifinales y final en un solo fin de semana, con todo el espectáculo del mejor baloncesto nacional.​",
+          "logos.logo-copa-del-rey-2fahnpmhdahfkmt9hbiatf.blurb": "La competición más vibrante del calendario. Ocho equipos, cuatro días, y una atmósfera única. Cada partido es una batalla por la gloria, con sorpresas, intensidad y momentos inolvidables. ​",
           "plans.dazn-tier-futbol-es-yp.description": "Vive todas las grandes ligas de Europa en directo y a la carta, previas detalladas, análisis tácticos, post partidos y documentales que muestran el lado más humano del fútbol.",
           "features.f-laliga-5-matches-on-35-of-the-38-matchda-1duh7ke": "LALIGA: 5 partidos en 35 de las 38 jornadas y el partido en abierto de todas las jornadas y toda LALIGA HYPERMOTION",
           "features.f-nfl-5-weekly-matches-playoffs-super-bowl-1rq5im": "Todas las competiciones de los canales de Red Bull TV y Eurosport: Australian Open, Roland Garros, combates seleccionados de UFC, todo el ciclismo…",
           "features.f-all-content-from-plan-premium-without-ex-1yq8d05": "Todo el contenido del plan Premium sin coste extra, fuera de la temporada de fútbol",
+          "logos.logo-premier-league-3njejksf9zi1padxy3454m.blurb": "La liga inglesa al completo: sus 20 equipos, 38 jornadas y el formato más competitivo del mundo. La competición más seguida a nivel global, con clubes históricos como el Manchester United, Liverpool, Arsenal o Chelsea.",
+          "logos.logo-bundesliga-1smscjp6ymaneycciisbbn.blurb": "La liga alemana completa, con sus 18 equipos y un calendario lleno de emoción. Vive cada partido, cada gol y cada jornada sin perderte nada.",
+          "logos.logo-ligue-1-7qo1wdnpnu2ylh5synp0uk.blurb": "Sigue la Ligue 1 y descubre a las grandes estrellas y futuras promesas del fútbol mundial, con partidos en directo, resúmenes y análisis de cada jornada.​",
+          "logos.logo-eredivisie-gzan9akjwiihkynzpqptq.blurb": "Sigue la Eredivisie y vive una de las competiciones más vibrantes de Europa, con fútbol ofensivo, partidos emocionantes y los clubes más reconocidos de los Países Bajos.",
+          "logos.logo-liga-portugal-5jj00atcjs8g6yjmxztsyv.blurb": "Disfruta de la Liga Portugal, hogar de grandes talentos y clubes históricos, con partidos en directo, análisis especializados y toda la emoción del fútbol portugués.​",
+          "logos.logo-uefa-nations-league-3w8xkotpewytka2r2amlga.blurb": "Sigue la UEFA Nations League y disfruta de los enfrentamientos entre las mejores selecciones europeas, con partidos decisivos, análisis y cobertura completa del torneo.​",
           "plans.dazn-tier-futbol-es.description": "Vive todas las grandes ligas de Europa en directo y a la carta, previas detalladas, análisis tácticos, post partidos y documentales que muestran el lado más humano del fútbol.",
           "plans.dazn-tier-futbol-es.badge": "Más vendido",
+          "logos.logo-serie-a-2jkvqibi1iqgb3zugj6c0a.blurb": "La competición italiana en su totalidad: todos los partidos, todos los equipos y toda la pasión del fútbol transalpino, desde el primer hasta el último minuto.",
+          "logos.logo-nfl-2femg0paqvivux73xd5mjc.blurb": "NFL: 5 partidos semanales, los playoffs y la Super Bowl. Todo en español. También RedZone en inglés.",
           "plans.dazn-tier-premium-es-yp.description": "El plan más completo para quienes no quieren perderse nada. Reúne todo el deporte de DAZN en un solo lugar, con la mejor experiencia en directo y a la carta. El acceso definitivo para disfrutar del mejor deporte sin límites.....",
           "plans.dazn-tier-premium-es-yp.badge": "Oferta Especial",
           "features.f-enjoy-all-dazn-sports-in-the-most-comple-1vnxiu2": "Disfruta todo el deporte de DAZN con el plan más completo",
           "features.f-motor-formula-1-motogp-nascar-wsbk-y-dtm-dsdg26": "Motor: Todo el Mundial de Formula 1® , MotoGP™, NASCAR, WSBK y DTM",
+          "logos.logo-motogp-1yn9l7nget0cyst7pmjynx.blurb": "El campeonato mundial de motociclismo, íntegro y en directo. Todas las categorías (MotoGP, Moto2 y Moto3), todos los Grandes Premios y cada sesión de entrenamientos, clasificación y carrera.",
+          "logos.logo-liga-endesa-5uw47rnhdjwb4echs9te5a.blurb": "La élite del baloncesto español. 18 equipos compiten durante toda la temporada regular por un puesto en los playoffs. Partidos cada semana, grandes estrellas y máxima competitividad. El camino al título empieza aquí.​",
+          "logos.logo-nba-go2ck9xukyhg3vrsv3xvq.blurb": "La mejor liga de baloncesto del mundo, con las 30 franquicias americanas compitiendo por el anillo. Disfruta de más de 180 partidos de la fase regular cada temporada en directo y a la carta. Adicionalmente, el All-Star Weekend al completo y más de 25 partidos de Playoffs. También disfrutarás de las Finales de Conferencia (una en directo y otra a la carta) y de la Final de la NBA (a la carta este año, en directo y a la carta el año que viene)",
+          "logos.logo-bundesliga-43d3grjccgc8xjwhbgwky3.blurb": "Sigue la Bundesliga en directo y a la carta, con los grandes clubes de Alemania, talentos emergentes, análisis previos y toda la intensidad de una de las ligas más espectaculares de Europa.",
+          "logos.logo-vive-la-pasi-n-de-la-serie-a-italiana-con-partidos-de-primer-nivel-rivalidades-hist-ricas-an-lisis-t-cticos-y-la-emoci-n-de-algunos-de-los-clubes-m-s-prestigiosos-del-mundo-5kpnsuxybejlwpg4z9ycah.blurb": "Vive la pasión de la Serie A italiana con partidos de primer nivel, rivalidades históricas, análisis tácticos y la emoción de algunos de los clubes más prestigiosos del mundo.",
           "plans.dazn-tier-premium-es.description": "El plan más completo para quienes no quieren perderse nada. Reúne todo el deporte de DAZN en un solo lugar, con la mejor experiencia en directo y a la carta. El acceso definitivo para disfrutar del mejor deporte sin límites.",
           "plans.dazn-tier-premium-es.badge": "Oferta Especial",
           "plans.dazn-tier-us-es.description": "El plan para quienes vibran con el deporte estadounidense. Desde las canastas imposibles de la NBA hasta la potencia de los motores de la NASCAR, pasando por la emoción de los mejores touchdowns de la NFL. Todo en español y en un solo lugar.",
           "plans.dazn-tier-motor-es.description": "Para los amantes de la adrenalina sobre ruedas: disfruta de todo el motor en directo y a la carta, y descubre las historias detrás del volante con previas, análisis, programas especiales y documentales.",
+          "logos.logo-moto2-6yvaq3o5ulgk2itvp1zil8.blurb": "La categoría intermedia del Campeonato del Mundo de MotoGP. Disfruta de todas las carreras de la temporada y sigue de cerca la lucha por el título entre las grandes promesas del motor.",
+          "logos.logo-moto3-3dirbeck5aj8waufcrhpeg.blurb": "La categoría de entrada al Mundial de MotoGP, donde compiten las futuras estrellas. Vive todas las carreras de la temporada, con adelantamientos constantes y una emocionante lucha por el campeonato.",
+          "logos.logo-f2-tm-logo-white-3wsccy6qz4ysd6ndwvmc5w.blurb": "La antesala de la Fórmula 1, donde los jóvenes talentos buscan dar el salto a la máxima categoría. Disfruta de todas las carreras de la temporada y sigue la batalla por el campeonato en algunos de los circuitos más importantes del mundo",
+          "logos.logo-f3-tm-logo-white-3u7zxjwotypnl2aykqwd71.blurb": "El primer gran escalón hacia la Fórmula 1. Descubre a las futuras estrellas en una competición repleta de jóvenes talentos, carreras intensas y luchas por el campeonato en los grandes circuitos internacionales.",
           "plans.dazn-tier-baloncesto-es.description": "Para los  auténticos aficionados al baloncesto. Este plan te sumerge en el mundo de la cancha con partidos en directo y a la carta, análisis tácticos, entrevistas exclusivas y contenido especial que va más allá del directo.",
           "features.f-watch-every-game-including-nfl-redzone-t-11qsmc3": "Disfruta de todos los partidos en directo y bajo demanda, y también de NFL RedZone, los playoffs y la Super Bowl LX",
           "features.f-get-the-authentic-american-commentary-1ddigve": "Obtén la auténtica transmisión estadounidense",
@@ -2295,536 +2412,793 @@
       "status": "active"
     },
     {
-      "id": "logo-bundesliga-conference",
+      "id": "logo-serie-a-rtzivscbv2fnfnaz7fhna",
+      "name": "Serie A",
+      "altText": "Serie A logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/rtZIVscBv2fnFNaz7FHNA/d729e13a034355884b544d1ae5ec863e/Serie_A.png",
+      "blurb": "All games of Serie A also with original commentary - plus Shows & documentaries from Italy."
+    },
+    {
+      "id": "logo-bundesliga-conference-2zclkgcgfqckpnu0pao5de",
       "name": "Bundesliga Conference",
       "altText": "Bundesliga Conference logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2ZclkgcgfQCKpNu0Pao5dE/f65e00e3989c42eec3a83d2441c42f83/DAZN-BuLi-Konferenz_R_2048px_sw__1_.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2ZclkgcgfQCKpNu0Pao5dE/f65e00e3989c42eec3a83d2441c42f83/DAZN-BuLi-Konferenz_R_2048px_sw__1_.png",
+      "blurb": "The legendary Konferenz on Saturday only on DAZN – plus all Bundesliga matches available on demand immediately after the final whistle (highlights and full match)"
     },
     {
-      "id": "logo-frauen-bundesliga",
+      "id": "logo-laliga-4njchywgvdmluawbqevzrm",
+      "name": "LaLiga",
+      "altText": "LaLiga logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4njcHYwgvdMlUawBqeVzRm/cb0ecc8d9d3154633498f61bb01657ca/image.png",
+      "blurb": "Every matchday: All 10 games live and exclusive, also available in Spanish commentary"
+    },
+    {
+      "id": "logo-frauen-bundesliga-50fwoc0zuhmukovqu4e9wo",
       "name": "Frauen Bundesliga",
       "altText": "Frauen Bundesliga logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/50fwoC0ZuHMUkoVQU4e9wo/2c659a7d4c52e645a905f8ed5960f7d1/Frauen_Bundesliga.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/50fwoC0ZuHMUkoVQU4e9wo/2c659a7d4c52e645a905f8ed5960f7d1/Frauen_Bundesliga.png",
+      "blurb": "All games live, highlights right after full-time and exclusive documentaries and shows"
     },
     {
-      "id": "logo-laliga-ch-super-sports",
+      "id": "logo-laliga-3o07aypw2wp0qfvpanobac",
+      "name": "LALIGA",
+      "altText": "LALIGA logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3o07aYpw2wP0QfvpanObaC/382a36c3559c066aca365d07280795a2/LaLiga_r.png",
+      "blurb": "Every matchday: All 10 games live and exclusive, also available in Spanish commentary"
+    },
+    {
+      "id": "logo-serie-a-1oprlcl1nz89ftj0oqagih",
+      "name": "Serie A",
+      "altText": "Serie A logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1OPRlcL1nz89fTj0oqagIh/dcb0f0123a11688d8b4522b750be1a24/Serie_A_r.png",
+      "blurb": "Every match from Serie A, Coppa Italia and Supercoppa Italiana"
+    },
+    {
+      "id": "logo-fa-cup-izld4dxwj2tbrxudcy5s6",
+      "name": "FA Cup",
+      "altText": "FA Cup logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/IzLD4dXWj2TbRxUdCY5S6/484ea85ec780455a6009357e5209223b/FA_Cup.png",
+      "blurb": "FA Cup – Follow all games of the FA Cup live during the 2024 to 2028 seasons, plus exclusive interviews and documentaries on demand."
+    },
+    {
+      "id": "logo-laliga-ch-super-sports-5c9hmqggifctuygkzvp5as",
       "name": "LALIGA - CH Super Sports",
       "altText": "LALIGA - CH Super Sports logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5C9HMqGGifCtUYGKzvp5aS/aaa155da2bc00804d3bde8122b8fcbc3/lalga.png"
     },
     {
-      "id": "logo-ligue-1-ch-super-sport",
+      "id": "logo-ligue-1-ch-super-sport-7ufpkyjx6lmcavidgsi7rs",
       "name": "Ligue 1 - CH Super Sport",
       "altText": "Ligue 1 - CH Super Sport logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7uFPkyJX6LMcAViDgsI7RS/c8cd25a41ca1132ff4735a836d93b04e/Ligue_1_r__supspo.png"
     },
     {
-      "id": "logo-pdc-darts",
-      "name": "PDC Darts",
-      "altText": "PDC Darts logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6CkUcjUFgUTTvWiLGjlVHn/df5369a98f59e2bc9876cdf39c092187/PDC_200x200.png"
-    },
-    {
-      "id": "logo-more-content",
-      "name": "More Content",
-      "altText": "More Content logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6qJHdps6ov4jYSn3r8uCGC/c1c01c140c4587d865847c055c5ffc2b/Frame_2147225624.svg"
-    },
-    {
-      "id": "logo-ligue-1-mcdonald-s",
-      "name": "Ligue 1 McDonald's",
-      "altText": "Ligue 1 McDonald's logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/58dzFpYfgYH0QmZIYpWb85/09c53ee9c4b746ca2411e9df9fd9ae3d/Ligue_1__.png"
-    },
-    {
-      "id": "logo-ligue-3-betclic",
-      "name": "Ligue 3 Betclic",
-      "altText": "Ligue 3 Betclic logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4gl9xL128Ne1dKDEFQhaAC/2d26a47c6f011835e39d4b13ae98caff/LIGUE3_COLOR_107x107.png"
-    },
-    {
-      "id": "logo-coppa-italia",
-      "name": "Coppa Italia",
-      "altText": "Coppa Italia logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/15qtxNfhBTf3BWDnXud0vv/c86613a7319ddc3223083c55a64a28ea/COPPA_512x512.jpg"
-    },
-    {
-      "id": "logo-betclic-elite",
-      "name": "Betclic Elite",
-      "altText": "Betclic Elite logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/525LYOKtjVbYwpW8zXwfG4/3a554734fb6065589267fbee258bf438/512x512_Betclic_EIÌ__LITE_LOGO-2.jpg"
-    },
-    {
-      "id": "logo-roshn-saudi-league",
-      "name": "Roshn Saudi League",
-      "altText": "Roshn Saudi League logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2kIekYrJprYcMM22JSGCjg/c1f3879e93be2cf791e620c847543bb1/RSL.jpg"
-    },
-    {
-      "id": "logo-serie-bkt",
-      "name": "Serie BKT",
-      "altText": "Serie BKT logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/rzx8b9AknZjeA9yXlqnnA/be39f4125b760b726e2b3fdb0b15f8fe/image_14.png"
-    },
-    {
-      "id": "logo-eurosport-1-2",
-      "name": "Eurosport 1 & 2",
-      "altText": "Eurosport 1 & 2 logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/22TZUBdopJsomjDksxz9y0/4839d98c60a48ad960671ce9801cce4b/Eurosport_logo-boxed.png"
-    },
-    {
-      "id": "logo-laliga-easports",
-      "name": "LaLiga EASports",
-      "altText": "LaLiga EASports logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3iHKJmZeHCqQvD1PC7i9tJ/54a56445a364b1f3532eca98ee62a078/image_11.png"
-    },
-    {
-      "id": "logo-cev-champions-league-log",
-      "name": "CEV Champions league log",
-      "altText": "CEV Champions league log logo",
-      "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5md55Yuvj6UqkDukyA02A2/d645c7af526b0f1c767755ea327f22f8/image_10.png"
-    },
-    {
-      "id": "logo-fa-cup",
+      "id": "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
       "name": "FA Cup",
       "altText": "FA Cup logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7cky9fRC8iTrHWWvBi1lBF/5a2adf13701903a3422815dded2b2919/FA-Cup_logo-boxed.jpg"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6LmYlKrEc5D6igFNdsVb8Q/983a2060786df17cc6f416a7d74d7a7a/FA_Cup_r.png"
     },
     {
-      "id": "logo-liga-portugal-betclic",
-      "name": "Liga Portugal Betclic",
-      "altText": "Liga Portugal Betclic logo",
+      "id": "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+      "name": "Coppa Italia",
+      "altText": "Coppa Italia logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7Je6921VsgSgpM91SIdjha/5e0f4771b5a3d4d5c04f298daf7e9df7/2.svg"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6PhMBPkVHUoaQBXqWXgsl2/e0e5e47f46c55cffdbb608cff5b7cfa3/Coppa_Italia_r.png",
+      "blurb": "Selected games from the first rounds, plus all quarterfinal, semifinal, and final games — all exclusively on DAZN."
     },
     {
-      "id": "logo-jupiler-pro-league",
+      "id": "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+      "name": "PDC Darts",
+      "altText": "PDC Darts logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6CkUcjUFgUTTvWiLGjlVHn/df5369a98f59e2bc9876cdf39c092187/PDC_200x200.png",
+      "blurb": "All the events live, including the Darts World Championship."
+    },
+    {
+      "id": "logo-more-content-6qjhdps6ov4jysn3r8ucgc",
+      "name": "More Content",
+      "altText": "More Content logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6qJHdps6ov4jYSn3r8uCGC/c1c01c140c4587d865847c055c5ffc2b/Frame_2147225624.svg",
+      "blurb": "Follow many more sports, with the best in class boxing fights, Ligue 1, women's football, tennis, golf and more."
+    },
+    {
+      "id": "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+      "name": "Ligue 1",
+      "altText": "Ligue 1 logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/tCpVKgYGKPNOgEUwFb4xQ/a74d2a25baf3de74dab1a2c58b4ccc27/Ligue_1_r__1_.png",
+      "blurb": "All games of Ligue 1 in the language of your choice (French, English and German commentary)"
+    },
+    {
+      "id": "logo-ligue-1-mcdonald-s-58dzfpyfgyh0qmziypwb85",
+      "name": "Ligue 1 McDonald's",
+      "altText": "Ligue 1 McDonald's logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/58dzFpYfgYH0QmZIYpWb85/09c53ee9c4b746ca2411e9df9fd9ae3d/Ligue_1__.png",
+      "blurb": "From now on, watch every Ligue 1 McDonald's game live."
+    },
+    {
+      "id": "logo-ligue-3-betclic-4gl9xl128ne1dkdefqhaac",
+      "name": "Ligue 3 Betclic",
+      "altText": "Ligue 3 Betclic logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4gl9xL128Ne1dKDEFQhaAC/2d26a47c6f011835e39d4b13ae98caff/LIGUE3_COLOR_107x107.png",
+      "blurb": "Discover the brand-new Ligue 3 Betclic, with every game live."
+    },
+    {
+      "id": "logo-serie-a-1mh5zdg0yk1edeikiynu0x",
+      "name": "Serie A",
+      "altText": "Serie A logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1mh5zdg0yK1eDEikiyNU0X/caddf5bb4ce4f939767edb5544d394f3/SERIE_A_512x512.jpg",
+      "blurb": "Every match from Serie A, Coppa Italia and Supercoppa Italianaa"
+    },
+    {
+      "id": "logo-copa-del-rey-39lclnyjbj0frvs60xplcq",
+      "name": "Copa del Rey",
+      "altText": "Copa del Rey logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/39LcLnYjbJ0FRVs60xPLcQ/c8828cb8f0ccca7f683e6cceb34415c9/ROUNDED_CDR.png",
+      "blurb": "Watch all events & championship on DAZN."
+    },
+    {
+      "id": "logo-coppa-italia-15qtxnfhbtf3bwdnxud0vv",
+      "name": "Coppa Italia",
+      "altText": "Coppa Italia logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/15qtxNfhBTf3BWDnXud0vv/c86613a7319ddc3223083c55a64a28ea/COPPA_512x512.jpg",
+      "blurb": "Football: stream matches from the Italian Cup."
+    },
+    {
+      "id": "logo-betclic-elite-525lyoktjvbywpw8zxwfg4",
+      "name": "Betclic Elite",
+      "altText": "Betclic Elite logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/525LYOKtjVbYwpW8zXwfG4/3a554734fb6065589267fbee258bf438/512x512_Betclic_EIÌ__LITE_LOGO-2.jpg",
+      "blurb": "All of Betclic ELITE, Including the All Star Game and Playoffs. Live."
+    },
+    {
+      "id": "logo-serie-a-6vwdmb0xwwt0dchtnlseo4",
+      "name": "Serie A",
+      "altText": "Serie A logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6VwDmB0xWWT0DchtNlsEO4/7e3657d0c81aec5f63680d374a72c670/SERIE_A_512x512.jpg",
+      "blurb": "Football: stream all matches from the Italian league."
+    },
+    {
+      "id": "logo-roshn-saudi-league-2kiekyrjprycmm22jsgcjg",
+      "name": "Roshn Saudi League",
+      "altText": "Roshn Saudi League logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2kIekYrJprYcMM22JSGCjg/c1f3879e93be2cf791e620c847543bb1/RSL.jpg",
+      "blurb": "Watch the Roshn Saudi League, with its global stars. Feel the excitement again with familiar faces from France."
+    },
+    {
+      "id": "logo-jupiler-pro-league-15takkvl5he8ddk83fckel",
       "name": "Jupiler Pro League",
       "altText": "Jupiler Pro League logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/73q8Jm2VlWxKqOkI2M9rdg/d453d146588e1492d23c3e6e2d457e92/image__3_.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/15TAKkVl5He8dDk83FcKEL/db305374b0f102d0c3d2483b5d1cd6e9/512x512_Jupiler_League_LOGO.jpg",
+      "blurb": "Football: stream the Belgian league."
     },
     {
-      "id": "logo-fifa",
+      "id": "logo-eredivisie-5xqp6cvvnke6suwadn21rz",
+      "name": "Eredivisie",
+      "altText": "Eredivisie logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5XQp6cVVNKe6suwaDN21RZ/6d92183a419ed9ad7142e7a5c45a01ce/EREDIVISIE.jpg",
+      "blurb": "Every week, watch at least 3 top Dutch football matches live, featuring PSV Eindhoven, Ajax Amsterdam and Feyenoord."
+    },
+    {
+      "id": "logo-serie-bkt-rzx8b9aknzjea9yxlqnna",
+      "name": "Serie BKT",
+      "altText": "Serie BKT logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/rzx8b9AknZjeA9yXlqnnA/be39f4125b760b726e2b3fdb0b15f8fe/image_14.png",
+      "blurb": "All of Serie BKT is on DAZN, including playoffs and playouts."
+    },
+    {
+      "id": "logo-eurosport-1-2-22tzubdopjsomjdksxz9y0",
+      "name": "Eurosport 1 & 2",
+      "altText": "Eurosport 1 & 2 logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/22TZUBdopJsomjDksxz9y0/4839d98c60a48ad960671ce9801cce4b/Eurosport_logo-boxed.png",
+      "blurb": "Eurosport 1 and Eurosport 2 is included in your plan"
+    },
+    {
+      "id": "logo-laliga-easports-3ihkjmzehcqqvd1pc7i9tj",
+      "name": "LaLiga EASports",
+      "altText": "LaLiga EASports logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3iHKJmZeHCqQvD1PC7i9tJ/54a56445a364b1f3532eca98ee62a078/image_11.png",
+      "blurb": "All of LaLiga EA Sports is exclusive to DAZN."
+    },
+    {
+      "id": "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+      "name": "Copa del Rey",
+      "altText": "Copa del Rey logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1sh71Dwls02CGNBtel1b0D/dcb2f559931eb6649e14212098130967/copadelrey.jfif",
+      "blurb": "Selected games from the first rounds, plus all quarterfinal, semifinal, and final games — all exclusively on DAZN."
+    },
+    {
+      "id": "logo-cev-champions-league-log-5md55yuvj6uqkdukya02a2",
+      "name": "CEV Champions league log",
+      "altText": "CEV Champions league log logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5md55Yuvj6UqkDukyA02A2/d645c7af526b0f1c767755ea327f22f8/image_10.png",
+      "blurb": "The European Volleyball Club Championship is on DAZN."
+    },
+    {
+      "id": "logo-fa-cup-7cky9frc8itrhwwvbi1lbf",
+      "name": "FA Cup",
+      "altText": "FA Cup logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7cky9fRC8iTrHWWvBi1lBF/5a2adf13701903a3422815dded2b2919/FA-Cup_logo-boxed.jpg",
+      "blurb": "The thrills of the Emirates FA Cup, the world's oldest cup, on DAZN"
+    },
+    {
+      "id": "logo-liga-portugal-betclic-7je6921vsgsgpm91sidjha",
+      "name": "Liga Portugal Betclic",
+      "altText": "Liga Portugal Betclic logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7Je6921VsgSgpM91SIdjha/5e0f4771b5a3d4d5c04f298daf7e9df7/2.svg",
+      "blurb": "The best of the Portuguese football league."
+    },
+    {
+      "id": "logo-jupiler-pro-league-73q8jm2vlwxkqoki2m9rdg",
+      "name": "Jupiler Pro League",
+      "altText": "Jupiler Pro League logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/73q8Jm2VlWxKqOkI2M9rdg/d453d146588e1492d23c3e6e2d457e92/image__3_.png",
+      "blurb": "The best of the Belgian football league."
+    },
+    {
+      "id": "logo-fifa-5npvjnt6fylgylmsgd4gu1",
       "name": "FIFA+",
       "altText": "FIFA+ logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5npvjnT6FyLGYLMsGd4gU1/304e2bd7f95c48308e46f004f3b72dae/FIFA_.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5npvjnT6FyLGYLMsGd4gU1/304e2bd7f95c48308e46f004f3b72dae/FIFA_.png",
+      "blurb": "Relive iconic FIFA World Cup™ matches and immerse yourself in world-class documentaries from around the globe"
     },
     {
-      "id": "logo-serie-a-women",
+      "id": "logo-serie-a-women-5b9rfyscvlk8a905e0ezbk",
       "name": "Serie A Women",
       "altText": "Serie A Women logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5B9rfysCvLK8A905e0EzBK/3a6080cba8c4a65a41fcd4fe63ceb3c4/SERIE_A_WOMEN_ATHORA_CMYK.jpg"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5B9rfysCvLK8A905e0EzBK/3a6080cba8c4a65a41fcd4fe63ceb3c4/SERIE_A_WOMEN_ATHORA_CMYK.jpg",
+      "blurb": "The entire Serie A Women is on DAZN, with 4 exclusive matches per day."
     },
     {
-      "id": "logo-nfl-logo-it",
+      "id": "logo-nfl-logo-it-4tzql3gryp4oxoeauagr2t",
       "name": "NFL LOGO IT",
       "altText": "NFL LOGO IT logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4TzqL3GrYp4oxOeauAgR2t/d50358baf582f1ad8677a2c9b04e0e0a/image_8.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4TzqL3GrYp4oxOeauAgR2t/d50358baf582f1ad8677a2c9b04e0e0a/image_8.png",
+      "blurb": "Watch a selection of NFL games on DAZN."
     },
     {
-      "id": "logo-roland-garros",
+      "id": "logo-roland-garros-14v2cgln3d4xmk3e8zecmo",
       "name": "ROLAND GARROS",
       "altText": "ROLAND GARROS logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/14V2cGlN3d4xmK3E8ZECMO/18a96abb7e3ad5680afa1bd602bedf0a/image_3.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/14V2cGlN3d4xmK3E8ZECMO/18a96abb7e3ad5680afa1bd602bedf0a/image_3.png",
+      "blurb": "All Roland Garros matches on Eurosport channels available on DAZN."
     },
     {
-      "id": "logo-australian-open",
+      "id": "logo-australian-open-ns4wtkjmnimcyxd7pdgc6",
       "name": "Australian Open",
       "altText": "Australian Open logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/nS4WTkjmnimCyXd7Pdgc6/b3baa82107c72f57d83e93204c1da98d/image__1_.jpeg"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/nS4WTkjmnimCyXd7Pdgc6/b3baa82107c72f57d83e93204c1da98d/image__1_.jpeg",
+      "blurb": "All Australian Open matches on Eurosport channels available on DAZN."
     },
     {
-      "id": "logo-the-best-of-cycling",
+      "id": "logo-the-best-of-cycling-4lac1wq9saiomtwdhmowyg",
       "name": "The best of cycling",
       "altText": "The best of cycling logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4laC1WQ9saiOmTwdhMowYG/f96b71c47ed0dad3ea161f7c8dbbd516/image_2.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4laC1WQ9saiOmTwdhMowYG/f96b71c47ed0dad3ea161f7c8dbbd516/image_2.png",
+      "blurb": "All stages of the Giro d'Italia, Tour de France, and Vuelta available on Eurosport channels."
     },
     {
-      "id": "logo-ufc",
+      "id": "logo-ufc-5n1uylajqascxphmbuovwe",
       "name": "UFC",
       "altText": "UFC logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5N1UyLAJqascXPhMBuoVwe/0b8d1a532a0acb6ba40db17b9c654108/UFC_r.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5N1UyLAJqascXPhMBuoVwe/0b8d1a532a0acb6ba40db17b9c654108/UFC_r.png",
+      "blurb": "All numbered events and fight nights live & on-demand"
     },
     {
-      "id": "logo-pga-logo",
+      "id": "logo-pga-logo-2srujpktnxk9t3p8qtq0ok",
       "name": "PGA Logo",
       "altText": "PGA Logo logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2sRuJpKtNxK9T3p8QTQ0Ok/57be998e39df96925f627cc4cda59c3d/pgaTourLogo.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2sRuJpKtNxK9T3p8QTQ0Ok/57be998e39df96925f627cc4cda59c3d/pgaTourLogo.png",
+      "blurb": "All holes of the PGA Tour are available on Eurosport channels."
     },
     {
-      "id": "logo-superlega",
+      "id": "logo-superlega-1c7rzaebyldmwhpbwhtrsk",
       "name": "SuperLega",
       "altText": "SuperLega logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1C7rZaeBYLDMwHpBWHTrSK/8ea4f798a994f2ed6eb5b507d50f6a75/image_9.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1C7rZaeBYLDMwHpBWHTrSK/8ea4f798a994f2ed6eb5b507d50f6a75/image_9.png",
+      "blurb": "The top men's Italian volleyball league is available on DAZN."
     },
     {
-      "id": "logo-serie-a-femminile-volley",
+      "id": "logo-serie-a-femminile-volley-2ibsgqrbqshxygpi8pshjc",
       "name": "Serie A Femminile volley",
       "altText": "Serie A Femminile volley logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2ibsGqrbqsHxyGpI8pShJc/54de3d0d517d4e03850acbc1e5a1391d/image.jpeg"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2ibsGqrbqsHxyGpI8pShJc/54de3d0d517d4e03850acbc1e5a1391d/image.jpeg",
+      "blurb": "The best of Serie A1 Tigotà is available on DAZN."
     },
     {
-      "id": "logo-kings-league-italia",
+      "id": "logo-kings-league-italia-6rr5wwh273vjmpyemr9f2u",
       "name": "Kings League Italia",
       "altText": "Kings League Italia logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6Rr5wWH273vjMPYEmr9F2U/6b1bcc69c6ed8da89ecbbff62e0af110/image__8_.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6Rr5wWH273vjMPYEmr9F2U/6b1bcc69c6ed8da89ecbbff62e0af110/image__8_.png",
+      "blurb": "All Kings League Italia matches with italian commentary"
     },
     {
-      "id": "logo-liga-portugal-2",
+      "id": "logo-liga-portugal-2-1llbmxnypoe9u5qfyqfuko",
       "name": "Liga Portugal-2",
       "altText": "Liga Portugal-2 logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1LLbmxnYPOe9u5QFyQFUko/77a172f5d9afae758bb48c7937d809fb/image_5.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1LLbmxnYPOe9u5QFyQFUko/77a172f5d9afae758bb48c7937d809fb/image_5.png",
+      "blurb": "The best of the Portuguese football league."
     },
     {
-      "id": "logo-serie-a-women-calcio-logo",
+      "id": "logo-serie-a-women-calcio-logo-6mqamyiu48lbkn63yzjg8d",
       "name": "Serie A Women Calcio logo",
       "altText": "Serie A Women Calcio logo logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6mQamYIU48LbkN63yzjg8D/69eead0c6a549c502353f2592e377396/Serie_A_Women___figcfemminile__â___Instagram_photos_and_videos.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6mQamYIU48LbkN63yzjg8D/69eead0c6a549c502353f2592e377396/Serie_A_Women___figcfemminile__â___Instagram_photos_and_videos.png",
+      "blurb": "The entire Serie A Women is on DAZN, with 4 exclusive matches per day."
     },
     {
-      "id": "logo-farm",
+      "id": "logo-eurosport-7agkwjkurzn6t8qvvz98kk",
+      "name": "Eurosport",
+      "altText": "Eurosport logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7aGkwjkURzn6T8qVVz98kK/f24f1ec7c5300c8f39cc4ce152962415/image.png",
+      "blurb": "All of Eurosport's content is available on DAZN"
+    },
+    {
+      "id": "logo-farm-pfm37nswtunzdivh3r3md",
       "name": "FARM",
       "altText": "FARM logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/pFM37NswtUNZdivh3r3md/4a1edbb8663b81a901f321a97fff812c/logos-2.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/pFM37NswtUNZdivh3r3md/4a1edbb8663b81a901f321a97fff812c/logos-2.png",
+      "blurb": "Farm League Baseball. The future starts here—live on DAZN."
     },
     {
-      "id": "logo-bleague",
+      "id": "logo-laliga-1knqzty1axtf0ez1vq9plq",
+      "name": "LaLiga",
+      "altText": "LaLiga logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1knQZTy1axTf0Ez1vQ9PLq/f04e446cca776190f6d38e1a71b64fe1/La_Liga.png",
+      "blurb": "LaLiga – Follow all games of the LaLiga, plus exclusive interviews and documentaries on demand."
+    },
+    {
+      "id": "logo-bleague-4xynmzpyldvqof6c6ywhvz",
       "name": "BLEAGUE",
       "altText": "BLEAGUE logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4XynmZpyldvQof6c6ywhVZ/c9421286f9bc0e42a67bb38ca6717cf3/NFL.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4XynmZpyldvQof6c6ywhVZ/c9421286f9bc0e42a67bb38ca6717cf3/NFL.png",
+      "blurb": "B.LEAGUE. Every game, live."
     },
     {
-      "id": "logo-japan-rugby-one",
+      "id": "logo-japan-rugby-one-4nlpucxky8tkbbjyb2cinp",
       "name": "Japan Rugby One",
       "altText": "Japan Rugby One logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4nLPuCxKY8TKBBjYB2CinP/3701bd2f4484ab9455cb999058947742/LaLiga.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4nLPuCxKY8TKBBjYB2CinP/3701bd2f4484ab9455cb999058947742/LaLiga.png",
+      "blurb": "League One Div 1・2・3. The pinnacle of rugby. All matches, live."
     },
     {
-      "id": "logo-laliga",
+      "id": "logo-premier-league-38bt916becp713loys7gdr",
+      "name": "Premier League",
+      "altText": "Premier League logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/38bt916BeCp713LoyS7GDr/e0324cb05c483b7aeadce2b886601091/Bundesliga.png",
+      "blurb": "All 380 Premier League matches available on DAZN, live matches, full replays, highlights, analysis/commentary programmes and much more."
+    },
+    {
+      "id": "logo-laliga-4b1dxbdbwcmmpdsgvu6dp7",
       "name": "LALIGA ",
       "altText": "LALIGA  logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4b1DXbDbwCMmPdsgvu6dP7/0c9e015825e3fc62fc462b098cc2278a/small_logo-9.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4b1DXbDbwCMmPdsgvu6dP7/0c9e015825e3fc62fc462b098cc2278a/small_logo-9.png",
+      "blurb": "All 380 LALIGA matches available on DAZN, live matches, full replays, highlights, analysis/commentary programmes and much more."
     },
     {
-      "id": "logo-formula-1",
+      "id": "logo-formula-1-19ujdv1gomxpkljxepyyqq",
       "name": "Formula 1",
       "altText": "Formula 1 logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/19uJDv1goMXPkLJXepYyQQ/d0b3e5df6e3082fbc644b2d4d4180f15/logos.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/19uJDv1goMXPkLJXepYyQQ/d0b3e5df6e3082fbc644b2d4d4180f15/logos.png",
+      "blurb": "All Formula 1 practice sessions, qualifying sessions and races available on DAZN (DAZN channel 5 and DAZN App)"
     },
     {
-      "id": "logo-europa-conference-league",
+      "id": "logo-bundesliga-7arb7hbh7pbml0cdxcgbku",
+      "name": "Bundesliga ",
+      "altText": "Bundesliga  logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7aRb7hbh7pbML0cdxCGBku/611f7167a429e56e2a4ed81b76e29531/Bundesliga__1_.png.jpeg",
+      "blurb": "All 306 Bundesliga matches available on DAZN, live matches, full replays, highlights, analysis/commentary programmes and much more."
+    },
+    {
+      "id": "logo-europa-conference-league-6oqaywdlwhywmr8oh4nza",
       "name": "Europa & Conference League",
       "altText": "Europa & Conference League logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6OqAywDLwhyWmr8Oh4Nza/0991674d32535af172d0185778b9e4be/small_logo-10.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6OqAywDLwhyWmr8Oh4Nza/0991674d32535af172d0185778b9e4be/small_logo-10.png",
+      "blurb": "Over 300 UEFA Europa & Conference League matches available on DAZN, live matches, full replays, highlights, analysis/commentary programmes and much more. We broadcast all matches live except the main match of one or the other competition (e.g. FC Porto)."
     },
     {
-      "id": "logo-formula-2",
+      "id": "logo-formula-2-2je4ztcxzctlbx45efgj3g",
       "name": "Formula 2",
       "altText": "Formula 2 logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2Je4ZTcXzcTlbx45EfgJ3g/df628f1252416932520a3aad5c0a7263/small_logo.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2Je4ZTcXzcTlbx45EfgJ3g/df628f1252416932520a3aad5c0a7263/small_logo.png",
+      "blurb": "Formula 2 practice sessions, qualifying rounds and races available on DAZN (DAZN channel 5 and DAZN App)"
     },
     {
-      "id": "logo-formula-3",
+      "id": "logo-formula-3-1dgtzdc3julczpxdlzpme8",
       "name": "Formula 3",
       "altText": "Formula 3 logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1DGtZdc3JulCzPxdLZPME8/4ba57ea00b318372e5e553cf80898b6f/small_logo-2.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1DGtZdc3JulCzPxdLZPME8/4ba57ea00b318372e5e553cf80898b6f/small_logo-2.png",
+      "blurb": "Formula 3 practice sessions, qualifying rounds and races available on DAZN (DAZN channel 5 and DAZN App)"
     },
     {
-      "id": "logo-formula-e",
+      "id": "logo-formula-e-3gj52hgnvtabcggmhc702v",
       "name": "Formula E",
       "altText": "Formula E logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3gj52hGnVtabCgGMhC702v/57c168cfc06a1a7728d8c85af83855a6/small_logo-3.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3gj52hGnVtabCgGMhC702v/57c168cfc06a1a7728d8c85af83855a6/small_logo-3.png",
+      "blurb": "All Formula E practice sessions, qualifying rounds and races available on DAZN (DAZN channel 5 and DAZN App)"
     },
     {
-      "id": "logo-f1-academy",
+      "id": "logo-f1-academy-3sffvszr74a3sgrhbnd9sg",
       "name": "F1 Academy",
       "altText": "F1 Academy logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3sFFVSzr74a3sGRHBnd9Sg/1088d251acd87fc7e1166c2ce2baa6e9/small_logo-5.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3sFFVSzr74a3sGRHBnd9Sg/1088d251acd87fc7e1166c2ce2baa6e9/small_logo-5.png",
+      "blurb": "F1 Academy practice sessions, qualifying rounds and races available on DAZN."
     },
     {
-      "id": "logo-porsche-supercup",
+      "id": "logo-porsche-supercup-5wwpyudjbrmmgk2em6vyq5",
       "name": "Porsche SuperCup",
       "altText": "Porsche SuperCup logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5WwPYudjbrMMGK2em6VYQ5/4f78a1b74c5e9faecf5a56164abe1a73/small_logo-6.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5WwPYudjbrMMGK2em6VYQ5/4f78a1b74c5e9faecf5a56164abe1a73/small_logo-6.png",
+      "blurb": "Follow the Porsche SuperCup on DAZN."
     },
     {
-      "id": "logo-f4-spanish",
+      "id": "logo-dtm-3zdkai6utap7pbcrguojgw",
+      "name": "DTM",
+      "altText": "DTM logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3ZdkAi6UTaP7pbCrGuOjGw/655d2cac880746854415367da861835d/small_logo-4.png",
+      "blurb": "Follow the DTM on DAZN."
+    },
+    {
+      "id": "logo-f4-spanish-5tgm0tb2hese1d9pzlllae",
       "name": "F4 Spanish",
       "altText": "F4 Spanish logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5tGm0tb2hesE1d9pZllLaE/b6dfddb7f1acd0fe6c55621c9fe30630/small_logo-7.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5tGm0tb2hesE1d9pZllLaE/b6dfddb7f1acd0fe6c55621c9fe30630/small_logo-7.png",
+      "blurb": "Follow F4 Spain on DAZN."
     },
     {
-      "id": "logo-f4-italian",
+      "id": "logo-f4-italian-qwbdptrmzmhmtzn5xl0mm",
       "name": "F4 Italian",
       "altText": "F4 Italian logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/QwbDptRmZmhmTzN5Xl0Mm/db3e7e24b6056415702c1c0a9b01c132/small_logo-8.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/QwbDptRmZmhmTzN5Xl0Mm/db3e7e24b6056415702c1c0a9b01c132/small_logo-8.png",
+      "blurb": "Follow F4 Italy on DAZN."
     },
     {
-      "id": "logo-mf-dazn-x-series",
+      "id": "logo-mf-dazn-x-series-3ha9oyguxk3ltae1saf5ry",
       "name": "MF & DAZN: X Series",
       "altText": "MF & DAZN: X Series logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3Ha9oYguXK3lTae1Saf5rY/7ad6f7cbdf85b0dc5414caec4390339b/big_logo-2.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3Ha9oYguXK3lTae1Saf5rY/7ad6f7cbdf85b0dc5414caec4390339b/big_logo-2.png",
+      "blurb": "Follow Misfits events on DAZN."
     },
     {
-      "id": "logo-superbikes",
+      "id": "logo-uefa-champions-league-5u7ruurccugfolhscw58ru",
+      "name": "UEFA Champions League",
+      "altText": "UEFA Champions League logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5u7RuurcCuGFOLHSCw58rU/b7f68c3c5eb53ee4d6f6ae5520c187de/big_logo.png",
+      "blurb": "Over 150 UEFA Champions League matches available on DAZN, live matches, full replays, highlights, analysis/commentary programmes and much more. We broadcast all matches live except for the two main ones (e.g. SL Benfica and Sporting CP)."
+    },
+    {
+      "id": "logo-superbikes-59okwqnnyd9eth6xg20ual",
       "name": "Superbikes",
       "altText": "Superbikes logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/59OKWqNNYD9ETH6Xg20uAl/2216c48606c16dc1228dee3bdf405377/Logo.png"
     },
     {
-      "id": "logo-nascar",
+      "id": "logo-nascar-469rkzxmgvmfx8wgxv6g0t",
       "name": "NASCAR",
       "altText": "NASCAR logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/469RKzXMgvmFX8wgXV6g0T/0bad06bea878fc00b3ad57ebae2b19bd/image.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/469RKzXMgvmFX8wgXV6g0T/0bad06bea878fc00b3ad57ebae2b19bd/image.png",
+      "blurb": "The most popular motorsport competition in the United States. Experience the adrenaline of stock car racing on oval tracks, with over 30 events per season. Follow top drivers, daring overtakes, and the fight for the championship.​"
     },
     {
-      "id": "logo-eurosport",
+      "id": "logo-eurosport-6pujdp1q8kcbhtdp5s9td2",
       "name": "Eurosport",
       "altText": "Eurosport logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6PUJDp1q8kcBHtdp5S9Td2/0c11c7c57a1fd782f70287a050018dc7/Eurosport_logo-boxed.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6PUJDp1q8kcBHtdp5S9Td2/0c11c7c57a1fd782f70287a050018dc7/Eurosport_logo-boxed.png",
+      "blurb": "Full coverage of major international sporting events: tennis, cycling, winter sports, athletics, and much more. All Eurosport content, unlimited."
     },
     {
-      "id": "logo-dtm",
+      "id": "logo-dtm-4tjbky6djw3ku6kl7dksjc",
       "name": "DTM",
       "altText": "DTM logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4tJBKy6djw3KU6kl7DkSjc/228c6f5822cb59b2bee83c5b525025e9/eyJwYXRoIjoiZGF6blwvZmlsZVwvZmdiRFBkRDJMUnpOaGt3eHFzN04ucG5nIn0-dazn-ElaJ2oYO-84t0FGusD8sLW7OX8P5BSu5PVDnXEJJMws.png"
     },
     {
-      "id": "logo-eurosport-1-y-2",
+      "id": "logo-eurosport-1-y-2-3kxsfvnrxpawmdye0qzobb",
       "name": "Eurosport 1 y 2",
       "altText": "Eurosport 1 y 2 logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3kXSFvNRXpAWmdYe0QzObB/ac4ffcd8cd16e0f7062c3b9747317765/Eurosport_logo-boxed.png"
     },
     {
-      "id": "logo-worldsbk",
+      "id": "logo-worldsbk-4z8dopfexalcaj593cdan0",
       "name": "WorldSBK",
       "altText": "WorldSBK logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4z8DopfexALcaj593cDaN0/e3f68d6d416bd7959e5fe6bf2a746846/image.png"
     },
     {
-      "id": "logo-supercopa-endesa",
+      "id": "logo-supercopa-endesa-4o3rv9cmfjvmmhtotfvtvn",
       "name": "Supercopa Endesa",
       "altText": "Supercopa Endesa logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4o3rv9CmFjvmmHtOTFvtvn/7acdd3f0c733d47bc428f13b5b6f86f2/RS821193_logo_scMaÌ_laga2025.jpg"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4o3rv9CmFjvmmHtOTFvtvn/7acdd3f0c733d47bc428f13b5b6f86f2/RS821193_logo_scMaÌ_laga2025.jpg",
+      "blurb": "The first major title of the season. Four top teams face off in a fast-paced and thrilling format. Semifinals and final packed into one weekend, showcasing the very best of Spanish basketball.​"
     },
     {
-      "id": "logo-copa-del-rey",
+      "id": "logo-copa-del-rey-2fahnpmhdahfkmt9hbiatf",
       "name": "Copa del rey ",
       "altText": "Copa del rey  logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2FAhNPmHDAHfKMT9hBIatf/2662fbf3895b4b51b9effd81f90dddb2/Logo_copa_del_rey__rgb_contorno__1_.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2FAhNPmHDAHfKMT9hBIatf/2662fbf3895b4b51b9effd81f90dddb2/Logo_copa_del_rey__rgb_contorno__1_.png",
+      "blurb": "The most electrifying competition on the calendar. Eight teams, four days, and a unique atmosphere. Every game is a battle for glory, full of surprises, intensity, and unforgettable moments.​"
     },
     {
-      "id": "logo-premier-league",
+      "id": "logo-premier-league-3njejksf9zi1padxy3454m",
       "name": "Premier League",
       "altText": "Premier League logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3nJEjKsF9zI1padXy3454M/d3c05f69fd443352863df533fd455465/Premier_1x1.JPG"
     },
     {
-      "id": "logo-ligue-1",
+      "id": "logo-bundesliga-1smscjp6ymaneycciisbbn",
+      "name": "Bundesliga",
+      "altText": "Bundesliga logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1SmsCJp6ymaneyccIISbbn/9772088ae7af0e0a742dad262111505b/Bundesliga.png"
+    },
+    {
+      "id": "logo-ligue-1-7qo1wdnpnu2ylh5synp0uk",
       "name": "Ligue 1",
       "altText": "Ligue 1 logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7qO1wdNpnu2YLH5sYNp0uK/e3a2e4f14f43bb2c9b57b262b272d080/DSG-12480-DACH-Circle-Logos-for-LP_Ligue-1.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7qO1wdNpnu2YLH5sYNp0uK/e3a2e4f14f43bb2c9b57b262b272d080/DSG-12480-DACH-Circle-Logos-for-LP_Ligue-1.png",
+      "blurb": "Follow Ligue 1 and discover the biggest stars and future talents in world football, with live matches, highlights, and analysis from every matchday.​"
     },
     {
-      "id": "logo-eredivisie",
+      "id": "logo-eredivisie-gzan9akjwiihkynzpqptq",
       "name": "EREDIVISIE",
       "altText": "EREDIVISIE logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/GZAN9AKjwIIhKYnZpqPTq/00c2c69daf7ff5aea77203aa8bfbeca3/EREDIVISE.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/GZAN9AKjwIIhKYnZpqPTq/00c2c69daf7ff5aea77203aa8bfbeca3/EREDIVISE.png",
+      "blurb": "Follow the Eredivisie and experience one of Europe’s most vibrant competitions, featuring attacking football, thrilling matches, and the Netherlands’ most renowned clubs.​"
     },
     {
-      "id": "logo-liga-portugal",
+      "id": "logo-liga-portugal-5jj00atcjs8g6yjmxztsyv",
       "name": "Liga Portugal",
       "altText": "Liga Portugal logo",
       "status": "active",
       "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5jj00atCJS8g6yjMxzTSyV/ebade81f777ef2332447732d9902040c/Liga_Portugal.png"
     },
     {
-      "id": "logo-uefa-national-team-games",
+      "id": "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
       "name": "UEFA National Team Games",
       "altText": "UEFA National Team Games logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3W8XKoTPewytkA2R2aMlga/e2f3d46c87eecf82e62ae51b930c794c/nations_league.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3W8XKoTPewytkA2R2aMlga/e2f3d46c87eecf82e62ae51b930c794c/nations_league.png",
+      "blurb": "Follow the UEFA Nations League and enjoy clashes between Europe’s top national teams, with decisive matches, expert analysis, and comprehensive tournament coverage.​"
     },
     {
-      "id": "logo-nfl",
+      "id": "logo-serie-a-2jkvqibi1iqgb3zugj6c0a",
+      "name": "Serie A",
+      "altText": "Serie A logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2JkVqIbi1iQGB3zugj6c0A/0a5fc262b1a055838231de7acf4200f7/seriea.png"
+    },
+    {
+      "id": "logo-nfl-2femg0paqvivux73xd5mjc",
       "name": "NFL",
       "altText": "NFL logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2feMg0paqVIvux73xd5mjc/145295f9c9ea882ec45e53c1ac809c0e/image.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/2feMg0paqVIvux73xd5mjc/145295f9c9ea882ec45e53c1ac809c0e/image.png",
+      "blurb": "NFL: 5 weekly matches, playoffs and SuperBowl. All in Spanish. Also RedZone in English."
     },
     {
-      "id": "logo-motogp",
+      "id": "logo-motogp-1yn9l7nget0cyst7pmjynx",
       "name": "MotoGP",
       "altText": "MotoGP logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1yn9l7nGet0CYSt7pMJYNX/99d4f056bf081567b37f144e497487db/motogp.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1yn9l7nGet0CYSt7pMJYNX/99d4f056bf081567b37f144e497487db/motogp.png",
+      "blurb": "MotoGP"
     },
     {
-      "id": "logo-liga-endesa",
+      "id": "logo-liga-endesa-5uw47rnhdjwb4echs9te5a",
       "name": "Liga Endesa",
       "altText": "Liga Endesa logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5UW47RnHdJwB4echs9te5A/a80ea9e0b4cbac39f9355b6be097f225/Image__4_.jpeg"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5UW47RnHdJwB4echs9te5A/a80ea9e0b4cbac39f9355b6be097f225/Image__4_.jpeg",
+      "blurb": "The pinnacle of Spanish basketball. Eighteen teams compete throughout the regular season for a spot in the playoffs. Weekly matchups, star players, and top-tier competition. The road to the title starts here.​"
     },
     {
-      "id": "logo-nba",
+      "id": "logo-nba-go2ck9xukyhg3vrsv3xvq",
       "name": "NBA",
       "altText": "NBA logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/gO2CK9XukYHg3VrSV3Xvq/266f6eb8b156ca98543fb12738e9377c/NBA_r.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/gO2CK9XukYHg3VrSV3Xvq/266f6eb8b156ca98543fb12738e9377c/NBA_r.png",
+      "blurb": "The greatest basketball league in the world — 30 American franchises battling for the championship ring. Watch over 180 games each season, live and on demand. Additionally, the whole All-Star Weekend and more than 25 Playoff matchups. You’ll also get the Conference Finals (one live and one on demand), plus the NBA Final (on demand this year, and live and on demand next year).​"
     },
     {
-      "id": "logo-moto2",
+      "id": "logo-serie-a-5kpnsuxybejlwpg4z9ycah",
+      "name": "Serie A",
+      "altText": "Serie A logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/5KpNSuxYBEjLWpg4Z9ycAh/d7ead873abcaaff169ff67c7bf8ad798/Serie_A.png",
+      "blurb": "Selected Serie A matches live"
+    },
+    {
+      "id": "logo-moto2-6yvaq3o5ulgk2itvp1zil8",
       "name": "Moto2",
       "altText": "Moto2 logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6YvaQ3o5UlgK2ITVP1zIl8/3cbff13f7e961941bcbda3764eefa62e/3_1.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6YvaQ3o5UlgK2ITVP1zIl8/3cbff13f7e961941bcbda3764eefa62e/3_1.png",
+      "blurb": "The intermediate class of the MotoGP World Championship. Enjoy every race of the season and follow the battle for the title between the biggest rising stars in motorcycle racing."
     },
     {
-      "id": "logo-moto3",
+      "id": "logo-moto3-3dirbeck5aj8waufcrhpeg",
       "name": "Moto3",
       "altText": "Moto3 logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3DirbecK5AJ8wAuFCRHpeg/5da901509e6e6f68f993d36f166b7e4f/4_1.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3DirbecK5AJ8wAuFCRHpeg/5da901509e6e6f68f993d36f166b7e4f/4_1.png",
+      "blurb": "The entry-level class of the MotoGP World Championship, where the future stars of motorcycle racing compete. Enjoy every race of the season, with non-stop overtaking and an exciting fight for the championship."
     },
     {
-      "id": "logo-f2-tm-logo-white",
+      "id": "logo-f2-tm-logo-white-3wsccy6qz4ysd6ndwvmc5w",
       "name": "F2 TM Logo White",
       "altText": "F2 TM Logo White logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3WscCy6QZ4ySd6NDwvmc5W/1520271ca76d2f44dd9fac1e7bfa9a71/2_1.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3WscCy6QZ4ySd6NDwvmc5W/1520271ca76d2f44dd9fac1e7bfa9a71/2_1.png",
+      "blurb": "The final step before Formula 1, where young racing talents compete to earn their place in the top category. Enjoy every race of the season and follow the battle for the championship at some of the world’s most iconic circuits."
     },
     {
-      "id": "logo-f3-tm-logo-white",
+      "id": "logo-f3-tm-logo-white-3u7zxjwotypnl2aykqwd71",
       "name": "F3 TM Logo White",
       "altText": "F3 TM Logo White logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3u7zXJwotYPNL2aYKQWD71/b38d1d3c6db028730dcdd1645fc37826/1_1.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3u7zXJwotYPNL2aYKQWD71/b38d1d3c6db028730dcdd1645fc37826/1_1.png",
+      "blurb": "The first major step towards Formula 1. Discover the future stars of motorsport in a competition packed with young talent, intense racing and championship battles at major international circuits."
     },
     {
-      "id": "logo-uefa-europa-league",
+      "id": "logo-uefa-europa-league-7lg2gvdcv60pjj4svxtc8v",
       "name": "UEFA Europa league",
       "altText": "UEFA Europa league logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7LG2gVDcV60Pjj4SVxTc8V/981568faf4f92fe6b13bca7cc6f6de9b/image"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7LG2gVDcV60Pjj4SVxTc8V/981568faf4f92fe6b13bca7cc6f6de9b/image",
+      "blurb": "Watch every game including the final."
     },
     {
-      "id": "logo-bundesliga",
+      "id": "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
       "name": "Bundesliga",
       "altText": "Bundesliga logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/43d3GrJCCGC8XJwhbGwKY3/73bf412a738b2fda8faf3701449644ea/Bundesliga__1_.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/43d3GrJCCGC8XJwhbGwKY3/73bf412a738b2fda8faf3701449644ea/Bundesliga__1_.png",
+      "blurb": "Watch the best German soccer, with every Bundesliga fixture available on DAZN."
     },
     {
-      "id": "logo-uefa-nations-league",
+      "id": "logo-uefa-nations-league-1i4qf4kr7k6pqlya7uo3ip",
       "name": "UEFA Nations League",
       "altText": "UEFA Nations League logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1I4Qf4KR7k6pqLYa7Uo3iP/69b0e43687f37acf362dfb8d27dfb5c7/image.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/1I4Qf4KR7k6pqLYa7Uo3iP/69b0e43687f37acf362dfb8d27dfb5c7/image.png",
+      "blurb": "All games available to watch (Germany games only on demand)."
     },
     {
-      "id": "logo-ncaa",
+      "id": "logo-ncaa-6hrmck3vkdnzvdrtbpt9xz",
       "name": "NCAA",
       "altText": "NCAA logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6hrmcK3vkdNZvdRtbpt9XZ/44ab30597bb3577c1c1022edfeb8b74a/other_ncaa-generic-logo_1000_1000.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6hrmcK3vkdNZvdRtbpt9XZ/44ab30597bb3577c1c1022edfeb8b74a/other_ncaa-generic-logo_1000_1000.png",
+      "blurb": "Watch select college football games for free this season."
     },
     {
-      "id": "logo-liv-golf",
+      "id": "logo-liv-golf-6bhqid9si3iqg4w9ouuutk",
       "name": "LIV Golf",
       "altText": "LIV Golf logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6bHQiD9Si3IQg4w9oUUUTk/53f042ae48e5ecd37320189e0fa85716/image"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/6bHQiD9Si3IQg4w9oUUUTk/53f042ae48e5ecd37320189e0fa85716/image",
+      "blurb": "Watch all events & championship on DAZN."
     },
     {
-      "id": "logo-dazn-boxing",
+      "id": "logo-dazn-boxing-3y0ck1qcbisbez8xluykes",
       "name": "Dazn Boxing",
       "altText": "Dazn Boxing logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3y0CK1qCbisbez8xlUYKES/5d26688344881fc681ee8521b2177b33/DAZN-BOXING-BLACK.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/3y0CK1qCbisbez8xlUYKES/5d26688344881fc681ee8521b2177b33/DAZN-BOXING-BLACK.png",
+      "blurb": "Watch the world's best fighters, the must-see match-ups and boxing's biggest nights. (Additional cost for pay-per-view events)"
     },
     {
-      "id": "logo-efl",
+      "id": "logo-efl-7bgxopqh2ilw3knedfxybe",
       "name": "EFL",
       "altText": "EFL logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7bgxOPQh2IlW3kNEDFxYbe/6feffeedfb3ddd437577938e7bb4b7a4/image"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7bgxOPQh2IlW3kNEDFxYbe/6feffeedfb3ddd437577938e7bb4b7a4/image",
+      "blurb": "Watch select EFL games throughout the season"
     },
     {
-      "id": "logo-carabao-cup",
+      "id": "logo-carabao-cup-4y4sn2xfaw5h3nhtie1j46",
       "name": "Carabao Cup",
       "altText": "Carabao Cup logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4y4sn2xFaw5H3nhtie1j46/6139bf2223680baa009d4106f77c31b9/image.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/4y4sn2xFaw5H3nhtie1j46/6139bf2223680baa009d4106f77c31b9/image.png",
+      "blurb": "Every game of the knockout Championship"
     },
     {
-      "id": "logo-uefa-champions-league",
+      "id": "logo-uefa-champions-league-7hxgl2qympjsjaevlzlqz9",
       "name": "UEFA Champions League",
       "altText": "UEFA Champions League logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/v30BhHFKDzeFF5Nvo4HCj/3aa5101d0fd5d82d0eaca180b0990519/Champions-League.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/7hxGL2QyMPjSJaevlzlQZ9/fda666c7c78b6654f36c4f272817ed1b/UEFA_Champions_League_r.png",
+      "blurb": "See every match from UEFA Champions League only on DAZN."
     },
     {
-      "id": "logo-serie-a",
+      "id": "logo-serie-a-chc4lx4glbio011aswnfk",
       "name": "Serie A ",
       "altText": "Serie A  logo",
       "status": "active",
-      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/Chc4Lx4GLbIo011ASWnfK/baddff104a58b807f18ed1d31e510d3f/fobu___serie.png"
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/Chc4Lx4GLbIo011ASWnfK/baddff104a58b807f18ed1d31e510d3f/fobu___serie.png",
+      "blurb": "Watch every game from Italy's biggest stars through Fubo Sports on DAZN."
+    },
+    {
+      "id": "logo-uefa-champions-league-v30bhhfkdzeff5nvo4hcj",
+      "name": "UEFA Champions League",
+      "altText": "UEFA Champions League logo",
+      "status": "active",
+      "image": "https://contentful-asset-proxy.sd.indazn.com/vhp9jnid12wf/v30BhHFKDzeFF5Nvo4HCj/3aa5101d0fd5d82d0eaca180b0990519/Champions-League.png",
+      "blurb": "See every match from UEFA Champions League only on DAZN."
     }
   ],
   "featureCatalog": [
@@ -4018,7 +4392,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_be",
-        "fetchedAt": "2026-09-18T18:01:52.193Z"
+        "fetchedAt": "2026-09-18T18:15:52.935Z"
       },
       "limits": {
         "streams": 1,
@@ -4269,7 +4643,7 @@
       "source": {
         "product": "NFL",
         "entitlementSetId": "tier_nfl_pro",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4542,7 +4916,7 @@
       "source": {
         "product": "NFL",
         "entitlementSetId": "tier_nfl_ultimate",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4813,7 +5187,7 @@
       "source": {
         "product": "FIBA",
         "entitlementSetId": "tier_fiba_pro",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5091,7 +5465,7 @@
       "source": {
         "product": "FIBA",
         "entitlementSetId": "tier_fiba_ultimate",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5132,7 +5506,7 @@
       "source": {
         "product": "CollegeSports",
         "entitlementSetId": "tier_collegesports_pro",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5172,7 +5546,7 @@
       "source": {
         "product": "CollegeSports",
         "entitlementSetId": "tier_collegesports_ultimate",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5210,7 +5584,7 @@
       "source": {
         "product": "RallyTV",
         "entitlementSetId": "tier_rallytv_pro",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5248,7 +5622,7 @@
       "source": {
         "product": "NationalLeagueTV",
         "entitlementSetId": "tier_nationalleaguetv_pro",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5275,15 +5649,15 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-serie-a",
-        "logo-ufc",
-        "logo-pdc-darts",
-        "logo-ligue-1",
-        "logo-fa-cup",
-        "logo-coppa-italia",
-        "logo-copa-del-rey",
-        "logo-uefa-national-team-games",
-        "logo-more-content"
+        "logo-serie-a-rtzivscbv2fnfnaz7fhna",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 9,
       "highlighted": true,
@@ -5295,7 +5669,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_at",
-        "fetchedAt": "2026-09-18T18:01:52.264Z"
+        "fetchedAt": "2026-09-18T18:15:53.022Z"
       },
       "limits": {
         "streams": 2,
@@ -5322,16 +5696,16 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-ufc",
-        "logo-pdc-darts",
-        "logo-ligue-1",
-        "logo-fa-cup",
-        "logo-coppa-italia",
-        "logo-copa-del-rey",
-        "logo-uefa-national-team-games",
-        "logo-more-content"
+        "logo-laliga-4njchywgvdmluawbqevzrm",
+        "logo-serie-a-1mh5zdg0yk1edeikiynu0x",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 10,
       "highlighted": false,
@@ -5343,7 +5717,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_at",
-        "fetchedAt": "2026-09-18T18:01:52.264Z"
+        "fetchedAt": "2026-09-18T18:15:53.022Z"
       },
       "limits": {
         "streams": 2,
@@ -5376,7 +5750,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_at",
-        "fetchedAt": "2026-09-18T18:01:52.264Z",
+        "fetchedAt": "2026-09-18T18:15:53.022Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5411,7 +5785,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_at",
-        "fetchedAt": "2026-09-18T18:01:52.264Z",
+        "fetchedAt": "2026-09-18T18:15:53.022Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5542,7 +5916,7 @@
       "source": {
         "product": "NHL",
         "entitlementSetId": "tier_nhl_pro",
-        "fetchedAt": "2026-09-18T18:01:52.750Z",
+        "fetchedAt": "2026-09-18T18:15:53.529Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5692,7 +6066,7 @@
       "source": {
         "product": "NHL",
         "entitlementSetId": "tier_nhl_ultimate",
-        "fetchedAt": "2026-09-18T18:01:52.750Z",
+        "fetchedAt": "2026-09-18T18:15:53.529Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5721,19 +6095,19 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-bundesliga-conference",
-        "logo-laliga",
-        "logo-ufc",
-        "logo-serie-a",
-        "logo-fa-cup",
-        "logo-pdc-darts",
-        "logo-ligue-1",
-        "logo-uefa-national-team-games",
-        "logo-copa-del-rey",
-        "logo-coppa-italia",
-        "logo-frauen-bundesliga",
-        "logo-eurosport-1-2",
-        "logo-more-content"
+        "logo-bundesliga-conference-2zclkgcgfqckpnu0pao5de",
+        "logo-laliga-4njchywgvdmluawbqevzrm",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-serie-a-1mh5zdg0yk1edeikiynu0x",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-frauen-bundesliga-50fwoc0zuhmukovqu4e9wo",
+        "logo-eurosport-1-2-22tzubdopjsomjdksxz9y0",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 13,
       "highlighted": false,
@@ -5745,7 +6119,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_de",
-        "fetchedAt": "2026-09-18T18:01:52.329Z"
+        "fetchedAt": "2026-09-18T18:15:53.103Z"
       },
       "limits": {
         "streams": 1,
@@ -5770,19 +6144,19 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-bundesliga-conference",
-        "logo-laliga",
-        "logo-ufc",
-        "logo-serie-a",
-        "logo-fa-cup",
-        "logo-pdc-darts",
-        "logo-ligue-1",
-        "logo-uefa-national-team-games",
-        "logo-copa-del-rey",
-        "logo-coppa-italia",
-        "logo-frauen-bundesliga",
-        "logo-eurosport-1-2",
-        "logo-more-content"
+        "logo-bundesliga-conference-2zclkgcgfqckpnu0pao5de",
+        "logo-laliga-3o07aypw2wp0qfvpanobac",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-serie-a-1oprlcl1nz89ftj0oqagih",
+        "logo-fa-cup-izld4dxwj2tbrxudcy5s6",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-frauen-bundesliga-50fwoc0zuhmukovqu4e9wo",
+        "logo-eurosport-1-2-22tzubdopjsomjdksxz9y0",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 13,
       "highlighted": false,
@@ -5794,7 +6168,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_supersport_de",
-        "fetchedAt": "2026-09-18T18:01:52.329Z",
+        "fetchedAt": "2026-09-18T18:15:53.103Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5821,18 +6195,18 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-ufc",
-        "logo-serie-a",
-        "logo-fa-cup",
-        "logo-pdc-darts",
-        "logo-ligue-1",
-        "logo-uefa-national-team-games",
-        "logo-copa-del-rey",
-        "logo-coppa-italia",
-        "logo-frauen-bundesliga",
-        "logo-eurosport-1-2",
-        "logo-more-content"
+        "logo-laliga-3o07aypw2wp0qfvpanobac",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-serie-a-1oprlcl1nz89ftj0oqagih",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-frauen-bundesliga-50fwoc0zuhmukovqu4e9wo",
+        "logo-eurosport-1-2-22tzubdopjsomjdksxz9y0",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 12,
       "highlighted": true,
@@ -5844,7 +6218,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_de",
-        "fetchedAt": "2026-09-18T18:01:52.329Z"
+        "fetchedAt": "2026-09-18T18:15:53.103Z"
       },
       "limits": {
         "streams": 2,
@@ -5876,7 +6250,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_de",
-        "fetchedAt": "2026-09-18T18:01:52.329Z",
+        "fetchedAt": "2026-09-18T18:15:53.103Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5901,18 +6275,18 @@
         "f-downloads-so-you-can-watch-on-the-go-2dnsrc"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-ufc",
-        "logo-serie-a",
-        "logo-fa-cup",
-        "logo-pdc-darts",
-        "logo-ligue-1",
-        "logo-uefa-national-team-games",
-        "logo-copa-del-rey",
-        "logo-coppa-italia",
-        "logo-frauen-bundesliga",
-        "logo-eurosport-1-2",
-        "logo-more-content"
+        "logo-laliga-3o07aypw2wp0qfvpanobac",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-serie-a-1oprlcl1nz89ftj0oqagih",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-frauen-bundesliga-50fwoc0zuhmukovqu4e9wo",
+        "logo-eurosport-1-2-22tzubdopjsomjdksxz9y0",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 12,
       "highlighted": false,
@@ -5924,7 +6298,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_de_wc_2",
-        "fetchedAt": "2026-09-18T18:01:52.329Z"
+        "fetchedAt": "2026-09-18T18:15:53.103Z"
       },
       "limits": {
         "streams": 3,
@@ -5957,7 +6331,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_de",
-        "fetchedAt": "2026-09-18T18:01:52.329Z",
+        "fetchedAt": "2026-09-18T18:15:53.103Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5992,7 +6366,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_de",
-        "fetchedAt": "2026-09-18T18:01:52.329Z",
+        "fetchedAt": "2026-09-18T18:15:53.103Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6029,7 +6403,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_li",
-        "fetchedAt": "2026-09-18T18:01:52.376Z"
+        "fetchedAt": "2026-09-18T18:15:53.186Z"
       },
       "limits": {
         "streams": 2,
@@ -6064,7 +6438,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_lu",
-        "fetchedAt": "2026-09-18T18:01:52.415Z"
+        "fetchedAt": "2026-09-18T18:15:53.225Z"
       },
       "limits": {
         "streams": 2,
@@ -6090,16 +6464,16 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-ufc",
-        "logo-laliga-ch-super-sports",
-        "logo-serie-a",
-        "logo-ligue-1-ch-super-sport",
-        "logo-fa-cup",
-        "logo-coppa-italia",
-        "logo-copa-del-rey",
-        "logo-uefa-national-team-games",
-        "logo-pdc-darts",
-        "logo-more-content"
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-laliga-ch-super-sports-5c9hmqggifctuygkzvp5as",
+        "logo-serie-a-5kpnsuxybejlwpg4z9ycah",
+        "logo-ligue-1-ch-super-sport-7ufpkyjx6lmcavidgsi7rs",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 10,
       "highlighted": false,
@@ -6111,7 +6485,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_supersports_ch",
-        "fetchedAt": "2026-09-18T18:01:52.482Z"
+        "fetchedAt": "2026-09-18T18:15:53.249Z"
       },
       "limits": {
         "streams": 2,
@@ -6136,16 +6510,16 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-ufc",
-        "logo-laliga-ch-super-sports",
-        "logo-serie-a",
-        "logo-ligue-1-ch-super-sport",
-        "logo-fa-cup",
-        "logo-coppa-italia",
-        "logo-copa-del-rey",
-        "logo-uefa-national-team-games",
-        "logo-pdc-darts",
-        "logo-more-content"
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-laliga-ch-super-sports-5c9hmqggifctuygkzvp5as",
+        "logo-serie-a-5kpnsuxybejlwpg4z9ycah",
+        "logo-ligue-1-ch-super-sport-7ufpkyjx6lmcavidgsi7rs",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 10,
       "highlighted": false,
@@ -6157,7 +6531,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_ch",
-        "fetchedAt": "2026-09-18T18:01:52.482Z"
+        "fetchedAt": "2026-09-18T18:15:53.249Z"
       },
       "limits": {
         "streams": 2,
@@ -6183,15 +6557,15 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-bundesliga",
-        "logo-ufc",
-        "logo-uefa-national-team-games",
-        "logo-ligue-1",
-        "logo-fa-cup",
-        "logo-coppa-italia",
-        "logo-copa-del-rey",
-        "logo-pdc-darts",
-        "logo-more-content"
+        "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 9,
       "highlighted": true,
@@ -6203,7 +6577,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_ch",
-        "fetchedAt": "2026-09-18T18:01:52.482Z"
+        "fetchedAt": "2026-09-18T18:15:53.249Z"
       },
       "limits": {
         "streams": 2,
@@ -6227,15 +6601,15 @@
         "f-download-to-watch-offline-ysgb3u"
       ],
       "logoTiles": [
-        "logo-bundesliga",
-        "logo-ufc",
-        "logo-uefa-national-team-games",
-        "logo-ligue-1",
-        "logo-fa-cup",
-        "logo-coppa-italia",
-        "logo-copa-del-rey",
-        "logo-pdc-darts",
-        "logo-more-content"
+        "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-ligue-1-tcpvkgygkpnogeuwfb4xq",
+        "logo-fa-cup-6lmylkrec5d6igfndsvb8q",
+        "logo-coppa-italia-6phmbpkvhuoaqbxqwxgsl2",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-pdc-darts-6ckucjufguttvwilgjlvhn",
+        "logo-more-content-6qjhdps6ov4jysn3r8ucgc"
       ],
       "logoTotal": 9,
       "highlighted": false,
@@ -6247,7 +6621,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_wc_2_ch",
-        "fetchedAt": "2026-09-18T18:01:52.482Z"
+        "fetchedAt": "2026-09-18T18:15:53.249Z"
       },
       "limits": {
         "streams": 3,
@@ -6280,7 +6654,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_ch",
-        "fetchedAt": "2026-09-18T18:01:52.482Z",
+        "fetchedAt": "2026-09-18T18:15:53.249Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6315,7 +6689,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_ch",
-        "fetchedAt": "2026-09-18T18:01:52.482Z",
+        "fetchedAt": "2026-09-18T18:15:53.249Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6344,8 +6718,8 @@
         "f-download-to-watch-offline-ysgb3u"
       ],
       "logoTiles": [
-        "logo-ligue-1-mcdonald-s",
-        "logo-ligue-3-betclic"
+        "logo-ligue-1-mcdonald-s-58dzfpyfgyh0qmziypwb85",
+        "logo-ligue-3-betclic-4gl9xl128ne1dkdefqhaac"
       ],
       "logoTotal": 2,
       "highlighted": false,
@@ -6357,7 +6731,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_leagueoneplus_fr",
-        "fetchedAt": "2026-09-18T18:01:52.512Z"
+        "fetchedAt": "2026-09-18T18:15:53.273Z"
       },
       "limits": {
         "streams": 2,
@@ -6385,11 +6759,11 @@
         "f-download-to-watch-offline-ysgb3u"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-copa-del-rey",
-        "logo-coppa-italia",
-        "logo-betclic-elite"
+        "logo-laliga-1knqzty1axtf0ez1vq9plq",
+        "logo-serie-a-1mh5zdg0yk1edeikiynu0x",
+        "logo-copa-del-rey-39lclnyjbj0frvs60xplcq",
+        "logo-coppa-italia-15qtxnfhbtf3bwdnxud0vv",
+        "logo-betclic-elite-525lyoktjvbywpw8zxwfg4"
       ],
       "logoTotal": 5,
       "highlighted": true,
@@ -6401,7 +6775,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_fr",
-        "fetchedAt": "2026-09-18T18:01:52.512Z"
+        "fetchedAt": "2026-09-18T18:15:53.273Z"
       },
       "limits": {
         "streams": 2,
@@ -6427,9 +6801,9 @@
         "f-get-the-authentic-american-commentary-1ddigve"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-copa-del-rey"
+        "logo-laliga-1knqzty1axtf0ez1vq9plq",
+        "logo-serie-a-1mh5zdg0yk1edeikiynu0x",
+        "logo-copa-del-rey-39lclnyjbj0frvs60xplcq"
       ],
       "logoTotal": 3,
       "highlighted": false,
@@ -6441,7 +6815,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_fr",
-        "fetchedAt": "2026-09-18T18:01:52.512Z"
+        "fetchedAt": "2026-09-18T18:15:53.273Z"
       },
       "limits": {
         "streams": null,
@@ -6469,11 +6843,11 @@
         "f-download-to-watch-offline-ysgb3u"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-copa-del-rey",
-        "logo-coppa-italia",
-        "logo-betclic-elite"
+        "logo-laliga-1knqzty1axtf0ez1vq9plq",
+        "logo-serie-a-1mh5zdg0yk1edeikiynu0x",
+        "logo-copa-del-rey-39lclnyjbj0frvs60xplcq",
+        "logo-coppa-italia-15qtxnfhbtf3bwdnxud0vv",
+        "logo-betclic-elite-525lyoktjvbywpw8zxwfg4"
       ],
       "logoTotal": 5,
       "highlighted": false,
@@ -6485,7 +6859,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_yp_fr",
-        "fetchedAt": "2026-09-18T18:01:52.512Z"
+        "fetchedAt": "2026-09-18T18:15:53.273Z"
       },
       "limits": {
         "streams": 1,
@@ -6511,15 +6885,15 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-copa-del-rey",
-        "logo-roshn-saudi-league",
-        "logo-jupiler-pro-league",
-        "logo-coppa-italia",
-        "logo-eredivisie",
-        "logo-betclic-elite",
-        "logo-fifa"
+        "logo-laliga-1knqzty1axtf0ez1vq9plq",
+        "logo-serie-a-6vwdmb0xwwt0dchtnlseo4",
+        "logo-copa-del-rey-39lclnyjbj0frvs60xplcq",
+        "logo-roshn-saudi-league-2kiekyrjprycmm22jsgcjg",
+        "logo-jupiler-pro-league-15takkvl5he8ddk83fckel",
+        "logo-coppa-italia-15qtxnfhbtf3bwdnxud0vv",
+        "logo-eredivisie-5xqp6cvvnke6suwadn21rz",
+        "logo-betclic-elite-525lyoktjvbywpw8zxwfg4",
+        "logo-fifa-5npvjnt6fylgylmsgd4gu1"
       ],
       "logoTotal": 9,
       "highlighted": false,
@@ -6531,7 +6905,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_super_sports_fr",
-        "fetchedAt": "2026-09-18T18:01:52.512Z"
+        "fetchedAt": "2026-09-18T18:15:53.273Z"
       },
       "limits": {
         "streams": 1,
@@ -6556,9 +6930,9 @@
         "f-multiview-watch-up-to-4-nfl-games-at-onc-1s3g9te"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-serie-a",
-        "logo-copa-del-rey"
+        "logo-laliga-1knqzty1axtf0ez1vq9plq",
+        "logo-serie-a-1mh5zdg0yk1edeikiynu0x",
+        "logo-copa-del-rey-39lclnyjbj0frvs60xplcq"
       ],
       "logoTotal": 3,
       "highlighted": false,
@@ -6570,7 +6944,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_fr",
-        "fetchedAt": "2026-09-18T18:01:52.512Z"
+        "fetchedAt": "2026-09-18T18:15:53.273Z"
       },
       "limits": {
         "streams": null,
@@ -6596,26 +6970,26 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-serie-bkt",
-        "logo-eurosport-1-2",
-        "logo-laliga-easports",
-        "logo-copa-del-rey",
-        "logo-cev-champions-league-log",
-        "logo-fa-cup",
-        "logo-liga-portugal-betclic",
-        "logo-jupiler-pro-league",
-        "logo-fifa",
-        "logo-serie-a-women",
-        "logo-nfl-logo-it",
-        "logo-roland-garros",
-        "logo-australian-open",
-        "logo-the-best-of-cycling",
-        "logo-ufc",
-        "logo-pga-logo",
-        "logo-liv-golf",
-        "logo-superlega",
-        "logo-serie-a-femminile-volley",
-        "logo-kings-league-italia"
+        "logo-serie-bkt-rzx8b9aknzjea9yxlqnna",
+        "logo-eurosport-1-2-22tzubdopjsomjdksxz9y0",
+        "logo-laliga-easports-3ihkjmzehcqqvd1pc7i9tj",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-cev-champions-league-log-5md55yuvj6uqkdukya02a2",
+        "logo-fa-cup-7cky9frc8itrhwwvbi1lbf",
+        "logo-liga-portugal-betclic-7je6921vsgsgpm91sidjha",
+        "logo-jupiler-pro-league-73q8jm2vlwxkqoki2m9rdg",
+        "logo-fifa-5npvjnt6fylgylmsgd4gu1",
+        "logo-serie-a-women-5b9rfyscvlk8a905e0ezbk",
+        "logo-nfl-logo-it-4tzql3gryp4oxoeauagr2t",
+        "logo-roland-garros-14v2cgln3d4xmk3e8zecmo",
+        "logo-australian-open-ns4wtkjmnimcyxd7pdgc6",
+        "logo-the-best-of-cycling-4lac1wq9saiomtwdhmowyg",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-pga-logo-2srujpktnxk9t3p8qtq0ok",
+        "logo-liv-golf-6bhqid9si3iqg4w9ouuutk",
+        "logo-superlega-1c7rzaebyldmwhpbwhtrsk",
+        "logo-serie-a-femminile-volley-2ibsgqrbqshxygpi8pshjc",
+        "logo-kings-league-italia-6rr5wwh273vjmpyemr9f2u"
       ],
       "logoTotal": 20,
       "highlighted": true,
@@ -6627,7 +7001,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_it",
-        "fetchedAt": "2026-09-18T18:01:52.533Z"
+        "fetchedAt": "2026-09-18T18:15:53.297Z"
       },
       "limits": {
         "streams": 2,
@@ -6652,15 +7026,15 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-cev-champions-league-log",
-        "logo-superlega",
-        "logo-australian-open",
-        "logo-nfl-logo-it",
-        "logo-liv-golf",
-        "logo-pga-logo",
-        "logo-ufc",
-        "logo-serie-a-women",
-        "logo-serie-a-femminile-volley"
+        "logo-cev-champions-league-log-5md55yuvj6uqkdukya02a2",
+        "logo-superlega-1c7rzaebyldmwhpbwhtrsk",
+        "logo-australian-open-ns4wtkjmnimcyxd7pdgc6",
+        "logo-nfl-logo-it-4tzql3gryp4oxoeauagr2t",
+        "logo-liv-golf-6bhqid9si3iqg4w9ouuutk",
+        "logo-pga-logo-2srujpktnxk9t3p8qtq0ok",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-serie-a-women-5b9rfyscvlk8a905e0ezbk",
+        "logo-serie-a-femminile-volley-2ibsgqrbqshxygpi8pshjc"
       ],
       "logoTotal": 9,
       "highlighted": false,
@@ -6672,7 +7046,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bronze_it",
-        "fetchedAt": "2026-09-18T18:01:52.533Z"
+        "fetchedAt": "2026-09-18T18:15:53.297Z"
       },
       "limits": {
         "streams": 2,
@@ -6696,13 +7070,13 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-laliga-easports",
-        "logo-copa-del-rey",
-        "logo-liga-portugal-2",
-        "logo-jupiler-pro-league",
-        "logo-fa-cup",
-        "logo-fifa",
-        "logo-serie-a-women-calcio-logo"
+        "logo-laliga-easports-3ihkjmzehcqqvd1pc7i9tj",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-liga-portugal-2-1llbmxnypoe9u5qfyqfuko",
+        "logo-jupiler-pro-league-73q8jm2vlwxkqoki2m9rdg",
+        "logo-fa-cup-7cky9frc8itrhwwvbi1lbf",
+        "logo-fifa-5npvjnt6fylgylmsgd4gu1",
+        "logo-serie-a-women-calcio-logo-6mqamyiu48lbkn63yzjg8d"
       ],
       "logoTotal": 7,
       "highlighted": false,
@@ -6714,7 +7088,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_goalpass_it",
-        "fetchedAt": "2026-09-18T18:01:52.533Z"
+        "fetchedAt": "2026-09-18T18:15:53.297Z"
       },
       "limits": {
         "streams": 2,
@@ -6749,7 +7123,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_it",
-        "fetchedAt": "2026-09-18T18:01:52.533Z",
+        "fetchedAt": "2026-09-18T18:15:53.297Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6787,7 +7161,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_myclubpass_it",
-        "fetchedAt": "2026-09-18T18:01:52.533Z",
+        "fetchedAt": "2026-09-18T18:15:53.297Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6813,26 +7187,26 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-serie-bkt",
-        "logo-eurosport",
-        "logo-laliga-easports",
-        "logo-copa-del-rey",
-        "logo-cev-champions-league-log",
-        "logo-fa-cup",
-        "logo-liga-portugal-betclic",
-        "logo-jupiler-pro-league",
-        "logo-fifa",
-        "logo-serie-a-women",
-        "logo-nfl-logo-it",
-        "logo-roland-garros",
-        "logo-australian-open",
-        "logo-the-best-of-cycling",
-        "logo-ufc",
-        "logo-pga-logo",
-        "logo-liv-golf",
-        "logo-superlega",
-        "logo-serie-a-femminile-volley",
-        "logo-kings-league-italia"
+        "logo-serie-bkt-rzx8b9aknzjea9yxlqnna",
+        "logo-eurosport-7agkwjkurzn6t8qvvz98kk",
+        "logo-laliga-easports-3ihkjmzehcqqvd1pc7i9tj",
+        "logo-copa-del-rey-1sh71dwls02cgnbtel1b0d",
+        "logo-cev-champions-league-log-5md55yuvj6uqkdukya02a2",
+        "logo-fa-cup-7cky9frc8itrhwwvbi1lbf",
+        "logo-liga-portugal-betclic-7je6921vsgsgpm91sidjha",
+        "logo-jupiler-pro-league-73q8jm2vlwxkqoki2m9rdg",
+        "logo-fifa-5npvjnt6fylgylmsgd4gu1",
+        "logo-serie-a-women-5b9rfyscvlk8a905e0ezbk",
+        "logo-nfl-logo-it-4tzql3gryp4oxoeauagr2t",
+        "logo-roland-garros-14v2cgln3d4xmk3e8zecmo",
+        "logo-australian-open-ns4wtkjmnimcyxd7pdgc6",
+        "logo-the-best-of-cycling-4lac1wq9saiomtwdhmowyg",
+        "logo-ufc-5n1uylajqascxphmbuovwe",
+        "logo-pga-logo-2srujpktnxk9t3p8qtq0ok",
+        "logo-liv-golf-6bhqid9si3iqg4w9ouuutk",
+        "logo-superlega-1c7rzaebyldmwhpbwhtrsk",
+        "logo-serie-a-femminile-volley-2ibsgqrbqshxygpi8pshjc",
+        "logo-kings-league-italia-6rr5wwh273vjmpyemr9f2u"
       ],
       "logoTotal": 20,
       "highlighted": false,
@@ -6844,7 +7218,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_it",
-        "fetchedAt": "2026-09-18T18:01:52.533Z"
+        "fetchedAt": "2026-09-18T18:15:53.297Z"
       },
       "limits": {
         "streams": 2,
@@ -6869,9 +7243,9 @@
         "f-get-the-authentic-american-commentary-1ddigve"
       ],
       "logoTiles": [
-        "logo-serie-bkt",
-        "logo-eurosport",
-        "logo-laliga-easports"
+        "logo-serie-bkt-rzx8b9aknzjea9yxlqnna",
+        "logo-eurosport-7agkwjkurzn6t8qvvz98kk",
+        "logo-laliga-easports-3ihkjmzehcqqvd1pc7i9tj"
       ],
       "logoTotal": 3,
       "highlighted": false,
@@ -6883,7 +7257,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_full_nflpro_it",
-        "fetchedAt": "2026-09-18T18:01:52.533Z"
+        "fetchedAt": "2026-09-18T18:15:53.297Z"
       },
       "limits": {
         "streams": null,
@@ -6908,9 +7282,9 @@
         "f-multiview-watch-up-to-4-nfl-games-at-onc-1s3g9te"
       ],
       "logoTiles": [
-        "logo-serie-bkt",
-        "logo-eurosport",
-        "logo-laliga-easports"
+        "logo-serie-bkt-rzx8b9aknzjea9yxlqnna",
+        "logo-eurosport-7agkwjkurzn6t8qvvz98kk",
+        "logo-laliga-easports-3ihkjmzehcqqvd1pc7i9tj"
       ],
       "logoTotal": 3,
       "highlighted": false,
@@ -6922,7 +7296,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_full_nflult_it",
-        "fetchedAt": "2026-09-18T18:01:52.533Z"
+        "fetchedAt": "2026-09-18T18:15:53.297Z"
       },
       "limits": {
         "streams": null,
@@ -6956,7 +7330,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_vito_jp",
-        "fetchedAt": "2026-09-18T18:01:52.558Z"
+        "fetchedAt": "2026-09-18T18:15:53.322Z"
       },
       "limits": {
         "streams": 2,
@@ -6980,7 +7354,7 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-farm"
+        "logo-farm-pfm37nswtunzdivh3r3md"
       ],
       "logoTotal": 1,
       "highlighted": false,
@@ -6992,7 +7366,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baseball_jp",
-        "fetchedAt": "2026-09-18T18:01:52.558Z"
+        "fetchedAt": "2026-09-18T18:15:53.322Z"
       },
       "limits": {
         "streams": 2,
@@ -7016,9 +7390,9 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-bleague",
-        "logo-japan-rugby-one"
+        "logo-laliga-1knqzty1axtf0ez1vq9plq",
+        "logo-bleague-4xynmzpyldvqof6c6ywhvz",
+        "logo-japan-rugby-one-4nlpucxky8tkbbjyb2cinp"
       ],
       "logoTotal": 3,
       "highlighted": true,
@@ -7030,7 +7404,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_jp",
-        "fetchedAt": "2026-09-18T18:01:52.558Z"
+        "fetchedAt": "2026-09-18T18:15:53.322Z"
       },
       "limits": {
         "streams": 2,
@@ -7056,9 +7430,9 @@
         "f-get-the-authentic-american-commentary-1ddigve"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-bleague",
-        "logo-japan-rugby-one"
+        "logo-laliga-1knqzty1axtf0ez1vq9plq",
+        "logo-bleague-4xynmzpyldvqof6c6ywhvz",
+        "logo-japan-rugby-one-4nlpucxky8tkbbjyb2cinp"
       ],
       "logoTotal": 3,
       "highlighted": false,
@@ -7070,7 +7444,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_std_nflpro_jp",
-        "fetchedAt": "2026-09-18T18:01:52.558Z"
+        "fetchedAt": "2026-09-18T18:15:53.322Z"
       },
       "limits": {
         "streams": null,
@@ -7095,9 +7469,9 @@
         "f-multiview-watch-up-to-4-nfl-games-at-onc-1s3g9te"
       ],
       "logoTiles": [
-        "logo-laliga",
-        "logo-bleague",
-        "logo-japan-rugby-one"
+        "logo-laliga-1knqzty1axtf0ez1vq9plq",
+        "logo-bleague-4xynmzpyldvqof6c6ywhvz",
+        "logo-japan-rugby-one-4nlpucxky8tkbbjyb2cinp"
       ],
       "logoTotal": 3,
       "highlighted": false,
@@ -7109,7 +7483,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_std_nflult_jp",
-        "fetchedAt": "2026-09-18T18:01:52.558Z"
+        "fetchedAt": "2026-09-18T18:15:53.322Z"
       },
       "limits": {
         "streams": null,
@@ -7135,19 +7509,19 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-premier-league",
-        "logo-laliga",
-        "logo-formula-1",
-        "logo-bundesliga",
-        "logo-europa-conference-league",
-        "logo-formula-2",
-        "logo-formula-3",
-        "logo-formula-e",
-        "logo-f1-academy",
-        "logo-porsche-supercup",
-        "logo-dtm",
-        "logo-f4-spanish",
-        "logo-f4-italian"
+        "logo-premier-league-38bt916becp713loys7gdr",
+        "logo-laliga-4b1dxbdbwcmmpdsgvu6dp7",
+        "logo-formula-1-19ujdv1gomxpkljxepyyqq",
+        "logo-bundesliga-7arb7hbh7pbml0cdxcgbku",
+        "logo-europa-conference-league-6oqaywdlwhywmr8oh4nza",
+        "logo-formula-2-2je4ztcxzctlbx45efgj3g",
+        "logo-formula-3-1dgtzdc3julczpxdlzpme8",
+        "logo-formula-e-3gj52hgnvtabcggmhc702v",
+        "logo-f1-academy-3sffvszr74a3sgrhbnd9sg",
+        "logo-porsche-supercup-5wwpyudjbrmmgk2em6vyq5",
+        "logo-dtm-3zdkai6utap7pbcrguojgw",
+        "logo-f4-spanish-5tgm0tb2hese1d9pzlllae",
+        "logo-f4-italian-qwbdptrmzmhmtzn5xl0mm"
       ],
       "logoTotal": 13,
       "highlighted": true,
@@ -7159,7 +7533,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bronze_pt",
-        "fetchedAt": "2026-09-18T18:01:52.580Z"
+        "fetchedAt": "2026-09-18T18:15:53.350Z"
       },
       "limits": {
         "streams": 2,
@@ -7186,19 +7560,19 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-premier-league",
-        "logo-formula-1",
-        "logo-laliga",
-        "logo-bundesliga",
-        "logo-mf-dazn-x-series",
-        "logo-uefa-champions-league",
-        "logo-formula-2",
-        "logo-formula-3",
-        "logo-formula-e",
-        "logo-dtm",
-        "logo-porsche-supercup",
-        "logo-f4-spanish",
-        "logo-f4-italian"
+        "logo-premier-league-38bt916becp713loys7gdr",
+        "logo-formula-1-19ujdv1gomxpkljxepyyqq",
+        "logo-laliga-4b1dxbdbwcmmpdsgvu6dp7",
+        "logo-bundesliga-7arb7hbh7pbml0cdxcgbku",
+        "logo-mf-dazn-x-series-3ha9oyguxk3ltae1saf5ry",
+        "logo-uefa-champions-league-5u7ruurccugfolhscw58ru",
+        "logo-formula-2-2je4ztcxzctlbx45efgj3g",
+        "logo-formula-3-1dgtzdc3julczpxdlzpme8",
+        "logo-formula-e-3gj52hgnvtabcggmhc702v",
+        "logo-dtm-3zdkai6utap7pbcrguojgw",
+        "logo-porsche-supercup-5wwpyudjbrmmgk2em6vyq5",
+        "logo-f4-spanish-5tgm0tb2hese1d9pzlllae",
+        "logo-f4-italian-qwbdptrmzmhmtzn5xl0mm"
       ],
       "logoTotal": 13,
       "highlighted": false,
@@ -7210,7 +7584,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_pt",
-        "fetchedAt": "2026-09-18T18:01:52.580Z"
+        "fetchedAt": "2026-09-18T18:15:53.350Z"
       },
       "limits": {
         "streams": 2,
@@ -7236,14 +7610,14 @@
         "f-full-hd-video-n05a3f"
       ],
       "logoTiles": [
-        "logo-formula-2",
-        "logo-superbikes",
-        "logo-formula-e",
-        "logo-dtm",
-        "logo-formula-3",
-        "logo-f1-academy",
-        "logo-porsche-supercup",
-        "logo-f4-spanish"
+        "logo-formula-2-2je4ztcxzctlbx45efgj3g",
+        "logo-superbikes-59okwqnnyd9eth6xg20ual",
+        "logo-formula-e-3gj52hgnvtabcggmhc702v",
+        "logo-dtm-3zdkai6utap7pbcrguojgw",
+        "logo-formula-3-1dgtzdc3julczpxdlzpme8",
+        "logo-f1-academy-3sffvszr74a3sgrhbnd9sg",
+        "logo-porsche-supercup-5wwpyudjbrmmgk2em6vyq5",
+        "logo-f4-spanish-5tgm0tb2hese1d9pzlllae"
       ],
       "logoTotal": 8,
       "highlighted": false,
@@ -7255,7 +7629,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_pt",
-        "fetchedAt": "2026-09-18T18:01:52.580Z"
+        "fetchedAt": "2026-09-18T18:15:53.350Z"
       },
       "limits": {
         "streams": 2,
@@ -7280,8 +7654,8 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-nascar",
-        "logo-eurosport"
+        "logo-nascar-469rkzxmgvmfx8wgxv6g0t",
+        "logo-eurosport-6pujdp1q8kcbhtdp5s9td2"
       ],
       "logoTotal": 2,
       "highlighted": false,
@@ -7293,7 +7667,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_us_es_yp",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7323,10 +7697,10 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-dtm",
-        "logo-nascar",
-        "logo-eurosport-1-y-2",
-        "logo-worldsbk"
+        "logo-dtm-4tjbky6djw3ku6kl7dksjc",
+        "logo-nascar-469rkzxmgvmfx8wgxv6g0t",
+        "logo-eurosport-1-y-2-3kxsfvnrxpawmdye0qzobb",
+        "logo-worldsbk-4z8dopfexalcaj593cdan0"
       ],
       "logoTotal": 4,
       "highlighted": false,
@@ -7338,7 +7712,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_es_yp",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7367,9 +7741,9 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-supercopa-endesa",
-        "logo-copa-del-rey",
-        "logo-eurosport"
+        "logo-supercopa-endesa-4o3rv9cmfjvmmhtotfvtvn",
+        "logo-copa-del-rey-2fahnpmhdahfkmt9hbiatf",
+        "logo-eurosport-6pujdp1q8kcbhtdp5s9td2"
       ],
       "logoTotal": 3,
       "highlighted": false,
@@ -7381,7 +7755,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baloncesto_es_yp",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7410,12 +7784,12 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-premier-league",
-        "logo-bundesliga",
-        "logo-ligue-1",
-        "logo-eredivisie",
-        "logo-liga-portugal",
-        "logo-uefa-national-team-games"
+        "logo-premier-league-3njejksf9zi1padxy3454m",
+        "logo-bundesliga-1smscjp6ymaneycciisbbn",
+        "logo-ligue-1-7qo1wdnpnu2ylh5synp0uk",
+        "logo-eredivisie-gzan9akjwiihkynzpqptq",
+        "logo-liga-portugal-5jj00atcjs8g6yjmxztsyv",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga"
       ],
       "logoTotal": 6,
       "highlighted": false,
@@ -7427,7 +7801,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_futbol_es_yp",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7457,14 +7831,14 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-premier-league",
-        "logo-bundesliga",
-        "logo-ligue-1",
-        "logo-eredivisie",
-        "logo-liga-portugal",
-        "logo-uefa-national-team-games",
-        "logo-serie-a",
-        "logo-nfl"
+        "logo-premier-league-3njejksf9zi1padxy3454m",
+        "logo-bundesliga-1smscjp6ymaneycciisbbn",
+        "logo-ligue-1-7qo1wdnpnu2ylh5synp0uk",
+        "logo-eredivisie-gzan9akjwiihkynzpqptq",
+        "logo-liga-portugal-5jj00atcjs8g6yjmxztsyv",
+        "logo-uefa-national-team-games-3w8xkotpewytka2r2amlga",
+        "logo-serie-a-2jkvqibi1iqgb3zugj6c0a",
+        "logo-nfl-2femg0paqvivux73xd5mjc"
       ],
       "logoTotal": 8,
       "highlighted": false,
@@ -7476,7 +7850,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_futbol_es",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7508,15 +7882,15 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-motogp",
-        "logo-liga-endesa",
-        "logo-nfl",
-        "logo-nba",
-        "logo-premier-league",
-        "logo-bundesliga",
-        "logo-serie-a",
-        "logo-ligue-1",
-        "logo-eredivisie"
+        "logo-motogp-1yn9l7nget0cyst7pmjynx",
+        "logo-liga-endesa-5uw47rnhdjwb4echs9te5a",
+        "logo-nfl-2femg0paqvivux73xd5mjc",
+        "logo-nba-go2ck9xukyhg3vrsv3xvq",
+        "logo-premier-league-3njejksf9zi1padxy3454m",
+        "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
+        "logo-serie-a-5kpnsuxybejlwpg4z9ycah",
+        "logo-ligue-1-7qo1wdnpnu2ylh5synp0uk",
+        "logo-eredivisie-gzan9akjwiihkynzpqptq"
       ],
       "logoTotal": 9,
       "highlighted": true,
@@ -7528,7 +7902,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_premium_es_yp",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7561,16 +7935,16 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-motogp",
-        "logo-liga-endesa",
-        "logo-nfl",
-        "logo-nba",
-        "logo-premier-league",
-        "logo-bundesliga",
-        "logo-serie-a",
-        "logo-ligue-1",
-        "logo-liga-portugal",
-        "logo-eredivisie"
+        "logo-motogp-1yn9l7nget0cyst7pmjynx",
+        "logo-liga-endesa-5uw47rnhdjwb4echs9te5a",
+        "logo-nfl-2femg0paqvivux73xd5mjc",
+        "logo-nba-go2ck9xukyhg3vrsv3xvq",
+        "logo-premier-league-3njejksf9zi1padxy3454m",
+        "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
+        "logo-serie-a-5kpnsuxybejlwpg4z9ycah",
+        "logo-ligue-1-7qo1wdnpnu2ylh5synp0uk",
+        "logo-liga-portugal-5jj00atcjs8g6yjmxztsyv",
+        "logo-eredivisie-gzan9akjwiihkynzpqptq"
       ],
       "logoTotal": 10,
       "highlighted": true,
@@ -7582,7 +7956,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_premium_es",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7612,8 +7986,8 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-nascar",
-        "logo-eurosport"
+        "logo-nascar-469rkzxmgvmfx8wgxv6g0t",
+        "logo-eurosport-6pujdp1q8kcbhtdp5s9td2"
       ],
       "logoTotal": 2,
       "highlighted": false,
@@ -7625,7 +7999,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_us_es",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7656,14 +8030,14 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-dtm",
-        "logo-nascar",
-        "logo-eurosport-1-y-2",
-        "logo-worldsbk",
-        "logo-moto2",
-        "logo-moto3",
-        "logo-f2-tm-logo-white",
-        "logo-f3-tm-logo-white"
+        "logo-dtm-4tjbky6djw3ku6kl7dksjc",
+        "logo-nascar-469rkzxmgvmfx8wgxv6g0t",
+        "logo-eurosport-1-y-2-3kxsfvnrxpawmdye0qzobb",
+        "logo-worldsbk-4z8dopfexalcaj593cdan0",
+        "logo-moto2-6yvaq3o5ulgk2itvp1zil8",
+        "logo-moto3-3dirbeck5aj8waufcrhpeg",
+        "logo-f2-tm-logo-white-3wsccy6qz4ysd6ndwvmc5w",
+        "logo-f3-tm-logo-white-3u7zxjwotypnl2aykqwd71"
       ],
       "logoTotal": 8,
       "highlighted": false,
@@ -7675,7 +8049,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_es",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7705,9 +8079,9 @@
         "f-stream-on-2-devices-in-1-location-1c1ly3o"
       ],
       "logoTiles": [
-        "logo-supercopa-endesa",
-        "logo-copa-del-rey",
-        "logo-eurosport"
+        "logo-supercopa-endesa-4o3rv9cmfjvmmhtotfvtvn",
+        "logo-copa-del-rey-2fahnpmhdahfkmt9hbiatf",
+        "logo-eurosport-6pujdp1q8kcbhtdp5s9td2"
       ],
       "logoTotal": 3,
       "highlighted": false,
@@ -7719,7 +8093,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baloncesto_es",
-        "fetchedAt": "2026-09-18T18:01:52.599Z"
+        "fetchedAt": "2026-09-18T18:15:53.376Z"
       },
       "limits": {
         "streams": 2,
@@ -7880,7 +8254,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "base_ent_set",
-        "fetchedAt": "2026-09-18T18:01:52.817Z",
+        "fetchedAt": "2026-09-18T18:15:53.601Z",
         "copy": "atlas"
       },
       "limits": {
@@ -7904,14 +8278,14 @@
         "f-download-to-watch-offline-ysgb3u"
       ],
       "logoTiles": [
-        "logo-uefa-europa-league",
-        "logo-bundesliga",
-        "logo-uefa-nations-league",
-        "logo-ncaa",
-        "logo-liv-golf",
-        "logo-dazn-boxing",
-        "logo-efl",
-        "logo-carabao-cup"
+        "logo-uefa-europa-league-7lg2gvdcv60pjj4svxtc8v",
+        "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
+        "logo-uefa-nations-league-1i4qf4kr7k6pqlya7uo3ip",
+        "logo-ncaa-6hrmck3vkdnzvdrtbpt9xz",
+        "logo-liv-golf-6bhqid9si3iqg4w9ouuutk",
+        "logo-dazn-boxing-3y0ck1qcbisbez8xluykes",
+        "logo-efl-7bgxopqh2ilw3knedfxybe",
+        "logo-carabao-cup-4y4sn2xfaw5h3nhtie1j46"
       ],
       "logoTotal": 8,
       "highlighted": true,
@@ -7923,7 +8297,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_ca_ul",
-        "fetchedAt": "2026-09-18T18:01:52.649Z"
+        "fetchedAt": "2026-09-18T18:15:53.422Z"
       },
       "limits": {
         "streams": 3,
@@ -7950,16 +8324,16 @@
         "f-download-to-watch-offline-ysgb3u"
       ],
       "logoTiles": [
-        "logo-uefa-champions-league",
-        "logo-serie-a",
-        "logo-uefa-europa-league",
-        "logo-bundesliga",
-        "logo-uefa-nations-league",
-        "logo-ncaa",
-        "logo-liv-golf",
-        "logo-dazn-boxing",
-        "logo-efl",
-        "logo-carabao-cup"
+        "logo-uefa-champions-league-7hxgl2qympjsjaevlzlqz9",
+        "logo-serie-a-chc4lx4glbio011aswnfk",
+        "logo-uefa-europa-league-7lg2gvdcv60pjj4svxtc8v",
+        "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
+        "logo-uefa-nations-league-1i4qf4kr7k6pqlya7uo3ip",
+        "logo-ncaa-6hrmck3vkdnzvdrtbpt9xz",
+        "logo-liv-golf-6bhqid9si3iqg4w9ouuutk",
+        "logo-dazn-boxing-3y0ck1qcbisbez8xluykes",
+        "logo-efl-7bgxopqh2ilw3knedfxybe",
+        "logo-carabao-cup-4y4sn2xfaw5h3nhtie1j46"
       ],
       "logoTotal": 10,
       "highlighted": false,
@@ -7971,7 +8345,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_daznplus_ca_ul",
-        "fetchedAt": "2026-09-18T18:01:52.649Z"
+        "fetchedAt": "2026-09-18T18:15:53.422Z"
       },
       "limits": {
         "streams": 3,
@@ -7997,14 +8371,14 @@
         "f-download-to-watch-offline-ysgb3u"
       ],
       "logoTiles": [
-        "logo-uefa-europa-league",
-        "logo-bundesliga",
-        "logo-uefa-nations-league",
-        "logo-ncaa",
-        "logo-liv-golf",
-        "logo-dazn-boxing",
-        "logo-efl",
-        "logo-carabao-cup"
+        "logo-uefa-europa-league-7lg2gvdcv60pjj4svxtc8v",
+        "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
+        "logo-uefa-nations-league-1i4qf4kr7k6pqlya7uo3ip",
+        "logo-ncaa-6hrmck3vkdnzvdrtbpt9xz",
+        "logo-liv-golf-6bhqid9si3iqg4w9ouuutk",
+        "logo-dazn-boxing-3y0ck1qcbisbez8xluykes",
+        "logo-efl-7bgxopqh2ilw3knedfxybe",
+        "logo-carabao-cup-4y4sn2xfaw5h3nhtie1j46"
       ],
       "logoTotal": 8,
       "highlighted": true,
@@ -8016,7 +8390,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_ca",
-        "fetchedAt": "2026-09-18T18:01:52.649Z"
+        "fetchedAt": "2026-09-18T18:15:53.422Z"
       },
       "limits": {
         "streams": 2,
@@ -8043,16 +8417,16 @@
         "f-download-to-watch-offline-ysgb3u"
       ],
       "logoTiles": [
-        "logo-uefa-champions-league",
-        "logo-serie-a",
-        "logo-uefa-europa-league",
-        "logo-bundesliga",
-        "logo-uefa-nations-league",
-        "logo-ncaa",
-        "logo-liv-golf",
-        "logo-dazn-boxing",
-        "logo-efl",
-        "logo-carabao-cup"
+        "logo-uefa-champions-league-v30bhhfkdzeff5nvo4hcj",
+        "logo-serie-a-chc4lx4glbio011aswnfk",
+        "logo-uefa-europa-league-7lg2gvdcv60pjj4svxtc8v",
+        "logo-bundesliga-43d3grjccgc8xjwhbgwky3",
+        "logo-uefa-nations-league-1i4qf4kr7k6pqlya7uo3ip",
+        "logo-ncaa-6hrmck3vkdnzvdrtbpt9xz",
+        "logo-liv-golf-6bhqid9si3iqg4w9ouuutk",
+        "logo-dazn-boxing-3y0ck1qcbisbez8xluykes",
+        "logo-efl-7bgxopqh2ilw3knedfxybe",
+        "logo-carabao-cup-4y4sn2xfaw5h3nhtie1j46"
       ],
       "logoTotal": 10,
       "highlighted": false,
@@ -8064,7 +8438,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_daznplus_ca",
-        "fetchedAt": "2026-09-18T18:01:52.649Z"
+        "fetchedAt": "2026-09-18T18:15:53.422Z"
       },
       "limits": {
         "streams": 2,
@@ -8120,7 +8494,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_ult",
-        "fetchedAt": "2026-09-18T18:01:52.817Z"
+        "fetchedAt": "2026-09-18T18:15:53.601Z"
       },
       "limits": {
         "streams": 2,
@@ -18866,27 +19240,27 @@
   "stepId": "",
   "device": "mobile",
   "live": {
-    "be": "2026-09-18T18:01:52.193Z",
-    "at": "2026-09-18T18:01:52.264Z",
-    "de": "2026-09-18T18:01:52.329Z",
-    "li": "2026-09-18T18:01:52.376Z",
-    "lu": "2026-09-18T18:01:52.415Z",
-    "ch": "2026-09-18T18:01:52.482Z",
-    "fr": "2026-09-18T18:01:52.512Z",
-    "it": "2026-09-18T18:01:52.533Z",
-    "jp": "2026-09-18T18:01:52.558Z",
-    "pt": "2026-09-18T18:01:52.580Z",
-    "es": "2026-09-18T18:01:52.599Z",
-    "tw": "2026-09-18T18:01:52.627Z",
-    "ca": "2026-09-18T18:01:52.649Z",
-    "ie": "2026-09-18T18:01:52.667Z",
-    "mx": "2026-09-18T18:01:52.691Z",
-    "nl": "2026-09-18T18:01:52.710Z",
-    "pl": "2026-09-18T18:01:52.730Z",
-    "gb": "2026-09-18T18:01:52.750Z",
-    "us": "2026-09-18T18:01:52.778Z",
-    "au": "2026-09-18T18:01:52.797Z",
-    "br": "2026-09-18T18:01:52.817Z"
+    "be": "2026-09-18T18:15:52.935Z",
+    "at": "2026-09-18T18:15:53.022Z",
+    "de": "2026-09-18T18:15:53.103Z",
+    "li": "2026-09-18T18:15:53.186Z",
+    "lu": "2026-09-18T18:15:53.225Z",
+    "ch": "2026-09-18T18:15:53.249Z",
+    "fr": "2026-09-18T18:15:53.273Z",
+    "it": "2026-09-18T18:15:53.297Z",
+    "jp": "2026-09-18T18:15:53.322Z",
+    "pt": "2026-09-18T18:15:53.350Z",
+    "es": "2026-09-18T18:15:53.376Z",
+    "tw": "2026-09-18T18:15:53.399Z",
+    "ca": "2026-09-18T18:15:53.422Z",
+    "ie": "2026-09-18T18:15:53.444Z",
+    "mx": "2026-09-18T18:15:53.465Z",
+    "nl": "2026-09-18T18:15:53.484Z",
+    "pl": "2026-09-18T18:15:53.508Z",
+    "gb": "2026-09-18T18:15:53.529Z",
+    "us": "2026-09-18T18:15:53.553Z",
+    "au": "2026-09-18T18:15:53.577Z",
+    "br": "2026-09-18T18:15:53.601Z"
   },
   "planTabsByMarket": {
     "es": [

@@ -114,6 +114,10 @@ export function cardStrings(set: CardSet): Translatable[] {
   for (const f of set.featureCatalog) {
     if (f.text.trim()) out.push({ key: `features.${f.id}`, label: 'Feature line', text: f.text })
   }
+  // The line under a competition in the "All features & content" dialog.
+  for (const l of set.logoCatalog) {
+    if (l.blurb?.trim()) out.push({ key: `logos.${l.id}.blurb`, label: `${l.name} line`, text: l.blurb })
+  }
   return out
 }
 
