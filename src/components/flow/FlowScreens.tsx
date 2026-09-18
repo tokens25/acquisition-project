@@ -747,12 +747,23 @@ export function CheckoutFlowScreen({
               key={line.id}
               data-schedule={line.schedule ? '' : undefined}
               data-offer={line.offer ? '' : undefined}
+              data-included={line.included ? '' : undefined}
+              data-noted={line.note ? '' : undefined}
             >
-              <p className="fl-checkout__line-label">
-                {line.schedule && <Mark svg={navSchedule} size={16} />}
-                {line.label}
-              </p>
+              <div className="fl-checkout__line-text">
+                <p className="fl-checkout__line-label">
+                  {line.schedule && <Mark svg={navSchedule} size={16} />}
+                  {line.label}
+                </p>
+                {line.note && (
+                  <p className="fl-checkout__line-note">
+                    <Mark svg={iconArtwork.discount} size={16} />
+                    {line.note}
+                  </p>
+                )}
+              </div>
               <p className="fl-checkout__line-value">
+                {line.struck && <s className="fl-checkout__line-struck">{line.struck}</s>}
                 {line.value}
                 {line.unit && <span className="fl-checkout__line-unit">/{line.unit}</span>}
               </p>

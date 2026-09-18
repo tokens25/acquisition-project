@@ -137,8 +137,15 @@ export interface CheckoutLine {
   /**
    * Draws the line as an offer rather than as a plain amount — a discount, a
    * free month, anything the summary announces rather than just totals.
+   * The row takes the offer tint, the value the offer green.
    */
   offer?: boolean
+  /** The full price, struck through before the value: "€36.99 €19.99/month". */
+  struck?: string
+  /** A second line under the label with the offer tag: "first 4 months discounted". */
+  note?: string
+  /** Something bundled in, marked "Included" in gold rather than priced. */
+  included?: boolean
 }
 
 /**

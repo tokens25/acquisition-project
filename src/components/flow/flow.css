@@ -731,9 +731,40 @@
   color: #afb3b8;
   font-weight: var(--font-weight-regular);
 }
-/* An offer is the summary announcing something rather than adding up, so the
-   amount is the one figure in the box drawn in the brand gold. */
+/* An offer row, as drawn: a green-tinted row, the full price struck through
+   in grey before the price paid in green, and a tagged line under the name
+   saying how long the price holds. */
+.fl-checkout__line[data-offer] {
+  background: rgba(109, 219, 150, 0.08);
+}
+.fl-checkout__line[data-noted] {
+  align-items: flex-start;
+}
+.fl-checkout__line-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-inline-size: 0;
+}
+.fl-checkout__line-note {
+  display: inline-flex;
+  gap: var(--space-4);
+  align-items: center;
+  margin: 0;
+  color: #6ddb96;
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.5;
+}
 .fl-checkout__line[data-offer] .fl-checkout__line-value {
+  color: #6ddb96;
+  gap: var(--space-4);
+}
+.fl-checkout__line-struck {
+  color: #afb3b8;
+  font-weight: var(--font-weight-regular);
+}
+/* Something bundled in is marked, in the brand gold, rather than priced. */
+.fl-checkout__line[data-included] .fl-checkout__line-value {
   color: #fbed7d;
 }
 .fl-checkout__line-unit {

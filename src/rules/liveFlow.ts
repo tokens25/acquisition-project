@@ -272,32 +272,36 @@ export function liveCheckoutScreen(set: CardSet, context: Context, authored: Che
   const fill = (text: string) => fillTokens(text, tokens)
 
   const lines: CheckoutLine[] = []
-  if (offer.freeTrialMonths) {
-    lines.push({
-      id: 'live-trial',
-      label: `${offer.freeTrialMonths} month${offer.freeTrialMonths === 1 ? '' : 's'} free, then ${money(offer.standardPrice)}/${words.unit}`,
-      value: money(0),
-      offer: true,
-    })
+  const discounted = offer.discount && offer.introPrice !== null
+  const months = offer.introMonths || 1
+  // The pay line is the offer, as the design draws it: the plan and how it is
+  // paid, the full price struck through beside what is paid now, and a line
+  // under the name saying how long the price holds.
+  lines.push({
+    id: 'live-plan',
+    label: kind === 'instalments' ? `${words.title} · ${offer.termMonths ?? 12}-month contract` : words.title,
+    value: money(discounted ? offer.introPrice! : offer.standardPrice),
+    unit: words.unit,
+    ...(discounted
+      ? {
+          offer: true,
+          struck: money(offer.standardPrice),
+          note:
+            months >= (offer.termMonths ?? 12) && kind === 'instalments'
+              ? `discounted for the whole ${months}-month contract`
+              : `first ${months === 1 ? 'month' : `${months} months`} discounted`,
+        }
+      : {}),
+    ...(offer.freeTrialMonths
+      ? { offer: true, note: `${offer.freeTrialMonths} month${offer.freeTrialMonths === 1 ? '' : 's'} free, then ${money(offer.standardPrice)}/${words.unit}` }
+      : {}),
+  })
+  // Anything bundled into the offer, marked as included rather than priced.
+  for (const id of offer.includedAddOnIds ?? []) {
+    const entry = set.addOnCatalog.find((a) => a.id === id)
+    lines.push({ id: `live-included-${id}`, label: entry?.title ?? id, value: 'Included', included: true })
   }
-  if (offer.discount && offer.introPrice !== null) {
-    const months = offer.introMonths || 1
-    lines.push({
-      id: 'live-offer',
-      label: `${money(offer.introPrice)} for ${months === 1 ? 'the first month' : `${months} months`}, then ${money(offer.standardPrice)}`,
-      value: `−${money(offer.standardPrice - offer.introPrice)}`,
-      offer: true,
-    })
-  }
-  lines.push(
-    {
-      id: 'live-plan',
-      label: kind === 'instalments' ? `${words.title} · ${offer.termMonths ?? 12}-month contract` : words.title,
-      value: money(offer.standardPrice),
-      unit: words.unit,
-    },
-    { id: 'live-today', label: 'Today you pay', value: money(offer.freeTrialMonths ? 0 : paid(offer)) },
-  )
+  lines.push({ id: 'live-today', label: 'Today you pay', value: money(offer.freeTrialMonths ? 0 : paid(offer)) })
   // A pass is paid once; there is no next payment to name.
   if (!offer.oneOff) {
     lines.push({
