@@ -125,12 +125,19 @@ export function filterAcquirableTiers(
 /**
  * Whether this product sells this plan.
  *
- * No product named is every product, and no product asked for is every plan:
- * validation runs over contexts that carry no subscription, and a context that
- * has not said what it is selling cannot be told a plan is the wrong one.
+ * A plan that names no product is the market's own — DAZN's plans, as the
+ * pricing service groups them — and is sold in the market's general flow and
+ * nowhere else. It used to mean "every product", from when MSG+ was the only
+ * content and nothing had a product yet; now everything does, and a DAZN plan
+ * turning up under FIBA is a plan on a page that is not selling it.
+ *
+ * A context that has not said what it is selling at all (`undefined`) is asked
+ * nothing: the rules run over such contexts and cannot be told a plan is the
+ * wrong one. The general flow says `''`, which is an answer.
  */
 export function sellsTier(tier: Tier, subscription?: string): boolean {
-  if (!tier.subscriptions || subscription === undefined) return true
+  if (subscription === undefined) return true
+  if (!tier.subscriptions?.length) return subscription === ''
   return tier.subscriptions.includes(subscription)
 }
 
@@ -165,7 +172,9 @@ export function excludedTiers(set: CardSet, context: Context = set.context) {
     .map((t) => ({
       tier: t,
       reason: !sellsTier(t, context.subscription)
-        ? (`not sold with ${context.subscription}` as const)
+        ? context.subscription
+          ? (`not sold with ${context.subscription}` as const)
+          : ('not in the general flow' as const)
         : !acquirable.has(t.id)
           ? (`not sold on ${context.channel}` as const)
           : (`not sold ${context.cadence}` as const),
@@ -221,13 +230,15 @@ export function marketFor(set: CardSet, code: string) {
 export function allContexts(set: CardSet): Context[] {
   const out: Context[] = []
   for (const market of set.markets) {
-    for (const subscription of channelsFor(market.code)) {
+    // The market's general flow first — DAZN's own plans — then each product.
+    const subscriptions = ['', ...channelsFor(market.code).map((c) => c.id)]
+    for (const subscription of subscriptions) {
       for (const channel of set.channels) {
         if (channel.markets && !channel.markets.includes(market.code)) continue
         for (const cadence of set.cadences) {
           const base = {
             market: market.code,
-            subscription: subscription.id,
+            subscription,
             channel: channel.code,
             cadence,
           }

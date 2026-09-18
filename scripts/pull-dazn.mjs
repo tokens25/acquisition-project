@@ -74,13 +74,19 @@ async function main() {
     }
   }
 
+  // The DAZN page's cards, then each product's own page — the league plans'
+  // names and benefits live under their product's pageId, not DAZN's.
+  const pages = ['DAZN', ...PRODUCTS.filter((p) => p !== 'DAZN')]
   for (const locale of new Set(Object.values(MARKETS))) {
-    const r = await pull(contentUrl(locale))
-    const items = Array.isArray(r.body?.items) ? r.body.items.length : 0
-    manifest.content.push({ locale, status: r.status, ok: r.ok, items, note: r.text })
-    if (r.ok) await writeFile(join(OUT, 'content', `${locale}.json`), JSON.stringify(r.body, null, 2))
-    process.stdout.write(`${r.ok ? '✓' : '✗'} content ${locale.padEnd(6)} ${r.status}  ${items} entries\n`)
-    await sleep(150)
+    for (const page of pages) {
+      const r = await pull(contentUrl(locale, page))
+      const items = Array.isArray(r.body?.items) ? r.body.items.length : 0
+      manifest.content.push({ locale, page, status: r.status, ok: r.ok, items, note: r.text })
+      const file = page === 'DAZN' ? `${locale}.json` : `${locale}--${page}.json`
+      if (r.ok && items > 0) await writeFile(join(OUT, 'content', file), JSON.stringify(r.body, null, 2))
+      process.stdout.write(`${r.ok && items ? '✓' : '·'} content ${locale.padEnd(6)} ${page.padEnd(17)} ${r.status}  ${items} entries\n`)
+      await sleep(150)
+    }
   }
 
   await writeFile(join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2))

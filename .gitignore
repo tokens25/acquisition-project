@@ -8,3 +8,9 @@ dist-single
 
 # A local, read-only snapshot of the hero project's Coach. Not part of this app.
 /coach/
+
+# Raw API pulls — regenerate with scripts/pull-dazn.mjs. The content set built from
+# them is committed; the dumps are provenance, not source.
+data/dazn/offers/
+data/dazn/content/
+data/dazn/*.before-import.json

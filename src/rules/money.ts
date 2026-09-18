@@ -8,7 +8,19 @@
  * Formatting resolves at render time from the market's locale and currency.
  */
 export function formatMoney(amount: number, locale: string, currency: string): string {
-  return format(amount, locale, currency, { minimumFractionDigits: 2 })
+  // As many decimals as the currency has — two for most, none for yen — and
+  // always that many, so a round price still reads "25,00 €" beside "25,99 €".
+  // Forcing two on every currency wrote "￥980.00", which no Japanese price does.
+  const digits = fractionDigits(locale, currency)
+  return format(amount, locale, currency, { minimumFractionDigits: digits, maximumFractionDigits: digits })
+}
+
+function fractionDigits(locale: string, currency: string): number {
+  try {
+    return new Intl.NumberFormat(locale, { style: 'currency', currency }).resolvedOptions().minimumFractionDigits ?? 2
+  } catch {
+    return 2
+  }
 }
 
 /** Rounds to whole units — savings copy never shows cents. */

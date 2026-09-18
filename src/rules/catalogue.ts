@@ -35,13 +35,14 @@ export interface MarketConfigEntry {
 }
 
 /**
- * The twenty markets.
+ * The twenty-one markets — the ones DAZN's offers service prices.
  *
- * Every country named here resolves to itself. "ROW: Everyone else" is the
- * market for countries that are not named — a market in its own right, not a
- * fallback that swallows the ones above it. The US in particular must never
- * fall into it: it is the one market whose channel list differs from all the
- * others, so resolving it by accident is the failure this list exists to stop.
+ * Read from the pricing API on 18 Sep 2026 (`scripts/pull-dazn.mjs`), not from
+ * a spec. Every one of these answered with priced DAZN plans in its own
+ * currency. What is not here is "ROW: Everyone else": the service has no such
+ * country, so the tool has no such market — a catch-all that cannot be priced
+ * cannot be sold. Australia and Brazil are here because the service prices
+ * them, whatever an earlier list said.
  */
 export const MARKETS: readonly MarketConfigEntry[] = [
   // Core
@@ -59,14 +60,15 @@ export const MARKETS: readonly MarketConfigEntry[] = [
   { id: 'tw', label: 'Taiwan', group: 'core', flag: '🇹🇼' },
 
   // Growth
+  { id: 'au', label: 'Australia', group: 'growth', flag: '🇦🇺' },
+  { id: 'br', label: 'Brazil', group: 'growth', flag: '🇧🇷' },
   { id: 'ca', label: 'Canada', group: 'growth', flag: '🇨🇦' },
-  { id: 'row', label: 'ROW: Everyone else', group: 'growth', catchAll: true, flag: '🌍' },
-  { id: 'ie', label: 'ROW: Ireland', group: 'growth', flag: '🇮🇪' },
-  { id: 'mx', label: 'ROW: Mexico', group: 'growth', flag: '🇲🇽' },
-  { id: 'nl', label: 'ROW: Netherlands', group: 'growth', flag: '🇳🇱' },
-  { id: 'pl', label: 'ROW: Poland', group: 'growth', flag: '🇵🇱' },
-  { id: 'gb', label: 'UK', group: 'growth', flag: '🇬🇧' },
-  { id: 'us', label: 'US', group: 'growth', flag: '🇺🇸' },
+  { id: 'ie', label: 'Ireland', group: 'growth', flag: '🇮🇪' },
+  { id: 'mx', label: 'Mexico', group: 'growth', flag: '🇲🇽' },
+  { id: 'nl', label: 'Netherlands', group: 'growth', flag: '🇳🇱' },
+  { id: 'pl', label: 'Poland', group: 'growth', flag: '🇵🇱' },
+  { id: 'gb', label: 'United Kingdom', group: 'growth', flag: '🇬🇧' },
+  { id: 'us', label: 'United States', group: 'growth', flag: '🇺🇸' },
 ]
 
 export const MARKET_GROUP_LABELS: Record<MarketGroup, string> = {
@@ -91,20 +93,24 @@ export interface ChannelConfigEntry {
 }
 
 /**
- * The seven channels, with the availability rules on them rather than in the
- * screens that ask.
+ * The seven channels. Six are DAZN's product groups, named as the pricing
+ * service names them, with availability read from which markets it priced
+ * them in on 18 Sep 2026. The rules an earlier spec wrote — "the leagues are
+ * not sold in the US" — were wrong in both directions: the US does sell NFL,
+ * and NHL is sold in twelve markets, not twenty.
  *
- * The rule is a single split: the RSNs are American and nothing else is. The
- * US carries FIBA, RallyTV and the RSNs; every other market carries FIBA,
- * RallyTV and the four leagues.
+ * The seventh, the RSNs, is in neither API. It is the one flow the design file
+ * draws and the content the tool shipped with, so it stays — as what it is,
+ * one American product this tool knows about and DAZN's pricing service does
+ * not. Nothing else in this list is decided by hand.
  */
 export const CHANNELS: readonly ChannelConfigEntry[] = [
   { id: 'fiba', label: 'FIBA' },
-  { id: 'national-league', label: 'National League', notSoldIn: ['us'] },
-  { id: 'ncaa', label: 'NCAA', notSoldIn: ['us'] },
-  { id: 'nfl', label: 'NFL', notSoldIn: ['us'] },
-  { id: 'nhl', label: 'NHL', notSoldIn: ['us'] },
-  { id: 'rallytv', label: 'RallyTV' },
+  { id: 'nfl', label: 'NFL', notSoldIn: ['ca'] },
+  { id: 'nhl', label: 'NHL', soldOnlyIn: ['at', 'ch', 'de', 'fr', 'gb', 'ie', 'jp', 'li', 'lu', 'pl', 'pt', 'tw'] },
+  { id: 'college-sports', label: 'College Sports', notSoldIn: ['ca', 'us'] },
+  { id: 'rallytv', label: 'Rally TV', notSoldIn: ['fr', 'jp', 'pl', 'pt'] },
+  { id: 'national-league', label: 'National League TV' },
   { id: 'rsns', label: 'RSNs', soldOnlyIn: ['us'] },
 ]
 

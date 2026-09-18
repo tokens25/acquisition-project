@@ -1,0 +1,1162 @@
+{
+  "pulledAt": "2026-09-18T07:42:18.071Z",
+  "offers": [
+    {
+      "market": "be",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "be",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "be",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "be",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "be",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "be",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "be",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "at",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 8
+    },
+    {
+      "market": "at",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "at",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "at",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "at",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "at",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "at",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "de",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 15
+    },
+    {
+      "market": "de",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "de",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "de",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "de",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "de",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "de",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "li",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 2
+    },
+    {
+      "market": "li",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "li",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "li",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "li",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "li",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "li",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "lu",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 2
+    },
+    {
+      "market": "lu",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "lu",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "lu",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "lu",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "lu",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "lu",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "ch",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 9
+    },
+    {
+      "market": "ch",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "ch",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "ch",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "ch",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "ch",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "ch",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "fr",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 14
+    },
+    {
+      "market": "fr",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "fr",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "fr",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "fr",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "fr",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "fr",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "it",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 19
+    },
+    {
+      "market": "it",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "it",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "it",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "it",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "it",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "it",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "jp",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 8
+    },
+    {
+      "market": "jp",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "jp",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "jp",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "jp",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "jp",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "jp",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "pt",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 11
+    },
+    {
+      "market": "pt",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "pt",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "pt",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "pt",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "pt",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "pt",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "es",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 29
+    },
+    {
+      "market": "es",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "es",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "es",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "es",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "es",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "es",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "tw",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "tw",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "tw",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "tw",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "tw",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "tw",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "tw",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "ca",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 18
+    },
+    {
+      "market": "ca",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "ca",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "ca",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "ca",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "ca",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "ca",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "ie",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 10
+    },
+    {
+      "market": "ie",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "ie",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "ie",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "ie",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "ie",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "ie",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "mx",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 9
+    },
+    {
+      "market": "mx",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "mx",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "mx",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "mx",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "mx",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "mx",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "nl",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 8
+    },
+    {
+      "market": "nl",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "nl",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "nl",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "nl",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "nl",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "nl",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "pl",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 10
+    },
+    {
+      "market": "pl",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "pl",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "pl",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "pl",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "pl",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "pl",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "gb",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 10
+    },
+    {
+      "market": "gb",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "gb",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 4
+    },
+    {
+      "market": "gb",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "gb",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "gb",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "gb",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "us",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 10
+    },
+    {
+      "market": "us",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 2
+    },
+    {
+      "market": "us",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "us",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "us",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "us",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "us",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "au",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 8
+    },
+    {
+      "market": "au",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "au",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "au",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "au",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "au",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "au",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "br",
+      "product": "DAZN",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "br",
+      "product": "NFL",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "br",
+      "product": "NHL",
+      "status": 200,
+      "ok": true,
+      "offers": 0
+    },
+    {
+      "market": "br",
+      "product": "FIBA",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "br",
+      "product": "CollegeSports",
+      "status": 200,
+      "ok": true,
+      "offers": 6
+    },
+    {
+      "market": "br",
+      "product": "RallyTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    },
+    {
+      "market": "br",
+      "product": "NationalLeagueTV",
+      "status": 200,
+      "ok": true,
+      "offers": 3
+    }
+  ],
+  "content": [
+    {
+      "locale": "nl-BE",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "de-AT",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "de-DE",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "de-LI",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "fr-LU",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "de-CH",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "fr-FR",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "it-IT",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "ja-JP",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "pt-PT",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "es-ES",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "zh-TW",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "en-CA",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "en-IE",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "es-MX",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "nl-NL",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "pl-PL",
+      "status": 400,
+      "ok": false,
+      "items": 0
+    },
+    {
+      "locale": "en-GB",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "en-US",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "en-AU",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    },
+    {
+      "locale": "pt-BR",
+      "status": 200,
+      "ok": true,
+      "items": 91
+    }
+  ]
+}
