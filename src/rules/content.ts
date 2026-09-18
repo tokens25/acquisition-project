@@ -211,6 +211,42 @@ export interface Tier {
   visibleToPartners: boolean
 
   overrides: Override[]
+
+  /**
+   * What the plan lets you do, as DAZN's offers service states it: streams at
+   * once, locations, downloads, video quality. Facts about the entitlement
+   * set, the same in every market — so on the tier, not in a patch — and
+   * drawn as the limits row under the price. Absent on plans written by hand.
+   */
+  limits?: PlanLimits
+
+  /**
+   * Where a live plan came from, so a refresh can find it again and a reader
+   * can tell it from one written here. Absent means authored in the tool.
+   */
+  source?: {
+    product: string
+    entitlementSetId: string
+    /** Which fallback wrote the words, when the CMS had no card. */
+    copy?: 'atlas' | 'entitlements' | 'id'
+    fetchedAt?: string
+  }
+}
+
+export interface PlanLimits {
+  /** Simultaneous streams. */
+  streams: number | null
+  /** Locations (IP addresses) those streams may come from. */
+  networks: number | null
+  /** How concurrency is policed: one stream, one location, or anywhere. */
+  policy: 'one' | 'single' | 'multi' | null
+  downloads: boolean
+  mobileOnly: boolean
+  /** Pay-per-view events bundled in. */
+  ppvs: number
+  multiview: boolean
+  /** Best picture the plan is sold with, as DAZN words it: "HD", "4K/HDR". */
+  video: string | null
 }
 
 /**
@@ -247,6 +283,21 @@ export interface CadenceOffer {
   includedAddOnIds: string[]
 
   /**
+   * How long the buyer is committing for, in months, when paying by
+   * instalments — the "12-mo contract" beside the price. Absent for a plan
+   * that renews period by period.
+   */
+  termMonths?: number
+  freeTrialMonths?: number
+  /**
+   * What can be bolted on to this plan in this market, priced. DAZN sells
+   * these as recurring add-ons conditional on the plan held; the card says so
+   * in one line — "Can add: Baloncesto €9.99/mo" — and the price is this
+   * market's, which is why it sits on the market-scoped offer.
+   */
+  canAdd?: AddOnLine[]
+
+  /**
    * The sentence under the price. Authored, not derived.
    *
    * On the offer rather than the tier because it names this offer's numbers —
@@ -277,6 +328,15 @@ export interface CadenceOffer {
    * of filling this in, not a second place the answer lives.
    */
   ctaLabel?: string
+}
+
+export interface AddOnLine {
+  /** The add-on's entitlement set, which is usually also a plan of its own. */
+  id: string
+  name: string
+  price: number
+  /** Cadence the price is per — Monthly, mostly. */
+  cadence: string
 }
 
 /** The fields a market or campaign may override on a tier. Sparse by design. */
@@ -386,6 +446,12 @@ export interface CardSet {
 
   tiers: Tier[]
   offers: CadenceOffer[]
+
+  /**
+   * Which markets' plans came from DAZN's APIs, and when — market code to an
+   * ISO timestamp. Absent means nothing live has been fetched into this set.
+   */
+  live?: Record<string, string>
   /**
    * The tabs over the plan picker.
    *

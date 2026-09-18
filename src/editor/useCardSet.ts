@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import type { CadenceOffer, CardSet, Context, Override, Tier, TierPatch } from '../rules/content'
 import type { PipelineDoc } from '../rules/pipeline'
 import { emptyPipeline } from '../rules/pipeline'
@@ -15,6 +15,9 @@ import { tabsOf } from '../rules/tabs'
 import { findOverride, matches, resolveOffer } from '../rules/resolve'
 import type { RemoteState } from './remote'
 import { loadRemote, publishRemote } from './remote'
+import { MARKETS as LIVE_MARKETS } from '../rules/dazn/spec'
+import { mergeLive } from '../rules/dazn/build'
+import { fetchLiveMarket, type LiveStatus } from './live'
 
 const STORAGE_KEY = 'acquisition-card-set-v3'
 
@@ -221,6 +224,10 @@ export interface CardSetStore {
   remoteDiffers: boolean
   takeShared: () => void
   keepLocal: () => void
+  /** Whether the plans on screen are DAZN's live catalogue, per the current market. */
+  live: LiveStatus
+  /** Ask DAZN again for this market's plans, now. */
+  refreshLive: () => void
   /** Saved content predates the shipped defaults now in the build. */
   staleSeed: boolean
   /** Keep the saved content and stop flagging it as behind the build. */
@@ -291,6 +298,36 @@ export function useCardSet(): CardSetStore {
   const [remoteDiffers, setRemoteDiffers] = useState(false)
   const [importError, setImportError] = useState<string | null>(null)
   const [importNotes, setImportNotes] = useState<string[]>([])
+
+  /*
+   * DAZN's catalogue, folded in per market.
+   *
+   * The facts about a plan — its name, words, prices, limits — are DAZN's to
+   * state, so they are fetched for the market on screen and written over
+   * whatever this browser had, every time the market changes and once per
+   * market per visit. What the tool adds around them stays. Fetched once per
+   * market rather than on every render, and again on request.
+   */
+  const [live, setLive] = useState<LiveStatus>({ state: 'off' })
+  const pulled = useRef(new Set<string>())
+  const pullLive = useCallback(async (market: string, refresh = false) => {
+    if (!LIVE_MARKETS.includes(market)) return
+    if (!refresh && pulled.current.has(market)) return
+    pulled.current.add(market)
+    setLive({ state: 'loading', market })
+    const result = await fetchLiveMarket(market, refresh)
+    if (!result.ok) {
+      pulled.current.delete(market)
+      setLive({ state: 'unreachable', market, reason: result.error })
+      return
+    }
+    if (result.live) {
+      const fresh = result.live
+      setSet((prev) => mergeLive(prev, fresh))
+    }
+    setLive({ state: 'live', market, fetchedAt: result.fetchedAt })
+  }, [])
+
 
   useEffect(() => {
     try {
@@ -502,7 +539,10 @@ export function useCardSet(): CardSetStore {
   const reset = useCallback(() => {
     setSet(defaultSet)
     setSeed(SEED_FINGERPRINT)
-  }, [])
+    // The defaults have no live plans; fetch this market's again.
+    pulled.current.clear()
+    void pullLive(defaultSet.context.market)
+  }, [pullLive])
 
   const exportJson = useCallback(() => {
     const blob = new Blob([JSON.stringify(set, null, 2)], { type: 'application/json' })
@@ -594,6 +634,9 @@ export function useCardSet(): CardSetStore {
       if (!initial.hadLocal || JSON.stringify(initial.set) === text) {
         setSet(hydrate(state.set))
         setSeed(SEED_FINGERPRINT)
+        // The shared copy replaced whatever live plans had already landed.
+        pulled.current.clear()
+        void pullLive(state.set.context?.market ?? initial.set.context.market)
       } else {
         setRemoteDiffers(true)
       }
@@ -601,7 +644,16 @@ export function useCardSet(): CardSetStore {
     return () => {
       cancelled = true
     }
-  }, [initial])
+  }, [initial, pullLive])
+
+  const market = context.market
+  useEffect(() => {
+    // Starting the fetch is the effect; the "loading" it records first is the
+    // fetch's own state, not a render's — which the rule cannot tell apart.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void pullLive(market)
+  }, [market, pullLive])
+  const refreshLive = useCallback(() => void pullLive(market, true), [market, pullLive])
 
   /** Take the shared copy, replacing this browser's version. */
   const takeShared = useCallback(() => {
@@ -610,7 +662,9 @@ export function useCardSet(): CardSetStore {
     setSet(hydrate(state.set))
     setSeed(SEED_FINGERPRINT)
     setRemoteDiffers(false)
-  }, [remote])
+    pulled.current.clear()
+    void pullLive(state.set.context?.market ?? market)
+  }, [remote, pullLive, market])
 
   /** Keep this browser's version; it becomes what would be published. */
   const keepLocal = useCallback(() => setRemoteDiffers(false), [])
@@ -658,6 +712,8 @@ export function useCardSet(): CardSetStore {
     remoteDiffers,
     takeShared,
     keepLocal,
+    live,
+    refreshLive,
     staleSeed,
     acceptSeed,
     journey,
