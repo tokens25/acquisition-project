@@ -74,18 +74,33 @@ import type { Selector } from '../rules/layers'
  * since the blocks were renamed are mostly our words too.
  *
  * A component we have is one whose production name is a name in our palette.
- * That is the whole test: the rename made the two vocabularies the same where
- * they overlap, so a match here is a real match rather than a table somebody
- * has to keep in step.
+ * That is nearly the whole test: the rename made the two vocabularies the same
+ * where they overlap, so a match is a real match rather than a table somebody
+ * has to keep in step. What the palette does not cover is named below.
  *
  * Nothing here changes the page. Adopting the live arrangement is a decision,
  * not something that happens while you are reading.
  */
+
+/**
+ * The blocks this tool has that are not in the palette.
+ *
+ * Two of them, and a name test alone calls both missing while both are sitting
+ * right there. The footer is under everything rather than in the run of cards,
+ * so it has no section type to carry a label. And the hero is a tab of its own
+ * — which the live page names twice, because it is a rollout caught in the
+ * middle: four markets draw `Banners` and four `BoxedHeroBanners`.
+ */
+const BESIDE_THE_PALETTE: Record<string, string> = {
+  Footer: 'the footer, under the palette',
+  Banners: 'the Hero banner tab',
+  BoxedHeroBanners: 'the Hero banner tab',
+}
 function LivePage({ market }: { market: string | undefined }) {
   const { state, page, error, reload } = useLiveLanding(market)
   if (state === 'off') return null
 
-  const ours = new Set(Object.values(SECTION_LABEL))
+  const ours = new Set([...Object.values(SECTION_LABEL), ...Object.keys(BESIDE_THE_PALETTE)])
   const mine = page?.components.filter((c) => ours.has(c.type)).length ?? 0
 
   return (
@@ -102,7 +117,11 @@ function LivePage({ market }: { market: string | undefined }) {
         <>
           {page.components.map((c) => (
             <div className="ls-live__row" key={c.at} data-have={ours.has(c.type) || undefined}>
-              <span className="ls-live__name">{c.type}</span>
+              {/* Where the match is not a palette block, say where it is
+                  instead — otherwise it reads as a match nobody can find. */}
+              <span className="ls-live__name" title={BESIDE_THE_PALETTE[c.type]}>
+                {c.type}
+              </span>
               {/* Which rail it is served, where it is served one at all — the
                   id our own Rail ID fields stand in for. */}
               <span className="ls-live__note">
