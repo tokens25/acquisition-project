@@ -140,6 +140,12 @@ export function RuledCard({
           ? { logos, rows: d.logoRows, overflowCount: d.overflowCount }
           : undefined
       }
+      facts={{
+        billing: d.billing,
+        youth: d.youth ?? undefined,
+        limits: d.limits,
+        canAdd: d.canAdd,
+      }}
       addOn={
         d.addOn
           ? {

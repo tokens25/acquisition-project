@@ -1,6 +1,6 @@
 import type { CadenceOffer, CardSet, Context, MarketConfig, Tier } from './content'
 import { formatMoney, formatMoneyWhole } from './money'
-import { findAddOn, resolveFeature, resolveLogo, type Resolution } from './resolve'
+import { findAddOn, resolveFeature, resolveLogo, resolveOffer, type Resolution } from './resolve'
 
 /**
  * Everything the card renders that is NOT authored.
@@ -183,8 +183,103 @@ export interface DerivedCard {
 
   footerLabel: string
 
+  /**
+   * §6 The facts — what DAZN's catalogue states about the plan.
+   *
+   * Every way this plan is priced here, the under-25 rate where one exists,
+   * the limits it is sold with and what can be added to it. Drawn from the
+   * offers and the tier's `limits`, so a plan written by hand shows only what
+   * was written and a live one shows what DAZN sells.
+   */
+  billing: DerivedBilling[]
+  youth: string | null
+  limits: { label: string; value: string }[]
+  canAdd: string[]
+
   /** Ids referenced but absent from a catalogue — these block publish. */
   missingRefs: string[]
+}
+
+export interface DerivedBilling {
+  cadence: string
+  /** "Monthly", "Annual", "12×" */
+  label: string
+  /** The price paid per unit, formatted: what the card's headline would say at that cadence. */
+  price: string
+  /** "/mo", "/yr" */
+  unit: string
+  /** This is the cadence the card is showing. */
+  current: boolean
+  /** "12-mo contract" — the commitment, when there is one. */
+  term: string | null
+}
+
+/** How a cadence reads in a row of billing options — short, like a price tag. */
+export function billingLabel(cadence: string, termMonths?: number): { label: string; unit: string } {
+  const c = cadence.toLowerCase()
+  if (termMonths && /instal/.test(c)) return { label: `${termMonths}×`, unit: 'mo' }
+  if (/instal/.test(c)) return { label: 'Instalments', unit: 'mo' }
+  if (/year|annual/.test(c)) return { label: 'Annual', unit: 'yr' }
+  if (/month/.test(c)) return { label: 'Monthly', unit: 'mo' }
+  return { label: cadence, unit: c }
+}
+
+/**
+ * Every way this plan is priced in this market, in the set's cadence order.
+ *
+ * Read through `resolveOffer` per cadence, so the same row wins as would win
+ * on the card at that cadence — market-scoped over general, tab over none.
+ */
+export function billingFor(set: CardSet, tier: Tier, market: MarketConfig, context: Context): DerivedBilling[] {
+  const out: DerivedBilling[] = []
+  for (const cadence of set.cadences) {
+    const offer = resolveOffer(set, tier.id, { ...context, cadence })
+    if (!offer) continue
+    const { label, unit } = billingLabel(cadence, offer.termMonths)
+    const price = offer.discount && offer.introPrice !== null ? offer.introPrice : offer.standardPrice
+    out.push({
+      cadence,
+      label,
+      price: formatMoney(price, market.locale, market.currency),
+      unit,
+      current: cadence === context.cadence,
+      term: offer.termMonths ? `${offer.termMonths}-mo contract` : null,
+    })
+  }
+  return out
+}
+
+/**
+ * The under-25 rate for this plan here, if DAZN sells one.
+ *
+ * A youth plan is the same entitlement set at a lower price for a year, sold
+ * as its own SKU (`…_yp`); the import keeps it as a legacy plan beside its
+ * parent. The parent's card says it in one line, at the cadence on screen
+ * where that cadence has one, or the first that does.
+ */
+export function youthFor(set: CardSet, tier: Tier, market: MarketConfig, context: Context): string | null {
+  const youth = set.tiers.find((t) => t.id === `${tier.id}-yp`)
+  if (!youth) return null
+  const at = resolveOffer(set, youth.id, context) ?? set.cadences.map((c) => resolveOffer(set, youth.id, { ...context, cadence: c })).find(Boolean)
+  if (!at) return null
+  const price = at.discount && at.introPrice !== null ? at.introPrice : at.standardPrice
+  const { unit } = billingLabel(at.cadence, at.termMonths)
+  const term = at.termMonths ? ` · ${at.termMonths} mo` : ''
+  return `Under-25: ${formatMoney(price, market.locale, market.currency)}/${unit}${term}`
+}
+
+/** The limits row: Streams 2 · IP 1 · Video HD. Only what is known. */
+export function limitsFor(tier: Tier): { label: string; value: string }[] {
+  const d = tier.limits
+  if (!d) return []
+  const out: { label: string; value: string }[] = []
+  if (d.streams !== null) out.push({ label: 'Streams', value: String(d.streams) })
+  if (d.networks !== null) out.push({ label: 'IP', value: String(d.networks) })
+  else if (d.policy === 'multi') out.push({ label: 'IP', value: 'Any' })
+  if (d.video) out.push({ label: 'Video', value: d.video })
+  if (d.downloads) out.push({ label: 'Downloads', value: 'Yes' })
+  if (d.mobileOnly) out.push({ label: 'Mobile', value: 'Only' })
+  return out
 }
 
 export function deriveCard(
@@ -349,6 +444,14 @@ export function deriveCard(
     features,
     addOn,
     footerLabel: plans?.footer?.trim() || STATIC.footer,
+
+    billing: billingFor(set, tier, market, context),
+    youth: youthFor(set, tier, market, context),
+    limits: limitsFor(tier),
+    canAdd: (offer.canAdd ?? []).map((a) => {
+      const { unit } = billingLabel(a.cadence)
+      return `Can add: ${a.name} ${money(a.price)}/${unit}`
+    }),
     missingRefs,
   }
 }

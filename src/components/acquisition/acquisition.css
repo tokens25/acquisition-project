@@ -901,3 +901,62 @@ button.acq-feature__info:hover {
   block-size: 0;
   pointer-events: none;
 }
+
+/* ── PlanFacts ────────────────────────────────────────────────
+   The catalogue's facts under the price, as tags. Same type scale as the
+   caption above the price, so the rows read as part of the pricing block
+   rather than as a second list of features. */
+.acq-facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.acq-facts__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-8);
+}
+.acq-facts__tag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: 2px var(--space-8);
+  border: var(--border-1) solid var(--color-border-transparent-subtle);
+  border-radius: var(--radius-4);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.acq-facts__tag[data-current] {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+.acq-facts[data-highlighted] .acq-facts__tag[data-current] {
+  border-color: var(--color-brand-tertiary);
+}
+.acq-facts__k {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+.acq-facts__v {
+  font-weight: var(--font-weight-bold);
+  color: inherit;
+}
+.acq-facts__v small {
+  font-weight: var(--font-weight-regular, 400);
+  font-size: 0.85em;
+  color: var(--color-text-tertiary);
+}
+.acq-facts__tag--youth {
+  border-color: var(--color-accent-warning-border, var(--color-accent-warning-text));
+  color: var(--color-accent-warning-text);
+}
+.acq-facts__tag--add {
+  border-style: dashed;
+}
+.acq-facts[data-device='mobile'] .acq-facts__tag {
+  padding-inline: var(--space-4);
+}

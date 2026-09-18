@@ -11,6 +11,7 @@ import { LogoTiles, type LogoTilesProps } from './LogoTiles'
 import { PlanCta } from './PlanCta'
 import { GoldGradient } from './GoldGradient'
 import { Pricing, type PricingProps } from './Pricing'
+import { PlanFacts, type PlanFactsProps } from './PlanFacts'
 import type { Device } from './types'
 
 export interface AcquisitionCardProps {
@@ -45,6 +46,12 @@ export interface AcquisitionCardProps {
   onSelect?: () => void
 
   logos?: LogoTilesProps
+  /**
+   * The catalogue's facts: other ways to pay, the under-25 rate, limits and
+   * add-ons. Split around the CTA — the prices with the price, the limits
+   * with what is included.
+   */
+  facts?: Omit<PlanFactsProps, 'device' | 'highlighted'>
   addOn?: Omit<AddOnProps, 'device'>
   features?: ReactNode
 
@@ -89,6 +96,7 @@ export function AcquisitionCard({
   selected,
   onSelect,
   logos,
+  facts,
   addOn,
   features,
   footerLabel,
@@ -132,6 +140,10 @@ export function AcquisitionCard({
 
         <Pricing {...pricing} device={device} />
 
+        {facts && (facts.billing || facts.youth) && (
+          <PlanFacts billing={facts.billing} youth={facts.youth} highlighted={highlighted} device={device} />
+        )}
+
         <PlanCta
           label={ctaLabel}
           highlighted={highlighted}
@@ -143,6 +155,10 @@ export function AcquisitionCard({
         />
 
         {logos && <LogoTiles {...logos} />}
+
+        {facts && (facts.limits || facts.canAdd) && (
+          <PlanFacts limits={facts.limits} canAdd={facts.canAdd} highlighted={highlighted} device={device} />
+        )}
 
         {addOn && <AddOn {...addOn} device={device} />}
 

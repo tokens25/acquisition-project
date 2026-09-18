@@ -622,3 +622,13 @@ select.ed-field__input {
 .ed-others:hover {
   color: var(--color-text-secondary);
 }
+
+/* A plan DAZN's catalogue owns. Says so before the fields it will overwrite. */
+.ed-live {
+  padding: var(--space-8) var(--space-12);
+  border-inline-start: var(--border-2) solid var(--color-accent-success-text);
+  color: var(--color-text-secondary);
+}
+.ed-live code {
+  color: var(--color-text-primary);
+}

@@ -19,7 +19,7 @@ import { iconArtwork } from '../card/assets'
 import { Icon } from '../components/Icon'
 import type { CardSetStore } from '../editor/useCardSet'
 import { excludedTiers, filterAcquirableTiers, resolveTier } from '../rules/resolve'
-import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer, priceUnitFor } from '../rules/derive'
+import { SHOW_ADDON, STATIC, ctaLabelFor, defaultExplainer, priceUnitFor, limitsFor } from '../rules/derive'
 import { CURRENCIES, currencySign, formatMoney } from '../rules/money'
 import { badgeSrc, logoArtwork } from '../card/assets'
 import { BenefitIcon } from './BenefitIcon'
@@ -544,6 +544,22 @@ export function EditPanel({ store }: { store: CardSetStore }) {
               }}
             />
           ))}
+        {tier.source && (
+          <p className="ed-absent ed-live">
+            <strong>Live from DAZN</strong> — {tier.source.product} · <code>{tier.source.entitlementSetId}</code>
+            {tier.source.copy === 'atlas' && ' · words from the Atlas'}
+            {tier.source.copy === 'entitlements' && ' · description built from its limits'}
+            {tier.source.copy === 'id' && ' · named from its id'}
+            . Name, description, benefits, badges and prices are DAZN's; a refresh writes over
+            edits to them. Highlighting, "Starts at", rows and tabs are yours and stay.
+            {tier.limits && (
+              <>
+                {' '}
+                Limits: {limitsFor(tier).map((l) => `${l.label} ${l.value}`).join(' · ')}.
+              </>
+            )}
+          </p>
+        )}
         <TextField
           label="Tier name"
           value={resolved.planName}
