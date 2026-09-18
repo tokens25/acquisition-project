@@ -77,6 +77,10 @@
 }
 .fl__title {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
   min-inline-size: 0;
   margin: 0;
   padding-inline-end: var(--space-24);
@@ -90,29 +94,24 @@
   block-size: 28px;
 }
 /* A screen that states a result puts a filled tick before its line — 16 of
-   glyph in a 32 box, which is what centres it against the title. The title
-   itself is the same one every screen has: the design sets this one in
+   glyph in a 24 box, riding inside the title so the pair centres as one. The
+   title itself is the same one every screen has: the design sets this one in
    regular, and one screen's title reading differently from the other six is a
    worse inconsistency than the weight is a fidelity. */
 .fl__mark {
   display: grid;
   flex: none;
   place-items: center;
-  inline-size: var(--space-32);
-  block-size: var(--space-32);
+  inline-size: var(--space-24);
+  block-size: var(--space-24);
 }
 .fl__mark img {
   inline-size: 16px;
   block-size: 16px;
 }
 
-/* The confirmation screen sets its own two: the title reads from the left
-   beside its tick rather than centred against a bar it shares with one, and
-   the body starts 100 down, which is what drops the circles clear of the
-   header instead of sitting them under it. */
-.fl[data-screen='ready'] .fl__title {
-  text-align: start;
-}
+/* The confirmation screen's body starts 100 down, which is what drops the
+   circles clear of the header instead of sitting them under it. */
 .fl[data-screen='ready'] .fl__body {
   padding-block-start: 100px;
 }

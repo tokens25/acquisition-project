@@ -139,12 +139,16 @@ function FlowHeader({ title, mark }: { title: string; mark?: string }) {
       <span className="fl__back">
         <Icon svg={iconArtwork['chevron-left']} size={16} />
       </span>
-      {mark && (
-        <span className="fl__mark" aria-hidden="true">
-          <img src={mark} alt="" />
-        </span>
-      )}
-      <h2 className="fl__title">{title}</h2>
+      {/* The tick travels with the line, inside the title, so the two centre
+          together against the bar like every other screen's title does. */}
+      <h2 className="fl__title">
+        {mark && (
+          <span className="fl__mark" aria-hidden="true">
+            <img src={mark} alt="" />
+          </span>
+        )}
+        {title}
+      </h2>
       <Mark svg={daznRubik} size={28} className="fl__brand" />
     </header>
   )
