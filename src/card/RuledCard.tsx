@@ -144,7 +144,10 @@ export function RuledCard({
           ? { logos, rows: d.logoRows, overflowCount: d.overflowCount }
           : undefined
       }
-      facts={{ canAdd: d.canAdd }}
+      // Add-ons are bought after the plan, from My Account or an upsell, not
+      // from this picker — so the card does not advertise them. The data
+      // stays on the offer for the screens that do.
+      facts={undefined}
       addOn={
         d.addOn
           ? {
