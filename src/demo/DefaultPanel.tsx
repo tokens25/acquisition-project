@@ -38,6 +38,9 @@ import { SelectField } from '../components/SelectField'
  */
 const answeredThisVisit = new Set<string>()
 
+/** The select's word for "no channel": DAZN itself, the market's general flow. */
+const DAZN_SELF = '__dazn__'
+
 export function DefaultPanel({
   store,
   prompt = false,
@@ -89,7 +92,7 @@ export function DefaultPanel({
    * this exists for.
    */
   const carried = (market: string, current?: string) =>
-    current && channelsFor(market).some((c) => c.id === current) ? current : undefined
+    current && channelsFor(market).some((c) => c.id === current) ? current : ''
 
   const answer = (key: string) => {
     answeredThisVisit.add(key)
@@ -220,19 +223,19 @@ export function DefaultPanel({
             ? 'Which product, inside the market above. The two together name the journey.'
             : resolution.message
         }
-        value={shown('subscription', context.subscription ?? '')}
+        value={shown('subscription', context.subscription || DAZN_SELF)}
         options={[
           ...asking('subscription'),
-          // A select shows its first option when its value matches none of
-          // them, so a cleared channel would read as the first channel. The
-          // empty answer has to be an answer the list contains.
-          ...(context.subscription ? [] : [{ value: '', label: 'Choose a channel…' }]),
+          // DAZN's own subscription is the market's general flow — the one
+          // with no channel on it. It needs a word in the list, because an
+          // empty value is what the select shows while the question is open.
+          { value: DAZN_SELF, label: 'DAZN' },
           ...channelsFor(context.market).map((c) => ({ value: c.id, label: c.label })),
         ]}
         onChange={(v) => {
           if (!v) return
           answer('subscription')
-          settle({ ...context, subscription: v }, status, entryCta)
+          settle({ ...context, subscription: v === DAZN_SELF ? '' : v }, status, entryCta)
         }}
       />
 

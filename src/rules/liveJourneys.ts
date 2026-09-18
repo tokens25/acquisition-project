@@ -114,7 +114,7 @@ export function directJourneys(set: CardSet): Journey[] {
       const journey: Journey = {
         id: directJourneyId(code, channel || undefined),
         name: `${where} · ${what} · direct signup`,
-        audience: 'new',
+        audience: 'logged-out-new',
         when: channel ? { market: code, subscription: channel } : { market: code },
         entry: { cta: 'Landing page', section: 'Landing page', figmaFrame: '—', figmaSection: '—' },
         seeds: [],
