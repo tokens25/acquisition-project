@@ -73,6 +73,24 @@ process.stderr.write('\n')
 
 set = { ...set, context: { ...(set.context ?? {}), market: set.context?.market || 'gb' } }
 
+/* Catalogue lines nothing refers to any more — a benefit reworded upstream,
+   a badge dropped from a card — go, so the file does not grow a tail of
+   spellings no plan uses. */
+const used = { features: new Set(), logos: new Set() }
+for (const t of set.tiers) {
+  for (const id of t.features) used.features.add(id)
+  for (const id of t.logoTiles) used.logos.add(id)
+  for (const o of t.overrides) {
+    for (const id of o.patch.features ?? []) used.features.add(id)
+    for (const id of o.patch.logoTiles ?? []) used.logos.add(id)
+  }
+}
+set = {
+  ...set,
+  featureCatalog: set.featureCatalog.filter((f) => used.features.has(f.id)),
+  logoCatalog: set.logoCatalog.filter((l) => used.logos.has(l.id)),
+}
+
 const liveTiers = set.tiers.filter((t) => t.source)
 const summary = [
   `markets  ${set.markets.length}`,

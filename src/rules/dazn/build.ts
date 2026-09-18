@@ -398,6 +398,10 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
      */
     if (/_yp$/.test(ent)) {
       tier.status = 'legacy'
+      // Drawn as a line on the parent's card, never as a card of its own — so
+      // it takes no gold and no partner storefront.
+      tier.highlighted = false
+      tier.visibleToPartners = false
       const parent = tiers.get(tier.id.replace(/-yp$/, ''))
       if (!tier.planName) tier.planName = parent?.planName ?? ''
       if (tier.planName && !/Youth$/.test(tier.planName)) tier.planName += ' · Youth'
@@ -406,6 +410,8 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
     }
     if (/^tier_bundle_/.test(ent)) {
       tier.status = 'legacy'
+      tier.highlighted = false
+      tier.visibleToPartners = false
       const s = ent.toLowerCase()
       const basePlan = /_ul_|unlimited/.test(s) ? 'DAZN Unlimited' : /_full_/.test(s) ? 'DAZN Full' : /_std_|standard/.test(s) ? 'DAZN Standard' : 'DAZN'
       const add = /nflult/.test(s) ? 'NFL Ultimate' : /nflpro/.test(s) ? 'NFL Pro' : /nfl/.test(s) ? 'NFL Game Pass' : /nhl/.test(s) ? 'NHL.TV' : ''
