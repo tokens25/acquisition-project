@@ -327,7 +327,13 @@ export function deriveCard(
 
   /* §5 — rows = 1 when an add-on renders, else 2. Capacity follows. */
   // Written wins; absent, an add-on panel has taken the second row's space.
-  const logoRows: 1 | 2 = tier.logoRows ?? (addOn ? 1 : 2)
+  /*
+   * One row of five, unless the plan says otherwise. A sixth competition
+   * turns the last slot into "+N" rather than opening a second row. The RSN
+   * plans are the exception: their Figma card is drawn with two rows of team
+   * badges, and that is what they carry.
+   */
+  const logoRows: 1 | 2 = tier.logoRows ?? (tier.subscriptions?.includes('rsns') && !addOn ? 2 : 1)
   const logoCapacity = LOGO_SLOTS_PER_ROW * logoRows
   /*
    * How many competitions the plan carries.
