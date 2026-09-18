@@ -31,9 +31,29 @@ const FIGMA_TABS: PlanTab[] = [
  */
 export function tabsOf(set: CardSet, market = set.context.market): PlanTab[] {
   const own = set.planTabsByMarket?.[market]
-  if (own !== undefined) return own
+  if (own !== undefined) {
+    // A market's tabs are DAZN's own storefront's — Spain's Standard and
+    // Youth −30. A league sold in the same market (Courtside, NFL Game Pass)
+    // has its own picker, and its plans sit on none of those tabs; drawing
+    // the tabs over it would show the same cards twice. The tabs apply to a
+    // channel only when a plan of that channel is placed on one of them.
+    const channel = set.context.subscription ?? ''
+    if (channel && channel !== 'rsns' && !placesOnTabs(set, market, channel, own)) return []
+    return own
+  }
   if (set.context.subscription === 'rsns') return set.planTabs ?? FIGMA_TABS
   return []
+}
+
+/** Whether any plan of a channel names one of these tabs, in its base or in its patch for the market. */
+function placesOnTabs(set: CardSet, market: string, channel: string, tabs: PlanTab[]): boolean {
+  const ids = new Set(tabs.map((t) => t.id))
+  return set.tiers.some((t) => {
+    if (!t.subscriptions?.includes(channel)) return false
+    const own = t.tabs ?? []
+    const patched = t.overrides.filter((o) => o.when.market === market).flatMap((o) => o.patch.tabs ?? [])
+    return [...own, ...patched].some((id) => ids.has(id))
+  })
 }
 
 /**

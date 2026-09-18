@@ -80,6 +80,9 @@ export interface TranslationStore {
   remove: (code: string) => void
 }
 
+/** What the tool reads: English, whichever market is open. */
+const ENGLISH: Language = { code: SOURCE_LANGUAGE, name: nameOf(SOURCE_LANGUAGE) }
+
 export function useTranslations(set: CardSet, context: Context): TranslationStore {
   const market = useMemo(
     () => set.markets.find((m) => m.code === context.market) ?? set.markets[0],
@@ -96,12 +99,16 @@ export function useTranslations(set: CardSet, context: Context): TranslationStor
 
   const mine = useMemo(() => store[market.code] ?? {}, [store, market.code])
 
-  /** Official first, then whatever this market has been given, in order. */
+  /**
+   * English first — the tool reads and writes English, and that is what is
+   * on screen until someone asks for another — then the market's official
+   * language, then whatever else this market has been given, in order.
+   */
   const languages = useMemo<Language[]>(() => {
     const extra = Object.keys(mine)
-      .filter((code) => code !== official.code)
+      .filter((code) => code !== official.code && code !== SOURCE_LANGUAGE)
       .map((code) => ({ code, name: nameOf(code) }))
-    return official.code === SOURCE_LANGUAGE ? [official, ...extra] : [official, ...extra]
+    return official.code === SOURCE_LANGUAGE ? [official, ...extra] : [ENGLISH, official, ...extra]
   }, [mine, official])
 
   const offerable = useMemo(
@@ -109,8 +116,11 @@ export function useTranslations(set: CardSet, context: Context): TranslationStor
     [set, market, mine],
   )
 
+  // English until asked otherwise: a Spanish card under English screens was
+  // the half-translated page nobody wanted. The market's own language is
+  // prepared in the background (below) and put on screen on request.
   const current = useMemo(
-    () => languages.find((l) => l.code === shown[market.code]) ?? official,
+    () => languages.find((l) => l.code === shown[market.code]) ?? languages[0] ?? official,
     [languages, shown, market.code, official],
   )
   const wanted = current.code !== SOURCE_LANGUAGE
@@ -319,7 +329,7 @@ export function useTranslations(set: CardSet, context: Context): TranslationStor
         return merged
       })
       askedFor.delete(`${market.code}|${code}`)
-      setShown((prev) => ({ ...prev, [market.code]: official.code }))
+      setShown((prev) => ({ ...prev, [market.code]: SOURCE_LANGUAGE }))
     },
   }
 }

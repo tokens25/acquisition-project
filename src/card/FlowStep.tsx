@@ -1,5 +1,5 @@
 import type { CardSet } from '../rules/content'
-import { chosenTier, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
+import { chosenTier, liveAuthScreen, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
 import { resolveFlow } from '../rules/layers'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
@@ -53,7 +53,7 @@ export function FlowStep({
         />
       )
     case 'auth':
-      return <AuthFlowScreen content={flow.auth ?? defaultFlow.auth} />
+      return <AuthFlowScreen content={liveAuthScreen(set, set.context, flow.auth ?? defaultFlow.auth)} />
     case 'account':
       return (
         <AccountFlowScreen

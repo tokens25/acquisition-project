@@ -78,9 +78,16 @@ export const offersUrl = (cc: string, product: Product) =>
 export const stringsUrl = (cc: string, lang: string) =>
   `https://resource-strings.acc.indazn.com/v1/eu/live?region=${cc}&LanguageCode=${lang}&Platform=web`
 
-/** The families of keys the checkout draws from. Everything else stays behind. */
+/**
+ * The families of keys the flow draws from. Everything else stays behind.
+ *
+ * The checkout's legal and summary lines, and the sign-in screen's line for
+ * people who already had an account with the product before it moved to
+ * DAZN (`signin_<product>_migrated_user_header`) — MSG+ and YES, Courtside,
+ * NHL.TV. A product that never moved has no such line, and no notice.
+ */
 export const CHECKOUT_KEYS =
-  /^(payment_termsWarning(_extended|_klarnaPayOverTime|_weekly)?|payment_ROWexclusion|payment_terms_acceptance_\w+|signUp_cancelSentence_\w+|signUp_\w+_cancelSentence_\w+|signup_cancelation_youthoffer_\w+|auth_payment_cancelSentence_\w+)$/
+  /^(payment_termsWarning(_extended|_klarnaPayOverTime|_weekly)?|payment_ROWexclusion|payment_terms_acceptance_\w+|signUp_cancelSentence_\w+|signUp_\w+_cancelSentence_\w+|signup_cancelation_youthoffer_\w+|auth_payment_cancelSentence_\w+|signin_\w*migrated_user_header\w*)$/
 
 export const contentUrl = (locale: string, pageId: string = 'DAZN') =>
   `https://dazn-content-proxy.sd.indazn.com/spaces/vhp9jnid12wf/environments/master/entries` +

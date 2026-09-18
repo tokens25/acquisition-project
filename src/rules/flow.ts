@@ -728,8 +728,12 @@ export const defaultFlow: FlowContent = {
     title: 'Log in or sign up for free',
     subtitle:
       'Get access to live sports, highlights, shows, News, Scores and much more. ',
-    noticeTitle: 'Current or previous Gotham subscriber? ',
-    noticeBody: 'You can sign up with the same email address',
+    // Empty by default: the notice is for people who had the product before it
+    // moved to DAZN, and DAZN's own line for it (`signin_<product>_migrated_
+    // user_header`) is read live per channel. Nothing written and nothing
+    // read means no notice.
+    noticeTitle: '',
+    noticeBody: '',
     emailLabel: 'Email address',
     emailValue: '',
     cta: 'Confirm and continue',
@@ -871,6 +875,10 @@ export const RSN_FLOW_PATCH = {
   },
   cadence: {
     footnote: 'Available across the New York and Buffalo DMAs.',
+  },
+  auth: {
+    noticeTitle: 'Current or previous MSG+ & YES subscriber?',
+    noticeBody: 'Use the same email address to sign in.',
   },
   checkout: {
     summaryTitle: 'MSG+',

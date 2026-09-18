@@ -25,7 +25,13 @@ export function MarketLanguages({ tx, onAdd }: { tx: TranslationStore; onAdd: ()
             className="mlang__lang"
             data-on={l.code === tx.current.code || undefined}
             aria-pressed={l.code === tx.current.code}
-            title={l.code === tx.official.code ? `${l.name}, what ${tx.market.label} reads officially` : `${l.name}, added for ${tx.market.label}`}
+            title={
+              l.code === tx.official.code
+                ? `${l.name}, what ${tx.market.label} reads officially`
+                : l.code === 'en'
+                  ? 'English, what the tool reads'
+                  : `${l.name}, added for ${tx.market.label}`
+            }
             onClick={() => tx.show(l.code)}
           >
             {l.name}

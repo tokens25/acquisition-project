@@ -2,7 +2,7 @@ import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
-import { checkoutSources, chosenTier, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
+import { authSource, checkoutSources, chosenTier, liveAuthScreen, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
 
 /** What the checkout's authored lines may stand in for. */
 const TOKENS_HELP = 'Tokens fill in from the plan and payment option being bought: {plan} {cadence} {price} {unit} {today} {next} {renewal} {term} {market}.'
@@ -485,6 +485,8 @@ function FlowFields({
 
   if (step.renderer === 'auth') {
     const a = flow.auth
+    const authKey = authSource(set, context)
+    const liveAuth = liveAuthScreen(set, context, a)
     return (
       <>
         <FieldGroup title="Screen">
@@ -500,6 +502,19 @@ function FlowFields({
         </FieldGroup>
 
         <FieldGroup title="Notice">
+          {authKey ? (
+            <p className="ed-absent ed-live">
+              For people who had this product before it came to DAZN. The line on screen is dazn.com's own for
+              this channel (<code>{authKey}</code>): “{liveAuth.noticeTitle}
+              {liveAuth.noticeBody ? ` ${liveAuth.noticeBody}` : ''}”. The words below are what shows where DAZN has
+              none.
+            </p>
+          ) : (
+            <p className="ed-absent">
+              DAZN has no sign-in notice for this channel — it is for people who had the product before it came
+              to DAZN (MSG+ and YES, Courtside 1891, NHL.TV). Leave both lines empty and no box is drawn.
+            </p>
+          )}
           <TextField
             label="Notice heading"
             value={a.noticeTitle}

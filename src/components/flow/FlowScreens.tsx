@@ -547,13 +547,20 @@ export function AuthFlowScreen({ content }: { content: AuthScreen }) {
           <h3 className="fl-auth__heading">{content.title}</h3>
           <p className="fl-auth__sub">{content.subtitle}</p>
         </div>
-        <div className="fl-auth__notice">
-          <p className="fl-auth__notice-title">
-            <Mark svg={icInfoFill} size={20} />
-            {content.noticeTitle}
-          </p>
-          <p className="fl-auth__notice-body">{content.noticeBody}</p>
-        </div>
+        {/* Only for a product people could have had before it came to DAZN.
+            Nothing to say means no box: an empty notice is a grey rectangle
+            asking to be read. */}
+        {(content.noticeTitle.trim() || content.noticeBody.trim()) && (
+          <div className="fl-auth__notice">
+            {content.noticeTitle.trim() && (
+              <p className="fl-auth__notice-title">
+                <Mark svg={icInfoFill} size={20} />
+                {content.noticeTitle}
+              </p>
+            )}
+            {content.noticeBody.trim() && <p className="fl-auth__notice-body">{content.noticeBody}</p>}
+          </div>
+        )}
         <div className="fl-auth__form">
           <Field label={content.emailLabel} value={content.emailValue} />
           <Cta>{content.cta}</Cta>

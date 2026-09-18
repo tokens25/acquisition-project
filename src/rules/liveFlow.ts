@@ -12,7 +12,7 @@
  * screen whose plan has no offers here is drawn exactly as authored.
  */
 import type { CadenceOffer, CardSet, Context, MarketConfig, Tier } from './content'
-import type { CadenceOption, CadenceScreen, CheckoutLine, CheckoutScreen, PaymentMethod } from './flow'
+import type { AuthScreen, CadenceOption, CadenceScreen, CheckoutLine, CheckoutScreen, PaymentMethod } from './flow'
 import { formatMoney, formatMoneyWhole } from './money'
 import { billingLabel } from './derive'
 import { daznCheckoutCopy } from './daznCopy'
@@ -337,4 +337,50 @@ export function liveCheckoutScreen(set: CardSet, context: Context, authored: Che
     payCta: fill(authored.payCta),
     ...(methods ? { methods, chosen: authored.chosen && methods.some((m) => m.id === authored.chosen) ? authored.chosen : methods[0].id } : {}),
   }
+}
+
+/* ── Sign-in ─────────────────────────────────────────────────────────── */
+
+/**
+ * The Resource Strings key for the sign-in notice of a channel: the line for
+ * people who had the product before it moved to DAZN. Named per product in
+ * DAZN's strings — `yesmsg` for the New York networks, `fiba`, `nhl` — so the
+ * channel is mapped to that name, and a channel with no line has none.
+ */
+const SIGNIN_NOTICE_KEYS: Record<string, string[]> = {
+  rsns: ['signin_yesmsg_migrated_user_header', 'signin_migrated_user_header_info'],
+  fiba: ['signin_fiba_migrated_user_header'],
+  nhl: ['signin_nhl_migrated_user_header'],
+  nfl: ['signin_nfl_migrated_user_header'],
+  'college-sports': ['signin_collegesports_migrated_user_header'],
+  rallytv: ['signin_rallytv_migrated_user_header'],
+  'national-league': ['signin_nationalleague_migrated_user_header'],
+}
+
+/** Which of DAZN's strings the sign-in notice reads, for the panel to say. Null when none. */
+export function authSource(set: CardSet, context: Context): string | null {
+  const strings = marketFor(set, context.market).checkoutCopy?.strings
+  if (!strings) return null
+  const keys = SIGNIN_NOTICE_KEYS[context.subscription ?? ''] ?? []
+  return keys.find((k) => strings[k]?.trim()) ?? null
+}
+
+/**
+ * The sign-in screen with DAZN's notice for this channel.
+ *
+ * DAZN writes it as one line — "Current or previous MSG+ subscriber? Use the
+ * same email address to sign in." The design draws a heading and a body, so
+ * the line is split where its question ends; a line with no question is the
+ * heading alone. No line for this channel leaves the authored words, and
+ * nothing authored leaves no notice at all.
+ */
+export function liveAuthScreen(set: CardSet, context: Context, authored: AuthScreen): AuthScreen {
+  const key = authSource(set, context)
+  if (!key) return authored
+  const line = marketFor(set, context.market).checkoutCopy!.strings[key].trim()
+  const q = line.indexOf('?')
+  if (q > 0 && q < line.length - 1) {
+    return { ...authored, noticeTitle: line.slice(0, q + 1).trim(), noticeBody: line.slice(q + 1).trim() }
+  }
+  return { ...authored, noticeTitle: line, noticeBody: '' }
 }
