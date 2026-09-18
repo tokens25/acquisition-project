@@ -12,6 +12,13 @@ import react from '@vitejs/plugin-react'
  *
  * The handlers take a web `Request` and return a `Response`, which is what
  * Vercel gives them in production, so the same code runs in both places.
+ *
+ * Exported by method or by default. Vercel reads the Web signature only from a
+ * handler exported under its HTTP method — a default export is taken for the
+ * older Node style, handed a relative URL, and its returned Response ignored.
+ * So a route written today exports `GET`, and the ones written before this was
+ * known still export `default`: this looks for the method first and falls back,
+ * which lets the two kinds sit side by side while they are brought into line.
  */
 function apiRoutes(): Plugin {
   return {
@@ -39,8 +46,14 @@ function apiRoutes(): Plugin {
         if (!/^[a-z0-9-]+$/.test(name)) return next()
 
         try {
-          const module = (await server.ssrLoadModule(`/api/${name}.ts`)) as {
-            default: (request: Request) => Promise<Response>
+          type Handler = (request: Request) => Promise<Response>
+          const module = (await server.ssrLoadModule(`/api/${name}.ts`)) as Record<string, Handler | undefined>
+          const handler = module[(req.method ?? 'GET').toUpperCase()] ?? module.default
+          if (typeof handler !== 'function') {
+            res.statusCode = 405
+            res.setHeader('content-type', 'application/json')
+            res.end(JSON.stringify({ error: `/api/${name} does not handle ${req.method}.` }))
+            return
           }
 
           const body =
@@ -59,7 +72,7 @@ function apiRoutes(): Plugin {
             ),
             body,
           })
-          const response = await module.default(request)
+          const response = await handler(request)
 
           res.statusCode = response.status
           response.headers.forEach((value, key) => res.setHeader(key, value))
