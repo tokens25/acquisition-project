@@ -793,8 +793,10 @@ export const defaultFlow: FlowContent = {
       { id: 'line-2', label: 'Today you pay', value: '$279.99' },
       { id: 'line-3', label: 'Next payment on 11/01/2026', value: '$279.99', schedule: true },
     ],
+    // {plan} {cadence} {price} {unit} {today} {next} {renewal} {term} are the
+    // offer's figures, filled in at the checkout for the plan being bought.
     renewalNote:
-      'Your plan will automatically renew on 01/10/2027 unless you turn off auto-renew in My Account.',
+      'Your plan renews automatically on {renewal} at {price}/{unit} unless you turn off auto-renew in My Account.',
     methods: [
       { id: 'method-1', label: 'Credit & Debit Cards', marks: 'cards', overflow: '+4', card: true },
       { id: 'method-2', label: 'Google Pay', marks: 'gpay' },
@@ -806,8 +808,8 @@ export const defaultFlow: FlowContent = {
     cvcLabel: 'CVC',
     nameOnCardLabel: 'Name on card',
     legal:
-      "By signing up you agree that your subscription starts immediately and that you have read and agree to our Terms of Use, Privacy Policy and Cookie Notice. Your subscription auto-renews unless you cancel before the end of the minimum term by selecting 'Cancel Subscription' in MyAccount.",
-    payCta: 'Pay now',
+      "By paying {today} you agree that your {plan} subscription starts immediately and that you have read and agree to our Terms of Use, Privacy Policy and Cookie Notice. You will be charged {price}/{unit}, renewing on {renewal} unless you cancel before then by selecting 'Cancel Subscription' in My Account.",
+    payCta: 'Pay {today}',
     secureCta: 'Secure checkout',
     promoLabel: 'Redeem promo code',
   },

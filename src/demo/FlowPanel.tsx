@@ -3,6 +3,9 @@ import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
 import { chosenTier, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
+
+/** What the checkout's authored lines may stand in for. */
+const TOKENS_HELP = 'Tokens fill in from the plan and payment option being bought: {plan} {cadence} {price} {unit} {today} {next} {renewal} {term} {market}.'
 import type { CadenceOption } from '../rules/flow'
 import { blankConsent, consentsOf } from '../rules/consents'
 import { blankLine, blankMethod, chosenMethod, linesOf, methodsOf } from '../rules/checkout'
@@ -28,7 +31,7 @@ import {
   writeFlow,
 } from '../rules/layers'
 import { flowFieldLabel } from '../rules/pipeline'
-import { resolveOffer, resolveSet } from '../rules/resolve'
+import { marketFor, resolveOffer, resolveSet } from '../rules/resolve'
 import { HeroBannerFields } from './HeroBannerFields'
 import { useState } from 'react'
 
@@ -848,11 +851,12 @@ function FlowFields({
           />
           {liveCheckout !== c && (
             <p className="ed-absent ed-live">
-              The summary lines and the renewal note are worked out from{' '}
+              The summary lines are worked out from{' '}
               <strong>{chosenTier(set, context)?.planName}</strong> at <strong>{context.cadence}</strong>:
               {liveCheckout.lines.map((l) => ` ${l.label} ${l.value}${l.unit ? `/${l.unit}` : ''}`).join(' ·')}.
-              Change the plan or payment option under "What is being bought" to see another's. The lines
-              written below are the fallback for a plan with no price here.
+              The ways to pay are {marketFor(set, context.market).label}'s, from DAZN. Change the plan or
+              payment option under "What is being bought" to see another's. The lines written below are the
+              fallback for a plan with no price here.
             </p>
           )}
           {linesOf(c).map((line, i) => {
@@ -924,6 +928,7 @@ function FlowFields({
             pipelineKey={'checkout.renewalNote'}
             onChange={(v) => patch('checkout', { renewalNote: v })}
             rows={3}
+            helpText={liveCheckout !== c ? `Reads: “${liveCheckout.renewalNote}”. ${TOKENS_HELP}` : TOKENS_HELP}
           />
         </FieldGroup>
 
@@ -1042,12 +1047,14 @@ function FlowFields({
             pipelineKey={'checkout.legal'}
             onChange={(v) => patch('checkout', { legal: v })}
             rows={6}
+            helpText={liveCheckout !== c ? `Reads: “${liveCheckout.legal}”. ${TOKENS_HELP}` : TOKENS_HELP}
           />
           <TextField
             label="Pay button"
             value={c.payCta}
             pipelineKey={'checkout.payCta'}
             onChange={(v) => patch('checkout', { payCta: v })}
+            helpText={liveCheckout !== c ? `Reads “${liveCheckout.payCta}”. ${TOKENS_HELP}` : TOKENS_HELP}
           />
           <TextField
             label="Under the pay button"

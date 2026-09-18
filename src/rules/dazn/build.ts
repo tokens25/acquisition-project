@@ -255,6 +255,13 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
   const base = index(pull.base)
   const locale = LOCALE[market] ?? BASE_LOCALE
   const currency = products.map((p) => pull.offers[p]?.Offers?.[0]?.ChargeTiers?.[0]?.Currency).find(Boolean) ?? 'EUR'
+  // The ways to pay, as the market's DAZN offers list them; a league product's
+  // list is the same market's and is read only when DAZN's own is missing.
+  const paymentMethods = uniq(
+    products.flatMap((p) =>
+      (pull.offers[p]?.PaymentMethods ?? []).map((m) => (typeof m === 'string' ? m : (m.Id ?? ''))).filter(Boolean),
+    ),
+  )
 
   const tiers = new Map<string, Tier>()
   const offers: CadenceOffer[] = []
@@ -470,7 +477,13 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
   }
 
   return {
-    market: { code: market, label: MARKET_LABEL[market] ?? market.toUpperCase(), locale, currency },
+    market: {
+      code: market,
+      label: MARKET_LABEL[market] ?? market.toUpperCase(),
+      locale,
+      currency,
+      ...(paymentMethods.length ? { paymentMethods } : {}),
+    },
     tiers: [...tiers.values()],
     offers,
     featureCatalog: [...features.values()],

@@ -404,6 +404,12 @@ export interface MarketConfig {
   label: string
   locale: string
   currency: string
+  /**
+   * How DAZN takes payment here, as the offers service lists them — "CreditCard",
+   * "PayPal", "GooglePay", "ApplePay", "Klarna…", "DCB". Absent on a market
+   * written by hand; the checkout then draws its authored methods.
+   */
+  paymentMethods?: string[]
 }
 
 export interface CampaignConfig {
