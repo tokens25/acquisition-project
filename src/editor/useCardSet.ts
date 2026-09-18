@@ -132,10 +132,18 @@ function mergeFlow(stored: FlowContent | undefined): FlowContent {
   for (const key of Object.keys(defaultFlow) as (keyof FlowContent)[]) {
     const shipped = defaultFlow[key]
     const saved = stored[key]
-    out[key] = (saved ? { ...shipped, ...saved } : shipped) as never
+    // A screen saved from when MSG+ was the base copy. That copy is a layer
+    // now (`flowLayers`), so a base still carrying it would put an RSN's
+    // words on every market's screens; the shipped DAZN-generic base is what
+    // it should have been.
+    const rsnBase = saved && isRsnCopy(saved)
+    out[key] = (saved && !rsnBase ? { ...shipped, ...saved } : shipped) as never
   }
   return out
 }
+
+const RSN_WORDS = /MSG\+|TV provider|Knicks|Yankees|Gotham|YES Network/i
+const isRsnCopy = (screen: unknown) => RSN_WORDS.test(JSON.stringify(screen))
 
 /**
  * Fills in a catalogue field the saved copy predates.

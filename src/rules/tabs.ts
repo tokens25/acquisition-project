@@ -20,8 +20,20 @@ const FIGMA_TABS: PlanTab[] = [
  * draws none. Reading empty as "use the default two" would make removing them
  * impossible.
  */
+/**
+ * The tabs over a market's plan picker.
+ *
+ * A market that has written its own has them. Otherwise the Standard and
+ * Ultimate tabs Figma draws — which are the MSG+ flow's, and only that
+ * flow's: DAZN's own plans in Spain or Germany sit in one row, as they do on
+ * dazn.com, and a tab row borrowed from an RSN storefront would divide them
+ * by a distinction they do not have.
+ */
 export function tabsOf(set: CardSet, market = set.context.market): PlanTab[] {
-  return set.planTabsByMarket?.[market] ?? set.planTabs ?? FIGMA_TABS
+  const own = set.planTabsByMarket?.[market]
+  if (own !== undefined) return own
+  if (set.context.subscription === 'rsns') return set.planTabs ?? FIGMA_TABS
+  return []
 }
 
 /**

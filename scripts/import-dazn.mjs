@@ -73,6 +73,13 @@ process.stderr.write('\n')
 
 set = { ...set, context: { ...(set.context ?? {}), market: set.context?.market || 'gb' } }
 
+/* Base flow copy from when MSG+ was the only content. It is a layer now, so
+   the file ships the DAZN-generic base the app carries and nothing else. */
+if (set.flow && /MSG\+|TV provider|Knicks/i.test(JSON.stringify(set.flow))) {
+  const { flow: _flow, ...rest } = set
+  set = rest
+}
+
 /* Catalogue lines nothing refers to any more — a benefit reworded upstream,
    a badge dropped from a card — go, so the file does not grow a tail of
    spellings no plan uses. */
