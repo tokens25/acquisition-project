@@ -90,9 +90,9 @@ export const DIRECT_STEPS: Step[] = [
 export const directJourneyId = (market: string, channel?: string) =>
   channel ? `direct-${market}-${channel}` : `direct-${market}`
 
-/** One direct journey per market with plans, and per league product sold there. */
-export function directJourneys(set: CardSet): Journey[] {
-  const sold = new Map<string, Set<string>>() // market → channels ('' = DAZN itself)
+/** Market → the products with a priced plan there ('' is DAZN itself). */
+export function soldByMarket(set: CardSet): Map<string, Set<string>> {
+  const sold = new Map<string, Set<string>>()
   const tierById = new Map(set.tiers.map((t) => [t.id, t]))
   for (const o of set.offers) {
     const tier = tierById.get(o.tierId)
@@ -101,6 +101,25 @@ export function directJourneys(set: CardSet): Journey[] {
     for (const c of tier.subscriptions?.length ? tier.subscriptions : ['']) channels.add(c)
     sold.set(o.market, channels)
   }
+  return sold
+}
+
+/**
+ * The products actually on sale in a market, in the catalogue's order — what
+ * a Channel filter should offer. The catalogue says where a product may be
+ * sold; the offers say where it is. A market with nothing but DAZN's own
+ * plans has no channel to choose, and the question is not asked.
+ */
+export function channelsSold(set: CardSet, market: string): string[] {
+  const here = soldByMarket(set).get(market) ?? new Set<string>()
+  // The RSNs have no offers in the catalogue; their drawn journeys say they sell.
+  for (const j of configuredJourneys) if (j.when?.market === market && j.when.subscription) here.add(j.when.subscription)
+  return [...here]
+}
+
+/** One direct journey per market with plans, and per league product sold there. */
+export function directJourneys(set: CardSet): Journey[] {
+  const sold = soldByMarket(set)
   const out: Journey[] = []
   // Product journeys before market ones, so a product context finds its own
   // first — a market journey leaves `subscription` open and matches there too.

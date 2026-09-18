@@ -11,7 +11,7 @@ import {
 } from '../rules/entry'
 import { MARKETS, MARKET_GROUP_LABELS, channelsFor } from '../rules/catalogue'
 import { resolveChannelJourney, resolveMarketJourney } from '../rules/journeyConfig'
-import { allJourneys } from '../rules/liveJourneys'
+import { allJourneys, channelsSold } from '../rules/liveJourneys'
 import { journeyApplies } from '../rules/journey'
 import { SelectField } from '../components/SelectField'
 
@@ -92,7 +92,7 @@ export function DefaultPanel({
    * this exists for.
    */
   const carried = (market: string, current?: string) =>
-    current && channelsFor(market).some((c) => c.id === current) ? current : ''
+    current && channelsSold(store.set, market).includes(current) ? current : ''
 
   const answer = (key: string) => {
     answeredThisVisit.add(key)
@@ -110,6 +110,14 @@ export function DefaultPanel({
    * asked only when the catalogue has given this situation nothing.
    */
   const journeys = allJourneys(store.set)
+  /* What can be chosen under the market: the products with plans here, in
+     the catalogue's order, DAZN's own first. One choice is no choice, and the
+     question is not asked — the market's own plans are what is meant. */
+  const soldHere = channelsSold(store.set, context.market)
+  const channelChoices = [
+    ...(soldHere.includes('') ? [''] : []),
+    ...channelsFor(context.market).map((c) => c.id).filter((id) => soldHere.includes(id)),
+  ]
   const live = journeys.some((j) => j.id.startsWith('direct-') && journeyApplies(j, context))
   const resolution = live
     ? ({ state: 'ok', scope: context.subscription ? 'channel' : 'market', shared: false } as const)
@@ -136,7 +144,7 @@ export function DefaultPanel({
    */
   const open = (key: string) => (prompt && !answered[key] ? 1 : 0)
   const pending =
-    open('market') + open('subscription') + open('status') + (askEntry ? open('entry') : 0)
+    open('market') + (channelChoices.length > 1 ? open('subscription') : 0) + open('status') + (askEntry ? open('entry') : 0)
   useEffect(() => {
     onAsking?.(pending)
   }, [onAsking, pending])
@@ -216,28 +224,30 @@ export function DefaultPanel({
         }}
       />
 
-      <SelectField
-        label="Channel"
-        helpText={
-          resolution.state === 'ok'
-            ? 'Which product, inside the market above. The two together name the journey.'
-            : resolution.message
-        }
-        value={shown('subscription', context.subscription || DAZN_SELF)}
-        options={[
-          ...asking('subscription'),
-          // DAZN's own subscription is the market's general flow — the one
-          // with no channel on it. It needs a word in the list, because an
-          // empty value is what the select shows while the question is open.
-          { value: DAZN_SELF, label: 'DAZN' },
-          ...channelsFor(context.market).map((c) => ({ value: c.id, label: c.label })),
-        ]}
-        onChange={(v) => {
-          if (!v) return
-          answer('subscription')
-          settle({ ...context, subscription: v === DAZN_SELF ? '' : v }, status, entryCta)
-        }}
-      />
+      {channelChoices.length > 1 && (
+        <SelectField
+          label="Channel"
+          helpText={
+            resolution.state === 'ok'
+              ? 'Which product, inside the market above. The two together name the journey.'
+              : resolution.message
+          }
+          value={shown('subscription', context.subscription || DAZN_SELF)}
+          options={[
+            ...asking('subscription'),
+            // Only what is on sale here. DAZN's own subscription is the
+            // market's general flow — the one with no channel on it — and
+            // needs a word in the list, because an empty value is what the
+            // select shows while the question is open.
+            ...channelChoices.map((c) => ({ value: c || DAZN_SELF, label: c ? (channelsFor(context.market).find((x) => x.id === c)?.label ?? c) : 'DAZN' })),
+          ]}
+          onChange={(v) => {
+            if (!v) return
+            answer('subscription')
+            settle({ ...context, subscription: v === DAZN_SELF ? '' : v }, status, entryCta)
+          }}
+        />
+      )}
 
       <SelectField
         label="User status"
