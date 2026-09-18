@@ -119,7 +119,18 @@ const dateIn = (locale: string, months: number, days = 0) => {
 }
 
 /** The figures a template may ask for, from this offer. */
-export function figuresFor(offer: CadenceOffer, market: MarketConfig, links: Record<string, string>): Record<string, string> {
+export function figuresFor(
+  offer: CadenceOffer,
+  market: MarketConfig,
+  links: Record<string, string>,
+  /**
+   * What the plan costs a month when bought monthly, for the sentence an
+   * annual plan ends on — "will continue … at the price of %{monthlyRate} per
+   * month". That is the monthly plan's price, not a twelfth of this one; a
+   * plan not sold monthly falls back to its own rate.
+   */
+  monthlyPrice?: number,
+): Record<string, string> {
   const money = (n: number) => formatMoney(n, market.locale, market.currency)
   const term = offer.termMonths ?? (/year|annual/i.test(offer.cadence) ? 12 : /instal/i.test(offer.cadence) ? 12 : 1)
   const intro = offer.discount && offer.introPrice !== null ? offer.introPrice : offer.standardPrice
@@ -133,7 +144,7 @@ export function figuresFor(offer: CadenceOffer, market: MarketConfig, links: Rec
   return {
     price: money(offer.standardPrice),
     billingRate: money(offer.standardPrice),
-    monthlyRate: money(offer.standardPrice),
+    monthlyRate: money(monthlyPrice ?? (/instal|month/i.test(offer.cadence) ? offer.standardPrice : offer.standardPrice / term)),
     renewalAmount: money(offer.standardPrice),
     OriginalPrice: money(offer.standardPrice),
     discountedRate: money(intro),
@@ -175,10 +186,12 @@ export function daznCheckoutCopy(
   offer: CadenceOffer,
   market: MarketConfig,
   method?: string,
+  /** The plan's price when bought monthly here, when it is sold that way. */
+  monthlyPrice?: number,
 ): DaznCheckoutCopy {
   const copy = market.checkoutCopy
   if (!copy) return { terms: null, termsKey: null, summary: null, summaryKey: null, withdrawal: null, links: {} }
-  const figures = figuresFor(offer, market, copy.links)
+  const figures = figuresFor(offer, market, copy.links, monthlyPrice)
   const termsKey = pick(copy.strings, termsKeys(offer, method))
   const summaryKey = pick(copy.strings, summaryKeys(tier, offer, context.market))
   const withdrawalKey = pick(copy.strings, ['payment_ROWexclusion_subscription', 'payment_ROWexclusion'])

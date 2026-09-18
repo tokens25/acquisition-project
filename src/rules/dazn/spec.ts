@@ -85,9 +85,13 @@ export const stringsUrl = (cc: string, lang: string) =>
  * people who already had an account with the product before it moved to
  * DAZN (`signin_<product>_migrated_user_header`) — MSG+ and YES, Courtside,
  * NHL.TV. A product that never moved has no such line, and no notice.
+ *
+ * And the account screen's consents: DAZN's own marketing permission, worded
+ * per market (`signup_allowMarketingEmails`), and the partner's for a league
+ * sold through DAZN (`signup_allowNFLMarketingEmails`, …FIBA…, …NHL…).
  */
 export const CHECKOUT_KEYS =
-  /^(payment_termsWarning(_extended|_klarnaPayOverTime|_weekly)?|payment_ROWexclusion|payment_terms_acceptance_\w+|signUp_cancelSentence_\w+|signUp_\w+_cancelSentence_\w+|signup_cancelation_youthoffer_\w+|auth_payment_cancelSentence_\w+|signin_\w*migrated_user_header\w*)$/
+  /^(payment_termsWarning(_extended|_klarnaPayOverTime|_weekly)?|payment_ROWexclusion|payment_terms_acceptance_\w+|signUp_cancelSentence_\w+|signUp_\w+_cancelSentence_\w+|signup_cancelation_youthoffer_\w+|auth_payment_cancelSentence_\w+|signin_\w*migrated_user_header\w*|auth_refined_consentOption_label|signup_allow\w*MarketingEmails|signup_Terms_PrivacyPolicy_CookieNotice)$/
 
 export const contentUrl = (locale: string, pageId: string = 'DAZN') =>
   `https://dazn-content-proxy.sd.indazn.com/spaces/vhp9jnid12wf/environments/master/entries` +

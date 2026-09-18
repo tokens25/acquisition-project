@@ -12,11 +12,12 @@
  * screen whose plan has no offers here is drawn exactly as authored.
  */
 import type { CadenceOffer, CardSet, Context, MarketConfig, Tier } from './content'
-import type { AuthScreen, CadenceOption, CadenceScreen, CheckoutLine, CheckoutScreen, PaymentMethod } from './flow'
+import type { AccountScreen, AuthScreen, CadenceOption, CadenceScreen, CheckoutLine, CheckoutScreen, Consent, PaymentMethod } from './flow'
 import { formatMoney, formatMoneyWhole } from './money'
 import { billingLabel } from './derive'
 import { daznCheckoutCopy } from './daznCopy'
 import { marketFor, offerForCard, resolveOffer, resolveSet } from './resolve'
+import { consentsOf } from './consents'
 
 /**
  * The plan the context says is being bought.
@@ -323,7 +324,10 @@ export function liveCheckoutScreen(set: CardSet, context: Context, authored: Che
   // What dazn.com's own checkout says here, for this plan and cadence, in
   // the market's language: the summary sentence under the totals and the
   // terms under the payment method. The authored lines are the fallback.
-  const dazn = daznCheckoutCopy(context, tier, offer, market)
+  // The monthly plan's price, for the line an annual plan's terms end on.
+  const monthly = resolveOffer(set, tier.id, { ...context, cadence: 'Monthly' })
+  const monthlyPrice = monthly && !monthly.oneOff ? monthly.standardPrice : undefined
+  const dazn = daznCheckoutCopy(context, tier, offer, market, undefined, monthlyPrice)
 
   return {
     ...authored,
@@ -383,4 +387,66 @@ export function liveAuthScreen(set: CardSet, context: Context, authored: AuthScr
     return { ...authored, noticeTitle: line.slice(0, q + 1).trim(), noticeBody: line.slice(q + 1).trim() }
   }
   return { ...authored, noticeTitle: line, noticeBody: '' }
+}
+
+/* ── Account: consents ───────────────────────────────────────────────── */
+
+/**
+ * The permission strings the account screen asks with, per channel.
+ *
+ * DAZN's own comes first and is worded per market — Spain's and Japan's are
+ * not Germany's. A league sold through DAZN adds its partner's: the NFL's,
+ * FIBA's, the NHL's (and its clubs'), the WRC promoter's, the NCAA's. The
+ * New York networks and National League TV ask for nothing of their own.
+ */
+const DAZN_CONSENT_KEY = 'signup_allowMarketingEmails'
+const PARTNER_CONSENT_KEYS: Record<string, string[]> = {
+  nfl: ['signup_allowNFLMarketingEmails'],
+  fiba: ['signup_allowFIBAMarketingEmails'],
+  nhl: ['signup_allowNHLMarketingEmails', 'signup_allowNHLClubMarketingEmails'],
+  rallytv: ['signup_allowRALLYMarketingEmails'],
+  'college-sports': ['signup_allowCollegeSportsMarketingEmails'],
+}
+
+/** A Resource String as the screen reads it: no markdown, no zero-width marks, one line. */
+const plainText = (s: string) =>
+  s
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/\*\*/g, '')
+    .replace(/[\u200b\u00a0]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+/** Which of DAZN's strings the consents on screen read, in order. Empty when DAZN has none for this market. */
+export function consentSources(set: CardSet, context: Context): string[] {
+  const strings = marketFor(set, context.market).checkoutCopy?.strings
+  if (!strings?.[DAZN_CONSENT_KEY]?.trim()) return []
+  const partner = (PARTNER_CONSENT_KEYS[context.subscription ?? ''] ?? []).filter((k) => strings[k]?.trim())
+  return [DAZN_CONSENT_KEY, ...partner]
+}
+
+/**
+ * The account screen with DAZN's consents for this market and channel.
+ *
+ * The heading is DAZN's ("Get notified"), the first switch DAZN's own
+ * permission in this market's wording, and one more for each partner the
+ * channel brings. The note under the group is the authored one, kept: DAZN
+ * has no string for it. Every switch starts off — the words say whether
+ * turning it on agrees or declines, and the screen draws them as written.
+ * A market DAZN has no consent string for reads the authored consents.
+ */
+export function liveAccountScreen(set: CardSet, context: Context, authored: AccountScreen): AccountScreen {
+  const keys = consentSources(set, context)
+  if (keys.length === 0) return authored
+  const strings = marketFor(set, context.market).checkoutCopy!.strings
+  const note = consentsOf(authored)[0]?.note ?? ''
+  const consents: Consent[] = keys.map((key, i) => ({
+    id: key,
+    body: plainText(strings[key]),
+    // The grey line closes the group, so it sits under the last switch.
+    note: i === keys.length - 1 ? note : '',
+    on: false,
+  }))
+  const heading = strings.auth_refined_consentOption_label?.trim()
+  return { ...authored, ...(heading ? { notifyHeading: heading } : {}), consents }
 }

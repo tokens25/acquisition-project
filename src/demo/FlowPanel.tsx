@@ -2,7 +2,7 @@ import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import { blankCadenceOption, cadenceSavings } from '../rules/cadence'
-import { authSource, checkoutSources, chosenTier, liveAuthScreen, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
+import { authSource, checkoutSources, chosenTier, consentSources, liveAccountScreen, liveAuthScreen, liveCadenceScreen, liveCheckoutScreen } from '../rules/liveFlow'
 
 /** What the checkout's authored lines may stand in for. */
 const TOKENS_HELP = 'Tokens fill in from the plan and payment option being bought: {plan} {cadence} {price} {unit} {today} {next} {renewal} {term} {market}.'
@@ -671,6 +671,32 @@ function FlowFields({
         </FieldGroup>
 
         <FieldGroup title="Marketing consent">
+          {(() => {
+            const keys = consentSources(set, context)
+            if (keys.length === 0) {
+              return (
+                <p className="ed-absent">
+                  DAZN has no consent strings for {marketFor(set, context.market).label} yet (they arrive with
+                  the market's checkout words); the consents below are read.
+                </p>
+              )
+            }
+            const live = liveAccountScreen(set, context, a)
+            return (
+              <p className="ed-absent ed-live">
+                The switches on screen are dazn.com's own for {marketFor(set, context.market).label}
+                {keys.length > 1 ? ' and this channel' : ''}:
+                {consentsOf(live).map((c, i) => (
+                  <span key={c.id}>
+                    {' '}
+                    <code>{keys[i]}</code> “{c.body.length > 90 ? `${c.body.slice(0, 90)}…` : c.body}”
+                    {i < keys.length - 1 ? ';' : '.'}
+                  </span>
+                ))}{' '}
+                The note under the group is yours. The consents below are what shows where DAZN has none.
+              </p>
+            )
+          })()}
           <TextField
             label="Section heading"
             value={a.notifyHeading}
@@ -813,6 +839,20 @@ function FlowFields({
   if (step.renderer === 'checkout') {
     const c = flow.checkout
     const liveCheckout = liveCheckoutScreen(set, context, c)
+    /*
+     * The ways the plan on this page is actually sold here. The set knows
+     * seven cadences across every market; Germany's Standard is sold at two
+     * of them, and offering the other five would let someone pick a payment
+     * option the page then quietly ignores — it draws the first way the plan
+     * is sold instead, and the pick looks broken.
+     */
+    const boughtTier = chosenTier(set, context)
+    const soldAt = boughtTier
+      ? set.cadences.filter((cadence) => resolveOffer(set, boughtTier.id, { ...context, cadence }))
+      : set.cadences
+    const cadenceOptions = soldAt.includes(context.cadence)
+      ? soldAt
+      : [context.cadence, ...soldAt]
     return (
       <>
         {/* What is being bought, on the page that buys it.
@@ -829,13 +869,31 @@ function FlowFields({
               { value: '', label: 'No plan in particular' },
               ...plansHere.map((t) => ({ value: t.id, label: t.planName || t.id })),
             ]}
-            onChange={(v) => setContext({ ...context, tier: v || undefined })}
+            onChange={(v) => {
+              // A plan not sold at the cadence on screen takes the page to the
+              // first way it is sold, so the page never shows a pick it ignores.
+              const next = v ? set.tiers.find((t) => t.id === v) : undefined
+              const sold = next
+                ? set.cadences.filter((cadence) => resolveOffer(set, next.id, { ...context, cadence }))
+                : []
+              const cadence = !next || sold.length === 0 || sold.includes(context.cadence) ? context.cadence : sold[0]
+              setContext({ ...context, tier: v || undefined, cadence })
+            }}
           />
           <SelectField
             label="Payment option"
-            helpText="Its terms and its renewal date follow from this."
+            helpText={
+              boughtTier && !soldAt.includes(context.cadence)
+                ? `${boughtTier.planName} is not sold ${context.cadence.toLowerCase()} in ${marketFor(set, context.market).label}; the page shows the first way it is — pick one of the ways it is sold.`
+                : boughtTier
+                  ? `The ways ${boughtTier.planName} is sold in ${marketFor(set, context.market).label}. Its terms and its renewal date follow from this.`
+                  : 'Its terms and its renewal date follow from this.'
+            }
             value={context.cadence}
-            options={set.cadences.map((v) => ({ value: v, label: v }))}
+            options={cadenceOptions.map((v) => ({
+              value: v,
+              label: boughtTier && !soldAt.includes(v) ? `${v} — not sold for this plan` : v,
+            }))}
             onChange={(v) => setContext({ ...context, cadence: v })}
           />
         </FieldGroup>
