@@ -601,6 +601,82 @@
   letter-spacing: 0.12px;
   text-transform: uppercase;
 }
+/* ── What the market's live page draws ─────────────────────────────────────
+   Under the count, shut until somebody opens it. A native details rather than
+   a fold of our own: one question, one answer, and no state to keep. */
+.ls-live {
+  margin-block-end: var(--space-8);
+  padding: var(--space-8) var(--space-10);
+  border: var(--border-1) solid var(--color-border-full-color-subtle);
+  border-radius: var(--radius-10);
+  background: var(--color-surface-container-1);
+}
+.ls-live__head {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+/* Safari draws its own marker through list-style, and the row reads as two
+   bullets without this. */
+.ls-live__head::-webkit-details-marker {
+  display: none;
+}
+.ls-live__head::before {
+  content: '▸ ';
+  color: var(--color-text-tertiary);
+}
+.ls-live[open] .ls-live__head::before {
+  content: '▾ ';
+}
+/* Still being read, or read and refused: the words say which, and the colour
+   stops somebody reading a stale list as a current one. */
+.ls-live[data-state='loading'] .ls-live__head,
+.ls-live[data-state='error'] .ls-live__head {
+  color: var(--color-text-tertiary);
+}
+.ls-live__row {
+  display: flex;
+  gap: var(--space-8);
+  align-items: baseline;
+  padding-block: 3px;
+}
+/* A name in production's words. Dimmed where this tool has no such block, so
+   what is missing reads as plainly as what matches. */
+.ls-live__name {
+  flex: 1;
+  min-inline-size: 0;
+  color: var(--color-text-tertiary);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ls-live__row[data-have] .ls-live__name {
+  color: var(--color-text-primary);
+}
+.ls-live__note {
+  flex: none;
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.ls-live__act {
+  margin-block-start: var(--space-8);
+  padding: 4px 8px;
+  border: var(--border-1) solid var(--ed-line);
+  border-radius: var(--radius-6);
+  background: none;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.ls-live__act:hover {
+  color: var(--color-text-primary);
+}
+
 .ls-head__count {
   color: var(--color-text-tertiary);
   font-size: 11.5px;

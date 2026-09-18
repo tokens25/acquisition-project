@@ -62,7 +62,66 @@ import {
 } from '../rules/sections'
 import type { LandingScreen, LandingTeam, RailSize } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
+import { useLiveLanding } from '../editor/useLiveLanding'
 import type { Selector } from '../rules/layers'
+
+/**
+ * What this market's live page is made of, beside what this one is.
+ *
+ * Read-only, and shut until somebody opens it. It answers one question the
+ * panel could not answer before — does the page we are drawing look anything
+ * like the page that is up — and answers it in production's own words, which
+ * since the blocks were renamed are mostly our words too.
+ *
+ * A component we have is one whose production name is a name in our palette.
+ * That is the whole test: the rename made the two vocabularies the same where
+ * they overlap, so a match here is a real match rather than a table somebody
+ * has to keep in step.
+ *
+ * Nothing here changes the page. Adopting the live arrangement is a decision,
+ * not something that happens while you are reading.
+ */
+function LivePage({ market }: { market: string | undefined }) {
+  const { state, page, error, reload } = useLiveLanding(market)
+  if (state === 'off') return null
+
+  const ours = new Set(Object.values(SECTION_LABEL))
+  const mine = page?.components.filter((c) => ours.has(c.type)).length ?? 0
+
+  return (
+    <details className="ls-live" data-state={state}>
+      <summary className="ls-live__head">
+        {state === 'loading' && `Reading ${market}'s live page…`}
+        {state === 'ready' && page && `${market} live — ${page.components.length} components, ${mine} we have`}
+        {state === 'none' && `${market} draws no live welcome page`}
+        {state === 'error' && `${market}'s live page could not be read`}
+      </summary>
+
+      {state === 'error' && <p className="ls-live__note">{error}</p>}
+      {state === 'ready' && page && (
+        <>
+          {page.components.map((c) => (
+            <div className="ls-live__row" key={c.at} data-have={ours.has(c.type) || undefined}>
+              <span className="ls-live__name">{c.type}</span>
+              {/* Which rail it is served, where it is served one at all — the
+                  id our own Rail ID fields stand in for. */}
+              <span className="ls-live__note">
+                {c.railId ? `rail ${c.railId.slice(0, 8)}` : `${c.entries.length} entries`}
+              </span>
+            </div>
+          ))}
+          <p className="ls-live__note">
+            {page.config.displayName ?? page.page} · {page.locale} · {page.env}
+            {page.cached && ' · cached'}
+          </p>
+        </>
+      )}
+      <button type="button" className="ls-live__act" onClick={reload}>
+        Read it again
+      </button>
+    </details>
+  )
+}
 
 /**
  * The landing page as the list of components it draws.
@@ -119,6 +178,7 @@ export function LandingSections({
           {drawn} on the page
         </span>
       </div>
+      <LivePage market={store.context.market} />
       {list.map((section) => (
         <SectionCard
           key={section.id}

@@ -49,7 +49,7 @@
       'edit tabs': [6,14,68,6], 'edit tab': [6,14,32,6],
       'component card': [6,44,68,16], 'components heading': [6,38,68,5],
       'components count': [56,38,18,5], 'components label': [6,38,20,5], 'component words': [24,45,36,11], 'component name line': [24,45,36,4], 'component row': [6,44,68,11],
-      'field row grip': [4,44,3,5], 'team row fields': [22,44,40,12], 'match side': [6,46,62,8], 'team ground': [22,54,18,4], 'team ground name': [28,54,12,4], 'component grip': [7,47,3,4], 'component shape': [12,45,9,7],
+      'field row grip': [4,44,3,5], 'live page': [6,44,68,9], 'live page summary': [8,45,64,3], 'live component row': [8,48,64,2], 'live component name': [8,48,42,2], 'live component note': [52,48,20,2], 'read the live page again': [8,50,18,2], 'team row fields': [22,44,40,12], 'match side': [6,46,62,8], 'team ground': [22,54,18,4], 'team ground name': [28,54,12,4], 'component grip': [7,47,3,4], 'component shape': [12,45,9,7],
       'component shape bar': [13,46,7,1], 'component name': [24,45,26,4],
       'component once only': [52,45,9,4], 'component contents': [24,49,34,3],
       'component actions': [24,52,30,3], 'component action': [24,52,9,3],
