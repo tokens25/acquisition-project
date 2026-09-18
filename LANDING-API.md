@@ -61,6 +61,13 @@ this system does what our `flowLayers` do:
 | `fields.environment` | `Live` — so there is a non-live environment alongside it |
 | `locale` | Language, separately from country |
 
+**The environment field is not one field.** `LPRootConfig` filters on
+`fields.environment[in]=Live`. `CommonContentTierGroup` filters on
+`fields.env[in]=production` — a different field name *and* a different value.
+Asking a tier group for `Live` returns 0 items and a 200, which reads exactly
+like an empty market. Checked both ways round: `env=production` gives 91 groups
+and 202 tier items for `en-GB`, `env=Live` gives nothing.
+
 ### LPRootConfig
 
 ```
@@ -167,6 +174,14 @@ redesign. It is a renderer switch, not content.
 | `VideoAsset` | `displayName` `video` |
 | `CatalogueFeaturesItem` | `logoImage` `tagLabel` `featuresText` |
 
+**These lists are a floor, not the model.** Contentful omits a field that is
+not set, so a type read from one market shows only what that market fills in.
+`CommonContentTierItem` read off `en-CA` has 29 fields; read off `en-GB` it has
+44 — `benefits`, `monthlyprice`, `weeklyprice`, `yearlyprice`,
+`compareBillingPeriod`, `compareEntitlementSetId`, `bestValueBadgeText`,
+`freeTrialText` and more. Read several markets before trusting a shape, or read
+the content model itself.
+
 `AdaptiveImage` is the one to copy. One picture per breakpoint plus a `default`,
 keyed — our `ImagePicker` holds a single data URL and the page scales it.
 
@@ -240,16 +255,80 @@ spotlight placeholder tiles as unconfirmed against this service.
 ## 3. The prices
 
 ```
-GET https://tiered-pricing-offer-service.ar.indazn.com/v1/offers/CA
-      ?Platform=web&Brand=DAZN&Manufacturer=&ProductGroup=all
+GET https://tiered-pricing-offer-service.ar.indazn.com/v1/offers/{COUNTRY}
+      ?Platform=web&Brand=DAZN&ProductGroup=DAZN
       &IsTiering=true&IncludeBundleOffers=true&BillingRouting=billing2
 ```
 
-Country in the path, and the flags say this service answers for both tiering and
-bundles. The CMS holds a `price` field on each tier as well, so one of the two
-is a fallback — which wins is not established here.
+Country in the path. No auth, no token, CORS-open, and **the country is in the
+request rather than read off the caller's address** — so any market can be
+pulled from anywhere, including from a script.
 
-## 4. The bootstrap
+```
+Offers[] · Addons[] · Entitlements[] · PaymentMethods[]
+FreeTrialIneligibilityReason · DiscountIneligibilityReason
+GiftCode · NoOfferFreeTrialMonths
+```
+
+An offer:
+
+```
+Id · SkuId · RatePlanId · ProductGroup · ProductType · Brand
+BillingPeriod · BillingType · BillingDate · NextBillingDate · RenewalDate
+Duration · ChargeTiers[] · TierRank · EntitlementSetId
+FreeTrialMonths · TotalFreeMonths · Instalment · AutoRenew
+RenewalAmount · NextPaymentAmount · NextRenewalPlan
+Purchasable · PurchaseDenyReasons · PaymentMethodIds
+AllowsNoPaymentMethod · IsAccessCodeApplicable · Conditions
+```
+
+`ChargeTiers[]` is `Price` / `Currency` / `Discount`. `Addons[]` are the PPVs,
+same shape plus `EventStartDate`, `DiscountPercentage` and `Promotions` — the
+start date is how an upcoming event is told from a past one.
+
+`Entitlements[]` is `setId` / `entitlementIds` / `features` / `content` /
+`multiviewEnabledCountries`. The limits live in `features`:
+
+| | |
+| --- | --- |
+| `CONCURRENCY.max_devices` | simultaneous streams |
+| `CONCURRENCY.max_ips` | simultaneous networks |
+| `DEVICE.max_registered_devices` | registered devices — 999 means unlimited |
+
+and the policy is also spelled out in `entitlementIds`:
+`disallow_watch_concurrency` (one stream),
+`allow_watch_concurrency_with_single_location` (many streams, one network),
+`allow_watch_concurrency` (many of both). Some products return `DEVICE` with no
+`CONCURRENCY` block at all, and for those the stream count is only in the CMS
+copy.
+
+### ProductGroup
+
+Case-sensitive, and it decides what is being sold:
+
+| | |
+| --- | --- |
+| `DAZN` | the main tiered plans |
+| `NFL` `NHL` `FIBA` | uppercase — FIBA is Courtside 1891 |
+| `CollegeSports` `RallyTV` `NationalLeagueTV` | CamelCase |
+
+A product's exact casing is in its signup URL:
+`…/account/content/<ProductGroup>/signup`.
+
+Two failure modes, and they do not look alike. **400** is no such group —
+`MSG`, `MSGPlus` and `RSN` all answer 400, so our MSG+ product group has no
+counterpart here under any obvious name. **200 with `Offers: []`** is a real
+group that is not sold in that market: `NHL` is empty in CA and US and returns
+four offers in DE.
+
+## 4. The join
+
+`EntitlementSetId` on an offer is `entitlementSetId` on a
+`CommonContentTierItem`. That is the whole join between what a plan **costs**
+and what a plan **says** — price and currency on one side, the title and the
+benefit lines on the other. Neither service knows the other's half.
+
+## 5. The bootstrap
 
 ```
 GET https://startup.core.indazn.com/v1/main/web
@@ -300,9 +379,17 @@ an RSN concern, not on the generic welcome page.
 
 Loaded `www.dazn.com` in a browser, let it redirect to `/en-CA/welcome`, read
 the network log, then re-fetched the config and rail endpoints from the page's
-own origin to read their shapes. No authentication, no writes, and no cookie
-consent was accepted. Field *names* and structure are recorded here; the copy
-and artwork in the responses are not.
+own origin to read their shapes. The component-type table came from the same
+query against eight markets.
+
+Sections 3 and 4 started from a reference note of Alex's covering the offers and
+tier-content services, and every claim in it was re-run here with plain `curl`
+before being written down — which is how the `env` / `environment` split and
+the 400-versus-empty distinction turned up. Both of those services answer an
+unauthenticated server-side GET with no browser involved.
+
+No authentication, no writes, and no cookie consent was accepted. Field *names*
+and structure are recorded here; the copy and artwork in the responses are not.
 
 Re-run it against another market by changing the country in the path and the
 `locale` / `fields.*Countries` filters — the ids and the rail UUIDs are
