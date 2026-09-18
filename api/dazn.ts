@@ -13,7 +13,7 @@
  * Cached in memory for an hour per market, because prices change daily at
  * most and the content pages are heavy. A cold call takes a few seconds.
  */
-import { buildMarket, fetchContent, fetchMarket, MARKETS, BASE_LOCALE, type LiveMarket, type ContentBody } from '../src/rules/dazn'
+import { buildMarket, fetchContent, fetchMarket, MARKETS, BASE_LOCALE, HEADERS, offersUrl, type LiveMarket, type ContentBody, type Product } from '../src/rules/dazn'
 
 const TTL_MS = 60 * 60 * 1000
 
@@ -45,6 +45,15 @@ export default async function handler(request: Request): Promise<Response> {
 
   if (!MARKETS.includes(market)) {
     return json({ ok: false, error: `Unknown market "${market}". One of: ${MARKETS.join(', ')}.`, markets: MARKETS }, 400)
+  }
+
+  // The offers service as it answers, for one product group — what the Dev
+  // view reads when a plan on screen and DAZN's catalogue disagree. The
+  // browser cannot ask the service itself: it answers only to dazn.com.
+  const raw = url.searchParams.get('raw')
+  if (raw) {
+    const res = await fetch(offersUrl(market, raw as Product), { headers: HEADERS })
+    return json({ ok: res.ok, status: res.status, body: res.ok ? await res.json() : null }, res.ok ? 200 : 502)
   }
 
   const had = markets.get(market)

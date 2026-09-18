@@ -160,6 +160,20 @@ export function offerForCard(set: CardSet, tierId: string, context: Context): Ca
   return null
 }
 
+/**
+ * The price a card leads with. "Starts at" is the entry price: a card drawn
+ * while a yearly or seasonal payment is the one on screen still says what a
+ * month costs, where the plan is sold by the month — $279.99/year is not
+ * where MSG+ starts. The checkout keeps reading the cadence on screen.
+ */
+function entryOffer(set: CardSet, tierId: string, context: Context): CadenceOffer | null {
+  if (/year|season|annual/i.test(context.cadence)) {
+    const monthly = resolveOffer(set, tierId, { ...context, cadence: 'Monthly' })
+    if (monthly) return monthly
+  }
+  return offerForCard(set, tierId, context)
+}
+
 /** Tiers this storefront sells, in display order, each with the price its card shows. */
 export function resolveSet(set: CardSet, context: Context = set.context): ResolvedCard[] {
   // Resolved before it is filtered: whether a plan is live here, or on this
@@ -169,7 +183,7 @@ export function resolveSet(set: CardSet, context: Context = set.context): Resolv
     set.tiers.map((tier) => resolveTier(tier, context)),
     { channel: context.channel, subscription: context.subscription },
   )
-    .map((tier) => ({ tier, offer: offerForCard(set, tier.id, context) }))
+    .map((tier) => ({ tier, offer: entryOffer(set, tier.id, context) }))
     .filter((r): r is ResolvedCard => r.offer !== null)
     .sort((a, b) => a.tier.displayOrder - b.tier.displayOrder)
 }

@@ -52,6 +52,21 @@ export const isBaseContext = (c: Context) => c.market === BASE_MARKET && !c.camp
  * not upgraded: it starts fresh, and its old key is left untouched in case
  * anything needs recovering by hand.
  */
+/**
+ * A shipped price a saved copy predates.
+ *
+ * The shipped plans' prices are authored — the networks are not in DAZN's
+ * catalogue — so a way to pay added to the shipped set later would never
+ * reach a browser that saved before it existed. Only an offer whose id the
+ * copy does not have is added; a price somebody changed stays changed.
+ */
+function withShippedOffers(offers: CardSet['offers']): CardSet['offers'] {
+  const have = new Set(offers.map((o) => o.id))
+  const shipped = new Set(defaultSet.tiers.map((t) => t.id))
+  const missing = defaultSet.offers.filter((o) => shipped.has(o.tierId) && !have.has(o.id))
+  return missing.length ? [...offers, ...missing] : offers
+}
+
 /** Plans once shipped by hand that DAZN's catalogue now supplies. */
 const LEGACY_TIERS = new Set(['fiba-ultimate', 'fiba-standard'])
 
@@ -76,7 +91,7 @@ function hydrate(raw: unknown): CardSet {
     tiers: input.tiers
       .filter((t) => !generated.has(t.id))
       .map((t) => ({ ...t, ...renamedSwitch(t), overrides: t.overrides ?? [] })),
-    offers: input.offers.filter((o) => !generated.has(o.tierId)),
+    offers: withShippedOffers(input.offers.filter((o) => !generated.has(o.tierId))),
     logoCatalog: withShippedBlurbs(input.logoCatalog),
     // A screen the saved copy predates. Saved work never reseeds, so content
     // stored before a screen existed would carry a hole where its words go,

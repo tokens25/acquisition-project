@@ -178,6 +178,12 @@ export const defaultSet: CardSet = {
     offer({ id: 'msg-plus-monthly', tierId: 'msg-plus', cadence: 'Monthly', standardPrice: 29.99 }),
     offer({ id: 'gotham-bundle-monthly', tierId: 'gotham-bundle', cadence: 'Monthly', standardPrice: 34.99 }),
     offer({ id: 'yes-monthly', tierId: 'yes', cadence: 'Monthly', standardPrice: 19.99 }),
+    // The second way to pay the design draws on the payment screen — "Pay
+    // now $279.99/year, MOST Popular" — is MSG+'s. The networks are not in
+    // DAZN's public catalogue, so this is the only price for it there is;
+    // the Gotham Bundle and YES are drawn with a monthly price alone, and no
+    // yearly one is invented for them.
+    offer({ id: 'msg-plus-yearly', tierId: 'msg-plus', cadence: 'Yearly', standardPrice: 279.99 }),
   ],
 
   // MSG+ is where the work is, so it is where a reset lands. It is also the
