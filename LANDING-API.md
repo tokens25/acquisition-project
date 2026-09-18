@@ -260,9 +260,16 @@ GET https://tiered-pricing-offer-service.ar.indazn.com/v1/offers/{COUNTRY}
       &IsTiering=true&IncludeBundleOffers=true&BillingRouting=billing2
 ```
 
-Country in the path. No auth, no token, CORS-open, and **the country is in the
-request rather than read off the caller's address** — so any market can be
-pulled from anywhere, including from a script.
+Country in the path. No auth, no token, and **the country is in the request
+rather than read off the caller's address** — so any market can be pulled from
+anywhere, including from a script.
+
+**But not from a browser that is not DAZN's.** This is the one service of the
+four that checks the origin: a `fetch` from `http://localhost:5173` fails CORS,
+where the content proxy and the rail router both answer it. Server-side `curl`
+is fine. So anything in this tool that wants a price needs a proxy — a Vite dev
+proxy, or something small and server-side — while everything else can be read
+straight from the page.
 
 ```
 Offers[] · Addons[] · Entitlements[] · PaymentMethods[]
