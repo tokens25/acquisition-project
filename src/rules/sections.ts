@@ -262,11 +262,30 @@ export const SHIPPED_ORDER: SectionType[] = [
   'faq',
 ]
 
-/** What each block is called, in the words the page uses for it. */
+/**
+ * What each block is called.
+ *
+ * The production `componentType` where the live page has one — see
+ * LANDING-API.md, read off eight markets' welcome pages. A name somebody has
+ * to translate on the way to implementing it is a name that costs something
+ * every time, and this is the vocabulary the handoff lands in: these strings
+ * group the strings a developer is given.
+ *
+ * Ten blocks have no counterpart to take a name from. Meet the teams, Outside
+ * the area, What's live and the rest are not on the welcome page at all — the
+ * teams grid is fetched separately, against an RSN tag — so they keep the name
+ * the design uses, which is the only name they have.
+ *
+ * Three more were left alone on purpose. Games schedule, Text block and Places
+ * have plausible counterparts in `ComingUpRail`, `IntroductionBanner` and
+ * `CompetitionCarousel`, but those three were matched by their type and their
+ * place in the order rather than by a page anybody has seen rendered. A guess
+ * written into the palette is a guess everybody downstream inherits.
+ */
 export const SECTION_LABEL: Record<SectionType, string> = {
-  zip: 'Postcode',
+  zip: 'ZipCodeBreather',
   schedule: 'Games schedule',
-  plans: 'Subscription plans',
+  plans: 'ContentTiers',
   teams: 'Meet the teams',
   area: 'Outside the area',
   /* Named for what it is rather than what it happens to be about: a still,
@@ -279,16 +298,16 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   devices: 'Text block',
   faq: 'FAQs',
   imageCta: 'Image CTA',
-  features: 'Features list',
-  supported: 'Supported devices',
-  rail: 'Rail',
-  subRail: 'More subscriptions',
+  features: 'SectionFeatures',
+  supported: 'SupportedDevices',
+  rail: 'StandardRail',
+  subRail: 'SubscriptionsRail',
   bundles: 'Bundles',
   matchList: 'Match list',
   cardStack: 'Feature cards',
   cities: 'Places',
   live: "What's live",
-  spotlight: 'Spotlight',
+  spotlight: 'SpotlightRail',
   fightPlan: 'Choose the plan',
 }
 
