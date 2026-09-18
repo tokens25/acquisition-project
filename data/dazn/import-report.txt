@@ -1,8 +1,8 @@
 markets  21
 plans    68 live + 3 authored
 offers   682
-benefits 173 lines
-badges   83
+benefits 174 lines
+badges   107
 
 be: 9 plans, 26 prices, EUR · collegesports-tier-collegesports-pro: words from the Atlas; collegesports-tier-collegesports-ultimate: words from the Atlas; rallytv-tier-rallytv-pro: words from the Atlas; nationalleaguetv-tier-nationalleaguetv-pro: words from the Atlas
 at: 14 plans, 35 prices, EUR · dazn-tier-bundle-ul-nflpro-at: words from the Atlas; dazn-tier-bundle-ul-nflult-at: words from the Atlas; collegesports-tier-collegesports-pro: words from the Atlas; collegesports-tier-collegesports-ultimate: words from the Atlas; rallytv-tier-rallytv-pro: words from the Atlas; nationalleaguetv-tier-nationalleaguetv-pro: words from the Atlas
@@ -27,10 +27,10 @@ au: 10 plans, 29 prices, AUD · collegesports-tier-collegesports-pro: words from
 br: 10 plans, 28 prices, BRL · collegesports-tier-collegesports-pro: words from the Atlas; collegesports-tier-collegesports-ultimate: words from the Atlas; rallytv-tier-rallytv-pro: words from the Atlas; nationalleaguetv-tier-nationalleaguetv-pro: words from the Atlas
 
 dazn-tier-silver-be: "DAZN Total" · 0 market patches
-nfl-tier-nfl-pro: "Season Pro" (entitlements) · 12 market patches
-nfl-tier-nfl-ultimate: "Season Pro Ultimate" (entitlements) · 11 market patches
-fiba-tier-fiba-pro: "Standard" (entitlements) · 13 market patches
-fiba-tier-fiba-ultimate: "Ultimate" (entitlements) · 13 market patches
+nfl-tier-nfl-pro: "Season Pro" (entitlements) · 5 market patches
+nfl-tier-nfl-ultimate: "Season Pro Ultimate" (entitlements) · 2 market patches
+fiba-tier-fiba-pro: "Standard" (entitlements) · 0 market patches
+fiba-tier-fiba-ultimate: "Ultimate" (entitlements) · 6 market patches
 collegesports-tier-collegesports-pro: "Pro" (entitlements) · 0 market patches
 collegesports-tier-collegesports-ultimate: "Ultimate" (entitlements) · 0 market patches
 rallytv-tier-rallytv-pro: "Standard" (entitlements) · 0 market patches
@@ -39,7 +39,7 @@ dazn-tier-gold-at: "DAZN" · 0 market patches
 dazn-tier-mobile-at: "Mobile Pass" · 0 market patches
 dazn-tier-bundle-ul-nflpro-at: "DAZN Unlimited + NFL Pro" (atlas) · 0 market patches
 dazn-tier-bundle-ul-nflult-at: "DAZN Unlimited + NFL Ultimate" (atlas) · 0 market patches
-nhl-tier-nhl-pro: "Standard" (entitlements) · 6 market patches
+nhl-tier-nhl-pro: "Standard" (entitlements) · 0 market patches
 nhl-tier-nhl-ultimate: "Ultimate" (entitlements) · 6 market patches
 dazn-tier-mobile-de: "Mobile Pass" · 0 market patches
 dazn-tier-supersport-de: "Super Sports" (atlas) · 0 market patches
