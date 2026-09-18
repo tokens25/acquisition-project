@@ -73,6 +73,27 @@ export default async function handler(request: Request): Promise<Response> {
     markets.set(market, { at: Date.now(), value: live })
     return json({ ok: true, market, live, cached: false, fetchedAt: pull.fetchedAt })
   } catch (error) {
-    return json({ ok: false, error: error instanceof Error ? error.message : String(error), market }, 502)
+    return json({ ok: false, error: describe(error), market }, 502)
   }
 }
+
+/**
+ * An error as one line a person can read. Node's fetch fails with a TypeError
+ * whose real reason sits in `cause` (a DNS refusal, a reset connection), and a
+ * throw that is not an Error at all would otherwise read "[object Object]".
+ */
+function describe(error: unknown): string {
+  if (error instanceof Error) {
+    const cause = (error as Error & { cause?: unknown }).cause
+    const inner = cause instanceof Error ? ` — ${cause.message}` : cause ? ` — ${JSON.stringify(cause)}` : ''
+    return `${error.message}${inner}`
+  }
+  try {
+    return typeof error === 'string' ? error : JSON.stringify(error)
+  } catch {
+    return String(error)
+  }
+}
+
+/** Longer than Vercel's default: one market is some twenty calls to DAZN, and a slow one must not become a blank page. */
+export const config = { maxDuration: 60 }
