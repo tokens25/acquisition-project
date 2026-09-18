@@ -162,11 +162,14 @@ export function offerForCard(set: CardSet, tierId: string, context: Context): Ca
 
 /** Tiers this storefront sells, in display order, each with the price its card shows. */
 export function resolveSet(set: CardSet, context: Context = set.context): ResolvedCard[] {
-  return filterAcquirableTiers(set.tiers, {
-    channel: context.channel,
-    subscription: context.subscription,
-  })
-    .map((tier) => ({ tier: resolveTier(tier, context), offer: offerForCard(set, tier.id, context) }))
+  // Resolved before it is filtered: whether a plan is live here, or on this
+  // tab, is a fact a market may patch — Spain's youth plans are live on their
+  // tab and legacy everywhere else — and the filter must read the patch.
+  return filterAcquirableTiers(
+    set.tiers.map((tier) => resolveTier(tier, context)),
+    { channel: context.channel, subscription: context.subscription },
+  )
+    .map((tier) => ({ tier, offer: offerForCard(set, tier.id, context) }))
     .filter((r): r is ResolvedCard => r.offer !== null)
     .sort((a, b) => a.tier.displayOrder - b.tier.displayOrder)
 }
@@ -174,7 +177,7 @@ export function resolveSet(set: CardSet, context: Context = set.context): Resolv
 /** Tiers dropped from this view, and why — for the preview's blast radius. */
 export function excludedTiers(set: CardSet, context: Context = set.context) {
   const acquirable = new Set(
-    filterAcquirableTiers(set.tiers, {
+    filterAcquirableTiers(set.tiers.map((t) => resolveTier(t, context)), {
       channel: context.channel,
       subscription: context.subscription,
     }).map((t) => t.id),

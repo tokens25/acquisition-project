@@ -190,7 +190,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   const sellable = useMemo(() => {
     const priced = (t: { id: string }) => set.offers.filter((o) => o.tierId === t.id)
     return new Set(
-      filterAcquirableTiers(set.tiers, {
+      filterAcquirableTiers(set.tiers.map((t) => resolveTier(t, context)), {
         channel: context.channel,
         subscription: context.subscription,
       })
