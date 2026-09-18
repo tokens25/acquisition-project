@@ -77,19 +77,52 @@ function standing(cadence: string, offer: CadenceOffer): Pick<CadenceOption, 'ti
 
 const paid = (o: CadenceOffer) => (o.discount && o.introPrice !== null ? o.introPrice : o.standardPrice)
 
-/** What a way to pay costs over a year, for the saving beside it. */
+/**
+ * What a way to pay costs over a year at its standing price, for the saving
+ * beside it. The standing price, not the first payment: a first month free
+ * is a promotion on top of the plan, and "Save 300 €/year" worked out from
+ * twelve free months is a saving nobody gets.
+ */
 function overAYear(cadence: string, o: CadenceOffer): number {
+  const p = o.standardPrice
   switch (kindOf(cadence)) {
     case 'weekly':
-      return paid(o) * 52
+      return p * 52
     case 'monthly':
-      return paid(o) * 12
+      return p * 12
     case 'instalments':
       // A two-year plan's yearly cost is half its total; a five-payment
       // season's is its total — either way, the year is what is compared.
-      return (paid(o) * (o.termMonths ?? 12)) / Math.max(1, (o.termMonths ?? 12) / 12)
+      return (p * (o.termMonths ?? 12)) / Math.max(1, (o.termMonths ?? 12) / 12)
     default:
-      return paid(o)
+      return p
+  }
+}
+
+/**
+ * The promotion on a way to pay, as the option states it: what is shown as
+ * the price, what is struck beside it, and the line that says how long.
+ *
+ * A free first month keeps the standing price as the price — "0,00 €/month"
+ * is not what the plan costs — and says the month is free. A lower rate for
+ * a run of months is the price, with the standing one struck beside it.
+ */
+function promotionOf(offer: CadenceOffer, unit: string, money: (n: number) => string): Pick<CadenceOption, 'price' | 'struck' | 'offer'> {
+  if (offer.freeTrialMonths) {
+    const n = offer.freeTrialMonths
+    return { price: money(offer.standardPrice), offer: `${n} month${n === 1 ? '' : 's'} free, then ${money(offer.standardPrice)}/${unit}` }
+  }
+  if (!offer.discount || offer.introPrice === null) return { price: money(offer.standardPrice) }
+  const months = offer.introMonths || 1
+  const span = months === 1 ? 'First month' : `First ${months} months`
+  if (offer.introPrice === 0) {
+    return { price: money(offer.standardPrice), offer: `${span} free` }
+  }
+  const whole = /instal/i.test(offer.cadence) && months >= (offer.termMonths ?? 12)
+  return {
+    price: money(offer.introPrice),
+    struck: money(offer.standardPrice),
+    offer: whole ? `For the whole ${months}-month contract` : `${span}, then ${money(offer.standardPrice)}/${unit}`,
   }
 }
 
@@ -138,7 +171,7 @@ export function liveCadenceScreen(set: CardSet, context: Context, authored: Cade
       id: cadence,
       title: written?.title?.trim() || words.title,
       note: (written?.note?.trim() || words.note) + youthNote,
-      price: formatMoney(paid(offer), market.locale, market.currency),
+      ...promotionOf(offer, words.unit, (n) => formatMoney(n, market.locale, market.currency)),
       unit: words.unit,
       badge: written?.badge ?? (kindOf(cadence) === 'yearly' && saving ? 'BEST VALUE' : ''),
       saving,
@@ -281,12 +314,14 @@ export function liveCheckoutScreen(set: CardSet, context: Context, authored: Che
   lines.push({
     id: 'live-plan',
     label: kind === 'instalments' ? `${words.title} · ${offer.termMonths ?? 12}-month contract` : words.title,
-    value: money(discounted ? offer.introPrice! : offer.standardPrice),
+    // A free first month is not a price of nothing: the line shows what the
+    // plan costs, and the note says the month is free. Today's line says 0.
+    value: money(discounted && offer.introPrice! > 0 ? offer.introPrice! : offer.standardPrice),
     unit: words.unit,
     ...(discounted
       ? {
           offer: true,
-          struck: money(offer.standardPrice),
+          ...(offer.introPrice! > 0 ? { struck: money(offer.standardPrice) } : {}),
           note:
             offer.introPrice === 0
               ? `first ${months === 1 ? 'month' : `${months} months`} free`

@@ -23,6 +23,10 @@ export interface CadenceOption {
   price: string
   /** What follows the slash: "year", "month". */
   unit: string
+  /** The full price, struck through before the price, when a promotion lowers it. */
+  struck?: string
+  /** The promotion in a line under the price: "First month free". */
+  offer?: string
   /** The corner ribbon. Empty for no ribbon. */
   badge: string
   /**

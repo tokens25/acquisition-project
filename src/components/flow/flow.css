@@ -359,6 +359,20 @@
   font-size: var(--font-size-caption-sm);
   line-height: 1.5;
 }
+/* The standing price, crossed out before the promotional one. */
+.fl-cadence__struck {
+  color: #afb3b8;
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.5;
+  text-decoration: line-through;
+}
+/* The promotion, in the green the saving uses: the two say the same kind of thing. */
+.fl-cadence__offer {
+  margin: 0;
+  color: #6ddb96;
+  font-size: var(--font-size-caption-xs);
+  line-height: 1.52;
+}
 /* Label/badge/Left — a pixel past the corner, over the card's own border. */
 .fl-cadence__badge {
   position: absolute;

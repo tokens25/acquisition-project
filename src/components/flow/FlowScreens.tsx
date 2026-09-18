@@ -500,6 +500,7 @@ export function CadenceFlowScreen({
                   <p className="fl-cadence__name">{option.title}</p>
                   <p className="fl-cadence__note">{option.note}</p>
                   <p className="fl-cadence__price">
+                    {option.struck && <s className="fl-cadence__struck">{option.struck}</s>}
                     <span className="fl-cadence__amount">{option.price}</span>
                     <span className="fl-cadence__unit">/{option.unit}</span>
                     {savings[option.id] && (
@@ -509,6 +510,7 @@ export function CadenceFlowScreen({
                       </span>
                     )}
                   </p>
+                  {option.offer && <p className="fl-cadence__offer">{option.offer}</p>}
                 </div>
                 {option.badge && (
                   <span className="fl-cadence__badge">
