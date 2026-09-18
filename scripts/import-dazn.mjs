@@ -93,12 +93,12 @@ async function loadAtlas() {
   const dazn = new Map() // `${cc}|${entSet}` → { name, desc, inc, badge, hl }
   for (const [cc, m] of Object.entries(d.markets ?? {})) {
     for (const t of m.tiers ?? []) {
-      dazn.set(`${cc.toLowerCase()}|${t.id}`, { name: t.name, desc: t.desc, inc: t.inc ?? [], badge: t.badge, hl: Boolean(t.hl) })
+      dazn.set(`${cc.toLowerCase()}|${t.id}`, { name: t.name, desc: t.desc, inc: t.inc ?? [], badge: t.badge, hl: Boolean(t.hl), resolution: t.resolution })
     }
     for (const p of m.products ?? []) {
       for (const t of p.tiers ?? []) {
         const k = `${p.pg}|${t.id}`
-        if (!league.has(k)) league.set(k, { product: p.name, name: t.name, inc: t.inc ?? [], tags: t.tags ?? [] })
+        if (!league.has(k)) league.set(k, { product: p.name, name: t.name, inc: t.inc ?? [], tags: t.tags ?? [], resolution: t.resolution })
       }
     }
   }
@@ -142,6 +142,67 @@ async function loadContent(locale) {
     groups.push(...(body.items ?? []))
   }
   return any ? { locale, groups, entries, assets } : null
+}
+
+/* ── Tier details, from the offers service's Entitlements ─────────────── */
+
+/**
+ * What a plan lets you do, as the offers service states it.
+ *
+ * These are facts about the entitlement set, not copy: how many streams at
+ * once, on how many networks, whether downloads are allowed, whether the plan
+ * is phone-only, how many pay-per-views it bundles. DAZN's own cards turn
+ * exactly these into benefit lines — "Stream on 2 devices in 1 location" — so
+ * a card that has no such line gets one written from the same facts, and a
+ * plan with no description at all gets one made of nothing but them.
+ */
+function detailsOf(body) {
+  const out = new Map()
+  for (const e of body.Entitlements ?? []) {
+    const ids = e.entitlementIds ?? []
+    const f = e.features ?? {}
+    const conc = f.CONCURRENCY ?? {}
+    const dev = f.DEVICE ?? {}
+    const policy = ids.some((x) => x.includes('disallow_watch_concurrency'))
+      ? 'one'
+      : ids.some((x) => x.includes('with_single_location'))
+        ? 'single'
+        : ids.some((x) => x.includes('watch_concurrency'))
+          ? 'multi'
+          : null
+    out.set(e.setId, {
+      streams: typeof conc.max_devices === 'number' ? conc.max_devices : null,
+      networks: typeof conc.max_ips === 'number' ? conc.max_ips : policy === 'single' ? 1 : null,
+      policy,
+      downloads: ids.some((x) => x.includes('allow_download')),
+      mobileOnly: dev.access_device === 'mobile',
+      ppvs: (e.ppvsIncluded ?? []).length,
+      multiview: (e.multiviewEnabledCountries ?? []).length > 0,
+    })
+  }
+  return out
+}
+
+/** The lines those facts make, in the order DAZN's cards tend to put them. */
+function detailLines(d, resolution) {
+  const lines = []
+  if (resolution) lines.push(resolution === '4K/HDR' ? 'HDR and Dolby 5.1 on selected events' : 'Full HD video')
+  if (d.policy === 'one' || d.streams === 1) lines.push('Watch on one device at a time')
+  else if (d.streams && d.networks && d.networks > 1) lines.push(`Watch on ${d.streams} devices in ${d.networks} locations`)
+  else if (d.streams && (d.networks === 1 || d.policy === 'single')) lines.push(`Stream on ${d.streams} devices in 1 location`)
+  else if (d.streams) lines.push(`Stream on ${d.streams} devices at once`)
+  if (d.mobileOnly) lines.push('Mobile only — phone and tablet')
+  if (d.downloads) lines.push('Download to watch offline')
+  if (d.ppvs > 0) lines.push(`${d.ppvs} pay-per-view event${d.ppvs === 1 ? '' : 's'} included`)
+  return lines
+}
+
+/** Whether a card already says something about a detail, in any language. */
+const SAYS = {
+  streams: /\b(stream|device|dispositiv|appareil|gerät|端末|デバイス|apparat|urządze|dispositivo)/i,
+  downloads: /\b(download|descarg|téléchar|herunterlad|ダウンロード|scaric|pobier)/i,
+  mobile: /\b(mobile|móvil|mobil|モバイル|celular)/i,
+  ppv: /\b(pay-per-view|ppv|pago por visión)/i,
 }
 
 /* ── Choosing the right card for a market ────────────────────────────── */
@@ -246,10 +307,23 @@ async function main() {
   const offers = []
   const features = new Map() // text → id
   const logos = new Map() // id → entry
-  const featureId = (text) => {
-    if (!features.has(text)) features.set(text, `f-${slug(text).slice(0, 48)}-${features.size + 1}`)
-    return features.get(text)
+  /*
+   * One id per line, where "one line" ignores what a copywriter's keyboard did
+   * to it: a double space or a trailing full stop is not a different benefit.
+   * The first spelling seen is the one kept.
+   */
+  const canon = (text) => text.replace(/\s+/g, ' ').replace(/[.\u200b]+$/g, '').trim()
+  const featureKeys = new Map() // canonical lower → text as first seen
+  const featureId = (raw) => {
+    const text = canon(raw)
+    const key = text.toLowerCase()
+    if (!featureKeys.has(key)) featureKeys.set(key, text)
+    const kept = featureKeys.get(key)
+    if (!features.has(kept)) features.set(kept, `f-${slug(kept).slice(0, 48)}-${features.size + 1}`)
+    return features.get(kept)
   }
+  /** The same line twice on one card says it once. */
+  const uniq = (ids) => [...new Set(ids)]
 
   for (const { market, product, body } of pulled) {
     const channel = CHANNEL_OF[product] // undefined for DAZN itself
@@ -309,10 +383,16 @@ async function main() {
 
     /* This market's words for each plan, as a market patch. */
     const local = await content(LOCALE[market])
+    const details = detailsOf(body)
     for (const [entSet, rank] of ranks) {
       const tierId = `${slug(product)}-${slug(entSet)}`
       const tier = tiers.get(tierId)
       tier.displayOrder = Math.max(tier.displayOrder, rank)
+      // The same entitlement set states the same facts in every market; the
+      // first market to answer supplies them.
+      if (!tier._details && details.get(entSet)) tier._details = details.get(entSet)
+      const curatedRes = (atlas.league.get(`${product}|${entSet}`) ?? atlas.dazn.get(`${market}|${entSet}`))?.resolution
+      if (curatedRes && !tier._resolution) tier._resolution = curatedRes
       const best = cardsFor(local, market, entSet)[0] ?? cardsFor(base, market, entSet)[0]
       if (!best) {
         // No card in the CMS. The Atlas has one for every league product, and
@@ -321,7 +401,7 @@ async function main() {
         if (curated && !tier.planName) {
           tier.planName = curated.name
           tier.description = curated.desc?.trim() ?? ''
-          tier.features = curated.inc.map((line) => featureId(line))
+          tier.features = uniq(curated.inc.map((line) => featureId(line)))
           if (curated.badge) tier.badge = curated.badge
           tier.highlighted = Boolean(curated.hl || curated.badge)
           tier._curated = true
@@ -348,7 +428,7 @@ async function main() {
           : f.showBestValueBadge && f.bestValueBadgeText
             ? String(f.bestValueBadgeText).trim()
             : undefined,
-        features: lines.map((b) => featureId(b.text)),
+        features: uniq(lines.map((b) => featureId(b.text))),
         logoTiles: badges.map((l) => l.id),
         logoTotal: badges.length,
       }
@@ -417,7 +497,40 @@ async function main() {
     tier.overrides = tier.overrides.filter((o) =>
       Object.entries(o.patch).some(([k, v]) => JSON.stringify(v) !== JSON.stringify(tier[k])),
     )
-    report.plans.push(`${tier.id}: "${tier.planName}"${tier._curated ? ' (Atlas)' : ''}${tier.status === 'legacy' ? ' [legacy]' : ''} · ${tier.overrides.length} market patches`)
+    report.plans.push(`${tier.id}: "${tier.planName}"${tier._curated ? ' (Atlas)' : ''}${tier._detailed ? ' (+details)' : ''}${tier.status === 'legacy' ? ' [legacy]' : ''} · ${tier.overrides.length} market patches`)
+  }
+
+  /*
+   * What the details fill in, once the words have had their say.
+   *
+   * A description made of facts where a plan has none — "Full HD video ·
+   * Stream on 2 devices in 1 location · Download to watch offline" — and a
+   * benefit line for any detail the card's own lines do not mention, in any
+   * of the languages a card here is written in. Nothing is added where the
+   * card already speaks to it; a card saying "Dispositivi: 2" is not given
+   * "Stream on 2 devices" beside it.
+   */
+  const textOf = (id) => [...features].find(([, v]) => v === id)?.[0] ?? ''
+  const mentions = (ids, re) => ids.some((id) => re.test(textOf(id)))
+  for (const tier of tiers.values()) {
+    const d = tier._details
+    if (!d) continue
+    const lines = detailLines(d, tier._resolution)
+    const missing = lines.filter((line) => {
+      if (/device|stream/i.test(line)) return !mentions(tier.features, SAYS.streams)
+      if (/download/i.test(line)) return !mentions(tier.features, SAYS.downloads)
+      if (/mobile/i.test(line)) return !mentions(tier.features, SAYS.mobile)
+      if (/pay-per-view/i.test(line)) return !mentions(tier.features, SAYS.ppv)
+      return !mentions(tier.features, /\b(hd|hdr|4k|dolby|1080|full hd)\b/i)
+    })
+    if (missing.length) {
+      tier.features = uniq([...tier.features, ...missing.map((line) => featureId(line))])
+      tier._detailed = true
+    }
+    if (!tier.description.trim() && lines.length) {
+      tier.description = lines.slice(0, 3).join(' · ')
+      tier._detailed = true
+    }
   }
 
   /* One highlighted plan per row (S-1). A row is one market's plans for one
@@ -465,7 +578,18 @@ async function main() {
       ...(current.logoCatalog ?? []).filter((l) => keptLogoIds.has(l.id)),
       ...[...logos.values()].map((l) => ({ id: l.id, name: l.name, altText: `${l.name} logo`, status: 'active', image: l.url })),
     ],
-    tiers: [...keptTiers, ...[...tiers.values()].map(({ _source, _curated, ...t }) => ({ ...t, source: { ..._source, ...(_curated ? { copy: 'atlas' } : {}) } }))],
+    tiers: [
+      ...keptTiers,
+      ...[...tiers.values()].map(({ _source, _curated, _details, _detailed, _resolution, ...t }) => ({
+        ...t,
+        source: {
+          ..._source,
+          ...(_curated ? { copy: 'atlas' } : {}),
+          ...(_detailed ? { details: 'entitlements' } : {}),
+          ...(_details ? { limits: _details } : {}),
+        },
+      })),
+    ],
     offers: [...keptOffers, ...offers],
     // Start where the data is richest.
     context: { ...(current.context ?? {}), market: 'gb', subscription: undefined, cadence: 'Monthly' },

@@ -1,7 +1,7 @@
 markets  21: be:EUR at:EUR de:EUR li:CHF lu:EUR ch:CHF fr:EUR it:EUR jp:JPY pt:EUR es:EUR tw:TWD ca:CAD ie:EUR mx:MXN nl:EUR pl:PLN gb:GBP us:USD au:AUD br:BRL
 plans    68 from the APIs + 3 RSN kept
 offers   637 priced rows (0 skipped, no price)
-benefits 421 distinct lines
+benefits 420 distinct lines
 badges   73 logo assets
 unnamed  1: dazn-tier-silver-de (DAZN)
 
@@ -14,7 +14,7 @@ dazn-tier-bundle-ul-nflult-at: "DAZN Unlimited + NFL Ultimate" (Atlas) [legacy] 
 fiba-tier-fiba-pro: "Standard" · 19 market patches
 fiba-tier-fiba-ultimate: "Ultimate" · 19 market patches
 nfl-tier-nfl-pro: "Season Pro" · 19 market patches
-nfl-tier-nfl-ultimate: "Season Pro Ultimate" · 18 market patches
+nfl-tier-nfl-ultimate: "Season Pro Ultimate" · 17 market patches
 nhl-tier-nhl-pro: "Standard" · 10 market patches
 nhl-tier-nhl-ultimate: "Ultimate" · 10 market patches
 nationalleaguetv-tier-nationalleaguetv-pro: "Standard" (Atlas) · 0 market patches
