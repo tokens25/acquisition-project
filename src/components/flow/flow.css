@@ -530,15 +530,25 @@
 .fl-account__rule[data-met] {
   color: #79e99c;
 }
+.fl-account__consents {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  border: var(--border-1) solid #6a717a;
+  border-radius: var(--radius-12);
+  background: #0d0e11;
+  overflow: hidden;
+}
 .fl-account__consent {
   display: flex;
   gap: var(--space-16);
   align-items: center;
   inline-size: 100%;
   padding: var(--space-16);
-  border: var(--border-1) solid #6a717a;
-  border-radius: var(--radius-12);
-  background: #0d0e11;
+}
+/* A rule between the permissions, none above the first or below the last. */
+.fl-account__consent + .fl-account__consent {
+  border-block-start: var(--border-1) solid #2b3036;
 }
 .fl-account__consent-body {
   flex: 1;

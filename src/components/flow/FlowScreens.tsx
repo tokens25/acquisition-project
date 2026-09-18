@@ -637,20 +637,31 @@ export function AccountFlowScreen({
 
           <div className="fl-account__block">
             <p className="fl-account__heading">{content.notifyHeading}</p>
-            {consentsOf(content).map((consent) => (
-              <div key={consent.id}>
-                <div className="fl-account__consent">
-                  <p className="fl-account__consent-body">{consent.body}</p>
-                  {/* The switch draws where it starts. A consent that is on by
-                      default is a different thing being asked from one that is
-                      off, and the screen has to show which. */}
-                  <span className="fl-account__switch" data-on={consent.on || undefined}>
-                    <span className="fl-account__knob" />
-                  </span>
-                </div>
-                {consent.note && <p className="fl-account__note">{consent.note}</p>}
+            {/* One box for all the permissions, a rule between each: they are
+                one question — what may we send you — asked in parts, and a
+                stack of separate boxes reads as three unrelated forms. */}
+            {consentsOf(content).length > 0 && (
+              <div className="fl-account__consents">
+                {consentsOf(content).map((consent) => (
+                  <div className="fl-account__consent" key={consent.id}>
+                    <p className="fl-account__consent-body">{consent.body}</p>
+                    {/* The switch draws where it starts. A consent that is on by
+                        default is a different thing being asked from one that is
+                        off, and the screen has to show which. */}
+                    <span className="fl-account__switch" data-on={consent.on || undefined}>
+                      <span className="fl-account__knob" />
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
+            {consentsOf(content)
+              .filter((c) => c.note)
+              .map((c) => (
+                <p className="fl-account__note" key={c.id}>
+                  {c.note}
+                </p>
+              ))}
           </div>
         </div>
 
