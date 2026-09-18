@@ -483,7 +483,9 @@ button.acq-feature__info:hover {
   container-type: inline-size;
 }
 /* One row, always. The plans are compared side by side — a fourth card
-   belongs at the end of the row, reached by scrolling, not under the first. */
+   belongs at the end of the row, reached by scrolling, not under the first.
+   And a row that scrolls says so: a slim bar under it that stays put, rather
+   than the overlay bar a Mac hides until the row is already moving. */
 .acq-set {
   display: flex;
   flex-wrap: nowrap;
@@ -493,6 +495,61 @@ button.acq-feature__info:hover {
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
   padding-block-end: var(--space-8);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-full-color-default) transparent;
+}
+/* The app hides every scrollbar (`* { scrollbar-width: none }`); this row is
+   the exception, so the bar has to be put back explicitly. */
+.acq-set::-webkit-scrollbar {
+  display: block;
+  block-size: 6px;
+}
+.acq-set::-webkit-scrollbar-track {
+  background: transparent;
+}
+.acq-set::-webkit-scrollbar-thumb {
+  background: var(--color-border-full-color-default);
+  border-radius: 3px;
+}
+/* Chevrons at the ends of the row, each present only while there is
+   something on its side to scroll to. On the phone the row is swiped. */
+.acq-set-nav {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 36px;
+  block-size: 36px;
+  padding: 0;
+  border: 1px solid var(--color-border-full-color-default);
+  border-radius: 50%;
+  background: var(--color-surface-container-3);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.4);
+}
+.acq-set-nav:hover {
+  background: var(--color-surface-container-4);
+}
+.acq-set-nav:focus-visible {
+  outline: 2px solid var(--color-brand-tertiary);
+  outline-offset: 2px;
+}
+.acq-set-nav--prev {
+  inset-inline-start: var(--space-8);
+}
+.acq-set-nav--next {
+  inset-inline-end: var(--space-8);
+}
+/* Not inside a phone frame: there the row is swiped, and two buttons over a
+   375-wide screen would cover the cards they are meant to reveal. */
+@container (max-width: 599px) {
+  .acq-set-nav {
+    display: none;
+  }
 }
 .acq-set > .acq-card {
   flex: 0 0 auto;

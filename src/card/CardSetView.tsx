@@ -6,6 +6,9 @@ import { isWholeInView } from '../components/acquisition/viewport'
 import type { CardSet, Context } from '../rules/content'
 import { marketFor, resolveSet } from '../rules/resolve'
 import { RuledCard } from './RuledCard'
+import chevronLeft from '../assets/icons/nav-chevron-left-md.svg?raw'
+import chevronRight from '../assets/icons/nav-chevron-right-md.svg?raw'
+import { Icon } from '../components/Icon'
 
 /**
  * Renders a set for a context and resolves the two set-level layout rules.
@@ -48,6 +51,7 @@ export function CardSetView({
   const probeRef = useRef<HTMLParagraphElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [hasMore, setHasMore] = useState(false)
+  const [hasLess, setHasLess] = useState(false)
   const [descriptionLines, setDescriptionLines] = useState<1 | 2>(1)
   /**
    * The open dialog's contents, or null.
@@ -180,7 +184,35 @@ export function CardSetView({
     if (!row) return
     const remaining = row.scrollWidth - row.clientWidth - row.scrollLeft
     setHasMore(remaining > 4)
+    setHasLess(row.scrollLeft > 4)
   }, [])
+
+  /** One card over, in the direction asked — a card and the gap beside it. */
+  const scrollBy = useCallback((direction: -1 | 1) => {
+    const row = ref.current
+    if (!row) return
+    const card = row.querySelector<HTMLElement>('.acq-card')
+    const gap = parseFloat(getComputedStyle(row).columnGap) || 0
+    const step = (card?.offsetWidth ?? row.clientWidth) + gap
+    row.scrollBy({ left: direction * step, behavior: 'smooth' })
+  }, [])
+
+  // A wheel turned over the row moves it sideways. The row is the only thing
+  // here that scrolls horizontally, and a mouse wheel has no sideways; without
+  // this, the fourth plan is reachable only on a trackpad.
+  useEffect(() => {
+    const row = ref.current
+    if (!row) return
+    const onWheel = (e: WheelEvent) => {
+      if (row.scrollWidth <= row.clientWidth) return
+      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return
+      const before = row.scrollLeft
+      row.scrollLeft += e.deltaY
+      if (row.scrollLeft !== before) e.preventDefault()
+    }
+    row.addEventListener('wheel', onWheel, { passive: false })
+    return () => row.removeEventListener('wheel', onWheel)
+  }, [cards])
 
   useEffect(() => {
     const row = ref.current
@@ -239,7 +271,32 @@ export function CardSetView({
 
   return (
     <div className="acq-preview">
-      <div className="acq-set-scroll" ref={scrollRef} data-more={hasMore || undefined}>
+      <div
+        className="acq-set-scroll"
+        ref={scrollRef}
+        data-more={hasMore || undefined}
+        data-less={hasLess || undefined}
+      >
+        {hasLess && (
+          <button
+            type="button"
+            className="acq-set-nav acq-set-nav--prev"
+            aria-label="Previous plans"
+            onClick={() => scrollBy(-1)}
+          >
+            <Icon svg={chevronLeft} size={20} />
+          </button>
+        )}
+        {hasMore && (
+          <button
+            type="button"
+            className="acq-set-nav acq-set-nav--next"
+            aria-label="More plans"
+            onClick={() => scrollBy(1)}
+          >
+            <Icon svg={chevronRight} size={20} />
+          </button>
+        )}
         <div
           className="acq-set"
           ref={ref}

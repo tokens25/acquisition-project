@@ -191,22 +191,18 @@ ul.jy__excluded li[data-reason='seeded'] { color: var(--color-accent-success-tex
    every one of them is there to be edited, rather than scrolling out of sight
    the way they do on a device.
 
-   It scrolls rather than clipping: the pane is usually wide enough for all
-   three, but it is not always, and a card you cannot reach is worse than one
-   you have to scroll to. The scrollbar is hidden because the row is a picture
-   of a screen and a bar under it is the tool's, not the design's. */
+   It scrolls rather than clipping: the pane is usually wide enough for
+   three, but a market sells four or six, and a card you cannot reach is worse
+   than one you have to scroll to. The row keeps its slim bar and its
+   chevrons here: a row that scrolls has to look like one. */
 .jy__viewport .acq-set {
   overflow-x: auto;
-  scrollbar-width: none;
   /* Chains out of the row when it reaches its end. The row contains its own
      overscroll on a device, where it is the only thing that scrolls sideways.
      Inside a frame that also scrolls sideways, containing it means a screen
      wider than the pane can never be reached from over the cards — and the
      cards are most of the screen. */
   overscroll-behavior-x: auto;
-}
-.jy__viewport .acq-set::-webkit-scrollbar {
-  display: none;
 }
 /* The row is the screen's neighbour here rather than its content, so its space
    above is its own — 16 off the tabs, not the 24 the screen's body gives it. */
