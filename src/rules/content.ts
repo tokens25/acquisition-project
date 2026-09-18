@@ -430,10 +430,20 @@ export interface MarketConfig {
    * market written by hand.
    */
   checkoutCopy?: {
+    /** In English — what the tool reads. */
     strings: Record<string, string>
     links: Record<string, string>
     version?: string
+    /** The same strings in the market's own language, shown when translated. */
+    native?: { language: string; strings: Record<string, string> }
   }
+  /**
+   * The plans' words in the market's own language, as DAZN's CMS has them,
+   * keyed the way the translator keys strings (`plans.<id>.description`,
+   * `features.<id>`). The tool reads English; these are what "Translate"
+   * puts on screen for this market instead of asking a machine.
+   */
+  words?: { language: string; strings: Record<string, string> }
 }
 
 export interface CampaignConfig {

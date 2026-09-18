@@ -161,6 +161,7 @@ export interface CheckoutStrings {
   strings: Record<string, string>
   links: Record<string, string>
   version?: string
+  language?: string
 }
 
 /** Everything fetched for one market: seven offer bodies, its locale's content pages, its checkout words. */
@@ -170,7 +171,10 @@ export interface MarketPull {
   /** The market's own locale (after fallback), then the English base. */
   content: ContentBody[]
   base: ContentBody[]
+  /** The checkout's words in English for this market — what the tool reads. */
   strings?: CheckoutStrings | null
+  /** The same in the market's own language, for the translator to put on screen. */
+  nativeStrings?: CheckoutStrings | null
   fetchedAt: string
 }
 
@@ -196,13 +200,13 @@ export async function fetchContent(fetchFn: Fetch, locale: string): Promise<Cont
 }
 
 /** The checkout's words for a market, in its own language, trimmed to the keys the checkout reads. */
-export async function fetchStrings(fetchFn: Fetch, market: string): Promise<CheckoutStrings | null> {
-  const lang = (LOCALE[market] ?? BASE_LOCALE).split('-')[0]
+export async function fetchStrings(fetchFn: Fetch, market: string, language?: string): Promise<CheckoutStrings | null> {
+  const lang = language ?? (LOCALE[market] ?? BASE_LOCALE).split('-')[0]
   const body = await get<StringsBody>(fetchFn, stringsUrl(market, lang))
   if (!body?.Strings) return null
   const strings: Record<string, string> = {}
   for (const [k, v] of Object.entries(body.Strings)) if (CHECKOUT_KEYS.test(k) && typeof v === 'string') strings[k] = v
-  return { strings, links: body.Links ?? {}, version: body.Metadata?.Version }
+  return { strings, links: body.Links ?? {}, version: body.Metadata?.Version, language: lang }
 }
 
 export async function fetchOffers(fetchFn: Fetch, market: string): Promise<Partial<Record<Product, OffersBody>>> {
@@ -222,11 +226,21 @@ export async function fetchOffers(fetchFn: Fetch, market: string): Promise<Parti
  */
 export async function fetchMarket(fetchFn: Fetch, market: string, base?: ContentBody[]): Promise<MarketPull> {
   const locale = LOCALE[market] ?? BASE_LOCALE
-  const [offers, content, baseContent, strings] = await Promise.all([
+  const lang = locale.split('-')[0]
+  const [offers, content, baseContent, english, native] = await Promise.all([
     fetchOffers(fetchFn, market),
     fetchContent(fetchFn, locale),
     base ? Promise.resolve(base) : locale === BASE_LOCALE ? Promise.resolve(null) : fetchContent(fetchFn, BASE_LOCALE),
-    fetchStrings(fetchFn, market),
+    fetchStrings(fetchFn, market, 'en'),
+    lang === 'en' ? Promise.resolve(null) : fetchStrings(fetchFn, market, lang),
   ])
-  return { market, offers, content, base: baseContent ?? content, strings, fetchedAt: new Date().toISOString() }
+  return {
+    market,
+    offers,
+    content,
+    base: baseContent ?? content,
+    strings: english ?? native,
+    nativeStrings: lang === 'en' ? null : native,
+    fetchedAt: new Date().toISOString(),
+  }
 }

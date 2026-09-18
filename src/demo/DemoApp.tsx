@@ -356,8 +356,8 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
   /** The sheet that asks which languages this market should also read in. */
   const [translating, setTranslating] = useState(false)
   const marketSet = useMemo(
-    () => (tx.state === 'off' ? store.set : viewSet(store.set, store.context.market, tx.entries)),
-    [store.set, store.context.market, tx.entries, tx.state],
+    () => (tx.state === 'off' ? store.set : viewSet(store.set, store.context.market, tx.entries, tx.current.code)),
+    [store.set, store.context.market, tx.entries, tx.state, tx.current.code],
   )
 
   const marketLabel = store.set.markets.find((m) => m.code === store.context.market)?.label ?? store.context.market

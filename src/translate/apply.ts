@@ -52,7 +52,7 @@ export function translatedSet(set: CardSet, translations: Translations): CardSet
  * kept, then whatever is only translated in this browser. Kept words win over
  * a fresh machine translation, because a person has read them.
  */
-export function viewSet(set: CardSet, market: string, machine: Translations): CardSet {
+export function viewSet(set: CardSet, market: string, machine: Translations, language?: string): CardSet {
   const kept = set.copyByMarket?.[market] ?? {}
   const draft: Record<string, string> = {}
   for (const [key, t] of Object.entries(machine)) {
@@ -60,7 +60,19 @@ export function viewSet(set: CardSet, market: string, machine: Translations): Ca
     if (currentAt(set, key) !== t.from) continue
     draft[key] = t.text
   }
-  return applyCopy(set, { ...kept, ...draft })
+  const applied = applyCopy(set, { ...kept, ...draft })
+  // The checkout's DAZN sentences are read in English; translated into the
+  // market's own language, the market's own strings are read instead.
+  if (!language) return applied
+  return {
+    ...applied,
+    markets: applied.markets.map((m) => {
+      const native = m.code === market ? m.checkoutCopy?.native : undefined
+      return native && native.language === language && m.checkoutCopy
+        ? { ...m, checkoutCopy: { ...m.checkoutCopy, strings: native.strings } }
+        : m
+    }),
+  }
 }
 
 /** Writes a flat key to text map over a copy of the set. */

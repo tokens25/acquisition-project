@@ -43,11 +43,20 @@ async function pullFromFiles(market, base) {
   for (const f of [`${locale}.json`, ...PRODUCTS.filter((p) => p !== 'DAZN').map((p) => `${locale}--${p}.json`)]) {
     try { content.push(await readJson(join(DATA, 'content', f))) } catch { /* no page */ }
   }
-  let strings = null
-  try {
-    strings = await readJson(join(DATA, 'strings', `${market}.json`))
-  } catch { /* not pulled */ }
-  return { market, offers, content, base: base ?? content, strings, fetchedAt: new Date().toISOString() }
+  // `{cc}.json` is the market's own language, `{cc}.en.json` the English; a
+  // market whose language is English has only the first.
+  let native = null
+  let english = null
+  try { native = await readJson(join(DATA, 'strings', `${market}.json`)) } catch { /* not pulled */ }
+  try { english = await readJson(join(DATA, 'strings', `${market}.en.json`)) } catch { /* not pulled */ }
+  const lang = (LOCALE[market] ?? 'en-GB').split('-')[0]
+  if (native && !native.language) native.language = lang
+  return {
+    market, offers, content, base: base ?? content,
+    strings: lang === 'en' ? native : (english ?? native),
+    nativeStrings: lang === 'en' ? null : native,
+    fetchedAt: new Date().toISOString(),
+  }
 }
 
 const current = await readJson(OUT).catch(() => null)

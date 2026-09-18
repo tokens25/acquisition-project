@@ -369,6 +369,7 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
   const features = new Map<string, FeatureEntry>()
   const logos = new Map<string, CatalogEntry>()
   const addOns = new Map<string, AddOnEntry>()
+  const words: Record<string, string> = {}
   const notes: string[] = []
   const feature = (text: string) => {
     const id = featureIdFor(text)
@@ -523,11 +524,29 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
       const ent = limitsBySet.get(entSet)
       if (ent) tier.limits = limitsOf(ent, curated?.resolution ?? null)
 
-      const best = cardsFor(local, market, entSet)[0] ?? cardsFor(base, market, entSet)[0]
+      // The tool reads English. The market's group has its cards in English
+      // in the en-GB locale, so those are the words; the market's own language
+      // is kept beside them for the translator to put on screen on request.
+      const english = cardsFor(base, market, entSet)[0]
+      const native = cardsFor(local, market, entSet)[0]
+      const best = english ?? native
       if (best) {
-        const source = (local && cardsFor(local, market, entSet)[0] ? local : base) as Content
+        const source = (english ? base : local) as Content
         const f = best.item.fields
         const lines = benefitsOf(source, best.item)
+        if (english && native && local && local !== base) {
+          const nf = native.item.fields
+          const nativeLines = benefitsOf(local, native.item)
+          if (str(nf.description)) words[`plans.${tierId}.description`] = str(nf.description)
+          const nBadge = (nf.showEyebrow ? str(nf.eyebrowText) : '') || (nf.showBestValueBadge ? str(nf.bestValueBadgeText) : '')
+          if (nBadge) words[`plans.${tierId}.badge`] = nBadge
+          // Line for line, when the two cards list the same number of them.
+          if (nativeLines.length === lines.length) {
+            lines.forEach((line, i) => {
+              if (nativeLines[i]) words[`features.${featureIdFor(line)}`] = canon(nativeLines[i])
+            })
+          }
+        }
         const badges = logosOf(source, best.item)
         for (const l of badges) logos.set(l.id, l)
         const eyebrow = f.showEyebrow ? str(f.eyebrowText) : ''
@@ -566,7 +585,15 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
   /* The tabs the DAZN page draws, and which plans sit on which. A plan the
      CMS puts on a tab is on sale from the picker — the youth plans in Spain
      are sold from their own tab, not tucked behind the standard ones. */
-  const tabbed = tabsOf(local, market) ?? tabsOf(base, market)
+  // English labels, with the market's own kept for the translator.
+  const tabbed = tabsOf(base, market) ?? tabsOf(local, market)
+  const nativeTabs = local && local !== base ? tabsOf(local, market) : null
+  if (tabbed && nativeTabs) {
+    for (const tab of tabbed.tabs) {
+      const own = nativeTabs.tabs.find((t) => t.id === tab.id)
+      if (own && own.name !== tab.name) words[`planTabs.${tab.id}.name`] = own.name
+    }
+  }
   const onATab = new Set<string>()
   if (tabbed) {
     for (const tier of tiers.values()) {
@@ -683,8 +710,23 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
       locale,
       currency,
       ...(paymentMethods.length ? { paymentMethods } : {}),
-      ...(pull.strings && Object.keys(pull.strings.strings).length
-        ? { checkoutCopy: { strings: pull.strings.strings, links: pull.strings.links, ...(pull.strings.version ? { version: pull.strings.version } : {}) } }
+      ...(Object.keys(words).length && !locale.startsWith('en')
+        ? { words: { language: locale.split('-')[0], strings: words } }
+        : {}),
+      // The tool reads English, so only English strings are read as the
+      // checkout's words; a market pulled in its own language alone keeps
+      // those for the translator and reads the authored lines until then.
+      ...((pull.strings && Object.keys(pull.strings.strings).length) || (pull.nativeStrings && Object.keys(pull.nativeStrings.strings).length)
+        ? {
+            checkoutCopy: {
+              strings: pull.strings && (pull.strings.language ?? 'en') === 'en' ? pull.strings.strings : {},
+              links: pull.strings?.links ?? pull.nativeStrings?.links ?? {},
+              ...(pull.strings?.version ? { version: pull.strings.version } : {}),
+              ...(pull.nativeStrings && Object.keys(pull.nativeStrings.strings).length && pull.nativeStrings.language
+                ? { native: { language: pull.nativeStrings.language, strings: pull.nativeStrings.strings } }
+                : {}),
+            },
+          }
         : {}),
     },
     tiers: [...tiers.values()],

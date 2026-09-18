@@ -142,20 +142,42 @@ export function useTranslations(set: CardSet, context: Context): TranslationStor
   const runOne = useCallback(
     async (lang: Language, force: boolean): Promise<{ ok: boolean; note: string | null }> => {
       if (lang.code === SOURCE_LANGUAGE) return { ok: true, note: null }
-      const have = force ? {} : (read()[market.code]?.[lang.code] ?? {})
+      const have: Translations = force ? {} : { ...(read()[market.code]?.[lang.code] ?? {}) }
+      // The market's own words for its plans, from DAZN's CMS, go on screen as
+      // they are — reviewed, since DAZN wrote them — and are not sent to be
+      // machine-translated. Only in the market's own language.
+      const cms = market.words?.language === lang.code ? market.words.strings : {}
+      let fromCms = 0
+      for (const s of everyString(set)) {
+        const text = cms[s.key]
+        if (text && have[s.key]?.from !== s.text) {
+          have[s.key] = { text, state: 'reviewed', from: s.text }
+          fromCms += 1
+        }
+      }
       const strings = everyString(set).filter((s) => {
         const already = have[s.key]
         // Already translated from this exact English, so leave it alone.
         return !(already && already.from === s.text)
       })
-      if (strings.length === 0) return { ok: true, note: null }
+      if (strings.length === 0) {
+        if (fromCms) save(market.code, lang.code, have)
+        return { ok: true, note: fromCms ? `${fromCms} lines are DAZN's own words for ${market.label}.` : null }
+      }
 
       try {
         const probe = await fetch('/api/translate', { headers: { accept: 'application/json' } })
         const status = (await probe.json()) as { configured?: boolean; reason?: string }
         if (!probe.ok || !status.configured) {
+          // DAZN's own words still go on screen; only the rest needs a key.
+          if (fromCms) save(market.code, lang.code, have)
           setState('unavailable')
-          return { ok: false, note: status.reason ?? 'No key is set.' }
+          return {
+            ok: false,
+            note: fromCms
+              ? `${fromCms} lines are DAZN's own words for ${market.label}; the rest need a translator key. ${status.reason ?? ''}`.trim()
+              : (status.reason ?? 'No key is set.'),
+          }
         }
         const res = await fetch('/api/translate', {
           method: 'POST',

@@ -98,15 +98,21 @@ async function main() {
 
   // The checkout's words, trimmed to the keys the checkout reads — the full
   // response is twenty thousand strings, most of them the app's own UI.
+  // In English (what the tool reads) and in the market's own language (what
+  // Translate puts on screen): `{cc}.json` and `{cc}.en.json`.
   for (const [cc, locale] of Object.entries(MARKETS)) {
-    const r = await pull(stringsUrl(cc, locale.split('-')[0]))
-    const all = r.body?.Strings ?? {}
-    const strings = Object.fromEntries(Object.entries(all).filter(([k]) => CHECKOUT_KEYS.test(k)))
-    const n = Object.keys(strings).length
-    manifest.strings.push({ market: cc, status: r.status, ok: r.ok, keys: n, version: r.body?.Metadata?.Version, note: r.text })
-    if (r.ok && n) await writeFile(join(OUT, 'strings', `${cc}.json`), JSON.stringify({ strings, links: r.body.Links ?? {}, version: r.body.Metadata?.Version }, null, 2))
-    process.stdout.write(`${r.ok && n ? '✓' : '·'} strings ${cc.toUpperCase().padEnd(3)} ${r.status}  ${n} checkout keys\n`)
-    await sleep(150)
+    const lang = locale.split('-')[0]
+    for (const l of lang === 'en' ? ['en'] : [lang, 'en']) {
+      const r = await pull(stringsUrl(cc, l))
+      const all = r.body?.Strings ?? {}
+      const strings = Object.fromEntries(Object.entries(all).filter(([k]) => CHECKOUT_KEYS.test(k)))
+      const n = Object.keys(strings).length
+      manifest.strings.push({ market: cc, language: l, status: r.status, ok: r.ok, keys: n, version: r.body?.Metadata?.Version, note: r.text })
+      const file = l === 'en' && lang !== 'en' ? `${cc}.en.json` : `${cc}.json`
+      if (r.ok && n) await writeFile(join(OUT, 'strings', file), JSON.stringify({ strings, links: r.body.Links ?? {}, version: r.body.Metadata?.Version, language: l }, null, 2))
+      process.stdout.write(`${r.ok && n ? '✓' : '·'} strings ${cc.toUpperCase().padEnd(3)} ${l}  ${r.status}  ${n} checkout keys\n`)
+      await sleep(150)
+    }
   }
 
   await writeFile(join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2))
