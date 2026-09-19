@@ -283,8 +283,9 @@ export const SHIPPED_ORDER: SectionType[] = [
  * it takes that name here.
  *
  * The other two were not Text block and not Places, which is what they had
- * been guessed to be. `IntroductionBanner` is a carousel of cards quoting a
- * price, and keeps away from Text block, which is two headings and a body.
+ * been guessed to be. `IntroductionBanner` is a full-bleed band that rotates
+ * and quotes a price — nothing like Text block, which is two headings and a
+ * body, and near enough to Article CTA that Article CTA takes the name.
  *
  * `CompetitionCarousel` is a row of circular league badges carrying a sentence
  * each — not Places, which is photographs of stadiums with words over them, but
@@ -306,9 +307,12 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   plans: 'ContentTiers',
   teams: 'CompetitionCarousel',
   area: 'Outside the area',
-  /* Named for what it is rather than what it happens to be about: a still,
-     a line about it, and a way in — node 708:174095. */
-  multiview: 'Article CTA',
+  /* Was Article CTA, named for what it is rather than what it happens to be
+     about — a still, a line about it, and a way in, node 708:174095. It takes
+     the live page's name for the same band, and is short of it in three ways
+     worth remembering: ours is not full-bleed, it does not rotate, and nothing
+     here binds a price to an entitlement and fills it in at render. */
+  multiview: 'IntroductionBanner',
   providers: 'TV providers',
   /* The type keeps its name because saved pages are arranged by it; what it
      is called is "Text block", which is what the design calls the component

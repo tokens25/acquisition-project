@@ -135,7 +135,7 @@ time of reading:
 | `SectionFeatures` | CA ES JP | Features list |
 | `SupportedDevices` | CA US GB IT DE | Supported devices |
 | `ZipCodeBreather` | US | Postcode |
-| `IntroductionBanner` | IT DE JP FR | Article CTA — nearest relative |
+| `IntroductionBanner` | IT DE JP FR | `IntroductionBanner` — ours takes the name |
 | `FreemiumBanner` | CA US GB ES DE JP FR | `FreemiumBanner` — ours takes the name |
 | `StickyPpvHeader` | ES | — |
 | `FAQs` | all eight | FAQs |
@@ -187,8 +187,8 @@ is drawn under the badge, drawn as a tooltip, or not drawn at all is not
 established: the component is in ES, DE, JP and FR only, and dazn.com serves by
 detected country, so none of those pages could be seen rendered from here.
 
-**`IntroductionBanner` is not our Text block. Article CTA is its nearest
-relative.** A breather — the artwork is filed under that name
+**`IntroductionBanner` is not our Text block. It is Article CTA**, which now
+carries that name. A breather — the artwork is filed under that name
 (`..._BUNDLE_BREATHER_DESKTOP_DACH.jpg`), which is the same word
 `ZipCodeBreather` carries: a full-bleed band that breaks up the page.
 
@@ -205,9 +205,14 @@ against the offers service through the join key above, rather than typed into
 the CMS.
 
 Text block is two headings and a body, which was never it. Article CTA is a
-still, a line about it and a way in, which is the right family — and short of
-this in three ways: it is not full-bleed, it does not rotate, and nothing we
-have binds a price to an entitlement and fills it in at render.
+still, a line about it and a way in, which is the right family — and the name is
+adopted on that reading.
+
+A match at the block and short at the fields, so the three gaps are worth
+keeping written down: ours is not full-bleed, it does not rotate, and nothing we
+have binds a price to an entitlement and fills it in at render. That last one is
+the only real work — the join it needs is the `entitlementSetId` above, which
+`/api/dazn` already resolves for the plan cards.
 
 **`FreemiumBanner` is our Image CTA**, which now carries that name. One
 `LPContentItem` with a `backgroundImage`, a `title`, a `description` and
@@ -219,8 +224,10 @@ It carries three things ours cannot say — `showBadge` with its text, a
 `features` list, and in Germany `showPrice` and `showHighlightedBorder`. A
 match at the block, short at the fields.
 
-So the palette is one component short of the welcome page:
-`IntroductionBanner`. `StickyPpvHeader` makes two, though it is Spain's alone.
+So the palette is not short of the welcome page at all, bar one:
+`StickyPpvHeader`, which is Spain's alone. Every other component on the GB, US,
+JP and DE pages has a block here — several of them short at the fields, which is
+where the work now is rather than in blocks that do not exist.
 
 ### The components on the `en-CA` welcome page
 

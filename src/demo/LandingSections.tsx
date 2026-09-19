@@ -102,19 +102,6 @@ const BESIDE_THE_PALETTE: Record<string, string> = {
   StandardRailV2: 'StandardRail — the same rail, a later renderer',
 }
 
-/**
- * The nearest thing we have to a component we do not have.
- *
- * Not a match and not counted as one — a page built from the nearest relative
- * would not look like the thing it is near. It is here because "we do not have
- * this" is a worse answer than "we do not have this, and here is what you would
- * reach for", and because knowing which gaps are nearly filled is how somebody
- * decides which to close first.
- */
-const NEAREST: Record<string, string> = {
-  IntroductionBanner:
-    'Nearest: Article CTA — a still with words and a way in, but full-bleed, rotating, and it quotes a live price from the offer.',
-}
 function LivePage({ market }: { market: string | undefined }) {
   const { state, page, error, reload } = useLiveLanding(market)
   if (state === 'off') return null
@@ -138,7 +125,7 @@ function LivePage({ market }: { market: string | undefined }) {
             <div className="ls-live__row" key={c.at} data-have={ours.has(c.type) || undefined}>
               {/* Where the match is not a palette block, say where it is
                   instead — otherwise it reads as a match nobody can find. */}
-              <span className="ls-live__name" title={BESIDE_THE_PALETTE[c.type] ?? NEAREST[c.type]}>
+              <span className="ls-live__name" title={BESIDE_THE_PALETTE[c.type]}>
                 {c.type}
               </span>
               {/* Which rail it is served, where it is served one at all — the
