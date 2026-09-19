@@ -136,7 +136,7 @@ time of reading:
 | `SupportedDevices` | CA US GB IT DE | Supported devices |
 | `ZipCodeBreather` | US | Postcode |
 | `IntroductionBanner` | IT DE JP FR | — |
-| `FreemiumBanner` | CA US GB ES DE JP FR | — |
+| `FreemiumBanner` | CA US GB ES DE JP FR | `FreemiumBanner` — ours takes the name |
 | `StickyPpvHeader` | ES | — |
 | `FAQs` | all eight | FAQs |
 | `Footer` | all eight | Footer |
@@ -191,11 +191,19 @@ detected country, so none of those pages could be seen rendered from here.
 promotional cards that quote a price and sell. Text block is two headings and a
 body.
 
-So the palette is three components short of the welcome page rather than one:
-`CompetitionCarousel`, `IntroductionBanner` and `FreemiumBanner` — that last
-one a single `LPContentItem` with a picture, a badge and a button, and the only
-one of the three that every market we have read draws. `StickyPpvHeader` makes
-four, though it is Spain's alone.
+**`FreemiumBanner` is our Image CTA**, which now carries that name. One
+`LPContentItem` with a `backgroundImage`, a `title`, a `description` and
+`buttons` — which is our picture, heading, line under it and button, field for
+field. Ours was named for its form and theirs for its purpose, and the purpose
+was already in ours: the copy it ships with is a free-to-watch pitch.
+
+It carries three things ours cannot say — `showBadge` with its text, a
+`features` list, and in Germany `showPrice` and `showHighlightedBorder`. A
+match at the block, short at the fields.
+
+So the palette is two components short of the welcome page:
+`CompetitionCarousel` and `IntroductionBanner`. `StickyPpvHeader` makes three,
+though it is Spain's alone.
 
 ### The components on the `en-CA` welcome page
 
@@ -212,7 +220,7 @@ from the `componentType` field rather than from the entry's type.
 | 5 | `SpotlightRail` | `AdaptiveImage` + **railId** | Spotlight |
 | 6 | `SpotlightRail` | `AdaptiveImage` + `LPButton` + **railId** | Spotlight |
 | 7 | `SpotlightRail` | `AdaptiveImage` + `LPButton` + **railId** | Spotlight |
-| 8 | `FreemiumBanner` | `LPContentItem` | — |
+| 8 | `FreemiumBanner` | `LPContentItem` | Image CTA, renamed to match |
 | 9 | `SupportedDevices` | `LPContentItem` + `CommonKeyValue` | Supported devices |
 | 10 | `FAQs` | 4 × `LPFaqArticle` | FAQs |
 | 11 | `Footer` | none — `footerKeys` only | Footer |
@@ -450,8 +458,8 @@ entries, not to a flag.
 against our single string of label text. Everywhere we hold a CTA as words, the
 live page holds a destination and a tracking id too.
 
-**Two components we do not have:** `FreemiumBanner`, and the second
-`SubscriptionsRail` is used as a distinct band rather than a duplicate.
+**The second `SubscriptionsRail`** is used as a distinct band rather than as a
+duplicate of the first, which our copies are.
 
 **One we have that this page does not use:** Meet the teams. It is fetched
 separately — `content_type=CommonGroup&fields.tags[in]=rsn_lp_teams` — which is

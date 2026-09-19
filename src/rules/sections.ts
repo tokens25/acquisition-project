@@ -271,7 +271,7 @@ export const SHIPPED_ORDER: SectionType[] = [
  * every time, and this is the vocabulary the handoff lands in: these strings
  * group the strings a developer is given.
  *
- * Ten blocks have no counterpart to take a name from. Meet the teams, Outside
+ * Nine blocks have no counterpart to take a name from. Meet the teams, Outside
  * the area, What's live and the rest are not on the welcome page at all — the
  * teams grid is fetched separately, against an RSN tag — so they keep the name
  * the design uses, which is the only name they have.
@@ -307,7 +307,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
      and what it now is — words, and nothing device-shaped about it. */
   devices: 'Text block',
   faq: 'FAQs',
-  imageCta: 'Image CTA',
+  imageCta: 'FreemiumBanner',
   features: 'SectionFeatures',
   supported: 'SupportedDevices',
   rail: 'StandardRail',
