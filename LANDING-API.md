@@ -459,6 +459,14 @@ landing page without touching the CMS query.
 Read across eight markets' `welcome` pages on 18 Sep 2026, against a palette of
 21 blocks.
 
+**Three of the seventeen are not this tool's to build.** The hero — `Banners`
+and `BoxedHeroBanners` — is authored in the hero studio, and `ContentTiers`
+comes from whatever sells the plans. Both are drawn here and neither is edited
+here, so the tables below count them and the honest reading leaves them out:
+**fourteen components in scope, thirteen of them ours**, and the tally per
+market becomes GB 10 of 10, US 8 of 8, CA 10 of 10, JP 10 of 10, DE 10 of 10,
+IT 6 of 6, FR 6 of 6, and ES 7 of 8.
+
 ### At the block level, we are all but complete
 
 Seventeen component types in production. We have sixteen.
@@ -482,6 +490,17 @@ Seventeen component types in production. We have sixteen.
 | `StandardRailV2` | DE | ✔ the same rail, later renderer |
 | `ZipCodeBreather` | US | ✔ |
 | `StickyPpvHeader` | ES | **no** |
+
+`StickyPpvHeader` is not what its name says. Spain's is a bar pinned to the top
+carrying one line — an offer of help to subscribe, with a phone number — a
+badge, and one primary button reading "Ya soy cliente" that goes to the auth
+chapter at `/account/content/dazn/signup?signin=true`. The entry is filed as
+`ES || Need help to subscribe || STICKY`.
+
+There is no picture on it at all: no `backgroundImage`, `showPrice` false, and
+the group's `showGradient` and `videoAlignment` are inherited rather than used.
+So the name says where it sits — stuck to the top — and nothing about what it
+holds, which is a component named for its first use and then reused.
 
 Which comes out, market by market:
 
