@@ -113,13 +113,6 @@
   align-items: center;
   min-inline-size: 0;
 }
-.pl-ready__hint {
-  min-inline-size: 0;
-  color: var(--color-text-tertiary);
-  font-size: 11.5px;
-  line-height: 1.3;
-  text-align: end;
-}
 .pl-ready__btn {
   display: flex;
   flex: none;
@@ -142,14 +135,10 @@
     background-color var(--pl-fast) ease,
     opacity var(--pl-fast) ease;
 }
-.pl-ready__btn:hover:not(:disabled) {
+.pl-ready__btn:hover {
   border-color: var(--pl-ready);
   background: color-mix(in srgb, var(--pl-ready) 8%, transparent);
   color: var(--pl-ready);
-}
-.pl-ready__btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
 }
 .pl-ready[data-compact] .pl-ready__btn {
   block-size: 24px;

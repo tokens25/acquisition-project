@@ -380,9 +380,6 @@ export function statusOf(doc: PipelineDoc, section: Section): SectionStatus {
   return doc.done[section.id] ? 'done' : 'ready'
 }
 
-export const missingRequired = (section: Section) =>
-  section.strings.filter((s) => s.required && s.value.trim() === '')
-
 export const STATUS_LABEL: Record<SectionStatus, string> = {
   draft: 'Not marked ready',
   ready: 'Ready for dev',
@@ -406,7 +403,6 @@ const without = <T>(record: Record<string, T>, id: string): Record<string, T> =>
 }
 
 export function markReady(doc: PipelineDoc, section: Section): PipelineDoc {
-  if (missingRequired(section).length) return doc
   return logged(
     {
       ...doc,

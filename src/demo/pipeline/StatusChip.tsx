@@ -6,7 +6,6 @@ import {
   changedKeys,
   formatWhen,
   fullLabel,
-  missingRequired,
   statusOf,
 } from '../../rules/pipeline'
 import { ChevronIcon, CodeIcon } from './icons'
@@ -42,16 +41,12 @@ export function StatusChip({
 
   if (status === 'draft') {
     if (pipe.mode !== 'market') return null
-    const missing = missingRequired(section).length
-    const hint = missing > 0 ? `Fill ${missing} required field${missing === 1 ? '' : 's'} first` : undefined
     return (
       <span className="pl-ready" data-compact={compact || undefined}>
-        {!compact && hint && <span className="pl-ready__hint">{hint}</span>}
         <button
           type="button"
           className="pl-ready__btn"
-          disabled={missing > 0}
-          title={hint ?? 'Snapshot every string on this page and hand it to dev'}
+          title="Snapshot every string on this page and hand it to dev"
           onClick={() => pipe.markReady(section.id)}
         >
           <CodeIcon size={12} />
