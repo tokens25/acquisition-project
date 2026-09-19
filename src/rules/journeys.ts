@@ -856,6 +856,37 @@ export const SUBSCRIPTIONS = [
   { code: 'nhl', label: 'NHL' },
 ] as const
 
+/**
+ * Which products a market sells.
+ *
+ * From the offers service, which is the only one that answers the question:
+ * NHL returns four offers in GB, DE, JP and FR and an empty catalogue in the
+ * other four; NFL sells everywhere but Canada. MSG+ is the odd one — the
+ * offers service has no such group anywhere, and every landing page it has is
+ * the US RSN family, so it is the US alone.
+ *
+ * A market not named here sells everything: the leagues sold as markets have
+ * not been read, and the base is every market at once. Silence is "not
+ * established" rather than "no".
+ *
+ * A catalogue changes without warning, so this greys an option rather than
+ * removing it — a market with nothing this season may have four next.
+ */
+export const MARKET_PRODUCTS: Record<string, string[]> = {
+  GB: ['dazn', 'nfl', 'nhl'],
+  IT: ['dazn', 'nfl'],
+  DE: ['dazn', 'nfl', 'nhl'],
+  US: ['dazn', 'msg', 'nfl'],
+  JP: ['dazn', 'nfl', 'nhl'],
+  CA: ['dazn'],
+  FR: ['dazn', 'nfl', 'nhl'],
+  ES: ['dazn', 'nfl'],
+}
+
+/** Whether a market sells a product, as far as anybody has read. */
+export const sellsHere = (market: string | undefined, product: string) =>
+  !market || !MARKET_PRODUCTS[market] || MARKET_PRODUCTS[market].includes(product)
+
 /** Who is at the door. */
 export const STATUSES = ['logged-out-new', 'logged-out-existing'] as const
 

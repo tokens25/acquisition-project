@@ -3,7 +3,7 @@ import type { CardSet, Context } from '../rules/content'
 import type { CardSetStore } from '../editor/useCardSet'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
 import { DEFAULT_PAGE_VIEW, PAGE_VIEWS } from '../rules/pageViews'
-import { MARKETS, SUBSCRIPTIONS, journeys, marketFlag } from '../rules/journeys'
+import { MARKETS, SUBSCRIPTIONS, journeys, marketFlag, sellsHere } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
 import { defaultSectionsFor, isUntouched } from '../rules/sections'
 import { resolveFlow, writeFlow } from '../rules/layers'
@@ -195,7 +195,14 @@ export function DefaultPanel({
         value={shown('subscription', context.subscription ?? '')}
         options={[
           ...asking('subscription'),
-          ...SUBSCRIPTIONS.map((sub) => ({ value: sub.code, label: sub.label })),
+          /* A product the market does not sell is offered and not choosable.
+             Greyed rather than dropped: a list that quietly loses an option is
+             a list somebody searches for the missing one in. */
+          ...SUBSCRIPTIONS.map((sub) => ({
+            value: sub.code,
+            label: sub.label,
+            disabled: !sellsHere(context.market, sub.code),
+          })),
         ]}
         onChange={(v) => {
           if (!v) return

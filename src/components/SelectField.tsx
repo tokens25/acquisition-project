@@ -22,7 +22,12 @@ import { Icon } from './Icon'
 export interface SelectFieldProps<T extends string> {
   label: string
   value: T
-  options: { value: T; label: string }[]
+  /**
+   * One of these may be offered and not choosable — a product a market does
+   * not sell. Greyed rather than dropped, because a list that quietly loses an
+   * option is a list somebody searches for the missing one in.
+   */
+  options: { value: T; label: string; disabled?: boolean }[]
   onChange: (value: T) => void
   helpText?: ReactNode
   error?: boolean
@@ -63,7 +68,7 @@ export function SelectField<T extends string>({
           onChange={(e) => onChange(e.target.value as T)}
         >
           {options.map((o) => (
-            <option key={o.value} value={o.value}>
+            <option key={o.value} value={o.value} disabled={o.disabled}>
               {o.label}
             </option>
           ))}
