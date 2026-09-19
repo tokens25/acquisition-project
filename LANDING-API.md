@@ -464,13 +464,23 @@ landing page without touching the CMS query.
 Read across eight markets' `welcome` pages on 18 Sep 2026, against a palette of
 21 blocks.
 
-**Three of the seventeen are not this tool's to build.** The hero — `Banners`
-and `BoxedHeroBanners` — is authored in the hero studio, and `ContentTiers`
-comes from whatever sells the plans. Both are drawn here and neither is edited
-here, so the tables below count them and the honest reading leaves them out:
-**fourteen components in scope, eleven of them ours**, and the tally per market
-becomes GB 10 of 10, CA 10 of 10, IT 6 of 6, JP 9 of 10, DE 9 of 10, US 7 of 8,
-FR 5 of 6, and ES 6 of 8.
+**Four of the seventeen are not this tool's to build.** The hero — `Banners`
+and `BoxedHeroBanners` — is authored in the hero studio. `ContentTiers` and
+`SubscriptionsRail` come from the acquisition flow, along with our Bundles and
+Choose the plan, which no welcome page draws anyway. All are drawn here and none
+is edited here.
+
+The tables below count them, because they are on the page. The honest reading
+leaves them out: **thirteen components in scope, eleven of them ours**, and six
+of the eight markets complete.
+
+| | | | |
+| --- | --- | --- | --- |
+| GB 8 of 8 | CA 8 of 8 | JP 9 of 9 | DE 9 of 9 |
+| IT 6 of 6 | FR 5 of 5 | US 5 of 6 | ES 7 of 8 |
+
+US is short `ZipCodeBreather`, the announcement inviting somebody to set their
+zone. ES is short `StickyPpvHeader`. There is nothing else.
 
 ### At the block level, we are all but complete
 
@@ -692,10 +702,16 @@ live page does not do this: it asks once, and the refusal is the input's
 `errorLabel`. Whatever is decided about that, the two blocks should not open
 with the same sentence.
 
-### Six of ours have no production name at all
+### Four of ours have no production name at all
 
-`Outside the area`, `Text block`, `Bundles`, `Match list`, `Feature cards`,
-`Choose the plan`.
+`Outside the area`, `Text block`, `Match list`, `Feature cards`. Bundles and
+Choose the plan had none either, and no longer need one: they belong to the
+acquisition flow rather than to a landing page.
+
+And the four are not one kind of thing. `Match list` and `Feature cards` are
+designs production has not built. `Outside the area` is not a component
+anywhere — the live page shows a refusal as an input's `errorLabel`. Only
+`Text block` is unexamined.
 
 Three others looked that way from the welcome pages and were not: the blocks now
 called `ZipCodeCheck`, `TeamsRail` and `SubscriptionProviders` are drawn on the
