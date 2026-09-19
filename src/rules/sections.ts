@@ -33,6 +33,7 @@ export type SectionType =
   | 'rail'
   | 'subRail'
   | 'badges'
+  | 'experience'
   | 'bundles'
   | 'matchList'
   | 'cardStack'
@@ -78,6 +79,7 @@ export const SECTION_TYPES: SectionType[] = [
   'rail',
   'subRail',
   'badges',
+  'experience',
   'bundles',
   'matchList',
   'cardStack',
@@ -149,6 +151,12 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   subRailTiles: 'subRail',
   badgesTitle: 'badges',
   badges: 'badges',
+  expOverline: 'experience',
+  expTitle: 'experience',
+  expBody: 'experience',
+  expCta: 'experience',
+  expImage: 'experience',
+  expSide: 'experience',
   bundlesTitle: 'bundles',
   bundlesBody: 'bundles',
   bundles: 'bundles',
@@ -213,6 +221,7 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   rail: 'Title, what kind of tiles, and the rail',
   subRail: 'Heading, a line under it, and the subscriptions',
   badges: 'Heading and the badges',
+  experience: 'A picture, a heading, a line under it, and a button',
   bundles: 'Heading, a line under it, and the bundles',
   matchList: 'Eyebrow, heading, button, and the matches by day',
   cardStack: 'A stack of cards',
@@ -246,6 +255,7 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   rail: [50, 100, 100],
   subRail: [70, 100, 100],
   badges: [60, 100, 100],
+  experience: [100, 55, 80],
   bundles: [60, 100, 100],
   matchList: [45, 70, 100],
   cardStack: [100, 60, 100],
@@ -329,6 +339,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   rail: 'StandardRail',
   subRail: 'SubscriptionsRail',
   badges: 'CompetitionCarousel',
+  experience: 'ExperienceFeature',
   bundles: 'Bundles',
   matchList: 'Match list',
   cardStack: 'Feature cards',

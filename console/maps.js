@@ -154,6 +154,8 @@
       'landing bar buttons': [40,2,36,7], 'landing bar button': [40,2,17,7]
     }},
     flowLandingPage: { vb: '0 0 80 220', parts: {
+      'feature band': [0,880,80,34], 'feature band picture': [4,882,72,16], 'feature band words': [4,900,72,12],
+      'feature band overline': [4,900,40,3], 'feature band heading': [4,904,60,5], 'feature band body': [4,910,66,4], 'feature band button': [4,915,26,5],
       'badge row': [0,856,80,22], 'badge row heading': [4,858,50,4], 'badge row track': [4,864,76,12],
       'badge tile': [4,864,14,12], 'badge disc': [4,864,10,10], 'badge line': [4,875,14,3],
       'landing page': [0,0,80,220],

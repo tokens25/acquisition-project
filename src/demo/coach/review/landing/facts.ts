@@ -84,6 +84,12 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
       return { heading: t.zipHeading, words: [t.zipHeading, t.zipNote, t.zipCta], cta: t.zipCta }
     case 'schedule':
       return { heading: t.scheduleHeading, words: [t.scheduleHeading], cta: '' }
+    case 'experience':
+      return {
+        heading: t.expTitle,
+        words: [t.expOverline, t.expTitle, t.expBody, t.expCta],
+        cta: t.expCta,
+      }
     case 'badges':
       return {
         heading: t.badgesTitle,

@@ -654,6 +654,29 @@ export interface LandingScreen {
   subRailBody?: string
   subRailTiles?: LandingSubTile[]
 
+  /* A feature told with a picture beside it — the live page's
+     ExperienceFeature, five of them on one NFL page, alternating which side
+     the media sits. Its own entries are a video with a poster still and a
+     block of words; we draw the still, which is the frame the video opens on
+     anyway. */
+  expOverline?: string
+  expTitle?: string
+  expBody?: string
+  expCta?: string
+  /**
+   * The picture. A data URL; absent draws the empty frame.
+   */
+  expImage?: string
+  /**
+   * Which side the picture sits, as the live page's `videoAlignment` says it.
+   *
+   * Left and right on a wide screen. This page is drawn at a phone's width,
+   * where a band beside its picture is a band nobody can read, so the two come
+   * out as the picture above the words or below them — which is what left and
+   * right amount to once a row has stacked.
+   */
+  expSide?: 'left' | 'right'
+
   /* The sports a market carries, as a row of round badges. The live page's
      CompetitionCarousel — drawn by Germany, Spain, France and Japan, and by no
      market that draws the teams rail. A heading, then a picture and a line
@@ -1005,6 +1028,13 @@ export const defaultFlow: FlowContent = {
       { id: 'tile-3', title: 'Qualifying | Pirelli British Grand Prix', meta: 'F1' },
       { id: 'tile-4', title: 'Practice 3 | Pirelli British Grand Prix', meta: 'F1' },
     ],
+
+    expOverline: 'Alternate feeds',
+    expTitle: 'Watch it your way',
+    expBody:
+      'Pick the camera, the commentary and the stats you want, and switch between them without missing a play.',
+    expCta: 'See how it works',
+    expSide: 'right',
 
     badgesTitle: 'All the sport you love',
     badges: [

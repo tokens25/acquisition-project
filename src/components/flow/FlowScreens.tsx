@@ -1870,6 +1870,18 @@ export function PageSectionView({
     case 'badges':
       return <BadgeRow title={text.badgesTitle} badges={badgesOf(content)} />
 
+    case 'experience':
+      return (
+        <ExperienceBand
+          overline={text.expOverline}
+          title={text.expTitle}
+          body={text.expBody}
+          cta={text.expCta}
+          image={content.expImage}
+          side={content.expSide ?? 'right'}
+        />
+      )
+
     case 'bundles':
       return (
         <BundlesSection
@@ -2029,6 +2041,56 @@ function SubRailSection({
               </span>
             </article>
         ))}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * One feature, told with a picture beside it.
+ *
+ * The live page's own carries a video and a block of words, and five of them
+ * run down an NFL page alternating which side the media sits. We draw the
+ * poster still rather than the video — it is the frame the video opens on, and
+ * a page that autoplays five of them is a page nobody asked for.
+ *
+ * Side is left and right on a wide screen. At the phone's width this page is
+ * drawn at, a band beside its picture is a band nobody can read, so the two
+ * come out as the picture above the words or below them — which is what left
+ * and right amount to once a row has stacked, and keeps the alternation the
+ * run depends on.
+ */
+function ExperienceBand({
+  overline,
+  title,
+  body,
+  cta,
+  image,
+  side,
+}: {
+  overline: string
+  title: string
+  body: string
+  cta: string
+  image?: string
+  side: 'left' | 'right'
+}) {
+  return (
+    <section className="fl-exp" data-side={side}>
+      {/* Drawn whether or not a picture has been chosen: the empty frame is
+          what says a band has one. */}
+      <span className="fl-exp__art" aria-hidden="true">
+        {image && <img src={image} alt="" />}
+      </span>
+      <div className="fl-exp__words">
+        {overline.trim() !== '' && <p className="fl-exp__overline">{overline}</p>}
+        {title.trim() !== '' && <p className="fl-exp__title">{title}</p>}
+        {body.trim() !== '' && <p className="fl-exp__body">{body}</p>}
+        {cta.trim() !== '' && (
+          <span className="fl-exp__cta" role="button">
+            {cta}
+          </span>
+        )}
       </div>
     </section>
   )

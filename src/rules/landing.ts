@@ -162,6 +162,8 @@ type ChoiceKey =
   | 'sections'
   | 'sectionCopy'
   | 'railSize'
+  | 'expImage'
+  | 'expSide'
   | 'railId'
   | 'scheduleRailId'
   | 'spotlightImage'
@@ -236,6 +238,10 @@ export function landingText(content: LandingScreen): Required<
     featuresTitle: of('featuresTitle'),
     featuresCta: of('featuresCta'),
     railTitle: of('railTitle'),
+    expOverline: of('expOverline'),
+    expTitle: of('expTitle'),
+    expBody: of('expBody'),
+    expCta: of('expCta'),
     badgesTitle: of('badgesTitle'),
     subRailTitle: of('subRailTitle'),
     subRailBody: of('subRailBody'),

@@ -1154,6 +1154,61 @@ function SectionFields({
         </>
       )
 
+    case 'experience':
+      return (
+        <>
+          <ImagePicker
+            // 16 by 9, which is the frame the live one's video opens on.
+            aspect="16 / 9"
+            src={inst.expImage}
+            label="Picture"
+            onPick={(url) => write({ expImage: url })}
+            onRemove={() => write({ expImage: '' })}
+          />
+          {/* Named for what it does rather than for the word the live page
+              uses: left and right are what a wide screen makes of it, and this
+              page is drawn at a phone's width. */}
+          <SelectField
+            label="Where the picture sits"
+            value={inst.expSide ?? 'right'}
+            options={[
+              { value: 'left', label: 'Above the words' },
+              { value: 'right', label: 'Under the words' },
+            ]}
+            onChange={(v) => write({ expSide: v === 'left' ? 'left' : 'right' })}
+            helpText="The live page alternates this down a run of them."
+          />
+          <TextField
+            label="Over the heading"
+            value={t.expOverline}
+            pipelineKey={key('landing.expOverline')}
+            onChange={(v) => write({ expOverline: v })}
+            helpText="Set in capitals by the design. Empty draws none."
+          />
+          <TextField
+            label="Heading"
+            value={t.expTitle}
+            pipelineKey={key('landing.expTitle')}
+            onChange={(v) => write({ expTitle: v })}
+            rows={2}
+          />
+          <TextField
+            label="Under the heading"
+            value={t.expBody}
+            pipelineKey={key('landing.expBody')}
+            onChange={(v) => write({ expBody: v })}
+            rows={3}
+          />
+          <TextField
+            label="Button"
+            value={t.expCta}
+            pipelineKey={key('landing.expCta')}
+            onChange={(v) => write({ expCta: v })}
+            helpText="Empty draws none."
+          />
+        </>
+      )
+
     case 'badges':
       return (
         <>
