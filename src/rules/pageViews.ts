@@ -27,6 +27,24 @@ export const PAGE_VIEWS: { code: PageView; label: string }[] = [
   { code: 'home-of', label: 'Home of' },
 ]
 
+/**
+ * Which views are also a state of the viewer, and the status each one means.
+ *
+ * Two of the four are. The logged-out home and the logged-in home differ by
+ * who is in front of them, which is the axis a journey's audience already
+ * sits on — so they answer the same question and belong in the same place
+ * rather than in a fifth one of their own.
+ *
+ * The other two are not. `landing` is the page with nobody in particular
+ * looking at it, and `home-of` is a different page rather than a different
+ * viewer. Both pin no status, which is what makes them the copy everybody
+ * gets and the thing the other two are written over.
+ */
+export const VIEW_STATUS: Record<string, string> = {
+  'logged-out': 'logged-out',
+  'logged-in': 'logged-in',
+}
+
 /** The page as it stands on its own, which is what the tool opens on. */
 export const DEFAULT_PAGE_VIEW: PageView = 'landing'
 

@@ -4,6 +4,7 @@ import { defaultFlow } from './flow'
 import { STATUS_LABELS } from './entry'
 import { MARKETS, SUBSCRIPTIONS, journeys } from './journeys'
 import { chosenJourney } from './journey'
+import { VIEW_STATUS, pageViewLabel } from './pageViews'
 
 /**
  * Which situation content is being written for.
@@ -68,10 +69,15 @@ export function situationOf(set: CardSet): Situation {
   // happens to name: a set carrying an id that does not run here is showing
   // some other journey, and its copy belongs to the one on screen.
   const journey = chosenJourney(journeys, set.context, set.journeyId)
+  // A context carrying a page view is the one-page product's, where the panel
+  // asks which surface this is instead of which audience — so the view is the
+  // whole of the answer there, including when it is one of the two that name
+  // no viewer and so pin nothing. Without one, the journey answers as before.
+  const view = set.context.pageView
   return {
     market: set.context.market,
     subscription: set.context.subscription ?? '',
-    status: journey?.audience ?? '',
+    status: view ? (VIEW_STATUS[view] ?? '') : (journey?.audience ?? ''),
     entry: journey?.entry.cta ?? '',
   }
 }
@@ -243,7 +249,9 @@ export function selectorLabel(when: Selector): string {
     when.market && (MARKETS.find((m) => m.code === when.market)?.label ?? when.market),
     when.subscription &&
       (SUBSCRIPTIONS.find((s) => s.code === when.subscription)?.label ?? when.subscription),
-    when.status && (STATUS_LABELS[when.status] ?? when.status),
+    // Journey audiences are named in entry.ts and page views in pageViews.ts,
+    // and a status here came from whichever control was on screen.
+    when.status && (STATUS_LABELS[when.status] ?? pageViewLabel(when.status)),
     when.entry,
   ].filter(Boolean)
   return parts.length ? parts.join(' · ') : SHARED

@@ -97,8 +97,23 @@ export function FlowPanel({
   // Which half of the landing page is being edited. The page, not the banner,
   // because that is what every other screen's panel opens on.
   const [tab, setTab] = useState<'page' | 'hero'>('page')
-  const scope = ladder.find((r) => r.label === chosen)?.when ?? {}
   const screen = step.renderer as keyof FlowContent
+  const hasHero = screen === 'landing'
+  /*
+   * The landing page asks nothing about where copy applies, so the answer is
+   * read off the questions it does ask rather than chosen on a ladder.
+   *
+   * Two of its four surfaces name a viewer and two do not. Logged out and
+   * logged in write over the market's copy at that status, so the page keeps
+   * one set of words and each of those two says what it says differently.
+   * The landing page itself and a competition's own name nobody, and write
+   * the market's copy — which is both what everybody gets and the thing the
+   * other two are written over.
+   */
+  const viewRung = ladder.find((r) => r.when.status !== undefined && r.when.entry === undefined)
+  const scope = hasHero
+    ? ((at.status ? viewRung : home)?.when ?? {})
+    : (ladder.find((r) => r.label === chosen)?.when ?? {})
   if (!(screen in defaultFlow))
     return <FlowFields store={store} step={step} scope={scope} />
 
@@ -133,15 +148,15 @@ export function FlowPanel({
      under it. One list of fourteen groups made you scroll past the whole page
      to reach the picture, so they are two tabs. Only this screen has them,
      because only this screen has a hero. */
-  const hasHero = screen === 'landing'
 
   return (
     <>
       {hasHero && <FlowTabs value={tab} onChange={setTab} />}
       {/* Neither half of the landing page asks where the copy applies. It is
-          written for the market the fields above name, which is where an edit
-          made while looking at that market was always going to go — the ladder
-          out to the shared copy is a step this page does not offer. */}
+          written for the market and the surface the fields above name, which
+          is where an edit made while looking at them was always going to go —
+          the ladder out to the shared copy is a step this page does not
+          offer. */}
       {!hasHero && (
       <FieldGroup title="Where this applies">
         <SelectField

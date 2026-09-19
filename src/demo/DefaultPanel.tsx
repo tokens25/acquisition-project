@@ -233,7 +233,7 @@ export function DefaultPanel({
       {views ? (
         <SelectField
           label="User status"
-          helpText="Which of the landing surfaces this is. Nothing draws it differently yet."
+          helpText="Which of the landing surfaces this is. Logged out and Logged in can each be written over the page everybody gets."
           value={context.pageView ?? DEFAULT_PAGE_VIEW}
           options={PAGE_VIEWS.map((v) => ({ value: v.code, label: v.label }))}
           onChange={(v) => {
