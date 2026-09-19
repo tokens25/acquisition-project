@@ -131,7 +131,7 @@ time of reading:
 | `StandardRail` | JP | Rail |
 | `StandardRailV2` | DE | Rail |
 | `ComingUpRail` | DE | `ComingUpRail` — ours takes the name |
-| `CompetitionCarousel` | ES DE JP FR | Meet the teams — nearest relative |
+| `CompetitionCarousel` | ES DE JP FR | `CompetitionCarousel` — ours takes the name |
 | `SectionFeatures` | CA ES JP | Features list |
 | `SupportedDevices` | CA US GB IT DE | Supported devices |
 | `ZipCodeBreather` | US | Postcode |
@@ -164,19 +164,22 @@ entries of its own. The same shape as ours: a heading, a line under it, and a
 rail somebody else fills. Germany's reads "Alle Spiele. Alle Teams. Alles an
 einem Ort."
 
-**`CompetitionCarousel` is not our Places. Meet the teams is its nearest
-relative.** Its entries are `CommonSpoloCircularLogo` — `image`,
+**`CompetitionCarousel` is not our Places. It is Meet the teams**, which now
+carries that name. Its entries are `CommonSpoloCircularLogo` — `image`,
 `description`, `isHighlighted` — and ES carries twelve, one per competition,
 under a heading. A row of circular league badges.
 
 Places is square photographs of stadiums with words laid over them: a different
-component wearing a similar word. Meet the teams is the same idea as this one —
-a row of logo tiles saying how much you get — and differs in three ways that
-matter. Ours burns a short label into the tile, a city over a name, where this
-carries a marketing sentence per badge with nowhere in our tile to put it. Ours
-is a 150 rounded square with a gradient wash at its foot; this is a circle. And
-ours colours each tile from what the name brings, where this has only
-`isHighlighted`.
+component wearing a similar word. Meet the teams is the same idea — a row of
+logo tiles saying how much you get — and the name is adopted on that reading.
+
+A match at the block and not at the drawing, so the differences are worth
+keeping written down. Ours burns a short label into the tile, a city over a
+name, where this carries a sentence per badge with nowhere in our tile to put
+it. Ours is a 150 rounded square with a gradient wash at its foot; this is a
+circle. Ours colours each tile from what the name brings, where this has only
+`isHighlighted`. And ours is keyed by team — the artwork is found by the name
+written on the tile — where this is competitions.
 
 Near enough to be the thing to stretch if somebody wants this row, and not near
 enough that a page built from ours would look like it. Whether the description
@@ -216,9 +219,8 @@ It carries three things ours cannot say — `showBadge` with its text, a
 `features` list, and in Germany `showPrice` and `showHighlightedBorder`. A
 match at the block, short at the fields.
 
-So the palette is two components short of the welcome page:
-`CompetitionCarousel` and `IntroductionBanner`. `StickyPpvHeader` makes three,
-though it is Spain's alone.
+So the palette is one component short of the welcome page:
+`IntroductionBanner`. `StickyPpvHeader` makes two, though it is Spain's alone.
 
 ### The components on the `en-CA` welcome page
 

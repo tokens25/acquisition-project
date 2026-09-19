@@ -112,8 +112,6 @@ const BESIDE_THE_PALETTE: Record<string, string> = {
  * decides which to close first.
  */
 const NEAREST: Record<string, string> = {
-  CompetitionCarousel:
-    'Nearest: Meet the teams — a row of logo tiles, but circular, and each badge carries a sentence rather than a name.',
   IntroductionBanner:
     'Nearest: Article CTA — a still with words and a way in, but full-bleed, rotating, and it quotes a live price from the offer.',
 }

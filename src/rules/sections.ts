@@ -271,8 +271,8 @@ export const SHIPPED_ORDER: SectionType[] = [
  * every time, and this is the vocabulary the handoff lands in: these strings
  * group the strings a developer is given.
  *
- * Nine blocks have no counterpart to take a name from. Meet the teams, Outside
- * the area, What's live and the rest are not on the welcome page at all — the
+ * Eight blocks have no counterpart to take a name from. Outside the area,
+ * What's live, Match list and the rest are not on the welcome page at all — the
  * teams grid is fetched separately, against an RSN tag — so they keep the name
  * the design uses, which is the only name they have.
  *
@@ -282,11 +282,19 @@ export const SHIPPED_ORDER: SectionType[] = [
  * line under it and no entries of its own, which is Games schedule exactly, and
  * it takes that name here.
  *
- * The other two were not, and keep the design's name. `IntroductionBanner` is
- * a carousel of cards quoting a price, where Text block is two headings and a
- * body; `CompetitionCarousel` is a row of circular league badges carrying a
- * sentence each, where Places is photographs of stadiums with words over them
- * — and Meet the teams, not Places, is the nearest thing we have to it.
+ * The other two were not Text block and not Places, which is what they had
+ * been guessed to be. `IntroductionBanner` is a carousel of cards quoting a
+ * price, and keeps away from Text block, which is two headings and a body.
+ *
+ * `CompetitionCarousel` is a row of circular league badges carrying a sentence
+ * each — not Places, which is photographs of stadiums with words over them, but
+ * the same idea as Meet the teams, which takes the name here. The two are not
+ * the same drawing and the difference is worth knowing: ours is a 150 rounded
+ * square with a gradient wash and a city over a name burned into it, where the
+ * live one is a circle with a sentence beside it, and ours colours each tile
+ * from what the name brings where the live one has only `isHighlighted`.
+ * The block is also keyed by team — its artwork is found by the name written on
+ * it — where the live one is competitions.
  *
  * Which is the reason for holding them: two of those three guesses were wrong,
  * and a guess written into the palette is a guess everybody downstream
@@ -296,7 +304,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   zip: 'ZipCodeBreather',
   schedule: 'ComingUpRail',
   plans: 'ContentTiers',
-  teams: 'Meet the teams',
+  teams: 'CompetitionCarousel',
   area: 'Outside the area',
   /* Named for what it is rather than what it happens to be about: a still,
      a line about it, and a way in — node 708:174095. */
