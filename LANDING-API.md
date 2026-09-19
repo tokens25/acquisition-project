@@ -509,6 +509,54 @@ Which comes out, market by market:
 | GB 11 of 11 | US 9 of 9 | CA 12 of 12 | JP 12 of 12 | DE 12 of 12 |
 | ES 9 of 10 | IT 8 of 8 | FR 8 of 8 | | |
 
+### The zip journey is one thing, and it is not on the page
+
+Three of our blocks — `ZipCodeBreather`, What's live and Outside the area —
+are one journey in production, and only its invitation is a landing page
+component.
+
+`ZipCodeBreather` on the US page is filed as
+`RSN Starlink || Announcement Breather`. It holds no input at all: a picture,
+a line about watching your regional sports networks, "Set up your zone in 2
+simple steps to connect", and a button. The code is typed somewhere after that
+button, not here. Ours draws the invitation *and* an empty field, which is one
+more thing than the live page puts on it.
+
+What a code buys is a **zone**, and the teams are tagged by it. The list comes
+from its own query rather than from the page config:
+
+```
+GET …/entries?content_type=CommonGroup&locale=en-US&include=10
+      &fields.tags[in]=rsn_lp_teams&fields.env[in]=Live
+```
+
+One group, `LP || RSN || ALL TEAMS`, holding 18 `CommonKeyValue` entries:
+
+| Field | What it holds |
+| --- | --- |
+| `key` | a slug — `new-york-knicks` |
+| `value` | the full name — "New York Knicks" |
+| `secondaryValue` | the short one — "Knicks" |
+| `keyImage` | the crest |
+| `localZoneTags` | which zones this team belongs to |
+| `showMoreInfoIcon` `postIconImage` `postIconKey` | trimmings |
+
+There are 26 zone tags across the 18 teams — `msg_1` through `msg_10`,
+`yes_ya`, `yes_nt`, `orl_mg`, and `all` for a team every zone gets. A team
+carries several.
+
+So **What's live is this list filtered to the zone a code resolved to**, and
+**Outside the area is the same question answered with no zone**. Neither is a
+missing component. Neither is a landing page component either: they are states
+downstream of a button the page does carry.
+
+And our teams block is modelled on this list more closely than on the Spanish
+carousel it is now named after. Its `value` and `secondaryValue` are our city
+over our name — "New York Knicks" is what `competitionArt` is keyed by, and
+"Knicks" is what the tile prints — and `keyImage` is the crest that key finds.
+What ours adds is a colour per tile; what theirs adds is the zone tags. Worth
+knowing before anybody makes the block competitions in fact as well as in name.
+
 ### Nine of ours are not on a welcome page
 
 `Outside the area`, `TV providers`, `Text block`, `Bundles`, `Match list`,
