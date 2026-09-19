@@ -557,6 +557,40 @@ over our name — "New York Knicks" is what `competitionArt` is keyed by, and
 What ours adds is a colour per tile; what theirs adds is the zone tags. Worth
 knowing before anybody makes the block competitions in fact as well as in name.
 
+### Our blocks are modelled on the MSG+/YES page, not the welcome page
+
+Chasing one title — "See what's live in your area" — found it on a component
+type none of the eight welcome pages draws, and pulled the rest of our
+"missing" blocks out with it.
+
+That title belongs to **`ZipCodeCheck`**, which lives on its own slugs:
+`zipcode` (root config `RSN || Only ZipCode`, US, Live) and `msgplusyes`
+(`US || MSGPlusYes Page`, US, Live). A third copy, filed
+`US || Welcome || Zip code checks`, is linked by no root config at all — an
+entry somebody made and nothing draws.
+
+`?page=msgplusyes` gives thirteen components, four of which appear on no
+welcome page:
+
+| Component | Its title | Ours |
+| --- | --- | --- |
+| `ZipCodeCheck` | "See what's live in your area" | What's live |
+| `ZipCodeAutoFill` | "Check everything looks right" | the postcode confirm |
+| `TeamsRail` | "Your New York sports, one home" | the teams block |
+| `SubscriptionProviders` | "Connect your TV subscription" | TV providers |
+
+Which reframes the palette. It was not built against a generic welcome page at
+all — it was built against this one, the RSN page, and that is why so much of it
+had no counterpart in the eight markets read first.
+
+**`TeamsRail` is the true counterpart of our teams block**, and the evidence is
+better than anything the Spanish carousel offered. Seven `LPContentItem`
+entries, each with `preTitle` and `title` — which is our city over our name —
+a `backgroundImage`, and `localZoneTags`, the same zone tagging the RSN team
+list uses. Its heading even reads the way ours does. `CompetitionCarousel` was
+adopted on the job the row does; `TeamsRail` matches the row, its fields and its
+contents.
+
 ### Nine of ours are not on a welcome page
 
 `Outside the area`, `TV providers`, `Text block`, `Bundles`, `Match list`,
