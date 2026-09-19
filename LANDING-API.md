@@ -164,8 +164,10 @@ entries of its own. The same shape as ours: a heading, a line under it, and a
 rail somebody else fills. Germany's reads "Alle Spiele. Alle Teams. Alles an
 einem Ort."
 
-**`CompetitionCarousel` is not our Places. It is Meet the teams**, which now
-carries that name. Its entries are `CommonSpoloCircularLogo` — `image`,
+**`CompetitionCarousel` is not our Places, and in the end it is not our teams
+block either.** It held that name for a while, on the reading that the two do
+the same job — until `TeamsRail` turned up on the RSN page matching the block
+field for field, and took it. So this is a gap again: a row we do not draw. Its entries are `CommonSpoloCircularLogo` — `image`,
 `description`, `isHighlighted` — and ES carries twelve, one per competition,
 under a heading. A row of circular league badges.
 
@@ -224,10 +226,10 @@ It carries three things ours cannot say — `showBadge` with its text, a
 `features` list, and in Germany `showPrice` and `showHighlightedBorder`. A
 match at the block, short at the fields.
 
-So the palette is not short of the welcome page at all, bar one:
-`StickyPpvHeader`, which is Spain's alone. Every other component on the GB, US,
-JP and DE pages has a block here — several of them short at the fields, which is
-where the work now is rather than in blocks that do not exist.
+So the palette is short of the welcome page by two: `CompetitionCarousel`, the
+row of circular league badges, and `StickyPpvHeader`, which is Spain's alone.
+Everything else on GB, US, CA and IT has a block here — several of them short at
+the fields, which is as much of the work as the missing blocks are.
 
 ### The components on the `en-CA` welcome page
 
@@ -463,9 +465,9 @@ Read across eight markets' `welcome` pages on 18 Sep 2026, against a palette of
 and `BoxedHeroBanners` — is authored in the hero studio, and `ContentTiers`
 comes from whatever sells the plans. Both are drawn here and neither is edited
 here, so the tables below count them and the honest reading leaves them out:
-**fourteen components in scope, thirteen of them ours**, and the tally per
-market becomes GB 10 of 10, US 8 of 8, CA 10 of 10, JP 10 of 10, DE 10 of 10,
-IT 6 of 6, FR 6 of 6, and ES 7 of 8.
+**fourteen components in scope, twelve of them ours**, and the tally per market
+becomes GB 10 of 10, US 8 of 8, CA 10 of 10, IT 6 of 6, JP 9 of 10, DE 9 of 10,
+FR 5 of 6, and ES 6 of 8.
 
 ### At the block level, we are all but complete
 
@@ -482,7 +484,7 @@ Seventeen component types in production. We have sixteen.
 | `SupportedDevices` | CA DE GB IT US | ✔ |
 | `Banners` | FR GB IT US | ✔ the Hero banner tab |
 | `BoxedHeroBanners` | CA DE ES JP | ✔ the Hero banner tab |
-| `CompetitionCarousel` | DE ES FR JP | ✔ |
+| `CompetitionCarousel` | DE ES FR JP | **no** |
 | `IntroductionBanner` | DE FR IT JP | ✔ |
 | `SectionFeatures` | CA ES JP | ✔ |
 | `ComingUpRail` | DE | ✔ |
@@ -591,10 +593,14 @@ list uses. Its heading even reads the way ours does. `CompetitionCarousel` was
 adopted on the job the row does; `TeamsRail` matches the row, its fields and its
 contents.
 
-### Nine of ours are not on a welcome page
+### Seven of ours have no production name at all
 
-`Outside the area`, `TV providers`, `Text block`, `Bundles`, `Match list`,
-`Feature cards`, `Places`, `What's live`, `Choose the plan`.
+`Outside the area`, `Text block`, `Bundles`, `Match list`, `Feature cards`,
+`Places`, `Choose the plan`.
+
+Three others looked that way from the welcome pages and were not: the blocks now
+called `ZipCodeCheck`, `TeamsRail` and `SubscriptionProviders` are drawn on the
+RSN slugs instead.
 
 Not the same as "not in production". Only the `welcome` slug was read, and the
 CMS holds hundreds of others — `boxing`, `ppv-bundle`, `nfl`, `msgplus`,

@@ -271,31 +271,27 @@ export const SHIPPED_ORDER: SectionType[] = [
  * every time, and this is the vocabulary the handoff lands in: these strings
  * group the strings a developer is given.
  *
- * Eight blocks have no counterpart to take a name from. Outside the area,
- * What's live, Match list and the rest are not on the welcome page at all — the
- * teams grid is fetched separately, against an RSN tag — so they keep the name
- * the design uses, which is the only name they have.
+ * Fourteen carry one. Seven do not — Outside the area, Text block, Bundles,
+ * Match list, Feature cards, Places and Choose the plan — and they keep the
+ * name the design gives them, which is the only name they have.
  *
- * Three more were held back until somebody read what they actually carried,
- * rather than matching them on their type and their place in the order. One of
- * the three was ours: `ComingUpRail` is a served rail with a heading and a
- * line under it and no entries of its own, which is Games schedule exactly, and
- * it takes that name here.
+ * Read the welcome pages alone and that list looked far longer, because this
+ * palette was never built against a welcome page. It was built against the
+ * RSN one: `ZipCodeCheck`, `TeamsRail` and `SubscriptionProviders` are drawn
+ * on `msgplusyes` and on `zipcode`, and on no welcome page in any market. A
+ * block with no counterpart on the page you happen to be reading is not a
+ * block with no counterpart.
  *
- * The other two were not Text block and not Places, which is what they had
- * been guessed to be. `IntroductionBanner` is a full-bleed band that rotates
- * and quotes a price — nothing like Text block, which is two headings and a
- * body, and near enough to Article CTA that Article CTA takes the name.
- *
- * `CompetitionCarousel` is a row of circular league badges carrying a sentence
- * each — not Places, which is photographs of stadiums with words over them, but
- * the same idea as Meet the teams, which takes the name here. The two are not
- * the same drawing and the difference is worth knowing: ours is a 150 rounded
- * square with a gradient wash and a city over a name burned into it, where the
- * live one is a circle with a sentence beside it, and ours colours each tile
- * from what the name brings where the live one has only `isHighlighted`.
- * The block is also keyed by team — its artwork is found by the name written on
- * it — where the live one is competitions.
+ * Three names were held back until somebody read what the component actually
+ * carried, rather than matching it on its type and its place in the order —
+ * which was worth doing, since two of those three guesses were wrong.
+ * `ComingUpRail` was Games schedule and took the name. `IntroductionBanner`
+ * was never Text block, and went to Article CTA, which is the right family and
+ * short of it in three ways: not full-bleed, does not rotate, and nothing here
+ * binds a price to an entitlement. `CompetitionCarousel` was never Places, and
+ * for a while it was this block — until `TeamsRail` turned up on the RSN page
+ * with `preTitle` over `title`, a picture and zone tags, which is this block
+ * field for field and is the name it carries now.
  *
  * Which is the reason for holding them: two of those three guesses were wrong,
  * and a guess written into the palette is a guess everybody downstream
@@ -305,7 +301,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   zip: 'ZipCodeBreather',
   schedule: 'ComingUpRail',
   plans: 'ContentTiers',
-  teams: 'CompetitionCarousel',
+  teams: 'TeamsRail',
   area: 'Outside the area',
   /* Was Article CTA, named for what it is rather than what it happens to be
      about — a still, a line about it, and a way in, node 708:174095. It takes
@@ -313,7 +309,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
      worth remembering: ours is not full-bleed, it does not rotate, and nothing
      here binds a price to an entitlement and fills it in at render. */
   multiview: 'IntroductionBanner',
-  providers: 'TV providers',
+  providers: 'SubscriptionProviders',
   /* The type keeps its name because saved pages are arranged by it; what it
      is called is "Text block", which is what the design calls the component
      and what it now is — words, and nothing device-shaped about it. */
@@ -328,7 +324,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   matchList: 'Match list',
   cardStack: 'Feature cards',
   cities: 'Places',
-  live: "What's live",
+  live: 'ZipCodeCheck',
   spotlight: 'SpotlightRail',
   fightPlan: 'Choose the plan',
 }

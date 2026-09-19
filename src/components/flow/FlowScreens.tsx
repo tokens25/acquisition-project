@@ -27,7 +27,7 @@ import {
   tilesOf,
 } from '../../rules/landing'
 import { consentsOf } from '../../rules/consents'
-import { articleShot, competitionArt, deviceRows, featureArt, flagFor, imageCtaArt } from './landingArt'
+import { articleShot, deviceRows, featureArt, flagFor, imageCtaArt, teamArt } from './landingArt'
 import {
   FIGHT_ART,
   GAME_ART,
@@ -1253,7 +1253,7 @@ function TeamsRail({
                "New York" over "Knicks" finds the same tile the one-line name
                used to. */
             const full = [team.city, team.name].map((one) => (one ?? '').trim()).filter(Boolean).join(' ')
-            const art = competitionArt[full]
+            const art = teamArt[full]
             return (
               <div className="fl-team" key={team.id}>
                 <div

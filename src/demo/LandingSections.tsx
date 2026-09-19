@@ -9,7 +9,7 @@ import { ComponentPeek } from './ComponentPeek'
 import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
-import { articleShot, competitionArt, DEVICES, featureArt, flagFor, imageCtaArt } from '../components/flow/landingArt'
+import { articleShot, DEVICES, featureArt, flagFor, imageCtaArt, teamArt } from '../components/flow/landingArt'
 import { artAt, SPOTLIGHT_ART, SUB_ART } from '../components/flow/newArt'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
@@ -760,7 +760,7 @@ function TeamRows({
       {teams.map((team, i) => {
         /* The two lines together are what the artwork is keyed by, the same
            way the rail reads them. */
-        const art = competitionArt[[team.city, team.name].map((one) => (one ?? '').trim()).filter(Boolean).join(' ')]
+        const art = teamArt[[team.city, team.name].map((one) => (one ?? '').trim()).filter(Boolean).join(' ')]
         return (
         <div
           className="demo__feature"
