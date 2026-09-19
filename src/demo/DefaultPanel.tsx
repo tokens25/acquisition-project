@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import type { Context } from '../rules/content'
+import type { CardSet, Context } from '../rules/content'
 import type { CardSetStore } from '../editor/useCardSet'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
 import { DEFAULT_PAGE_VIEW, PAGE_VIEWS } from '../rules/pageViews'
 import { MARKETS, SUBSCRIPTIONS, journeys, marketFlag } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
+import { defaultSectionsFor, isUntouched } from '../rules/sections'
+import { resolveFlow, writeFlow } from '../rules/layers'
 
 /**
  * The default view's fields: the situation being authored for.
@@ -68,7 +70,7 @@ export function DefaultPanel({
   /** How many questions are still unanswered, for whoever is waiting on them. */
   onAsking?: (pending: number) => void
 }) {
-  const { context, setContext, updateSet, journey } = store
+  const { set, context, setContext, updateSet, journey } = store
 
   const [answered, setAnswered] = useState<Record<string, boolean>>(() => ({
     ...answeredThisVisit,
@@ -120,7 +122,33 @@ export function DefaultPanel({
     const options = entryPoints(journeys, next, nextStatus)
     const cta = nextEntry && options.includes(nextEntry) ? nextEntry : options[0]
     const found = journeysMatching(journeys, next, nextStatus, cta ?? '')[0]
-    if (found) updateSet({ journeyId: found.id })
+
+    /*
+     * The page a market and a product are given.
+     *
+     * Read off the live pages, so picking Germany and NFL opens on what
+     * Germany's NFL page is made of rather than on the run the design shipped.
+     * A starting point and not a mirror: the moment somebody adds, removes or
+     * reorders a block the page is theirs, and changing market from then on
+     * leaves it alone.
+     *
+     * Written at the base rather than at the market's own layer, because this
+     * is what the page is rather than one market's difference from it.
+     *
+     * One patch rather than two updates: each reads the set as it stands, and
+     * two in a row would have the second undo the first. The two halves touch
+     * different fields, so merging them is merging and not a choice.
+     */
+    const patch: Partial<CardSet> = found ? { journeyId: found.id } : {}
+    if (isUntouched(resolveFlow(set).landing, context.market, context.subscription)) {
+      Object.assign(
+        patch,
+        writeFlow(set, {}, 'landing', {
+          sections: defaultSectionsFor(next.market, next.subscription),
+        }),
+      )
+    }
+    if (Object.keys(patch).length > 0) updateSet(patch)
   }
 
   /** The same, when only the answer below the context has changed. */

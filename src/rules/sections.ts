@@ -400,6 +400,76 @@ export function sectionsOf(content: LandingScreen): PageSection[] {
   return SHIPPED_ORDER.map((type) => ({ id: type, type, on: true }))
 }
 
+/**
+ * What a page starts as, for a market and a product.
+ *
+ * Read off the live pages rather than decided here — the order is theirs, and
+ * so are the repeats: GB's DAZN page really is four spotlight rails, and an
+ * NFL page really is five feature bands in a row. The hero and the footer are
+ * left out because neither is a section, and a block a market draws twice that
+ * can only exist once is taken once.
+ *
+ * A combination nobody has read falls back to `SHIPPED_ORDER`, which is the
+ * page the design shipped and a fair answer for a market we know nothing
+ * about.
+ *
+ * A starting point, not a mirror. Once somebody has arranged the page it is
+ * theirs, and changing market leaves it alone — see `isUntouched`.
+ */
+export const PAGE_DEFAULTS: Record<string, SectionType[]> = {
+  'GB|dazn': ['subRail', 'subRail', 'spotlight', 'spotlight', 'spotlight', 'spotlight', 'imageCta', 'supported', 'faq'],
+  'US|dazn': ['subRail', 'subRail', 'spotlight', 'imageCta', 'zone', 'supported', 'faq'],
+  'CA|dazn': ['subRail', 'plans', 'features', 'subRail', 'spotlight', 'spotlight', 'spotlight', 'imageCta', 'supported', 'faq'],
+  'JP|dazn': ['plans', 'multiview', 'rail', 'features', 'imageCta', 'spotlight', 'rail', 'badges', 'subRail', 'faq'],
+  'DE|dazn': ['plans', 'multiview', 'badges', 'multiview', 'imageCta', 'subRail', 'schedule', 'supported', 'faq'],
+  'ES|dazn': ['ppv', 'plans', 'features', 'imageCta', 'spotlight', 'badges', 'spotlight', 'faq'],
+  'IT|dazn': ['multiview', 'plans', 'multiview', 'spotlight', 'supported', 'faq'],
+  'FR|dazn': ['plans', 'multiview', 'imageCta', 'badges', 'subRail', 'faq'],
+  'US|msg': ['zip', 'rail', 'plans', 'live', 'teams', 'providers', 'features', 'imageCta', 'spotlight', 'supported', 'faq'],
+  'US|nfl': ['features', 'supported', 'faq'],
+  'GB|nfl': ['plans', 'rail', 'experience', 'experience', 'experience', 'experience', 'experience', 'features', 'supported', 'spotlight', 'shows', 'faq'],
+  'DE|nfl': ['plans', 'rail', 'experience', 'experience', 'experience', 'experience', 'experience', 'features', 'supported', 'spotlight', 'shows', 'faq'],
+  'GB|nhl': ['schedCarousel', 'plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
+  'DE|nhl': ['schedCarousel', 'plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
+}
+
+/** The types a market and a product start with, or the shipped run. */
+export const defaultTypesFor = (market?: string | null, product?: string | null): SectionType[] =>
+  PAGE_DEFAULTS[`${(market ?? '').toUpperCase()}|${(product ?? '').toLowerCase()}`] ?? SHIPPED_ORDER
+
+/**
+ * Those types as a page, ids and all.
+ *
+ * Ids the way `withAdded` makes them, so a page that starts with four
+ * spotlight rails is numbered the way one that grew to four would be.
+ */
+export function defaultSectionsFor(market?: string | null, product?: string | null): PageSection[] {
+  const list: PageSection[] = []
+  for (const type of defaultTypesFor(market, product)) {
+    const taken = list.some((s) => s.id === type)
+    list.push({ id: taken ? freeId(list, type) : type, type, on: true })
+  }
+  return list
+}
+
+/**
+ * Whether the page is still the one a market and a product were given.
+ *
+ * The test for whether a default may be replaced by another. Nothing is stored
+ * to say where an arrangement came from: an arrangement that matches the one
+ * this situation would have produced has not been touched, whoever made it,
+ * and one that does not is somebody's.
+ */
+export function isUntouched(content: LandingScreen, market?: string | null, product?: string | null): boolean {
+  const saved = content.sections
+  if (!saved || saved.length === 0) return true
+  const want = defaultSectionsFor(market, product)
+  return (
+    saved.length === want.length &&
+    saved.every((s, at) => s.type === want[at].type && s.id === want[at].id && s.on === want[at].on)
+  )
+}
+
 /** Whether this instance is the original — the one that owns the page's own fields. */
 export const isFirst = (section: PageSection) => section.id === section.type
 
