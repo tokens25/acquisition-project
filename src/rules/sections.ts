@@ -276,15 +276,25 @@ export const SHIPPED_ORDER: SectionType[] = [
  * teams grid is fetched separately, against an RSN tag — so they keep the name
  * the design uses, which is the only name they have.
  *
- * Three more were left alone on purpose. Games schedule, Text block and Places
- * have plausible counterparts in `ComingUpRail`, `IntroductionBanner` and
- * `CompetitionCarousel`, but those three were matched by their type and their
- * place in the order rather than by a page anybody has seen rendered. A guess
- * written into the palette is a guess everybody downstream inherits.
+ * Three more were held back until somebody read what they actually carried,
+ * rather than matching them on their type and their place in the order. One of
+ * the three was ours: `ComingUpRail` is a served rail with a heading and a
+ * line under it and no entries of its own, which is Games schedule exactly, and
+ * it takes that name here.
+ *
+ * The other two were not, and keep the design's name. `IntroductionBanner` is
+ * a carousel of cards quoting a price, where Text block is two headings and a
+ * body; `CompetitionCarousel` is a row of circular league badges carrying a
+ * sentence each, where Places is photographs of stadiums with words over them
+ * — and Meet the teams, not Places, is the nearest thing we have to it.
+ *
+ * Which is the reason for holding them: two of those three guesses were wrong,
+ * and a guess written into the palette is a guess everybody downstream
+ * inherits.
  */
 export const SECTION_LABEL: Record<SectionType, string> = {
   zip: 'ZipCodeBreather',
-  schedule: 'Games schedule',
+  schedule: 'ComingUpRail',
   plans: 'ContentTiers',
   teams: 'Meet the teams',
   area: 'Outside the area',

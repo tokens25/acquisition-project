@@ -83,18 +83,23 @@ import type { Selector } from '../rules/layers'
  */
 
 /**
- * The blocks this tool has that are not in the palette.
+ * The blocks we have that a name test alone calls missing.
  *
- * Two of them, and a name test alone calls both missing while both are sitting
- * right there. The footer is under everything rather than in the run of cards,
- * so it has no section type to carry a label. And the hero is a tab of its own
- * — which the live page names twice, because it is a rollout caught in the
- * middle: four markets draw `Banners` and four `BoxedHeroBanners`.
+ * Two reasons a match gets missed. Some blocks are not in the palette at all:
+ * the footer sits under everything rather than in the run of cards, and the
+ * hero is a tab of its own, so neither carries a section label to match on.
+ *
+ * And some are in the palette under one of their names. The live page names a
+ * component twice while it is being rolled out — four markets draw `Banners`
+ * and four `BoxedHeroBanners`, and Germany draws `StandardRailV2` where Japan
+ * draws `StandardRail`. A later renderer of a component is that component, and
+ * counting it missing says we lack a block we are looking at.
  */
 const BESIDE_THE_PALETTE: Record<string, string> = {
   Footer: 'the footer, under the palette',
   Banners: 'the Hero banner tab',
   BoxedHeroBanners: 'the Hero banner tab',
+  StandardRailV2: 'StandardRail — the same rail, a later renderer',
 }
 
 /**

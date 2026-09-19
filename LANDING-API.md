@@ -130,7 +130,7 @@ time of reading:
 | `SpotlightRail` | CA US GB ES IT JP | Spotlight |
 | `StandardRail` | JP | Rail |
 | `StandardRailV2` | DE | Rail |
-| `ComingUpRail` | DE | Games schedule ✔ |
+| `ComingUpRail` | DE | `ComingUpRail` — ours takes the name |
 | `CompetitionCarousel` | ES DE JP FR | Meet the teams — nearest relative |
 | `SectionFeatures` | CA ES JP | Features list |
 | `SupportedDevices` | CA US GB IT DE | Supported devices |
@@ -158,9 +158,11 @@ The mapping column is our reading, not theirs. Three of the rows were first
 guessed from the type and its place in the order; all three have since been
 settled by reading what they actually carry, and two of the guesses were wrong.
 
-**`ComingUpRail` is our Games schedule.** ✔ A served rail — `railId`,
-`railParams`, a `title` and a `description`, and no entries of its own. The
-same shape as ours: a heading, a line under it, and a rail somebody else fills.
+**`ComingUpRail` is our Games schedule**, which now carries that name. A
+served rail — `railId`, `railParams`, a `title` and a `description`, and no
+entries of its own. The same shape as ours: a heading, a line under it, and a
+rail somebody else fills. Germany's reads "Alle Spiele. Alle Teams. Alles an
+einem Ort."
 
 **`CompetitionCarousel` is not our Places. Meet the teams is its nearest
 relative.** Its entries are `CommonSpoloCircularLogo` — `image`,
