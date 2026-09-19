@@ -42,17 +42,24 @@ import deviceAndroidTv from '../../assets/landing/devices/android-tv.svg'
 export { imageCtaArt, articleShot }
 
 /**
- * A team's tile, by the name it is written with.
+ * A tile on the CompetitionCarousel, by the name it is written with.
  *
  * Same idea as `featureArt` below: what somebody types picks the artwork, so
  * the crest and the colour are not a second thing to choose. A name with no
  * entry draws the tile's own template, which is what the design leaves
- * standing for a team it has not filled in.
+ * standing for a tile nobody has filled in.
+ *
+ * Named for the block it serves, and its keys are teams — which is the block's
+ * own state of affairs rather than an oversight here. The row was called Meet
+ * the teams until it took the live page's name for the same row, and what it
+ * ships with is three New York clubs. Keys become competitions when somebody
+ * gives the row competitions to draw; until then a name that matched the keys
+ * would not match the block.
  *
  * Here rather than in the screens because the panel needs it too — it shows
- * the logo a team has before offering to replace it.
+ * the logo a tile has before offering to replace it.
  */
-export const teamArt: Record<string, { ground: string; art: string; width: number; city: string }> = {
+export const competitionArt: Record<string, { ground: string; art: string; width: number; city: string }> = {
   'New York Knicks': { ground: '#1b418b', art: teamKnicks, width: 98, city: 'New York' },
   'New York Rangers': { ground: '#e51937', art: teamRangers, width: 83, city: 'New York' },
   'New York Islanders': { ground: '#003087', art: teamIslanders, width: 83, city: 'New York' },
