@@ -52,6 +52,7 @@ import {
   SECTION_BARS,
   SECTION_CONTENTS,
   SECTION_LABEL,
+  typesFromLive,
   SECTION_TYPES,
   isFirst,
   isOnceOnly,
@@ -113,6 +114,10 @@ function LivePage({ market, product }: { market: string | undefined; product: st
 
   const ours = new Set([...Object.values(SECTION_LABEL), ...Object.keys(BESIDE_THE_PALETTE)])
   const mine = page?.components.filter((c) => ours.has(c.type)).length ?? 0
+  // The third number, because two of them never agree and the reason is not
+  // a shortfall: the hero is a tab and the footer is under the palette, so a
+  // page holding everything this market draws still has two fewer rows.
+  const rows = page ? typesFromLive(page.components.map((c) => c.type)).length : 0
 
   return (
     <details className="ls-live" data-state={state}>
@@ -123,7 +128,7 @@ function LivePage({ market, product }: { market: string | undefined; product: st
             guess at. */}
         {state === 'ready' &&
           page &&
-          `${market} live${page.page === 'welcome' ? '' : ` · ${page.page}`} — ${page.components.length} components, ${mine} we have`}
+          `${market} live${page.page === 'welcome' ? '' : ` · ${page.page}`} — ${page.components.length} components, ${mine} we have, ${rows} on the page`}
         {state === 'none' &&
           (elsewhere.length
             ? `${market} draws no welcome page for this product — ${elsewhere.length} others`

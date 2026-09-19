@@ -5,8 +5,9 @@ import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../r
 import { DEFAULT_PAGE_VIEW, PAGE_VIEWS } from '../rules/pageViews'
 import { MARKETS, SUBSCRIPTIONS, journeys, marketFlag, sellsHere } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
-import { defaultSectionsFor, isUntouched } from '../rules/sections'
-import { resolveFlow, writeFlow } from '../rules/layers'
+import { defaultSectionsFor, isUntouched, rememberLive } from '../rules/sections'
+import { baseFlow, writeFlow } from '../rules/layers'
+import { useLiveLanding } from '../editor/useLiveLanding'
 
 /**
  * The default view's fields: the situation being authored for.
@@ -154,7 +155,17 @@ export function DefaultPanel({
      * different fields, so merging them is merging and not a choice.
      */
     const patch: Partial<CardSet> = found ? { journeyId: found.id } : {}
-    if (isUntouched(resolveFlow(set).landing, context.market, context.subscription)) {
+    /*
+     * Asked of the page under the markets, not of the market on screen.
+     *
+     * Every edit on this screen is written to the market's own copy, because
+     * that is the only scope the landing panel writes at — so a market that
+     * has arranged its page holds that arrangement itself, and the page below
+     * is still the run of blocks the last market was given. Asking the
+     * resolved content would find Canada's work and conclude the page had
+     * been arranged, leaving Germany reading Canada's list instead of its own.
+     */
+    if (isUntouched(baseFlow(set).landing, context.market, context.subscription)) {
       Object.assign(
         patch,
         writeFlow(set, {}, 'landing', {
@@ -164,6 +175,41 @@ export function DefaultPanel({
     }
     if (Object.keys(patch).length > 0) updateSet(patch)
   }
+
+  /*
+   * What this market draws, read once here and remembered for everybody.
+   *
+   * The table of defaults was a reading of the live pages on the day it was
+   * written, and Germany had already moved: it draws StandardRailV2, which is
+   * StandardRail, and the row was never added. A table that has to be kept in
+   * step is a table that will be out of step, so the live page answers where
+   * it can and the table only where it cannot — offline, or a combination
+   * production draws no page for.
+   *
+   * The answer arrives after the market is picked, so picking is not where
+   * this can happen. It happens when the answer lands, and only onto an
+   * arrangement nobody has made their own.
+   */
+  const live = useLiveLanding(context.market, context.subscription)
+  const page = live.state === 'ready' ? live.page : null
+  useEffect(() => {
+    if (!page) return
+    // Asked before the answer moves. Afterwards the page matches the list it
+    // is about to be given rather than the one it was given, and every
+    // arrangement would read as somebody's own work.
+    const spare = isUntouched(baseFlow(set).landing, context.market, context.subscription)
+    const news = rememberLive(
+      context.market,
+      context.subscription,
+      page.components.map((c) => c.type),
+    )
+    if (!news || !spare) return
+    updateSet(
+      writeFlow(set, {}, 'landing', {
+        sections: defaultSectionsFor(context.market, context.subscription),
+      }),
+    )
+  }, [page, context.market, context.subscription, set, updateSet])
 
   /** The same, when only the answer below the context has changed. */
   const pick = (nextStatus: string, nextEntry?: string) => settle(context, nextStatus, nextEntry)

@@ -240,6 +240,16 @@ function forkFrom(set: CardSet, scope: Selector): FlowContent {
 
 const blankSituation: Situation = { market: '', subscription: '', status: '', entry: '' }
 
+/**
+ * The copy everybody gets, with nothing written over it.
+ *
+ * A different question from what a situation ends up showing, and the one to
+ * ask about the page itself: a market with its own copy resolves to that copy,
+ * so asking the resolved content whether the page is still a default answers
+ * for the market rather than for the page under it.
+ */
+export const baseFlow = (set: CardSet): FlowContent => resolveFlow(set, blankSituation)
+
 /** Drops a whole layer, so its situations read what they read before it. */
 export function clearLayer(set: CardSet, scope: Selector): Partial<CardSet> {
   return { flowLayers: (set.flowLayers ?? []).filter((l) => !sameSelector(l.when, scope)) }

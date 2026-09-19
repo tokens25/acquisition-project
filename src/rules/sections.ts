@@ -421,7 +421,7 @@ export const PAGE_DEFAULTS: Record<string, SectionType[]> = {
   'US|dazn': ['subRail', 'subRail', 'spotlight', 'imageCta', 'zone', 'supported', 'faq'],
   'CA|dazn': ['subRail', 'plans', 'features', 'subRail', 'spotlight', 'spotlight', 'spotlight', 'imageCta', 'supported', 'faq'],
   'JP|dazn': ['plans', 'multiview', 'rail', 'features', 'imageCta', 'spotlight', 'rail', 'badges', 'subRail', 'faq'],
-  'DE|dazn': ['plans', 'multiview', 'badges', 'multiview', 'imageCta', 'subRail', 'schedule', 'supported', 'faq'],
+  'DE|dazn': ['plans', 'rail', 'multiview', 'badges', 'multiview', 'imageCta', 'subRail', 'schedule', 'supported', 'faq'],
   'ES|dazn': ['ppv', 'plans', 'features', 'imageCta', 'spotlight', 'badges', 'spotlight', 'faq'],
   'IT|dazn': ['multiview', 'plans', 'multiview', 'spotlight', 'supported', 'faq'],
   'FR|dazn': ['plans', 'multiview', 'imageCta', 'badges', 'subRail', 'faq'],
@@ -433,9 +433,81 @@ export const PAGE_DEFAULTS: Record<string, SectionType[]> = {
   'DE|nhl': ['schedCarousel', 'plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
 }
 
-/** The types a market and a product start with, or the shipped run. */
+/**
+ * Production names that are on the live page and cannot be cards on ours.
+ *
+ * Not blocks we lack. The hero is a tab of its own because it is authored in
+ * the hero studio, and the footer sits under the palette rather than in the
+ * run — so a page that draws every component a market has still has two fewer
+ * rows than the market lists, and always will.
+ */
+const NOT_A_CARD = new Set(['Banners', 'BoxedHeroBanners', 'Footer'])
+
+/** A later renderer of a component is that component. */
+const SAME_BLOCK: Record<string, string> = { StandardRailV2: 'StandardRail' }
+
+const TYPE_BY_NAME: Record<string, SectionType> = Object.fromEntries(
+  (Object.entries(SECTION_LABEL) as [SectionType, string][]).map(([type, name]) => [name, type]),
+)
+
+/**
+ * A live page's components as our types, in the order the market draws them.
+ *
+ * The rename is what makes this a lookup rather than a table somebody keeps in
+ * step: production's name for a block is our name for it, so the only entries
+ * needed here are the two kinds of exception above. A name we do not know is
+ * skipped rather than guessed at — a block we have not built is not a block
+ * the page can hold.
+ */
+export function typesFromLive(names: string[]): SectionType[] {
+  const out: SectionType[] = []
+  for (const raw of names) {
+    const name = SAME_BLOCK[raw] ?? raw
+    if (NOT_A_CARD.has(name)) continue
+    const type = TYPE_BY_NAME[name]
+    if (type) out.push(type)
+  }
+  return out
+}
+
+const pageKey = (market?: string | null, product?: string | null) =>
+  `${(market ?? '').toUpperCase()}|${(product ?? '').toLowerCase()}`
+
+/**
+ * What each market was last seen to draw.
+ *
+ * Kept here, beside the table it stands in front of, rather than in a store:
+ * every reader of a default wants the same answer, and a default that changed
+ * depending on which component asked would be worse than a stale one. It is
+ * filled in as the panel reads a market, so a market nobody has looked at yet
+ * falls back to the table below, which is the same list as of the day it was
+ * written.
+ */
+const seenLive = new Map<string, SectionType[]>()
+
+/** Remembers a market's live page. True when this is news. */
+export function rememberLive(
+  market: string | null | undefined,
+  product: string | null | undefined,
+  names: string[],
+): boolean {
+  const key = pageKey(market, product)
+  const types = typesFromLive(names)
+  const had = seenLive.get(key)
+  if (had && had.length === types.length && had.every((t, i) => t === types[i])) return false
+  seenLive.set(key, types)
+  return true
+}
+
+/**
+ * The types a market and a product start with.
+ *
+ * What the market draws now where that has been read, what it drew when the
+ * table was written where it has not, and the shipped run for a combination
+ * production has no page for.
+ */
 export const defaultTypesFor = (market?: string | null, product?: string | null): SectionType[] =>
-  PAGE_DEFAULTS[`${(market ?? '').toUpperCase()}|${(product ?? '').toLowerCase()}`] ?? SHIPPED_ORDER
+  seenLive.get(pageKey(market, product)) ?? PAGE_DEFAULTS[pageKey(market, product)] ?? SHIPPED_ORDER
 
 /**
  * Those types as a page, ids and all.
