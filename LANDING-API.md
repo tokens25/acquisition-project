@@ -603,6 +603,52 @@ list uses. Its heading even reads the way ours does. `CompetitionCarousel` was
 adopted on the job the row does; `TeamsRail` matches the row, its fields and its
 contents.
 
+### Outside the area is an error, not a component
+
+There is no production component for it, and the reason is worth knowing: the
+out-of-area answer is a **state of an input**.
+
+Two `LPInputField` entries exist in the whole space, both inside
+`RegionalBlacklistTeams` — the blackout-restrictions block. Each carries
+`label`, `placeholder`, `startIcon`, `errorIcon`, `inputVariant`,
+`shouldShowInputField`, and an `errorLabel` saying, in substance, that the code
+typed is either invalid or has nothing associated with it.
+
+So the live shape is: a component asks, its input holds the message for a code
+that fails, and the failure is shown in place. Ours draws that failure as a card
+of its own with a heading, a notice and a way out. That is a design decision
+rather than a missing block, and it is the third piece of the zip journey to
+come out this way — `ZipCodeCheck` asks and `ZipCodeAutoFill` confirms, both
+real components; the refusal is a string.
+
+`RegionalBlacklistTeams` is worth a note of its own. It is not our Outside the
+area: it is a blackout checker, MLB and MSG, asking for a code to say what is
+restricted where. Nothing here draws it.
+
+### Every component type in the space
+
+3,146 `LPContentGroup` entries carry 70 distinct `componentType` values. The
+ones any of this matters to, by how many entries use them:
+
+```
+925 Banners          499 ContentTiers      178 SpotlightRail    163 ExperienceFeature
+123 BoxedHeroBanners 116 FAQs              107 FreemiumBanner   107 TermsAndConditions
+ 96 StandardRail      81 SubscriptionsRail  73 SectionFeatures   67 SupportedDevices
+ 65 ComingUpRail      64 CompetitionCarousel 63 Footer           46 IntroductionBanner
+ 37 ArticlesRail      23 TeamsRail          23 ShowsRail         21 Features
+ 20 RedeemPage        16 StickyPpvHeader    15 PlansHeroBanner   14 PlayersRail
+ 14 PromoBanner       13 AnnouncementBanner 13 DeviceGraphic     12 LPScheduleCarousel
+```
+
+and a long tail of ones and twos — `Breather`, `StickyHeader`, `Countdown`,
+`SubscriptionComparison`, `ZipCodeBreather`, `ZipCodeAutoFill`, `ZipCodeCheck`,
+`RegionalBlacklistTeams`, `Map`, `AboutUs`, `LiveChats` and thirty more.
+
+Two things to take from it. The welcome pages show a fraction of what exists —
+this palette's counterparts are spread across campaign, RSN and B2B pages. And
+the tail is where the specific things live: our three zip components are 3, 3
+and 4 entries each, against 925 `Banners`.
+
 ### Seven of ours have no production name at all
 
 `Outside the area`, `Text block`, `Bundles`, `Match list`, `Feature cards`,
