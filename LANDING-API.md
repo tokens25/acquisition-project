@@ -130,12 +130,12 @@ time of reading:
 | `SpotlightRail` | CA US GB ES IT JP | Spotlight |
 | `StandardRail` | JP | Rail |
 | `StandardRailV2` | DE | Rail |
-| `ComingUpRail` | DE | Games schedule |
-| `CompetitionCarousel` | ES DE JP FR | Rail — Places |
+| `ComingUpRail` | DE | Games schedule ✔ |
+| `CompetitionCarousel` | ES DE JP FR | — |
 | `SectionFeatures` | CA ES JP | Features list |
 | `SupportedDevices` | CA US GB IT DE | Supported devices |
 | `ZipCodeBreather` | US | Postcode |
-| `IntroductionBanner` | IT DE JP FR | Text block (unconfirmed) |
+| `IntroductionBanner` | IT DE JP FR | — |
 | `FreemiumBanner` | CA US GB ES DE JP FR | — |
 | `StickyPpvHeader` | ES | — |
 | `FAQs` | all eight | FAQs |
@@ -154,9 +154,32 @@ express.
 **`ZipCodeBreather` is US-only**, which is our Postcode component and the RSN
 journey it belongs to.
 
-The mapping column is our reading, not theirs — `ComingUpRail`,
-`CompetitionCarousel` and `IntroductionBanner` were named from their
-component type and their place in the order, not from a rendered page.
+The mapping column is our reading, not theirs. Three of the rows were first
+guessed from the type and its place in the order; all three have since been
+settled by reading what they actually carry, and two of the guesses were wrong.
+
+**`ComingUpRail` is our Games schedule.** ✔ A served rail — `railId`,
+`railParams`, a `title` and a `description`, and no entries of its own. The
+same shape as ours: a heading, a line under it, and a rail somebody else fills.
+
+**`CompetitionCarousel` is not our Places, and we have nothing like it.** Its
+entries are `CommonSpoloCircularLogo` — `image`, `description`,
+`isHighlighted` — and ES carries twelve, one per competition, under a heading.
+A row of circular league badges. Places is square photographs of stadiums with
+words laid over them, which is a different component wearing a similar word.
+
+**`IntroductionBanner` is not our Text block either.** Three entries of
+`LPContentItem` and `CommonKeyValue`, carrying `backgroundImage`, `buttons`,
+`showPrice`, `billingPeriod`, `entitlementSetId`, `features` and a
+`disclaimer`, with `carouselInterval` and `theme` on the group. A carousel of
+promotional cards that quote a price and sell. Text block is two headings and a
+body.
+
+So the palette is three components short of the welcome page rather than one:
+`CompetitionCarousel`, `IntroductionBanner` and `FreemiumBanner` — that last
+one a single `LPContentItem` with a picture, a badge and a button, and the only
+one of the three that every market we have read draws. `StickyPpvHeader` makes
+four, though it is Spain's alone.
 
 ### The components on the `en-CA` welcome page
 
