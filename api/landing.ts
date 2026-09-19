@@ -61,6 +61,25 @@ const PRODUCT: Record<string, string> = {
 }
 const PRODUCTS = Object.keys(PRODUCT)
 
+/**
+ * The page a product opens on, where it is not the welcome one.
+ *
+ * MSG+ has no welcome page. It has seven, and `msgplusyes` is the one that
+ * carries the whole journey — thirteen components, and the only place
+ * `ZipCodeCheck`, `TeamsRail` and `SubscriptionProviders` are drawn together.
+ * So asking for MSG+ without naming a page asks for that one.
+ *
+ * Nothing here for NFL or NHL on purpose. Neither draws a welcome page either
+ * and both have pages of their own, but which of them is the one is not
+ * established, and a guess written here is a guess everybody downstream
+ * inherits. They answer with the list instead, which is the honest no.
+ *
+ * A `page` on the query always wins: this is a default, not a redirect.
+ */
+const HOME: Record<string, string> = {
+  msg: 'msgplusyes',
+}
+
 const SPACE = 'vhp9jnid12wf'
 const TTL_MS = 60 * 60 * 1000
 
@@ -231,9 +250,10 @@ async function handler(request: Request): Promise<Response> {
   // Absolute from Vercel's Web runtime, relative from anything else.
   const url = new URL(request.url, 'http://localhost')
   const market = (url.searchParams.get('market') ?? '').toLowerCase()
-  const page = url.searchParams.get('page') ?? 'welcome'
+  const named = url.searchParams.get('page')
   const env = url.searchParams.get('env') ?? 'Live'
   const product = (url.searchParams.get('product') ?? '').toLowerCase()
+  const page = named ?? HOME[product] ?? 'welcome'
   const refresh = url.searchParams.get('refresh') === '1'
   const raw = url.searchParams.get('raw') === '1'
 

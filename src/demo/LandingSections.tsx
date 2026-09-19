@@ -115,7 +115,12 @@ function LivePage({ market, product }: { market: string | undefined; product: st
     <details className="ls-live" data-state={state}>
       <summary className="ls-live__head">
         {state === 'loading' && `Reading ${market}'s live page…`}
-        {state === 'ready' && page && `${market} live — ${page.components.length} components, ${mine} we have`}
+        {/* The slug where it is not the welcome one, because which page is
+            being compared against is the thing you would otherwise have to
+            guess at. */}
+        {state === 'ready' &&
+          page &&
+          `${market} live${page.page === 'welcome' ? '' : ` · ${page.page}`} — ${page.components.length} components, ${mine} we have`}
         {state === 'none' &&
           (elsewhere.length
             ? `${market} draws no welcome page for this product — ${elsewhere.length} others`
