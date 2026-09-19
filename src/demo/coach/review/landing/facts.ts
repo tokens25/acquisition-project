@@ -2,6 +2,7 @@ import type { CardSet } from '../../../../rules/content'
 import { resolveFlow } from '../../../../rules/layers'
 import type { LandingScreen } from '../../../../rules/flow'
 import {
+  badgesOf,
   bundlesOf,
   cardsOf,
   cityTabsOf,
@@ -83,6 +84,12 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
       return { heading: t.zipHeading, words: [t.zipHeading, t.zipNote, t.zipCta], cta: t.zipCta }
     case 'schedule':
       return { heading: t.scheduleHeading, words: [t.scheduleHeading], cta: '' }
+    case 'badges':
+      return {
+        heading: t.badgesTitle,
+        words: [t.badgesTitle, ...badgesOf(l).map((one) => one.line)],
+        cta: '',
+      }
     case 'plans':
       return { heading: t.plansTitle, words: [t.plansTitle, t.plansBody], cta: '' }
     case 'teams':

@@ -270,6 +270,22 @@ export interface LandingSubTile {
   logo?: boolean
 }
 
+/**
+ * One badge on the competition carousel.
+ *
+ * A picture and a line, which is all the live one carries: its entries hold an
+ * image and a description and nothing else — no name, no link, no price. Japan
+ * draws the row with no lines at all, so a badge with nothing written under it
+ * is a badge and not an unfinished one.
+ */
+export interface LandingBadge {
+  id: string
+  /** The line under the disc. Empty draws none, which Japan's row does. */
+  line: string
+  /** The picture inside the disc, masked round by the page. A data URL. */
+  image?: string
+}
+
 /** One fight inside a bundle, as the bundle card lists it. */
 export interface LandingBundleFight {
   id: string
@@ -638,6 +654,13 @@ export interface LandingScreen {
   subRailBody?: string
   subRailTiles?: LandingSubTile[]
 
+  /* The sports a market carries, as a row of round badges. The live page's
+     CompetitionCarousel — drawn by Germany, Spain, France and Japan, and by no
+     market that draws the teams rail. A heading, then a picture and a line
+     each. */
+  badgesTitle?: string
+  badges?: LandingBadge[]
+
   /* Bundles — node 1093:55175. Nights sold together for less than the sum of
      them, side by side so the two prices can be compared. */
   bundlesTitle?: string
@@ -981,6 +1004,14 @@ export const defaultFlow: FlowContent = {
       { id: 'tile-2', title: 'Race | Pirelli British Grand Prix', meta: 'F1' },
       { id: 'tile-3', title: 'Qualifying | Pirelli British Grand Prix', meta: 'F1' },
       { id: 'tile-4', title: 'Practice 3 | Pirelli British Grand Prix', meta: 'F1' },
+    ],
+
+    badgesTitle: 'All the sport you love',
+    badges: [
+      { id: 'badge-1', line: 'Every matchday, live and on demand.' },
+      { id: 'badge-2', line: 'The whole season, wherever you are.' },
+      { id: 'badge-3', line: 'Every race weekend from lights out.' },
+      { id: 'badge-4', line: 'Fight nights as they happen.' },
     ],
 
     subRailTitle: 'More subscriptions you might like',

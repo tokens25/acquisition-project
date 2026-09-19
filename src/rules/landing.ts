@@ -1,5 +1,6 @@
 import type {
   HeroLabelVariant,
+  LandingBadge,
   LandingBundle,
   LandingCard,
   LandingMatch,
@@ -175,6 +176,7 @@ export function landingText(content: LandingScreen): Required<
     | 'footerLinks'
     | 'railTiles'
     | 'subRailTiles'
+    | 'badges'
     | 'bundles'
     | 'matchGames'
     | 'featureCards'
@@ -234,6 +236,7 @@ export function landingText(content: LandingScreen): Required<
     featuresTitle: of('featuresTitle'),
     featuresCta: of('featuresCta'),
     railTitle: of('railTitle'),
+    badgesTitle: of('badgesTitle'),
     subRailTitle: of('subRailTitle'),
     subRailBody: of('subRailBody'),
     bundlesTitle: of('bundlesTitle'),
@@ -399,6 +402,16 @@ export function subTilesOf(content: LandingScreen): LandingSubTile[] {
 /** A new one, with the way in already written: every tile has the same one. */
 export function blankSubTile(existing: LandingSubTile[]): LandingSubTile {
   return { id: nextId('sub', existing), line: '', cta: 'Subscribe', logo: true }
+}
+
+/** The badges on the carousel, or the ones it ships with. */
+export function badgesOf(content: LandingScreen): LandingBadge[] {
+  return content.badges ?? defaultFlow.landing.badges ?? []
+}
+
+/** A new one. A picture and a line are both optional; the disc is not. */
+export function blankBadge(existing: LandingBadge[]): LandingBadge {
+  return { id: nextId('badge', existing), line: '' }
 }
 
 /** The bundles on offer, or the ones it ships with. */

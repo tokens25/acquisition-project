@@ -154,6 +154,8 @@
       'landing bar buttons': [40,2,36,7], 'landing bar button': [40,2,17,7]
     }},
     flowLandingPage: { vb: '0 0 80 220', parts: {
+      'badge row': [0,856,80,22], 'badge row heading': [4,858,50,4], 'badge row track': [4,864,76,12],
+      'badge tile': [4,864,14,12], 'badge disc': [4,864,10,10], 'badge line': [4,875,14,3],
       'landing page': [0,0,80,220],
       'postcode block': [0,2,80,24], 'postcode copy': [4,4,72,9],
       'postcode heading': [4,4,72,4], 'postcode note': [4,9,72,4],

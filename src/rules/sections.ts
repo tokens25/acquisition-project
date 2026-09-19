@@ -32,6 +32,7 @@ export type SectionType =
   | 'supported'
   | 'rail'
   | 'subRail'
+  | 'badges'
   | 'bundles'
   | 'matchList'
   | 'cardStack'
@@ -76,6 +77,7 @@ export const SECTION_TYPES: SectionType[] = [
   'supported',
   'rail',
   'subRail',
+  'badges',
   'bundles',
   'matchList',
   'cardStack',
@@ -145,6 +147,8 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   subRailTitle: 'subRail',
   subRailBody: 'subRail',
   subRailTiles: 'subRail',
+  badgesTitle: 'badges',
+  badges: 'badges',
   bundlesTitle: 'bundles',
   bundlesBody: 'bundles',
   bundles: 'bundles',
@@ -208,6 +212,7 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   supported: 'Heading, the logos, note, link',
   rail: 'Title, what kind of tiles, and the rail',
   subRail: 'Heading, a line under it, and the subscriptions',
+  badges: 'Heading and the badges',
   bundles: 'Heading, a line under it, and the bundles',
   matchList: 'Eyebrow, heading, button, and the matches by day',
   cardStack: 'A stack of cards',
@@ -240,6 +245,7 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   supported: [70, 100, 45],
   rail: [50, 100, 100],
   subRail: [70, 100, 100],
+  badges: [60, 100, 100],
   bundles: [60, 100, 100],
   matchList: [45, 70, 100],
   cardStack: [100, 60, 100],
@@ -320,6 +326,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   supported: 'SupportedDevices',
   rail: 'StandardRail',
   subRail: 'SubscriptionsRail',
+  badges: 'CompetitionCarousel',
   bundles: 'Bundles',
   matchList: 'Match list',
   cardStack: 'Feature cards',

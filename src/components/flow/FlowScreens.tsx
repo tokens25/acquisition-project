@@ -8,6 +8,7 @@ import { styleOf } from '../../rules/tabs'
 import { useImageRatio } from './useImageRatio'
 import type { HeroBanner } from '../../rules/landing'
 import {
+  badgesOf,
   bundlesOf,
   cardsOf,
   cityTabsOf,
@@ -101,6 +102,7 @@ import type { Device, MarketConfig, PlanTab } from '../../rules/content'
 import type {
   LandingBundle,
   LandingCard,
+  LandingBadge,
   LandingMatch,
   LandingTab,
   LandingTeam,
@@ -1865,6 +1867,9 @@ export function PageSectionView({
         />
       )
 
+    case 'badges':
+      return <BadgeRow title={text.badgesTitle} badges={badgesOf(content)} />
+
     case 'bundles':
       return (
         <BundlesSection
@@ -2023,6 +2028,38 @@ function SubRailSection({
                 </span>
               </span>
             </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * The sports a market carries, as a row of round badges.
+ *
+ * The live page's own is three fields and no more: a picture, a line, and a
+ * flag for a highlighted one that no market sets. So this is a picture and a
+ * line, and the flag is left out until something wants it — a setting nothing
+ * reads is a setting somebody has to keep working for nothing.
+ *
+ * A badge with no picture draws the empty disc rather than nothing. The row is
+ * a template before it is filled in, and an empty circle is what says how many
+ * there will be.
+ */
+function BadgeRow({ title, badges }: { title: string; badges: LandingBadge[] }) {
+  return (
+    <section className="fl-badges">
+      {title.trim() !== '' && <p className="fl-badges__title">{title}</p>}
+      <div className="fl-badges__row">
+        {badges.map((badge) => (
+          <div className="fl-badges__one" key={badge.id}>
+            <span className="fl-badges__disc" aria-hidden="true">
+              {badge.image && <img src={badge.image} alt="" />}
+            </span>
+            {/* Japan's row carries no lines at all, so nothing written is a
+                row that is finished rather than one waiting. */}
+            {badge.line.trim() !== '' && <p className="fl-badges__line">{badge.line}</p>}
+          </div>
         ))}
       </div>
     </section>

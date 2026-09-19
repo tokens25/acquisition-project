@@ -15,6 +15,8 @@ import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
 import {
+  badgesOf,
+  blankBadge,
   blankCard,
   blankFeature,
   blankMatch,
@@ -1130,6 +1132,67 @@ function SectionFields({
             }
           >
             Add a subscription
+          </button>
+        </>
+      )
+
+    case 'badges':
+      return (
+        <>
+          <TextField
+            label="Heading"
+            value={t.badgesTitle}
+            pipelineKey={key('landing.badgesTitle')}
+            onChange={(v) => write({ badgesTitle: v })}
+            rows={2}
+          />
+          {badgesOf(inst).map((badge, i) => {
+            const all = badgesOf(inst)
+            const edit = (next: Partial<typeof badge>) =>
+              write({ badges: all.map((one, j) => (j === i ? { ...one, ...next } : one)) })
+            return (
+              <div className="demo__feature" data-row="" key={badge.id}>
+                {/* Round on the page, so round here: what is being chosen is a
+                    badge, and a square picker would show a crop the page does
+                    not draw. */}
+                <ImagePicker
+                  aspect="1 / 1"
+                  width={72}
+                  src={badge.image}
+                  label="Badge"
+                  aria={`Badge ${i + 1}`}
+                  onPick={(url) => edit({ image: url })}
+                  onRemove={() => edit({ image: '' })}
+                />
+                <span className="demo__team-side">
+                  <TextField
+                    label={`Badge ${i + 1}`}
+                    value={badge.line}
+                    pipelineKey={key(`landing.badges[${i}].line`)}
+                    onChange={(v) => edit({ line: v })}
+                    rows={2}
+                    helpText="The line under it. Empty draws none, which is what Japan's row does."
+                  />
+                </span>
+                <button
+                  data-icon="trash"
+                  aria-label="Remove"
+                  type="button"
+                  className="demo__feature-remove"
+                  data-destructive=""
+                  onClick={() => write({ badges: all.filter((_, j) => j !== i) })}
+                >
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            )
+          })}
+          <button
+            type="button"
+            className="ed-add"
+            onClick={() => write({ badges: [...badgesOf(inst), blankBadge(badgesOf(inst))] })}
+          >
+            Add a badge
           </button>
         </>
       )
