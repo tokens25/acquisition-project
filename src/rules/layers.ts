@@ -102,11 +102,35 @@ export function specificity(when: Selector): number {
   return pinned.length * 16 + weight
 }
 
+/**
+ * What a surface is, rather than what anybody wrote it to be.
+ *
+ * Somebody already signed in cannot sign in, so the nav's sign-in button is
+ * not something the logged-in page withholds by choice — it is something that
+ * page does not have. No market is pinned because none is relevant: it is as
+ * true in Spain as in Canada.
+ *
+ * These stack after everything written, not at their own specificity. A market
+ * that has taken its own copy took a snapshot of every field at the moment it
+ * forked, this one included, and at a plain market's specificity that snapshot
+ * would outrank a rule the market never had an opinion about — so the forked
+ * markets, the ones most likely to be somebody's long-standing work, would be
+ * the only ones the rule failed to reach.
+ */
+const BUILT_IN: FlowLayer[] = [
+  {
+    id: 'built-in:signed-in-nav',
+    when: { status: 'logged-in' },
+    patch: { landing: { navSignUpEnabled: false } },
+  },
+]
+
 /** The layers that apply here, least specific first — the order they stack in. */
 export function layersFor(set: CardSet, at: Situation = situationOf(set)): FlowLayer[] {
-  return (set.flowLayers ?? [])
+  const written = (set.flowLayers ?? [])
     .filter((l) => selectorMatches(l.when, at))
     .sort((a, b) => specificity(a.when) - specificity(b.when))
+  return [...written, ...BUILT_IN.filter((l) => selectorMatches(l.when, at))]
 }
 
 /**
