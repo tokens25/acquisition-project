@@ -69,15 +69,18 @@ const PRODUCTS = Object.keys(PRODUCT)
  * `ZipCodeCheck`, `TeamsRail` and `SubscriptionProviders` are drawn together.
  * So asking for MSG+ without naming a page asks for that one.
  *
- * Nothing here for NFL or NHL on purpose. Neither draws a welcome page either
- * and both have pages of their own, but which of them is the one is not
- * established, and a guess written here is a guess everybody downstream
- * inherits. They answer with the list instead, which is the honest no.
+ * NFL and NHL are simpler: each has a slug named after itself, and it is the
+ * one the market configs carry. NFL's is per-market — a US welcome of five
+ * components, fourteen in GB and DACH — and NHL's is one config serving GB and
+ * DACH together. MSG+ is the odd one, and the only reason this is a table
+ * rather than "the product's own name": DAZN's page is `welcome`.
  *
  * A `page` on the query always wins: this is a default, not a redirect.
  */
 const HOME: Record<string, string> = {
   msg: 'msgplusyes',
+  nfl: 'nfl',
+  nhl: 'nhl',
 }
 
 const SPACE = 'vhp9jnid12wf'
