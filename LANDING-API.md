@@ -649,7 +649,7 @@ this palette's counterparts are spread across campaign, RSN and B2B pages. And
 the tail is where the specific things live: our three zip components are 3, 3
 and 4 entries each, against 925 `Banners`.
 
-### Places is ShowcaseSquareRail
+### The places block is ShowcaseSquareRail
 
 Searched by its heading rather than guessed: `ShowcaseSquareRail` has two
 entries in the space and one of them is titled the same as our block's, with
@@ -657,7 +657,14 @@ six cards where ours has its places. Its cards are `LPShowcaseCard` —
 `label`, `backgroundImage`, `showGradient`, `textvariant` — which is a picture
 with a word over it, and ours as well. The other is a set of nations.
 
-Both are World Cup 26 content, which is where our block's own copy comes from.
+Both are World Cup 26 content, which is where our block's own copy comes from —
+its overline, its heading and the line under it are that entry's word for word.
+
+**No tabs on it.** The group carries nothing tab-shaped, and nothing filters the
+row: all six cards are scrolled through. What each card has instead is a
+`label` — a country, drawn as a pill on the card rather than as a control over
+it, and empty on the sibling entry. So our tabs are ours, sitting on top of a
+component that has none.
 
 ### Two of ours are designs production has not built
 
@@ -685,10 +692,10 @@ live page does not do this: it asks once, and the refusal is the input's
 `errorLabel`. Whatever is decided about that, the two blocks should not open
 with the same sentence.
 
-### Seven of ours have no production name at all
+### Six of ours have no production name at all
 
 `Outside the area`, `Text block`, `Bundles`, `Match list`, `Feature cards`,
-`Places`, `Choose the plan`.
+`Choose the plan`.
 
 Three others looked that way from the welcome pages and were not: the blocks now
 called `ZipCodeCheck`, `TeamsRail` and `SubscriptionProviders` are drawn on the

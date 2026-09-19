@@ -277,9 +277,9 @@ export const SHIPPED_ORDER: SectionType[] = [
  * every time, and this is the vocabulary the handoff lands in: these strings
  * group the strings a developer is given.
  *
- * Fourteen carry one. Seven do not — Outside the area, Text block, Bundles,
- * Match list, Feature cards, Places and Choose the plan — and they keep the
- * name the design gives them, which is the only name they have.
+ * Fifteen carry one. Six do not — Outside the area, Text block, Bundles,
+ * Match list, Feature cards and Choose the plan — and they keep the name the
+ * design gives them, which is the only name they have.
  *
  * Read the welcome pages alone and that list looked far longer, because this
  * palette was never built against a welcome page. It was built against the
@@ -294,10 +294,12 @@ export const SHIPPED_ORDER: SectionType[] = [
  * `ComingUpRail` was Games schedule and took the name. `IntroductionBanner`
  * was never Text block, and went to Article CTA, which is the right family and
  * short of it in three ways: not full-bleed, does not rotate, and nothing here
- * binds a price to an entitlement. `CompetitionCarousel` was never Places, and
- * for a while it was this block — until `TeamsRail` turned up on the RSN page
- * with `preTitle` over `title`, a picture and zone tags, which is this block
- * field for field and is the name it carries now.
+ * binds a price to an entitlement. `CompetitionCarousel` was never the
+ * places block, and for a while it was this one — until `TeamsRail` turned up
+ * on the RSN page with `preTitle` over `title`, a picture and zone tags, which
+ * is this block field for field and is the name it carries now. The places
+ * block found its own name later: `ShowcaseSquareRail`, whose overline,
+ * heading and line under it are word for word ours.
  *
  * Which is the reason for holding them: two of those three guesses were wrong,
  * and a guess written into the palette is a guess everybody downstream
@@ -330,7 +332,7 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   bundles: 'Bundles',
   matchList: 'Match list',
   cardStack: 'Feature cards',
-  cities: 'Places',
+  cities: 'ShowcaseSquareRail',
   live: 'ZipCodeCheck',
   spotlight: 'SpotlightRail',
   fightPlan: 'Choose the plan',
