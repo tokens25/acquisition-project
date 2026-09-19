@@ -131,7 +131,7 @@ time of reading:
 | `StandardRail` | JP | Rail |
 | `StandardRailV2` | DE | Rail |
 | `ComingUpRail` | DE | Games schedule ✔ |
-| `CompetitionCarousel` | ES DE JP FR | — |
+| `CompetitionCarousel` | ES DE JP FR | Meet the teams — nearest relative |
 | `SectionFeatures` | CA ES JP | Features list |
 | `SupportedDevices` | CA US GB IT DE | Supported devices |
 | `ZipCodeBreather` | US | Postcode |
@@ -162,11 +162,25 @@ settled by reading what they actually carry, and two of the guesses were wrong.
 `railParams`, a `title` and a `description`, and no entries of its own. The
 same shape as ours: a heading, a line under it, and a rail somebody else fills.
 
-**`CompetitionCarousel` is not our Places, and we have nothing like it.** Its
-entries are `CommonSpoloCircularLogo` — `image`, `description`,
-`isHighlighted` — and ES carries twelve, one per competition, under a heading.
-A row of circular league badges. Places is square photographs of stadiums with
-words laid over them, which is a different component wearing a similar word.
+**`CompetitionCarousel` is not our Places. Meet the teams is its nearest
+relative.** Its entries are `CommonSpoloCircularLogo` — `image`,
+`description`, `isHighlighted` — and ES carries twelve, one per competition,
+under a heading. A row of circular league badges.
+
+Places is square photographs of stadiums with words laid over them: a different
+component wearing a similar word. Meet the teams is the same idea as this one —
+a row of logo tiles saying how much you get — and differs in three ways that
+matter. Ours burns a short label into the tile, a city over a name, where this
+carries a marketing sentence per badge with nowhere in our tile to put it. Ours
+is a 150 rounded square with a gradient wash at its foot; this is a circle. And
+ours colours each tile from what the name brings, where this has only
+`isHighlighted`.
+
+Near enough to be the thing to stretch if somebody wants this row, and not near
+enough that a page built from ours would look like it. Whether the description
+is drawn under the badge, drawn as a tooltip, or not drawn at all is not
+established: the component is in ES, DE, JP and FR only, and dazn.com serves by
+detected country, so none of those pages could be seen rendered from here.
 
 **`IntroductionBanner` is not our Text block either.** Three entries of
 `LPContentItem` and `CommonKeyValue`, carrying `backgroundImage`, `buttons`,
