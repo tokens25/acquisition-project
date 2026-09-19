@@ -154,6 +154,10 @@
       'landing bar buttons': [40,2,36,7], 'landing bar button': [40,2,17,7]
     }},
     flowLandingPage: { vb: '0 0 80 220', parts: {
+      'ppv bar': [0,950,80,7], 'ppv bar badge': [4,952,10,4], 'ppv bar line': [16,952,44,4], 'ppv bar button': [62,952,14,4],
+      'zone breather': [0,958,80,34], 'zone breather picture': [4,960,72,16], 'zone breather heading': [4,978,60,5], 'zone breather line': [4,984,66,4], 'zone breather button': [4,989,28,5],
+      'schedule carousel': [0,994,80,24], 'schedule carousel label': [4,996,30,3], 'schedule carousel heading': [4,1000,56,5], 'schedule carousel track': [4,1007,76,9],
+      'schedule day': [4,1007,9,9], 'schedule day name': [5,1008,7,3], 'schedule day number': [5,1012,7,4],
       'shows rail': [0,918,80,30], 'shows rail heading': [4,920,50,5], 'shows rail line': [4,926,62,4],
       'shows rail track': [4,932,76,12], 'show': [4,932,16,12], 'show picture': [4,932,16,9], 'show name': [4,942,16,2], 'shows rail button': [4,945,24,5],
       'feature band': [0,880,80,34], 'feature band picture': [4,882,72,16], 'feature band words': [4,900,72,12],

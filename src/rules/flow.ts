@@ -654,6 +654,32 @@ export interface LandingScreen {
   subRailBody?: string
   subRailTiles?: LandingSubTile[]
 
+  /* A bar pinned above everything — the live page's StickyPpvHeader, which
+     Spain uses to offer help subscribing rather than to sell a fight. A line,
+     a badge and a way in; no picture anywhere on it. */
+  ppvLine?: string
+  ppvBadge?: string
+  ppvCta?: string
+
+  /* The invitation to set a zone — the live page's ZipCodeBreather, the US
+     welcome page's announcement. A picture, two lines and a button, and no
+     input: the code is typed on the step after this one. */
+  zoneTitle?: string
+  zoneBody?: string
+  zoneCta?: string
+  zoneImage?: string
+
+  /* A run of match days — the live page's LPScheduleCarousel. Served twice
+     over: a rail id for the row and a service dictionary for the fixtures,
+     between a start and an end. */
+  carouselTitle?: string
+  carouselLabel?: string
+  carouselFrom?: string
+  carouselTo?: string
+  carouselRailId?: string
+  /** Which sports-data service answers with the matches. */
+  carouselService?: string
+
   /* The shows a subscription carries, as a rail somebody else fills — the
      live page's ShowsRail. A heading, a line under it, the rail it names, and
      a way in. Its own entries are that one button; the tiles are the rail's. */
@@ -1037,6 +1063,21 @@ export const defaultFlow: FlowContent = {
       { id: 'tile-3', title: 'Qualifying | Pirelli British Grand Prix', meta: 'F1' },
       { id: 'tile-4', title: 'Practice 3 | Pirelli British Grand Prix', meta: 'F1' },
     ],
+
+    ppvLine: 'Need a hand choosing? Call 0800 000 000',
+    ppvBadge: 'Help',
+    ppvCta: "I'm already a customer",
+
+    zoneTitle: 'Watch the teams closest to home',
+    zoneBody: 'Set up your zone in two steps and we will show you what you get.',
+    zoneCta: 'Set up my zone',
+
+    carouselTitle: 'Every game, day by day',
+    carouselLabel: 'This week',
+    carouselFrom: '2026-09-18',
+    carouselTo: '2026-09-25',
+    carouselRailId: 'carousel_2345id',
+    carouselService: 'SportsDataMatchesCompetition_V1',
 
     showsTitle: 'Originals',
     showsBody: 'Go behind the season with the people who live it.',

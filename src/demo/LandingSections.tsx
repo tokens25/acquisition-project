@@ -39,6 +39,8 @@ import {
   blankTile,
   railIdOf,
   scheduleRailIdOf,
+  carouselRailIdOf,
+  carouselServiceOf,
   showsRailIdOf,
   railSizeOf,
   spotlightRailIdOf,
@@ -1152,6 +1154,118 @@ function SectionFields({
           >
             Add a subscription
           </button>
+        </>
+      )
+
+    case 'ppv':
+      return (
+        <>
+          <TextField
+            label="Badge"
+            value={t.ppvBadge}
+            pipelineKey={key('landing.ppvBadge')}
+            onChange={(v) => write({ ppvBadge: v })}
+            helpText="Set in capitals by the design. Empty draws none."
+          />
+          <TextField
+            label="Line"
+            value={t.ppvLine}
+            pipelineKey={key('landing.ppvLine')}
+            onChange={(v) => write({ ppvLine: v })}
+            rows={2}
+          />
+          <TextField
+            label="Button"
+            value={t.ppvCta}
+            pipelineKey={key('landing.ppvCta')}
+            onChange={(v) => write({ ppvCta: v })}
+            helpText="Empty draws none."
+          />
+        </>
+      )
+
+    case 'zone':
+      return (
+        <>
+          <ImagePicker
+            aspect="16 / 9"
+            src={inst.zoneImage}
+            label="Picture"
+            onPick={(url) => write({ zoneImage: url })}
+            onRemove={() => write({ zoneImage: '' })}
+          />
+          <TextField
+            label="Heading"
+            value={t.zoneTitle}
+            pipelineKey={key('landing.zoneTitle')}
+            onChange={(v) => write({ zoneTitle: v })}
+            rows={2}
+          />
+          <TextField
+            label="Under the heading"
+            value={t.zoneBody}
+            pipelineKey={key('landing.zoneBody')}
+            onChange={(v) => write({ zoneBody: v })}
+            rows={3}
+          />
+          <TextField
+            label="Button"
+            value={t.zoneCta}
+            pipelineKey={key('landing.zoneCta')}
+            onChange={(v) => write({ zoneCta: v })}
+            helpText="It hands over to the step that asks for the code. There is no input on this block."
+          />
+        </>
+      )
+
+    case 'schedCarousel':
+      return (
+        <>
+          <TextField
+            label="Over the heading"
+            value={t.carouselLabel}
+            pipelineKey={key('landing.carouselLabel')}
+            onChange={(v) => write({ carouselLabel: v })}
+            helpText="Set in capitals by the design. Empty draws none."
+          />
+          <TextField
+            label="Heading"
+            value={t.carouselTitle}
+            pipelineKey={key('landing.carouselTitle')}
+            onChange={(v) => write({ carouselTitle: v })}
+            rows={2}
+          />
+          {/* The two dates are the only part of this a person can see: they
+              decide which days the row runs between. */}
+          <TextField
+            label="From"
+            value={t.carouselFrom}
+            pipelineKey={key('landing.carouselFrom')}
+            onChange={(v) => write({ carouselFrom: v })}
+            helpText="A date, as 2026-09-18. Eight days at most are drawn."
+          />
+          <TextField
+            label="To"
+            value={t.carouselTo}
+            pipelineKey={key('landing.carouselTo')}
+            onChange={(v) => write({ carouselTo: v })}
+            helpText="A date the row runs up to."
+          />
+          {/* Served twice over, and neither address is drawn. */}
+          <TextField
+            label="Rail ID"
+            value={carouselRailIdOf(inst)}
+            pipelineKey={key('landing.carouselRailId')}
+            onChange={(v) => write({ carouselRailId: v })}
+            helpText="The rail's id, for the row itself."
+          />
+          <TextField
+            label="Service ID"
+            value={carouselServiceOf(inst)}
+            pipelineKey={key('landing.carouselService')}
+            onChange={(v) => write({ carouselService: v })}
+            helpText="Which sports-data service answers with the matches."
+          />
         </>
       )
 

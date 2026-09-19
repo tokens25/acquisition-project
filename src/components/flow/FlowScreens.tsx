@@ -1870,6 +1870,29 @@ export function PageSectionView({
     case 'badges':
       return <BadgeRow title={text.badgesTitle} badges={badgesOf(content)} />
 
+    case 'ppv':
+      return <PpvBar line={text.ppvLine} badge={text.ppvBadge} cta={text.ppvCta} />
+
+    case 'zone':
+      return (
+        <ZoneBreather
+          title={text.zoneTitle}
+          body={text.zoneBody}
+          cta={text.zoneCta}
+          image={content.zoneImage}
+        />
+      )
+
+    case 'schedCarousel':
+      return (
+        <SchedCarousel
+          title={text.carouselTitle}
+          label={text.carouselLabel}
+          from={text.carouselFrom}
+          to={text.carouselTo}
+        />
+      )
+
     case 'shows':
       return (
         <ShowsRow title={text.showsTitle} body={text.showsBody} cta={text.showsCta} />
@@ -2045,6 +2068,118 @@ function SubRailSection({
                 </span>
               </span>
             </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/**
+ * A bar pinned above everything — the live page's StickyPpvHeader.
+ *
+ * Named for a fight and used for whatever a market needs at the top: Spain's
+ * offers help subscribing and a way in for somebody who already pays. A line,
+ * a badge and a button, and no picture anywhere on it.
+ *
+ * Pinned on the live page. Here it is drawn where it sits in the run, because
+ * this page is a picture of a page rather than one being scrolled.
+ */
+function PpvBar({ line, badge, cta }: { line: string; badge: string; cta: string }) {
+  return (
+    <section className="fl-ppv">
+      {badge.trim() !== '' && <span className="fl-ppv__badge">{badge}</span>}
+      {line.trim() !== '' && <p className="fl-ppv__line">{line}</p>}
+      {cta.trim() !== '' && (
+        <span className="fl-ppv__cta" role="button">
+          {cta}
+        </span>
+      )}
+    </section>
+  )
+}
+
+/**
+ * The invitation to set a zone — the live page's ZipCodeBreather.
+ *
+ * The US welcome page's announcement, and not the postcode block: there is no
+ * input on it anywhere. It says what a zone gets you and hands over; the code
+ * is typed on the step after this one, which is ZipCodeAutoFill.
+ */
+function ZoneBreather({
+  title,
+  body,
+  cta,
+  image,
+}: {
+  title: string
+  body: string
+  cta: string
+  image?: string
+}) {
+  return (
+    <section className="fl-zone">
+      <span className="fl-zone__art" aria-hidden="true">
+        {image && <img src={image} alt="" />}
+      </span>
+      {title.trim() !== '' && <p className="fl-zone__title">{title}</p>}
+      {body.trim() !== '' && <p className="fl-zone__body">{body}</p>}
+      {cta.trim() !== '' && (
+        <span className="fl-zone__cta" role="button">
+          {cta}
+        </span>
+      )}
+    </section>
+  )
+}
+
+/**
+ * A run of match days — the live page's LPScheduleCarousel.
+ *
+ * Served twice over: a rail id for the row and a service dictionary for the
+ * fixtures, between a start date and an end. Neither address is drawn — what
+ * is drawn is the days they fall between, which is the one thing the two dates
+ * decide and the only part of this a person can see.
+ *
+ * Dates that do not parse draw no days rather than a guess at them.
+ */
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+function daysBetween(from: string, to: string) {
+  const start = new Date(from)
+  const end = new Date(to)
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return []
+  const out: { dow: string; date: number; key: string }[] = []
+  const at = new Date(start)
+  // Eight at most: a carousel is a row somebody scrolls, not a calendar.
+  while (at <= end && out.length < 8) {
+    out.push({ dow: DAYS[at.getUTCDay()], date: at.getUTCDate(), key: at.toISOString().slice(0, 10) })
+    at.setUTCDate(at.getUTCDate() + 1)
+  }
+  return out
+}
+
+function SchedCarousel({
+  title,
+  label,
+  from,
+  to,
+}: {
+  title: string
+  label: string
+  from: string
+  to: string
+}) {
+  const days = daysBetween(from, to)
+  return (
+    <section className="fl-sched">
+      {label.trim() !== '' && <p className="fl-sched__label">{label}</p>}
+      {title.trim() !== '' && <p className="fl-sched__title">{title}</p>}
+      <div className="fl-sched__row">
+        {days.map((day, at) => (
+          <span className="fl-sched__day" key={day.key} data-on={at === 0 || undefined}>
+            <span className="fl-sched__dow">{day.dow}</span>
+            <span className="fl-sched__date">{day.date}</span>
+          </span>
         ))}
       </div>
     </section>

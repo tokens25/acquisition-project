@@ -163,6 +163,9 @@ type ChoiceKey =
   | 'sectionCopy'
   | 'railSize'
   | 'showsRailId'
+  | 'zoneImage'
+  | 'carouselRailId'
+  | 'carouselService'
   | 'expImage'
   | 'expSide'
   | 'railId'
@@ -239,6 +242,16 @@ export function landingText(content: LandingScreen): Required<
     featuresTitle: of('featuresTitle'),
     featuresCta: of('featuresCta'),
     railTitle: of('railTitle'),
+    ppvLine: of('ppvLine'),
+    ppvBadge: of('ppvBadge'),
+    ppvCta: of('ppvCta'),
+    zoneTitle: of('zoneTitle'),
+    zoneBody: of('zoneBody'),
+    zoneCta: of('zoneCta'),
+    carouselTitle: of('carouselTitle'),
+    carouselLabel: of('carouselLabel'),
+    carouselFrom: of('carouselFrom'),
+    carouselTo: of('carouselTo'),
     showsTitle: of('showsTitle'),
     showsBody: of('showsBody'),
     showsCta: of('showsCta'),
@@ -372,6 +385,16 @@ export function scheduleRailIdOf(content: LandingScreen): string {
 /** The device logos the wall leaves out, or the ones it ships without. */
 export function devicesOffOf(content: LandingScreen): string[] {
   return content.supportedOff ?? defaultFlow.landing.supportedOff ?? []
+}
+
+/** Which rail the match days come from, or the one it ships with. */
+export function carouselRailIdOf(content: LandingScreen): string {
+  return content.carouselRailId ?? defaultFlow.landing.carouselRailId ?? ''
+}
+
+/** Which service answers with the matches, or the one it ships with. */
+export function carouselServiceOf(content: LandingScreen): string {
+  return content.carouselService ?? defaultFlow.landing.carouselService ?? ''
 }
 
 /** Which rail the shows come from, or the one it ships with. */

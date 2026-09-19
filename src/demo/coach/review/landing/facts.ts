@@ -84,6 +84,16 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
       return { heading: t.zipHeading, words: [t.zipHeading, t.zipNote, t.zipCta], cta: t.zipCta }
     case 'schedule':
       return { heading: t.scheduleHeading, words: [t.scheduleHeading], cta: '' }
+    case 'ppv':
+      return { heading: t.ppvLine, words: [t.ppvBadge, t.ppvLine, t.ppvCta], cta: t.ppvCta }
+    case 'zone':
+      return { heading: t.zoneTitle, words: [t.zoneTitle, t.zoneBody, t.zoneCta], cta: t.zoneCta }
+    case 'schedCarousel':
+      return {
+        heading: t.carouselTitle,
+        words: [t.carouselTitle, t.carouselLabel],
+        cta: '',
+      }
     case 'shows':
       return {
         heading: t.showsTitle,

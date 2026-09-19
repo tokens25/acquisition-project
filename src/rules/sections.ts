@@ -35,6 +35,9 @@ export type SectionType =
   | 'badges'
   | 'experience'
   | 'shows'
+  | 'ppv'
+  | 'zone'
+  | 'schedCarousel'
   | 'bundles'
   | 'matchList'
   | 'cardStack'
@@ -82,6 +85,9 @@ export const SECTION_TYPES: SectionType[] = [
   'badges',
   'experience',
   'shows',
+  'ppv',
+  'zone',
+  'schedCarousel',
   'bundles',
   'matchList',
   'cardStack',
@@ -163,6 +169,19 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   showsBody: 'shows',
   showsCta: 'shows',
   showsRailId: 'shows',
+  ppvLine: 'ppv',
+  ppvBadge: 'ppv',
+  ppvCta: 'ppv',
+  zoneTitle: 'zone',
+  zoneBody: 'zone',
+  zoneCta: 'zone',
+  zoneImage: 'zone',
+  carouselTitle: 'schedCarousel',
+  carouselLabel: 'schedCarousel',
+  carouselFrom: 'schedCarousel',
+  carouselTo: 'schedCarousel',
+  carouselRailId: 'schedCarousel',
+  carouselService: 'schedCarousel',
   bundlesTitle: 'bundles',
   bundlesBody: 'bundles',
   bundles: 'bundles',
@@ -229,6 +248,9 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   badges: 'Heading and the badges',
   experience: 'A picture, a heading, a line under it, and a button',
   shows: 'Heading, a line under it, the rail, and a button',
+  ppv: 'A line, a badge and a button',
+  zone: 'A picture, a heading, a line under it, and a button',
+  schedCarousel: 'Heading, label, the days, and where they come from',
   bundles: 'Heading, a line under it, and the bundles',
   matchList: 'Eyebrow, heading, button, and the matches by day',
   cardStack: 'A stack of cards',
@@ -264,6 +286,9 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   badges: [60, 100, 100],
   experience: [100, 55, 80],
   shows: [70, 100, 100],
+  ppv: [100, 40, 0],
+  zone: [100, 60, 70],
+  schedCarousel: [60, 100, 100],
   bundles: [60, 100, 100],
   matchList: [45, 70, 100],
   cardStack: [100, 60, 100],
@@ -349,6 +374,9 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   badges: 'CompetitionCarousel',
   experience: 'ExperienceFeature',
   shows: 'ShowsRail',
+  ppv: 'StickyPpvHeader',
+  zone: 'ZipCodeBreather',
+  schedCarousel: 'LPScheduleCarousel',
   bundles: 'Bundles',
   matchList: 'Match list',
   cardStack: 'Feature cards',
