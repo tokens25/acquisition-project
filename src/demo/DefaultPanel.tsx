@@ -118,10 +118,24 @@ export function DefaultPanel({
    * passed in rather than read from above.
    */
   const settle = (next: Context, nextStatus: string, nextEntry?: string) => {
-    setContext(next)
-    const options = entryPoints(journeys, next, nextStatus)
+    /*
+     * A market that does not sell what is selected moves the selection.
+     *
+     * Greying an option stops somebody choosing it and does nothing about a
+     * choice already made: pick NHL in Germany, switch to Spain, and the
+     * selection is a product Spain has no offers for. Falling back to DAZN is
+     * the one answer every market has.
+     *
+     * Only where something was chosen. An unanswered question at the front
+     * door stays unanswered rather than being answered for somebody.
+     */
+    const sold = !next.subscription || sellsHere(next.market, next.subscription)
+    const here: Context = sold ? next : { ...next, subscription: 'dazn' }
+
+    setContext(here)
+    const options = entryPoints(journeys, here, nextStatus)
     const cta = nextEntry && options.includes(nextEntry) ? nextEntry : options[0]
-    const found = journeysMatching(journeys, next, nextStatus, cta ?? '')[0]
+    const found = journeysMatching(journeys, here, nextStatus, cta ?? '')[0]
 
     /*
      * The page a market and a product are given.
@@ -144,7 +158,7 @@ export function DefaultPanel({
       Object.assign(
         patch,
         writeFlow(set, {}, 'landing', {
-          sections: defaultSectionsFor(next.market, next.subscription),
+          sections: defaultSectionsFor(here.market, here.subscription),
         }),
       )
     }
