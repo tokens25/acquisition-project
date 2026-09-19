@@ -451,20 +451,32 @@ const TYPE_BY_NAME: Record<string, SectionType> = Object.fromEntries(
 )
 
 /**
- * A live page's components as our types, in the order the market draws them.
+ * Whether a production name is a thing the page holds as a card at all.
+ *
+ * False for the hero and the footer, which is not the same as not having
+ * them: they are elsewhere in the tool rather than missing from it. Counting
+ * them would put a difference in every comparison that no amount of building
+ * could ever close, so they are left out of the counting entirely.
+ */
+export const isCard = (name: string): boolean => !NOT_A_CARD.has(SAME_BLOCK[name] ?? name)
+
+/**
+ * The card a production name is, or null where it is not one of ours.
  *
  * The rename is what makes this a lookup rather than a table somebody keeps in
  * step: production's name for a block is our name for it, so the only entries
- * needed here are the two kinds of exception above. A name we do not know is
- * skipped rather than guessed at — a block we have not built is not a block
- * the page can hold.
+ * needed are the two kinds of exception above. A name we do not know answers
+ * null rather than a guess — a block we have not built is not a block the page
+ * can hold.
  */
+export const cardFor = (name: string): SectionType | null =>
+  isCard(name) ? (TYPE_BY_NAME[SAME_BLOCK[name] ?? name] ?? null) : null
+
+/** A live page's components as our types, in the order the market draws them. */
 export function typesFromLive(names: string[]): SectionType[] {
   const out: SectionType[] = []
-  for (const raw of names) {
-    const name = SAME_BLOCK[raw] ?? raw
-    if (NOT_A_CARD.has(name)) continue
-    const type = TYPE_BY_NAME[name]
+  for (const name of names) {
+    const type = cardFor(name)
     if (type) out.push(type)
   }
   return out

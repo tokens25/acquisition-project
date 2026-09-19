@@ -52,7 +52,8 @@ import {
   SECTION_BARS,
   SECTION_CONTENTS,
   SECTION_LABEL,
-  typesFromLive,
+  cardFor,
+  isCard,
   SECTION_TYPES,
   isFirst,
   isOnceOnly,
@@ -89,22 +90,19 @@ import type { Selector } from '../rules/layers'
  */
 
 /**
- * The blocks we have that a name test alone calls missing.
+ * Where a component lives when the name is not the one in the palette.
  *
- * Two reasons a match gets missed. Some blocks are not in the palette at all:
- * the footer sits under everything rather than in the run of cards, and the
- * hero is a tab of its own, so neither carries a section label to match on.
+ * The live page names a component twice while a renderer is being rolled out:
+ * Germany draws `StandardRailV2` where Japan draws `StandardRail`. A later
+ * renderer of a component is that component, and calling it missing says we
+ * lack a block we are looking at.
  *
- * And some are in the palette under one of their names. The live page names a
- * component twice while it is being rolled out — four markets draw `Banners`
- * and four `BoxedHeroBanners`, and Germany draws `StandardRailV2` where Japan
- * draws `StandardRail`. A later renderer of a component is that component, and
- * counting it missing says we lack a block we are looking at.
+ * The hero and the footer are not here. They are not cards at all — `isCard`
+ * leaves them out of the list and out of both counts — because a page that
+ * holds every component a market draws would otherwise still read as two
+ * short, every time, for a reason no amount of building could close.
  */
 const BESIDE_THE_PALETTE: Record<string, string> = {
-  Footer: 'the footer, under the palette',
-  Banners: 'the Hero banner tab',
-  BoxedHeroBanners: 'the Hero banner tab',
   StandardRailV2: 'StandardRail — the same rail, a later renderer',
 }
 
@@ -112,12 +110,13 @@ function LivePage({ market, product }: { market: string | undefined; product: st
   const { state, page, error, elsewhere, reload } = useLiveLanding(market, product)
   if (state === 'off') return null
 
-  const ours = new Set([...Object.values(SECTION_LABEL), ...Object.keys(BESIDE_THE_PALETTE)])
-  const mine = page?.components.filter((c) => ours.has(c.type)).length ?? 0
-  // The third number, because two of them never agree and the reason is not
-  // a shortfall: the hero is a tab and the footer is under the palette, so a
-  // page holding everything this market draws still has two fewer rows.
-  const rows = page ? typesFromLive(page.components.map((c) => c.type)).length : 0
+  /* The cards, which is what the palette can answer for. */
+  const cards = page?.components.filter((c) => isCard(c.type)) ?? []
+  const mine = cards.filter((c) => cardFor(c.type)).length
+  /* Named at the foot rather than dropped silently: a page does draw them,
+     and a list that skipped them without saying so would be a different page
+     from the one that is up. */
+  const elsewhereOnPage = page?.components.filter((c) => !isCard(c.type)).map((c) => c.type) ?? []
 
   return (
     <details className="ls-live" data-state={state}>
@@ -128,7 +127,7 @@ function LivePage({ market, product }: { market: string | undefined; product: st
             guess at. */}
         {state === 'ready' &&
           page &&
-          `${market} live${page.page === 'welcome' ? '' : ` · ${page.page}`} — ${page.components.length} components, ${mine} we have, ${rows} on the page`}
+          `${market} live${page.page === 'welcome' ? '' : ` · ${page.page}`} — ${cards.length} components, ${mine} we have`}
         {state === 'none' &&
           (elsewhere.length
             ? `${market} draws no welcome page for this product — ${elsewhere.length} others`
@@ -149,8 +148,8 @@ function LivePage({ market, product }: { market: string | undefined; product: st
         ))}
       {state === 'ready' && page && (
         <>
-          {page.components.map((c) => (
-            <div className="ls-live__row" key={c.at} data-have={ours.has(c.type) || undefined}>
+          {cards.map((c) => (
+            <div className="ls-live__row" key={c.at} data-have={cardFor(c.type) ? true : undefined}>
               {/* Where the match is not a palette block, say where it is
                   instead — otherwise it reads as a match nobody can find. */}
               <span className="ls-live__name" title={BESIDE_THE_PALETTE[c.type]}>
@@ -163,6 +162,12 @@ function LivePage({ market, product }: { market: string | undefined; product: st
               </span>
             </div>
           ))}
+          {elsewhereOnPage.length > 0 && (
+            <p className="ls-live__note">
+              Also {elsewhereOnPage.join(', ')} — the hero is its own tab and the footer sits under
+              the palette, so neither is counted here.
+            </p>
+          )}
           <p className="ls-live__note">
             {page.config.displayName ?? page.page} · {page.locale} · {page.env}
             {page.cached && ' · cached'}
