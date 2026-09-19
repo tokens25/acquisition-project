@@ -134,7 +134,7 @@ time of reading:
 | `CompetitionCarousel` | ES DE JP FR | `CompetitionCarousel` — ours takes the name |
 | `SectionFeatures` | CA ES JP | Features list |
 | `SupportedDevices` | CA US GB IT DE | Supported devices |
-| `ZipCodeBreather` | US | Postcode |
+| `ZipCodeBreather` | US | — an announcement, not our input |
 | `IntroductionBanner` | IT DE JP FR | `IntroductionBanner` — ours takes the name |
 | `FreemiumBanner` | CA US GB ES DE JP FR | `FreemiumBanner` — ours takes the name |
 | `StickyPpvHeader` | ES | — |
@@ -151,8 +151,9 @@ with both. That is a hero rollout caught mid-flight, not two components.
 market's own decision, which is the thing our per-market layering exists to
 express.
 
-**`ZipCodeBreather` is US-only**, which is our Postcode component and the RSN
-journey it belongs to.
+**`ZipCodeBreather` is US-only**, and is not our postcode block. It is an
+announcement with a picture inviting somebody to set their zone; ours is the
+step that follows, which is `ZipCodeAutoFill`.
 
 The mapping column is our reading, not theirs. Three of the rows were first
 guessed from the type and its place in the order; all three have since been
@@ -226,8 +227,10 @@ It carries three things ours cannot say — `showBadge` with its text, a
 `features` list, and in Germany `showPrice` and `showHighlightedBorder`. A
 match at the block, short at the fields.
 
-So the palette is short of the welcome page by two: `CompetitionCarousel`, the
-row of circular league badges, and `StickyPpvHeader`, which is Spain's alone.
+So the palette is short of the welcome page by three: `CompetitionCarousel`,
+the row of circular league badges; `ZipCodeBreather`, the US announcement that
+invites somebody to set their zone; and `StickyPpvHeader`, which is Spain's
+alone.
 Everything else on GB, US, CA and IT has a block here — several of them short at
 the fields, which is as much of the work as the missing blocks are.
 
@@ -465,8 +468,8 @@ Read across eight markets' `welcome` pages on 18 Sep 2026, against a palette of
 and `BoxedHeroBanners` — is authored in the hero studio, and `ContentTiers`
 comes from whatever sells the plans. Both are drawn here and neither is edited
 here, so the tables below count them and the honest reading leaves them out:
-**fourteen components in scope, twelve of them ours**, and the tally per market
-becomes GB 10 of 10, US 8 of 8, CA 10 of 10, IT 6 of 6, JP 9 of 10, DE 9 of 10,
+**fourteen components in scope, eleven of them ours**, and the tally per market
+becomes GB 10 of 10, CA 10 of 10, IT 6 of 6, JP 9 of 10, DE 9 of 10, US 7 of 8,
 FR 5 of 6, and ES 6 of 8.
 
 ### At the block level, we are all but complete
@@ -490,7 +493,7 @@ Seventeen component types in production. We have sixteen.
 | `ComingUpRail` | DE | ✔ |
 | `StandardRail` | JP | ✔ |
 | `StandardRailV2` | DE | ✔ the same rail, later renderer |
-| `ZipCodeBreather` | US | ✔ |
+| `ZipCodeBreather` | US | **no** |
 | `StickyPpvHeader` | ES | **no** |
 
 `StickyPpvHeader` is not what its name says. Spain's is a bar pinned to the top
@@ -513,16 +516,23 @@ Which comes out, market by market:
 
 ### The zip journey is one thing, and it is not on the page
 
-Three of our blocks — `ZipCodeBreather`, What's live and Outside the area —
-are one journey in production, and only its invitation is a landing page
-component.
+Three of our blocks — `ZipCodeAutoFill`, `ZipCodeCheck` and Outside the area —
+are one journey in production, and it is spread across more than one page.
 
+The welcome page carries only the invitation, and it is not ours.
 `ZipCodeBreather` on the US page is filed as
-`RSN Starlink || Announcement Breather`. It holds no input at all: a picture,
-a line about watching your regional sports networks, "Set up your zone in 2
-simple steps to connect", and a button. The code is typed somewhere after that
-button, not here. Ours draws the invitation *and* an empty field, which is one
-more thing than the live page puts on it.
+`RSN Starlink || Announcement Breather`: a picture, a line about watching your
+regional sports networks, an offer to set your zone in two steps, and a button.
+No input anywhere on it. We do not draw that component, and the name was ours
+for a while on the strength of the word "ZipCode" alone.
+
+What we draw is the two steps that follow, both on the RSN slugs.
+`ZipCodeCheck` asks — "See what's live in your area", with a line about
+entering a code to see which teams you have access to. `ZipCodeAutoFill`
+confirms — "Check everything looks right", a line about using the home ZIP code
+to work out which local teams and games you can watch, and a golden Sign up.
+Our own heading, note and button are a paraphrase of that one, close enough
+that the two read as the same screen written twice.
 
 What a code buys is a **zone**, and the teams are tagged by it. The list comes
 from its own query rather than from the page config:

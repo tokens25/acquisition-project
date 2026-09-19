@@ -298,7 +298,7 @@ export const SHIPPED_ORDER: SectionType[] = [
  * inherits.
  */
 export const SECTION_LABEL: Record<SectionType, string> = {
-  zip: 'ZipCodeBreather',
+  zip: 'ZipCodeAutoFill',
   schedule: 'ComingUpRail',
   plans: 'ContentTiers',
   teams: 'TeamsRail',
