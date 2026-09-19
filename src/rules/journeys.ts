@@ -812,6 +812,28 @@ if (import.meta.env.DEV) {
    structure, it will be written the way those were.
    ──────────────────────────────────────────────────────────────────────── */
 
+/**
+ * A market's flag, worked out from its code rather than kept in a table.
+ *
+ * A two-letter country code *is* a flag in Unicode — the pair of regional
+ * indicators for its letters — so nothing has to be drawn and a market added
+ * later brings its own without anybody being asked for artwork.
+ *
+ * Anything that is not two letters has none to find, which is the right answer
+ * rather than a missing case: NFL and NHL are leagues sold as markets, and the
+ * base is every market at once.
+ *
+ * Where a platform ships no flag glyphs the pair falls back to the two letters
+ * themselves, which is the country code — a worse picture and still the right
+ * information.
+ */
+export function marketFlag(code: string): string {
+  if (!/^[A-Za-z]{2}$/.test(code)) return ''
+  return [...code.toUpperCase()]
+    .map((letter) => String.fromCodePoint(0x1f1e6 + letter.charCodeAt(0) - 65))
+    .join('')
+}
+
 /** Countries and leagues the product is sold in. */
 export const MARKETS = [
   { code: 'GB', label: 'UK' },

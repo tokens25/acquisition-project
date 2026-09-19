@@ -5,7 +5,7 @@ import { iconArtwork, logoArtwork } from '../card/assets'
 import type { AddOnPurchaseType, CardSet, Tier, TierPatch } from '../rules/content'
 import { DIRECT } from '../rules/content'
 import { journeysFor, resolveJourney } from '../rules/journey'
-import { journeys } from '../rules/journeys'
+import { journeys, marketFlag } from '../rules/journeys'
 import { excludedTiers, marketFor, resolveTier } from '../rules/resolve'
 import { summarise, validateAll, validateContext } from '../rules/validate'
 import { Icon } from '../components/Icon'
@@ -132,7 +132,10 @@ export function SetEditor({ store }: { store: CardSetStore }) {
           value={context.market}
           options={[
             { value: BASE_MARKET, label: 'Base — all markets' },
-            ...set.markets.map((m) => ({ value: m.code, label: `${m.label} (${m.currency})` })),
+            ...set.markets.map((m) => ({
+              value: m.code,
+              label: `${marketFlag(m.code)} ${m.label} (${m.currency})`.trim(),
+            })),
           ]}
           onChange={(v) => setContext({ ...context, market: v })}
         />

@@ -3,7 +3,7 @@ import type { Context } from '../rules/content'
 import type { CardSetStore } from '../editor/useCardSet'
 import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../rules/entry'
 import { DEFAULT_PAGE_VIEW, PAGE_VIEWS } from '../rules/pageViews'
-import { MARKETS, SUBSCRIPTIONS, journeys } from '../rules/journeys'
+import { MARKETS, SUBSCRIPTIONS, journeys, marketFlag } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
 
 /**
@@ -151,7 +151,7 @@ export function DefaultPanel({
           // behind it is a dead end, and published content can be older than
           // the list. The currency is not part of a market's name either — the
           // pricing group's own heading says it, where it is being used.
-          ...MARKETS.map((m) => ({ value: m.code, label: m.label })),
+          ...MARKETS.map((m) => ({ value: m.code, label: `${marketFlag(m.code)} ${m.label}`.trim() })),
           ...(prompt ? [{ value: ADD_MARKET, label: 'Add new' }] : []),
         ]}
         onChange={(v) => {
