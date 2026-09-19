@@ -327,6 +327,50 @@ about entitlements is in the CMS — the CMS only names the id.
 
 (`showBillingPeriodSwicther` is misspelled in the model.)
 
+### What the config selects on, and what it does not
+
+The tool asks three questions at the front door. The config answers two of them.
+
+**Market — yes.** `includedCountries` and `excludedCountries` on the entry,
+with `locale` separately for the words.
+
+**Product group — yes, and in its own vocabulary.** `prductGroup` on the root
+config, misspelled in the model. Twenty-one values across the 954:
+
+```
+DAZN 329   NFL 52   NationalLeagueTV 14   RallyTv 12   NHL 10   YESMSG 8
+FIBA 6   KAYO 5   CollegeSports 3   MONUMENTAL 3   MLB 2   LAKINGS 2
+FIFA_PLUS 1   and eight per-club NBA codes — CLENBA, INDNBA, ORLNBA and so on
+```
+
+499 are unset, so over half of all landing pages do not name one at all.
+
+The catch is that this is **not the offers service's vocabulary**. There it is
+`RallyTV`; here `RallyTv`. There MSG has no group at all and answers 400; here
+it is `YESMSG`. Two services, two spellings of the same idea, and a product
+group means a different thing to each — so a single field in this tool cannot
+address both without a mapping.
+
+`brand` is a separate axis above it: `dazn` on all 954, `kayo` on 6.
+
+**User status — no.** `LPRootConfig` carries nine fields and not one of them
+is about who is looking: `brand`, `displayName`, `isDevModeEnabled`,
+`prductGroup`, `environment`, `pages`, `includedCountries`,
+`excludedCountries`, `components`.
+
+Nor is it hiding in the slugs. Of 802 distinct page slugs, eight mention
+anything like a user state, and they are campaigns rather than states —
+`nhlfreemium` and `premiumupgrade`, pages in the same sense `boxing` is a page.
+There is no logged-out page and no logged-in one.
+
+Which fits what the offers service showed: the fields that depend on a person —
+`Purchasable`, `PurchaseDenyReasons`, `FreeTrialIneligibilityReason` — live
+there and need an authenticated user. A landing page is drawn before anybody is
+known.
+
+The nearest thing to an audience on the config is `environment`, and it answers
+a different question: who is allowed to see this page, not who is reading it.
+
 ## 2. The rails
 
 ```
