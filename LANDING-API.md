@@ -568,6 +568,39 @@ Which comes out, market by market:
 | GB 11 of 11 | US 9 of 9 | CA 12 of 12 | JP 12 of 12 | DE 12 of 12 |
 | ES 9 of 10 | IT 8 of 8 | FR 8 of 8 | | |
 
+### What "complete" counts, and what it does not
+
+Every market and product the tool can address reads complete. That means every
+component on that page has a block here. It does not mean the blocks are on
+that page, and the distribution is lopsided enough to be worth writing down.
+
+**Pages are between 5 and 14 components.** US and NFL draws five. GB and DE draw
+fourteen apiece. GB's DAZN page is eleven components of only seven types — four
+spotlight rails and two subscription rails — and GB's NFL page is fourteen of
+ten, five of them the same feature band. Components repeat, which is what our
+duplication is for.
+
+**Two components are on all fourteen pages: `FAQs` and `Footer`.** Everything
+else is a market's decision or a product's.
+
+| On | Components |
+| --- | --- |
+| 14 pages | `FAQs`, `Footer` |
+| 9–11 | `SupportedDevices`, `ContentTiers`, `FreemiumBanner`, `SpotlightRail`, `BoxedHeroBanners`, `SectionFeatures` |
+| 4–6 | `SubscriptionsRail`, `Banners`, `IntroductionBanner`, `StandardRail`, `CompetitionCarousel`, `ExperienceFeature` |
+| 1–2 | `ShowsRail`, `LPScheduleCarousel`, `ZipCodeBreather`, `StandardRailV2`, `ComingUpRail`, `StickyPpvHeader`, `ZipCodeAutoFill`, `ZipCodeCheck`, `TeamsRail`, `SubscriptionProviders` |
+
+Ten of the twenty-four appear on exactly one page each. The palette is a
+superset of any single page and always will be — which is the point of it, and
+the reason a score of 14 of 14 is a statement about shape rather than about
+coverage.
+
+**Seven of our twenty-seven are on none of the fourteen.** `Outside the area`
+is a refusal the live page draws as an input's error. `Bundles` and `Choose the
+plan` belong to the acquisition flow. `ShowcaseSquareRail` is on the World Cup
+campaign pages rather than these. `Text block`, `Match list` and `Feature
+cards` are designs production has not built.
+
 ### The zip journey is one thing, and it is not on the page
 
 Three of our blocks — `ZipCodeAutoFill`, `ZipCodeCheck` and Outside the area —
