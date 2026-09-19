@@ -649,6 +649,42 @@ this palette's counterparts are spread across campaign, RSN and B2B pages. And
 the tail is where the specific things live: our three zip components are 3, 3
 and 4 entries each, against 925 `Banners`.
 
+### Places is ShowcaseSquareRail
+
+Searched by its heading rather than guessed: `ShowcaseSquareRail` has two
+entries in the space and one of them is titled the same as our block's, with
+six cards where ours has its places. Its cards are `LPShowcaseCard` —
+`label`, `backgroundImage`, `showGradient`, `textvariant` — which is a picture
+with a word over it, and ours as well. The other is a set of nations.
+
+Both are World Cup 26 content, which is where our block's own copy comes from.
+
+### Two of ours are designs production has not built
+
+**Match list** and **Feature cards** turn up nothing. Their headings, their
+counts, their distinctive phrases: no `LPContentGroup` and no `LPContentItem`
+carries them. The nearest to the match list is a `PromoBanner` about the World
+Cup that mentions the same number of matches, and the nearest to the feature
+cards is a run of boxing bundles that share a couple of words.
+
+Which is a reasonable place for a design tool to be: both came from Figma, and
+a component nobody has built yet has nothing to be matched against. Worth
+keeping apart from the blocks that do have a counterpart, because the two look
+identical from inside the palette.
+
+### Our two zip answers share a heading
+
+Not a production question, an ours question, and it is why the area block is
+hard to place. `ZipCodeCheck` and Outside the area ship with the *same* title.
+The live one's is the production string, word for word. The area block then
+carries it again over a line about entering a code, a notice refusing a
+particular code, and a way out.
+
+So the block reads as a question in its heading and an answer in its body. The
+live page does not do this: it asks once, and the refusal is the input's
+`errorLabel`. Whatever is decided about that, the two blocks should not open
+with the same sentence.
+
 ### Seven of ours have no production name at all
 
 `Outside the area`, `Text block`, `Bundles`, `Match list`, `Feature cards`,
