@@ -454,6 +454,98 @@ GET https://startup.core.indazn.com/v1/static/web?Brand=dazn
 itself a decision made upstream, so a market can be pointed at a different
 landing page without touching the CMS query.
 
+## How the two compare
+
+Read across eight markets' `welcome` pages on 18 Sep 2026, against a palette of
+21 blocks.
+
+### At the block level, we are all but complete
+
+Seventeen component types in production. We have sixteen.
+
+| Production component | Markets drawing it | Ours |
+| --- | --- | --- |
+| `FAQs` | all eight | ✔ |
+| `Footer` | all eight | ✔ under the palette |
+| `FreemiumBanner` | CA DE ES FR GB JP US | ✔ |
+| `ContentTiers` | CA DE ES FR IT JP | ✔ |
+| `SpotlightRail` | CA ES GB IT JP US | ✔ |
+| `SubscriptionsRail` | CA DE FR GB JP US | ✔ |
+| `SupportedDevices` | CA DE GB IT US | ✔ |
+| `Banners` | FR GB IT US | ✔ the Hero banner tab |
+| `BoxedHeroBanners` | CA DE ES JP | ✔ the Hero banner tab |
+| `CompetitionCarousel` | DE ES FR JP | ✔ |
+| `IntroductionBanner` | DE FR IT JP | ✔ |
+| `SectionFeatures` | CA ES JP | ✔ |
+| `ComingUpRail` | DE | ✔ |
+| `StandardRail` | JP | ✔ |
+| `StandardRailV2` | DE | ✔ the same rail, later renderer |
+| `ZipCodeBreather` | US | ✔ |
+| `StickyPpvHeader` | ES | **no** |
+
+Which comes out, market by market:
+
+| | | | | |
+| --- | --- | --- | --- | --- |
+| GB 11 of 11 | US 9 of 9 | CA 12 of 12 | JP 12 of 12 | DE 12 of 12 |
+| ES 9 of 10 | IT 8 of 8 | FR 8 of 8 | | |
+
+### Nine of ours are not on a welcome page
+
+`Outside the area`, `TV providers`, `Text block`, `Bundles`, `Match list`,
+`Feature cards`, `Places`, `What's live`, `Choose the plan`.
+
+Not the same as "not in production". Only the `welcome` slug was read, and the
+CMS holds hundreds of others — `boxing`, `ppv-bundle`, `nfl`, `msgplus`,
+`sports`, a long tail of campaign pages. Several of these are RSN or PPV
+components and would be expected to sit on those. Establishing that is a matter
+of reading another slug, which the route already takes as `?page=`.
+
+### The gap is not blocks. It is fields
+
+A count of names cannot see this, and the fold in the panel reports 12 of 12
+for a market whose page we could not reproduce. What is thin, and where:
+
+**Everywhere a picture appears.** `AdaptiveImage` carries `default`, `web`,
+`tablet`, `mobile` and `livingRoom`. We carry one image and let the page scale
+it. Every crop somebody art-directed is lost on the way in and invented on the
+way out.
+
+**Everywhere a button appears.** `navigationType`, `navigationChapterName`,
+`navigationLink`, `scrollAction`, `entitlementSetId`, `buttonTrackingId`,
+`freeTrialLabel`, `mobileButtonLabel` — against our one string of label text.
+We hold what a button says and nothing about where it goes.
+
+**Anywhere a price is quoted.** `showPrice` with a `billingPeriod` and an
+`entitlementSetId`, and an `offerLabel` written around a `{price}` placeholder
+filled in against the offers service. Nothing here binds a price to an
+entitlement. This is the single largest capability we lack, and it turns up on
+`ContentTiers`, `FreemiumBanner` and `IntroductionBanner` alike.
+
+**Per component**, the ones established so far:
+
+| Block | Short by |
+| --- | --- |
+| `ContentTiers` | 44 fields on `en-GB`'s tier items against our heading and a line; the rest lives in the Subscription screen |
+| `FreemiumBanner` | `showBadge` and its text, a `features` list, `showHighlightedBorder` |
+| `IntroductionBanner` | not full-bleed, does not rotate (`carouselInterval`), no price |
+| `CompetitionCarousel` | a circle against our rounded square, a sentence against our city over a name, `isHighlighted` against our colour — and ours is keyed by team |
+| `SupportedDevices` | 16 entries against our thirteen on-and-off toggles |
+| the rails | `railId` **and** `railParams` against our one Rail ID string |
+
+**And the two models target differently.** Theirs is three lists on an entry —
+`pages`, `includedCountries`, `environment` — intersected. Ours is a base with
+market layers over it. Ours can say "Spain differs from the base in one field";
+theirs cannot. Theirs can say "this entry is for these four countries and this
+audience"; ours cannot. They do not round-trip.
+
+### So where the work is
+
+Not in building blocks. Sixteen of seventeen exist, and the seventeenth is one
+market's PPV bar. The work is in what a block can hold: a picture per
+breakpoint, a button that knows its destination, and a price that comes from
+the offer rather than from typing.
+
 ## Where we disagree with it
 
 Worth reading before building an adapter.
