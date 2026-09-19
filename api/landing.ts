@@ -41,6 +41,26 @@ const MARKETS = Object.keys(LOCALE)
  */
 const ENVIRONMENTS = ['Live', 'Test', 'Beta']
 
+/**
+ * What this tool calls a product group, and what the CMS calls it.
+ *
+ * Two vocabularies for one idea, so the tool keeps its own and this is where
+ * the other is written down. The offers service has a third — same words for
+ * DAZN, NFL and NHL, `RallyTV` where the CMS says `RallyTv`, and nothing at
+ * all for MSG, which answers 400 there. So MSG+ has a landing page and no
+ * offers of its own, which is a fact about the product rather than a gap here.
+ *
+ * Unset on 499 of the 954 configs — the campaign long tail. Every welcome page
+ * sets it, all of them to DAZN.
+ */
+const PRODUCT: Record<string, string> = {
+  dazn: 'DAZN',
+  msg: 'YESMSG',
+  nfl: 'NFL',
+  nhl: 'NHL',
+}
+const PRODUCTS = Object.keys(PRODUCT)
+
 const SPACE = 'vhp9jnid12wf'
 const TTL_MS = 60 * 60 * 1000
 
@@ -56,13 +76,31 @@ const HEADERS = {
  * for this audience. `include=10` flattens the whole tree into one answer
  * rather than leaving a page's components to be fetched one link at a time.
  */
-const configUrl = (locale: string, country: string, page: string, env: string) =>
+const configUrl = (locale: string, country: string, page: string, env: string, group: string | null) =>
   `https://dazn-content-proxy.sd.indazn.com/spaces/${SPACE}/environments/master/entries` +
   `?content_type=LPRootConfig&locale=${encodeURIComponent(locale)}&include=10` +
   `&fields.pages[in]=${encodeURIComponent(page)}` +
   `&fields.includedCountries[in]=${country},ALL` +
   `&fields.excludedCountries[nin]=${country}` +
-  `&fields.environment[in]=${encodeURIComponent(env)}`
+  `&fields.environment[in]=${encodeURIComponent(env)}` +
+  (group ? `&fields.prductGroup=${encodeURIComponent(group)}` : '')
+
+/**
+ * The pages this product does draw here, for when the one asked for is not one
+ * of them. Asked only on a miss, and cheap: no `include`, three fields.
+ *
+ * A product group with no page under the slug somebody asked for is the
+ * ordinary case rather than a fault — MSG+ has no welcome page, it has an RSN
+ * one — and an answer that says so and names them is worth more than a no.
+ */
+const elsewhereUrl = (locale: string, country: string, env: string, group: string) =>
+  `https://dazn-content-proxy.sd.indazn.com/spaces/${SPACE}/environments/master/entries` +
+  `?content_type=LPRootConfig&locale=${encodeURIComponent(locale)}&limit=20` +
+  `&select=fields.displayName,fields.pages` +
+  `&fields.includedCountries[in]=${country},ALL` +
+  `&fields.excludedCountries[nin]=${country}` +
+  `&fields.environment[in]=${encodeURIComponent(env)}` +
+  `&fields.prductGroup=${encodeURIComponent(group)}`
 
 /* ── The shapes, only the fields read ──────────────────────────────────── */
 
@@ -195,6 +233,7 @@ async function handler(request: Request): Promise<Response> {
   const market = (url.searchParams.get('market') ?? '').toLowerCase()
   const page = url.searchParams.get('page') ?? 'welcome'
   const env = url.searchParams.get('env') ?? 'Live'
+  const product = (url.searchParams.get('product') ?? '').toLowerCase()
   const refresh = url.searchParams.get('refresh') === '1'
   const raw = url.searchParams.get('raw') === '1'
 
@@ -204,10 +243,14 @@ async function handler(request: Request): Promise<Response> {
   if (!ENVIRONMENTS.includes(env)) {
     return json({ ok: false, error: `Unknown env "${env}". One of: ${ENVIRONMENTS.join(', ')}.`, environments: ENVIRONMENTS }, 400)
   }
+  if (product && !PRODUCTS.includes(product)) {
+    return json({ ok: false, error: `Unknown product "${product}". One of: ${PRODUCTS.join(', ')}.`, products: PRODUCTS }, 400)
+  }
 
   const locale = LOCALE[market]
   const country = market.toUpperCase()
-  const key = `${market}|${page}|${env}`
+  const group = product ? PRODUCT[product] : null
+  const key = `${market}|${page}|${env}|${group ?? ''}`
   const held = pages.get(key)
   const started = Date.now()
 
@@ -217,7 +260,7 @@ async function handler(request: Request): Promise<Response> {
     body = held.value
     cached = true
   } else {
-    const target = configUrl(locale, country, page, env)
+    const target = configUrl(locale, country, page, env, group)
     try {
       const response = await fetch(target, { headers: HEADERS })
       if (!response.ok) {
@@ -234,9 +277,27 @@ async function handler(request: Request): Promise<Response> {
   const root = body.items?.[0]
 
   // No config is an answer, not a failure: plenty of markets do not draw a
-  // given page, and 200-with-nothing is how this service says so.
+  // given page, and 200-with-nothing is how this service says so. Where a
+  // product group was named, say what it does draw rather than only what it
+  // does not.
   if (!root) {
-    return json({ ok: true, market, locale, page, env, cached, seconds, found: false, components: [], assets: {} })
+    let elsewhere: { displayName: string | null; pages: string[] }[] = []
+    if (group) {
+      try {
+        const also = await fetch(elsewhereUrl(locale, country, env, group), { headers: HEADERS })
+        if (also.ok) {
+          const body2 = (await also.json()) as Body
+          elsewhere = (body2.items ?? []).map((it) => ({
+            displayName: typeof it.fields.displayName === 'string' ? it.fields.displayName : null,
+            pages: Array.isArray(it.fields.pages) ? (it.fields.pages as string[]) : [],
+          }))
+        }
+      } catch {
+        // The answer stands without it; a second call failing is not a reason
+        // to turn a found-nothing into an error.
+      }
+    }
+    return json({ ok: true, market, locale, page, env, product: product || null, cached, seconds, found: false, components: [], assets: {}, elsewhere })
   }
 
   if (raw) return json({ ok: true, market, locale, page, env, cached, seconds, found: true, body })
@@ -251,6 +312,7 @@ async function handler(request: Request): Promise<Response> {
     locale,
     page,
     env,
+    product: product || null,
     cached,
     seconds,
     found: true,

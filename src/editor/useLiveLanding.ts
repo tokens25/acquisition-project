@@ -29,11 +29,18 @@ export interface LiveComponent {
   entries: { type: string; id: string; name: string | null }[]
 }
 
+/** A page this product does draw, where the one asked for is not one of them. */
+export interface LiveElsewhere {
+  displayName: string | null
+  pages: string[]
+}
+
 export interface LivePage {
   market: string
   locale: string
   page: string
   env: string
+  product: string | null
   cached: boolean
   seconds: number
   config: { displayName: string | null; pages: string[]; environment: string[] }
@@ -63,14 +70,17 @@ interface Answer {
   state: 'ready' | 'none' | 'error' | 'off'
   page: LivePage | null
   error: string | null
+  /** Only on 'none', and only where a product group was named. */
+  elsewhere: LiveElsewhere[]
 }
 
-export function useLiveLanding(market: string | undefined | null) {
+export function useLiveLanding(market: string | undefined | null, product?: string | null) {
   const code = (market ?? '').trim().toLowerCase()
+  const group = (product ?? '').trim().toLowerCase()
   const [answer, setAnswer] = useState<Answer | null>(null)
   /** Bumped to ask again, which is the only thing a reload has to do. */
   const [nonce, setNonce] = useState(0)
-  const asked = `${code}|${nonce}`
+  const asked = `${code}|${group}|${nonce}`
 
   useEffect(() => {
     if (!code) return
@@ -80,7 +90,10 @@ export function useLiveLanding(market: string | undefined | null) {
 
     const ask = async () => {
       try {
-        const url = `/api/landing?market=${encodeURIComponent(code)}${nonce ? '&refresh=1' : ''}`
+        const url =
+          `/api/landing?market=${encodeURIComponent(code)}` +
+          (group ? `&product=${encodeURIComponent(group)}` : '') +
+          (nonce ? '&refresh=1' : '')
         const response = await fetch(url, { signal: stop.signal })
         const body = await response.json()
         if (stop.signal.aborted) return
@@ -88,29 +101,29 @@ export function useLiveLanding(market: string | undefined | null) {
         // fault to report, it is "there is nothing here to ask for" — which is
         // what NFL and NHL are, sitting in the market list as product groups.
         if (response.status === 400) {
-          setAnswer({ asked, state: 'off', page: null, error: null })
+          setAnswer({ asked, state: 'off', page: null, error: null, elsewhere: [] })
           return
         }
         if (!response.ok || body?.ok === false) {
           const said = typeof body?.error === 'string' ? body.error : `The route answered ${response.status}.`
-          setAnswer({ asked, state: 'error', page: null, error: said })
+          setAnswer({ asked, state: 'error', page: null, error: said, elsewhere: [] })
           return
         }
         if (!body.found) {
-          setAnswer({ asked, state: 'none', page: null, error: null })
+          setAnswer({ asked, state: 'none', page: null, error: null, elsewhere: Array.isArray(body.elsewhere) ? body.elsewhere : [] })
           return
         }
-        setAnswer({ asked, state: 'ready', page: body as LivePage, error: null })
+        setAnswer({ asked, state: 'ready', page: body as LivePage, error: null, elsewhere: [] })
       } catch (e) {
         if (stop.signal.aborted) return
         // A tool running without its routes — a static preview, a build with
         // no functions — should say so rather than look broken.
-        setAnswer({ asked, state: 'error', page: null, error: e instanceof Error ? e.message : String(e) })
+        setAnswer({ asked, state: 'error', page: null, error: e instanceof Error ? e.message : String(e), elsewhere: [] })
       }
     }
     void ask()
     return () => stop.abort()
-  }, [code, nonce, asked])
+  }, [code, group, nonce, asked])
 
   const mine = answer?.asked === asked ? answer : null
   const state: LiveState = !code ? 'off' : (mine?.state ?? 'loading')
@@ -119,6 +132,7 @@ export function useLiveLanding(market: string | undefined | null) {
     state,
     page: mine?.page ?? null,
     error: mine?.error ?? null,
+    elsewhere: mine?.elsewhere ?? [],
     reload: () => setNonce((n) => n + 1),
   }
 }

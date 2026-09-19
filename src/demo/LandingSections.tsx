@@ -104,8 +104,8 @@ const BESIDE_THE_PALETTE: Record<string, string> = {
   StandardRailV2: 'StandardRail — the same rail, a later renderer',
 }
 
-function LivePage({ market }: { market: string | undefined }) {
-  const { state, page, error, reload } = useLiveLanding(market)
+function LivePage({ market, product }: { market: string | undefined; product: string | undefined }) {
+  const { state, page, error, elsewhere, reload } = useLiveLanding(market, product)
   if (state === 'off') return null
 
   const ours = new Set([...Object.values(SECTION_LABEL), ...Object.keys(BESIDE_THE_PALETTE)])
@@ -116,11 +116,24 @@ function LivePage({ market }: { market: string | undefined }) {
       <summary className="ls-live__head">
         {state === 'loading' && `Reading ${market}'s live page…`}
         {state === 'ready' && page && `${market} live — ${page.components.length} components, ${mine} we have`}
-        {state === 'none' && `${market} draws no live welcome page`}
+        {state === 'none' &&
+          (elsewhere.length
+            ? `${market} draws no welcome page for this product — ${elsewhere.length} others`
+            : `${market} draws no live welcome page`)}
         {state === 'error' && `${market}'s live page could not be read`}
       </summary>
 
       {state === 'error' && <p className="ls-live__note">{error}</p>}
+      {/* A product with no page under this slug is the ordinary case — MSG+
+          has no welcome page, it has an RSN one — so say which pages it does
+          draw rather than stopping at the no. */}
+      {state === 'none' &&
+        elsewhere.map((one) => (
+          <div className="ls-live__row" key={one.pages[0] ?? one.displayName}>
+            <span className="ls-live__name">{one.pages[0] ?? '—'}</span>
+            <span className="ls-live__note">{one.displayName ?? ''}</span>
+          </div>
+        ))}
       {state === 'ready' && page && (
         <>
           {page.components.map((c) => (
@@ -205,7 +218,7 @@ export function LandingSections({
           {drawn} on the page
         </span>
       </div>
-      <LivePage market={store.context.market} />
+      <LivePage market={store.context.market} product={store.context.subscription} />
       {list.map((section) => (
         <SectionCard
           key={section.id}
