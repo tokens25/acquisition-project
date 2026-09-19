@@ -1870,6 +1870,11 @@ export function PageSectionView({
     case 'badges':
       return <BadgeRow title={text.badgesTitle} badges={badgesOf(content)} />
 
+    case 'shows':
+      return (
+        <ShowsRow title={text.showsTitle} body={text.showsBody} cta={text.showsCta} />
+      )
+
     case 'experience':
       return (
         <ExperienceBand
@@ -2042,6 +2047,48 @@ function SubRailSection({
             </article>
         ))}
       </div>
+    </section>
+  )
+}
+
+/**
+ * The shows a subscription carries — the live page's ShowsRail.
+ *
+ * A served rail: the page names which one and the rail answers with its shows,
+ * so its only entry of its own is the button. What is drawn here is the
+ * placeholder standing in for that answer, the way the schedule's is.
+ *
+ * Its own `title` and `description` sit above, and unlike the other served
+ * rails it carries a way in underneath — which is the one thing that makes it
+ * its own component rather than another rail.
+ */
+const SHOWS = [
+  'Behind the Season',
+  'Matchday Diaries',
+  'The Rivalry',
+  'Inside the Room',
+]
+
+function ShowsRow({ title, body, cta }: { title: string; body: string; cta: string }) {
+  return (
+    <section className="fl-shows">
+      {title.trim() !== '' && <p className="fl-shows__title">{title}</p>}
+      {body.trim() !== '' && <p className="fl-shows__body">{body}</p>}
+      <div className="fl-shows__row">
+        {SHOWS.map((name, at) => (
+          <article className="fl-shows__tile" key={name}>
+            <span className="fl-shows__art" aria-hidden="true">
+              <img src={artAt(STORY_ART, at)} alt="" />
+            </span>
+            <p className="fl-shows__name">{name}</p>
+          </article>
+        ))}
+      </div>
+      {cta.trim() !== '' && (
+        <span className="fl-shows__cta" role="button">
+          {cta}
+        </span>
+      )}
     </section>
   )
 }

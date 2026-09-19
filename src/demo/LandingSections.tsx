@@ -39,6 +39,7 @@ import {
   blankTile,
   railIdOf,
   scheduleRailIdOf,
+  showsRailIdOf,
   railSizeOf,
   spotlightRailIdOf,
   subTilesOf,
@@ -1151,6 +1152,44 @@ function SectionFields({
           >
             Add a subscription
           </button>
+        </>
+      )
+
+    case 'shows':
+      return (
+        <>
+          <TextField
+            label="Heading"
+            value={t.showsTitle}
+            pipelineKey={key('landing.showsTitle')}
+            onChange={(v) => write({ showsTitle: v })}
+            rows={2}
+          />
+          <TextField
+            label="Under the heading"
+            value={t.showsBody}
+            pipelineKey={key('landing.showsBody')}
+            onChange={(v) => write({ showsBody: v })}
+            rows={2}
+            helpText="Empty draws none."
+          />
+          {/* Which rail, not what is in it: the shows, their pictures and their
+              order come from whatever serves it. What is drawn against an id
+              here is a placeholder standing in for that. */}
+          <TextField
+            label="Rail ID"
+            value={showsRailIdOf(inst)}
+            pipelineKey={key('landing.showsRailId')}
+            onChange={(v) => write({ showsRailId: v })}
+            helpText="The rail's id in whatever serves the shows."
+          />
+          <TextField
+            label="Button"
+            value={t.showsCta}
+            pipelineKey={key('landing.showsCta')}
+            onChange={(v) => write({ showsCta: v })}
+            helpText="Under the rail. Empty draws none — the other served rails have none at all."
+          />
         </>
       )
 

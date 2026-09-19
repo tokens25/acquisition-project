@@ -3206,6 +3206,88 @@
   display: none;
 }
 
+/* ── The shows a subscription carries ─────────────────────────────────────
+   A served rail with a way in under it, which is what separates it from the
+   other served rails. The gutter belongs to the parts, so the row runs to the
+   edge of the screen and is cut off by it. */
+.fl-shows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: flex-start;
+  inline-size: 100%;
+  padding-block: var(--space-24);
+}
+.fl-shows__title {
+  margin: 0;
+  padding-inline: var(--space-16);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-heading-s);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25;
+}
+.fl-shows__body {
+  margin: 0;
+  padding-inline: var(--space-16);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-s);
+  line-height: 1.5;
+}
+.fl-shows__row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-start;
+  inline-size: 100%;
+  padding-inline: var(--space-16);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-shows__row::-webkit-scrollbar {
+  display: none;
+}
+.fl-shows__tile {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-8);
+  inline-size: 132px;
+}
+/* Taller than it is wide, which is how a show is listed rather than a game. */
+.fl-shows__art {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-8);
+  background: var(--color-surface-container-3);
+  overflow: hidden;
+}
+.fl-shows__art img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.fl-shows__name {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+}
+.fl-shows__cta {
+  display: inline-flex;
+  align-items: center;
+  block-size: 40px;
+  margin-inline: var(--space-16);
+  padding-inline: var(--space-20);
+  border: var(--border-1) solid var(--color-border-full-color-default);
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+}
+
 /* ── One feature, with its picture ────────────────────────────────────────
    Left and right on a wide screen; above and below at the width this page is
    drawn at, which is what left and right come to once a row has stacked. */
@@ -3965,6 +4047,7 @@
    Said through `.fl-page` for the specificity, which is how the schedule
    already answers the same rule. */
 .fl-page .fl-rail,
+.fl-page .fl-shows,
 .fl-page .fl-badges,
 .fl-page .fl-subrail,
 .fl-page .fl-bundles,

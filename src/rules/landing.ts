@@ -162,6 +162,7 @@ type ChoiceKey =
   | 'sections'
   | 'sectionCopy'
   | 'railSize'
+  | 'showsRailId'
   | 'expImage'
   | 'expSide'
   | 'railId'
@@ -238,6 +239,9 @@ export function landingText(content: LandingScreen): Required<
     featuresTitle: of('featuresTitle'),
     featuresCta: of('featuresCta'),
     railTitle: of('railTitle'),
+    showsTitle: of('showsTitle'),
+    showsBody: of('showsBody'),
+    showsCta: of('showsCta'),
     expOverline: of('expOverline'),
     expTitle: of('expTitle'),
     expBody: of('expBody'),
@@ -368,6 +372,11 @@ export function scheduleRailIdOf(content: LandingScreen): string {
 /** The device logos the wall leaves out, or the ones it ships without. */
 export function devicesOffOf(content: LandingScreen): string[] {
   return content.supportedOff ?? defaultFlow.landing.supportedOff ?? []
+}
+
+/** Which rail the shows come from, or the one it ships with. */
+export function showsRailIdOf(content: LandingScreen): string {
+  return content.showsRailId ?? defaultFlow.landing.showsRailId ?? ''
 }
 
 /** Which rail the row of tiles draws, or the one it ships with. */

@@ -654,6 +654,15 @@ export interface LandingScreen {
   subRailBody?: string
   subRailTiles?: LandingSubTile[]
 
+  /* The shows a subscription carries, as a rail somebody else fills — the
+     live page's ShowsRail. A heading, a line under it, the rail it names, and
+     a way in. Its own entries are that one button; the tiles are the rail's. */
+  showsTitle?: string
+  showsBody?: string
+  showsCta?: string
+  /** Which rail the shows come from. An address, not words. */
+  showsRailId?: string
+
   /* A feature told with a picture beside it — the live page's
      ExperienceFeature, five of them on one NFL page, alternating which side
      the media sits. Its own entries are a video with a poster still and a
@@ -1028,6 +1037,11 @@ export const defaultFlow: FlowContent = {
       { id: 'tile-3', title: 'Qualifying | Pirelli British Grand Prix', meta: 'F1' },
       { id: 'tile-4', title: 'Practice 3 | Pirelli British Grand Prix', meta: 'F1' },
     ],
+
+    showsTitle: 'Originals',
+    showsBody: 'Go behind the season with the people who live it.',
+    showsCta: 'Browse the shows',
+    showsRailId: 'shows_2345id',
 
     expOverline: 'Alternate feeds',
     expTitle: 'Watch it your way',
