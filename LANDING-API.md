@@ -135,7 +135,7 @@ time of reading:
 | `SectionFeatures` | CA ES JP | Features list |
 | `SupportedDevices` | CA US GB IT DE | Supported devices |
 | `ZipCodeBreather` | US | Postcode |
-| `IntroductionBanner` | IT DE JP FR | — |
+| `IntroductionBanner` | IT DE JP FR | Article CTA — nearest relative |
 | `FreemiumBanner` | CA US GB ES DE JP FR | `FreemiumBanner` — ours takes the name |
 | `StickyPpvHeader` | ES | — |
 | `FAQs` | all eight | FAQs |
@@ -184,12 +184,27 @@ is drawn under the badge, drawn as a tooltip, or not drawn at all is not
 established: the component is in ES, DE, JP and FR only, and dazn.com serves by
 detected country, so none of those pages could be seen rendered from here.
 
-**`IntroductionBanner` is not our Text block either.** Three entries of
-`LPContentItem` and `CommonKeyValue`, carrying `backgroundImage`, `buttons`,
-`showPrice`, `billingPeriod`, `entitlementSetId`, `features` and a
-`disclaimer`, with `carouselInterval` and `theme` on the group. A carousel of
-promotional cards that quote a price and sell. Text block is two headings and a
-body.
+**`IntroductionBanner` is not our Text block. Article CTA is its nearest
+relative.** A breather — the artwork is filed under that name
+(`..._BUNDLE_BREATHER_DESKTOP_DACH.jpg`), which is the same word
+`ZipCodeBreather` carries: a full-bleed band that breaks up the page.
+
+Each card holds a `backgroundImage` — an `AdaptiveImage`, so desktop, tablet
+and mobile are three separately cropped files, 2880 by 1200 at the top — with a
+`title`, a `description`, one `primary` button, a `features` list, a
+`disclaimer` and a badge. The group carries `carouselInterval: 5000` and
+`showGradient`, so the band rotates.
+
+And it quotes a live price. `showPrice`, a `billingPeriod` and an
+`entitlementSetId` arrive as key-values, and one of Germany's two carries an
+`offerLabel` written as markdown around a `{price}` placeholder — resolved
+against the offers service through the join key above, rather than typed into
+the CMS.
+
+Text block is two headings and a body, which was never it. Article CTA is a
+still, a line about it and a way in, which is the right family — and short of
+this in three ways: it is not full-bleed, it does not rotate, and nothing we
+have binds a price to an entitlement and fills it in at render.
 
 **`FreemiumBanner` is our Image CTA**, which now carries that name. One
 `LPContentItem` with a `backgroundImage`, a `title`, a `description` and
