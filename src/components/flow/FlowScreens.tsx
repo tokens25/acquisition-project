@@ -2709,7 +2709,9 @@ function SpotlightSection({
         {(tiles && tiles.length > 0 ? tiles : SPOT_FIXTURES).map((game, at) => (
           <article className="fl-spot__tile" key={game.id}>
             <span className="fl-spot__shot" aria-hidden="true">
-              <img src={game.image || artAt(SPOT_ART, at)} alt="" />
+              {/* Lazily, as the live page does: a rail of seventy-nine is a
+                  rail of seventy-nine pictures, and the row shows three. */}
+              <img src={game.image || artAt(SPOT_ART, at)} alt="" loading="lazy" />
               <span className="fl-spot__stamp">{stampFor(game, at)}</span>
             </span>
             <p className="fl-spot__name">{game.title}</p>

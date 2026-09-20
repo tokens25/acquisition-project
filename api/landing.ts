@@ -206,8 +206,19 @@ const tileImage = (country: string, id: string | undefined): string | null =>
       `&quality=80&width=600&height=337&resizeAction=fill&verticalAlignment=top&format=webp`
     : null
 
-/** As many as anything here would draw. The count is the true number. */
-const TILE_CAP = 12
+/**
+ * How many of a rail's tiles come back.
+ *
+ * All of them, to the length the live page itself holds: its slider carries
+ * every tile the rail serves — seventy-nine on Canada's soccer rail — and
+ * lazily loads the pictures as they come into view. A cap here was a cap on
+ * how much of the rail this tool could show, and there is no reason for one
+ * that the live page does not have.
+ *
+ * A number rather than none at all, because a rail is somebody else's list and
+ * a page should not be unbounded on the strength of that.
+ */
+const TILE_CAP = 100
 
 /**
  * What one rail is serving.

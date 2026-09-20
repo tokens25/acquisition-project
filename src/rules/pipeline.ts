@@ -178,6 +178,10 @@ const NOT_COPY = new Set([
   // Which logos the wall leaves out. Names of devices, not words anybody
   // writes or translates.
   'supportedOff',
+  // What a rail is serving. Fixtures, with the hour they kick off — served by
+  // the rail its id names, different by the time dev reads them, and nobody's
+  // to write. The id above is what dev implements; these are what it returns.
+  'railTiles', 'spotlightTiles',
   // Pictures. Uploaded ones are data URLs, and a handoff listing a megabyte of
   // base64 as a string to implement is a handoff nobody can read.
   'heroImage', 'image', 'imageCtaImage', 'multiviewImage',
