@@ -257,6 +257,8 @@ export interface LandingTile {
   live?: boolean
   /** When it starts, ISO. The stamp is read from it in the reader's hours. */
   start?: string
+  /** The rail's own picture for it, where the rail has been read. */
+  image?: string
 }
 
 /** One subscription offered beside this one — node 1084:55909. */

@@ -512,7 +512,7 @@ export interface LiveBlock {
   rail?: {
     title: string | null
     count: number
-    tiles: { title: string; meta: string; live: boolean; start: string | null }[]
+    tiles: { title: string; meta: string; live: boolean; start: string | null; image: string | null }[]
   } | null
   entries?: LiveEntry[]
 }
@@ -598,6 +598,7 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
       meta: plain(t.meta),
       ...(t.live ? { live: true } : {}),
       ...(t.start ? { start: t.start } : {}),
+      ...(t.image ? { image: t.image } : {}),
     }))
     return rows.length ? rows : shipped
   }
@@ -797,6 +798,10 @@ const LIVE_SPEC: Partial<Record<SectionType, LiveSpec>> = {
     title: 'spotlightTitle',
     body: 'spotlightBody',
     rail: 'spotlightRailId',
+    // No market's spotlight carries an overLine, so this empties the shipped
+    // "Exclusive" everywhere — which is right: the live page draws no label
+    // over any of them.
+    eyebrow: 'spotlightLabel',
     image: 'spotlightImage',
     cta: 'spotlightCta',
     list: 'spotlightTiles',

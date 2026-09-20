@@ -186,7 +186,25 @@ interface RailTile {
   meta: string
   live: boolean
   start: string | null
+  image: string | null
 }
+
+/**
+ * A rail tile's picture, which is an id rather than a URL.
+ *
+ * The rail hands back `{ Id, ImageMimeType, ImageType }` and the page builds
+ * the address from it, so this builds the same one. Read off the live page's
+ * own markup rather than guessed — the host is `image.discovery` and not
+ * `images.discovery`, and the wrong one answers 403 to everything, which
+ * reads exactly like a service that is closed.
+ *
+ * 600 by 337 at quality 80, as the page asks for it at a phone's width.
+ */
+const tileImage = (country: string, id: string | undefined): string | null =>
+  id
+    ? `https://image.discovery.indazn.com/${country}/v2/${country}/image/?id=${encodeURIComponent(id)}` +
+      `&quality=80&width=600&height=337&resizeAction=fill&verticalAlignment=top&format=webp`
+    : null
 
 /** As many as anything here would draw. The count is the true number. */
 const TILE_CAP = 12
@@ -212,7 +230,14 @@ async function railOf(
     if (!res.ok) return { title: null, count: 0, tiles: [] }
     const body = (await res.json()) as {
       Title?: string
-      Tiles?: { Title?: string; Label?: string; Type?: string; VideoType?: string; Start?: string }[]
+      Tiles?: {
+        Title?: string
+        Label?: string
+        Type?: string
+        VideoType?: string
+        Start?: string
+        Image?: { Id?: string }
+      }[]
     }
     const all = Array.isArray(body.Tiles) ? body.Tiles : []
     return {
@@ -223,6 +248,7 @@ async function railOf(
         meta: t.Label ?? '',
         live: t.Type === 'Live' || t.VideoType === 'Live',
         start: typeof t.Start === 'string' ? t.Start : null,
+        image: tileImage(country, t.Image?.Id),
       })),
     }
   } catch {

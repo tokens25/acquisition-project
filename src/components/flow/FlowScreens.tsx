@@ -2668,11 +2668,11 @@ function LiveSection({
  * rail answers with its fixtures, so there is nothing here to write down and
  * these stand in for the answer.
  */
-const SPOT_FIXTURES = [
+const SPOT_FIXTURES: LandingTile[] = [
   { id: 'sassuolo-torino', title: 'Sassuolo vs. Torino', meta: 'Serie A' },
   { id: 'monza-lecce', title: 'Monza vs. Lecce', meta: 'Serie A' },
   { id: 'bologna-como', title: 'Bologna vs. Como', meta: 'Serie A' },
-] as const
+]
 
 function SpotlightSection({
   image,
@@ -2704,10 +2704,12 @@ function SpotlightSection({
       <div className="fl-spot__row">
         {/* What the rail is serving, three of them, or the three this tool
             shipped where no rail has been read. */}
-        {(tiles && tiles.length > 0 ? tiles.slice(0, 3) : SPOT_FIXTURES).map((game, at) => (
+        {/* Everything the rail gave, because the row scrolls: three was the
+            number this tool shipped, not a number the design asked for. */}
+        {(tiles && tiles.length > 0 ? tiles : SPOT_FIXTURES).map((game, at) => (
           <article className="fl-spot__tile" key={game.id}>
             <span className="fl-spot__shot" aria-hidden="true">
-              <img src={artAt(SPOT_ART, at)} alt="" />
+              <img src={game.image || artAt(SPOT_ART, at)} alt="" />
               <span className="fl-spot__stamp">{stampFor(game, at)}</span>
             </span>
             <p className="fl-spot__name">{game.title}</p>
