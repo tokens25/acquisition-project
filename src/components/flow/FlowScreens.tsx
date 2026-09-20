@@ -1964,6 +1964,7 @@ export function PageSectionView({
           label={text.spotlightLabel}
           title={text.spotlightTitle}
           body={text.spotlightBody}
+          cta={text.spotlightCta}
           tiles={content.spotlightTiles}
         />
       )
@@ -2678,12 +2679,14 @@ function SpotlightSection({
   label,
   title,
   body,
+  cta,
   tiles,
 }: {
   image: string
   label: string
   title: string
   body: string
+  cta: string
   /** What the rail is serving, where it has been read. */
   tiles?: LandingTile[]
 }) {
@@ -2705,15 +2708,45 @@ function SpotlightSection({
           <article className="fl-spot__tile" key={game.id}>
             <span className="fl-spot__shot" aria-hidden="true">
               <img src={artAt(SPOT_ART, at)} alt="" />
-              <span className="fl-spot__stamp">{fixtureFor(at).stamp}</span>
+              <span className="fl-spot__stamp">{stampFor(game, at)}</span>
             </span>
             <p className="fl-spot__name">{game.title}</p>
             <p className="fl-spot__meta">{game.meta}</p>
           </article>
         ))}
       </div>
+      {/* The way into the rail. The live page sets it beside the heading; here
+          it follows the row, because a phone's width puts it there. */}
+      {cta.trim() !== '' && (
+        <span className="fl-spot__cta" role="button">
+          {cta}
+        </span>
+      )}
     </section>
   )
+}
+
+/**
+ * When a fixture is, as the tile says it.
+ *
+ * LIVE where it is playing, the hour where it starts today, the day where it
+ * is further off — read in the reader's own hours, because a kick-off shown in
+ * somebody else's is a kick-off they will get wrong. A tile that came from no
+ * rail keeps the stamp this tool draws for its place in the row.
+ */
+function stampFor(game: LandingTile, at: number): string {
+  if (game.live) return 'LIVE'
+  if (!game.start) return fixtureFor(at).stamp
+  const when = new Date(game.start)
+  if (Number.isNaN(when.getTime())) return fixtureFor(at).stamp
+  const today = new Date()
+  const sameDay =
+    when.getFullYear() === today.getFullYear() &&
+    when.getMonth() === today.getMonth() &&
+    when.getDate() === today.getDate()
+  return sameDay
+    ? `TODAY ${when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+    : when.toLocaleDateString([], { day: 'numeric', month: 'short' }).toUpperCase()
 }
 
 

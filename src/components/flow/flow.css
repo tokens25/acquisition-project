@@ -4516,6 +4516,23 @@
   line-height: 1.45;
 }
 
+/* The way into the rail, under the row. A secondary button on the live page —
+   outlined rather than filled, because the rail is the offer and this is only
+   the rest of it. */
+.fl-spot__cta {
+  display: grid;
+  place-items: center;
+  margin-inline: var(--space-16);
+  padding-block: var(--space-12);
+  border-radius: var(--radius-8);
+  background: var(--color-background-secondary, rgba(255, 255, 255, 0.08));
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* The page's section rule again: the spotlight runs its picture to both
    edges, so it cannot take the 16 inset every other component takes. */
 .fl-page .fl-spot {

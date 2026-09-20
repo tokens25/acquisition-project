@@ -348,6 +348,7 @@
       "spotlight tile timestamp": [5,759,9,3],
       "spotlight tile name": [4,770,30,3],
       "spotlight tile meta": [4,773,20,3],
+      "spotlight button": [4,778,30,4],
       "fight plan block": [0,782,80,66],
       "fight plan heading": [4,783,72,6],
       "fight plan cards": [4,791,72,50],

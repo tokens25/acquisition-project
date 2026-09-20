@@ -171,7 +171,21 @@ interface Component {
    * nothing at all, so the live page shows fewer blocks than it is configured
    * with. Canada is configured with three spotlight rails and draws one.
    */
-  rail: { title: string | null; count: number; tiles: { title: string; meta: string }[] } | null
+  rail: { title: string | null; count: number; tiles: RailTile[] } | null
+}
+
+/**
+ * One thing a rail is serving.
+ *
+ * `live` and `start` rather than a stamp already written: the live page marks
+ * a fixture LIVE or gives the hour it starts, and which of those to say — and
+ * in whose hours — is the reader's question, not this one's.
+ */
+interface RailTile {
+  title: string
+  meta: string
+  live: boolean
+  start: string | null
 }
 
 /** As many as anything here would draw. The count is the true number. */
@@ -188,7 +202,7 @@ async function railOf(
   country: string,
   id: string,
   params: string | null,
-): Promise<{ title: string | null; count: number; tiles: { title: string; meta: string }[] }> {
+): Promise<{ title: string | null; count: number; tiles: RailTile[] }> {
   const url =
     `https://rail-router.discovery.indazn.com/${country}/v10/Rail?id=${encodeURIComponent(id)}` +
     `&platform=web&country=${country}` +
@@ -196,12 +210,20 @@ async function railOf(
   try {
     const res = await fetch(url, { headers: HEADERS, signal: AbortSignal.timeout(8000) })
     if (!res.ok) return { title: null, count: 0, tiles: [] }
-    const body = (await res.json()) as { Title?: string; Tiles?: { Title?: string; Label?: string }[] }
+    const body = (await res.json()) as {
+      Title?: string
+      Tiles?: { Title?: string; Label?: string; Type?: string; VideoType?: string; Start?: string }[]
+    }
     const all = Array.isArray(body.Tiles) ? body.Tiles : []
     return {
       title: typeof body.Title === 'string' && body.Title.trim() ? body.Title : null,
       count: all.length,
-      tiles: all.slice(0, TILE_CAP).map((t) => ({ title: t.Title ?? '', meta: t.Label ?? '' })),
+      tiles: all.slice(0, TILE_CAP).map((t) => ({
+        title: t.Title ?? '',
+        meta: t.Label ?? '',
+        live: t.Type === 'Live' || t.VideoType === 'Live',
+        start: typeof t.Start === 'string' ? t.Start : null,
+      })),
     }
   } catch {
     // A rail that cannot be reached is not a rail that is empty, but neither

@@ -198,6 +198,7 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   liveBody: 'live',
   liveCta: 'live',
   spotlightImage: 'spotlight',
+  spotlightCta: 'spotlight',
   spotlightLabel: 'spotlight',
   spotlightTitle: 'spotlight',
   spotlightBody: 'spotlight',
@@ -508,7 +509,11 @@ export interface LiveBlock {
   description: string | null
   overLine?: string | null
   railId: string | null
-  rail?: { title: string | null; count: number; tiles: { title: string; meta: string }[] } | null
+  rail?: {
+    title: string | null
+    count: number
+    tiles: { title: string; meta: string; live: boolean; start: string | null }[]
+  } | null
   entries?: LiveEntry[]
 }
 
@@ -587,7 +592,13 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
     // rail its id names is serving, which is why its tiles come from there and
     // not from its entries.
     const serving = block?.rail?.tiles ?? []
-    const rows = serving.map((t, i) => ({ id: `tile-${i + 1}`, title: plain(t.title), meta: plain(t.meta) }))
+    const rows = serving.map((t, i) => ({
+      id: `tile-${i + 1}`,
+      title: plain(t.title),
+      meta: plain(t.meta),
+      ...(t.live ? { live: true } : {}),
+      ...(t.start ? { start: t.start } : {}),
+    }))
     return rows.length ? rows : shipped
   }
   if (type === 'subRail') {
@@ -787,6 +798,7 @@ const LIVE_SPEC: Partial<Record<SectionType, LiveSpec>> = {
     body: 'spotlightBody',
     rail: 'spotlightRailId',
     image: 'spotlightImage',
+    cta: 'spotlightCta',
     list: 'spotlightTiles',
   },
   plans: { from: 'CommonContentTierGroup', title: 'plansTitle', body: 'plansBody' },

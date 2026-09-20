@@ -253,6 +253,10 @@ export interface LandingTile {
   title: string
   /** The quieter line: a competition, a city and a capacity, a date. */
   meta: string
+  /** Playing now, which the stamp says instead of an hour. */
+  live?: boolean
+  /** When it starts, ISO. The stamp is read from it in the reader's hours. */
+  start?: string
 }
 
 /** One subscription offered beside this one — node 1084:55909. */
@@ -816,6 +820,8 @@ export interface LandingScreen {
    * fixtures; three of them fit.
    */
   spotlightTiles?: LandingTile[]
+  /** The way into the rail — "See more" on the live page. */
+  spotlightCta?: string
   spotlightLabel?: string
   spotlightTitle?: string
   spotlightBody?: string

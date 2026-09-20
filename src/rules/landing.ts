@@ -280,6 +280,7 @@ export function landingText(content: LandingScreen): Required<
     spotlightLabel: of('spotlightLabel'),
     spotlightTitle: of('spotlightTitle'),
     spotlightBody: of('spotlightBody'),
+    spotlightCta: of('spotlightCta'),
     planPickTitle: of('planPickTitle'),
     planPickMore: of('planPickMore'),
     planPickCta: of('planPickCta'),

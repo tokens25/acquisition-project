@@ -35,7 +35,11 @@ export interface LiveComponent {
    * contents have run out draws nothing at all, so the live page shows fewer
    * blocks than it is configured with.
    */
-  rail: { title: string | null; count: number; tiles: { title: string; meta: string }[] } | null
+  rail: {
+    title: string | null
+    count: number
+    tiles: { title: string; meta: string; live: boolean; start: string | null }[]
+  } | null
   entries: LiveEntry[]
 }
 

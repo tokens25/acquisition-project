@@ -527,6 +527,7 @@
       ["spotlight tile timestamp", ".fl-spot__stamp", "The white date chip at the top left.", 'flowLandingPage'],
       ["spotlight tile name", ".fl-spot__name", "Which game.", 'flowLandingPage'],
       ["spotlight tile meta", ".fl-spot__meta", "The competition. Empty draws none.", 'flowLandingPage'],
+      ["spotlight button", ".fl-spot__cta", "The way into the rail, under the row — outlined rather than filled, because the rail is the offer and this is the rest of it.", 'flowLandingPage'],
       ["fight plan block", ".fl-plan", "Buying the fight — node 1102:53279. A heading, the plans it can be bought on, and the button under them. The design draws this card eight times in its Variation section; they are one card with different words in it, so one block draws all eight.", 'flowLandingPage'],
       ["fight plan heading", ".fl-plan__title", "At 22 and bold — what you need before you can watch.", 'flowLandingPage'],
       ["fight plan cards", ".fl-plan__cards", "The plans, stacked 12 apart.", 'flowLandingPage'],
