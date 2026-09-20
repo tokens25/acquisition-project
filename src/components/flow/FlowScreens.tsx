@@ -1705,27 +1705,25 @@ export function PageSectionView({
        centred: a heading whose second line takes the brand gradient, and the
        words under it. Nothing else; the row of device logos the section used
        to promise is not in the design. */
-    case 'devices':
-      return (
-        <section className="fl-page__devices">
-          <p className="fl-text__title">
-            {text.devicesTitle}
-            {text.devicesTitleTwo && (
-              <>
-                <br />
-                <span className="fl-text__gold">{text.devicesTitleTwo}</span>
-              </>
-            )}
-          </p>
-          <p className="fl-text__body">{text.devicesBody}</p>
-        </section>
-      )
-
     /* Node 853:58657 — a heading between two rules, and the logos under it:
        four rows of three spaced apart, and one on its own at the end. */
     case 'supported':
       return (
         <section className="fl-page__supported">
+          {/* The words over the wall — node 734:41541. A heading whose second
+              line takes the brand gradient, and the words under it. Part of
+              this section rather than a block of its own, because that is
+              where the live page keeps them. */}
+          <p className="fl-text__title">
+            {text.supportedHeading}
+            {text.supportedHeadingTwo && (
+              <>
+                <br />
+                <span className="fl-text__gold">{text.supportedHeadingTwo}</span>
+              </>
+            )}
+          </p>
+          <p className="fl-text__body">{text.supportedBody}</p>
           <p className="fl-dev__heading">
             <img className="fl-dev__rule" src={deviceRule} alt="" />
             <span>{text.supportedTitle}</span>

@@ -600,11 +600,18 @@ export interface LandingScreen {
   providersCta?: string
   providers?: LandingProvider[]
 
-  /** "Watch on your favourite devices." */
-  devicesTitle?: string
+  /**
+   * The heading above the wall of logos — "Watch on your favourite devices."
+   *
+   * The live page keeps it on the SupportedDevices component itself, over the
+   * strip's own two strings, so it belongs to that block here too. It used to
+   * be a component of its own called Text block, which was a block this tool
+   * had and the page did not.
+   */
+  supportedHeading?: string
   /** The second line, which the design sets on its own. */
-  devicesTitleTwo?: string
-  devicesBody?: string
+  supportedHeadingTwo?: string
+  supportedBody?: string
 
   /* The footer — node 741:29473. The words under everything, and the mark
      under those. It is not one of the page's components: it does not move and
@@ -1030,9 +1037,9 @@ export const defaultFlow: FlowContent = {
       { id: 'provider-11', name: 'Mid-Hudson Fiber' },
     ],
 
-    devicesTitle: 'Watch on your favourite devices.',
-    devicesTitleTwo: 'Anytime. Anywhere.',
-    devicesBody:
+    supportedHeading: 'Watch on your favourite devices.',
+    supportedHeadingTwo: 'Anytime. Anywhere.',
+    supportedBody:
       'Whether you are at home or on the go, NHL TV is available on a wide range of mobile and connected devices including Smart TVs, Chromecast, Playstation, Xbox and more.',
 
     footerLinks: [

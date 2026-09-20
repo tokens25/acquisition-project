@@ -1009,21 +1009,18 @@ function SectionFields({
         </>
       )
 
-    case 'devices':
-      return (
-        <>
-
-              <TextField label="Heading" value={t.devicesTitle} pipelineKey={key('landing.devicesTitle')} onChange={(v) => write({ devicesTitle: v })} />
-              <TextField label="Second line" value={t.devicesTitleTwo} pipelineKey={key('landing.devicesTitleTwo')} onChange={(v) => write({ devicesTitleTwo: v })} helpText="Its own line, in the brand gradient." />
-              <TextField label="Under the heading" value={t.devicesBody} pipelineKey={key('landing.devicesBody')} onChange={(v) => write({ devicesBody: v })} rows={4} />
-        </>
-      )
-
     case 'supported':
       return (
         <>
+          {/* The words over the wall, which used to be a block of their own
+              called Text block. The live page keeps them on this component,
+              so they are edited here, above the strip's own heading — in the
+              order the section reads. */}
+          <TextField label="Heading" value={t.supportedHeading} pipelineKey={key('landing.supportedHeading')} onChange={(v) => write({ supportedHeading: v })} />
+          <TextField label="Second line" value={t.supportedHeadingTwo} pipelineKey={key('landing.supportedHeadingTwo')} onChange={(v) => write({ supportedHeadingTwo: v })} helpText="Its own line, in the brand gradient." />
+          <TextField label="Under the heading" value={t.supportedBody} pipelineKey={key('landing.supportedBody')} onChange={(v) => write({ supportedBody: v })} rows={4} />
           <TextField
-            label="Heading"
+            label="Over the logos"
             value={t.supportedTitle}
             pipelineKey={key('landing.supportedTitle')}
             onChange={(v) => write({ supportedTitle: v })}

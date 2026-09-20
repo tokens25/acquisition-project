@@ -138,8 +138,6 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
         words: [t.providersTitle, t.providersBody, t.providersHighlight, t.providersNote, t.providersCta],
         cta: t.providersCta,
       }
-    case 'devices':
-      return { heading: t.devicesTitle, words: [t.devicesTitle, t.devicesTitleTwo, t.devicesBody], cta: '' }
     case 'faq':
       return { heading: t.faqTitle, words: [t.faqTitle, ...questionsOf(l).map((q) => q.question)], cta: '' }
     case 'imageCta':

@@ -26,7 +26,6 @@ export type SectionType =
   | 'area'
   | 'multiview'
   | 'providers'
-  | 'devices'
   | 'faq'
   | 'imageCta'
   | 'features'
@@ -76,7 +75,6 @@ export const SECTION_TYPES: SectionType[] = [
   'area',
   'multiview',
   'providers',
-  'devices',
   'faq',
   'imageCta',
   'features',
@@ -135,9 +133,9 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   providersNote: 'providers',
   providersCta: 'providers',
   providers: 'providers',
-  devicesTitle: 'devices',
-  devicesTitleTwo: 'devices',
-  devicesBody: 'devices',
+  supportedHeading: 'supported',
+  supportedHeadingTwo: 'supported',
+  supportedBody: 'supported',
   supportedTitle: 'supported',
   supportedNote: 'supported',
   supportedLink: 'supported',
@@ -239,11 +237,10 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   area: 'Heading, a line under it, notice, button',
   multiview: 'Still, eyebrow, heading, button',
   providers: 'Heading, a line under it, a note, button',
-  devices: 'Two headings and a body',
   faq: 'Heading and five questions',
   imageCta: 'Picture, heading, body, button',
   features: 'Eyebrow, heading, rows, button',
-  supported: 'Heading, the logos, note, link',
+  supported: 'Two headings, a body, the logos, note, link',
   rail: 'Title, what kind of tiles, and the rail',
   subRail: 'Heading, a line under it, and the subscriptions',
   badges: 'Heading and the badges',
@@ -277,7 +274,6 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   area: [75, 100, 60],
   multiview: [100, 60, 45],
   providers: [65, 100, 100],
-  devices: [90, 70, 50],
   faq: [55, 100, 100],
   imageCta: [100, 55, 45],
   features: [45, 100, 100],
@@ -308,7 +304,6 @@ export const SHIPPED_ORDER: SectionType[] = [
   'area',
   'multiview',
   'providers',
-  'devices',
   'faq',
 ]
 
@@ -365,7 +360,6 @@ export const SECTION_LABEL: Record<SectionType, string> = {
   /* The type keeps its name because saved pages are arranged by it; what it
      is called is "Text block", which is what the design calls the component
      and what it now is — words, and nothing device-shaped about it. */
-  devices: 'Text block',
   faq: 'FAQs',
   imageCta: 'FreemiumBanner',
   features: 'SectionFeatures',
@@ -599,6 +593,26 @@ function supportedFromLive(kids: LiveEntry[], shipped: Record<string, unknown>):
   }
 }
 
+/**
+ * The heading over the strip, which the component keeps as one string.
+ *
+ * Production writes it as two lines with a blank one between them, and marks
+ * the second for emphasis — "Watch on your favourite devices.\n\n##Anytime.
+ * Anywhere.##" — because that is one field in their CMS. The design sets the
+ * two lines differently, so this tool has always held them apart, and the
+ * break is where they part.
+ */
+function headingFromLive(title: string | null, body: string | null, shipped: Record<string, unknown>): Record<string, string> {
+  const was = (field: string) => String(shipped[field] ?? '')
+  if (!title) return { supportedHeading: was('supportedHeading'), supportedHeadingTwo: was('supportedHeadingTwo'), supportedBody: body ? plain(body) : was('supportedBody') }
+  const [first, ...rest] = title.split(/\n+/)
+  return {
+    supportedHeading: plain(first),
+    supportedHeadingTwo: rest.length ? plain(rest.join(' ')) : '',
+    supportedBody: body ? plain(body) : was('supportedBody'),
+  }
+}
+
 /** The field each of those lists lives in. */
 const LIVE_LISTS: Partial<Record<SectionType, string>> = {
   subRail: 'subRailTiles',
@@ -657,7 +671,6 @@ const LIVE_FIELDS: Partial<Record<SectionType, { title?: string; body?: string; 
   area: { title: 'areaTitle', body: 'areaBody' },
   bundles: { title: 'bundlesTitle', body: 'bundlesBody' },
   cities: { title: 'citiesTitle', body: 'citiesBody' },
-  devices: { title: 'devicesTitle', body: 'devicesBody' },
 }
 
 /**
@@ -728,7 +741,10 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     }
     const listField = LIVE_LISTS[type]
     if (listField) mine[listField] = listFromLive(type, block.entries ?? [], shipped[listField])
-    if (type === 'supported') Object.assign(mine, supportedFromLive(block.entries ?? [], shipped))
+    if (type === 'supported') {
+      Object.assign(mine, supportedFromLive(block.entries ?? [], shipped))
+      Object.assign(mine, headingFromLive(block.title, block.description, shipped))
+    }
     if (Object.keys(mine).length === 0) continue
     if (id === type) Object.assign(own, mine)
     else copies[id] = mine as Partial<LandingScreen>
