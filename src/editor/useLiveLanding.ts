@@ -28,6 +28,8 @@ export interface LiveComponent {
   /** Set on the components that are served a rail rather than authored. */
   railId: string | null
   railParams: string | null
+  /** What the offer includes, where a card inside the component lists it. */
+  features: string[]
   /**
    * What the rail is serving, where the component is served one.
    *

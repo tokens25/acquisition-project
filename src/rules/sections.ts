@@ -126,6 +126,9 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   multiviewTitle: 'multiview',
   multiviewBody: 'multiview',
   multiviewCta: 'multiview',
+  multiviewCardTitle: 'multiview',
+  multiviewCardBody: 'multiview',
+  multiviewFeatures: 'multiview',
   providersTitle: 'providers',
   providersBody: 'providers',
   providersHighlight: 'providers',
@@ -507,6 +510,7 @@ export interface LiveBlock {
   title: string | null
   description: string | null
   overLine?: string | null
+  features?: string[]
   railId: string | null
   rail?: {
     title: string | null
@@ -802,6 +806,12 @@ function liveFieldNames(): string[] {
   // Set per market rather than through the table, and cleared with the rest so
   // a market that draws no banner does not keep the last one's arrangement.
   out.add('imageCtaLayout')
+  for (const field of ['multiviewCardTitle', 'multiviewCardBody', 'multiviewFeatures']) out.add(field)
+  // Shipped copy with nowhere to come from: no introduction banner in any
+  // market carries a badge, so "ULTIMATE ONLY" was this tool's own sitting
+  // over Italy's heading.
+  out.add('multiviewBadge')
+  LIST_FIELDS.add('multiviewFeatures')
   return [...out]
 }
 
@@ -972,6 +982,15 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       said(spec.rail, block.railId)
       said(spec.image, pictureFromLive(kids))
       if (spec.list) mine[spec.list] = listFromLive(type, kids, block)
+    }
+    // The card inside the introduction banner, which has words of its own
+    // beneath the component's — and a list of what the offer includes, which
+    // the CMS hangs off the card as loose key-value entries.
+    if (type === 'multiview') {
+      const card = (block.entries ?? []).find((k) => k.type === 'LPContentItem')
+      mine.multiviewCardTitle = plain(card?.title ?? '')
+      mine.multiviewCardBody = plain(card?.body ?? '')
+      mine.multiviewFeatures = (block.features ?? []).map(plain).filter(Boolean)
     }
     // Every market stacks this banner — the picture, then the words under it
     // — so a page opened on a market is stacked. The design's other

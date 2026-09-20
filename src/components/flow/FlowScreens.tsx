@@ -1631,9 +1631,38 @@ export function PageSectionView({
               </p>
               <p className="fl-art__title">{text.multiviewTitle}</p>
               <p className="fl-art__body">{text.multiviewBody}</p>
+              {/* The card under the words: what the offer is called, what it
+                  comes with, and the way in. Drawn only where the banner has
+                  one, because the two arrangements are both real — Italy's
+                  mobile banner carries a card and its bundle banner is the
+                  card. */}
+              {text.multiviewCardTitle.trim() !== '' && (
+                <span className="fl-art__card">
+                  {text.multiviewCardTitle.trim() !== '' && (
+                    <span className="fl-art__card-title">{text.multiviewCardTitle}</span>
+                  )}
+                  {text.multiviewCardBody.trim() !== '' && (
+                    <span className="fl-art__card-body">{text.multiviewCardBody}</span>
+                  )}
+                </span>
+              )}
               <span className="fl-art__cta" role="button">
                 {text.multiviewCta}
               </span>
+              {/* After the button, as the live page sets it: the button is the
+                  card's and the list is what the card got you, so the list
+                  reads as the answer to having pressed it rather than as more
+                  to get through first. */}
+              {(content.multiviewFeatures?.length ?? 0) > 0 && (
+                <span className="fl-art__list">
+                  {content.multiviewFeatures?.map((line) => (
+                    <span className="fl-art__line" key={line}>
+                      <Mark svg={iconArtwork.check} size={20} />
+                      {line}
+                    </span>
+                  ))}
+                </span>
+              )}
             </div>
           </div>
         </section>

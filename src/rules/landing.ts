@@ -186,6 +186,7 @@ export function landingText(content: LandingScreen): Required<
     | 'railTiles'
     | 'spotlightTiles'
     | 'imageCtaTiles'
+    | 'multiviewFeatures'
     | 'subRailTiles'
     | 'badges'
     | 'bundles'
@@ -232,6 +233,8 @@ export function landingText(content: LandingScreen): Required<
     multiviewTitle: of('multiviewTitle'),
     multiviewBody: of('multiviewBody'),
     multiviewCta: of('multiviewCta'),
+    multiviewCardTitle: of('multiviewCardTitle'),
+    multiviewCardBody: of('multiviewCardBody'),
     providersTitle: of('providersTitle'),
     providersBody: of('providersBody'),
     providersHighlight: of('providersHighlight'),

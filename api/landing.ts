@@ -163,6 +163,14 @@ interface Component {
   railParams: string | null
   entries: Child[]
   /**
+   * What the offer includes, a line each.
+   *
+   * Hung off the card rather than off the component, as loose key-value
+   * entries — so it is resolved here rather than left to whoever reads the
+   * entries to know that a `features` link two levels down is a sentence.
+   */
+  features: string[]
+  /**
    * What the rail is serving, for the components that are served one.
    *
    * Null where a component has no rail. An empty `tiles` with `count` zero
@@ -367,6 +375,27 @@ function imageOf(kid: Entry, byId: Map<string, Entry>, assets: Assets): string |
   return null
 }
 
+/**
+ * What a card inside a component says the offer includes.
+ *
+ * Two levels down: the component holds a card, the card holds `features`, and
+ * each of those is a key-value entry whose value is the line. Italy's mobile
+ * banner lists four this way.
+ */
+function featuresOf(kids: unknown[], byId: Map<string, Entry>): string[] {
+  const out: string[] = []
+  for (const k of kids) {
+    const kid = isLink(k) ? byId.get(k.sys.id) : undefined
+    const links = kid && Array.isArray(kid.fields.features) ? (kid.fields.features as unknown[]) : []
+    for (const l of links) {
+      const one = isLink(l) ? byId.get(l.sys.id) : undefined
+      const value = one?.fields.value
+      if (typeof value === 'string' && value.trim()) out.push(value.trim())
+    }
+  }
+  return out
+}
+
 /** The words on one child entry, with its button resolved. */
 function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child {
   const kid = isLink(link) ? byId.get(link.sys.id) : undefined
@@ -411,7 +440,7 @@ function componentsOf(root: Entry, byId: Map<string, Entry>, assets: Assets): Co
   return links.map((link, at) => {
     const entry = isLink(link) ? byId.get(link.sys.id) : undefined
     if (!entry) {
-      return { at, type: 'unresolved', version: null, title: null, description: null, overLine: null, railId: null, railParams: null, entries: [], rail: null }
+      return { at, type: 'unresolved', version: null, title: null, description: null, overLine: null, railId: null, railParams: null, entries: [], features: [], rail: null }
     }
     const f = entry.fields
     const params = f.railParams as { params?: string } | undefined
@@ -427,6 +456,7 @@ function componentsOf(root: Entry, byId: Map<string, Entry>, assets: Assets): Co
       // Encoded in the CMS, decoded onto the rail router's query string.
       railParams: typeof params?.params === 'string' ? decodeURIComponent(params.params) : null,
       entries: kids.map((k) => childOf(k, byId, assets)),
+      features: featuresOf(kids, byId),
       // Filled in after, where there is a rail to ask about.
       rail: null,
     }

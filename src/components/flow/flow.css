@@ -4954,3 +4954,44 @@
 .fl-imgcta[data-layout='top'] .fl-imgcta__cta {
   inline-size: 100%;
 }
+
+/* ── The card inside the introduction banner ──────────────────────────
+   The banner says what the offer is; the card under it says what the offer is
+   called and what comes with it. Set apart on its own ground rather than by a
+   rule, because it is a thing inside the banner and not the next part of it. */
+.fl-art__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-16);
+  border-radius: var(--radius-8);
+  background: rgba(255, 255, 255, 0.06);
+}
+.fl-art__card-title {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+}
+.fl-art__card-body {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.45;
+}
+.fl-art__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-block-start: var(--space-4);
+}
+/* A tick and a line, the tick holding its size while the words wrap under
+   themselves rather than under it. */
+.fl-art__line {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: var(--space-8);
+  align-items: start;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.45;
+}

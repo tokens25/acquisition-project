@@ -627,6 +627,19 @@ export interface LandingScreen {
   multiviewTitle?: string
   multiviewBody?: string
   multiviewCta?: string
+  /**
+   * The card inside the banner, which has words of its own.
+   *
+   * The banner is two things stacked: an overline, a heading and a line that
+   * say what the offer is, and under them a card that says what you get and
+   * carries the button. Italy draws both — "Tutto lo sport di DAZN, sul tuo
+   * smartphone." over "Sempre con te. Ogni competizione." — so one heading
+   * would have had to stand in for two.
+   */
+  multiviewCardTitle?: string
+  multiviewCardBody?: string
+  /** What the offer includes, a line each against a tick. */
+  multiviewFeatures?: string[]
   /** The still: one of its own, and whether it is drawn with one at all. */
   multiviewImage?: string
   multiviewImageOff?: boolean
@@ -1103,6 +1116,11 @@ export const defaultFlow: FlowContent = {
     multiviewBody:
       'Build your perfect gameday with Multiview. Watch up to 4 live game feeds at once.',
     multiviewCta: 'Get Ultimate',
+    /* Empty, because the shipped banner is the arrangement without a card:
+       the words and a button, and nothing under them. A market that draws one
+       fills these. */
+    multiviewCardTitle: '',
+    multiviewCardBody: '',
 
     providersTitle: 'How to connect your\nTV Subscription',
     providersBody:
