@@ -36,7 +36,7 @@ import {
   type PageSection,
   type SectionType,
 } from '../rules/sections'
-import type { LandingScreen, LandingTeam, RailSize } from '../rules/flow'
+import type { ImageCtaLayout, LandingScreen, LandingTeam, RailSize } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
 import { useLive } from '../editor/liveLandingContext'
 import { LivePageChip } from './LivePageChip'
@@ -1928,6 +1928,18 @@ function SectionFields({
             onPick={(url) => write({ imageCtaImage: url, imageCtaImageOff: false })}
             onRemove={() => write({ imageCtaImage: '', imageCtaImageOff: true })}
             onShipped={() => write({ imageCtaImage: '', imageCtaImageOff: false })}
+          />
+          {/* Named for what each draws rather than for the setting: nobody
+              reaches for "fill". */}
+          <SelectField
+            label="Card"
+            value={inst.imageCtaLayout ?? 'fill'}
+            options={[
+              { value: 'top', label: 'Picture at the top, words under it' },
+              { value: 'fill', label: 'Picture fills the card, words over it' },
+            ]}
+            onChange={(v) => write({ imageCtaLayout: v as ImageCtaLayout })}
+            helpText="Every market draws it stacked; the design draws it filled."
           />
           <TextField label="Heading" value={t.imageCtaTitle} pipelineKey={key('landing.imageCtaTitle')} onChange={(v) => write({ imageCtaTitle: v })} rows={2} />
           <TextField label="Under the heading" value={t.imageCtaBody} pipelineKey={key('landing.imageCtaBody')} onChange={(v) => write({ imageCtaBody: v })} rows={3} />

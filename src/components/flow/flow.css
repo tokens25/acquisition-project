@@ -4901,3 +4901,41 @@
   font-size: var(--font-size-body-xs);
   line-height: 1.45;
 }
+
+/* ── The banner stacked, which is how every market draws it ───────────
+   The picture at the top of the card and the words on the card's own ground
+   under it, rather than laid over the foot of one picture the height of the
+   card. Node 747:46379 is the other arrangement and stays on the menu; this
+   is what is up. A data attribute rather than a second set of classes: it is
+   the same card put together differently, not a different card. */
+.fl-imgcta[data-layout='top'] {
+  justify-content: flex-start;
+  gap: var(--space-20);
+  aspect-ratio: auto;
+  padding-block-end: var(--space-20);
+  overflow: hidden;
+}
+.fl-imgcta[data-layout='top'] .fl-imgcta__art {
+  position: static;
+  inline-size: 100%;
+  block-size: auto;
+  /* The picture is a picture again rather than the card's ground, so it takes
+     a shape of its own — the live page's, a little wider than square. */
+  aspect-ratio: 343 / 300;
+  border-radius: 0;
+}
+.fl-imgcta[data-layout='top'] .fl-imgcta__foot {
+  gap: var(--space-16);
+  align-items: stretch;
+  inline-size: 100%;
+  padding-inline: var(--space-16);
+}
+/* Ranged left, as the live page sets it: the words sit under a picture rather
+   than in the middle of one, and a centred paragraph under a left-aligned
+   heading reads as a caption. */
+.fl-imgcta[data-layout='top'] .fl-imgcta__words {
+  text-align: start;
+}
+.fl-imgcta[data-layout='top'] .fl-imgcta__cta {
+  inline-size: 100%;
+}

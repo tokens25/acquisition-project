@@ -307,6 +307,9 @@ export interface LandingSubTile {
  * draws the row with no lines at all, so a badge with nothing written under it
  * is a badge and not an unfinished one.
  */
+/** How the freemium banner is put together — the picture over or above. */
+export type ImageCtaLayout = 'fill' | 'top'
+
 /** One logo on the wall of supported devices. */
 export interface LandingDevice {
   id: string
@@ -859,6 +862,19 @@ export interface LandingScreen {
    * are one component on the live page and one here.
    */
   imageCtaTiles?: LandingTile[]
+  /**
+   * How the card is put together.
+   *
+   * `top` stacks it — the picture, then the words and the button under it on
+   * the card's own ground, which is how every market draws this banner. `fill`
+   * is the design's, node 747:46379: one picture the height of the card with
+   * the words laid over its foot.
+   *
+   * Absent means `fill`, because that is what every page written before this
+   * was a choice was drawn as, and a page must not change shape because a
+   * setting appeared under it.
+   */
+  imageCtaLayout?: ImageCtaLayout
   imageCtaImageOff?: boolean
 
   /** The questions at the foot of the page. */

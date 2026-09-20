@@ -1837,7 +1837,7 @@ export function PageSectionView({
     case 'imageCta':
       return (
         <section className="fl-page__image-cta">
-          <div className="fl-imgcta">
+          <div className="fl-imgcta" data-layout={content.imageCtaLayout ?? 'fill'}>
             {!content.imageCtaImageOff && (
               <img
                 className="fl-imgcta__art"

@@ -159,6 +159,7 @@ type ChoiceKey =
   | 'navSignUpEnabled'
   | 'imageCtaImage'
   | 'imageCtaImageOff'
+  | 'imageCtaLayout'
   | 'multiviewImage'
   | 'multiviewImageOff'
   | 'sections'

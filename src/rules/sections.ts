@@ -774,7 +774,7 @@ interface LiveSpec {
 
 /** Nothing, in the shape the field holds. */
 const blankFor = (field: string): unknown =>
-  LIST_FIELDS.has(field) ? [] : ''
+  LIST_FIELDS.has(field) ? [] : field === 'imageCtaLayout' ? undefined : ''
 
 /** Which of them hold a list rather than a string. */
 const LIST_FIELDS = new Set<string>()
@@ -799,6 +799,9 @@ function liveFieldNames(): string[] {
   // their own two functions rather than through the table.
   for (const field of ['supportedTitle', 'supportedNote', 'supportedLink', 'supportedHeading', 'supportedHeadingTwo', 'supportedBody'])
     out.add(field)
+  // Set per market rather than through the table, and cleared with the rest so
+  // a market that draws no banner does not keep the last one's arrangement.
+  out.add('imageCtaLayout')
   return [...out]
 }
 
@@ -964,6 +967,10 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       said(spec.image, pictureFromLive(kids))
       if (spec.list) mine[spec.list] = listFromLive(type, kids, block)
     }
+    // Every market stacks this banner — the picture, then the words under it
+    // — so a page opened on a market is stacked. The design's other
+    // arrangement stays available in the panel.
+    if (type === 'imageCta') mine.imageCtaLayout = 'top'
     if (type === 'supported') {
       Object.assign(mine, supportedFromLive(block.entries ?? []))
       Object.assign(mine, headingFromLive(block.title, block.description))
