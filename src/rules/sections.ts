@@ -582,11 +582,20 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
     return tiles.length ? tiles : shipped
   }
   if (type === 'features') {
+    // The tag is the row's button, not its badge. The live page draws that
+    // label as the pill over the heading — Follow, FanZone, Downloads — and
+    // uses it as the tab for the row besides; the badge is a different thing,
+    // an entitlement note reading "Ultimate only", which one row in four has.
+    //
+    // And the picture is the row's own rather than one the tag brings. Ours
+    // are looked up from a bundled map by tag, which answers for the tags
+    // this tool shipped and nothing for a market's.
     const rows = items.map((k, i) => ({
       id: `feature-${i + 1}`,
-      tag: plain(k.preTitle ?? k.badge ?? ''),
+      tag: plain(k.cta ?? k.preTitle ?? k.badge ?? ''),
       title: plain(k.title ?? ''),
       body: plain(k.body ?? ''),
+      ...(k.image ? { image: k.image } : {}),
     }))
     return rows.length ? rows : shipped
   }

@@ -318,8 +318,12 @@ function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child
     preTitle: str(f.preTitle),
     badge: str(f.badgeText),
     body: str(f.description),
-    // Two spellings of the same thing across two button types.
-    cta: first ? (str(first.fields.label) ?? str(first.fields.buttonLabel)) : null,
+    // Two spellings of the same thing across two button types — and where
+    // the entry IS a button, its own label, which is how a component carries
+    // the one button that belongs to the whole block rather than to a tile.
+    cta: first
+      ? (str(first.fields.label) ?? str(first.fields.buttonLabel))
+      : (str(f.label) ?? str(f.buttonLabel)),
     key: str(f.key),
     value: str(f.value),
     image: imageOf(kid, byId, assets),
