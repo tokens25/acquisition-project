@@ -1,6 +1,37 @@
+import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+
+/**
+ * Which commit a bundle was made from, baked in as a literal.
+ *
+ * More than one of this tool is up at once — a Vercel alias per branch, and a
+ * production alias pointing at whichever branch is configured — and they are
+ * all behind team sign-in. So the only way to tell what a deployment is
+ * serving is for the page to say, which means the answer has to be decided
+ * here, where the bundle is made, and not looked up later.
+ *
+ * Vercel's own variables first, because on Vercel they are the truth and the
+ * checkout is a detached head that would report no branch. Git second, for a
+ * local build. Neither, and the stamp says so rather than claiming a version
+ * nobody can check.
+ */
+function buildStamp() {
+  const git = (...args: string[]) => {
+    try {
+      return execFileSync('git', args, { encoding: 'utf8' }).trim()
+    } catch {
+      return ''
+    }
+  }
+  const env = process.env
+  return {
+    sha: env.VERCEL_GIT_COMMIT_SHA || git('rev-parse', 'HEAD') || 'unknown',
+    ref: env.VERCEL_GIT_COMMIT_REF || git('rev-parse', '--abbrev-ref', 'HEAD') || 'unknown',
+    at: new Date().toISOString(),
+  }
+}
 
 /**
  * Runs the `api/` handlers on the dev server.
@@ -89,4 +120,7 @@ function apiRoutes(): Plugin {
 
 export default defineConfig({
   plugins: [react(), apiRoutes()],
+  // Read once when the config loads, so every module sees the same build and
+  // a long build does not stamp its own chunks with different times.
+  define: { __BUILD__: JSON.stringify(buildStamp()) },
 })

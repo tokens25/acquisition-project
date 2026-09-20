@@ -1342,3 +1342,39 @@
     animation: none;
   }
 }
+
+/* ── Build stamp ──────────────────────────────────────────────
+   Which commit the page is running, at the foot of the panel. Quiet:
+   it is for the person checking a deployment, not for the work, so it
+   reads as a caption under the last control rather than as another one.
+   Selectable, because a sha somebody cannot copy is a sha they retype
+   wrongly. */
+.vs {
+  display: flex;
+  gap: var(--space-8);
+  align-items: baseline;
+  margin: 0;
+  padding-block: var(--space-8) var(--space-12);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.2;
+  user-select: text;
+}
+.vs__sha {
+  font-family: var(--font-family-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  letter-spacing: 0.02em;
+}
+/* The branch carries the most meaning of the three — it says whose work a
+   deployment is showing — so it is the one that is not dimmed further. */
+.vs__ref {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vs__at {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}

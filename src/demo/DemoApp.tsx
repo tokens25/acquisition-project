@@ -13,6 +13,7 @@ import { planJourney } from '../rules/journey'
 import { summarise, validateAll } from '../rules/validate'
 import { Button } from '../components/Button'
 import { DefaultPanel } from './DefaultPanel'
+import { VersionStamp } from './VersionStamp'
 import { EditPanel } from './EditPanel'
 import { FlowPanel, FlowTabs } from './FlowPanel'
 import { DEVICE_LABEL } from '../rules/content'
@@ -863,6 +864,10 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
               </button>
             </>
           )}
+          {/* Under the last control on both products, because the question it
+              answers — which build is this — is asked of the tool rather than
+              of whichever half of it is on screen. */}
+          <VersionStamp />
         </div>
         </div>
 
