@@ -399,10 +399,18 @@ export function sectionsOf(content: LandingScreen): PageSection[] {
  * What a page starts as, for a market and a product.
  *
  * Read off the live pages rather than decided here — the order is theirs, and
- * so are the repeats: GB's DAZN page really is four spotlight rails, and an
- * NFL page really is five feature bands in a row. The hero and the footer are
- * left out because neither is a section, and a block a market draws twice that
- * can only exist once is taken once.
+ * so are the repeats: an NFL page really is five feature bands in a row. The
+ * hero and the footer are left out because neither is a section, and a block a
+ * market draws twice that can only exist once is taken once.
+ *
+ * What each market DRAWS, not what it lists. A block served by a rail that has
+ * run out draws nothing, so it is not here — which is why Britain has two
+ * spotlight rails where its page names four. The same rule the live reading
+ * uses, so the two agree whichever answers.
+ *
+ * Which makes this a photograph of a moving thing. A rail refills and a market
+ * grows a block back; this was taken on 2026-09-20 and is only consulted when
+ * the live page cannot be reached.
  *
  * A combination nobody has read falls back to `SHIPPED_ORDER`, which is the
  * page the design shipped and a fair answer for a market we know nothing
@@ -412,20 +420,20 @@ export function sectionsOf(content: LandingScreen): PageSection[] {
  * theirs, and changing market leaves it alone — see `isUntouched`.
  */
 export const PAGE_DEFAULTS: Record<string, SectionType[]> = {
-  'GB|dazn': ['subRail', 'subRail', 'spotlight', 'spotlight', 'spotlight', 'spotlight', 'imageCta', 'supported', 'faq'],
-  'US|dazn': ['subRail', 'subRail', 'spotlight', 'imageCta', 'zone', 'supported', 'faq'],
-  'CA|dazn': ['subRail', 'plans', 'features', 'subRail', 'spotlight', 'spotlight', 'spotlight', 'imageCta', 'supported', 'faq'],
-  'JP|dazn': ['plans', 'multiview', 'rail', 'features', 'imageCta', 'spotlight', 'rail', 'badges', 'subRail', 'faq'],
-  'DE|dazn': ['plans', 'rail', 'multiview', 'badges', 'multiview', 'imageCta', 'subRail', 'schedule', 'supported', 'faq'],
-  'ES|dazn': ['ppv', 'plans', 'features', 'imageCta', 'spotlight', 'badges', 'spotlight', 'faq'],
-  'IT|dazn': ['multiview', 'plans', 'multiview', 'spotlight', 'supported', 'faq'],
+  'GB|dazn': ['subRail', 'subRail', 'spotlight', 'spotlight', 'imageCta', 'supported', 'faq'],
+  'US|dazn': ['subRail', 'subRail', 'imageCta', 'zone', 'supported', 'faq'],
+  'CA|dazn': ['subRail', 'plans', 'features', 'subRail', 'spotlight', 'imageCta', 'supported', 'faq'],
+  'JP|dazn': ['plans', 'multiview', 'features', 'imageCta', 'badges', 'subRail', 'faq'],
+  'DE|dazn': ['plans', 'rail', 'multiview', 'badges', 'multiview', 'imageCta', 'subRail', 'supported', 'faq'],
+  'ES|dazn': ['ppv', 'plans', 'features', 'imageCta', 'badges', 'faq'],
+  'IT|dazn': ['multiview', 'plans', 'multiview', 'supported', 'faq'],
   'FR|dazn': ['plans', 'multiview', 'imageCta', 'badges', 'subRail', 'faq'],
-  'US|msg': ['zip', 'rail', 'plans', 'live', 'teams', 'providers', 'features', 'imageCta', 'spotlight', 'supported', 'faq'],
+  'US|msg': ['zip', 'plans', 'live', 'teams', 'providers', 'features', 'imageCta', 'supported', 'faq'],
   'US|nfl': ['features', 'supported', 'faq'],
   'GB|nfl': ['plans', 'rail', 'experience', 'experience', 'experience', 'experience', 'experience', 'features', 'supported', 'spotlight', 'shows', 'faq'],
   'DE|nfl': ['plans', 'rail', 'experience', 'experience', 'experience', 'experience', 'experience', 'features', 'supported', 'spotlight', 'shows', 'faq'],
-  'GB|nhl': ['schedCarousel', 'plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
-  'DE|nhl': ['schedCarousel', 'plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
+  'GB|nhl': ['plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
+  'DE|nhl': ['plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
 }
 
 /**
