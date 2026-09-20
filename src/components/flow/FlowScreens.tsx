@@ -1742,9 +1742,12 @@ export function PageSectionView({
                   <img
                     className="fl-dev__logo"
                     key={device.name}
+                    /* A market's own, which has no measured width and takes a
+                       share of the row instead. */
+                    data-own={device.w === undefined || undefined}
                     src={device.src}
                     alt={device.name}
-                    style={{ inlineSize: device.w }}
+                    style={device.w === undefined ? undefined : { inlineSize: device.w }}
                   />
                 ))}
               </div>

@@ -1948,6 +1948,21 @@
   block-size: 32px;
   object-fit: contain;
 }
+/* A market's own logo, which came with no width.
+   The thirteen this app ships were measured off the design — Roku is 69.6,
+   Android TV 126.4 — and a market's arrive as whatever file DAZN holds, which
+   at 32 tall is Samsung at 206 and Panasonic at 200. Three of those do not fit
+   across a phone, so a live logo is given a third of the row and fits itself
+   inside it: height gives way first, which is how a wordmark shrinks without
+   losing its shape. */
+.fl-dev__logo[data-own] {
+  flex: 0 1 auto;
+  inline-size: auto;
+  min-inline-size: 0;
+  max-inline-size: 30%;
+  block-size: auto;
+  max-block-size: 32px;
+}
 
 .fl-dev__note {
   margin: 0;
