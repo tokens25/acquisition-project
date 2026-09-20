@@ -3669,10 +3669,13 @@
   inline-size: 72px;
   block-size: auto;
 }
+/* Bold, as the live page sets it. The line is what the tile is — "Cruz vs.
+   Bravo" — and it carries the weight against the picture behind it. */
 .fl-subtile__line {
   margin: 0;
   color: var(--color-text-primary);
   font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
   line-height: 1.45;
   text-align: center;
 }

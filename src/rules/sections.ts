@@ -613,6 +613,41 @@ function headingFromLive(title: string | null, body: string | null): Record<stri
   }
 }
 
+/**
+ * Components that keep their heading on a child rather than on themselves.
+ *
+ * ContentTiers does. Its own title is empty and "Choose your subscription"
+ * sits on the tier group linked inside it, because in the CMS that group is
+ * the thing being titled and the component is only the slot it goes in.
+ *
+ * Matched on the child's type rather than on being first, so a rail whose
+ * first entry happens to be a tile cannot have that tile's name taken for the
+ * rail's.
+ */
+const TITLE_ON_CHILD: Partial<Record<SectionType, string>> = {
+  plans: 'CommonContentTierGroup',
+}
+
+/** Every field on the landing screen that a live page can answer for. */
+function liveFieldNames(): string[] {
+  const out = new Set<string>()
+  for (const fields of Object.values(LIVE_FIELDS)) {
+    for (const field of [fields.title, fields.body, fields.rail, fields.image]) if (field) out.add(field)
+  }
+  for (const field of Object.values(LIVE_LISTS)) if (field) out.add(field)
+  // The strip's own strings and the heading over it, which are read by their
+  // own two functions rather than through LIVE_FIELDS.
+  for (const field of ['supportedTitle', 'supportedNote', 'supportedLink', 'supportedHeading', 'supportedHeadingTwo', 'supportedBody'])
+    out.add(field)
+  return [...out]
+}
+
+const headingOf = (type: SectionType, block: LiveBlock): string | null => {
+  const from = TITLE_ON_CHILD[type]
+  if (!from) return block.title
+  return block.title ?? (block.entries ?? []).find((k) => k.type === from)?.title ?? null
+}
+
 /** The field each of those lists lives in. */
 const LIVE_LISTS: Partial<Record<SectionType, string>> = {
   subRail: 'subRailTiles',
@@ -740,7 +775,20 @@ export const defaultTypesFor = (market?: string | null, product?: string | null)
 export function wordsFromLive(market?: string | null, product?: string | null): Partial<LandingScreen> {
   const live = seenLive.get(pageKey(market, product))
   if (!live) return {}
-  const own: Record<string, unknown> = {}
+  /*
+   * Every field the live page can speak to, back to what this tool ships,
+   * before a word of the market's is written over it.
+   *
+   * Because these live on one page shared by every market, and a market only
+   * writes the blocks it draws. Britain's page has no plan picker, so its
+   * heading was whatever the last market left there — and after Germany, that
+   * was "Wähle deine Mitgliedschaft" under an English page. Reset first and
+   * the ones this market does draw are written over it, while the ones it does
+   * not go back to words that at least belong to nobody in particular.
+   */
+  const own: Record<string, unknown> = Object.fromEntries(
+    liveFieldNames().map((field) => [field, (defaultFlow.landing as unknown as Record<string, unknown>)[field]]),
+  )
   const copies: Record<string, Partial<LandingScreen>> = {}
   const list: PageSection[] = []
   for (const block of live) {
@@ -759,7 +807,7 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     // are handled below, so a kind missing here is not a kind to skip.
     const fields = LIVE_FIELDS[type]
     if (fields) {
-      said(fields.title, block.title)
+      said(fields.title, headingOf(type, block))
       said(fields.body, block.description)
       said(fields.rail, block.railId)
       said(fields.image, pictureFromLive(block.entries ?? []))
