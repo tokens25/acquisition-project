@@ -2060,6 +2060,9 @@ function SubRailSection({
                 {tile.logo !== false && (
                   <img className="fl-subtile__logo" src={daznLogo} alt="" />
                 )}
+                {/* When it is, over what it is — the shape an events rail
+                    takes and a products rail does not. */}
+                {tile.badge?.trim() && <span className="fl-subtile__badge">{tile.badge}</span>}
                 <p className="fl-subtile__line">{tile.line}</p>
                 <span className="fl-subtile__cta" role="button">
                   {tile.cta}

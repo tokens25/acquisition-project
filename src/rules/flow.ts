@@ -254,6 +254,13 @@ export interface LandingSubTile {
   line: string
   cta: string
   /**
+   * When it is, over the line — "SEP 19".
+   *
+   * An events rail has one on every tile and a products rail on none, which is
+   * why it is a tile's rather than the rail's. Empty draws nothing.
+   */
+  badge?: string
+  /**
    * The picture behind it, where one was chosen. A data URL.
    *
    * Absent is not blank: the tile draws the shipped picture for its place in

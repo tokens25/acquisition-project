@@ -260,6 +260,7 @@
       "subscription tile wash": [4,392,26,16],
       "subscription tile foot": [6,394,22,12],
       "subscription tile logo": [12,394,10,3],
+      "subscription tile badge": [13,397,8,2],
       "subscription tile line": [6,398,22,4],
       "subscription tile button": [6,403,22,4],
       "bundles block": [0,412,80,48],

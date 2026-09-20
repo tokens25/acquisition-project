@@ -439,6 +439,7 @@
       ["subscription tile wash", ".fl-subtile__wash", "Dark at the foot and gone by halfway up, so the words hold and the picture is still a picture.", 'flowLandingPage'],
       ["subscription tile foot", ".fl-subtile__foot", "The logo, the line and the button, centred over the bottom of the tile.", 'flowLandingPage'],
       ["subscription tile logo", ".fl-subtile__logo", "Whose subscription it is.", 'flowLandingPage'],
+      ["subscription tile badge", ".fl-subtile__badge", "When it is, over what it is — a dark pill carrying the date. Every tile in an events rail has one and none in a products rail does, so it is the tile's and not the rail's.", 'flowLandingPage'],
       ["subscription tile line", ".fl-subtile__line", "What it sells, in one line, centred.", 'flowLandingPage'],
       ["subscription tile button", ".fl-subtile__cta", "The white button on the tile. Every tile carries its own: the rail is a shelf, not a link into a page that sells them.", 'flowLandingPage'],
       ["bundles block", ".fl-bundles", "Nights sold together for less than the sum of them — node 1093:55175. A different kind of subscription from the plans: a plan is a tier of the service, a bundle is a basket of events.", 'flowLandingPage'],

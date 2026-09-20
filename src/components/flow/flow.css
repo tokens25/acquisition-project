@@ -3652,6 +3652,19 @@
   align-items: center;
   padding: var(--space-16) var(--space-16) var(--space-20);
 }
+/* When it is, over what it is. A pill rather than plain words, as the live
+   page sets it: the date has to read as a label and not as the first line of
+   the title under it. */
+.fl-subtile__badge {
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-4, 4px);
+  background: var(--color-background-primary, #0c161c);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 .fl-subtile__logo {
   inline-size: 72px;
   block-size: auto;

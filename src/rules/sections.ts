@@ -543,6 +543,8 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown): u
       id: `sub-${i + 1}`,
       line: plain(k.title ?? k.body ?? ''),
       cta: plain(k.cta ?? ''),
+      badge: plain(k.badge ?? ''),
+      ...(k.image ? { background: k.image, logo: false } : {}),
     }))
     return tiles.length ? tiles : shipped
   }
@@ -582,15 +584,14 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown): u
  * The footer is one string with a link inside it, and this tool holds the
  * words and the link apart, so it is split where the anchor opens.
  */
-function supportedFromLive(kids: LiveEntry[], shipped: Record<string, unknown>): Record<string, string> {
+function supportedFromLive(kids: LiveEntry[]): Record<string, string> {
   const at = (key: string) => kids.find((k) => k.key === key)?.value ?? null
-  const was = (field: string) => String(shipped[field] ?? '')
   const footer = at('supportedDeviceFooter')
   const split = footer ? /^([\s\S]*?)<a[^>]*>([\s\S]*?)<\/a>/.exec(footer) : null
   return {
-    supportedTitle: plain(at('supportedDeviceHeader') ?? was('supportedTitle')),
-    supportedNote: split ? plain(split[1]) : footer ? plain(footer) : was('supportedNote'),
-    supportedLink: split ? plain(split[2]) : was('supportedLink'),
+    supportedTitle: plain(at('supportedDeviceHeader') ?? ''),
+    supportedNote: split ? plain(split[1]) : footer ? plain(footer) : '',
+    supportedLink: split ? plain(split[2]) : '',
   }
 }
 
@@ -603,14 +604,12 @@ function supportedFromLive(kids: LiveEntry[], shipped: Record<string, unknown>):
  * two lines differently, so this tool has always held them apart, and the
  * break is where they part.
  */
-function headingFromLive(title: string | null, body: string | null, shipped: Record<string, unknown>): Record<string, string> {
-  const was = (field: string) => String(shipped[field] ?? '')
-  if (!title) return { supportedHeading: was('supportedHeading'), supportedHeadingTwo: was('supportedHeadingTwo'), supportedBody: body ? plain(body) : was('supportedBody') }
-  const [first, ...rest] = title.split(/\n+/)
+function headingFromLive(title: string | null, body: string | null): Record<string, string> {
+  const [first, ...rest] = (title ?? '').split(/\n+/)
   return {
-    supportedHeading: plain(first),
+    supportedHeading: plain(first ?? ''),
     supportedHeadingTwo: rest.length ? plain(rest.join(' ')) : '',
-    supportedBody: body ? plain(body) : was('supportedBody'),
+    supportedBody: body ? plain(body) : '',
   }
 }
 
@@ -727,11 +726,16 @@ export const defaultTypesFor = (market?: string | null, product?: string | null)
  * always lived, and every one after it writes under its own id — the same
  * division the handoff now names them by.
  *
- * A field the live page says nothing about falls back to the words this tool
- * shipped — which are words somebody wrote — rather than being emptied in the
- * name of accuracy. To the shipped words and not to whatever is there: what is
- * there, one market switch into an afternoon, is the last market's, and a
- * Canadian rail under a German line is worse than either.
+ * A field the live page leaves empty is empty here. It was falling back to
+ * the words this tool shipped, on the grounds that those are words somebody
+ * wrote — but they are words somebody wrote for a different block. Canada's
+ * events rail carries no line under its heading, and the shipped line belongs
+ * to the products rail, so "Don't miss live on DAZN" arrived over "Add
+ * additional sports from around the world to your DAZN plan". The page draws
+ * nothing there; so does this.
+ *
+ * Only the fields the live page answers for are touched at all, so this empties
+ * what production leaves empty rather than emptying what it never carries.
  */
 export function wordsFromLive(market?: string | null, product?: string | null): Partial<LandingScreen> {
   const live = seenLive.get(pageKey(market, product))
@@ -749,7 +753,7 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     const shipped = defaultFlow.landing as unknown as Record<string, unknown>
     const said = (field: string | undefined, live: string | null) => {
       if (!field) return
-      mine[field] = live ? plain(live) : String(shipped[field] ?? '')
+      mine[field] = live ? plain(live) : ''
     }
     // Most blocks keep their heading on the component. The ones that do not
     // are handled below, so a kind missing here is not a kind to skip.
@@ -763,8 +767,8 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     const listField = LIVE_LISTS[type]
     if (listField) mine[listField] = listFromLive(type, block.entries ?? [], shipped[listField])
     if (type === 'supported') {
-      Object.assign(mine, supportedFromLive(block.entries ?? [], shipped))
-      Object.assign(mine, headingFromLive(block.title, block.description, shipped))
+      Object.assign(mine, supportedFromLive(block.entries ?? []))
+      Object.assign(mine, headingFromLive(block.title, block.description))
     }
     if (Object.keys(mine).length === 0) continue
     if (id === type) Object.assign(own, mine)
