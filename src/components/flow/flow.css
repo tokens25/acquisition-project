@@ -4851,3 +4851,53 @@
   block-size: 20px;
   object-fit: contain;
 }
+
+/* What the offer gets you, under the banner. The NHL pages hang a rail of
+   free-to-view clips off their freemium banner; the markets whose banner has
+   no rail draw the banner alone. Laid out as the spotlight's row is, because
+   it is the same thing in the same place: a scroller of fixed-width tiles. */
+.fl-imgcta__row {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-start;
+  inline-size: 100%;
+  margin-block-start: var(--space-16);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.fl-imgcta__row::-webkit-scrollbar {
+  display: none;
+}
+.fl-imgcta__tile {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-4);
+  inline-size: 220px;
+}
+.fl-imgcta__shot {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-8);
+  aspect-ratio: 16 / 9;
+}
+.fl-imgcta__shot img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.fl-imgcta__name {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+}
+.fl-imgcta__meta {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.45;
+}

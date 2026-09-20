@@ -184,6 +184,7 @@ export function landingText(content: LandingScreen): Required<
     | 'footerLinks'
     | 'railTiles'
     | 'spotlightTiles'
+    | 'imageCtaTiles'
     | 'subRailTiles'
     | 'badges'
     | 'bundles'

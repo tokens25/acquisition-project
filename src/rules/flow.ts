@@ -850,6 +850,15 @@ export interface LandingScreen {
   imageCtaCta?: string
   /** A picture of its own, and whether it is drawn with one at all. */
   imageCtaImage?: string
+  /**
+   * What the rail under it is serving, where the banner is served one.
+   *
+   * The NHL pages' banner is: "Try NHL.TV for free" over a row of the clips
+   * that are free to watch — Top Goals of the Stanley Cup Final and the rest.
+   * The banner is the offer and the row is what the offer gets you, so the two
+   * are one component on the live page and one here.
+   */
+  imageCtaTiles?: LandingTile[]
   imageCtaImageOff?: boolean
 
   /** The questions at the foot of the page. */

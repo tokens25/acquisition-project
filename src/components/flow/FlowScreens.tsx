@@ -1855,6 +1855,22 @@ export function PageSectionView({
               </span>
             </div>
           </div>
+          {/* What the offer gets you, where the banner is served a rail. The
+              NHL pages put the free clips under it; the markets whose banner
+              has no rail draw the banner alone, as they do on the live page. */}
+          {content.imageCtaTiles && content.imageCtaTiles.length > 0 && (
+            <div className="fl-imgcta__row">
+              {content.imageCtaTiles.map((clip, at) => (
+                <article className="fl-imgcta__tile" key={clip.id}>
+                  <span className="fl-imgcta__shot" aria-hidden="true">
+                    <img src={clip.image || artAt(SPOT_ART, at)} alt="" loading="lazy" />
+                  </span>
+                  <p className="fl-imgcta__name">{clip.title}</p>
+                  <p className="fl-imgcta__meta">{clip.meta}</p>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
       )
 

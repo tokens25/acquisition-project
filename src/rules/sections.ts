@@ -586,7 +586,7 @@ export interface LiveEntry {
  */
 function listFromLive(type: SectionType, kids: LiveEntry[], block?: LiveBlock): unknown {
   const items = kids.filter((k) => k.type === 'LPContentItem')
-  if (type === 'rail' || type === 'spotlight') {
+  if (type === 'rail' || type === 'spotlight' || type === 'imageCta') {
     // A standard rail authors nothing inside it: what it shows is whatever the
     // rail its id names is serving, which is why its tiles come from there and
     // not from its entries.
@@ -823,7 +823,14 @@ const LIVE_SPEC: Partial<Record<SectionType, LiveSpec>> = {
   // the strip keeps them in a place no other block does — and the wall itself
   // is a list like any other.
   supported: { list: 'supportedDevices' },
-  imageCta: { from: 'LPContentItem', title: 'imageCtaTitle', body: 'imageCtaBody', cta: 'imageCtaCta', image: 'imageCtaImage' },
+  imageCta: {
+    from: 'LPContentItem',
+    title: 'imageCtaTitle',
+    body: 'imageCtaBody',
+    cta: 'imageCtaCta',
+    image: 'imageCtaImage',
+    list: 'imageCtaTiles',
+  },
   multiview: { from: 'LPContentItem', title: 'multiviewTitle', body: 'multiviewBody', eyebrow: 'multiviewEyebrow', cta: 'multiviewCta', image: 'multiviewImage' },
   experience: { from: 'LPContentItem', title: 'expTitle', body: 'expBody', eyebrow: 'expOverline', cta: 'expCta', image: 'expImage' },
   zone: { from: 'LPContentItem', title: 'zoneTitle', body: 'zoneBody', cta: 'zoneCta', image: 'zoneImage' },
