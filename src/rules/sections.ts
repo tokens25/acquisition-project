@@ -1,5 +1,4 @@
 import type { LandingScreen } from './flow'
-import { defaultFlow } from './flow'
 
 /**
  * The landing page as a list of components rather than a fixed run of
@@ -585,7 +584,7 @@ export interface LiveEntry {
  * empty answer is visibly somebody's to write; a mismatched one is a lie that
  * reads fine.
  */
-function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, block?: LiveBlock): unknown {
+function listFromLive(type: SectionType, kids: LiveEntry[], block?: LiveBlock): unknown {
   const items = kids.filter((k) => k.type === 'LPContentItem')
   if (type === 'rail' || type === 'spotlight') {
     // A standard rail authors nothing inside it: what it shows is whatever the
@@ -600,7 +599,7 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
       ...(t.start ? { start: t.start } : {}),
       ...(t.image ? { image: t.image } : {}),
     }))
-    return rows.length ? rows : shipped
+    return rows
   }
   if (type === 'subRail') {
     const tiles = items.map((k, i) => ({
@@ -614,7 +613,7 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
       // artwork, not to sit on a photograph that names itself.
       ...(k.mark ? { logoImage: k.mark } : { logo: false }),
     }))
-    return tiles.length ? tiles : shipped
+    return tiles
   }
   if (type === 'features') {
     // The tag is the row's button, not its badge. The live page draws that
@@ -639,7 +638,7 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
         image: k.image as string,
         ...(k.ctaIcon ? { icon: k.ctaIcon } : {}),
       }))
-    return rows.length ? rows : shipped
+    return rows
   }
   if (type === 'supported') {
     // Every logo on the wall, named and with its own artwork. A market names
@@ -653,7 +652,7 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
       name: plain(k.title ?? ''),
       logo: k.mark ?? k.image ?? undefined,
     }))
-    return rows.length ? rows : shipped
+    return rows
   }
   if (type === 'badges') {
     // A competition badge is a circular logo with the competition's name under
@@ -664,7 +663,7 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
       line: plain(k.body ?? k.title ?? ''),
       ...(k.image ? { image: k.image } : {}),
     }))
-    return rows.length ? rows : shipped
+    return rows
   }
   if (type === 'teams') {
     // The city over the club, which is how the rail sets a team: "New York"
@@ -675,11 +674,11 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
       name: plain(k.title ?? ''),
       ...(k.image ? { logo: k.image } : {}),
     }))
-    return rows.length ? rows : shipped
+    return rows
   }
   if (type === 'providers') {
     const rows = items.map((k, i) => ({ id: `provider-${i + 1}`, name: plain(k.title ?? '') }))
-    return rows.length ? rows : shipped
+    return rows
   }
   if (type === 'faq') {
     const asked = kids.filter((k) => k.type === 'LPFaqArticle' && k.title)
@@ -688,9 +687,9 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
       question: plain(k.title ?? ''),
       answer: '',
     }))
-    return rows.length ? rows : shipped
+    return rows
   }
-  return shipped
+  return []
 }
 
 /**
@@ -773,6 +772,13 @@ interface LiveSpec {
   list?: string
 }
 
+/** Nothing, in the shape the field holds. */
+const blankFor = (field: string): unknown =>
+  LIST_FIELDS.has(field) ? [] : ''
+
+/** Which of them hold a list rather than a string. */
+const LIST_FIELDS = new Set<string>()
+
 /**
  * Every field on the landing screen that a live page can answer for.
  *
@@ -782,8 +788,12 @@ interface LiveSpec {
 function liveFieldNames(): string[] {
   const out = new Set<string>()
   for (const spec of Object.values(LIVE_SPEC)) {
-    for (const field of [spec.title, spec.body, spec.eyebrow, spec.cta, spec.rail, spec.image, spec.list])
+    for (const field of [spec.title, spec.body, spec.eyebrow, spec.cta, spec.rail, spec.image])
       if (field) out.add(field)
+    if (spec.list) {
+      out.add(spec.list)
+      LIST_FIELDS.add(spec.list)
+    }
   }
   // The devices strip's own strings and the heading over it, which are read by
   // their own two functions rather than through the table.
@@ -898,19 +908,22 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
   const live = seenLive.get(pageKey(market, product))
   if (!live) return {}
   /*
-   * Every field the live page can speak to, back to what this tool ships,
-   * before a word of the market's is written over it.
+   * Every field the live page can speak to, emptied, before a word of the
+   * market's is written over it.
    *
-   * Because these live on one page shared by every market, and a market only
+   * Emptied and not set to what this tool ships. A page opens on what the
+   * market draws, and what this tool ships is not what any market draws — it
+   * is a design's example. Where the market has a block, its words go in
+   * below; where it has none, the field belongs to whoever adds that block
+   * and is theirs to write.
+   *
+   * Clearing first also stops the last market's words standing in for this
+   * one's: these live on one page shared by every market, and a market only
    * writes the blocks it draws. Britain's page has no plan picker, so its
-   * heading was whatever the last market left there — and after Germany, that
-   * was "Wähle deine Mitgliedschaft" under an English page. Reset first and
-   * the ones this market does draw are written over it, while the ones it does
-   * not go back to words that at least belong to nobody in particular.
+   * heading was once whatever the last market left there — after Germany,
+   * "Wähle deine Mitgliedschaft" under an English page.
    */
-  const own: Record<string, unknown> = Object.fromEntries(
-    liveFieldNames().map((field) => [field, (defaultFlow.landing as unknown as Record<string, unknown>)[field]]),
-  )
+  const own: Record<string, unknown> = Object.fromEntries(liveFieldNames().map((field) => [field, blankFor(field)]))
   const copies: Record<string, Partial<LandingScreen>> = {}
   const list: PageSection[] = []
   for (const block of live) {
@@ -920,7 +933,6 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     const id = taken ? freeId(list, type) : type
     list.push({ id, type, on: true })
     const mine: Record<string, unknown> = {}
-    const shipped = defaultFlow.landing as unknown as Record<string, unknown>
     const said = (field: string | undefined, live: string | null) => {
       if (!field) return
       mine[field] = live ? plain(live) : ''
@@ -943,7 +955,7 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       said(spec.cta, kids.find((k) => k.type === 'LPButton')?.cta ?? holder?.cta ?? null)
       said(spec.rail, block.railId)
       said(spec.image, pictureFromLive(kids))
-      if (spec.list) mine[spec.list] = listFromLive(type, kids, shipped[spec.list], block)
+      if (spec.list) mine[spec.list] = listFromLive(type, kids, block)
     }
     if (type === 'supported') {
       Object.assign(mine, supportedFromLive(block.entries ?? []))

@@ -2705,8 +2705,10 @@ function SpotlightSection({
         {/* What the rail is serving, three of them, or the three this tool
             shipped where no rail has been read. */}
         {/* Everything the rail gave, because the row scrolls: three was the
-            number this tool shipped, not a number the design asked for. */}
-        {(tiles && tiles.length > 0 ? tiles : SPOT_FIXTURES).map((game, at) => (
+            number this tool shipped, not a number the design asked for. The
+            three of its own are drawn only where no rail has been read at all
+            — a page opened offline, or one somebody is building by hand. */}
+        {(tiles ?? SPOT_FIXTURES).map((game, at) => (
           <article className="fl-spot__tile" key={game.id}>
             <span className="fl-spot__shot" aria-hidden="true">
               {/* Lazily, as the live page does: a rail of seventy-nine is a
