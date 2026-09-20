@@ -124,10 +124,16 @@ function LivePage({ market }: { market: string | undefined }) {
               <span className="ls-live__name" title={BESIDE_THE_PALETTE[c.type]}>
                 {c.type}
               </span>
-              {/* Which rail it is served, where it is served one at all — the
-                  id our own Rail ID fields stand in for. */}
-              <span className="ls-live__note">
-                {c.railId ? `rail ${c.railId.slice(0, 8)}` : `${c.entries.length} entries`}
+              {/* What it is serving, where it is served at all. A rail with
+                  nothing in it is the thing worth saying: the component is
+                  configured and the page does not draw it, which is why a
+                  market can list ten blocks and show eight. */}
+              <span className="ls-live__note" data-empty={c.rail?.count === 0 || undefined}>
+                {c.rail
+                  ? c.rail.count === 0
+                    ? 'rail empty · not drawn'
+                    : `rail · ${c.rail.count} items`
+                  : `${c.entries.length} entries`}
               </span>
             </div>
           ))}

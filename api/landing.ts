@@ -162,6 +162,52 @@ interface Component {
   railId: string | null
   railParams: string | null
   entries: Child[]
+  /**
+   * What the rail is serving, for the components that are served one.
+   *
+   * Null where a component has no rail. An empty `tiles` with `count` zero
+   * is the answer that explains the page: a rail whose contents have run out
+   * — a tournament that is over, a fight night with nothing booked — draws
+   * nothing at all, so the live page shows fewer blocks than it is configured
+   * with. Canada is configured with three spotlight rails and draws one.
+   */
+  rail: { title: string | null; count: number; tiles: { title: string; meta: string }[] } | null
+}
+
+/** As many as anything here would draw. The count is the true number. */
+const TILE_CAP = 12
+
+/**
+ * What one rail is serving.
+ *
+ * The params are the CMS's, decoded once already and handed back encoded: they
+ * say which sport or competition the rail is for, and without them the router
+ * answers with an empty rail rather than an error.
+ */
+async function railOf(
+  country: string,
+  id: string,
+  params: string | null,
+): Promise<{ title: string | null; count: number; tiles: { title: string; meta: string }[] }> {
+  const url =
+    `https://rail-router.discovery.indazn.com/${country}/v10/Rail?id=${encodeURIComponent(id)}` +
+    `&platform=web&country=${country}` +
+    (params ? `&params=${encodeURIComponent(params)}` : '')
+  try {
+    const res = await fetch(url, { headers: HEADERS, signal: AbortSignal.timeout(8000) })
+    if (!res.ok) return { title: null, count: 0, tiles: [] }
+    const body = (await res.json()) as { Title?: string; Tiles?: { Title?: string; Label?: string }[] }
+    const all = Array.isArray(body.Tiles) ? body.Tiles : []
+    return {
+      title: typeof body.Title === 'string' && body.Title.trim() ? body.Title : null,
+      count: all.length,
+      tiles: all.slice(0, TILE_CAP).map((t) => ({ title: t.Title ?? '', meta: t.Label ?? '' })),
+    }
+  } catch {
+    // A rail that cannot be reached is not a rail that is empty, but neither
+    // is worth failing the page for: the components still answer.
+    return { title: null, count: 0, tiles: [] }
+  }
 }
 
 /**
@@ -280,7 +326,7 @@ function componentsOf(root: Entry, byId: Map<string, Entry>, assets: Assets): Co
   return links.map((link, at) => {
     const entry = isLink(link) ? byId.get(link.sys.id) : undefined
     if (!entry) {
-      return { at, type: 'unresolved', version: null, title: null, description: null, overLine: null, railId: null, railParams: null, entries: [] }
+      return { at, type: 'unresolved', version: null, title: null, description: null, overLine: null, railId: null, railParams: null, entries: [], rail: null }
     }
     const f = entry.fields
     const params = f.railParams as { params?: string } | undefined
@@ -296,6 +342,8 @@ function componentsOf(root: Entry, byId: Map<string, Entry>, assets: Assets): Co
       // Encoded in the CMS, decoded onto the rail router's query string.
       railParams: typeof params?.params === 'string' ? decodeURIComponent(params.params) : null,
       entries: kids.map((k) => childOf(k, byId, assets)),
+      // Filled in after, where there is a rail to ask about.
+      rail: null,
     }
   })
 }
@@ -342,6 +390,22 @@ interface Cached {
   value: Body
 }
 const pages = new Map<string, Cached>()
+
+/**
+ * Every component's rail, asked for at once.
+ *
+ * At once because a page has a handful of them and asking in turn would add
+ * their round trips together for no reason. The answer is held with the page's
+ * own, so this is paid once an hour and not once a look.
+ */
+async function withRails(components: Component[], market: string): Promise<Component[]> {
+  const country = market.toLowerCase()
+  return Promise.all(
+    components.map(async (c) =>
+      c.railId ? { ...c, rail: await railOf(country, c.railId, c.railParams) } : c,
+    ),
+  )
+}
 
 async function handler(request: Request): Promise<Response> {
   const json = (body: unknown, status = 200) =>
@@ -452,7 +516,7 @@ async function handler(request: Request): Promise<Response> {
     },
     // Built once and handed down: every picture on the page resolves
     // through it, and building it per entry would be the same map each time.
-    components: componentsOf(root, byId, pictures),
+    components: await withRails(componentsOf(root, byId, pictures), market),
     assets: pictures,
   })
 }

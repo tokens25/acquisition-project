@@ -500,6 +500,7 @@ export interface LiveBlock {
   description: string | null
   overLine?: string | null
   railId: string | null
+  rail?: { title: string | null; count: number; tiles: { title: string; meta: string }[] } | null
   entries?: LiveEntry[]
 }
 
@@ -555,8 +556,16 @@ export interface LiveEntry {
  * empty answer is visibly somebody's to write; a mismatched one is a lie that
  * reads fine.
  */
-function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown): unknown {
+function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, block?: LiveBlock): unknown {
   const items = kids.filter((k) => k.type === 'LPContentItem')
+  if (type === 'rail') {
+    // A standard rail authors nothing inside it: what it shows is whatever the
+    // rail its id names is serving, which is why its tiles come from there and
+    // not from its entries.
+    const serving = block?.rail?.tiles ?? []
+    const rows = serving.map((t, i) => ({ id: `tile-${i + 1}`, title: plain(t.title), meta: plain(t.meta) }))
+    return rows.length ? rows : shipped
+  }
   if (type === 'subRail') {
     const tiles = items.map((k, i) => ({
       id: `sub-${i + 1}`,
@@ -741,7 +750,7 @@ const LIVE_SPEC: Partial<Record<SectionType, LiveSpec>> = {
   zone: { from: 'LPContentItem', title: 'zoneTitle', body: 'zoneBody', cta: 'zoneCta', image: 'zoneImage' },
   live: { from: 'LPContentItem', title: 'liveTitle', body: 'liveBody', cta: 'liveCta' },
   ppv: { from: 'LPContentItem', title: 'ppvLine', cta: 'ppvCta' },
-  rail: { title: 'railTitle', rail: 'railId' },
+  rail: { title: 'railTitle', rail: 'railId', list: 'railTiles' },
   schedule: { title: 'scheduleHeading', body: 'scheduleSubheading', rail: 'scheduleRailId' },
   shows: { title: 'showsTitle', body: 'showsBody', cta: 'showsCta', rail: 'showsRailId' },
   badges: { title: 'badgesTitle', list: 'badges' },
@@ -865,7 +874,7 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       said(spec.cta, kids.find((k) => k.type === 'LPButton')?.cta ?? holder?.cta ?? null)
       said(spec.rail, block.railId)
       said(spec.image, pictureFromLive(kids))
-      if (spec.list) mine[spec.list] = listFromLive(type, kids, shipped[spec.list])
+      if (spec.list) mine[spec.list] = listFromLive(type, kids, shipped[spec.list], block)
     }
     if (type === 'supported') {
       Object.assign(mine, supportedFromLive(block.entries ?? []))

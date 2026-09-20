@@ -221,6 +221,7 @@ export function DefaultPanel({
         description: c.description,
         overLine: c.overLine,
         railId: c.railId,
+        rail: c.rail,
         entries: c.entries,
       })),
     )

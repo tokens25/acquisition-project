@@ -1377,3 +1377,11 @@
     transition: none;
   }
 }
+
+/* A component the live page is configured with and does not draw, because the
+   rail it is served has run out. Dimmed rather than coloured: it is not a
+   fault, it is the reason a market lists ten blocks and shows eight. */
+.ls-live__note[data-empty] {
+  opacity: 0.55;
+  font-style: italic;
+}

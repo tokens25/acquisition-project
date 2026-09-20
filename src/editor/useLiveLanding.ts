@@ -28,6 +28,14 @@ export interface LiveComponent {
   /** Set on the components that are served a rail rather than authored. */
   railId: string | null
   railParams: string | null
+  /**
+   * What the rail is serving, where the component is served one.
+   *
+   * A count of zero is the answer that explains the page: a rail whose
+   * contents have run out draws nothing at all, so the live page shows fewer
+   * blocks than it is configured with.
+   */
+  rail: { title: string | null; count: number; tiles: { title: string; meta: string }[] } | null
   entries: LiveEntry[]
 }
 
