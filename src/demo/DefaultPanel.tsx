@@ -220,6 +220,7 @@ export function DefaultPanel({
         title: c.title,
         description: c.description,
         railId: c.railId,
+        entries: c.entries,
       })),
     )
     if (!news || !spare) return

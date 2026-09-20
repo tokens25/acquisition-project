@@ -505,11 +505,81 @@ export interface LiveBlock {
   title: string | null
   description: string | null
   railId: string | null
+  entries?: LiveEntry[]
 }
 
-const sameBlocks = (a: LiveBlock[], b: LiveBlock[]) =>
-  a.length === b.length &&
-  a.every((x, i) => x.type === b[i].type && x.title === b[i].title && x.description === b[i].description && x.railId === b[i].railId)
+/** One thing inside a block — a tile, a feature, a question. */
+export interface LiveEntry {
+  type: string
+  title: string | null
+  preTitle: string | null
+  badge: string | null
+  body: string | null
+  cta: string | null
+}
+
+/**
+ * The lists a block draws, where the live page fills them itself.
+ *
+ * Three of them do. A rail's tiles, a features section's rows and an FAQ's
+ * questions are entries in the CMS beside the block, so they come across with
+ * its heading. The rest of the lists on this page are not there to be had: a
+ * spotlight's items are served from the rail its id names, and a supported
+ * devices list is a table of logos rather than words.
+ *
+ * Which field carries a tile's line depends on the rail. Canada's events rail
+ * puts it in the title — "Cruz vs. Bravo" — and its products rail in the
+ * description — "Every race from the WRC and ERC season". Both are the line
+ * under the picture, so either answers.
+ *
+ * An FAQ arrives unanswered. Production's questions link out to a help article
+ * rather than carrying an answer, and pairing them with the shipped answers by
+ * position would put "your subscription moves across to DAZN" under "What's
+ * included in each plan?" — a plausible-looking pair that is simply wrong. An
+ * empty answer is visibly somebody's to write; a mismatched one is a lie that
+ * reads fine.
+ */
+function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown): unknown {
+  const items = kids.filter((k) => k.type === 'LPContentItem')
+  if (type === 'subRail') {
+    const tiles = items.map((k, i) => ({
+      id: `sub-${i + 1}`,
+      line: plain(k.title ?? k.body ?? ''),
+      cta: plain(k.cta ?? ''),
+    }))
+    return tiles.length ? tiles : shipped
+  }
+  if (type === 'features') {
+    const rows = items.map((k, i) => ({
+      id: `feature-${i + 1}`,
+      tag: plain(k.preTitle ?? k.badge ?? ''),
+      title: plain(k.title ?? ''),
+      body: plain(k.body ?? ''),
+    }))
+    return rows.length ? rows : shipped
+  }
+  if (type === 'faq') {
+    const asked = kids.filter((k) => k.type === 'LPFaqArticle' && k.title)
+    const rows = asked.map((k, i) => ({
+      id: `faq-${i + 1}`,
+      question: plain(k.title ?? ''),
+      answer: '',
+    }))
+    return rows.length ? rows : shipped
+  }
+  return shipped
+}
+
+/** The field each of those lists lives in. */
+const LIVE_LISTS: Partial<Record<SectionType, string>> = {
+  subRail: 'subRailTiles',
+  features: 'features',
+  faq: 'faqs',
+}
+
+/* Every word of them, entries included: a rail whose heading is unchanged and
+   whose tiles are not is still a page that has moved. */
+const sameBlocks = (a: LiveBlock[], b: LiveBlock[]) => JSON.stringify(a) === JSON.stringify(b)
 
 /** Remembers a market's live page. True when this is news. */
 export function rememberLive(
@@ -604,7 +674,7 @@ export const defaultTypesFor = (market?: string | null, product?: string | null)
 export function wordsFromLive(market?: string | null, product?: string | null): Partial<LandingScreen> {
   const live = seenLive.get(pageKey(market, product))
   if (!live) return {}
-  const own: Record<string, string> = {}
+  const own: Record<string, unknown> = {}
   const copies: Record<string, Partial<LandingScreen>> = {}
   const list: PageSection[] = []
   for (const block of live) {
@@ -615,7 +685,7 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     list.push({ id, type, on: true })
     const fields = LIVE_FIELDS[type]
     if (!fields) continue
-    const mine: Record<string, string> = {}
+    const mine: Record<string, unknown> = {}
     const shipped = defaultFlow.landing as unknown as Record<string, unknown>
     const said = (field: string | undefined, live: string | null) => {
       if (!field) return
@@ -624,6 +694,8 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     said(fields.title, block.title)
     said(fields.body, block.description)
     said(fields.rail, block.railId)
+    const listField = LIVE_LISTS[type]
+    if (listField) mine[listField] = listFromLive(type, block.entries ?? [], shipped[listField])
     if (Object.keys(mine).length === 0) continue
     if (id === type) Object.assign(own, mine)
     else copies[id] = mine as Partial<LandingScreen>

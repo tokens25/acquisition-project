@@ -26,7 +26,20 @@ export interface LiveComponent {
   /** Set on the components that are served a rail rather than authored. */
   railId: string | null
   railParams: string | null
-  entries: { type: string; id: string; name: string | null }[]
+  entries: LiveEntry[]
+}
+
+/** One thing inside a component, as much of it as is words. */
+export interface LiveEntry {
+  type: string
+  id: string
+  /** The CMS's filing label, not copy. */
+  name: string | null
+  title: string | null
+  preTitle: string | null
+  badge: string | null
+  body: string | null
+  cta: string | null
 }
 
 /** A page this product does draw, where the one asked for is not one of them. */

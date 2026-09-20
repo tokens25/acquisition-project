@@ -159,7 +159,54 @@ interface Component {
   /** Which rail, for the components that are served one. */
   railId: string | null
   railParams: string | null
-  entries: { type: string; id: string; name: string | null }[]
+  entries: Child[]
+}
+
+/**
+ * One thing inside a component, as much of it as is words.
+ *
+ * `name` is the CMS's own label for the entry — "[CA] LP || Features | Follow"
+ * — which is how the editor is filed rather than anything a reader sees. The
+ * rest is what is on the page: a tile's line, a feature's heading, a question.
+ *
+ * Which field carries the line depends on the component. A tile in an events
+ * rail puts it in `title` and a tile in a products rail in `description`, so
+ * both come across and whoever reads them decides.
+ */
+interface Child {
+  type: string
+  id: string
+  /** The CMS's filing label, not copy. */
+  name: string | null
+  title: string | null
+  /** Above the title, and usually the same words as the badge. */
+  preTitle: string | null
+  badge: string | null
+  body: string | null
+  /** The first button's label, which is the only one a tile ever draws. */
+  cta: string | null
+}
+
+/** The words on one child entry, with its button resolved. */
+function childOf(link: unknown, byId: Map<string, Entry>): Child {
+  const kid = isLink(link) ? byId.get(link.sys.id) : undefined
+  const id = isLink(link) ? link.sys.id : ''
+  if (!kid) return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null }
+  const f = kid.fields
+  const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null)
+  const buttons = Array.isArray(f.buttons) ? (f.buttons as unknown[]) : []
+  const first = buttons.map((b) => (isLink(b) ? byId.get(b.sys.id) : undefined)).find(Boolean)
+  return {
+    type: kid.sys.contentType.sys.id,
+    id,
+    name: str(f.displayName),
+    title: str(f.title),
+    preTitle: str(f.preTitle),
+    badge: str(f.badgeText),
+    body: str(f.description),
+    // Two spellings of the same thing across two button types.
+    cta: first ? (str(first.fields.label) ?? str(first.fields.buttonLabel)) : null,
+  }
 }
 
 /**
@@ -188,14 +235,7 @@ function componentsOf(root: Entry, byId: Map<string, Entry>): Component[] {
       railId: typeof f.railId === 'string' ? f.railId : null,
       // Encoded in the CMS, decoded onto the rail router's query string.
       railParams: typeof params?.params === 'string' ? decodeURIComponent(params.params) : null,
-      entries: kids.map((k) => {
-        const kid = isLink(k) ? byId.get(k.sys.id) : undefined
-        return {
-          type: kid ? kid.sys.contentType.sys.id : 'unresolved',
-          id: isLink(k) ? k.sys.id : '',
-          name: kid && typeof kid.fields.displayName === 'string' ? kid.fields.displayName : null,
-        }
-      }),
+      entries: kids.map((k) => childOf(k, byId)),
     }
   })
 }
