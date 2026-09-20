@@ -950,16 +950,22 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     const spec = LIVE_SPEC[type]
     if (spec) {
       const kids = block.entries ?? []
-      // The entry that carries the words, where the component does not. Named
+      // The entry that carries the words where the component does not. Named
       // rather than taken as the first, so a rail cannot have the name of the
       // tile that happens to lead it read as the rail's own.
+      //
+      // The component first, and the holder only where it is quiet. Which way
+      // round matters: Italy draws two introduction banners and they are built
+      // differently — the first keeps its heading, its line and its overline on
+      // the component and only the button on the card inside it, the second
+      // keeps everything on the card. Always reading the card threw the first
+      // one's words away.
       const holder = spec.from ? kids.find((k) => k.type === spec.from) : undefined
-      const words = holder ?? { title: block.title, body: block.description, preTitle: null, cta: null }
-      said(spec.title, words.title ?? null)
-      said(spec.body, words.body ?? null)
+      said(spec.title, block.title ?? holder?.title ?? null)
+      said(spec.body, block.description ?? holder?.body ?? null)
       // Two names for the small line over a heading, and a block uses whichever
       // its shape gives it: the component's overLine, or the holder's preTitle.
-      said(spec.eyebrow, block.overLine ?? words.preTitle ?? null)
+      said(spec.eyebrow, block.overLine ?? holder?.preTitle ?? null)
       // The block's own button, which is an entry of its own — not the button
       // on a tile, which a rail of tiles has one of per tile.
       said(spec.cta, kids.find((k) => k.type === 'LPButton')?.cta ?? holder?.cta ?? null)
