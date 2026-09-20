@@ -23,6 +23,8 @@ export interface LiveComponent {
   version: string | null
   title: string | null
   description: string | null
+  /** The small line over the heading, where the component carries one. */
+  overLine: string | null
   /** Set on the components that are served a rail rather than authored. */
   railId: string | null
   railParams: string | null

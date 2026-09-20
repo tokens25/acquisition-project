@@ -498,8 +498,27 @@ export interface LiveBlock {
   type: string
   title: string | null
   description: string | null
+  overLine?: string | null
   railId: string | null
   entries?: LiveEntry[]
+}
+
+/* Every word of them, entries included: a rail whose heading is unchanged and
+   whose tiles are not is still a page that has moved. */
+const sameBlocks = (a: LiveBlock[], b: LiveBlock[]) => JSON.stringify(a) === JSON.stringify(b)
+
+/** Remembers a market's live page. True when this is news. */
+export function rememberLive(
+  market: string | null | undefined,
+  product: string | null | undefined,
+  blocks: LiveBlock[],
+): boolean {
+  const key = pageKey(market, product)
+  const cards = blocks.filter((b) => cardFor(b.type))
+  const had = seenLive.get(key)
+  if (had && sameBlocks(had, cards)) return false
+  seenLive.set(key, cards)
+  return true
 }
 
 /** One thing inside a block — a tile, a feature, a question. */
@@ -555,6 +574,32 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown): u
       title: plain(k.title ?? ''),
       body: plain(k.body ?? ''),
     }))
+    return rows.length ? rows : shipped
+  }
+  if (type === 'badges') {
+    // A competition badge is a circular logo with the competition's name under
+    // it, which is a content type of its own rather than a content item.
+    const rounds = kids.filter((k) => k.type === 'CommonSpoloCircularLogo')
+    const rows = rounds.map((k, i) => ({
+      id: `badge-${i + 1}`,
+      line: plain(k.body ?? k.title ?? ''),
+      ...(k.image ? { image: k.image } : {}),
+    }))
+    return rows.length ? rows : shipped
+  }
+  if (type === 'teams') {
+    // The city over the club, which is how the rail sets a team: "New York"
+    // small, "Knicks" under it.
+    const rows = items.map((k, i) => ({
+      id: `team-${i + 1}`,
+      city: plain(k.preTitle ?? ''),
+      name: plain(k.title ?? ''),
+      ...(k.image ? { logo: k.image } : {}),
+    }))
+    return rows.length ? rows : shipped
+  }
+  if (type === 'providers') {
+    const rows = items.map((k, i) => ({ id: `provider-${i + 1}`, name: plain(k.title ?? '') }))
     return rows.length ? rows : shipped
   }
   if (type === 'faq') {
@@ -614,97 +659,80 @@ function headingFromLive(title: string | null, body: string | null): Record<stri
 }
 
 /**
- * Components that keep their heading on a child rather than on themselves.
+ * Where each block's words are, and which of ours they fill.
  *
- * ContentTiers does. Its own title is empty and "Choose your subscription"
- * sits on the tier group linked inside it, because in the CMS that group is
- * the thing being titled and the component is only the slot it goes in.
+ * One table for all of it, because the shapes repeat and the exceptions are
+ * the point. Read off every market's live page rather than guessed: the census
+ * in this session covered fourteen market-and-product pages and twenty-two
+ * component types, and what it showed is that a component is not reliably the
+ * thing that carries its own words.
  *
- * Matched on the child's type rather than on being first, so a rail whose
- * first entry happens to be a tile cannot have that tile's name taken for the
- * rail's.
+ * `from` names the child content type that does, where it is not the
+ * component. Five blocks are like this — a freemium banner, an introduction
+ * banner, an experience feature, a zip breather and a zip check all keep their
+ * heading and body on the `LPContentItem` inside them, and the tier group
+ * keeps the plan picker's heading. Read off the component, those five come
+ * back empty, which is what they were doing.
+ *
+ * `eyebrow` comes from the component's `overLine` or the child's
+ * `preTitle` — two names for the small line above a heading, and a block
+ * uses whichever its shape gives it.
+ *
+ * `cta` is the component's own button, which is an `LPButton` among its
+ * entries, and is not the button on a tile: a rail of tiles has one of each.
  */
-const TITLE_ON_CHILD: Partial<Record<SectionType, string>> = {
-  plans: 'CommonContentTierGroup',
+interface LiveSpec {
+  /** The child content type carrying the words, where the component does not. */
+  from?: string
+  title?: string
+  body?: string
+  eyebrow?: string
+  cta?: string
+  rail?: string
+  image?: string
+  /** The field holding this block's repeated part. */
+  list?: string
 }
 
-/** Every field on the landing screen that a live page can answer for. */
+/**
+ * Every field on the landing screen that a live page can answer for.
+ *
+ * Read off the table rather than listed beside it, so a block gaining a field
+ * gains it here too and cannot be left carrying the last market's words.
+ */
 function liveFieldNames(): string[] {
   const out = new Set<string>()
-  for (const fields of Object.values(LIVE_FIELDS)) {
-    for (const field of [fields.title, fields.body, fields.rail, fields.image]) if (field) out.add(field)
+  for (const spec of Object.values(LIVE_SPEC)) {
+    for (const field of [spec.title, spec.body, spec.eyebrow, spec.cta, spec.rail, spec.image, spec.list])
+      if (field) out.add(field)
   }
-  for (const field of Object.values(LIVE_LISTS)) if (field) out.add(field)
-  // The strip's own strings and the heading over it, which are read by their
-  // own two functions rather than through LIVE_FIELDS.
+  // The devices strip's own strings and the heading over it, which are read by
+  // their own two functions rather than through the table.
   for (const field of ['supportedTitle', 'supportedNote', 'supportedLink', 'supportedHeading', 'supportedHeadingTwo', 'supportedBody'])
     out.add(field)
   return [...out]
 }
 
-const headingOf = (type: SectionType, block: LiveBlock): string | null => {
-  const from = TITLE_ON_CHILD[type]
-  if (!from) return block.title
-  return block.title ?? (block.entries ?? []).find((k) => k.type === from)?.title ?? null
-}
-
-/** The field each of those lists lives in. */
-const LIVE_LISTS: Partial<Record<SectionType, string>> = {
-  subRail: 'subRailTiles',
-  features: 'features',
-  faq: 'faqs',
-}
-
-/* Every word of them, entries included: a rail whose heading is unchanged and
-   whose tiles are not is still a page that has moved. */
-const sameBlocks = (a: LiveBlock[], b: LiveBlock[]) => JSON.stringify(a) === JSON.stringify(b)
-
-/** Remembers a market's live page. True when this is news. */
-export function rememberLive(
-  market: string | null | undefined,
-  product: string | null | undefined,
-  blocks: LiveBlock[],
-): boolean {
-  const key = pageKey(market, product)
-  const cards = blocks.filter((b) => cardFor(b.type))
-  const had = seenLive.get(key)
-  if (had && sameBlocks(had, cards)) return false
-  seenLive.set(key, cards)
-  return true
-}
-
-/**
- * Which field of a block takes the live page's title, its line and its rail.
- *
- * Only the three every block has in the same sense. A block says more than
- * this — pictures, buttons, the tiles of a rail — and those are not the live
- * page's to give: it serves them from a rail the id already names, or from
- * assets this tool does not hold. The three here are the ones that are words
- * on the page, in the same place, in every market.
- */
-const LIVE_FIELDS: Partial<
-  Record<SectionType, { title?: string; body?: string; rail?: string; image?: string }>
-> = {
-  subRail: { title: 'subRailTitle', body: 'subRailBody' },
+const LIVE_SPEC: Partial<Record<SectionType, LiveSpec>> = {
+  subRail: { title: 'subRailTitle', body: 'subRailBody', list: 'subRailTiles' },
   spotlight: { title: 'spotlightTitle', body: 'spotlightBody', rail: 'spotlightRailId', image: 'spotlightImage' },
-  plans: { title: 'plansTitle', body: 'plansBody' },
-  features: { title: 'featuresTitle' },
-
-  faq: { title: 'faqTitle' },
-  imageCta: { title: 'imageCtaTitle', body: 'imageCtaBody', image: 'imageCtaImage' },
-  multiview: { title: 'multiviewTitle', body: 'multiviewBody', image: 'multiviewImage' },
+  plans: { from: 'CommonContentTierGroup', title: 'plansTitle', body: 'plansBody' },
+  features: { title: 'featuresTitle', eyebrow: 'featuresEyebrow', cta: 'featuresCta', list: 'features' },
+  faq: { title: 'faqTitle', list: 'faqs' },
+  imageCta: { from: 'LPContentItem', title: 'imageCtaTitle', body: 'imageCtaBody', cta: 'imageCtaCta', image: 'imageCtaImage' },
+  multiview: { from: 'LPContentItem', title: 'multiviewTitle', body: 'multiviewBody', eyebrow: 'multiviewEyebrow', cta: 'multiviewCta', image: 'multiviewImage' },
+  experience: { from: 'LPContentItem', title: 'expTitle', body: 'expBody', eyebrow: 'expOverline', cta: 'expCta', image: 'expImage' },
+  zone: { from: 'LPContentItem', title: 'zoneTitle', body: 'zoneBody', cta: 'zoneCta', image: 'zoneImage' },
+  live: { from: 'LPContentItem', title: 'liveTitle', body: 'liveBody', cta: 'liveCta' },
+  ppv: { from: 'LPContentItem', title: 'ppvLine', cta: 'ppvCta' },
   rail: { title: 'railTitle', rail: 'railId' },
   schedule: { title: 'scheduleHeading', body: 'scheduleSubheading', rail: 'scheduleRailId' },
-  shows: { title: 'showsTitle', body: 'showsBody', rail: 'showsRailId' },
-  badges: { title: 'badgesTitle' },
-  experience: { title: 'expTitle', body: 'expBody', image: 'expImage' },
-  zone: { title: 'zoneTitle', body: 'zoneBody', image: 'zoneImage' },
-  ppv: { title: 'ppvLine' },
-  teams: { title: 'teamsTitle', body: 'teamsBody' },
-  providers: { title: 'providersTitle', body: 'providersBody' },
-  live: { title: 'liveTitle', body: 'liveBody' },
-  zip: { title: 'zipHeading', body: 'zipNote' },
-  schedCarousel: { title: 'carouselTitle', rail: 'carouselRailId' },
+  shows: { title: 'showsTitle', body: 'showsBody', cta: 'showsCta', rail: 'showsRailId' },
+  badges: { title: 'badgesTitle', list: 'badges' },
+  teams: { title: 'teamsTitle', body: 'teamsBody', eyebrow: 'teamsEyebrow', list: 'teams' },
+  providers: { title: 'providersTitle', body: 'providersBody', cta: 'providersCta', list: 'providers' },
+  zip: { title: 'zipHeading', body: 'zipNote', cta: 'zipCta' },
+  schedCarousel: { from: 'LPScheduleCarousel', title: 'carouselTitle', eyebrow: 'carouselLabel', rail: 'carouselRailId' },
   area: { title: 'areaTitle', body: 'areaBody' },
   bundles: { title: 'bundlesTitle', body: 'bundlesBody' },
   cities: { title: 'citiesTitle', body: 'citiesBody' },
@@ -803,17 +831,26 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       if (!field) return
       mine[field] = live ? plain(live) : ''
     }
-    // Most blocks keep their heading on the component. The ones that do not
-    // are handled below, so a kind missing here is not a kind to skip.
-    const fields = LIVE_FIELDS[type]
-    if (fields) {
-      said(fields.title, headingOf(type, block))
-      said(fields.body, block.description)
-      said(fields.rail, block.railId)
-      said(fields.image, pictureFromLive(block.entries ?? []))
+    const spec = LIVE_SPEC[type]
+    if (spec) {
+      const kids = block.entries ?? []
+      // The entry that carries the words, where the component does not. Named
+      // rather than taken as the first, so a rail cannot have the name of the
+      // tile that happens to lead it read as the rail's own.
+      const holder = spec.from ? kids.find((k) => k.type === spec.from) : undefined
+      const words = holder ?? { title: block.title, body: block.description, preTitle: null, cta: null }
+      said(spec.title, words.title ?? null)
+      said(spec.body, words.body ?? null)
+      // Two names for the small line over a heading, and a block uses whichever
+      // its shape gives it: the component's overLine, or the holder's preTitle.
+      said(spec.eyebrow, block.overLine ?? words.preTitle ?? null)
+      // The block's own button, which is an entry of its own — not the button
+      // on a tile, which a rail of tiles has one of per tile.
+      said(spec.cta, kids.find((k) => k.type === 'LPButton')?.cta ?? holder?.cta ?? null)
+      said(spec.rail, block.railId)
+      said(spec.image, pictureFromLive(kids))
+      if (spec.list) mine[spec.list] = listFromLive(type, kids, shipped[spec.list])
     }
-    const listField = LIVE_LISTS[type]
-    if (listField) mine[listField] = listFromLive(type, block.entries ?? [], shipped[listField])
     if (type === 'supported') {
       Object.assign(mine, supportedFromLive(block.entries ?? []))
       Object.assign(mine, headingFromLive(block.title, block.description))

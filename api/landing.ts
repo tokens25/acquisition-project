@@ -156,6 +156,8 @@ interface Component {
   version: string | null
   title: string | null
   description: string | null
+  /** The small line over the heading, where the component carries one. */
+  overLine: string | null
   /** Which rail, for the components that are served one. */
   railId: string | null
   railParams: string | null
@@ -278,7 +280,7 @@ function componentsOf(root: Entry, byId: Map<string, Entry>, assets: Assets): Co
   return links.map((link, at) => {
     const entry = isLink(link) ? byId.get(link.sys.id) : undefined
     if (!entry) {
-      return { at, type: 'unresolved', version: null, title: null, description: null, railId: null, railParams: null, entries: [] }
+      return { at, type: 'unresolved', version: null, title: null, description: null, overLine: null, railId: null, railParams: null, entries: [] }
     }
     const f = entry.fields
     const params = f.railParams as { params?: string } | undefined
@@ -289,6 +291,7 @@ function componentsOf(root: Entry, byId: Map<string, Entry>, assets: Assets): Co
       version: typeof f.version === 'string' ? f.version : null,
       title: typeof f.title === 'string' ? f.title : null,
       description: typeof f.description === 'string' ? f.description : null,
+      overLine: typeof f.overLine === 'string' ? f.overLine : null,
       railId: typeof f.railId === 'string' ? f.railId : null,
       // Encoded in the CMS, decoded onto the rail router's query string.
       railParams: typeof params?.params === 'string' ? decodeURIComponent(params.params) : null,
