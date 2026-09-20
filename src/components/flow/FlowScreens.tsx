@@ -1964,6 +1964,7 @@ export function PageSectionView({
           label={text.spotlightLabel}
           title={text.spotlightTitle}
           body={text.spotlightBody}
+          tiles={content.spotlightTiles}
         />
       )
 
@@ -2677,11 +2678,14 @@ function SpotlightSection({
   label,
   title,
   body,
+  tiles,
 }: {
   image: string
   label: string
   title: string
   body: string
+  /** What the rail is serving, where it has been read. */
+  tiles?: LandingTile[]
 }) {
   return (
     <section className="fl-spot">
@@ -2695,7 +2699,9 @@ function SpotlightSection({
         {body.trim() !== '' && <p className="fl-spot__body">{body}</p>}
       </div>
       <div className="fl-spot__row">
-        {SPOT_FIXTURES.map((game, at) => (
+        {/* What the rail is serving, three of them, or the three this tool
+            shipped where no rail has been read. */}
+        {(tiles && tiles.length > 0 ? tiles.slice(0, 3) : SPOT_FIXTURES).map((game, at) => (
           <article className="fl-spot__tile" key={game.id}>
             <span className="fl-spot__shot" aria-hidden="true">
               <img src={artAt(SPOT_ART, at)} alt="" />

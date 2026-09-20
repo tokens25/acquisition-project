@@ -807,6 +807,15 @@ export interface LandingScreen {
      the screen, and then the fixtures that make it up. */
   /** The picture behind the top of it. Empty means the shipped one. */
   spotlightImage?: string
+  /**
+   * What the rail under it is serving.
+   *
+   * A spotlight is a picture and a pitch over a row of what it is pitching, and
+   * the row is the rail its id names — the same arrangement as a standard rail,
+   * under different words. Canada's soccer spotlight is served seventy-nine
+   * fixtures; three of them fit.
+   */
+  spotlightTiles?: LandingTile[]
   spotlightLabel?: string
   spotlightTitle?: string
   spotlightBody?: string

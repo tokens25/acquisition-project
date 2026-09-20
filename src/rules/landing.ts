@@ -183,6 +183,7 @@ export function landingText(content: LandingScreen): Required<
     | 'features'
     | 'footerLinks'
     | 'railTiles'
+    | 'spotlightTiles'
     | 'subRailTiles'
     | 'badges'
     | 'bundles'

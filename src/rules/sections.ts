@@ -508,6 +508,20 @@ export interface LiveBlock {
    whose tiles are not is still a page that has moved. */
 const sameBlocks = (a: LiveBlock[], b: LiveBlock[]) => JSON.stringify(a) === JSON.stringify(b)
 
+/**
+ * Whether the live page draws this block, as against listing it.
+ *
+ * A component served by a rail draws nothing when that rail is empty — a
+ * tournament that is over, a fight night with nothing booked — so a market
+ * can be configured with ten blocks and show eight. Canada is: three
+ * spotlight rails, one of which is serving.
+ *
+ * The page a market opens on is what it draws. What it merely lists is in the
+ * fold, where the empty ones are named and the reason given.
+ */
+export const drawsHere = (block: { railId?: string | null; rail?: { count: number } | null }) =>
+  !block.rail || block.rail.count > 0
+
 /** Remembers a market's live page. True when this is news. */
 export function rememberLive(
   market: string | null | undefined,
@@ -515,7 +529,7 @@ export function rememberLive(
   blocks: LiveBlock[],
 ): boolean {
   const key = pageKey(market, product)
-  const cards = blocks.filter((b) => cardFor(b.type))
+  const cards = blocks.filter((b) => cardFor(b.type) && drawsHere(b))
   const had = seenLive.get(key)
   if (had && sameBlocks(had, cards)) return false
   seenLive.set(key, cards)
@@ -560,7 +574,7 @@ export interface LiveEntry {
  */
 function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, block?: LiveBlock): unknown {
   const items = kids.filter((k) => k.type === 'LPContentItem')
-  if (type === 'rail') {
+  if (type === 'rail' || type === 'spotlight') {
     // A standard rail authors nothing inside it: what it shows is whatever the
     // rail its id names is serving, which is why its tiles come from there and
     // not from its entries.
@@ -760,7 +774,13 @@ function liveFieldNames(): string[] {
 
 const LIVE_SPEC: Partial<Record<SectionType, LiveSpec>> = {
   subRail: { title: 'subRailTitle', body: 'subRailBody', list: 'subRailTiles' },
-  spotlight: { title: 'spotlightTitle', body: 'spotlightBody', rail: 'spotlightRailId', image: 'spotlightImage' },
+  spotlight: {
+    title: 'spotlightTitle',
+    body: 'spotlightBody',
+    rail: 'spotlightRailId',
+    image: 'spotlightImage',
+    list: 'spotlightTiles',
+  },
   plans: { from: 'CommonContentTierGroup', title: 'plansTitle', body: 'plansBody' },
   features: { title: 'featuresTitle', eyebrow: 'featuresEyebrow', cta: 'featuresCta', list: 'features' },
   faq: { title: 'faqTitle', list: 'faqs' },

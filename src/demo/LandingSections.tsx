@@ -21,6 +21,7 @@ import {
   SECTION_CONTENTS,
   SECTION_LABEL,
   cardFor,
+  drawsHere,
   isCard,
   SECTION_TYPES,
   isFirst,
@@ -79,9 +80,12 @@ function LivePage({ market }: { market: string | undefined }) {
   const { state, page, error, elsewhere, reload } = useLive()
   if (state === 'off') return null
 
-  /* The cards, which is what the palette can answer for. */
+  /* The cards, which is what the palette can answer for — and of those, the
+     ones the page draws. A block whose rail is empty is listed and not drawn,
+     so counting it would promise a component nobody can see. */
   const cards = page?.components.filter((c) => isCard(c.type)) ?? []
-  const mine = cards.filter((c) => cardFor(c.type)).length
+  const drawn = cards.filter(drawsHere)
+  const mine = drawn.filter((c) => cardFor(c.type)).length
   /* Named at the foot rather than dropped silently: a page does draw them,
      and a list that skipped them without saying so would be a different page
      from the one that is up. */
@@ -96,7 +100,7 @@ function LivePage({ market }: { market: string | undefined }) {
             guess at. */}
         {state === 'ready' &&
           page &&
-          `${market} live${page.page === 'welcome' ? '' : ` · ${page.page}`} — ${cards.length} components, ${mine} we have`}
+          `${market} live${page.page === 'welcome' ? '' : ` · ${page.page}`} — ${drawn.length} components, ${mine} we have`}
         {state === 'none' &&
           (elsewhere.length
             ? `${market} draws no welcome page for this product — ${elsewhere.length} others`
