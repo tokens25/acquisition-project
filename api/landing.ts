@@ -188,14 +188,64 @@ interface Child {
   /** Set on `CommonKeyValue`, which is how a component carries a loose string. */
   key: string | null
   value: string | null
+  /** The picture this entry stands for or carries, at the phone's breakpoint. */
+  image: string | null
+}
+
+type Assets = Record<string, { url: string }>
+
+/**
+ * A picture reference as one URL, at the breakpoint a phone would ask for.
+ *
+ * Two shapes reach here. A field can link an asset directly — a logo, a poster
+ * — or link an `AdaptiveImage`, which is five links, one per breakpoint. The
+ * page picks between them by the screen it is on; this tool draws a phone, so
+ * it takes `mobile` and falls back through the others rather than answering
+ * nothing when a picture has been given for some screens and not others.
+ */
+const BREAKPOINTS = ['mobile', 'default', 'web', 'tablet', 'livingRoom']
+
+function pictureOf(value: unknown, byId: Map<string, Entry>, assets: Assets): string | null {
+  if (!isLink(value)) return null
+  const id = value.sys.id
+  if (assets[id]) return assets[id].url
+  const entry = byId.get(id)
+  if (!entry) return null
+  for (const at of BREAKPOINTS) {
+    const link = entry.fields[at]
+    if (isLink(link) && assets[link.sys.id]) return assets[link.sys.id].url
+  }
+  return null
+}
+
+/**
+ * The picture a child entry stands for, wherever it keeps it.
+ *
+ * An `AdaptiveImage` is the picture. Everything else carries one under a name
+ * that depends on what it is: a banner's is its background, a video's is the
+ * still it shows before it plays.
+ */
+function imageOf(kid: Entry, byId: Map<string, Entry>, assets: Assets): string | null {
+  if (kid.sys.contentType.sys.id === 'AdaptiveImage') {
+    for (const at of BREAKPOINTS) {
+      const link = kid.fields[at]
+      if (isLink(link) && assets[link.sys.id]) return assets[link.sys.id].url
+    }
+    return null
+  }
+  for (const field of ['backgroundImage', 'posterImage', 'logoImage', 'logo']) {
+    const found = pictureOf(kid.fields[field], byId, assets)
+    if (found) return found
+  }
+  return null
 }
 
 /** The words on one child entry, with its button resolved. */
-function childOf(link: unknown, byId: Map<string, Entry>): Child {
+function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child {
   const kid = isLink(link) ? byId.get(link.sys.id) : undefined
   const id = isLink(link) ? link.sys.id : ''
   if (!kid)
-    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, key: null, value: null }
+    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, key: null, value: null, image: null }
   const f = kid.fields
   const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null)
   const buttons = Array.isArray(f.buttons) ? (f.buttons as unknown[]) : []
@@ -212,6 +262,7 @@ function childOf(link: unknown, byId: Map<string, Entry>): Child {
     cta: first ? (str(first.fields.label) ?? str(first.fields.buttonLabel)) : null,
     key: str(f.key),
     value: str(f.value),
+    image: imageOf(kid, byId, assets),
   }
 }
 
@@ -222,7 +273,7 @@ function childOf(link: unknown, byId: Map<string, Entry>): Child {
  * `componentType`. A link that resolves to nothing is kept and marked rather
  * than dropped: a hole in the order is the thing somebody needs to see.
  */
-function componentsOf(root: Entry, byId: Map<string, Entry>): Component[] {
+function componentsOf(root: Entry, byId: Map<string, Entry>, assets: Assets): Component[] {
   const links = Array.isArray(root.fields.components) ? (root.fields.components as unknown[]) : []
   return links.map((link, at) => {
     const entry = isLink(link) ? byId.get(link.sys.id) : undefined
@@ -241,7 +292,7 @@ function componentsOf(root: Entry, byId: Map<string, Entry>): Component[] {
       railId: typeof f.railId === 'string' ? f.railId : null,
       // Encoded in the CMS, decoded onto the rail router's query string.
       railParams: typeof params?.params === 'string' ? decodeURIComponent(params.params) : null,
-      entries: kids.map((k) => childOf(k, byId)),
+      entries: kids.map((k) => childOf(k, byId, assets)),
     }
   })
 }
@@ -373,6 +424,7 @@ async function handler(request: Request): Promise<Response> {
 
   const byId = new Map<string, Entry>()
   for (const e of body.includes?.Entry ?? []) byId.set(e.sys.id, e)
+  const pictures = assetsOf(body)
 
   const f = root.fields
   return json({
@@ -395,8 +447,10 @@ async function handler(request: Request): Promise<Response> {
       environment: Array.isArray(f.environment) ? f.environment : [],
       includedCountries: Array.isArray(f.includedCountries) ? f.includedCountries : [],
     },
-    components: componentsOf(root, byId),
-    assets: assetsOf(body),
+    // Built once and handed down: every picture on the page resolves
+    // through it, and building it per entry would be the same map each time.
+    components: componentsOf(root, byId, pictures),
+    assets: pictures,
   })
 }
 

@@ -43,6 +43,8 @@ export interface LiveEntry {
   /** Set on `CommonKeyValue`, which is how a component carries a loose string. */
   key: string | null
   value: string | null
+  /** The picture it stands for or carries, at the phone's breakpoint. */
+  image: string | null
 }
 
 /** A page this product does draw, where the one asked for is not one of them. */

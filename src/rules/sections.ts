@@ -512,6 +512,7 @@ export interface LiveEntry {
   cta: string | null
   key?: string | null
   value?: string | null
+  image?: string | null
 }
 
 /**
@@ -647,21 +648,23 @@ export function rememberLive(
  * assets this tool does not hold. The three here are the ones that are words
  * on the page, in the same place, in every market.
  */
-const LIVE_FIELDS: Partial<Record<SectionType, { title?: string; body?: string; rail?: string }>> = {
+const LIVE_FIELDS: Partial<
+  Record<SectionType, { title?: string; body?: string; rail?: string; image?: string }>
+> = {
   subRail: { title: 'subRailTitle', body: 'subRailBody' },
-  spotlight: { title: 'spotlightTitle', body: 'spotlightBody', rail: 'spotlightRailId' },
+  spotlight: { title: 'spotlightTitle', body: 'spotlightBody', rail: 'spotlightRailId', image: 'spotlightImage' },
   plans: { title: 'plansTitle', body: 'plansBody' },
   features: { title: 'featuresTitle' },
 
   faq: { title: 'faqTitle' },
-  imageCta: { title: 'imageCtaTitle', body: 'imageCtaBody' },
-  multiview: { title: 'multiviewTitle', body: 'multiviewBody' },
+  imageCta: { title: 'imageCtaTitle', body: 'imageCtaBody', image: 'imageCtaImage' },
+  multiview: { title: 'multiviewTitle', body: 'multiviewBody', image: 'multiviewImage' },
   rail: { title: 'railTitle', rail: 'railId' },
   schedule: { title: 'scheduleHeading', body: 'scheduleSubheading', rail: 'scheduleRailId' },
   shows: { title: 'showsTitle', body: 'showsBody', rail: 'showsRailId' },
   badges: { title: 'badgesTitle' },
-  experience: { title: 'expTitle', body: 'expBody' },
-  zone: { title: 'zoneTitle', body: 'zoneBody' },
+  experience: { title: 'expTitle', body: 'expBody', image: 'expImage' },
+  zone: { title: 'zoneTitle', body: 'zoneBody', image: 'zoneImage' },
   ppv: { title: 'ppvLine' },
   teams: { title: 'teamsTitle', body: 'teamsBody' },
   providers: { title: 'providersTitle', body: 'providersBody' },
@@ -672,6 +675,23 @@ const LIVE_FIELDS: Partial<Record<SectionType, { title?: string; body?: string; 
   bundles: { title: 'bundlesTitle', body: 'bundlesBody' },
   cities: { title: 'citiesTitle', body: 'citiesBody' },
 }
+
+/**
+ * The picture a block draws, from whichever of its entries carries one.
+ *
+ * A spotlight's is an `AdaptiveImage` entry standing on its own, a banner's
+ * hangs off the tile inside it, an experience feature's is the still of the
+ * video it plays. The route has already resolved all three to one URL at the
+ * phone's breakpoint, so the only question left is which entry to ask, and
+ * the answer is the first that has one.
+ *
+ * The URL is DAZN's asset proxy — the same host the live page loads from —
+ * rather than anything this tool holds. A picture that arrives this way is
+ * borrowed, not owned: it is here so the page can be compared against the one
+ * that is up, and Replace puts something of ours in its place.
+ */
+const pictureFromLive = (kids: LiveEntry[]): string | null =>
+  kids.map((k) => k.image).find((url) => typeof url === 'string' && url) ?? null
 
 /**
  * A live string as this tool can draw it.
@@ -738,6 +758,7 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       said(fields.title, block.title)
       said(fields.body, block.description)
       said(fields.rail, block.railId)
+      said(fields.image, pictureFromLive(block.entries ?? []))
     }
     const listField = LIVE_LISTS[type]
     if (listField) mine[listField] = listFromLive(type, block.entries ?? [], shipped[listField])
