@@ -15,6 +15,10 @@ import { useLive } from '../editor/liveLandingContext'
  * saying the same thing in one line. It says the time, and the states where
  * there is no time to say.
  *
+ * The dot takes the plan chip's colours from the other branch — green read,
+ * amber asking, red unreachable — because the two will sit near each other and
+ * a reader should not have to learn which green means what twice.
+ *
  * Refresh asks the route to skip its cache, which it holds an hour — so this
  * is for "they shipped a component this morning", not for every glance. It
  * refreshes the fold under it too, because there is one reading of the page
@@ -30,7 +34,12 @@ export function LivePageChip() {
 
   return (
     <span className="lpc" data-state={state} title={title(state, page?.cached)}>
-      {state === 'loading' && 'reading…'}
+      {/* The state as a colour as well as a sentence. Not decoration: while it
+          is asking, the sentence is the only thing that changes and a line of
+          small grey text changing is easy to miss — a dot that starts blinking
+          is not. */}
+      <span className="lpc__dot" aria-hidden="true" />
+      {state === 'loading' && 'Asking DAZN…'}
       {state === 'ready' && page && at(page.seconds)}
       {/* An answer, so it reads as one. What the product does draw is in the
           fold under this; the header says only that this is not it. */}
