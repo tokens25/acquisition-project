@@ -516,6 +516,8 @@ export interface LiveEntry {
   badge: string | null
   body: string | null
   cta: string | null
+  key?: string | null
+  value?: string | null
 }
 
 /**
@@ -570,6 +572,33 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown): u
   return shipped
 }
 
+/**
+ * The supported-devices strip, whose strings are not where the others are.
+ *
+ * Every other block keeps its heading on the component. This one keeps two
+ * loose strings beside the logos — `supportedDeviceHeader` over them and
+ * `supportedDeviceFooter` under — because the component's own title and
+ * description are a different thing: the two-line heading and the paragraph
+ * that stand above the whole section. This tool draws the strip and has no
+ * field for that heading, so taking the component's title for the strip's put
+ * "Watch on your favourite devices." where "Our leading supported devices"
+ * belongs.
+ *
+ * The footer is one string with a link inside it, and this tool holds the
+ * words and the link apart, so it is split where the anchor opens.
+ */
+function supportedFromLive(kids: LiveEntry[], shipped: Record<string, unknown>): Record<string, string> {
+  const at = (key: string) => kids.find((k) => k.key === key)?.value ?? null
+  const was = (field: string) => String(shipped[field] ?? '')
+  const footer = at('supportedDeviceFooter')
+  const split = footer ? /^([\s\S]*?)<a[^>]*>([\s\S]*?)<\/a>/.exec(footer) : null
+  return {
+    supportedTitle: plain(at('supportedDeviceHeader') ?? was('supportedTitle')),
+    supportedNote: split ? plain(split[1]) : footer ? plain(footer) : was('supportedNote'),
+    supportedLink: split ? plain(split[2]) : was('supportedLink'),
+  }
+}
+
 /** The field each of those lists lives in. */
 const LIVE_LISTS: Partial<Record<SectionType, string>> = {
   subRail: 'subRailTiles',
@@ -609,7 +638,7 @@ const LIVE_FIELDS: Partial<Record<SectionType, { title?: string; body?: string; 
   spotlight: { title: 'spotlightTitle', body: 'spotlightBody', rail: 'spotlightRailId' },
   plans: { title: 'plansTitle', body: 'plansBody' },
   features: { title: 'featuresTitle' },
-  supported: { title: 'supportedTitle', body: 'supportedNote' },
+
   faq: { title: 'faqTitle' },
   imageCta: { title: 'imageCtaTitle', body: 'imageCtaBody' },
   multiview: { title: 'multiviewTitle', body: 'multiviewBody' },
@@ -683,19 +712,23 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
     const taken = list.some((s) => s.id === type)
     const id = taken ? freeId(list, type) : type
     list.push({ id, type, on: true })
-    const fields = LIVE_FIELDS[type]
-    if (!fields) continue
     const mine: Record<string, unknown> = {}
     const shipped = defaultFlow.landing as unknown as Record<string, unknown>
     const said = (field: string | undefined, live: string | null) => {
       if (!field) return
       mine[field] = live ? plain(live) : String(shipped[field] ?? '')
     }
-    said(fields.title, block.title)
-    said(fields.body, block.description)
-    said(fields.rail, block.railId)
+    // Most blocks keep their heading on the component. The ones that do not
+    // are handled below, so a kind missing here is not a kind to skip.
+    const fields = LIVE_FIELDS[type]
+    if (fields) {
+      said(fields.title, block.title)
+      said(fields.body, block.description)
+      said(fields.rail, block.railId)
+    }
     const listField = LIVE_LISTS[type]
     if (listField) mine[listField] = listFromLive(type, block.entries ?? [], shipped[listField])
+    if (type === 'supported') Object.assign(mine, supportedFromLive(block.entries ?? [], shipped))
     if (Object.keys(mine).length === 0) continue
     if (id === type) Object.assign(own, mine)
     else copies[id] = mine as Partial<LandingScreen>

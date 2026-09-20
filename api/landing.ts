@@ -185,13 +185,17 @@ interface Child {
   body: string | null
   /** The first button's label, which is the only one a tile ever draws. */
   cta: string | null
+  /** Set on `CommonKeyValue`, which is how a component carries a loose string. */
+  key: string | null
+  value: string | null
 }
 
 /** The words on one child entry, with its button resolved. */
 function childOf(link: unknown, byId: Map<string, Entry>): Child {
   const kid = isLink(link) ? byId.get(link.sys.id) : undefined
   const id = isLink(link) ? link.sys.id : ''
-  if (!kid) return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null }
+  if (!kid)
+    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, key: null, value: null }
   const f = kid.fields
   const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null)
   const buttons = Array.isArray(f.buttons) ? (f.buttons as unknown[]) : []
@@ -206,6 +210,8 @@ function childOf(link: unknown, byId: Map<string, Entry>): Child {
     body: str(f.description),
     // Two spellings of the same thing across two button types.
     cta: first ? (str(first.fields.label) ?? str(first.fields.buttonLabel)) : null,
+    key: str(f.key),
+    value: str(f.value),
   }
 }
 
