@@ -18,6 +18,8 @@ import type { CardSet, Context, Tier } from './content'
 import { resolveFlow } from './layers'
 import { FLOW_STEPS } from './flow'
 import { resolveOffer, resolveTier } from './resolve'
+import type { LandingScreen } from './flow'
+import { FIELD_COMPONENT, SECTION_LABEL, copyOf, isFirst, sectionsOf } from './sections'
 
 export type Mode = 'market' | 'dev'
 export type SectionStatus = 'draft' | 'ready' | 'changed' | 'done'
@@ -191,12 +193,12 @@ export const flowFieldLabel = (field: string) =>
   field.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase())
 
 /** Walks one flow screen and lists every string on it, in field order. */
-function flowStrings(prefix: string, screen: Record<string, unknown>): StringDef[] {
+function flowStrings(prefix: string, screen: Record<string, unknown>, group?: string): StringDef[] {
   const out: StringDef[] = []
   const walk = (value: unknown, key: string, label: string, field: string) => {
     if (NOT_COPY.has(field)) return
     if (typeof value === 'string') {
-      out.push({ key, label, value, required: FLOW_REQUIRED.has(field) })
+      out.push({ key, label, value, required: FLOW_REQUIRED.has(field), ...(group ? { group } : {}) })
     } else if (Array.isArray(value)) {
       value.forEach((item, i) => walk(item, `${key}[${i}]`, `${label} ${i + 1}`, field))
     } else if (typeof value === 'object' && value !== null) {
@@ -207,6 +209,45 @@ function flowStrings(prefix: string, screen: Record<string, unknown>): StringDef
   }
   for (const [field, value] of Object.entries(screen)) {
     walk(value, `${prefix}.${field}`, flowFieldLabel(field), field)
+  }
+  return out
+}
+
+/**
+ * The blocks a page draws more than once, each as its own strings.
+ *
+ * A component's words live in the page's own fields, one set per kind, and the
+ * first block of a kind owns them. That was the whole story while a second one
+ * was something a person occasionally chose. It is not any more: a market's
+ * page is opened on what that market draws, and Britain draws four spotlight
+ * rails, Germany two introduction banners, the NFL pages five experience
+ * features. Handing dev one set of words for four rails hands over a page that
+ * is not the page.
+ *
+ * So every instance after the first is listed under its own id, which is
+ * stable, with the words it actually draws — its own where it has them and the
+ * first's where it has not, because that is what is on screen either way.
+ * Grouped by the block, so the handoff reads as "SpotlightRail 2 · Heading"
+ * rather than as a second Heading nobody can place.
+ */
+function instanceStrings(landing: LandingScreen): StringDef[] {
+  const out: StringDef[] = []
+  const nth = new Map<string, number>()
+  for (const section of sectionsOf(landing)) {
+    const n = (nth.get(section.type) ?? 0) + 1
+    nth.set(section.type, n)
+    if (isFirst(section)) continue
+    // The whole screen with this block's own words over it, not just its
+    // plain fields: a rail's tiles and an FAQ's questions are lists, and a
+    // second rail with no tiles in the handoff is a second rail dev cannot
+    // build. `flowStrings` walks lists and drops the ids and pictures itself.
+    const text = copyOf(landing as unknown as Record<string, unknown>, landing, section)
+    // Only the fields this kind owns. A block's override is a partial of the
+    // whole screen, so without this a second rail would list the FAQ as well.
+    const mine = Object.fromEntries(
+      Object.entries(text).filter(([field]) => FIELD_COMPONENT[field] === section.type),
+    )
+    out.push(...flowStrings(`landing.${section.id}`, mine, `${SECTION_LABEL[section.type]} ${n}`))
   }
   return out
 }
@@ -305,7 +346,12 @@ export function sectionsFor(
   const out: Section[] = FLOW_STEPS.map((id) => ({
     id,
     label: labels[id] ?? flowFieldLabel(id),
-    strings: flowStrings(id, flow[id] as unknown as Record<string, unknown>),
+    strings: [
+      ...flowStrings(id, flow[id] as unknown as Record<string, unknown>),
+      // The landing page is the one screen that can carry a component twice,
+      // and the second one's words are nowhere in the fields above.
+      ...(id === 'landing' ? instanceStrings(flow.landing) : []),
+    ],
   }))
   const tiers = [...set.tiers].sort((a, b) => a.displayOrder - b.displayOrder)
   out.splice(1, 0, {

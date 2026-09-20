@@ -191,10 +191,10 @@ function LivePage({ market }: { market: string | undefined }) {
  * words, and editing one leaves the other alone.
  *
  * The first instance of a type writes the page's own fields, which is where
- * its words have always been, so nothing published moves. Every copy after it
- * keeps its words under its own id, and carries no pipeline key: dev has one
- * string per field of the page, and a second Postcode does not have a second
- * name for the same string yet.
+ * its words have always been, so nothing published moves. Every one after it
+ * keeps its words under its own id, and is named to dev under that id too —
+ * so a page drawing four spotlight rails hands over four rails' worth of
+ * words rather than one set standing in for all of them.
  */
 export function LandingSections({
   store,
@@ -241,13 +241,15 @@ export function LandingSections({
         </span>
       </div>
       <LivePage market={store.context.market} />
-      {list.map((section) => (
+      {list.map((section, at) => (
         <SectionCard
           key={section.id}
           section={section}
+          /* Which one of its kind this is, counted over the whole list so the
+             number matches the one the handoff names it by. */
+          nth={list.slice(0, at + 1).filter((s) => s.type === section.type).length}
           store={store}
           scope={scope}
-         
           dragging={dragging}
           over={over}
           onDragStart={() => setDragging(section.id)}
@@ -418,6 +420,7 @@ function AddSection({
 
 function SectionCard({
   section,
+  nth,
   store,
   scope,
   dragging,
@@ -434,6 +437,8 @@ function SectionCard({
   onRemove,
 }: {
   section: PageSection
+  /** Which one of its kind, from 1 — the number the handoff names it by. */
+  nth: number
   store: CardSetStore
   scope: Selector
   dragging: string | null
@@ -483,8 +488,17 @@ function SectionCard({
       ),
     )
 
-  /** Dev's name for a string, which only the page's own fields have. */
-  const key = (k: string) => (isFirst(section) ? k : undefined)
+/**
+   * Dev's name for a string.
+   *
+   * The first block of a kind writes the page's own fields, so its strings
+   * keep the names dev has always had for them and nothing published moves.
+   * A later one is named under its own id — the same name the handoff lists
+   * it by — because a page that draws four rails has four rails' worth of
+   * words and dev needs all of them.
+   */
+  const key = (k: string) =>
+    isFirst(section) ? k : k.replace(/^landing\./, `landing.${section.id}.`)
 
   const label = SECTION_LABEL[section.type]
   /* A kind the page can only carry one of — so there is nothing to copy. */
@@ -575,7 +589,14 @@ function SectionCard({
                   {label}
                 </button>
                 {once && <span className="ls-row__once">one only</span>}
-                {!isFirst(section) && <span className="ls-card__copy">copy</span>}
+                {/* Which one of its kind this is, rather than that it is a
+                    copy of the one above. It was called a copy because the
+                    only way to get a second was to duplicate the first; now a
+                    market opens on what it draws and the United States simply
+                    has two subscriptions rails, neither derived from the
+                    other. The number is also the name the handoff lists it
+                    under. */}
+                {nth > 1 && <span className="ls-card__copy">{nth}</span>}
               </span>
               <span className="ls-row__made">{SECTION_CONTENTS[section.type]}</span>
 
