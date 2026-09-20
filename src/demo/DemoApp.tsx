@@ -14,7 +14,6 @@ import { summarise, validateAll } from '../rules/validate'
 import { Button } from '../components/Button'
 import { DefaultPanel } from './DefaultPanel'
 import { VersionStamp } from './VersionStamp'
-import { LivePageChip } from './LivePageChip'
 import { LiveLandingProvider } from '../editor/LiveLanding'
 import { EditPanel } from './EditPanel'
 import { FlowPanel, FlowTabs } from './FlowPanel'
@@ -720,11 +719,6 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
               onChange={(device) => store.updateSet({ device })}
             />
           )}
-          {/* How the page here stands against the one this market has up, and
-              the way to ask again. Beside the device for the same reason the
-              language is: it says which version of the page you are looking
-              at, not what the page says. */}
-          {single && <LivePageChip market={store.context.market} />}
           {/* The gate reports where the content stands, which in edit mode is
               a step in the review rather than a verdict on publishing. */}
           <span className="demo__gate" data-state={gate.state}>

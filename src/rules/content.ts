@@ -425,6 +425,20 @@ export interface CardSet {
    */
   flowLayers?: FlowLayer[]
   /**
+   * The arrangement the tool last gave the landing page, as a fingerprint.
+   *
+   * So that "has anybody arranged this page" is a memory rather than a guess.
+   * It used to be answered by asking whether the page matched what this market
+   * would produce now, which held only while the two could not drift — and
+   * they can: the defaults are read from the live page, so a market that
+   * changes what it draws changes the answer under a page nobody touched, and
+   * that page then reads as somebody's work for ever and stops being updated.
+   *
+   * Absent on a set arranged before the tool started remembering, which is why
+   * the old comparison is still there to answer for those.
+   */
+  sectionsDefault?: string
+  /**
    * Kept with the content rather than in the page, because it is a fact about
    * this content and not about this browser tab: reloading does not un-ask for
    * a review, and editing after asking drops it back to `draft` rather than

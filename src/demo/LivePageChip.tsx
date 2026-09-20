@@ -1,48 +1,41 @@
 import { useLive } from '../editor/liveLandingContext'
-import { typesFromLive } from '../rules/sections'
 
 /**
- * Where the page on screen stands against the one this market has up.
+ * When the live page was last read, beside the count it belongs to.
  *
- * The panel opens a market on what it draws, which is a claim about something
- * that can change while nobody is looking — so the claim has to carry a time.
- * Without one the list is a fact with no date on it, and the honest reading of
- * an undated fact is that it might be yesterday's.
+ * The panel opens a market on what that market draws, which is a claim about
+ * something that can change while nobody is looking — so the claim has to
+ * carry a time. Without one the list is a fact with no date on it, and the
+ * honest reading of an undated fact is that it might be yesterday's.
  *
- * Five states, because the route has five answers and each is worth a
- * different sentence. A market that draws no page for this product is not an
- * error; it is the answer for MSG+, which has an RSN page and no welcome one.
+ * It sits in the Components header rather than in a bar of its own because the
+ * count is already there saying how many, and how many and how fresh are one
+ * thought. That also settles what this may say: the market and the number are
+ * on either side of it already, so repeating them here would be three ways of
+ * saying the same thing in one line. It says the time, and the states where
+ * there is no time to say.
  *
- * Refresh asks the route to skip its cache. The answer is held an hour, so
- * this is for "they shipped a component this morning", not for every glance —
- * and it refreshes the fold under it too, because there is one reading of the
- * page and this is the button that takes it again.
+ * Refresh asks the route to skip its cache, which it holds an hour — so this
+ * is for "they shipped a component this morning", not for every glance. It
+ * refreshes the fold under it too, because there is one reading of the page
+ * and this is the button that takes it again.
  *
  * Named for the page rather than for being live, so it does not collide with
  * the plan-price chip on the other branch. The two answer different questions
- * of different services and will eventually sit side by side.
+ * of different services and will eventually sit near each other.
  */
-export function LivePageChip({ market }: { market: string | undefined }) {
+export function LivePageChip() {
   const { state, page, elsewhere, reload } = useLive()
-  if (state === 'off' || !market) return null
-
-  const code = market.toUpperCase()
-  const cards = page ? typesFromLive(page.components.map((c) => c.type)).length : 0
+  if (state === 'off') return null
 
   return (
     <span className="lpc" data-state={state} title={title(state, page?.cached)}>
-      <span className="lpc__dot" aria-hidden="true" />
-      {state === 'loading' && `Reading ${code}…`}
-      {state === 'ready' && page && (
-        <>
-          {code} live · {cards} component{cards === 1 ? '' : 's'} · {at(page.seconds)}
-        </>
-      )}
+      {state === 'loading' && 'reading…'}
+      {state === 'ready' && page && at(page.seconds)}
       {/* An answer, so it reads as one. What the product does draw is in the
-          fold; the chip says only that this is not it. */}
-      {state === 'none' &&
-        (elsewhere.length ? `${code} · no welcome page for this product` : `${code} · no live page`)}
-      {state === 'error' && `${code} · could not be read`}
+          fold under this; the header says only that this is not it. */}
+      {state === 'none' && (elsewhere.length ? 'no page for this product' : 'no live page')}
+      {state === 'error' && 'could not be read'}
       {state !== 'loading' && (
         <button type="button" className="lpc__refresh" onClick={reload}>
           {state === 'error' ? 'Try again' : 'Refresh'}

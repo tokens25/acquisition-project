@@ -5,7 +5,7 @@ import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../r
 import { DEFAULT_PAGE_VIEW, PAGE_VIEWS } from '../rules/pageViews'
 import { MARKETS, SUBSCRIPTIONS, journeys, marketFlag, sellsHere } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
-import { defaultSectionsFor, isUntouched, rememberLive } from '../rules/sections'
+import { defaultSectionsFor, isUntouched, rememberLive, sectionsFingerprint } from '../rules/sections'
 import { baseFlow, writeFlow } from '../rules/layers'
 import { useLive } from '../editor/liveLandingContext'
 
@@ -165,13 +165,11 @@ export function DefaultPanel({
      * resolved content would find Canada's work and conclude the page had
      * been arranged, leaving Germany reading Canada's list instead of its own.
      */
-    if (isUntouched(baseFlow(set).landing, context.market, context.subscription)) {
-      Object.assign(
-        patch,
-        writeFlow(set, {}, 'landing', {
-          sections: defaultSectionsFor(here.market, here.subscription),
-        }),
-      )
+    if (isUntouched(baseFlow(set).landing, context.market, context.subscription, set.sectionsDefault)) {
+      const sections = defaultSectionsFor(here.market, here.subscription)
+      Object.assign(patch, writeFlow(set, {}, 'landing', { sections }), {
+        sectionsDefault: sectionsFingerprint(sections),
+      })
     }
     if (Object.keys(patch).length > 0) updateSet(patch)
   }
@@ -197,18 +195,23 @@ export function DefaultPanel({
     // Asked before the answer moves. Afterwards the page matches the list it
     // is about to be given rather than the one it was given, and every
     // arrangement would read as somebody's own work.
-    const spare = isUntouched(baseFlow(set).landing, context.market, context.subscription)
+    const spare = isUntouched(
+      baseFlow(set).landing,
+      context.market,
+      context.subscription,
+      set.sectionsDefault,
+    )
     const news = rememberLive(
       context.market,
       context.subscription,
       page.components.map((c) => c.type),
     )
     if (!news || !spare) return
-    updateSet(
-      writeFlow(set, {}, 'landing', {
-        sections: defaultSectionsFor(context.market, context.subscription),
-      }),
-    )
+    const sections = defaultSectionsFor(context.market, context.subscription)
+    updateSet({
+      ...writeFlow(set, {}, 'landing', { sections }),
+      sectionsDefault: sectionsFingerprint(sections),
+    })
   }, [page, context.market, context.subscription, set, updateSet])
 
   /** The same, when only the answer below the context has changed. */

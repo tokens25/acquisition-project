@@ -678,8 +678,49 @@
 }
 
 .ls-head__count {
+  display: flex;
+  gap: var(--space-6, 6px);
+  align-items: baseline;
   color: var(--color-text-tertiary);
   font-size: 11.5px;
+}
+
+/* ── When the live page was last read ──────────────────────────────────────
+   Beside the count, because how many and how fresh are one thought. A middot
+   joins them rather than a gap alone: two numbers side by side read as one
+   number split in half. */
+.lpc {
+  display: flex;
+  gap: var(--space-6, 6px);
+  align-items: baseline;
+  white-space: nowrap;
+}
+.lpc::before {
+  content: '·';
+  opacity: 0.6;
+}
+/* Only the state that wants doing something about it takes a colour. A market
+   with no page under this slug is an ordinary answer and stays the colour of
+   the count it sits beside. */
+.lpc[data-state='error'] {
+  color: var(--color-status-warning, #f2af3d);
+}
+.lpc[data-state='loading'] {
+  opacity: 0.7;
+}
+.lpc__refresh {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.lpc__refresh:hover {
+  color: var(--color-text-primary);
 }
 
 /* The card is the row and its fold together. It carries nothing of its own but

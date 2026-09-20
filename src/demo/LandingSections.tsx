@@ -70,6 +70,7 @@ import {
 import type { LandingScreen, LandingTeam, RailSize } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
 import { useLive } from '../editor/liveLandingContext'
+import { LivePageChip } from './LivePageChip'
 import type { Selector } from '../rules/layers'
 
 /**
@@ -227,13 +228,16 @@ export function LandingSections({
 
   return (
     <>
-      {/* What the list is, and how much of it the page draws. The count is the
-          one fact the rows cannot say between them: nine names is obvious, nine
-          names of which six are on is not. */}
+      {/* What the list is, how much of it the page draws, and when the live
+          page it was opened on was last read. The count is the one fact the
+          rows cannot say between them — nine names is obvious, nine names of
+          which six are on is not — and the time is the one the list cannot say
+          about itself. */}
       <div className="ls-head">
         <span className="ls-head__title">Components</span>
         <span className="ls-head__count">
           {drawn} on the page
+          <LivePageChip />
         </span>
       </div>
       <LivePage market={store.context.market} />

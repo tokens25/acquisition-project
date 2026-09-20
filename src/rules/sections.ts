@@ -537,16 +537,39 @@ export function defaultSectionsFor(market?: string | null, product?: string | nu
 }
 
 /**
- * Whether the page is still the one a market and a product were given.
+ * An arrangement, exactly — every instance, its kind, and whether it draws.
  *
- * The test for whether a default may be replaced by another. Nothing is stored
- * to say where an arrangement came from: an arrangement that matches the one
- * this situation would have produced has not been touched, whoever made it,
- * and one that does not is somebody's.
+ * Enough to tell one arrangement from another and no more: two pages with the
+ * same blocks in the same order with the same ones switched on are the same
+ * arrangement, whatever their words say.
  */
-export function isUntouched(content: LandingScreen, market?: string | null, product?: string | null): boolean {
+export const sectionsFingerprint = (list: PageSection[]): string =>
+  list.map((s) => `${s.id}:${s.type}:${s.on ? 1 : 0}`).join('|')
+
+/**
+ * Whether the page is still the one the tool gave it.
+ *
+ * The test for whether a default may be replaced by another, and it is a
+ * memory where there is one: the set records the arrangement it was handed,
+ * and a page that still matches that record is one nobody has arranged.
+ *
+ * The old test — does this match what this market would produce now — is kept
+ * for a page saved before the set started remembering. It was only ever right
+ * while the two could not drift apart, and reading the defaults from the live
+ * page is exactly what lets them: a market that changes what it draws changes
+ * the answer under a page nobody touched. Such a page would read as somebody's
+ * work from then on and never be updated again. One market switch replaces the
+ * guess with a record, so a set is only exposed to it once.
+ */
+export function isUntouched(
+  content: LandingScreen,
+  market?: string | null,
+  product?: string | null,
+  given?: string,
+): boolean {
   const saved = content.sections
   if (!saved || saved.length === 0) return true
+  if (given !== undefined) return sectionsFingerprint(saved) === given
   const want = defaultSectionsFor(market, product)
   return (
     saved.length === want.length &&
