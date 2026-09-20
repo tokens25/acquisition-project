@@ -7,7 +7,7 @@ import { MARKETS, SUBSCRIPTIONS, journeys, marketFlag, sellsHere } from '../rule
 import { SelectField } from '../components/SelectField'
 import { defaultSectionsFor, isUntouched, rememberLive } from '../rules/sections'
 import { baseFlow, writeFlow } from '../rules/layers'
-import { useLiveLanding } from '../editor/useLiveLanding'
+import { useLive } from '../editor/liveLandingContext'
 
 /**
  * The default view's fields: the situation being authored for.
@@ -190,7 +190,7 @@ export function DefaultPanel({
    * this can happen. It happens when the answer lands, and only onto an
    * arrangement nobody has made their own.
    */
-  const live = useLiveLanding(context.market, context.subscription)
+  const live = useLive()
   const page = live.state === 'ready' ? live.page : null
   useEffect(() => {
     if (!page) return

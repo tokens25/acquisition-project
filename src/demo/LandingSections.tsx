@@ -69,7 +69,7 @@ import {
 } from '../rules/sections'
 import type { LandingScreen, LandingTeam, RailSize } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
-import { useLiveLanding } from '../editor/useLiveLanding'
+import { useLive } from '../editor/liveLandingContext'
 import type { Selector } from '../rules/layers'
 
 /**
@@ -106,8 +106,8 @@ const BESIDE_THE_PALETTE: Record<string, string> = {
   StandardRailV2: 'StandardRail — the same rail, a later renderer',
 }
 
-function LivePage({ market, product }: { market: string | undefined; product: string | undefined }) {
-  const { state, page, error, elsewhere, reload } = useLiveLanding(market, product)
+function LivePage({ market }: { market: string | undefined }) {
+  const { state, page, error, elsewhere, reload } = useLive()
   if (state === 'off') return null
 
   /* The cards, which is what the palette can answer for. */
@@ -236,7 +236,7 @@ export function LandingSections({
           {drawn} on the page
         </span>
       </div>
-      <LivePage market={store.context.market} product={store.context.subscription} />
+      <LivePage market={store.context.market} />
       {list.map((section) => (
         <SectionCard
           key={section.id}
