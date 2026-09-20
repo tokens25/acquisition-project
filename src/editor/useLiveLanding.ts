@@ -55,6 +55,8 @@ export interface LiveEntry {
   value: string | null
   /** The picture it stands for or carries, at the phone's breakpoint. */
   image: string | null
+  /** The logo drawn over that picture, where it has one of its own. */
+  mark: string | null
 }
 
 /** A page this product does draw, where the one asked for is not one of them. */

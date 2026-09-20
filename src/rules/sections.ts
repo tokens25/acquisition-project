@@ -533,6 +533,7 @@ export interface LiveEntry {
   key?: string | null
   value?: string | null
   image?: string | null
+  mark?: string | null
 }
 
 /**
@@ -572,7 +573,11 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
       line: plain(k.title ?? k.body ?? ''),
       cta: plain(k.cta ?? ''),
       badge: plain(k.badge ?? ''),
-      ...(k.image ? { background: k.image, logo: false } : {}),
+      ...(k.image ? { background: k.image } : {}),
+      // Its own lockup where the tile has one. Where it has neither that nor
+      // the mark, the DAZN one is left off: it is there to stand in for
+      // artwork, not to sit on a photograph that names itself.
+      ...(k.mark ? { logoImage: k.mark } : { logo: false }),
     }))
     return tiles.length ? tiles : shipped
   }
@@ -589,11 +594,13 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
     // Every logo on the wall, named and with its own artwork. A market names
     // its own — Canada fourteen, and not the same fourteen as Germany — so the
     // shipped thirteen are a stand-in rather than the list.
-    const wall = items.filter((k) => k.title && k.image)
+    // A device is a logo and a name and nothing else, so its picture is the
+    // lockup rather than a background — the one field a tile keeps separately.
+    const wall = items.filter((k) => k.title && (k.mark ?? k.image))
     const rows = wall.map((k, i) => ({
       id: `device-${i + 1}`,
       name: plain(k.title ?? ''),
-      logo: k.image ?? undefined,
+      logo: k.mark ?? k.image ?? undefined,
     }))
     return rows.length ? rows : shipped
   }

@@ -2058,8 +2058,15 @@ function SubRailSection({
               </span>
               <span className="fl-subtile__wash" aria-hidden="true" />
               <span className="fl-subtile__foot">
-                {tile.logo !== false && (
-                  <img className="fl-subtile__logo" src={daznLogo} alt="" />
+                {/* Its own lockup where it has one, the DAZN mark where it
+                    does not and has not been turned off. */}
+                {(tile.logoImage || tile.logo !== false) && (
+                  <img
+                    className="fl-subtile__logo"
+                    data-own={tile.logoImage ? true : undefined}
+                    src={tile.logoImage || daznLogo}
+                    alt=""
+                  />
                 )}
                 {/* When it is, over what it is — the shape an events rail
                     takes and a products rail does not. */}

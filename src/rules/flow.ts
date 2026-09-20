@@ -267,6 +267,14 @@ export interface LandingSubTile {
    * the rail. This is only what somebody put there instead.
    */
   background?: string
+/**
+   * The lockup over the picture, where this tile has one of its own.
+   *
+   * A products rail puts the product's logo there and an events rail the
+   * event's — the fight night lockup over the fight's photograph. Absent falls
+   * back to the DAZN mark, which is the setting below.
+   */
+  logoImage?: string
   /**
    * Whether the DAZN mark is drawn over the line at the foot.
    *

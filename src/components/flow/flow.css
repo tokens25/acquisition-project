@@ -3669,6 +3669,15 @@
   inline-size: 72px;
   block-size: auto;
 }
+/* A tile's own lockup, which is not the DAZN mark and is not its size. They
+   run wide — a fight night banner, a league's wordmark — so it is given the
+   tile to work in and held to a height that leaves the line room under it. */
+.fl-subtile__logo[data-own] {
+  inline-size: auto;
+  max-inline-size: 100%;
+  max-block-size: 44px;
+  object-fit: contain;
+}
 /* Bold, as the live page sets it. The line is what the tile is — "Cruz vs.
    Bravo" — and it carries the weight against the picture behind it. */
 .fl-subtile__line {

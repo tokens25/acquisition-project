@@ -238,6 +238,15 @@ interface Child {
   value: string | null
   /** The picture this entry stands for or carries, at the phone's breakpoint. */
   image: string | null
+  /**
+   * The logo drawn over that picture, where the entry has one of its own.
+   *
+   * A tile carries two images and they do different work: the background is
+   * the photograph, and this is the lockup over it — a product's logo on a
+   * products rail, an event's on an events rail. Resolving one and not the
+   * other loses the half that names the thing.
+   */
+  mark: string | null
 }
 
 type Assets = Record<string, { url: string }>
@@ -281,7 +290,10 @@ function imageOf(kid: Entry, byId: Map<string, Entry>, assets: Assets): string |
     }
     return null
   }
-  for (const field of ['backgroundImage', 'posterImage', 'logoImage', 'logo']) {
+  // Not the logo: that is the lockup over the picture, carried separately,
+  // and a device on the wall — which is a logo and nothing else — is read by
+  // its own list rather than through here.
+  for (const field of ['backgroundImage', 'posterImage']) {
     const found = pictureOf(kid.fields[field], byId, assets)
     if (found) return found
   }
@@ -293,7 +305,7 @@ function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child
   const kid = isLink(link) ? byId.get(link.sys.id) : undefined
   const id = isLink(link) ? link.sys.id : ''
   if (!kid)
-    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, key: null, value: null, image: null }
+    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, key: null, value: null, image: null, mark: null }
   const f = kid.fields
   const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null)
   const buttons = Array.isArray(f.buttons) ? (f.buttons as unknown[]) : []
@@ -311,6 +323,7 @@ function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child
     key: str(f.key),
     value: str(f.value),
     image: imageOf(kid, byId, assets),
+    mark: pictureOf(f.logo, byId, assets) ?? pictureOf(f.logoImage, byId, assets),
   }
 }
 
