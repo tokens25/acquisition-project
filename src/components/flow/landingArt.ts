@@ -129,10 +129,31 @@ export const DEVICES: { src: string; name: string; w: number }[] = [
   { src: deviceAndroidTv, name: 'Android TV', w: 126.4 },
 ]
 
-/** The wall as it stands, three to a row, with the ones turned off left out. */
-export function deviceRows(off: string[]) {
-  const on = DEVICES.filter((device) => !off.includes(device.name))
-  const rows: (typeof DEVICES)[] = []
+/** One logo on the wall, however it got there. */
+export interface WallLogo {
+  name: string
+  src: string
+  /** The width the design gives it. Absent for a market's own, which is drawn
+      at the wall's height and whatever width that makes it. */
+  w?: number
+}
+
+/**
+ * The wall as it stands, three to a row, with the ones turned off left out.
+ *
+ * Takes the names the page holds rather than the thirteen this app ships, so a
+ * market that has been read from the live page draws its own. A name this app
+ * has artwork for keeps that artwork and the width the design measured for it;
+ * one it does not draws the logo the live page gave it.
+ */
+export function deviceRows(off: string[], wall?: { name: string; logo?: string }[]) {
+  const list: WallLogo[] = (wall ?? DEVICES).map((device) => {
+    const known = DEVICES.find((d) => d.name === device.name)
+    const live = 'logo' in device ? device.logo : undefined
+    return known && !live ? known : { name: device.name, src: live ?? known?.src ?? '' }
+  })
+  const on = list.filter((device) => device.src && !off.includes(device.name))
+  const rows: WallLogo[][] = []
   for (let at = 0; at < on.length; at += 3) rows.push(on.slice(at, at + 3))
   return rows
 }

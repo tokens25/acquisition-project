@@ -9,44 +9,12 @@ import { ComponentPeek } from './ComponentPeek'
 import { FieldGroup } from './FieldGroup'
 import { ChevronIcon, CopyIcon, TrashIcon } from './pipeline/icons'
 import { ImagePicker } from './ImagePicker'
-import { articleShot, DEVICES, featureArt, flagFor, imageCtaArt, teamArt } from '../components/flow/landingArt'
+import { articleShot, featureArt, flagFor, imageCtaArt, teamArt } from '../components/flow/landingArt'
 import { artAt, SPOTLIGHT_ART, SUB_ART } from '../components/flow/newArt'
 import { SelectField } from '../components/SelectField'
 import { TextField } from '../components/TextField'
 import { ToggleField } from '../components/ToggleField'
-import {
-  badgesOf,
-  blankBadge,
-  blankCard,
-  blankFeature,
-  blankMatch,
-  blankTab,
-  blankTeam,
-  blankLink,
-  blankQuestion,
-  blankSubTile,
-  bundlesOf,
-  cardsOf,
-  cityTabsOf,
-  cityTilesOf,
-  devicesOffOf,
-  featuresOf,
-  matchesOf,
-  planCardsOf,
-  landingText,
-  linksOf,
-  questionsOf,
-  blankTile,
-  railIdOf,
-  scheduleRailIdOf,
-  carouselRailIdOf,
-  carouselServiceOf,
-  showsRailIdOf,
-  railSizeOf,
-  spotlightRailIdOf,
-  subTilesOf,
-  teamsOf,
-} from '../rules/landing'
+import { badgesOf, blankBadge, blankCard, blankFeature, blankLink, blankMatch, blankQuestion, blankSubTile, blankTab, blankTeam, blankTile, bundlesOf, cardsOf, carouselRailIdOf, carouselServiceOf, cityTabsOf, cityTilesOf, devicesOf, devicesOffOf, featuresOf, landingText, linksOf, matchesOf, planCardsOf, questionsOf, railIdOf, railSizeOf, scheduleRailIdOf, showsRailIdOf, spotlightRailIdOf, subTilesOf, teamsOf } from '../rules/landing'
 import { resolveFlow, writeFlow } from '../rules/layers'
 import {
   SECTION_BARS,
@@ -1030,7 +998,7 @@ function SectionFields({
               what is being answered here is whether this market supports the
               thing, which is a word. The wall closes the gap itself. */}
           <div className="demo__feature">
-            {DEVICES.map((device) => {
+            {devicesOf(inst).map((device) => {
               const off = devicesOffOf(inst)
               return (
                 <ToggleField

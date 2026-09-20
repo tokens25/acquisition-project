@@ -13,6 +13,7 @@ import {
   cardsOf,
   cityTabsOf,
   cityTilesOf,
+  devicesOf,
   devicesOffOf,
   featuresOf,
   matchesOf,
@@ -1731,7 +1732,7 @@ export function PageSectionView({
           </p>
           <div className="fl-dev__body">
           <div className="fl-dev__wall">
-            {deviceRows(devicesOffOf(content)).map((row) => (
+            {deviceRows(devicesOffOf(content), devicesOf(content)).map((row) => (
               <div
                 className="fl-dev__row"
                 key={row.map((d) => d.name).join()}

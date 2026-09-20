@@ -17,6 +17,8 @@ import type {
   LandingScreen,
 } from './flow'
 import { defaultFlow } from './flow'
+import type { LandingDevice } from './flow'
+import { DEVICES } from '../components/flow/landingArt'
 
 /**
  * How far the hero picture can be zoomed, as a percentage of the size that
@@ -191,6 +193,7 @@ export function landingText(content: LandingScreen): Required<
     | 'planCards'
     | 'teams'
     | 'supportedOff'
+    | 'supportedDevices'
     | HeroKey
     | ChoiceKey
   >
@@ -385,6 +388,19 @@ export function scheduleRailIdOf(content: LandingScreen): string {
 /** The device logos the wall leaves out, or the ones it ships without. */
 export function devicesOffOf(content: LandingScreen): string[] {
   return content.supportedOff ?? defaultFlow.landing.supportedOff ?? []
+}
+
+/**
+ * The wall this page draws: the market's own where it has one, else the
+ * shipped thirteen.
+ *
+ * A market's own arrives with its logos as URLs on DAZN's proxy. The shipped
+ * ones are files this app holds, so they carry no url and the wall falls back
+ * to the artwork it has always drawn for that name.
+ */
+export function devicesOf(content: LandingScreen): LandingDevice[] {
+  const mine = content.supportedDevices
+  return mine && mine.length > 0 ? mine : DEVICES.map((d) => ({ id: d.name, name: d.name }))
 }
 
 /** Which rail the match days come from, or the one it ships with. */

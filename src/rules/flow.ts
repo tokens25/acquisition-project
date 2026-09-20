@@ -285,6 +285,14 @@ export interface LandingSubTile {
  * draws the row with no lines at all, so a badge with nothing written under it
  * is a badge and not an unfinished one.
  */
+/** One logo on the wall of supported devices. */
+export interface LandingDevice {
+  id: string
+  name: string
+  /** Where the logo is, when it came from the live page rather than the app. */
+  logo?: string
+}
+
 export interface LandingBadge {
   id: string
   /** The line under the disc. Empty draws none, which Japan's row does. */
@@ -639,6 +647,20 @@ export interface LandingScreen {
    * everywhere until somebody says otherwise. Absent leaves out none.
    */
   supportedOff?: string[]
+  /**
+   * The wall this market actually shows, where it has been read from the live
+   * page.
+   *
+   * The shipped wall is thirteen logos this tool holds the artwork for, and
+   * every market drew those thirteen whatever it really shows. Production
+   * names its own — Canada lists fourteen, and not the same fourteen — so a
+   * market that has been read draws its own and the shipped wall stands in for
+   * the ones that have not.
+   *
+   * Switched on and off by name either way, which is what `supportedOff` has
+   * always held.
+   */
+  supportedDevices?: LandingDevice[]
 
   /* The features list — node 852:58100. A run of rows, each a picture, a
      tag, a heading and a line, with a way in under them. */

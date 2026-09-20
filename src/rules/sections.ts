@@ -576,6 +576,18 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown): u
     }))
     return rows.length ? rows : shipped
   }
+  if (type === 'supported') {
+    // Every logo on the wall, named and with its own artwork. A market names
+    // its own — Canada fourteen, and not the same fourteen as Germany — so the
+    // shipped thirteen are a stand-in rather than the list.
+    const wall = items.filter((k) => k.title && k.image)
+    const rows = wall.map((k, i) => ({
+      id: `device-${i + 1}`,
+      name: plain(k.title ?? ''),
+      logo: k.image ?? undefined,
+    }))
+    return rows.length ? rows : shipped
+  }
   if (type === 'badges') {
     // A competition badge is a circular logo with the competition's name under
     // it, which is a content type of its own rather than a content item.
@@ -719,6 +731,10 @@ const LIVE_SPEC: Partial<Record<SectionType, LiveSpec>> = {
   plans: { from: 'CommonContentTierGroup', title: 'plansTitle', body: 'plansBody' },
   features: { title: 'featuresTitle', eyebrow: 'featuresEyebrow', cta: 'featuresCta', list: 'features' },
   faq: { title: 'faqTitle', list: 'faqs' },
+  // Its heading and its two loose strings are read by their own functions —
+  // the strip keeps them in a place no other block does — and the wall itself
+  // is a list like any other.
+  supported: { list: 'supportedDevices' },
   imageCta: { from: 'LPContentItem', title: 'imageCtaTitle', body: 'imageCtaBody', cta: 'imageCtaCta', image: 'imageCtaImage' },
   multiview: { from: 'LPContentItem', title: 'multiviewTitle', body: 'multiviewBody', eyebrow: 'multiviewEyebrow', cta: 'multiviewCta', image: 'multiviewImage' },
   experience: { from: 'LPContentItem', title: 'expTitle', body: 'expBody', eyebrow: 'expOverline', cta: 'expCta', image: 'expImage' },
