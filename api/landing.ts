@@ -247,6 +247,14 @@ interface Child {
    * other loses the half that names the thing.
    */
   mark: string | null
+  /**
+   * The icon on that button, from its `startIcon`.
+   *
+   * Every feature pill wears one — a star on Follow, an arrow on Downloads —
+   * and it is the button's rather than the row's, which is why it comes back
+   * beside the label and not beside the picture.
+   */
+  ctaIcon: string | null
 }
 
 type Assets = Record<string, { url: string }>
@@ -305,7 +313,7 @@ function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child
   const kid = isLink(link) ? byId.get(link.sys.id) : undefined
   const id = isLink(link) ? link.sys.id : ''
   if (!kid)
-    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, key: null, value: null, image: null, mark: null }
+    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, key: null, value: null, image: null, mark: null, ctaIcon: null }
   const f = kid.fields
   const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null)
   const buttons = Array.isArray(f.buttons) ? (f.buttons as unknown[]) : []
@@ -328,6 +336,7 @@ function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child
     value: str(f.value),
     image: imageOf(kid, byId, assets),
     mark: pictureOf(f.logo, byId, assets) ?? pictureOf(f.logoImage, byId, assets),
+    ctaIcon: pictureOf((first ?? kid).fields.startIcon, byId, assets),
   }
 }
 

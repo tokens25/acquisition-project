@@ -57,6 +57,8 @@ export interface LiveEntry {
   image: string | null
   /** The logo drawn over that picture, where it has one of its own. */
   mark: string | null
+  /** The icon on its button, where that button wears one. */
+  ctaIcon: string | null
 }
 
 /** A page this product does draw, where the one asked for is not one of them. */

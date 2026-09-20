@@ -4825,3 +4825,12 @@
   margin: auto;
   object-fit: contain;
 }
+
+/* The market's own icon in a feature pill, where the row brought one. Sized to
+   the mark it stands in for, so a pill reads the same either way. */
+.fl-feat__icon {
+  flex: none;
+  inline-size: 20px;
+  block-size: 20px;
+  object-fit: contain;
+}

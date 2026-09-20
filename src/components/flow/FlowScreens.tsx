@@ -1807,7 +1807,13 @@ export function PageSectionView({
                   <div className="fl-feat__words">
                     {feature.tag && (
                       <span className="fl-feat__tag">
-                        {art && <Mark svg={art.icon} size={20} />}
+                        {/* The market's own icon where the row brought one,
+                            else the one this tool draws for that tag. */}
+                        {feature.icon ? (
+                          <img className="fl-feat__icon" src={feature.icon} alt="" />
+                        ) : (
+                          art && <Mark svg={art.icon} size={20} />
+                        )}
                         {feature.tag}
                       </span>
                     )}

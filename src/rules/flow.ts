@@ -223,6 +223,14 @@ export interface LandingFeature {
   body: string
   /** A picture of its own, instead of the one the tag brings. */
   image?: string
+  /**
+   * The icon in the pill, instead of the one the tag brings.
+   *
+   * The live page puts it on the button the pill is made from, so a market's
+   * rows wear the market's icons rather than whichever of ours its tag
+   * happens to name.
+   */
+  icon?: string
   /** Drawn without a picture at all. */
   imageOff?: boolean
 }

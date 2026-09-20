@@ -534,6 +534,7 @@ export interface LiveEntry {
   value?: string | null
   image?: string | null
   mark?: string | null
+  ctaIcon?: string | null
 }
 
 /**
@@ -590,13 +591,20 @@ function listFromLive(type: SectionType, kids: LiveEntry[], shipped: unknown, bl
     // And the picture is the row's own rather than one the tag brings. Ours
     // are looked up from a bundled map by tag, which answers for the tags
     // this tool shipped and nothing for a market's.
-    const rows = items.map((k, i) => ({
-      id: `feature-${i + 1}`,
-      tag: plain(k.cta ?? k.preTitle ?? k.badge ?? ''),
-      title: plain(k.title ?? ''),
-      body: plain(k.body ?? ''),
-      ...(k.image ? { image: k.image } : {}),
-    }))
+    // A row with no picture is a row the live page does not draw. Canada is
+    // configured with four and shows three, and the one it leaves out is the
+    // only row in any market without a background — the same arithmetic as a
+    // spotlight whose rail has run out.
+    const rows = items
+      .filter((k) => k.image)
+      .map((k, i) => ({
+        id: `feature-${i + 1}`,
+        tag: plain(k.cta ?? k.preTitle ?? k.badge ?? ''),
+        title: plain(k.title ?? ''),
+        body: plain(k.body ?? ''),
+        image: k.image as string,
+        ...(k.ctaIcon ? { icon: k.ctaIcon } : {}),
+      }))
     return rows.length ? rows : shipped
   }
   if (type === 'supported') {

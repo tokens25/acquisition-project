@@ -226,6 +226,7 @@
       'feature picture frame': [8,238,14,8],
       'feature words': [24,237,48,11],
       'feature tag': [24,237,16,3],
+      'feature tag icon': [25,238,3,1],
       'feature words pair': [24,241,48,7],
       'feature heading': [24,241,48,3],
       'feature body': [24,244,48,4],

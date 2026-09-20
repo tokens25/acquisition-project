@@ -392,6 +392,7 @@
       ["feature picture frame", ".fl-feat__frame", "The part of the photograph the design shows, at the height and offset that row gives it.", 'flowLandingPage'],
       ["feature words", ".fl-feat__words", "The tag, the heading and the line, 6 apart.", 'flowLandingPage'],
       ["feature tag", ".fl-feat__tag", "The pill naming what the feature is — its icon comes from the tag, so the tag is the key as well as the label.", 'flowLandingPage'],
+      ["feature tag icon", ".fl-feat__icon", "The icon in that pill, where the market brought one of its own on the button the pill is made from. Otherwise the tag names one of ours.", 'flowLandingPage'],
       ["feature words pair", ".fl-feat__text", "The heading and the line under it, 4 apart.", 'flowLandingPage'],
       ["feature heading", ".fl-feat__name", "The feature’s own heading, at 16 over 1.55.", 'flowLandingPage'],
       ["feature body", ".fl-feat__body", "What the feature gives you, at 14 over 1.5.", 'flowLandingPage'],
