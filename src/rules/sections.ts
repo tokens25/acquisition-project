@@ -1,4 +1,5 @@
 import type { LandingScreen } from './flow'
+import { defaultFlow } from './flow'
 
 /**
  * The landing page as a list of components rather than a fixed run of
@@ -495,21 +496,79 @@ const pageKey = (market?: string | null, product?: string | null) =>
  * falls back to the table below, which is the same list as of the day it was
  * written.
  */
-const seenLive = new Map<string, SectionType[]>()
+const seenLive = new Map<string, LiveBlock[]>()
+
+/** One block of a market's live page, as much of it as a default can use. */
+export interface LiveBlock {
+  /** The production `componentType`. */
+  type: string
+  title: string | null
+  description: string | null
+  railId: string | null
+}
+
+const sameBlocks = (a: LiveBlock[], b: LiveBlock[]) =>
+  a.length === b.length &&
+  a.every((x, i) => x.type === b[i].type && x.title === b[i].title && x.description === b[i].description && x.railId === b[i].railId)
 
 /** Remembers a market's live page. True when this is news. */
 export function rememberLive(
   market: string | null | undefined,
   product: string | null | undefined,
-  names: string[],
+  blocks: LiveBlock[],
 ): boolean {
   const key = pageKey(market, product)
-  const types = typesFromLive(names)
+  const cards = blocks.filter((b) => cardFor(b.type))
   const had = seenLive.get(key)
-  if (had && had.length === types.length && had.every((t, i) => t === types[i])) return false
-  seenLive.set(key, types)
+  if (had && sameBlocks(had, cards)) return false
+  seenLive.set(key, cards)
   return true
 }
+
+/**
+ * Which field of a block takes the live page's title, its line and its rail.
+ *
+ * Only the three every block has in the same sense. A block says more than
+ * this — pictures, buttons, the tiles of a rail — and those are not the live
+ * page's to give: it serves them from a rail the id already names, or from
+ * assets this tool does not hold. The three here are the ones that are words
+ * on the page, in the same place, in every market.
+ */
+const LIVE_FIELDS: Partial<Record<SectionType, { title?: string; body?: string; rail?: string }>> = {
+  subRail: { title: 'subRailTitle', body: 'subRailBody' },
+  spotlight: { title: 'spotlightTitle', body: 'spotlightBody', rail: 'spotlightRailId' },
+  plans: { title: 'plansTitle', body: 'plansBody' },
+  features: { title: 'featuresTitle' },
+  supported: { title: 'supportedTitle', body: 'supportedNote' },
+  faq: { title: 'faqTitle' },
+  imageCta: { title: 'imageCtaTitle', body: 'imageCtaBody' },
+  multiview: { title: 'multiviewTitle', body: 'multiviewBody' },
+  rail: { title: 'railTitle', rail: 'railId' },
+  schedule: { title: 'scheduleHeading', body: 'scheduleSubheading', rail: 'scheduleRailId' },
+  shows: { title: 'showsTitle', body: 'showsBody', rail: 'showsRailId' },
+  badges: { title: 'badgesTitle' },
+  experience: { title: 'expTitle', body: 'expBody' },
+  zone: { title: 'zoneTitle', body: 'zoneBody' },
+  ppv: { title: 'ppvLine' },
+  teams: { title: 'teamsTitle', body: 'teamsBody' },
+  providers: { title: 'providersTitle', body: 'providersBody' },
+  live: { title: 'liveTitle', body: 'liveBody' },
+  zip: { title: 'zipHeading', body: 'zipNote' },
+  schedCarousel: { title: 'carouselTitle', rail: 'carouselRailId' },
+  area: { title: 'areaTitle', body: 'areaBody' },
+  bundles: { title: 'bundlesTitle', body: 'bundlesBody' },
+  cities: { title: 'citiesTitle', body: 'citiesBody' },
+  devices: { title: 'devicesTitle', body: 'devicesBody' },
+}
+
+/**
+ * A live string as this tool can draw it.
+ *
+ * DAZN's renderer reads `##like this##` as emphasis. Ours does not, so left
+ * alone the markers arrive on screen as themselves. The words are the words
+ * either way; only the marks go.
+ */
+const plain = (text: string) => text.replace(/##/g, '').trim()
 
 /**
  * The types a market and a product start with.
@@ -518,8 +577,60 @@ export function rememberLive(
  * table was written where it has not, and the shipped run for a combination
  * production has no page for.
  */
-export const defaultTypesFor = (market?: string | null, product?: string | null): SectionType[] =>
-  seenLive.get(pageKey(market, product)) ?? PAGE_DEFAULTS[pageKey(market, product)] ?? SHIPPED_ORDER
+export const defaultTypesFor = (market?: string | null, product?: string | null): SectionType[] => {
+  const live = seenLive.get(pageKey(market, product))
+  if (live) return typesFromLive(live.map((b) => b.type))
+  return PAGE_DEFAULTS[pageKey(market, product)] ?? SHIPPED_ORDER
+}
+
+/**
+ * What each block of a market's page says, where the market has been read.
+ *
+ * The arrangement was the easy half. A page that draws three spotlight rails
+ * and says the same thing in all three is not the page: Canada's three are a
+ * club world cup, a fight night and a soccer rail, and the only thing they
+ * have in common is the shape. So the words come across with the order.
+ *
+ * The first block of a kind writes the page's own fields, where its words have
+ * always lived, and every one after it writes under its own id — the same
+ * division the handoff now names them by.
+ *
+ * A field the live page says nothing about falls back to the words this tool
+ * shipped — which are words somebody wrote — rather than being emptied in the
+ * name of accuracy. To the shipped words and not to whatever is there: what is
+ * there, one market switch into an afternoon, is the last market's, and a
+ * Canadian rail under a German line is worse than either.
+ */
+export function wordsFromLive(market?: string | null, product?: string | null): Partial<LandingScreen> {
+  const live = seenLive.get(pageKey(market, product))
+  if (!live) return {}
+  const own: Record<string, string> = {}
+  const copies: Record<string, Partial<LandingScreen>> = {}
+  const list: PageSection[] = []
+  for (const block of live) {
+    const type = cardFor(block.type)
+    if (!type) continue
+    const taken = list.some((s) => s.id === type)
+    const id = taken ? freeId(list, type) : type
+    list.push({ id, type, on: true })
+    const fields = LIVE_FIELDS[type]
+    if (!fields) continue
+    const mine: Record<string, string> = {}
+    const shipped = defaultFlow.landing as unknown as Record<string, unknown>
+    const said = (field: string | undefined, live: string | null) => {
+      if (!field) return
+      mine[field] = live ? plain(live) : String(shipped[field] ?? '')
+    }
+    said(fields.title, block.title)
+    said(fields.body, block.description)
+    said(fields.rail, block.railId)
+    if (Object.keys(mine).length === 0) continue
+    if (id === type) Object.assign(own, mine)
+    else copies[id] = mine as Partial<LandingScreen>
+  }
+  const out = own as Partial<LandingScreen>
+  return Object.keys(copies).length > 0 ? { ...out, sectionCopy: copies } : out
+}
 
 /**
  * Those types as a page, ids and all.

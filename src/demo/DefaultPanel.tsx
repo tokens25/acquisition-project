@@ -5,7 +5,13 @@ import { entryPoints, journeysMatching, STATUS_LABELS, userStatuses } from '../r
 import { DEFAULT_PAGE_VIEW, PAGE_VIEWS } from '../rules/pageViews'
 import { MARKETS, SUBSCRIPTIONS, journeys, marketFlag, sellsHere } from '../rules/journeys'
 import { SelectField } from '../components/SelectField'
-import { defaultSectionsFor, isUntouched, rememberLive, sectionsFingerprint } from '../rules/sections'
+import {
+  defaultSectionsFor,
+  isUntouched,
+  rememberLive,
+  sectionsFingerprint,
+  wordsFromLive,
+} from '../rules/sections'
 import { baseFlow, writeFlow } from '../rules/layers'
 import { useLive } from '../editor/liveLandingContext'
 
@@ -167,9 +173,14 @@ export function DefaultPanel({
      */
     if (isUntouched(baseFlow(set).landing, context.market, context.subscription, set.sectionsDefault)) {
       const sections = defaultSectionsFor(here.market, here.subscription)
-      Object.assign(patch, writeFlow(set, {}, 'landing', { sections }), {
-        sectionsDefault: sectionsFingerprint(sections),
-      })
+      Object.assign(
+        patch,
+        writeFlow(set, {}, 'landing', {
+          sections,
+          ...wordsFromLive(here.market, here.subscription),
+        }),
+        { sectionsDefault: sectionsFingerprint(sections) },
+      )
     }
     if (Object.keys(patch).length > 0) updateSet(patch)
   }
@@ -204,12 +215,20 @@ export function DefaultPanel({
     const news = rememberLive(
       context.market,
       context.subscription,
-      page.components.map((c) => c.type),
+      page.components.map((c) => ({
+        type: c.type,
+        title: c.title,
+        description: c.description,
+        railId: c.railId,
+      })),
     )
     if (!news || !spare) return
     const sections = defaultSectionsFor(context.market, context.subscription)
     updateSet({
-      ...writeFlow(set, {}, 'landing', { sections }),
+      ...writeFlow(set, {}, 'landing', {
+        sections,
+        ...wordsFromLive(context.market, context.subscription),
+      }),
       sectionsDefault: sectionsFingerprint(sections),
     })
   }, [page, context.market, context.subscription, set, updateSet])
