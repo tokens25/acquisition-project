@@ -583,6 +583,8 @@ export interface LiveBlock {
   description: string | null
   overLine?: string | null
   features?: { line: string; icon: string | null }[]
+  /** What this block's offer costs, looked up by the route. */
+  price?: string | null
   railId: string | null
   rail?: {
     title: string | null
@@ -998,6 +1000,12 @@ const pictureFromLive = (kids: LiveEntry[]): string | null =>
  */
 const plain = (text: string) => text.replace(/##/g, '').trim()
 
+/** A block's ticked lines, each with the icon the CMS named against it. */
+const linesFromLive = (features: { line: string; icon: string | null }[] | undefined) =>
+  (features ?? [])
+    .map((one) => ({ line: plain(one.line), ...(one.icon ? { icon: one.icon } : {}) }))
+    .filter((one) => one.line !== '')
+
 /**
  * The price line a banner carries, split into the two things it is drawn as.
  *
@@ -1007,18 +1015,16 @@ const plain = (text: string) => text.replace(/##/g, '').trim()
  * the two come apart here rather than at render.
  *
  * `{price}` is not a price. Most markets leave the amount as that placeholder
- * and production fills it from the offers service; nothing on this branch can
- * reach that service, so the amount is left empty and the terms come across
- * on their own. A field somebody has to clear before typing into is worse
- * than a field that is already empty.
+ * and production looks the number up at render from the entitlement named
+ * beside it; the route does the same and hands the answer in as `resolved`.
+ * Where even that is empty — the service unreachable, or an entitlement it
+ * does not sell — the terms come across alone and the amount is a field to
+ * type in, which beats a sentence reading "{price} /month".
  */
-/** A block's ticked lines, each with the icon the CMS named against it. */
-const linesFromLive = (features: { line: string; icon: string | null }[] | undefined) =>
-  (features ?? [])
-    .map((one) => ({ line: plain(one.line), ...(one.icon ? { icon: one.icon } : {}) }))
-    .filter((one) => one.line !== '')
-
-function priceFromLive(entries: LiveEntry[]): { price: string; note: string } {
+function priceFromLive(
+  entries: LiveEntry[],
+  resolved?: string | null,
+): { price: string; note: string } {
   const label = entries.find((k) => k.key === 'offerLabel')?.value
   if (!label) return { price: '', note: '' }
   const strip = (s: string) =>
@@ -1037,7 +1043,7 @@ function priceFromLive(entries: LiveEntry[]): { price: string; note: string } {
   // price. `{price}` is the CMS's own marker, which is what it already writes
   // in the markets that fill the amount at render.
   const note = strip(label.replace(bold[0], ' {price} '))
-  return { price: amount === '{price}' ? '' : amount, note }
+  return { price: amount === '{price}' ? (resolved ?? '') : amount, note }
 }
 
 /**
@@ -1162,7 +1168,7 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       mine.multiviewCta = plain(card?.cta ?? '')
       mine.multiviewNote = plain(card?.disclaimer ?? '')
       mine.multiviewFeatures = linesFromLive(block.features)
-      const money = priceFromLive(block.entries ?? [])
+      const money = priceFromLive(block.entries ?? [], block.price)
       mine.multiviewPrice = money.price
       mine.multiviewPriceNote = money.note
     }

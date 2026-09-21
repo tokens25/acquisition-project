@@ -178,6 +178,13 @@ interface Component {
    */
   features: Feature[]
   /**
+   * What this component's offer costs, where it names one — see `priceOf`.
+   *
+   * Null where the component quotes no price, and where the service could not
+   * be reached. Filled in after, like the rail.
+   */
+  price?: string | null
+  /**
    * What the rail is serving, for the components that are served one.
    *
    * Null where a component has no rail. An empty `tiles` with `count` zero
@@ -600,6 +607,101 @@ async function withRails(components: Component[], market: string): Promise<Compo
   )
 }
 
+/**
+ * What a plan costs, from the service the live page asks.
+ *
+ * The CMS does not hold prices. A banner that quotes one holds the sentence
+ * with `{price}` in it and, beside it, the entitlement and the billing period
+ * that say which offer to look the number up in — production resolves the two
+ * at render. This is that service, asked the same way the page asks it.
+ *
+ * Country in the path rather than the query, which is how it is addressed.
+ * Nothing here needs a credential; it answers the same to anybody.
+ */
+const offersUrl = (country: string) =>
+  `https://tiered-pricing-offer-service.ar.indazn.com/v1/offers/${country.toUpperCase()}` +
+  `?Platform=web&Brand=DAZN&Manufacturer=&ProductGroup=all&IsTiering=true` +
+  `&IncludeBundleOffers=true&BillingRouting=billing2`
+
+interface Offer {
+  EntitlementSetId?: string
+  BillingPeriod?: string
+  ChargeTiers?: { Price?: number; Currency?: string }[]
+  RenewalAmount?: number
+}
+
+const offerCache = new Map<string, { at: number; offers: Offer[] }>()
+
+/**
+ * Every offer a market sells, held for the hour the page is.
+ *
+ * Unreachable is not an error here. A price that cannot be looked up leaves
+ * the amount empty and the sentence around it intact, which is a banner
+ * missing a number rather than a page that will not open.
+ */
+async function offersOf(country: string): Promise<Offer[]> {
+  const held = offerCache.get(country)
+  if (held && Date.now() - held.at < TTL_MS) return held.offers
+  try {
+    const res = await fetch(offersUrl(country), { headers: HEADERS, signal: AbortSignal.timeout(8000) })
+    if (!res.ok) return []
+    const body = (await res.json()) as { Offers?: Offer[] }
+    const offers = Array.isArray(body.Offers) ? body.Offers : []
+    offerCache.set(country, { at: Date.now(), offers })
+    return offers
+  } catch {
+    return []
+  }
+}
+
+/**
+ * The price a component quotes, as the reader's locale writes it.
+ *
+ * Matched on the entitlement first and the billing period second, because one
+ * entitlement is sold on more than one period and the banner names which. A
+ * component that names no entitlement quotes no price and is not asked about.
+ *
+ * Formatted in the locale the page is being read in rather than the market's
+ * own, for the same reason every other word on it is: this tool reads a page
+ * in English unless somebody switches it, and "9,99 €" under an English
+ * sentence is the market's convention in the wrong place. Switching the
+ * translation switches this too.
+ */
+function priceOf(component: Component, offers: Offer[], locale: string): string | null {
+  const said = (key: string) =>
+    component.entries.find((k) => k.key === key)?.value?.trim() ?? null
+  const entitlement = said('entitlementSetId')
+  if (!entitlement) return null
+  const period = said('billingPeriod')
+  const mine = offers.filter((o) => o.EntitlementSetId === entitlement)
+  const offer = (period && mine.find((o) => o.BillingPeriod === period)) || mine[0]
+  if (!offer) return null
+  const tier = offer.ChargeTiers?.[0]
+  const amount = typeof tier?.Price === 'number' ? tier.Price : offer.RenewalAmount
+  if (typeof amount !== 'number') return null
+  const currency = tier?.Currency
+  if (!currency) return null
+  try {
+    return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount)
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Each component's price, where it quotes one.
+ *
+ * One call for the market rather than one per component: the service answers
+ * for everything it sells at once, and a page quotes at most a handful.
+ */
+async function withPrices(components: Component[], market: string, locale: string): Promise<Component[]> {
+  const wants = components.some((c) => c.entries.some((k) => k.key === 'entitlementSetId'))
+  if (!wants) return components
+  const offers = await offersOf(market)
+  if (offers.length === 0) return components
+  return components.map((c) => ({ ...c, price: priceOf(c, offers, locale) }))
+}
+
 async function handler(request: Request): Promise<Response> {
   const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {
@@ -725,7 +827,7 @@ async function handler(request: Request): Promise<Response> {
     },
     // Built once and handed down: every picture on the page resolves
     // through it, and building it per entry would be the same map each time.
-    components: await withRails(componentsOf(root, byId, pictures), market),
+    components: await withPrices(await withRails(componentsOf(root, byId, pictures), market), market, locale),
     assets: pictures,
   })
 }

@@ -984,7 +984,7 @@ function SectionFields({
               {/* Two fields because the page draws two things: the money, and
                   what you are agreeing to. Most markets leave the money to the
                   offers service, so it arrives empty and the terms do not. */}
-              <TextField label="Price" value={t.multiviewPrice} pipelineKey={key('landing.multiviewPrice')} onChange={(v) => write({ multiviewPrice: v })} helpText="The money, in bold — “€9.99”. Empty in the markets that fill it at render." />
+              <TextField label="Price" value={t.multiviewPrice} pipelineKey={key('landing.multiviewPrice')} onChange={(v) => write({ multiviewPrice: v })} helpText="The money, in bold — “€9.99”. Looked up from what the market sells; type over it to try another." />
               <TextField label="The terms" value={t.multiviewPriceNote} pipelineKey={key('landing.multiviewPriceNote')} onChange={(v) => write({ multiviewPriceNote: v })} rows={2} helpText="The grey sentence around it. {price} is where the money goes — “From {price} /month”." />
               <TextField label="Button" value={t.multiviewCta} pipelineKey={key('landing.multiviewCta')} onChange={(v) => write({ multiviewCta: v })} />
               <TextField label="Over the list" value={t.multiviewNote} pipelineKey={key('landing.multiviewNote')} onChange={(v) => write({ multiviewNote: v })} rows={2} helpText="Bold, for an offer built on another — “Everything from …, plus:”." />

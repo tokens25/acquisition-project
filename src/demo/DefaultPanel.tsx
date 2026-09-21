@@ -226,6 +226,7 @@ export function DefaultPanel({
         description: c.description,
         overLine: c.overLine,
         features: c.features,
+        price: c.price,
         railId: c.railId,
         rail: c.rail,
         entries: c.entries,

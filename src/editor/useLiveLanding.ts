@@ -33,6 +33,8 @@ export interface LiveComponent {
    * each line with the icon the CMS names beside it.
    */
   features: { line: string; icon: string | null }[]
+  /** What this component's offer costs, where it names one. */
+  price?: string | null
   /**
    * What the rail is serving, where the component is served one.
    *
