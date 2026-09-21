@@ -1521,6 +1521,12 @@
 .fl-page {
   gap: var(--space-48);
   padding-block-end: var(--space-48);
+  /* The landing page's own ground, which is not the phone's. Every other
+     screen sits on #060606; the live landing page sits on #080e12, and its
+     banner cards are drawn on that same near-black — so a card has no edge
+     against the page. Setting it here rather than on `.fl` keeps the rest of
+     the journey on the surface it is drawn at. */
+  background: #080e12;
 }
 .fl-page section {
   display: flex;
@@ -1859,6 +1865,131 @@
    section`, which lays every band out with no gap of its own. */
 .fl-page .fl-page__multiview {
   gap: var(--space-20);
+}
+
+/* ── Feature — node 708:174095 ────────────────────────────────────────
+   The design's own banner, kept whole when the introduction banner beside it
+   was rebuilt to production's shape. A card on the soft surface inside a 2px
+   border at an 18 radius, 16 of padding and 16 between the still and the
+   words. The still keeps the design's 1369 by 770 and takes a 2px border of
+   its own at a 6 radius. The words are 8 apart, and the button sits 16 under
+   them. The gold on the pill and the button is the fill the design exports
+   rather than a gradient guessed from it. */
+.fl-still {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  align-items: center;
+  inline-size: 100%;
+  padding: var(--space-16);
+  border: var(--border-2) solid #252729;
+  border-radius: var(--radius-18);
+  background: #0c161c;
+}
+.fl-still__shot {
+  inline-size: 100%;
+  aspect-ratio: 1369 / 770;
+  border: var(--border-2) solid #242d33;
+  border-radius: var(--radius-6);
+  object-fit: cover;
+}
+.fl-still__words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: flex-start;
+  inline-size: 100%;
+}
+.fl-still__prefix {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  margin: 0;
+  inline-size: 100%;
+}
+.fl-still__kind {
+  color: #b3b9bb;
+  font-size: 18px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+  white-space: nowrap;
+}
+/* The pill sits 12 clear of the words before it. */
+.fl-still__tab {
+  padding-inline-start: var(--space-12);
+}
+.fl-still__badge {
+  display: inline-flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 20px;
+  min-block-size: 20px;
+  padding: var(--space-4) 6px;
+  border: var(--border-1) solid #cfa120;
+  border-radius: var(--radius-2);
+  background: url('../../assets/landing/article/pill-fill.png') center / cover no-repeat;
+  color: #080e12;
+  font-size: var(--font-size-caption-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.fl-still__title {
+  margin: 0;
+  inline-size: 100%;
+  color: #f9fafa;
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.32;
+}
+.fl-still__body {
+  margin: 0;
+  inline-size: 100%;
+  color: #b3b9bb;
+  font-size: 18px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.55;
+}
+.fl-still__cta {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  min-inline-size: 192px;
+  block-size: 48px;
+  margin-block-start: var(--space-8);
+  padding: var(--space-12);
+  border-radius: var(--radius-8);
+  background: url('../../assets/landing/article/button-fill.png') center / cover no-repeat;
+  color: #080e12;
+  font-family: inherit;
+  font-size: var(--font-size-button-lg);
+  font-weight: var(--font-weight-bold);
+  overflow: clip;
+}
+.fl-still__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-block-start: var(--space-4);
+}
+/* A tick and a line, the tick holding its size while the words wrap under
+   themselves rather than under it. */
+.fl-still__line {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: var(--space-8);
+  align-items: start;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption-sm);
+  line-height: 1.45;
+}
+.fl-still__tick {
+  inline-size: 20px;
+  block-size: 20px;
+  object-fit: contain;
 }
 
 /* ── The words above the card — production's `mainContent` ────────────
@@ -3129,6 +3260,7 @@
    buttons — the tabs, the navigation, the footer's links — are named after it. */
 .fl [role='button'],
 .fl-landing__nav-cta,
+.fl-still__cta,
 .fl-landing__link,
 .fl-landing__search,
 .fl-landing__step,

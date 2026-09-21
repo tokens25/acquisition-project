@@ -25,6 +25,7 @@ export type SectionType =
   | 'teams'
   | 'area'
   | 'multiview'
+  | 'article'
   | 'providers'
   | 'faq'
   | 'imageCta'
@@ -74,6 +75,7 @@ export const SECTION_TYPES: SectionType[] = [
   'teams',
   'area',
   'multiview',
+  'article',
   'providers',
   'faq',
   'imageCta',
@@ -122,6 +124,12 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   areaNotice: 'area',
   areaNote: 'area',
   areaCta: 'area',
+  articleEyebrow: 'article',
+  articleBadge: 'article',
+  articleTitle: 'article',
+  articleBody: 'article',
+  articleCta: 'article',
+  articleLines: 'article',
   multiviewEyebrow: 'multiview',
   multiviewBadge: 'multiview',
   multiviewTitle: 'multiview',
@@ -130,6 +138,7 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   multiviewCardTitle: 'multiview',
   multiviewCardBody: 'multiview',
   multiviewFeatures: 'multiview',
+  multiviewNote: 'multiview',
   providersTitle: 'providers',
   providersBody: 'providers',
   providersHighlight: 'providers',
@@ -240,6 +249,7 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   teams: 'Eyebrow, heading, body, and the teams',
   area: 'Heading, a line under it, notice, button',
   multiview: 'Words above a card, or the card alone',
+  article: 'Still, eyebrow, heading, button',
   providers: 'Heading, a line under it, a note, button',
   faq: 'Heading and five questions',
   imageCta: 'Picture, heading, body, button',
@@ -277,6 +287,7 @@ export const SECTION_BARS: Record<SectionType, [number, number, number]> = {
   teams: [40, 85, 100],
   area: [75, 100, 60],
   multiview: [100, 60, 45],
+  article: [100, 60, 45],
   providers: [65, 100, 100],
   faq: [55, 100, 100],
   imageCta: [100, 55, 45],
@@ -306,7 +317,7 @@ export const SHIPPED_ORDER: SectionType[] = [
   'plans',
   'teams',
   'area',
-  'multiview',
+  'article',
   'providers',
   'faq',
 ]
@@ -360,6 +371,13 @@ export const SECTION_LABEL: Record<SectionType, string> = {
      worth remembering: ours is not full-bleed, it does not rotate, and nothing
      here binds a price to an entitlement and fills it in at render. */
   multiview: 'IntroductionBanner',
+  /* The design's own banner, node 708:174095, kept as a block of its own when
+     the one above it was rebuilt to production's shape. Production has no
+     component by this name — it is the design's, and the design calls it a
+     feature. Short of the live banner in three ways worth remembering: ours is
+     not full-bleed, it does not rotate, and nothing here binds a price to an
+     entitlement and fills it in at render. */
+  article: 'Feature',
   providers: 'SubscriptionProviders',
   /* The type keeps its name because saved pages are arranged by it; what it
      is called is "Text block", which is what the design calls the component

@@ -75,7 +75,7 @@ export interface LandingFacts {
 }
 
 /** Which component types draw a picture at all. */
-const PICTURED: SectionType[] = ['features', 'imageCta', 'multiview']
+const PICTURED: SectionType[] = ['features', 'imageCta', 'multiview', 'article']
 
 /** What a component says, in the order it says it. */
 function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: LandingScreen): { heading: string; words: string[]; cta: string } {
@@ -129,8 +129,22 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
     case 'multiview':
       return {
         heading: t.multiviewTitle,
-        words: [t.multiviewEyebrow, t.multiviewBadge, t.multiviewTitle, t.multiviewBody, t.multiviewCta],
+        words: [
+          t.multiviewBadge,
+          t.multiviewTitle,
+          t.multiviewBody,
+          t.multiviewCardTitle,
+          t.multiviewCardBody,
+          t.multiviewCta,
+          t.multiviewNote,
+        ],
         cta: t.multiviewCta,
+      }
+    case 'article':
+      return {
+        heading: t.articleTitle,
+        words: [t.articleEyebrow, t.articleBadge, t.articleTitle, t.articleBody, t.articleCta],
+        cta: t.articleCta,
       }
     case 'providers':
       return {

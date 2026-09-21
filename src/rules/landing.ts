@@ -162,6 +162,8 @@ type ChoiceKey =
   | 'imageCtaImage'
   | 'imageCtaImageOff'
   | 'imageCtaLayout'
+  | 'articleImage'
+  | 'articleImageOff'
   | 'multiviewImage'
   | 'multiviewImageOff'
   | 'sections'
@@ -189,6 +191,7 @@ export function landingText(content: LandingScreen): Required<
     | 'spotlightTiles'
     | 'imageCtaTiles'
     | 'multiviewFeatures'
+    | 'articleLines'
     | 'subRailTiles'
     | 'badges'
     | 'bundles'
@@ -238,6 +241,11 @@ export function landingText(content: LandingScreen): Required<
     multiviewCardTitle: of('multiviewCardTitle'),
     multiviewCardBody: of('multiviewCardBody'),
     multiviewNote: of('multiviewNote'),
+    articleEyebrow: of('articleEyebrow'),
+    articleBadge: of('articleBadge'),
+    articleTitle: of('articleTitle'),
+    articleBody: of('articleBody'),
+    articleCta: of('articleCta'),
     providersTitle: of('providersTitle'),
     providersBody: of('providersBody'),
     providersHighlight: of('providersHighlight'),

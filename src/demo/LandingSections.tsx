@@ -36,7 +36,8 @@ import {
   type PageSection,
   type SectionType,
 } from '../rules/sections'
-import type { ImageCtaLayout, LandingScreen, LandingTeam, RailSize } from '../rules/flow'
+import type { ImageCtaLayout, LandingBannerLine, LandingScreen, LandingTeam, RailSize } from '../rules/flow'
+import { BANNER_ICONS, bannerLinesOf } from '../rules/flow'
 import type { CardSetStore } from '../editor/useCardSet'
 import { useLive } from '../editor/liveLandingContext'
 import { LivePageChip } from './LivePageChip'
@@ -983,6 +984,81 @@ function SectionFields({
               <TextField label="Button" value={t.multiviewCta} pipelineKey={key('landing.multiviewCta')} onChange={(v) => write({ multiviewCta: v })} />
               <TextField label="Over the list" value={t.multiviewNote} pipelineKey={key('landing.multiviewNote')} onChange={(v) => write({ multiviewNote: v })} rows={2} helpText="Bold, for an offer built on another — “Everything from …, plus:”." />
           </FieldGroup>
+          {/* What the offer includes. The icon is the line's own, because the
+              live page sets it per line and not per banner: Italy's bundle
+              banner runs gold ticks with a camera on the line about NFL
+              games. */}
+          <FieldGroup title="What it includes">
+              {bannerLinesOf(inst.multiviewFeatures).map((one, i) => {
+                const all = bannerLinesOf(inst.multiviewFeatures)
+                const at = (next: Partial<LandingBannerLine>) =>
+                  write({ multiviewFeatures: all.map((l, j) => (j === i ? { ...l, ...next } : l)) })
+                return (
+                  <div className="demo__feature" key={i}>
+                    <TextField
+                      label={`Line ${i + 1}`}
+                      value={one.line}
+                      pipelineKey={key(`landing.multiviewFeatures[${i}].line`)}
+                      onChange={(v) => at({ line: v })}
+                      rows={2}
+                    />
+                    {/* Named for what each draws, from the one list the pull
+                        reads too — so a line typed here and a line read off a
+                        market are the same thing. */}
+                    <SelectField
+                      label="Against it"
+                      value={one.icon ?? ''}
+                      options={[{ value: '', label: 'The tick this tool draws' }, ...BANNER_ICONS]}
+                      onChange={(v) => at({ icon: v || undefined })}
+                    />
+                    <button
+                      data-icon="trash"
+                      aria-label="Remove"
+                      type="button"
+                      className="demo__feature-remove"
+                      onClick={() => write({ multiviewFeatures: all.filter((_, j) => j !== i) })}
+                    >
+                      <TrashIcon size={14} />
+                    </button>
+                  </div>
+                )
+              })}
+              <button
+                type="button"
+                className="ed-add"
+                onClick={() =>
+                  write({
+                    multiviewFeatures: [
+                      ...bannerLinesOf(inst.multiviewFeatures),
+                      { line: '', icon: BANNER_ICONS[0].value },
+                    ],
+                  })
+                }
+              >
+                Add a line
+              </button>
+          </FieldGroup>
+        </>
+      )
+
+    case 'article':
+      return (
+        <>
+          <ImagePicker
+            // The still's own 1369 by 770.
+            aspect="1369 / 770"
+            src={inst.articleImage}
+            shipped={articleShot}
+            off={inst.articleImageOff}
+            onPick={(url) => write({ articleImage: url, articleImageOff: false })}
+            onRemove={() => write({ articleImage: '', articleImageOff: true })}
+            onShipped={() => write({ articleImage: '', articleImageOff: false })}
+          />
+              <TextField label="Over the heading" value={t.articleEyebrow} pipelineKey={key('landing.articleEyebrow')} onChange={(v) => write({ articleEyebrow: v })} />
+              <TextField label="Pill" value={t.articleBadge} pipelineKey={key('landing.articleBadge')} onChange={(v) => write({ articleBadge: v })} helpText="Empty draws none." />
+              <TextField label="Heading" value={t.articleTitle} pipelineKey={key('landing.articleTitle')} onChange={(v) => write({ articleTitle: v })} rows={2} />
+              <TextField label="Under the heading" value={t.articleBody} pipelineKey={key('landing.articleBody')} onChange={(v) => write({ articleBody: v })} rows={3} />
+              <TextField label="Button" value={t.articleCta} pipelineKey={key('landing.articleCta')} onChange={(v) => write({ articleCta: v })} />
         </>
       )
 

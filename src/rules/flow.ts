@@ -321,6 +321,25 @@ export type ImageCtaLayout = 'fill' | 'top'
  */
 export type NavFirstStyle = 'subscribe' | 'neutral'
 
+/** Where DAZN serves the icons a banner line can wear. */
+const BANNER_ICON_BASE = 'https://static.dazndn.com/icons'
+
+/**
+ * The icons a banner line can wear, named for what each one draws.
+ *
+ * The three the live pages use. The CMS names an icon per line rather than
+ * linking a picture, and the name is the file — so these are that file, and a
+ * line pulled from a market and a line picked here are the same thing.
+ *
+ * One list, read by the menu in the panel and by anything else that has to
+ * say what a line is wearing.
+ */
+export const BANNER_ICONS: { value: string; label: string }[] = [
+  { value: `${BANNER_ICON_BASE}/check.png`, label: 'A plain tick' },
+  { value: `${BANNER_ICON_BASE}/check-circle-gold.png`, label: 'A gold tick in a circle' },
+  { value: `${BANNER_ICON_BASE}/watch-every-game-gold.png`, label: 'A gold video camera' },
+]
+
 /** One line of what an offer includes, and the icon set against it. */
 export interface LandingBannerLine {
   line: string
@@ -334,11 +353,20 @@ export interface LandingBannerLine {
  * It was a list of sentences before the icons came across, and a page saved
  * then still holds one — so a bare string is read as a line with no icon of
  * its own rather than as a page that cannot be opened.
+ *
+ * Kept whole rather than filtered: a row somebody has just added is a row
+ * with nothing typed in it yet, and dropping it here would take the field
+ * away the moment it appeared. The screens leave a blank line undrawn, which
+ * is where that belongs.
  */
 export const bannerLinesOf = (
   lines: (LandingBannerLine | string)[] | undefined,
-): LandingBannerLine[] =>
-  (lines ?? []).map((one) => (typeof one === 'string' ? { line: one } : one)).filter((one) => one.line.trim() !== '')
+): LandingBannerLine[] => (lines ?? []).map((one) => (typeof one === 'string' ? { line: one } : one))
+
+/** The ones with something to say — what a screen draws. */
+export const drawnLinesOf = (
+  lines: (LandingBannerLine | string)[] | undefined,
+): LandingBannerLine[] => bannerLinesOf(lines).filter((one) => one.line.trim() !== '')
 
 /** One logo on the wall of supported devices. */
 export interface LandingDevice {
@@ -710,6 +738,27 @@ export interface LandingScreen {
   /** The still: one of its own, and whether it is drawn with one at all. */
   multiviewImage?: string
   multiviewImageOff?: boolean
+
+  /**
+   * Feature — the design's own banner, node 708:174095.
+   *
+   * The shape the introduction banner had before it was read off a live page:
+   * a framed still, an icon and a word over a gold pill, a heading, a line and
+   * a gold button, with the ticks under it. No market draws it, which is why
+   * it is a block of its own rather than an arrangement of the other — the
+   * page can have the design's banner and production's, and they are not the
+   * same thing wearing different settings.
+   */
+  articleEyebrow?: string
+  articleBadge?: string
+  articleTitle?: string
+  articleBody?: string
+  articleCta?: string
+  /** What it includes, a line each against a tick. */
+  articleLines?: (LandingBannerLine | string)[]
+  /** The still: one of its own, and whether it is drawn with one at all. */
+  articleImage?: string
+  articleImageOff?: boolean
 
   /** "How to connect your TV Subscription" and the grid of providers. */
   providersTitle?: string
@@ -1192,6 +1241,13 @@ export const defaultFlow: FlowContent = {
     multiviewCardTitle: '',
     multiviewCardBody: '',
     multiviewNote: '',
+
+    articleEyebrow: 'Multiview',
+    articleBadge: 'Ultimate only',
+    articleTitle: 'Feel 4 times the action with Multiview',
+    articleBody:
+      'Build your perfect gameday with Multiview. Watch up to 4 live game feeds at once.',
+    articleCta: 'Get Ultimate',
 
     providersTitle: 'How to connect your\nTV Subscription',
     providersBody:

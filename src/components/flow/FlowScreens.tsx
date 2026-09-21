@@ -112,7 +112,7 @@ import type {
   LandingTile,
   RailSize,
 } from '../../rules/flow'
-import { bannerLinesOf } from '../../rules/flow'
+import { drawnLinesOf } from '../../rules/flow'
 import { statedMoney } from '../../rules/money'
 import type {
   AccountScreen,
@@ -1643,7 +1643,7 @@ export function PageSectionView({
        half is drawn only where it has something to say, and an empty top is
        an empty top rather than a fallback to the card's words. */
     case 'multiview': {
-      const bannerLines = bannerLinesOf(content.multiviewFeatures)
+      const bannerLines = drawnLinesOf(content.multiviewFeatures)
       const eyebrow = text.multiviewEyebrow.trim() !== ''
       const badge = text.multiviewBadge.trim() !== ''
       const topTitle = text.multiviewTitle.trim() !== ''
@@ -1704,6 +1704,54 @@ export function PageSectionView({
                         <img className="fl-art__tick" src={one.icon} alt="" />
                       ) : (
                         <Mark svg={iconArtwork.check} size={16} />
+                      )}
+                      {one.line}
+                    </span>
+                  ))}
+                </span>
+              )}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    /* Feature — node 708:174095, the design's own banner.
+       The shape the introduction banner had before it was read off a live
+       page: a framed still, an icon and a word over a gold pill, and a gold
+       button. Kept whole rather than folded into the other one, because a page
+       may want both and they are not one block with a setting. */
+    case 'article': {
+      const lines = drawnLinesOf(content.articleLines)
+      return (
+        <section className="fl-page__article">
+          <div className="fl-still">
+            {!content.articleImageOff && (
+              <img className="fl-still__shot" src={content.articleImage || articleShot} alt="" />
+            )}
+            <div className="fl-still__words">
+              <p className="fl-still__prefix">
+                <Mark svg={articleIcon} size={24} />
+                <span className="fl-still__kind">{text.articleEyebrow}</span>
+                {text.articleBadge && (
+                  <span className="fl-still__tab">
+                    <span className="fl-still__badge">{text.articleBadge}</span>
+                  </span>
+                )}
+              </p>
+              <p className="fl-still__title">{text.articleTitle}</p>
+              <p className="fl-still__body">{text.articleBody}</p>
+              <span className="fl-still__cta" role="button">
+                {text.articleCta}
+              </span>
+              {lines.length > 0 && (
+                <span className="fl-still__list">
+                  {lines.map((one) => (
+                    <span className="fl-still__line" key={one.line}>
+                      {one.icon ? (
+                        <img className="fl-still__tick" src={one.icon} alt="" />
+                      ) : (
+                        <Mark svg={iconArtwork.check} size={20} />
                       )}
                       {one.line}
                     </span>
