@@ -3336,6 +3336,25 @@
   block-size: 100%;
   object-fit: cover;
 }
+/* The same chip the spotlight rail marks an entitlement with, in the same
+   corner: a rail of fixtures says what it takes to watch them the one way,
+   whichever rail it is. */
+.fl-rail__lock {
+  position: absolute;
+  inset-block-start: var(--space-8);
+  inset-inline-start: var(--space-8);
+  display: grid;
+  place-items: center;
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: var(--radius-4, 4px);
+  background: #f8fafb;
+  color: #131415;
+}
+/* Along by the padlock's width and the gap, where there is one. */
+.fl-rail__lock + .fl-rail__stamp {
+  inset-inline-start: calc(var(--space-8) + 20px + 6px);
+}
 .fl-rail__stamp {
   position: absolute;
   inset-block-start: var(--space-8);

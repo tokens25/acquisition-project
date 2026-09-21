@@ -485,6 +485,11 @@ export const NAV_DEFAULTS: Record<string, { first: string; style: NavFirstStyle;
   // over `--new-gold`. Nothing to browse here before paying, so the first
   // button asks for the money and the second is the way back in.
   IT: { first: 'Subscribe', style: 'subscribe', second: 'Log in' },
+  // Reported 2026-09-20 by somebody in the market, not read from here — the
+  // bar follows the connection, so Germany cannot be looked at from Milan.
+  // One button: an empty first draws none at all, which is the third thing
+  // this slot does besides Explore and Subscribe.
+  DE: { first: '', style: 'neutral', second: 'Log in' },
 }
 
 /**

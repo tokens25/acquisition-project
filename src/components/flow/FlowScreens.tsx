@@ -640,10 +640,16 @@ export function LandingFlowScreen({
           {/* Either the gold one that asks for money or the grey one that
               offers a look around, depending on what the market draws — see
               `navFirstStyle`. Grey where nothing says, because grey is what
-              this bar was before the choice existed. */}
-          <span className="fl-landing__nav-cta" data-appearance={content.navFirstStyle ?? 'neutral'}>
-            {text.navExplore}
-          </span>
+              this bar was before the choice existed.
+
+              Or neither: Germany draws one button, and an empty label is how
+              a market says so. A toggle would have been a second way to say
+              the same thing, and the label is the one somebody edits. */}
+          {text.navExplore.trim() !== '' && (
+            <span className="fl-landing__nav-cta" data-appearance={content.navFirstStyle ?? 'neutral'}>
+              {text.navExplore}
+            </span>
+          )}
           {(content.navSignUpEnabled ?? true) && (
             <span className="fl-landing__nav-cta">{text.navSignUp}</span>
           )}
@@ -2160,10 +2166,42 @@ function RailSection({
           return (
             <article className="fl-rail__tile" key={tile.id}>
               <span className="fl-rail__art" aria-hidden="true">
-                <img src={artAt(art, at)} alt="" />
+                {/* The rail's own thumbnail where the rail router served one.
+                    The pictures in the file are stand-ins for a rail nobody
+                    has read yet — drawing them over a rail that answered puts
+                    a stock crowd shot on Bayern against Arsenal. */}
+                <img src={tile.image || artAt(art, at)} alt="" />
+                {/* What it takes to watch it, as the spotlight rail marks it:
+                    a padlock on anything that names an entitlement. */}
+                {tile.locked && (
+                  <span className="fl-rail__lock">
+                    <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
+                      <path
+                        d="M8 10V7.5a4 4 0 0 1 8 0V10"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                      />
+                      <rect
+                        x="4.6"
+                        y="10"
+                        width="14.8"
+                        height="10.4"
+                        rx="1.6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                      />
+                      <rect x="10.4" y="13.9" width="3.2" height="3.2" fill="currentColor" />
+                    </svg>
+                  </span>
+                )}
                 {/* The date rides on the picture where the tile is big enough
-                    to carry it, and the stylesheet hides it where it is not. */}
-                <span className="fl-rail__stamp">{fixtureFor(at).stamp}</span>
+                    to carry it, and the stylesheet hides it where it is not.
+                    The fixture's own kick-off where the rail gave one — a tile
+                    that says 14 SEP over a game in October is worse than a
+                    tile that says nothing. */}
+                <span className="fl-rail__stamp">{stampFor(tile, at)}</span>
               </span>
               <span className="fl-rail__words">
                 <p className="fl-rail__name">{tile.title}</p>

@@ -255,6 +255,7 @@ function FlowFields({
               value={l.navExplore}
               pipelineKey={'landing.navExplore'}
               onChange={(v) => patch('landing', { navExplore: v })}
+              helpText="Empty draws none — Germany's bar is the second button alone."
             />
             {/* Named for what each one draws rather than for the setting:
                 nobody reaches for "neutral". */}

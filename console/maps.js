@@ -265,7 +265,7 @@
       "rail row": [0,343,80,18],
       "rail tile": [4,343,30,18],
       "rail tile picture": [4,343,30,11],
-      "rail tile timestamp": [5,344,9,3],
+      "rail tile padlock": [5,344,3,3], "rail tile timestamp": [9,344,9,3],
       "rail tile words": [4,355,30,6],
       "rail tile title": [4,355,30,3],
       "rail tile meta": [4,358,22,3],
