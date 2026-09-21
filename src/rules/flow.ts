@@ -321,6 +321,25 @@ export type ImageCtaLayout = 'fill' | 'top'
  */
 export type NavFirstStyle = 'subscribe' | 'neutral'
 
+/** One line of what an offer includes, and the icon set against it. */
+export interface LandingBannerLine {
+  line: string
+  /** A picture of the market's own; absent draws the shipped tick. */
+  icon?: string
+}
+
+/**
+ * The banner's list, however it is being held.
+ *
+ * It was a list of sentences before the icons came across, and a page saved
+ * then still holds one — so a bare string is read as a line with no icon of
+ * its own rather than as a page that cannot be opened.
+ */
+export const bannerLinesOf = (
+  lines: (LandingBannerLine | string)[] | undefined,
+): LandingBannerLine[] =>
+  (lines ?? []).map((one) => (typeof one === 'string' ? { line: one } : one)).filter((one) => one.line.trim() !== '')
+
 /** One logo on the wall of supported devices. */
 export interface LandingDevice {
   id: string
@@ -675,8 +694,19 @@ export interface LandingScreen {
    * adds. The CMS keeps it on the card as `disclaimer`.
    */
   multiviewNote?: string
-  /** What the offer includes, a line each against a tick. */
-  multiviewFeatures?: string[]
+  /**
+   * What the offer includes, a line each against an icon.
+   *
+   * The icon is the market's, not ours: the CMS names one per line and the
+   * name is the file. Italy's two banners use three between them — a plain
+   * tick down the mobile one, a gold tick down the bundle one, and a gold
+   * camera on its line about NFL games. A line with none falls back to the
+   * tick this tool draws.
+   *
+   * Reads as `string[]` too, which is what it was and what a page saved
+   * before this still holds — see `bannerLinesOf`.
+   */
+  multiviewFeatures?: (LandingBannerLine | string)[]
   /** The still: one of its own, and whether it is drawn with one at all. */
   multiviewImage?: string
   multiviewImageOff?: boolean

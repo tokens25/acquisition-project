@@ -556,7 +556,7 @@ export interface LiveBlock {
   title: string | null
   description: string | null
   overLine?: string | null
-  features?: string[]
+  features?: { line: string; icon: string | null }[]
   railId: string | null
   rail?: {
     title: string | null
@@ -1088,7 +1088,9 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       mine.multiviewCardBody = plain(card?.body ?? '')
       mine.multiviewCta = plain(card?.cta ?? '')
       mine.multiviewNote = plain(card?.disclaimer ?? '')
-      mine.multiviewFeatures = (block.features ?? []).map(plain).filter(Boolean)
+      mine.multiviewFeatures = (block.features ?? [])
+        .map((one) => ({ line: plain(one.line), ...(one.icon ? { icon: one.icon } : {}) }))
+        .filter((one) => one.line !== '')
     }
     // Every market stacks this banner — the picture, then the words under it
     // — so a page opened on a market is stacked. The design's other

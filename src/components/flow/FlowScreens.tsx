@@ -112,6 +112,7 @@ import type {
   LandingTile,
   RailSize,
 } from '../../rules/flow'
+import { bannerLinesOf } from '../../rules/flow'
 import { statedMoney } from '../../rules/money'
 import type {
   AccountScreen,
@@ -1642,6 +1643,7 @@ export function PageSectionView({
        half is drawn only where it has something to say, and an empty top is
        an empty top rather than a fallback to the card's words. */
     case 'multiview': {
+      const bannerLines = bannerLinesOf(content.multiviewFeatures)
       const eyebrow = text.multiviewEyebrow.trim() !== ''
       const badge = text.multiviewBadge.trim() !== ''
       const topTitle = text.multiviewTitle.trim() !== ''
@@ -1665,7 +1667,10 @@ export function PageSectionView({
               {topBody && <p className="fl-art__top-body">{text.multiviewBody}</p>}
             </div>
           )}
-          <div className="fl-art">
+          {/* `data-shot` rather than a look at the field in the CSS: the card
+              holds room for the picture in its own top padding, and a card
+              drawn without one must not hold room for nothing. */}
+          <div className="fl-art" data-shot={content.multiviewImageOff ? undefined : true}>
             {!content.multiviewImageOff && (
               <img className="fl-art__shot" src={content.multiviewImage || articleShot} alt="" />
             )}
@@ -1689,12 +1694,18 @@ export function PageSectionView({
                   card's and the list is what the card got you, so the list
                   reads as the answer to having pressed it rather than as more
                   to get through first. */}
-              {(content.multiviewFeatures?.length ?? 0) > 0 && (
+              {bannerLines.length > 0 && (
                 <span className="fl-art__list">
-                  {content.multiviewFeatures?.map((line) => (
-                    <span className="fl-art__line" key={line}>
-                      <Mark svg={iconArtwork.check} size={20} />
-                      {line}
+                  {bannerLines.map((one) => (
+                    <span className="fl-art__line" key={one.line}>
+                      {/* The market's icon where it names one — a gold tick, a
+                          camera — and the shipped tick where it does not. */}
+                      {one.icon ? (
+                        <img className="fl-art__tick" src={one.icon} alt="" />
+                      ) : (
+                        <Mark svg={iconArtwork.check} size={16} />
+                      )}
+                      {one.line}
                     </span>
                   ))}
                 </span>

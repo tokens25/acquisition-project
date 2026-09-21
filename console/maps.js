@@ -209,6 +209,7 @@
       'article button': [8,116,64,2],
       'article offer note': [8,118,64,1],
       'article offer list': [8,119,64,3], 'article offer line': [8,119,64,1],
+      'article offer tick': [8,119,2,1],
       'providers block': [4,126,72,44],
       'providers words': [8,127,64,10], 'providers heading': [8,127,64,6],
       'providers body': [8,134,64,4],

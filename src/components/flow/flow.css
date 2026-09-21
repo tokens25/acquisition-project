@@ -1794,23 +1794,40 @@
 
    The gold on the pill and the button is the fill the design exports rather
    than a gradient guessed from it. */
+/* Measured on en-IT at 375: a 22 radius, the words 16 in from the sides and
+   24 clear of the foot, on the near-black the picture's own ground gives it.
+   No border and no inner frame — the picture runs to the card's corners and
+   the card is what clips it. */
 .fl-art {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-16);
+  gap: var(--space-12);
   align-items: center;
   inline-size: 100%;
-  padding: var(--space-16);
-  border: var(--border-2) solid #252729;
-  border-radius: var(--radius-18);
-  background: #0c161c;
+  padding: var(--space-16) var(--space-16) var(--space-24);
+  border-radius: 22px;
+  background: #080e12;
+  overflow: clip;
+}
+/* Room for the picture above the words, where there is one. A percentage
+   padding resolves against the card's own width, so half of it is exactly the
+   height of a 2:1 band — production's `56.25vw - 40px` at the width it draws
+   the card, said in terms of the card instead of the window. The 21 is the
+   gap it leaves between the picture and the first line. */
+.fl-art[data-shot] {
+  padding-block-start: calc(50% + 21px);
 }
 .fl-art__shot {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
   inline-size: 100%;
-  aspect-ratio: 1369 / 770;
-  border: var(--border-2) solid #242d33;
-  border-radius: var(--radius-6);
+  aspect-ratio: 2 / 1;
   object-fit: cover;
+  /* Top rather than centre: these are crowd-and-player pictures, and what is
+     worth keeping is at the top of them. */
+  object-position: center top;
 }
 .fl-art__words {
   display: flex;
@@ -1922,7 +1939,10 @@
   margin-block-start: var(--space-8);
   padding: var(--space-12);
   border-radius: var(--radius-8);
-  background: url('../../assets/landing/article/button-fill.png') center / cover no-repeat;
+  /* White, as every market draws it. The gold fill the design exports is the
+     hero's button; this one is the card's, and the card is already gold-lit by
+     the picture above it. */
+  background: #f9fafa;
   color: #080e12;
   font-family: inherit;
   font-size: var(--font-size-button-lg);
@@ -5129,14 +5149,20 @@
   gap: var(--space-8);
   margin-block-start: var(--space-4);
 }
-/* A tick and a line, the tick holding its size while the words wrap under
-   themselves rather than under it. */
+/* An icon and a line, the icon holding its size while the words wrap under
+   themselves rather than under it. 16 and 12 apart, as the live page sets it,
+   and centred against the line rather than hung from its top. */
 .fl-art__line {
   display: grid;
-  grid-template-columns: 20px 1fr;
-  gap: var(--space-8);
-  align-items: start;
-  color: var(--color-text-secondary);
+  grid-template-columns: 16px 1fr;
+  gap: var(--space-12);
+  align-items: center;
+  color: #b3b9bb;
   font-size: var(--font-size-caption-sm);
-  line-height: 1.45;
+  line-height: 21px;
+}
+.fl-art__tick {
+  inline-size: 16px;
+  block-size: 16px;
+  object-fit: contain;
 }

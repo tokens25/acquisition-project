@@ -176,7 +176,7 @@ interface Component {
    * entries — so it is resolved here rather than left to whoever reads the
    * entries to know that a `features` link two levels down is a sentence.
    */
-  features: string[]
+  features: Feature[]
   /**
    * What the rail is serving, for the components that are served one.
    *
@@ -431,21 +431,43 @@ function imageOf(kid: Entry, byId: Map<string, Entry>, assets: Assets): string |
 }
 
 /**
+ * Where the icons on those lines are served from.
+ *
+ * The CMS names an icon rather than linking a picture, and the name is the
+ * file: `check`, `check-circle-gold`, `watch-every-game-gold`. Italy's two
+ * banners use all three — the mobile one a plain tick on every line, the
+ * bundle one a gold tick and, on the line about NFL games, a gold camera.
+ */
+const ICONS = 'https://static.dazndn.com/icons'
+
+/** One line of what an offer includes, and the icon set against it. */
+interface Feature {
+  line: string
+  /** Null where the CMS named none, which is the shipped tick's cue. */
+  icon: string | null
+}
+
+/**
  * What a card inside a component says the offer includes.
  *
  * Two levels down: the component holds a card, the card holds `features`, and
- * each of those is a key-value entry whose value is the line. Italy's mobile
- * banner lists four this way.
+ * each of those is a key-value entry — `value` is the line, and `key` is the
+ * name of the icon beside it rather than a key to look anything up by.
  */
-function featuresOf(kids: unknown[], byId: Map<string, Entry>): string[] {
-  const out: string[] = []
+function featuresOf(kids: unknown[], byId: Map<string, Entry>): Feature[] {
+  const out: Feature[] = []
   for (const k of kids) {
     const kid = isLink(k) ? byId.get(k.sys.id) : undefined
     const links = kid && Array.isArray(kid.fields.features) ? (kid.fields.features as unknown[]) : []
     for (const l of links) {
       const one = isLink(l) ? byId.get(l.sys.id) : undefined
       const value = one?.fields.value
-      if (typeof value === 'string' && value.trim()) out.push(value.trim())
+      if (typeof value !== 'string' || !value.trim()) continue
+      const name = one?.fields.key
+      out.push({
+        line: value.trim(),
+        icon: typeof name === 'string' && name.trim() ? `${ICONS}/${name.trim()}.png` : null,
+      })
     }
   }
   return out
