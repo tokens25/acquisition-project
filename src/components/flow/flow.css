@@ -4575,7 +4575,10 @@
   place-items: center;
   inline-size: 20px;
   block-size: 20px;
-  border-radius: var(--radius-2);
+  /* A rounded square rather than the stamp's slight round: the chip is as
+     tall as it is wide, and the same small radius on a square reads as a
+     rectangle that has not been finished. */
+  border-radius: var(--radius-4, 4px);
   background: #f8fafb;
   color: #131415;
 }

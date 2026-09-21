@@ -2824,15 +2824,26 @@ function SpotlightSection({
                   what anybody can watch. */}
               {game.locked && (
                 <span className="fl-spot__lock">
-                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
+                    {/* Outlined, with a keyhole — a body drawn as a block
+                        reads as a bag at this size. */}
                     <path
-                      d="M7 10V7a5 5 0 0 1 10 0v3"
+                      d="M8 10V7.5a4 4 0 0 1 8 0V10"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
+                      strokeWidth="2.2"
                     />
-                    <rect x="5" y="10" width="14" height="11" rx="2" fill="currentColor" />
+                    <rect
+                      x="4.6"
+                      y="10"
+                      width="14.8"
+                      height="10.4"
+                      rx="1.6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                    />
+                    <rect x="10.4" y="13.9" width="3.2" height="3.2" fill="currentColor" />
                   </svg>
                 </span>
               )}
