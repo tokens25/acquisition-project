@@ -1430,8 +1430,27 @@ export function LandingPageScreen({
   device?: Device
 }) {
   const text = landingText(content)
+  /*
+   * The sticky bar is drawn above everything rather than where it sits in the
+   * run, and taken out of the run so it is not drawn twice.
+   *
+   * It is the one block that is not part of the page's order: the live page
+   * pins it over the top of its own header, so it is above the hero here too
+   * however the list is arranged. Everything else is drawn where the list
+   * says, which is the whole point of the list.
+   */
+  const shown = sectionsOf(content).filter((section) => section.on)
+  const bar = shown.find((section) => section.type === 'ppv')
   return (
     <div className="fl fl-page" data-device={device}>
+      {bar && (
+        <PageSectionView
+          key={bar.id}
+          section={bar}
+          content={content}
+          text={copyOf(text, content, bar)}
+        />
+      )}
       {/* No hat here. Whatever draws the phone draws that — the preview's own
           frame, the popup's — so the page is only ever the page, and the bar
           is never drawn twice over one screen. */}
@@ -1442,8 +1461,8 @@ export function LandingPageScreen({
         market={market}
         device={device}
       />
-      {sectionsOf(content)
-        .filter((section) => section.on)
+      {shown
+        .filter((section) => section.type !== 'ppv')
         .map((section) => (
           <PageSectionView
             key={section.id}
@@ -2165,6 +2184,11 @@ function goldTail(line: string): [string, string] {
 
 function PpvBar({ line, badge, cta }: { line: string; badge: string; cta: string }) {
   const [said, number] = goldTail(line.trim())
+  /* Closed, as the live page lets it be closed. Only for as long as the page
+     is on screen: it is a preview of a bar somebody else's reader dismisses,
+     not a setting, so opening the page again brings it back. */
+  const [gone, setGone] = useState(false)
+  if (gone) return null
   return (
     <section className="fl-ppv">
       {badge.trim() !== '' && <span className="fl-ppv__badge">{badge}</span>}
@@ -2179,12 +2203,14 @@ function PpvBar({ line, badge, cta }: { line: string; badge: string; cta: string
           {cta}
         </span>
       )}
-      {/* The way out of it. Drawn because the live page draws one, and inert
-          because nothing here is dismissed — a page being authored keeps every
-          block it has. */}
-      <span className="fl-ppv__close" aria-hidden="true">
+      <button
+        type="button"
+        className="fl-ppv__close"
+        aria-label="Close"
+        onClick={() => setGone(true)}
+      >
         <Icon svg={iconArtwork.close} size={20} />
-      </span>
+      </button>
     </section>
   )
 }
