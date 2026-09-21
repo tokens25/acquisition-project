@@ -3222,9 +3222,12 @@
 }
 
 /* ── The bar above everything ─────────────────────────────────────────────
-   A line, a badge and a way in, and no picture. Pinned on the live page and
-   drawn in the run here, because this is a picture of a page. */
-/* Pinned to the top of the page it sits on, as the live page pins it: it is
+   A line, a way in and a way out of it, and no picture. Its gutter is its own
+   — 16 either side, as the live page sets it — which is why it is not in the
+   group below that gives its gutter to its parts. A rail does that so a tile
+   can run off the screen; this has nothing to run off.
+
+   Pinned to the top of the page it sits on, as the live page pins it: it is
    the one block that stays while everything else scrolls under it, and drawing
    it in the run made it look like the first thing rather than the standing
    one. Above the page's own header, which is where Spain puts it. */
@@ -3235,13 +3238,21 @@
   display: flex;
   gap: var(--space-12);
   align-items: center;
+  justify-content: space-between;
   inline-size: 100%;
-  padding: var(--space-10) var(--space-16);
-  background: var(--color-surface-container-2);
+  padding: var(--space-8) var(--space-16);
+  /* The live page's own: the page's ground, and a warm wash gathering at the
+     end of the bar — nothing for the first nine tenths, then the gold the
+     number and the way in are set in, at a fifth. Measured off en-ES at 375. */
+  border-block-end: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(90deg, rgba(8, 14, 18, 0) 0%, rgba(242, 175, 61, 0.2) 90%, rgba(251, 237, 125, 0.2) 100%),
+    #0c161c;
 }
-/* The number the line is offering, in the gold the live page gives it. */
+/* The number the line is offering, in the gold the live page gives it —
+   #cfa120, which is the flat gold and not the gradient the way in wears. */
 .fl-ppv__number {
-  color: var(--color-brand-primary);
+  color: #cfa120;
   font-weight: var(--font-weight-bold);
   white-space: nowrap;
 }
@@ -3249,8 +3260,7 @@
   display: grid;
   flex: none;
   place-items: center;
-  margin-inline-start: auto;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
 }
 .fl-ppv__badge {
   flex: none;
@@ -3262,21 +3272,29 @@
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
 }
+/* Takes the room the other two do not, and wraps inside it — at 375 the
+   sentence runs to two lines, which is what the live page does with it. */
 .fl-ppv__line {
-  flex: 1;
+  flex: 1 1 auto;
   min-inline-size: 0;
   margin: 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-caption-sm);
-  line-height: 1.35;
+  color: #f9fafa;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  line-height: 21px;
 }
-/* Gold and unruled, as the live page sets it: it is a way out of the offer
-   rather than the offer, so it does not take a button. */
+/* The gradient the live page paints the words in rather than behind them:
+   the same gold that runs across a primary button, clipped to the text, which
+   is why it reads as gold lettering and not as a gold pill. */
 .fl-ppv__cta {
   flex: none;
-  color: var(--color-brand-primary);
-  font-size: var(--font-size-caption-sm);
+  background: linear-gradient(90deg, #f2af3d 0%, #fbed7d 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 14px;
   font-weight: var(--font-weight-bold);
+  white-space: nowrap;
 }
 
 /* ── The invitation to set a zone ─────────────────────────────────────────
@@ -4264,8 +4282,17 @@
 
    Said through `.fl-page` for the specificity, which is how the schedule
    already answers the same rule. */
+/* The bar is a row, centred, with its own gutter — said through `.fl-page`
+   because the page's own rule for a section is a column ranged to the start at
+   10, and a section is what this is. The nine components written against that
+   rule want it; this one is a bar. */
+.fl-page .fl-ppv {
+  flex-direction: row;
+  align-items: center;
+  padding: var(--space-8) var(--space-16);
+}
+
 .fl-page .fl-rail,
-.fl-page .fl-ppv,
 .fl-page .fl-sched,
 .fl-page .fl-shows,
 .fl-page .fl-badges,
