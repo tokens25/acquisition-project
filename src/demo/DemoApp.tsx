@@ -15,6 +15,7 @@ import { Button } from '../components/Button'
 import { DefaultPanel } from './DefaultPanel'
 import { VersionStamp } from './VersionStamp'
 import { LiveLandingProvider } from '../editor/LiveLanding'
+import { SOURCE_LANGUAGE } from '../translate/languages'
 import { EditPanel } from './EditPanel'
 import { FlowPanel, FlowTabs } from './FlowPanel'
 import { DEVICE_LABEL } from '../rules/content'
@@ -693,9 +694,18 @@ export function DemoApp({ product = 'flow' }: { product?: Product } = {}) {
     </header>
   )
 
+  /*
+   * English until the translation says otherwise, whatever market is on
+   * screen: the tool is worked in English, and a market's own language is a
+   * thing somebody switches to rather than a thing a market brings with it.
+   */
   return (
 
-    <LiveLandingProvider market={store.context.market} product={store.context.subscription}>
+    <LiveLandingProvider
+      market={store.context.market}
+      product={store.context.subscription}
+      lang={tx.current.code === SOURCE_LANGUAGE ? null : tx.current.code}
+    >
     <TranslationMarks.Provider value={translationMarks}>
     <main className="page demo" data-collapsed={collapsed || undefined}>
       {/* The bar spans the window and never moves. Collapsing the panel

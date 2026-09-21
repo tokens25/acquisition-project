@@ -24,7 +24,14 @@
  * LANDING-API.md for where the query and its filters come from.
  */
 
-/** The locale the content service holds each market's words in. */
+/**
+ * The locale the content service holds each market's words in.
+ *
+ * Kept as the fallback rather than the default. A page is read in English —
+ * `en-ES`, `en-DE` — because that is the language this tool is worked in, and
+ * a market's own is what somebody switches to. Every market the service holds
+ * answers to English; where one ever does not, this is what it answers to.
+ */
 const LOCALE: Record<string, string> = {
   be: 'nl-BE', at: 'de-AT', de: 'de-DE', li: 'de-LI', lu: 'fr-LU', ch: 'de-CH',
   fr: 'fr-FR', it: 'it-IT', jp: 'ja-JP', pt: 'pt-PT', es: 'es-ES', tw: 'zh-TW',
@@ -541,6 +548,10 @@ async function handler(request: Request): Promise<Response> {
   const page = named ?? HOME[product] ?? 'welcome'
   const refresh = url.searchParams.get('refresh') === '1'
   const raw = url.searchParams.get('raw') === '1'
+  /* Two letters, or nothing for English. What the tool's translation is set
+     to rather than what the market reads in: a market's own language is a
+     thing somebody switches to. */
+  const lang = (url.searchParams.get('lang') ?? '').toLowerCase().replace(/[^a-z]/g, '').slice(0, 2)
 
   if (!MARKETS.includes(market)) {
     return json({ ok: false, error: `Unknown market "${market}". One of: ${MARKETS.join(', ')}.`, markets: MARKETS }, 400)
@@ -552,10 +563,17 @@ async function handler(request: Request): Promise<Response> {
     return json({ ok: false, error: `Unknown product "${product}". One of: ${PRODUCTS.join(', ')}.`, products: PRODUCTS }, 400)
   }
 
-  const locale = LOCALE[market]
   const country = market.toUpperCase()
+  /*
+   * English unless a language was asked for.
+   *
+   * The tool is worked in English whatever market is on screen, so the words
+   * arrive in English and stay there until somebody switches the translation
+   * to the market's own — which is what `lang` is.
+   */
+  const locale = lang ? `${lang}-${country}` : `en-${country}`
   const group = product ? PRODUCT[product] : null
-  const key = `${market}|${page}|${env}|${group ?? ''}`
+  const key = `${market}|${locale}|${page}|${env}|${group ?? ''}`
   const held = pages.get(key)
   const started = Date.now()
 
@@ -565,13 +583,18 @@ async function handler(request: Request): Promise<Response> {
     body = held.value
     cached = true
   } else {
-    const target = configUrl(locale, country, page, env, group)
+    const read = async (at: string) => {
+      const response = await fetch(configUrl(at, country, page, env, group), { headers: HEADERS })
+      if (!response.ok) throw new Error(`The content service answered ${response.status}.`)
+      return (await response.json()) as Body
+    }
     try {
-      const response = await fetch(target, { headers: HEADERS })
-      if (!response.ok) {
-        return json({ ok: false, market, locale, page, env, status: response.status, error: `The content service answered ${response.status}.` }, 502)
+      body = await read(locale)
+      // A market the service holds nothing English for falls back to its own
+      // language rather than reading as a market that draws no page at all.
+      if (!body.items?.length && !lang && LOCALE[market] && LOCALE[market] !== locale) {
+        body = await read(LOCALE[market])
       }
-      body = (await response.json()) as Body
     } catch (error) {
       return json({ ok: false, market, locale, page, env, error: describe(error) }, 502)
     }

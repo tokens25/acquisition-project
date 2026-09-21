@@ -112,13 +112,25 @@ interface Answer {
   elsewhere: LiveElsewhere[]
 }
 
-export function useLiveLanding(market: string | undefined | null, product?: string | null) {
+export function useLiveLanding(
+  market: string | undefined | null,
+  product?: string | null,
+  /**
+   * The language to read the page in, or nothing for English.
+   *
+   * English whatever the market, because that is what the tool is worked in:
+   * Spain's page arrives as "Need help to subscribe?" and becomes "¿Te
+   * ayudamos a contratar?" when somebody switches the translation to Spanish.
+   */
+  lang?: string | null,
+) {
   const code = (market ?? '').trim().toLowerCase()
   const group = (product ?? '').trim().toLowerCase()
+  const said = (lang ?? '').trim().toLowerCase()
   const [answer, setAnswer] = useState<Answer | null>(null)
   /** Bumped to ask again, which is the only thing a reload has to do. */
   const [nonce, setNonce] = useState(0)
-  const asked = `${code}|${group}|${nonce}`
+  const asked = `${code}|${group}|${said}|${nonce}`
 
   useEffect(() => {
     if (!code) return
@@ -131,6 +143,7 @@ export function useLiveLanding(market: string | undefined | null, product?: stri
         const url =
           `/api/landing?market=${encodeURIComponent(code)}` +
           (group ? `&product=${encodeURIComponent(group)}` : '') +
+          (said ? `&lang=${encodeURIComponent(said)}` : '') +
           (nonce ? '&refresh=1' : '')
         const response = await fetch(url, { signal: stop.signal })
         const body = await response.json()
@@ -161,7 +174,7 @@ export function useLiveLanding(market: string | undefined | null, product?: stri
     }
     void ask()
     return () => stop.abort()
-  }, [code, group, nonce, asked])
+  }, [code, group, said, nonce, asked])
 
   const mine = answer?.asked === asked ? answer : null
   const state: LiveState = !code ? 'off' : (mine?.state ?? 'loading')
