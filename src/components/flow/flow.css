@@ -3547,7 +3547,8 @@
    edge of the screen and is cut off by it. */
 .fl-badges__row {
   display: flex;
-  gap: var(--space-16);
+  /* 10 between discs, as the live page sets them. */
+  gap: var(--space-10);
   align-items: flex-start;
   inline-size: 100%;
   padding-inline: var(--space-16);
@@ -3558,13 +3559,16 @@
 .fl-badges__row::-webkit-scrollbar {
   display: none;
 }
+/* As wide as the disc, because that is all there usually is: the live page
+   draws logos and no words, and 96 was the width a line under one needed.
+   A row that does carry lines lets them run to the disc's width and wrap. */
 .fl-badges__one {
   display: flex;
   flex: none;
   flex-direction: column;
   gap: var(--space-8);
   align-items: center;
-  inline-size: 96px;
+  inline-size: 42px;
 }
 /* The disc is the component. An empty one is the row saying how many there
    will be, so it is drawn whether or not a picture has been chosen. */
@@ -3572,8 +3576,8 @@
   display: grid;
   flex: none;
   place-items: center;
-  inline-size: 80px;
-  block-size: 80px;
+  inline-size: 42px;
+  block-size: 42px;
   border-radius: var(--radius-full);
   background: var(--color-surface-container-3);
   overflow: hidden;
