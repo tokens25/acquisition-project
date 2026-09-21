@@ -4296,9 +4296,12 @@
   padding: var(--space-8) var(--space-16);
   /* The page stands every component 48 off the one above it, and the bar is
      not one of them: it sits on the page rather than in the run, so it takes
-     that gap back and the hero starts directly under it. The same token as the
-     gap, so the two cannot drift apart. */
-  margin-block-end: calc(-1 * var(--space-48));
+     that gap back. The same token as the gap, so the two cannot drift apart.
+
+     And 20 beyond it, so the page runs under the bar rather than starting
+     against it — which is how the live page stacks them: its own header and
+     this bar are both pinned at nought, the bar over the top of it. */
+  margin-block-end: calc(-1 * var(--space-48) - 20px);
 }
 
 .fl-page .fl-rail,
