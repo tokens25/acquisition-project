@@ -1221,7 +1221,18 @@ function SectionFields({
                   pipelineKey={key(`landing.subRailTiles[${i}].line`)}
                   onChange={(v) => edit({ line: v })}
                   rows={2}
-                  helpText="The line under the logo, which is what the tile says it sells."
+                  helpText="What it is called, in bold — an event names itself here."
+                />
+                {/* The other of the two. A tile carries one or the other on the
+                    live page, so both fields are here and both draw only when
+                    filled rather than one field drawn two ways. */}
+                <TextField
+                  label="Or a description"
+                  value={tile.note ?? ''}
+                  pipelineKey={key(`landing.subRailTiles[${i}].note`)}
+                  onChange={(v) => edit({ note: v })}
+                  rows={3}
+                  helpText="What it gets you, smaller and quieter — a subscription describes itself here."
                 />
                 <TextField
                   label="Button"

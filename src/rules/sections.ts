@@ -692,7 +692,12 @@ function listFromLive(type: SectionType, kids: LiveEntry[], block?: LiveBlock): 
   if (type === 'subRail') {
     const tiles = items.map((k, i) => ({
       id: `sub-${i + 1}`,
-      line: plain(k.title ?? k.body ?? ''),
+      // Apart, not one or the other: the line is what the tile is called and
+      // the note is what it gets you, and the live page draws them at
+      // different sizes. An events rail fills the first, a products rail the
+      // second, and the tile is whichever it was given.
+      line: plain(k.title ?? ''),
+      ...(k.body ? { note: plain(k.body) } : {}),
       cta: plain(k.cta ?? ''),
       badge: plain(k.badge ?? ''),
       ...(k.image ? { background: k.image } : {}),

@@ -268,6 +268,16 @@ export interface LandingSubTile {
   id: string
   /** What it is, in the line the tile carries under the logo. */
   line: string
+  /**
+   * What it gets you, under that line.
+   *
+   * The live page draws two different things here and the tile is one or the
+   * other: an event names itself at 18 bold — "Canelo vs. Mbilli" — and a
+   * subscription describes itself at 12 in grey. Read as one field they came
+   * out the same size, which is what put a paragraph about San Antonio Spurs
+   * broadcasts where a fight's name goes.
+   */
+  note?: string
   cta: string
   /**
    * When it is, over the line — "SEP 19".

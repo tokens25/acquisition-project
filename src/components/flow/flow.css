@@ -3904,7 +3904,8 @@
   flex: none;
   inline-size: 272px;
   aspect-ratio: 272 / 408;
-  border-radius: var(--radius-12);
+  /* Measured on the live rail at 375: 18, not the 12 this had. */
+  border-radius: 18px;
   overflow: hidden;
 }
 .fl-subtile__art,
@@ -3923,27 +3924,34 @@
   inset: 0;
   background: linear-gradient(to top, rgb(4 8 11 / 92%) 28%, rgb(4 8 11 / 0%) 62%);
 }
+/* 4 between the things that belong together — the logo, the date, the name —
+   and the button set 12 off from them, which is how the live rail spaces it. */
 .fl-subtile__foot {
   position: absolute;
   inset-block-end: 0;
   inset-inline: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-12);
+  gap: var(--space-4);
   align-items: center;
-  padding: var(--space-16) var(--space-16) var(--space-20);
+  padding: var(--space-16) var(--space-16) 26px;
 }
 /* When it is, over what it is. A pill rather than plain words, as the live
    page sets it: the date has to read as a label and not as the first line of
    the title under it. */
 .fl-subtile__badge {
-  padding: var(--space-4) var(--space-10);
+  display: flex;
+  align-items: center;
+  block-size: 24px;
+  padding-inline: 6px;
   border-radius: var(--radius-4, 4px);
-  background: var(--color-background-primary, #0c161c);
-  color: var(--color-text-primary);
+  /* White with dark ink, which is the way round the live rail draws it. It had
+     the tile's own dark ground and light text, and a dark chip on a dark
+     picture is not a chip. */
+  background: #f9fafa;
+  color: #080e12;
   font-size: var(--font-size-caption-sm);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.04em;
+  font-weight: var(--font-weight-semibold, 600);
   text-transform: uppercase;
 }
 .fl-subtile__logo {
@@ -3961,22 +3969,36 @@
 }
 /* Bold, as the live page sets it. The line is what the tile is — "Cruz vs.
    Bravo" — and it carries the weight against the picture behind it. */
+/* Bold, as the live page sets it. The line is what the tile is — "Cruz vs.
+   Bravo" — and it carries the weight against the picture behind it. */
 .fl-subtile__line {
   margin: 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-body-s);
+  color: #f9fafa;
+  font-size: 18px;
   font-weight: var(--font-weight-bold);
-  line-height: 1.45;
+  line-height: 1.38;
+  text-align: center;
+}
+/* What it gets you, where the tile describes itself instead of naming itself:
+   12 over 1.33 in the quieter ink. Measured on the live rail, where a
+   subscription tile carries this and an event tile carries the line above. */
+.fl-subtile__note {
+  margin: 0;
+  color: #b3b9bb;
+  font-size: 12px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.33;
   text-align: center;
 }
 .fl-subtile__cta {
   display: grid;
   place-items: center;
   inline-size: 100%;
-  block-size: 48px;
+  block-size: 40px;
+  margin-block-start: var(--space-8);
   border-radius: var(--radius-8);
-  background: var(--color-surface-inverse);
-  color: var(--color-text-inverse);
+  background: #f9fafa;
+  color: #080e12;
   font-size: var(--font-size-body-s);
   font-weight: var(--font-weight-bold);
   cursor: pointer;

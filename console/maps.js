@@ -284,6 +284,7 @@
       "subscription tile logo": [12,394,10,3],
       "subscription tile badge": [13,397,8,2],
       "subscription tile line": [6,398,22,4],
+      "subscription tile note": [6,398,22,4],
       "subscription tile button": [6,403,22,4],
       "bundles block": [0,412,80,48],
       "bundles head": [4,413,72,8],

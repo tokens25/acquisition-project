@@ -2299,7 +2299,12 @@ function SubRailSection({
                 {/* When it is, over what it is — the shape an events rail
                     takes and a products rail does not. */}
                 {tile.badge?.trim() && <span className="fl-subtile__badge">{tile.badge}</span>}
-                <p className="fl-subtile__line">{tile.line}</p>
+                {tile.line.trim() !== '' && <p className="fl-subtile__line">{tile.line}</p>}
+                {/* What it gets you, where the tile describes itself instead of
+                    naming itself. Quieter and smaller, as the live page sets
+                    it: a paragraph at the name's size reads as a name that ran
+                    on too long. */}
+                {tile.note?.trim() && <p className="fl-subtile__note">{tile.note}</p>}
                 <span className="fl-subtile__cta" role="button">
                   {tile.cta}
                 </span>
