@@ -515,7 +515,14 @@ export interface LiveBlock {
   rail?: {
     title: string | null
     count: number
-    tiles: { title: string; meta: string; live: boolean; start: string | null; image: string | null }[]
+    tiles: {
+      title: string
+      meta: string
+      live: boolean
+      start: string | null
+      image: string | null
+      locked: boolean
+    }[]
   } | null
   entries?: LiveEntry[]
 }
@@ -602,6 +609,7 @@ function listFromLive(type: SectionType, kids: LiveEntry[], block?: LiveBlock): 
       ...(t.live ? { live: true } : {}),
       ...(t.start ? { start: t.start } : {}),
       ...(t.image ? { image: t.image } : {}),
+      ...(t.locked ? { locked: true } : {}),
     }))
     return rows
   }

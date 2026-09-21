@@ -4564,6 +4564,25 @@
   block-size: 100%;
   object-fit: cover;
 }
+/* The padlock sits first and the stamp beside it, as the live page lays the
+   two out: what it takes to watch it, then when it is. Its own square on the
+   same ground as the stamp, so a tile that has both reads as one strip. */
+.fl-spot__lock {
+  position: absolute;
+  inset-block-start: var(--space-8);
+  inset-inline-start: var(--space-8);
+  display: grid;
+  place-items: center;
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: var(--radius-2);
+  background: #f8fafb;
+  color: #131415;
+}
+/* Along by the padlock's width and the gap, where there is one. */
+.fl-spot__lock + .fl-spot__stamp {
+  inset-inline-start: calc(var(--space-8) + 20px + 6px);
+}
 .fl-spot__stamp {
   position: absolute;
   inset-block-start: var(--space-8);

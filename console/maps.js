@@ -352,7 +352,7 @@
       "spotlight row": [0,758,80,18],
       "spotlight tile": [4,758,30,18],
       "spotlight tile picture": [4,758,30,11],
-      "spotlight tile timestamp": [5,759,9,3],
+      "spotlight tile padlock": [5,759,3,3], "spotlight tile timestamp": [9,759,9,3],
       "spotlight tile name": [4,770,30,3],
       "spotlight tile meta": [4,773,20,3],
       "spotlight button": [4,778,30,4],

@@ -259,6 +259,8 @@ export interface LandingTile {
   start?: string
   /** The rail's own picture for it, where the rail has been read. */
   image?: string
+  /** Watching it takes a subscription, which the tile wears as a padlock. */
+  locked?: boolean
 }
 
 /** One subscription offered beside this one — node 1084:55909. */

@@ -202,6 +202,15 @@ interface RailTile {
   live: boolean
   start: string | null
   image: string | null
+  /**
+   * Whether watching it takes a subscription, which the tile wears as a
+   * padlock.
+   *
+   * Read from `EntitlementIds`: a tile that names one needs it, a tile that
+   * names none is open to anybody. Twenty-one of the fifty-seven on Britain's
+   * football rail name one, and the live page padlocks exactly those.
+   */
+  locked: boolean
 }
 
 /**
@@ -288,6 +297,7 @@ async function railOf(
         VideoType?: string
         Start?: string
         Image?: { Id?: string }
+        EntitlementIds?: string[]
       }[]
     }
     const all = Array.isArray(body.Tiles) ? body.Tiles : []
@@ -300,6 +310,7 @@ async function railOf(
         live: t.Type === 'Live' || t.VideoType === 'Live',
         start: typeof t.Start === 'string' ? t.Start : null,
         image: tileImage(country, t.Image?.Id),
+        locked: Array.isArray(t.EntitlementIds) && t.EntitlementIds.length > 0,
       })),
     }
   } catch {

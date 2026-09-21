@@ -2818,6 +2818,24 @@ function SpotlightSection({
                   any scroll position. A rail of small stills is worth the
                   bytes; a rail of blanks is not. */}
               <img src={game.image || artAt(SPOT_ART, at)} alt="" />
+              {/* What it takes to watch it, beside when it is: a padlock on
+                  anything that names an entitlement, which is how the live page
+                  marks the difference between what a subscription gets you and
+                  what anybody can watch. */}
+              {game.locked && (
+                <span className="fl-spot__lock">
+                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                    <path
+                      d="M7 10V7a5 5 0 0 1 10 0v3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <rect x="5" y="10" width="14" height="11" rx="2" fill="currentColor" />
+                  </svg>
+                </span>
+              )}
               <span className="fl-spot__stamp">{stampFor(game, at)}</span>
             </span>
             <p className="fl-spot__name">{game.title}</p>

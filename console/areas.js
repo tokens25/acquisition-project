@@ -536,6 +536,7 @@
       ["spotlight row", ".fl-spot__row", "The games, 12 apart, scrolling sideways.", 'flowLandingPage'],
       ["spotlight tile", ".fl-spot__tile", "One game, 300 wide.", 'flowLandingPage'],
       ["spotlight tile picture", ".fl-spot__shot", "The still, on 16:9.", 'flowLandingPage'],
+      ["spotlight tile padlock", ".fl-spot__lock", "What it takes to watch it, before the date: a padlock on anything naming an entitlement, and nothing on what anybody can watch.", 'flowLandingPage'],
       ["spotlight tile timestamp", ".fl-spot__stamp", "The white date chip at the top left.", 'flowLandingPage'],
       ["spotlight tile name", ".fl-spot__name", "Which game.", 'flowLandingPage'],
       ["spotlight tile meta", ".fl-spot__meta", "The competition. Empty draws none.", 'flowLandingPage'],

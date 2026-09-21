@@ -40,7 +40,14 @@ export interface LiveComponent {
   rail: {
     title: string | null
     count: number
-    tiles: { title: string; meta: string; live: boolean; start: string | null; image: string | null }[]
+    tiles: {
+      title: string
+      meta: string
+      live: boolean
+      start: string | null
+      image: string | null
+      locked: boolean
+    }[]
   } | null
   entries: LiveEntry[]
 }
