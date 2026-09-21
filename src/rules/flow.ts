@@ -1054,7 +1054,10 @@ export const defaultFlow: FlowContent = {
     // first drawing had them the other way round; the panel calls them by
     // position, which is what they are.
     navExplore: 'Explore',
-    navSignUp: 'Sign in',
+    /* What the live page says, in every market read so far. The tool's own
+       reviewer prefers "Sign in" and the platforms it cites do too, but this
+       is a picture of a page rather than a page: it says what the page says. */
+    navSignUp: 'Log in',
     title: 'MSG+ on DAZN',
     body: 'Stream MSG and YES only on DAZN and watch every local Knicks, Yankees, Nets, Rangers, Devils, Islanders and Sabres game live or on demand. ',
     cta: 'Sign Up',

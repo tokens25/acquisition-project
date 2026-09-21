@@ -636,11 +636,13 @@ export function LandingFlowScreen({
               </svg>
             </span>
           )}
-          <span className="fl-landing__nav-cta">{text.navExplore}</span>
+          {/* The quieter of the two, because the way in is the other one:
+              exploring is what somebody does instead of signing in. */}
+          <span className="fl-landing__nav-cta" data-appearance="neutral">
+            {text.navExplore}
+          </span>
           {(content.navSignUpEnabled ?? true) && (
-            <span className="fl-landing__nav-cta" data-appearance="neutral">
-              {text.navSignUp}
-            </span>
+            <span className="fl-landing__nav-cta">{text.navSignUp}</span>
           )}
         </span>
       </header>
