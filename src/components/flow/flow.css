@@ -3224,13 +3224,33 @@
 /* ── The bar above everything ─────────────────────────────────────────────
    A line, a badge and a way in, and no picture. Pinned on the live page and
    drawn in the run here, because this is a picture of a page. */
+/* Pinned to the top of the page it sits on, as the live page pins it: it is
+   the one block that stays while everything else scrolls under it, and drawing
+   it in the run made it look like the first thing rather than the standing
+   one. Above the page's own header, which is where Spain puts it. */
 .fl-ppv {
+  position: sticky;
+  z-index: 3;
+  inset-block-start: 0;
   display: flex;
-  gap: var(--space-8);
+  gap: var(--space-12);
   align-items: center;
   inline-size: 100%;
   padding: var(--space-10) var(--space-16);
   background: var(--color-surface-container-2);
+}
+/* The number the line is offering, in the gold the live page gives it. */
+.fl-ppv__number {
+  color: var(--color-brand-primary);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+}
+.fl-ppv__close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  margin-inline-start: auto;
+  color: var(--color-text-secondary);
 }
 .fl-ppv__badge {
   flex: none;
@@ -3250,12 +3270,13 @@
   font-size: var(--font-size-caption-sm);
   line-height: 1.35;
 }
+/* Gold and unruled, as the live page sets it: it is a way out of the offer
+   rather than the offer, so it does not take a button. */
 .fl-ppv__cta {
   flex: none;
-  color: var(--color-text-primary);
+  color: var(--color-brand-primary);
   font-size: var(--font-size-caption-sm);
   font-weight: var(--font-weight-bold);
-  text-decoration: underline;
 }
 
 /* ── The invitation to set a zone ─────────────────────────────────────────

@@ -2149,16 +2149,42 @@ function SubRailSection({
  * Pinned on the live page. Here it is drawn where it sits in the run, because
  * this page is a picture of a page rather than one being scrolled.
  */
+/**
+ * The number in a line that offers one, which the live page sets in gold.
+ *
+ * The CMS gives one plain sentence — "¿Te ayudamos a contratar? Llama al 900
+ * 999 823" — and the page picks the number out of it, so this picks the same
+ * one: a run of digits and spaces at the end of the line, six digits or more,
+ * which is a telephone number and not a date or a price. A line without one
+ * comes back whole and is drawn plainly.
+ */
+function goldTail(line: string): [string, string] {
+  const at = /(?:[\d][\d\s]{5,})$/.exec(line)
+  return at ? [line.slice(0, at.index), at[0]] : [line, '']
+}
+
 function PpvBar({ line, badge, cta }: { line: string; badge: string; cta: string }) {
+  const [said, number] = goldTail(line.trim())
   return (
     <section className="fl-ppv">
       {badge.trim() !== '' && <span className="fl-ppv__badge">{badge}</span>}
-      {line.trim() !== '' && <p className="fl-ppv__line">{line}</p>}
+      {line.trim() !== '' && (
+        <p className="fl-ppv__line">
+          {said}
+          {number && <span className="fl-ppv__number">{number}</span>}
+        </p>
+      )}
       {cta.trim() !== '' && (
         <span className="fl-ppv__cta" role="button">
           {cta}
         </span>
       )}
+      {/* The way out of it. Drawn because the live page draws one, and inert
+          because nothing here is dismissed — a page being authored keeps every
+          block it has. */}
+      <span className="fl-ppv__close" aria-hidden="true">
+        <Icon svg={iconArtwork.close} size={20} />
+      </span>
     </section>
   )
 }

@@ -154,7 +154,8 @@
       'landing bar buttons': [40,2,36,7], 'landing bar button': [40,2,17,7]
     }},
     flowLandingPage: { vb: '0 0 80 220', parts: {
-      'ppv bar': [0,950,80,7], 'ppv bar badge': [4,952,10,4], 'ppv bar line': [16,952,44,4], 'ppv bar button': [62,952,14,4],
+      'ppv bar': [0,950,80,7], 'ppv bar badge': [4,952,10,4], 'ppv bar line': [16,952,44,4],
+      'ppv bar number': [46,952,14,4], 'ppv bar button': [62,952,12,4], 'ppv bar close': [75,952,4,4],
       'zone breather': [0,958,80,34], 'zone breather picture': [4,960,72,16], 'zone breather heading': [4,978,60,5], 'zone breather line': [4,984,66,4], 'zone breather button': [4,989,28,5],
       'schedule carousel': [0,994,80,24], 'schedule carousel label': [4,996,30,3], 'schedule carousel heading': [4,1000,56,5], 'schedule carousel track': [4,1007,76,9],
       'schedule day': [4,1007,9,9], 'schedule day name': [5,1008,7,3], 'schedule day number': [5,1012,7,4],

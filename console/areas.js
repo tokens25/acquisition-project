@@ -89,6 +89,8 @@
       ['ppv bar', '.fl-ppv', 'The bar above everything. Named for a fight and used for whatever a market needs at the top — Spain’s offers help subscribing — and the only block with no picture on it anywhere. Pinned on the live page and drawn in the run here, because this is a picture of a page rather than one being scrolled.', 'flowLandingPage'],
       ['ppv bar badge', '.fl-ppv__badge', 'The word at the start of the bar, in capitals. Empty draws none.', 'flowLandingPage'],
       ['ppv bar line', '.fl-ppv__line', 'What the bar says.', 'flowLandingPage'],
+      ['ppv bar number', '.fl-ppv__number', 'The number the line is offering, in gold. Picked out of the sentence, which the CMS gives whole.', 'flowLandingPage'],
+      ['ppv bar close', '.fl-ppv__close', 'The way out of the bar, at its end. Drawn because the live page draws one; inert, because a page being authored keeps every block it has.', 'flowLandingPage'],
       ['ppv bar button', '.fl-ppv__cta', 'The way in at the end of the bar. Empty draws none.', 'flowLandingPage'],
       ['zone breather', '.fl-zone', 'The invitation to set a zone. An announcement rather than the postcode block: there is no input on it anywhere. It says what a zone gets you and hands over, and the code is typed on the step after.', 'flowLandingPage'],
       ['zone breather picture', '.fl-zone__art', 'The still behind the invitation. Drawn empty as well as full.', 'flowLandingPage'],
