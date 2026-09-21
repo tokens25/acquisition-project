@@ -4294,6 +4294,11 @@
   flex-direction: row;
   align-items: center;
   padding: var(--space-8) var(--space-16);
+  /* The page stands every component 48 off the one above it, and the bar is
+     not one of them: it sits on the page rather than in the run, so it takes
+     that gap back and the hero starts directly under it. The same token as the
+     gap, so the two cannot drift apart. */
+  margin-block-end: calc(-1 * var(--space-48));
 }
 
 .fl-page .fl-rail,
