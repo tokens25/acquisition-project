@@ -659,12 +659,16 @@ function listFromLive(type: SectionType, kids: LiveEntry[], block?: LiveBlock): 
     return rows
   }
   if (type === 'badges') {
-    // A competition badge is a circular logo with the competition's name under
-    // it, which is a content type of its own rather than a content item.
+    // A competition badge is a circular logo and, on the live page, nothing
+    // else: Germany draws eleven discs at 42 and not a word under any of them.
+    // The description on each is long — "Alle Spiele der Ligue 1, wahlweise mit
+    // Originalkommentar" — and is not a label; it is what the logo is for,
+    // written down, and the page does not show it. So the line takes a title
+    // where an entry has one, which few do, and is otherwise empty.
     const rounds = kids.filter((k) => k.type === 'CommonSpoloCircularLogo')
     const rows = rounds.map((k, i) => ({
       id: `badge-${i + 1}`,
-      line: plain(k.body ?? k.title ?? ''),
+      line: plain(k.title ?? ''),
       ...(k.image ? { image: k.image } : {}),
     }))
     return rows

@@ -368,7 +368,10 @@ function imageOf(kid: Entry, byId: Map<string, Entry>, assets: Assets): string |
   // Not the logo: that is the lockup over the picture, carried separately,
   // and a device on the wall — which is a logo and nothing else — is read by
   // its own list rather than through here.
-  for (const field of ['backgroundImage', 'posterImage']) {
+  // `image` last: a competition badge is nothing but one and keeps it under
+  // that name, while a card that has both keeps its photograph in the first two
+  // and its lockup apart.
+  for (const field of ['backgroundImage', 'posterImage', 'image']) {
     const found = pictureOf(kid.fields[field], byId, assets)
     if (found) return found
   }
