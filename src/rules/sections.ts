@@ -815,6 +815,9 @@ function liveFieldNames(): string[] {
   // market carries a badge, so "ULTIMATE ONLY" was this tool's own sitting
   // over Italy's heading.
   out.add('multiviewBadge')
+  // The same again on the sticky bar. Spain's carries a line and a button and
+  // no badge, so "HELP" was this tool's own over a Spanish phone number.
+  out.add('ppvBadge')
   LIST_FIELDS.add('multiviewFeatures')
   return [...out]
 }
