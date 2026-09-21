@@ -4626,12 +4626,13 @@
   margin-inline: var(--space-16);
   padding-block: var(--space-12);
   border-radius: var(--radius-8);
-  background: var(--color-background-secondary, rgba(255, 255, 255, 0.08));
+  /* The live page's own ground for it, and no rule under the words: it is a
+     button, and a button that is also underlined is a button apologising for
+     not being a link. */
+  background: #242d33;
   color: var(--color-text-primary);
   font-size: var(--font-size-body-s);
   font-weight: var(--font-weight-bold);
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 /* The page's section rule again: the spotlight runs its picture to both
