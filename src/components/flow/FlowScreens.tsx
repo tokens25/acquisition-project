@@ -1635,43 +1635,56 @@ export function PageSectionView({
 
     /* Node 708:174095 — the still, then who it is for, what it is, and the
        way in. A card of its own on the soft surface inside a 2px border. */
-    case 'multiview':
+    /* Two halves stacked: the words on the page, and the card under them.
+       Production calls them `mainContent` and `backgroundSection`, and the
+       first is the half a market may leave out — Italy draws its mobile
+       banner with both and its bundle banner with the card alone. So each
+       half is drawn only where it has something to say, and an empty top is
+       an empty top rather than a fallback to the card's words. */
+    case 'multiview': {
+      const eyebrow = text.multiviewEyebrow.trim() !== ''
+      const badge = text.multiviewBadge.trim() !== ''
+      const topTitle = text.multiviewTitle.trim() !== ''
+      const topBody = text.multiviewBody.trim() !== ''
       return (
         <section className="fl-page__multiview">
+          {(eyebrow || badge || topTitle || topBody) && (
+            <div className="fl-art__top">
+              {(eyebrow || badge) && (
+                <p className="fl-art__prefix">
+                  {eyebrow && (
+                    <>
+                      <Mark svg={articleIcon} size={24} />
+                      <span className="fl-art__kind">{text.multiviewEyebrow}</span>
+                    </>
+                  )}
+                  {badge && <span className="fl-art__badge">{text.multiviewBadge}</span>}
+                </p>
+              )}
+              {topTitle && <p className="fl-art__top-title">{text.multiviewTitle}</p>}
+              {topBody && <p className="fl-art__top-body">{text.multiviewBody}</p>}
+            </div>
+          )}
           <div className="fl-art">
             {!content.multiviewImageOff && (
               <img className="fl-art__shot" src={content.multiviewImage || articleShot} alt="" />
             )}
             <div className="fl-art__words">
-              <p className="fl-art__prefix">
-                <Mark svg={articleIcon} size={24} />
-                <span className="fl-art__kind">{text.multiviewEyebrow}</span>
-                {text.multiviewBadge && (
-                  <span className="fl-art__tab">
-                    <span className="fl-art__badge">{text.multiviewBadge}</span>
-                  </span>
-                )}
-              </p>
-              <p className="fl-art__title">{text.multiviewTitle}</p>
-              <p className="fl-art__body">{text.multiviewBody}</p>
-              {/* The card under the words: what the offer is called, what it
-                  comes with, and the way in. Drawn only where the banner has
-                  one, because the two arrangements are both real — Italy's
-                  mobile banner carries a card and its bundle banner is the
-                  card. */}
               {text.multiviewCardTitle.trim() !== '' && (
-                <span className="fl-art__card">
-                  {text.multiviewCardTitle.trim() !== '' && (
-                    <span className="fl-art__card-title">{text.multiviewCardTitle}</span>
-                  )}
-                  {text.multiviewCardBody.trim() !== '' && (
-                    <span className="fl-art__card-body">{text.multiviewCardBody}</span>
-                  )}
-                </span>
+                <p className="fl-art__title">{text.multiviewCardTitle}</p>
+              )}
+              {text.multiviewCardBody.trim() !== '' && (
+                <p className="fl-art__body">{text.multiviewCardBody}</p>
               )}
               <span className="fl-art__cta" role="button">
                 {text.multiviewCta}
               </span>
+              {/* The line that says the list is an addition rather than the
+                  whole offer. Between the button and the list, which is where
+                  the live page sets it. */}
+              {text.multiviewNote.trim() !== '' && (
+                <span className="fl-art__note">{text.multiviewNote}</span>
+              )}
               {/* After the button, as the live page sets it: the button is the
                   card's and the list is what the card got you, so the list
                   reads as the answer to having pressed it rather than as more
@@ -1690,6 +1703,7 @@ export function PageSectionView({
           </div>
         </section>
       )
+    }
 
     /* Node 734:27154 — the words, the tiles in two columns 12 apart, the line
        about the rest of them, and the way in. Everything 24 apart. */

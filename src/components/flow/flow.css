@@ -1837,6 +1837,47 @@
 .fl-art__tab {
   padding-inline-start: var(--space-12);
 }
+
+/* Two halves, 20 apart, as the live page sets them. Scoped past `.fl-page
+   section`, which lays every band out with no gap of its own. */
+.fl-page .fl-page__multiview {
+  gap: var(--space-20);
+}
+
+/* ── The words above the card — production's `mainContent` ────────────
+   Centred and on the page's own ground rather than inside the card, 12 apart,
+   with 20 of side padding. Measured on en-IT at 375: the pill 24 high at a 2
+   radius, the heading 26/32 bold, the line under it 16/24. The block is drawn
+   only where a market fills it in — see the renderer. */
+.fl-art__top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: center;
+  inline-size: 100%;
+  padding-inline: var(--space-20);
+  text-align: center;
+}
+/* The pill and, where the design's arrangement is in use, the icon and word
+   beside it. Centred here, where the same row inside the card runs left. */
+.fl-art__top .fl-art__prefix {
+  justify-content: center;
+  inline-size: auto;
+}
+.fl-art__top-title {
+  margin: 0;
+  color: #f9fafa;
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  line-height: 32px;
+}
+.fl-art__top-body {
+  margin: 0;
+  color: #f9fafa;
+  font-size: 16px;
+  font-weight: var(--font-weight-regular);
+  line-height: 24px;
+}
 .fl-art__badge {
   display: inline-flex;
   gap: var(--space-4);
@@ -5071,6 +5112,16 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption-sm);
   line-height: 1.45;
+}
+/* The bold line over the list, 26 under the button and 28 clear of the first
+   row — production's own spacing, which is what makes it read as a heading for
+   the list rather than as a line of the card's body. */
+.fl-art__note {
+  margin-block-start: 18px;
+  color: #f9fafa;
+  font-size: var(--font-size-caption-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.5;
 }
 .fl-art__list {
   display: flex;

@@ -239,7 +239,7 @@ export const SECTION_CONTENTS: Record<SectionType, string> = {
   plans: 'Heading and a line under it',
   teams: 'Eyebrow, heading, body, and the teams',
   area: 'Heading, a line under it, notice, button',
-  multiview: 'Still, eyebrow, heading, button',
+  multiview: 'Words above a card, or the card alone',
   providers: 'Heading, a line under it, a note, button',
   faq: 'Heading and five questions',
   imageCta: 'Picture, heading, body, button',
@@ -613,6 +613,8 @@ export interface LiveEntry {
   badge: string | null
   body: string | null
   cta: string | null
+  /** The bold line a card sets over its list — see `multiviewNote`. */
+  disclaimer?: string | null
   key?: string | null
   value?: string | null
   image?: string | null
@@ -864,11 +866,21 @@ function liveFieldNames(): string[] {
   // Set per market rather than through the table, and cleared with the rest so
   // a market that draws no banner does not keep the last one's arrangement.
   out.add('imageCtaLayout')
-  for (const field of ['multiviewCardTitle', 'multiviewCardBody', 'multiviewFeatures']) out.add(field)
-  // Shipped copy with nowhere to come from: no introduction banner in any
-  // market carries a badge, so "ULTIMATE ONLY" was this tool's own sitting
-  // over Italy's heading.
-  out.add('multiviewBadge')
+  // The introduction banner's own, all of them read by hand rather than
+  // through the table — the two halves of it want opposite answers when one
+  // is empty, which the table has no way to say.
+  for (const field of [
+    'multiviewBadge',
+    'multiviewEyebrow',
+    'multiviewTitle',
+    'multiviewBody',
+    'multiviewCardTitle',
+    'multiviewCardBody',
+    'multiviewCta',
+    'multiviewNote',
+    'multiviewFeatures',
+  ])
+    out.add(field)
   // The same again on the sticky bar. Spain's carries a line and a button and
   // no badge, so "HELP" was this tool's own over a Spanish phone number.
   out.add('ppvBadge')
@@ -905,7 +917,13 @@ const LIVE_SPEC: Partial<Record<SectionType, LiveSpec>> = {
     image: 'imageCtaImage',
     list: 'imageCtaTiles',
   },
-  multiview: { from: 'LPContentItem', title: 'multiviewTitle', body: 'multiviewBody', eyebrow: 'multiviewEyebrow', cta: 'multiviewCta', image: 'multiviewImage' },
+  // Everything but the picture is read by hand below. The shared resolver
+  // falls back from the component to the card it holds, and this is the one
+  // block where that fallback is wrong: the component's words are the block
+  // above the card and the card's are the card, so letting one stand in for
+  // the other draws the bundle banner's heading twice — once on the page and
+  // again inside it.
+  multiview: { from: 'LPContentItem', image: 'multiviewImage' },
   experience: { from: 'LPContentItem', title: 'expTitle', body: 'expBody', eyebrow: 'expOverline', cta: 'expCta', image: 'expImage' },
   zone: { from: 'LPContentItem', title: 'zoneTitle', body: 'zoneBody', cta: 'zoneCta', image: 'zoneImage' },
   live: { from: 'LPContentItem', title: 'liveTitle', body: 'liveBody', cta: 'liveCta' },
@@ -1044,13 +1062,32 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       said(spec.image, pictureFromLive(kids))
       if (spec.list) mine[spec.list] = listFromLive(type, kids, block)
     }
-    // The card inside the introduction banner, which has words of its own
-    // beneath the component's — and a list of what the offer includes, which
-    // the CMS hangs off the card as loose key-value entries.
+    /*
+     * The introduction banner, whose two halves come from two places.
+     *
+     * The component's own words are the block above the card — production
+     * calls it `mainContent`, and draws the overLine there as a gold pill
+     * rather than as an overline. The card's words are the card. Neither
+     * stands in for the other: Italy draws the mobile banner with both halves
+     * and the bundle banner with the top half left empty, and a fallback in
+     * either direction turns one of those two pages into the other.
+     *
+     * So an empty half is written as empty. That is the whole point of the
+     * pair — "filled in and not filled in" is the difference between Italy's
+     * two banners, and the only thing that tells them apart.
+     */
     if (type === 'multiview') {
       const card = (block.entries ?? []).find((k) => k.type === 'LPContentItem')
+      mine.multiviewBadge = plain(block.overLine ?? '')
+      mine.multiviewTitle = plain(block.title ?? '')
+      mine.multiviewBody = plain(block.description ?? '')
+      // No market draws the icon-and-word row the design puts over this
+      // banner, so it stays empty where a market has been read.
+      mine.multiviewEyebrow = ''
       mine.multiviewCardTitle = plain(card?.title ?? '')
       mine.multiviewCardBody = plain(card?.body ?? '')
+      mine.multiviewCta = plain(card?.cta ?? '')
+      mine.multiviewNote = plain(card?.disclaimer ?? '')
       mine.multiviewFeatures = (block.features ?? []).map(plain).filter(Boolean)
     }
     // Every market stacks this banner — the picture, then the words under it

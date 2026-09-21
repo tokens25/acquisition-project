@@ -964,11 +964,25 @@ function SectionFields({
             onShipped={() => write({ multiviewImage: '', multiviewImageOff: false })}
           />
 
-              <TextField label="Over the heading" value={t.multiviewEyebrow} pipelineKey={key('landing.multiviewEyebrow')} onChange={(v) => write({ multiviewEyebrow: v })} />
-              <TextField label="Pill" value={t.multiviewBadge} pipelineKey={key('landing.multiviewBadge')} onChange={(v) => write({ multiviewBadge: v })} helpText="Empty draws none." />
+          {/* The banner is two halves and the fields say so, because the same
+              three words mean different things in each — the top half's
+              heading sits on the page and the card's sits on the picture.
+              Leaving all three empty is what draws the card on its own, which
+              is how the live page sets a banner that needs no introduction. */}
+          <FieldGroup title="Above the card">
+              <TextField label="Pill" value={t.multiviewBadge} pipelineKey={key('landing.multiviewBadge')} onChange={(v) => write({ multiviewBadge: v })} helpText="The gold one. Empty draws none." />
               <TextField label="Heading" value={t.multiviewTitle} pipelineKey={key('landing.multiviewTitle')} onChange={(v) => write({ multiviewTitle: v })} rows={2} />
-              <TextField label="Under the heading" value={t.multiviewBody} pipelineKey={key('landing.multiviewBody')} onChange={(v) => write({ multiviewBody: v })} rows={3} />
+              <TextField label="Under the heading" value={t.multiviewBody} pipelineKey={key('landing.multiviewBody')} onChange={(v) => write({ multiviewBody: v })} rows={3} helpText="Empty all three and the banner is the card alone." />
+              {/* The design's own row, which no market draws. Last, because it
+                  is the one field here nobody reading a live page will fill. */}
+              <TextField label="Over the pill" value={t.multiviewEyebrow} pipelineKey={key('landing.multiviewEyebrow')} onChange={(v) => write({ multiviewEyebrow: v })} helpText="The icon and word the design draws. No market has one." />
+          </FieldGroup>
+          <FieldGroup title="On the card">
+              <TextField label="Heading" value={t.multiviewCardTitle} pipelineKey={key('landing.multiviewCardTitle')} onChange={(v) => write({ multiviewCardTitle: v })} rows={2} />
+              <TextField label="Under the heading" value={t.multiviewCardBody} pipelineKey={key('landing.multiviewCardBody')} onChange={(v) => write({ multiviewCardBody: v })} rows={2} />
               <TextField label="Button" value={t.multiviewCta} pipelineKey={key('landing.multiviewCta')} onChange={(v) => write({ multiviewCta: v })} />
+              <TextField label="Over the list" value={t.multiviewNote} pipelineKey={key('landing.multiviewNote')} onChange={(v) => write({ multiviewNote: v })} rows={2} helpText="Bold, for an offer built on another — “Everything from …, plus:”." />
+          </FieldGroup>
         </>
       )
 

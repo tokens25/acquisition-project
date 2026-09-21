@@ -237,6 +237,7 @@ export function landingText(content: LandingScreen): Required<
     multiviewCta: of('multiviewCta'),
     multiviewCardTitle: of('multiviewCardTitle'),
     multiviewCardBody: of('multiviewCardBody'),
+    multiviewNote: of('multiviewNote'),
     providersTitle: of('providersTitle'),
     providersBody: of('providersBody'),
     providersHighlight: of('providersHighlight'),

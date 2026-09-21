@@ -343,6 +343,15 @@ interface Child {
   body: string | null
   /** The first button's label, which is the only one a tile ever draws. */
   cta: string | null
+  /**
+   * The bold line a card sets over its list of what you get.
+   *
+   * Italy's bundle banner says "Everything from the DAZN Unlimited
+   * subscription, plus:" — which is what makes the four lines under it read as
+   * an addition rather than as the whole offer. Only `LPContentItem` carries
+   * it, and only where the offer is built on another one.
+   */
+  disclaimer: string | null
   /** Set on `CommonKeyValue`, which is how a component carries a loose string. */
   key: string | null
   value: string | null
@@ -447,7 +456,7 @@ function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child
   const kid = isLink(link) ? byId.get(link.sys.id) : undefined
   const id = isLink(link) ? link.sys.id : ''
   if (!kid)
-    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, key: null, value: null, image: null, mark: null, ctaIcon: null }
+    return { type: 'unresolved', id, name: null, title: null, preTitle: null, badge: null, body: null, cta: null, disclaimer: null, key: null, value: null, image: null, mark: null, ctaIcon: null }
   const f = kid.fields
   const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null)
   const buttons = Array.isArray(f.buttons) ? (f.buttons as unknown[]) : []
@@ -466,6 +475,7 @@ function childOf(link: unknown, byId: Map<string, Entry>, assets: Assets): Child
     cta: first
       ? (str(first.fields.label) ?? str(first.fields.buttonLabel))
       : (str(f.label) ?? str(f.buttonLabel)),
+    disclaimer: str(f.disclaimer),
     key: str(f.key),
     value: str(f.value),
     image: imageOf(kid, byId, assets),

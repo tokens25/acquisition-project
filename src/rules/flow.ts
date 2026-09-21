@@ -654,14 +654,27 @@ export interface LandingScreen {
   /**
    * The card inside the banner, which has words of its own.
    *
-   * The banner is two things stacked: an overline, a heading and a line that
-   * say what the offer is, and under them a card that says what you get and
-   * carries the button. Italy draws both — "Tutto lo sport di DAZN, sul tuo
-   * smartphone." over "Sempre con te. Ogni competizione." — so one heading
-   * would have had to stand in for two.
+   * The banner is two things stacked: a badge, a heading and a line that say
+   * what the offer is, sitting on the page above the card, and under them the
+   * card that says what you get and carries the button. Italy draws both —
+   * "All DAZN sport, on your smartphone." over "Always with you. Every
+   * competition." — so one heading would have had to stand in for two.
+   *
+   * Production calls the halves `mainContent` and `backgroundSection`, and the
+   * first is the half a market can leave out: Italy's bundle banner sets no
+   * title, description or overLine on the component at all, so it draws the
+   * card alone.
    */
   multiviewCardTitle?: string
   multiviewCardBody?: string
+  /**
+   * The bold line over the list, where the offer is built on another one.
+   *
+   * "Everything from the DAZN Unlimited subscription, plus:" — without it the
+   * four lines under it read as the whole offer rather than as what this one
+   * adds. The CMS keeps it on the card as `disclaimer`.
+   */
+  multiviewNote?: string
   /** What the offer includes, a line each against a tick. */
   multiviewFeatures?: string[]
   /** The still: one of its own, and whether it is drawn with one at all. */
@@ -1148,6 +1161,7 @@ export const defaultFlow: FlowContent = {
        fills these. */
     multiviewCardTitle: '',
     multiviewCardBody: '',
+    multiviewNote: '',
 
     providersTitle: 'How to connect your\nTV Subscription',
     providersBody:
