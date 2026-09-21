@@ -1914,7 +1914,7 @@ export function PageSectionView({
               {content.imageCtaTiles.map((clip, at) => (
                 <article className="fl-imgcta__tile" key={clip.id}>
                   <span className="fl-imgcta__shot" aria-hidden="true">
-                    <img src={clip.image || artAt(SPOT_ART, at)} alt="" loading="lazy" />
+                    <img src={clip.image || artAt(SPOT_ART, at)} alt="" />
                   </span>
                   <p className="fl-imgcta__name">{clip.title}</p>
                   <p className="fl-imgcta__meta">{clip.meta}</p>
@@ -2811,9 +2811,13 @@ function SpotlightSection({
         {(tiles ?? SPOT_FIXTURES).map((game, at) => (
           <article className="fl-spot__tile" key={game.id}>
             <span className="fl-spot__shot" aria-hidden="true">
-              {/* Lazily, as the live page does: a rail of seventy-nine is a
-                  rail of seventy-nine pictures, and the row shows three. */}
-              <img src={game.image || artAt(SPOT_ART, at)} alt="" loading="lazy" />
+              {/* Eagerly, though the live page is lazy about it. The preview is
+                  drawn inside a phone frame that is scaled, and a scaled box
+                  inside a scroller never satisfies the browser that an image
+                  is near enough to want: lazy here loads nothing at all, at
+                  any scroll position. A rail of small stills is worth the
+                  bytes; a rail of blanks is not. */}
+              <img src={game.image || artAt(SPOT_ART, at)} alt="" />
               <span className="fl-spot__stamp">{stampFor(game, at)}</span>
             </span>
             <p className="fl-spot__name">{game.title}</p>

@@ -205,6 +205,28 @@ interface RailTile {
 }
 
 /**
+ * Which of the image service's regions a market is served from.
+ *
+ * Not the country. Canada's page asks `/ca/`, Britain's asks `/eu/` — the
+ * segment is a region, and a country code that is not one is refused: `gb`
+ * and `de` both answer 400.
+ *
+ * Three of them serve, and each serves any picture: Britain's id comes back
+ * byte for byte the same from `eu`, `ca` and `jp`. So this only has to be
+ * near enough, and near enough is the region the market's own page asks for.
+ *
+ * The Americas go through `ca` rather than `us`, which is a region the
+ * service holds at a version this does not speak — it answers that v2 is not
+ * one of v3 or v4 — and there is nothing to gain by learning a second shape
+ * for pictures the first one already serves.
+ */
+const IMAGE_REGION: Record<string, string> = {
+  ca: 'ca', us: 'ca', br: 'ca', mx: 'ca',
+  jp: 'jp', tw: 'jp', au: 'jp',
+}
+const regionOf = (country: string) => IMAGE_REGION[country.toLowerCase()] ?? 'eu'
+
+/**
  * A rail tile's picture, which is an id rather than a URL.
  *
  * The rail hands back `{ Id, ImageMimeType, ImageType }` and the page builds
@@ -215,11 +237,14 @@ interface RailTile {
  *
  * 600 by 337 at quality 80, as the page asks for it at a phone's width.
  */
-const tileImage = (country: string, id: string | undefined): string | null =>
-  id
-    ? `https://image.discovery.indazn.com/${country}/v2/${country}/image/?id=${encodeURIComponent(id)}` +
-      `&quality=80&width=600&height=337&resizeAction=fill&verticalAlignment=top&format=webp`
-    : null
+const tileImage = (country: string, id: string | undefined): string | null => {
+  if (!id) return null
+  const region = regionOf(country)
+  return (
+    `https://image.discovery.indazn.com/${region}/v2/${region}/image/?id=${encodeURIComponent(id)}` +
+    `&quality=80&width=600&height=337&resizeAction=fill&verticalAlignment=top&format=webp`
+  )
+}
 
 /**
  * How many of a rail's tiles come back.
