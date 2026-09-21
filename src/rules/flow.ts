@@ -723,6 +723,23 @@ export interface LandingScreen {
    */
   multiviewNote?: string
   /**
+   * The price line under the card's words — "**€9.99** /month – cancel
+   * anytime with 30 days' notice".
+   *
+   * Two fields because the live page draws it as two things: the amount at 18
+   * bold in the bright ink, and the terms after it at 16 in grey. One string
+   * with markup in it would have to be parsed at render and typed with tags by
+   * whoever edits it.
+   *
+   * The CMS keeps the pair as one `offerLabel` string on the component, and in
+   * most markets the amount in it is the placeholder `{price}` rather than a
+   * number: production fills that at render from the offers service. Nothing
+   * on this branch can reach that service, so a market whose label is a
+   * placeholder arrives with the terms and no amount, for somebody to type.
+   */
+  multiviewPrice?: string
+  multiviewPriceNote?: string
+  /**
    * What the offer includes, a line each against an icon.
    *
    * The icon is the market's, not ours: the CMS names one per line and the
@@ -992,6 +1009,14 @@ export interface LandingScreen {
    */
   imageCtaTiles?: LandingTile[]
   /**
+   * What the free tier includes, a line each against an icon.
+   *
+   * The same list the introduction banner carries, because this banner is that
+   * banner: production gives it its own component name and its own module, and
+   * then builds it out of the same picture, heading, button and ticked lines.
+   */
+  imageCtaLines?: (LandingBannerLine | string)[]
+  /**
    * How the card is put together.
    *
    * `top` stacks it — the picture, then the words and the button under it on
@@ -1241,6 +1266,8 @@ export const defaultFlow: FlowContent = {
     multiviewCardTitle: '',
     multiviewCardBody: '',
     multiviewNote: '',
+    multiviewPrice: '',
+    multiviewPriceNote: '',
 
     articleEyebrow: 'Multiview',
     articleBadge: 'Ultimate only',

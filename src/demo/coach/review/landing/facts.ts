@@ -135,6 +135,8 @@ function wordsOf(type: SectionType, t: ReturnType<typeof landingText>, l: Landin
           t.multiviewBody,
           t.multiviewCardTitle,
           t.multiviewCardBody,
+          t.multiviewPrice,
+          t.multiviewPriceNote,
           t.multiviewCta,
           t.multiviewNote,
         ],

@@ -5231,34 +5231,80 @@
    the same card put together differently, not a different card. */
 .fl-imgcta[data-layout='top'] {
   justify-content: flex-start;
-  gap: var(--space-20);
+  gap: 0;
   aspect-ratio: auto;
-  padding-block-end: var(--space-20);
-  overflow: hidden;
+  padding-block-end: 0;
+  border-color: #3d4549;
+  background: #080e12;
+  overflow: clip;
 }
+/* Pinned to the top and left behind the words, which is how the live page
+   builds it: the picture does not stop, it fades. Measured on en-DE — the
+   band is 341 by 284 at a 375 window, which is the card's own width against
+   a fraction of it rather than a window measurement. */
 .fl-imgcta[data-layout='top'] .fl-imgcta__art {
-  position: static;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
   inline-size: 100%;
   block-size: auto;
-  /* The picture is a picture again rather than the card's ground, so it takes
-     a shape of its own — the live page's, a little wider than square. */
-  aspect-ratio: 343 / 300;
+  aspect-ratio: 341 / 284;
   border-radius: 0;
+  object-position: center top;
 }
+/* The words start at 71.5% of the card's width down it — production's 243.75
+   at the width it draws the card — and the scrim under them takes the picture
+   into the card's ground on the way. Both are the card's width rather than the
+   window's, because the tool's phone is not the window. */
 .fl-imgcta[data-layout='top'] .fl-imgcta__foot {
-  gap: var(--space-16);
+  gap: var(--space-12);
   align-items: stretch;
   inline-size: 100%;
-  padding-inline: var(--space-16);
+  padding: 71.5% var(--space-16) var(--space-24);
+  background: linear-gradient(
+    180deg,
+    rgb(8 14 18 / 0%) 0,
+    rgb(8 14 18 / 0%) 32%,
+    rgb(8 14 18 / 45%) 48%,
+    rgb(8 14 18 / 90%) 64%,
+    #080e12 85%,
+    #080e12 100%
+  );
 }
 /* Ranged left, as the live page sets it: the words sit under a picture rather
    than in the middle of one, and a centred paragraph under a left-aligned
    heading reads as a caption. */
 .fl-imgcta[data-layout='top'] .fl-imgcta__words {
+  gap: var(--space-4);
   text-align: start;
 }
 .fl-imgcta[data-layout='top'] .fl-imgcta__cta {
   inline-size: 100%;
+}
+/* The list, ruled off from the button above it — the one thing this card does
+   that the introduction banner's does not. 24 above the rule and 17 below. */
+.fl-imgcta__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  margin-block-start: var(--space-12);
+  padding-block-start: 17px;
+  border-block-start: 1px solid #3d4549;
+}
+.fl-imgcta__line {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: var(--space-12);
+  align-items: center;
+  color: #f9fafa;
+  font-size: var(--font-size-caption-sm);
+  line-height: 21px;
+  text-align: start;
+}
+.fl-imgcta__tick {
+  inline-size: 16px;
+  block-size: 16px;
+  object-fit: contain;
 }
 
 /* ── The card inside the introduction banner ──────────────────────────
@@ -5284,6 +5330,24 @@
   font-size: var(--font-size-caption-sm);
   line-height: 1.45;
 }
+/* What it costs and on what terms. Measured on en-DE: the terms at 16 in the
+   grey the live page uses for them, the amount at 18 bold in the bright ink,
+   and 12 between this and the words above it. */
+.fl-art__price {
+  margin: 0;
+  margin-block-start: var(--space-4);
+  color: #6d7377;
+  font-size: 16px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.4;
+}
+.fl-art__amount {
+  margin-inline-end: 4px;
+  color: #f9fafa;
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+}
+
 /* The bold line over the list, 26 under the button and 28 clear of the first
    row — production's own spacing, which is what makes it read as a heading for
    the list rather than as a line of the card's body. */

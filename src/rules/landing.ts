@@ -192,6 +192,7 @@ export function landingText(content: LandingScreen): Required<
     | 'imageCtaTiles'
     | 'multiviewFeatures'
     | 'articleLines'
+    | 'imageCtaLines'
     | 'subRailTiles'
     | 'badges'
     | 'bundles'
@@ -241,6 +242,8 @@ export function landingText(content: LandingScreen): Required<
     multiviewCardTitle: of('multiviewCardTitle'),
     multiviewCardBody: of('multiviewCardBody'),
     multiviewNote: of('multiviewNote'),
+    multiviewPrice: of('multiviewPrice'),
+    multiviewPriceNote: of('multiviewPriceNote'),
     articleEyebrow: of('articleEyebrow'),
     articleBadge: of('articleBadge'),
     articleTitle: of('articleTitle'),

@@ -981,6 +981,11 @@ function SectionFields({
           <FieldGroup title="On the card">
               <TextField label="Heading" value={t.multiviewCardTitle} pipelineKey={key('landing.multiviewCardTitle')} onChange={(v) => write({ multiviewCardTitle: v })} rows={2} />
               <TextField label="Under the heading" value={t.multiviewCardBody} pipelineKey={key('landing.multiviewCardBody')} onChange={(v) => write({ multiviewCardBody: v })} rows={2} />
+              {/* Two fields because the page draws two things: the money, and
+                  what you are agreeing to. Most markets leave the money to the
+                  offers service, so it arrives empty and the terms do not. */}
+              <TextField label="Price" value={t.multiviewPrice} pipelineKey={key('landing.multiviewPrice')} onChange={(v) => write({ multiviewPrice: v })} helpText="The money, in bold — “€9.99”. Empty in the markets that fill it at render." />
+              <TextField label="The terms" value={t.multiviewPriceNote} pipelineKey={key('landing.multiviewPriceNote')} onChange={(v) => write({ multiviewPriceNote: v })} rows={2} helpText="The grey sentence around it. {price} is where the money goes — “From {price} /month”." />
               <TextField label="Button" value={t.multiviewCta} pipelineKey={key('landing.multiviewCta')} onChange={(v) => write({ multiviewCta: v })} />
               <TextField label="Over the list" value={t.multiviewNote} pipelineKey={key('landing.multiviewNote')} onChange={(v) => write({ multiviewNote: v })} rows={2} helpText="Bold, for an offer built on another — “Everything from …, plus:”." />
           </FieldGroup>
@@ -2034,6 +2039,56 @@ function SectionFields({
           <TextField label="Heading" value={t.imageCtaTitle} pipelineKey={key('landing.imageCtaTitle')} onChange={(v) => write({ imageCtaTitle: v })} rows={2} />
           <TextField label="Under the heading" value={t.imageCtaBody} pipelineKey={key('landing.imageCtaBody')} onChange={(v) => write({ imageCtaBody: v })} rows={3} />
           <TextField label="Button" value={t.imageCtaCta} pipelineKey={key('landing.imageCtaCta')} onChange={(v) => write({ imageCtaCta: v })} />
+          {/* The same list the introduction banner carries, because this is
+              that card: production gives it another name and builds it the
+              same way. Here it sits under a hairline. */}
+          <FieldGroup title="What it includes">
+              {bannerLinesOf(inst.imageCtaLines).map((one, i) => {
+                const all = bannerLinesOf(inst.imageCtaLines)
+                const at = (next: Partial<LandingBannerLine>) =>
+                  write({ imageCtaLines: all.map((l, j) => (j === i ? { ...l, ...next } : l)) })
+                return (
+                  <div className="demo__feature" key={i}>
+                    <TextField
+                      label={`Line ${i + 1}`}
+                      value={one.line}
+                      pipelineKey={key(`landing.imageCtaLines[${i}].line`)}
+                      onChange={(v) => at({ line: v })}
+                      rows={2}
+                    />
+                    <SelectField
+                      label="Against it"
+                      value={one.icon ?? ''}
+                      options={[{ value: '', label: 'The tick this tool draws' }, ...BANNER_ICONS]}
+                      onChange={(v) => at({ icon: v || undefined })}
+                    />
+                    <button
+                      data-icon="trash"
+                      aria-label="Remove"
+                      type="button"
+                      className="demo__feature-remove"
+                      onClick={() => write({ imageCtaLines: all.filter((_, j) => j !== i) })}
+                    >
+                      <TrashIcon size={14} />
+                    </button>
+                  </div>
+                )
+              })}
+              <button
+                type="button"
+                className="ed-add"
+                onClick={() =>
+                  write({
+                    imageCtaLines: [
+                      ...bannerLinesOf(inst.imageCtaLines),
+                      { line: '', icon: BANNER_ICONS[0].value },
+                    ],
+                  })
+                }
+              >
+                Add a line
+              </button>
+          </FieldGroup>
         </>
       )
 

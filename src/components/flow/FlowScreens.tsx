@@ -1687,6 +1687,22 @@ export function PageSectionView({
               {text.multiviewCardBody.trim() !== '' && (
                 <p className="fl-art__body">{text.multiviewCardBody}</p>
               )}
+              {/* What it costs and on what terms, between the words and the
+                  button, as the live page sets it. The amount carries the
+                  weight; the terms trail after it in grey. */}
+              {(text.multiviewPrice.trim() !== '' || text.multiviewPriceNote.trim() !== '') && (
+                <p className="fl-art__price">
+                  {priceParts(text.multiviewPrice, text.multiviewPriceNote).map((part, i) =>
+                    part.money ? (
+                      <span className="fl-art__amount" key={i}>
+                        {part.text}
+                      </span>
+                    ) : (
+                      part.text
+                    ),
+                  )}
+                </p>
+              )}
               <span className="fl-art__cta" role="button">
                 {text.multiviewCta}
               </span>
@@ -1968,7 +1984,8 @@ export function PageSectionView({
 
     /* Node 747:46379 — a picture 343 by 447 with the words and the button
        laid over the foot of it, inside a 2px border on a 12 radius. */
-    case 'imageCta':
+    case 'imageCta': {
+      const freeLines = drawnLinesOf(content.imageCtaLines)
       return (
         <section className="fl-page__image-cta">
           <div className="fl-imgcta" data-layout={content.imageCtaLayout ?? 'fill'}>
@@ -1982,11 +1999,31 @@ export function PageSectionView({
             <div className="fl-imgcta__foot">
               <div className="fl-imgcta__words">
                 <p className="fl-imgcta__title">{text.imageCtaTitle}</p>
-                <p className="fl-imgcta__body">{text.imageCtaBody}</p>
+                {text.imageCtaBody.trim() !== '' && (
+                  <p className="fl-imgcta__body">{text.imageCtaBody}</p>
+                )}
               </div>
               <span className="fl-imgcta__cta" role="button">
                 {text.imageCtaCta}
               </span>
+              {/* What the free tier includes, under a hairline. The live page
+                  rules this list off from the button above it, which the
+                  introduction banner's does not — it is the one thing the two
+                  cards do differently. */}
+              {freeLines.length > 0 && (
+                <span className="fl-imgcta__list">
+                  {freeLines.map((one) => (
+                    <span className="fl-imgcta__line" key={one.line}>
+                      {one.icon ? (
+                        <img className="fl-imgcta__tick" src={one.icon} alt="" />
+                      ) : (
+                        <Mark svg={iconArtwork.check} size={16} />
+                      )}
+                      {one.line}
+                    </span>
+                  ))}
+                </span>
+              )}
             </div>
           </div>
           {/* What the offer gets you, where the banner is served a rail. The
@@ -2007,6 +2044,7 @@ export function PageSectionView({
           )}
         </section>
       )
+    }
 
     case 'rail':
       return (
@@ -2978,6 +3016,32 @@ function SpotlightSection({
       )}
     </section>
   )
+}
+
+/**
+ * The price line in the pieces it is drawn in.
+ *
+ * The note is a sentence with `{price}` where the amount goes — the CMS's own
+ * marker, and the only way to keep Italy's "From €34.99 /month" from becoming
+ * "€34.99 From /month". A note with no marker takes the amount in front of it,
+ * which is where every market that has one puts it.
+ *
+ * An empty amount takes the marker out with it rather than leaving a gap:
+ * most markets fill the amount at render from a service this branch cannot
+ * reach, and a sentence reading "{price} /month" is worse than one reading
+ * "/month".
+ */
+function priceParts(price: string, note: string): { text: string; money?: boolean }[] {
+  const money = price.trim()
+  const said = note.trim()
+  if (said === '') return money === '' ? [] : [{ text: money, money: true }]
+  if (!said.includes('{price}')) {
+    return money === '' ? [{ text: said }] : [{ text: money, money: true }, { text: ` ${said}` }]
+  }
+  const [before, ...rest] = said.split('{price}')
+  const after = rest.join('{price}')
+  if (money === '') return [{ text: `${before}${after}`.replace(/\s+/g, ' ').trim() }]
+  return [{ text: before }, { text: money, money: true }, { text: after }]
 }
 
 /**

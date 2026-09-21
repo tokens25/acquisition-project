@@ -139,6 +139,8 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   multiviewCardBody: 'multiview',
   multiviewFeatures: 'multiview',
   multiviewNote: 'multiview',
+  multiviewPrice: 'multiview',
+  multiviewPriceNote: 'multiview',
   providersTitle: 'providers',
   providersBody: 'providers',
   providersHighlight: 'providers',
@@ -159,6 +161,7 @@ export const FIELD_COMPONENT: Record<string, SectionType> = {
   imageCtaTitle: 'imageCta',
   imageCtaBody: 'imageCta',
   imageCtaCta: 'imageCta',
+  imageCtaLines: 'imageCta',
   faqTitle: 'faq',
   faqs: 'faq',
   railTitle: 'rail',
@@ -901,9 +904,14 @@ function liveFieldNames(): string[] {
     'multiviewCardBody',
     'multiviewCta',
     'multiviewNote',
+    'multiviewPrice',
+    'multiviewPriceNote',
     'multiviewFeatures',
+    // The freemium banner's, which is the same list on the same card.
+    'imageCtaLines',
   ])
     out.add(field)
+  LIST_FIELDS.add('imageCtaLines')
   // The same again on the sticky bar. Spain's carries a line and a button and
   // no badge, so "HELP" was this tool's own over a Spanish phone number.
   out.add('ppvBadge')
@@ -989,6 +997,48 @@ const pictureFromLive = (kids: LiveEntry[]): string | null =>
  * either way; only the marks go.
  */
 const plain = (text: string) => text.replace(/##/g, '').trim()
+
+/**
+ * The price line a banner carries, split into the two things it is drawn as.
+ *
+ * The CMS keeps it as one `offerLabel` string with the amount in bold —
+ * `<b>€9.99</b> /month – cancel anytime with 30 days' notice`. The live page
+ * draws the bold part at 18 in the bright ink and the rest at 16 in grey, so
+ * the two come apart here rather than at render.
+ *
+ * `{price}` is not a price. Most markets leave the amount as that placeholder
+ * and production fills it from the offers service; nothing on this branch can
+ * reach that service, so the amount is left empty and the terms come across
+ * on their own. A field somebody has to clear before typing into is worse
+ * than a field that is already empty.
+ */
+/** A block's ticked lines, each with the icon the CMS named against it. */
+const linesFromLive = (features: { line: string; icon: string | null }[] | undefined) =>
+  (features ?? [])
+    .map((one) => ({ line: plain(one.line), ...(one.icon ? { icon: one.icon } : {}) }))
+    .filter((one) => one.line !== '')
+
+function priceFromLive(entries: LiveEntry[]): { price: string; note: string } {
+  const label = entries.find((k) => k.key === 'offerLabel')?.value
+  if (!label) return { price: '', note: '' }
+  const strip = (s: string) =>
+    s
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  const bold = /<b>([\s\S]*?)<\/b>/i.exec(label)
+  if (!bold) return { price: '', note: strip(label) }
+  const amount = strip(bold[1])
+  // The sentence with the amount's place kept rather than its text. Italy says
+  // "From €34.99 /month" and Germany "€9.99 /month – cancel anytime": the
+  // amount is in the middle of one and at the front of the other, so a note
+  // that only held what came after it would put Italy's "From" behind its own
+  // price. `{price}` is the CMS's own marker, which is what it already writes
+  // in the markets that fill the amount at render.
+  const note = strip(label.replace(bold[0], ' {price} '))
+  return { price: amount === '{price}' ? '' : amount, note }
+}
 
 /**
  * The types a market and a product start with.
@@ -1111,10 +1161,16 @@ export function wordsFromLive(market?: string | null, product?: string | null): 
       mine.multiviewCardBody = plain(card?.body ?? '')
       mine.multiviewCta = plain(card?.cta ?? '')
       mine.multiviewNote = plain(card?.disclaimer ?? '')
-      mine.multiviewFeatures = (block.features ?? [])
-        .map((one) => ({ line: plain(one.line), ...(one.icon ? { icon: one.icon } : {}) }))
-        .filter((one) => one.line !== '')
+      mine.multiviewFeatures = linesFromLive(block.features)
+      const money = priceFromLive(block.entries ?? [])
+      mine.multiviewPrice = money.price
+      mine.multiviewPriceNote = money.note
     }
+    // The freemium banner is the introduction banner under another name —
+    // production gives it its own component and then builds it out of the same
+    // picture, heading, button and ticked lines. So its lines come across the
+    // same way.
+    if (type === 'imageCta') mine.imageCtaLines = linesFromLive(block.features)
     // Every market stacks this banner — the picture, then the words under it
     // — so a page opened on a market is stacked. The design's other
     // arrangement stays available in the panel.
