@@ -1,4 +1,5 @@
-import type { LandingScreen } from './flow'
+import type { LandingScreen, NavFirstStyle } from './flow'
+import { defaultFlow } from './flow'
 
 /**
  * The landing page as a list of components rather than a fixed run of
@@ -437,6 +438,51 @@ export const PAGE_DEFAULTS: Record<string, SectionType[]> = {
   'DE|nfl': ['plans', 'rail', 'experience', 'experience', 'experience', 'experience', 'experience', 'features', 'supported', 'spotlight', 'shows', 'faq'],
   'GB|nhl': ['plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
   'DE|nhl': ['plans', 'experience', 'features', 'imageCta', 'supported', 'supported', 'faq'],
+}
+
+/**
+ * The top bar's first button, market by market, as production draws it.
+ *
+ * A table rather than a reading, because this one button is the only thing on
+ * the page that the content service does not answer for. The bar is DAZN's own
+ * shell rather than a component of the landing config — `exploreButton`, drawn
+ * by the app around whatever the CMS hands it — so there is nothing in the
+ * config to read, and the only way to know what a market draws is to look at
+ * the market.
+ *
+ * Which is the catch: the bar follows the connection, not the locale. Asking
+ * for `/en-GB/welcome` from Milan answers `/en-IT/welcome`, so a row here can
+ * only be written from inside the market it is about. Hence the dates — each
+ * row says when somebody was there.
+ *
+ * Keyed by market alone. The bar is the site's and not the page's: NFL and NHL
+ * draw the same one DAZN does.
+ *
+ * A market with no row falls through to `neutral` and whatever the first
+ * button already says, which is the bar as this tool shipped. That is a gap
+ * and not an answer — a row is only here once somebody has been there.
+ */
+export const NAV_DEFAULTS: Record<string, { first: string; style: NavFirstStyle; second: string }> = {
+  // Read on 2026-09-20 from Milan: gold, `exploreButton-module__subscribeStyle`,
+  // over `--new-gold`. Nothing to browse here before paying, so the first
+  // button asks for the money and the second is the way back in.
+  IT: { first: 'Subscribe', style: 'subscribe', second: 'Log in' },
+}
+
+/**
+ * What the top bar draws in a market, or the shipped bar where nobody has been
+ * there to see.
+ *
+ * Answers for all three fields either way, never `{}`. These live on one page
+ * shared by every market, and a patch that says nothing leaves the last
+ * market's bar standing: pick Italy, then Britain, and Britain drew Italy's
+ * gold Subscribe. Saying "the shipped one" out loud is what stops that.
+ */
+export const navFromProduction = (market?: string | null): Partial<LandingScreen> => {
+  const row = NAV_DEFAULTS[(market ?? '').toUpperCase()]
+  const base = defaultFlow.landing
+  if (!row) return { navExplore: base.navExplore, navFirstStyle: 'neutral', navSignUp: base.navSignUp }
+  return { navExplore: row.first, navFirstStyle: row.style, navSignUp: row.second }
 }
 
 /**

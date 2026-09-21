@@ -312,6 +312,15 @@ export interface LandingSubTile {
 /** How the freemium banner is put together — the picture over or above. */
 export type ImageCtaLayout = 'fill' | 'top'
 
+/**
+ * The two faces the top bar's first button is drawn with.
+ *
+ * Named for what they say rather than for what they look like: `subscribe` is
+ * the gold one that asks for money, `neutral` the grey one that offers a look
+ * around first.
+ */
+export type NavFirstStyle = 'subscribe' | 'neutral'
+
 /** One logo on the wall of supported devices. */
 export interface LandingDevice {
   id: string
@@ -527,6 +536,19 @@ export interface LandingScreen {
   /** The two buttons in the bar at the top. */
   navExplore: string
   navSignUp: string
+  /**
+   * Which face the first button wears.
+   *
+   * Production draws one component in that slot — DAZN's own `exploreButton` —
+   * and gives it either face depending on the market. Italy's says Subscribe
+   * on the gold gradient, because there is nothing to browse before paying;
+   * where there is, it says Explore on grey and the way in is the button
+   * beside it.
+   *
+   * Absent means `neutral`, which is how the bar was drawn before this was a
+   * choice. A page must not change shape because a setting appeared under it.
+   */
+  navFirstStyle?: NavFirstStyle
   /**
    * Whether the bar has that second button at all. Absent means it does, for
    * the same reason the hero's does: the page shipped with both.

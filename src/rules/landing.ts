@@ -72,6 +72,7 @@ export type HeroKey = (typeof HERO_KEYS)[number]
 const HERO_FIELDS = new Set<string>([
   ...HERO_KEYS,
   'navExplore',
+  'navFirstStyle',
   'navSignUp',
   'navSignUpEnabled',
   'title',
@@ -156,6 +157,7 @@ type ChoiceKey =
   | 'bodySource'
   | 'ctaSource'
   | 'altCtaEnabled'
+  | 'navFirstStyle'
   | 'navSignUpEnabled'
   | 'imageCtaImage'
   | 'imageCtaImageOff'

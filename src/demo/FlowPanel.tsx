@@ -8,7 +8,7 @@ import { blankLine, blankMethod, chosenMethod, linesOf, methodsOf } from '../rul
 import { FieldGroup } from './FieldGroup'
 import { LandingSections } from './LandingSections'
 import type { CardSetStore } from '../editor/useCardSet'
-import type { FlowContent } from '../rules/flow'
+import type { FlowContent, NavFirstStyle } from '../rules/flow'
 import { defaultFlow } from '../rules/flow'
 import type { Step } from '../rules/journey'
 import type { Selector } from '../rules/layers'
@@ -255,6 +255,18 @@ function FlowFields({
               value={l.navExplore}
               pipelineKey={'landing.navExplore'}
               onChange={(v) => patch('landing', { navExplore: v })}
+            />
+            {/* Named for what each one draws rather than for the setting:
+                nobody reaches for "neutral". */}
+            <SelectField
+              label="First button’s look"
+              value={l.navFirstStyle ?? 'neutral'}
+              options={[
+                { value: 'neutral', label: 'Grey, so the second button is the way in' },
+                { value: 'subscribe', label: 'Gold, so this one is the way in' },
+              ]}
+              onChange={(v) => patch('landing', { navFirstStyle: v as NavFirstStyle })}
+              helpText="Italy draws it gold; the markets with something to browse first draw it grey."
             />
             <TextField
               label="Second button"

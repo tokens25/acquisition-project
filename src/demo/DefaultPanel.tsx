@@ -8,6 +8,7 @@ import { SelectField } from '../components/SelectField'
 import {
   defaultSectionsFor,
   isUntouched,
+  navFromProduction,
   rememberLive,
   sectionsFingerprint,
   wordsFromLive,
@@ -178,6 +179,10 @@ export function DefaultPanel({
         writeFlow(set, {}, 'landing', {
           sections,
           ...wordsFromLive(here.market, here.subscription),
+          // The one thing on the page the content service cannot be asked
+          // about, so it comes from the table rather than from the answer —
+          // and comes across whether or not the answer has landed.
+          ...navFromProduction(here.market),
         }),
         { sectionsDefault: sectionsFingerprint(sections) },
       )
@@ -232,6 +237,7 @@ export function DefaultPanel({
       ...writeFlow(set, {}, 'landing', {
         sections,
         ...wordsFromLive(context.market, context.subscription),
+        ...navFromProduction(context.market),
       }),
       sectionsDefault: sectionsFingerprint(sections),
     })

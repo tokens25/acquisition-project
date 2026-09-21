@@ -636,9 +636,11 @@ export function LandingFlowScreen({
               </svg>
             </span>
           )}
-          {/* The quieter of the two, because the way in is the other one:
-              exploring is what somebody does instead of signing in. */}
-          <span className="fl-landing__nav-cta" data-appearance="neutral">
+          {/* Either the gold one that asks for money or the grey one that
+              offers a look around, depending on what the market draws — see
+              `navFirstStyle`. Grey where nothing says, because grey is what
+              this bar was before the choice existed. */}
+          <span className="fl-landing__nav-cta" data-appearance={content.navFirstStyle ?? 'neutral'}>
             {text.navExplore}
           </span>
           {(content.navSignUpEnabled ?? true) && (

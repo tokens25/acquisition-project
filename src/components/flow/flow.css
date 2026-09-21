@@ -1329,6 +1329,13 @@
   background: var(--surface-neutral);
   color: var(--text-default);
 }
+/* Measured on en-IT, where production calls it `--new-gold`: the same two
+   stops this tool already holds as `--gradient-subscribe`. No colour of its
+   own — the ink is `--text-strong` above, which is the #080e12 production
+   draws it in. */
+.fl-landing__nav-cta[data-appearance='subscribe'] {
+  background: var(--gradient-subscribe);
+}
 
 /* ── Choose your subscription — node 671:25098 ─────────────── */
 
