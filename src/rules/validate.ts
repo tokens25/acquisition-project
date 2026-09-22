@@ -108,7 +108,8 @@ export function validateContext(set: CardSet, context: Context): Violation[] {
   const cards = resolveSet(set, context)
   // One highlighted plan per screen. A market with tabs shows one tab at a
   // time, so each tab is its own row and may carry its own gold card.
-  const tabs = tabsOf(set, context.market)
+  // A tab that prices the plans shows all of them, so those tabs are one row.
+  const tabs = tabsOf(set, context.market).filter((t) => !t.cadence)
   const rows = tabs.length
     ? tabs.map((tab) => tiersOnTab(cards.map((c) => c.tier), tab.id))
     : [cards.map((c) => c.tier)]

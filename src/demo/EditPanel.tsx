@@ -229,7 +229,8 @@ export function EditPanel({ store }: { store: CardSetStore }) {
   // resolves here, not off the base.
   const tabsOfTier = (t: Tier) => resolveTier(t, context).tabs ?? []
   const planGroups: { name: string; tab: string | null; tiers: Tier[] }[] =
-    planTabs.length > 1
+    // Tabs that price the plans rather than divide them leave one row of chips.
+    planTabs.length > 1 && !planTabs.every((t) => t.cadence)
       ? [
           // A plan on every tab has no one tab to sit under.
           ...(shownTiers.some((t) => tabsOfTier(t).length === 0)
@@ -474,6 +475,25 @@ export function EditPanel({ store }: { store: CardSetStore }) {
                 ]}
                 onChange={(v) => write({ style: v as PlanTab['style'] })}
               />
+              <SelectField
+                label="Shows"
+                value={one.cadence ?? ''}
+                options={[
+                  { value: '', label: 'The plans that name this tab' },
+                  ...set.cadences.map((c) => ({ value: c, label: `Every plan, priced ${c.toLowerCase()}` })),
+                ]}
+                onChange={(v) => {
+                  const next = { ...one }
+                  if (v) next.cadence = v
+                  else delete next.cadence
+                  updateSet(writeTabs(set, all.map((t, j) => (j === i ? next : t))))
+                }}
+                helpText={
+                  one.cadence
+                    ? 'A way of paying, as DAZN draws over NHL.TV and Game Pass. A plan not sold this way is not on this tab.'
+                    : 'A set of plans, as Spain divides Standard from Youth −30. Tick the tab on each plan below.'
+                }
+              />
               {/* A pair goes together — one tab divides the plans into the
                   plans — so a pair has one control under both of them rather
                   than two buttons that would each do the same thing. */}
@@ -564,7 +584,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
             a plan that is on no tab is sold nowhere, which is what removing it
             is for. */}
         {tabsOf(set).length > 1 &&
-          tabsOf(set).map((one) => (
+          tabsOf(set).filter((one) => !one.cadence).map((one) => (
             <ToggleField
               key={one.id}
               label={`Shows on ${one.name}`}

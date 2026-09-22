@@ -262,7 +262,16 @@ export function Prototype({
       // A plan's CTA is a choice as well as a step forward: the screens after
       // it price what was picked here, so the pick is kept with the cadence.
       const tier = el.closest<HTMLElement>('[data-tier-id]')?.dataset.tierId
-      if (tier) setChosen((prev) => (prev.tier === tier ? prev : { ...prev, tier }))
+      // On a tab that names the way of paying, choosing a plan chooses that
+      // too: the card said "CHF 44.99/year", and the checkout owes it that.
+      const tab = current.step.renderer === 'plans' || current.step.renderer === 'landing' ? current.state : undefined
+      const priced = tab ? tabsOf(set).find((t) => t.id === tab)?.cadence : undefined
+      if (tier) {
+        setChosen((prev) => {
+          if (prev.tier === tier && (!priced || prev.cadence === priced)) return prev
+          return { ...prev, tier, ...(priced ? { cadence: priced } : {}) }
+        })
+      }
       // A CTA commits to what the screen was asking, so it leaves the screen
       // for good rather than moving to the next drawing of it.
       const to = current.step.renderer === 'plans' ? afterThisStep() : at + 1

@@ -40,7 +40,13 @@
           "features.f-every-game-from-spain-s-liga-endesa-and--1w8bh5x": "Elke wedstrijd uit de Spaanse Liga Endesa en de France Betclic Elite",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "Bekijk legendarische wedstrijden, spelersprofielen en meer met FIBA Classics",
           "plans.fiba-tier-fiba-ultimate.badge": "Beste ervaring",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview – bekijk tot 4 wedstrijden tegelijk"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview – bekijk tot 4 wedstrijden tegelijk",
+          "planTabs.billing-upfront.name": "Betaal vooraf",
+          "planTabs.billing-instalments.name": "Betaal maandelijks",
+          "planTabs.billing-weekly.name": "Wekelijks",
+          "planTabs.season.name": "Seizoen",
+          "planTabs.monthly.name": "Maandelijks",
+          "planTabs.billing-monthly.name": "Maandelijks flexibel"
         }
       }
     },
@@ -109,7 +115,13 @@
           "features.f-every-game-from-spain-s-liga-endesa-and--1w8bh5x": "Alle Spiele der spanischen Liga Endesa",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "Erlebe legendäre Spiele, Spielerporträts und mehr mit FIBA Classics",
           "plans.fiba-tier-fiba-ultimate.badge": "Beste Experience",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview: Schaue bis zu 4 Spiele parallel"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview: Schaue bis zu 4 Spiele parallel",
+          "planTabs.billing-upfront.name": "Einmalzahlung",
+          "planTabs.billing-instalments.name": "Ratenzahlung",
+          "planTabs.billing-weekly.name": "Wöchentlich",
+          "planTabs.season.name": "Saison",
+          "planTabs.monthly.name": "Monatlich",
+          "planTabs.billing-monthly.name": "Monatsabo"
         }
       }
     },
@@ -190,7 +202,13 @@
           "features.f-every-game-from-spain-s-liga-endesa-and--1w8bh5x": "Alle Spiele der spanischen Liga Endesa",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "Erlebe legendäre Spiele, Spielerporträts und mehr mit FIBA Classics",
           "plans.fiba-tier-fiba-ultimate.badge": "Beste Experience",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview: Schaue bis zu 4 Spiele parallel"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview: Schaue bis zu 4 Spiele parallel",
+          "planTabs.billing-upfront.name": "Einmalzahlung",
+          "planTabs.billing-instalments.name": "Ratenzahlung",
+          "planTabs.billing-weekly.name": "Wöchentlich",
+          "planTabs.season.name": "Saison",
+          "planTabs.monthly.name": "Monatlich",
+          "planTabs.billing-monthly.name": "Monatsabo"
         }
       },
       "checkoutCopy": {
@@ -389,7 +407,13 @@
           "features.f-watch-live-action-and-on-demand-from-fib-19p2yxz": "Erlebe Live-Basketball aus der FIBA und Betclic Elite* für die nächsten 30 Tage",
           "features.f-watch-live-action-from-fiba-basketball-i-1npk1y6": "Erlebe Live-Basketball aus der FIBA, inklusive der 2027 World Cup Qualifiers, des 2026 Women's World Cup und mehr",
           "features.f-every-game-from-betclic-elite-with-frenc-10t7dh4": "Alle Spiele der französischen Betclic Elite",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview: Schaue bis zu 4 Spiele parallel"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview: Schaue bis zu 4 Spiele parallel",
+          "planTabs.billing-upfront.name": "Einmalzahlung",
+          "planTabs.billing-instalments.name": "Ratenzahlung",
+          "planTabs.billing-weekly.name": "Wöchentlich",
+          "planTabs.season.name": "Saison",
+          "planTabs.monthly.name": "Monatlich",
+          "planTabs.billing-monthly.name": "Monatliche Zahlung"
         }
       }
     },
@@ -447,7 +471,11 @@
           "features.f-watch-live-action-and-on-demand-from-fib-19p2yxz": "Watch live action and on-demand from FIBA Basketball and Betclic Elite",
           "features.f-watch-live-action-from-fiba-basketball-i-1npk1y6": "Streamez les matchs de la FIBA en direct, notamment la Coupe du monde féminine 2026, les qualifications pour la Coupe du monde masculine 2027, et bien plus",
           "features.f-every-game-from-betclic-elite-with-frenc-10t7dh4": "Every game from France's Betclic Elite*",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview : streamez jusqu’à 4 matchs en même temps"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview : streamez jusqu’à 4 matchs en même temps",
+          "planTabs.billing-upfront.name": "Paiement annuel",
+          "planTabs.billing-weekly.name": "Paiement hebdomadaire",
+          "planTabs.billing-monthly.name": "Mensuel flexible",
+          "planTabs.billing-instalments.name": "Paiement mensuel"
         }
       }
     },
@@ -527,7 +555,13 @@
           "features.f-watch-live-action-and-on-demand-from-fib-19p2yxz": "Erlebe Live-Basketball aus der FIBA und Betclic Elite* für die nächsten 30 Tage",
           "features.f-watch-live-action-from-fiba-basketball-i-1npk1y6": "Erlebe Live-Basketball aus der FIBA, inklusive der 2027 World Cup Qualifiers, des 2026 Women's World Cup und mehr",
           "features.f-every-game-from-betclic-elite-with-frenc-10t7dh4": "Alle Spiele der französischen Betclic Elite",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview: Schaue bis zu 4 Spiele parallel"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview: Schaue bis zu 4 Spiele parallel",
+          "planTabs.billing-upfront.name": "Einmalzahlung",
+          "planTabs.billing-instalments.name": "Ratenzahlung",
+          "planTabs.billing-weekly.name": "Wöchentlich",
+          "planTabs.season.name": "Saison",
+          "planTabs.monthly.name": "Monatlich",
+          "planTabs.billing-monthly.name": "Monatliche Zahlung"
         }
       }
     },
@@ -604,7 +638,13 @@
           "features.f-every-game-from-spain-s-liga-endesa-1o2xgju": "Tous les matchs de la Liga ACB, en Espagne",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "Revivez des matchs de légende, découvrez des portraits de joueurs et bien plus avec FIBA Classics",
           "plans.fiba-tier-fiba-ultimate.badge": "Meilleure expérience",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview : streamez jusqu’à 4 matchs en même temps"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview : streamez jusqu’à 4 matchs en même temps",
+          "planTabs.billing-upfront.name": "Paiement annuel",
+          "planTabs.billing-instalments.name": "Paiement mensuel",
+          "planTabs.billing-weekly.name": "Paiement hebdomadaire",
+          "planTabs.season.name": "Saison",
+          "planTabs.monthly.name": "Paiement mensuel",
+          "planTabs.billing-monthly.name": "Mensuel flexible"
         }
       },
       "checkoutCopy": {
@@ -835,7 +875,13 @@
           "features.f-every-game-from-spain-s-liga-endesa-and--1w8bh5x": "Ogni partita della Liga Endesa spagnola e della Betclic Elite francese",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "Le partite che hanno fatto la storia, i protagonisti del basket e molto altro: scopri FIBA Classics",
           "plans.fiba-tier-fiba-ultimate.badge": "Migliore esperienza",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview - guarda fino a 4 partite in contemporanea"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview - guarda fino a 4 partite in contemporanea",
+          "planTabs.billing-upfront.name": "Pagamento in un'unica soluzione",
+          "planTabs.billing-instalments.name": "Pagamento mensile",
+          "planTabs.billing-weekly.name": "Settimanale",
+          "planTabs.season.name": "Stagione",
+          "planTabs.monthly.name": "Mensile",
+          "planTabs.billing-monthly.name": "Mensile"
         }
       },
       "checkoutCopy": {
@@ -1040,7 +1086,13 @@
           "features.f-every-game-from-spain-s-liga-endesa-and--1w8bh5x": "スペインのリーガ・エンデサ*とフランスのベトクリック・エリート*の全試合",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "FIBA クラシックスで名勝負や選手プロフィールなどを視聴可能",
           "plans.fiba-tier-fiba-ultimate.badge": "最高の体験",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "マルチビュー - 最大4試合を同時視聴可能"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "マルチビュー - 最大4試合を同時視聴可能",
+          "planTabs.billing-upfront.name": "一括払い",
+          "planTabs.billing-instalments.name": "月々払い",
+          "planTabs.billing-weekly.name": "週刊",
+          "planTabs.season.name": "シーズン",
+          "planTabs.monthly.name": "月払い",
+          "planTabs.billing-monthly.name": "月間プラン"
         }
       },
       "checkoutCopy": {
@@ -1265,7 +1317,13 @@
           "features.f-watch-live-action-and-on-demand-from-fib-19p2yxz": "Assista a jogos em direto e on-demand da FIBA Basketball e da Betclic Elite",
           "features.f-watch-live-action-from-fiba-basketball-i-1npk1y6": "Assiste a jogos em direto da FIBA, incluindo as eliminatórias para o Campeonato do Mundo de 2027, o Campeonato do Mundo Feminino de 2026 e muito mais",
           "features.f-every-game-from-betclic-elite-with-frenc-10t7dh4": "Todos os jogos da Betclic Elite de França",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview – vê até 4 jogos ao mesmo tempo"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview – vê até 4 jogos ao mesmo tempo",
+          "planTabs.billing-upfront.name": "Pagamento único",
+          "planTabs.billing-instalments.name": "Pagamento mensal",
+          "planTabs.billing-weekly.name": "Semanal",
+          "planTabs.season.name": "Época",
+          "planTabs.monthly.name": "Mensal",
+          "planTabs.billing-monthly.name": "Mensal"
         }
       }
     },
@@ -1358,7 +1416,13 @@
           "plans.fiba-tier-fiba-ultimate.badge": "La mejor experiencia",
           "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multipantalla: Hasta 4 partidos a la vez",
           "planTabs.standard-offers-cta.name": "Tarifas Estándar",
-          "planTabs.youth-offers-cta.name": "Tarifa Joven -30"
+          "planTabs.youth-offers-cta.name": "Tarifa Joven -30",
+          "planTabs.billing-upfront.name": "pago por adelantado",
+          "planTabs.billing-instalments.name": "Pago mensual",
+          "planTabs.billing-weekly.name": "Semanalmente",
+          "planTabs.season.name": "Temporada",
+          "planTabs.monthly.name": "Mensual",
+          "planTabs.billing-monthly.name": "Plan mensual"
         }
       },
       "checkoutCopy": {
@@ -1578,7 +1642,13 @@
           "features.f-every-game-from-spain-s-liga-endesa-and--1w8bh5x": "每一場西甲籃球聯賽的賽事直播",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "透過 FIBA Classics 觀看經典賽事、球員介紹，以及更多精彩內容。",
           "plans.fiba-tier-fiba-ultimate.badge": "Best experience",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "多視窗－可同時觀看最多 4 場比賽。"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "多視窗－可同時觀看最多 4 場比賽。",
+          "planTabs.billing-upfront.name": "一次付清",
+          "planTabs.billing-instalments.name": "按月付款",
+          "planTabs.billing-weekly.name": "每週付款",
+          "planTabs.season.name": "每月費用為",
+          "planTabs.monthly.name": "每月付款",
+          "planTabs.billing-monthly.name": "月付彈性方案"
         }
       }
     },
@@ -1804,7 +1874,13 @@
           "features.f-watch-live-and-on-demand-action-from-fib-mh9quc": "Vive toda la acción en vivo y a la carta del baloncesto FIBA incluyendo los clasificatorios a la Copa Mundial 2027, la Copa Mundial femenina 2026 y mucho más",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "Revive partidos legendarios, perfiles de jugadores y mucho más con FIBA Classics",
           "plans.fiba-tier-fiba-ultimate.badge": "La mejor experiencia",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multipantalla: Hasta 4 partidos a la vez"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multipantalla: Hasta 4 partidos a la vez",
+          "planTabs.billing-upfront.name": "pago por adelantado",
+          "planTabs.billing-instalments.name": "Pago mensual",
+          "planTabs.billing-weekly.name": "Semanal",
+          "planTabs.season.name": "Temporada",
+          "planTabs.monthly.name": "Mensual",
+          "planTabs.billing-monthly.name": "Plan mensual"
         }
       }
     },
@@ -1851,7 +1927,13 @@
           "features.f-watch-live-and-on-demand-action-from-fib-mh9quc": "Bekijk live wedstrijden van FIBA Basketball, waaronder de kwalificaties voor het WK 2027, het WK 2026 bij de vrouwen en meer",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "Bekijk legendarische wedstrijden, spelersprofielen en meer met FIBA Classics",
           "plans.fiba-tier-fiba-ultimate.badge": "Beste ervaring",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview – bekijk tot 4 wedstrijden tegelijk"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview – bekijk tot 4 wedstrijden tegelijk",
+          "planTabs.billing-upfront.name": "Betaal vooraf",
+          "planTabs.billing-instalments.name": "Betaal maandelijks",
+          "planTabs.billing-weekly.name": "Wekelijks",
+          "planTabs.season.name": "Seizoen",
+          "planTabs.monthly.name": "Maandelijks",
+          "planTabs.billing-monthly.name": "Maandelijks flexibel"
         }
       }
     },
@@ -2328,7 +2410,12 @@
           "features.f-watch-live-and-on-demand-action-from-fib-mh9quc": "Assista ao vivo e on-demand aos jogos da FIBA Basketball, incluindo as Qualificatórias para a Copa do Mundo de 2027, a Copa do Mundo Feminina de 2026 e muito mais",
           "features.f-watch-legendary-games-player-profiles-an-16y96qy": "Assista a jogos históricos, perfis de jogadores e muito mais com o FIBA Classics",
           "plans.fiba-tier-fiba-ultimate.badge": "Melhor experiência",
-          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview - assista a até 4 jogos ao mesmo tempo"
+          "features.f-multiview-watch-up-to-4-games-at-once-q1jdsi": "Multiview - assista a até 4 jogos ao mesmo tempo",
+          "planTabs.billing-upfront.name": "Pagamento antecipado",
+          "planTabs.billing-instalments.name": "Pagamento mensal",
+          "planTabs.season.name": "Temporada",
+          "planTabs.monthly.name": "Mensal",
+          "planTabs.billing-monthly.name": "Mensal"
         }
       }
     }
@@ -4398,7 +4485,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_be",
-        "fetchedAt": "2026-09-18T19:54:49.284Z"
+        "fetchedAt": "2026-09-22T07:01:18.308Z"
       },
       "limits": {
         "streams": 1,
@@ -4526,7 +4613,7 @@
       "source": {
         "product": "NFL",
         "entitlementSetId": "tier_nfl_pro",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4601,7 +4688,7 @@
       "source": {
         "product": "NFL",
         "entitlementSetId": "tier_nfl_ultimate",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4640,7 +4727,7 @@
       "source": {
         "product": "FIBA",
         "entitlementSetId": "tier_fiba_pro",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4734,7 +4821,7 @@
       "source": {
         "product": "FIBA",
         "entitlementSetId": "tier_fiba_ultimate",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4775,7 +4862,7 @@
       "source": {
         "product": "CollegeSports",
         "entitlementSetId": "tier_collegesports_pro",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4815,7 +4902,7 @@
       "source": {
         "product": "CollegeSports",
         "entitlementSetId": "tier_collegesports_ultimate",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4853,7 +4940,7 @@
       "source": {
         "product": "RallyTV",
         "entitlementSetId": "tier_rallytv_pro",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4891,7 +4978,7 @@
       "source": {
         "product": "NationalLeagueTV",
         "entitlementSetId": "tier_nationalleaguetv_pro",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -4938,7 +5025,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_at",
-        "fetchedAt": "2026-09-18T19:54:49.359Z"
+        "fetchedAt": "2026-09-22T07:01:18.394Z"
       },
       "limits": {
         "streams": 2,
@@ -4986,7 +5073,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_at",
-        "fetchedAt": "2026-09-18T19:54:49.359Z"
+        "fetchedAt": "2026-09-22T07:01:18.394Z"
       },
       "limits": {
         "streams": 2,
@@ -5019,7 +5106,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_at",
-        "fetchedAt": "2026-09-18T19:54:49.359Z",
+        "fetchedAt": "2026-09-22T07:01:18.394Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5054,7 +5141,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_at",
-        "fetchedAt": "2026-09-18T19:54:49.359Z",
+        "fetchedAt": "2026-09-22T07:01:18.394Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5092,7 +5179,7 @@
       "source": {
         "product": "NHL",
         "entitlementSetId": "tier_nhl_pro",
-        "fetchedAt": "2026-09-18T19:54:49.705Z",
+        "fetchedAt": "2026-09-22T07:01:18.833Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5184,7 +5271,7 @@
       "source": {
         "product": "NHL",
         "entitlementSetId": "tier_nhl_ultimate",
-        "fetchedAt": "2026-09-18T19:54:49.705Z",
+        "fetchedAt": "2026-09-22T07:01:18.833Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5237,7 +5324,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_de",
-        "fetchedAt": "2026-09-18T19:54:49.408Z"
+        "fetchedAt": "2026-09-22T07:01:18.444Z"
       },
       "limits": {
         "streams": 1,
@@ -5286,7 +5373,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_supersport_de",
-        "fetchedAt": "2026-09-18T19:54:49.408Z",
+        "fetchedAt": "2026-09-22T07:01:18.444Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5336,7 +5423,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_de",
-        "fetchedAt": "2026-09-18T19:54:49.408Z"
+        "fetchedAt": "2026-09-22T07:01:18.444Z"
       },
       "limits": {
         "streams": 2,
@@ -5368,7 +5455,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_de",
-        "fetchedAt": "2026-09-18T19:54:49.408Z",
+        "fetchedAt": "2026-09-22T07:01:18.444Z",
         "copy": "entitlements"
       },
       "limits": {
@@ -5416,7 +5503,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_de_wc_2",
-        "fetchedAt": "2026-09-18T19:54:49.408Z"
+        "fetchedAt": "2026-09-22T07:01:18.444Z"
       },
       "limits": {
         "streams": 3,
@@ -5449,7 +5536,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_de",
-        "fetchedAt": "2026-09-18T19:54:49.408Z",
+        "fetchedAt": "2026-09-22T07:01:18.444Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5484,7 +5571,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_de",
-        "fetchedAt": "2026-09-18T19:54:49.408Z",
+        "fetchedAt": "2026-09-22T07:01:18.444Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5521,7 +5608,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_li",
-        "fetchedAt": "2026-09-18T19:54:49.442Z"
+        "fetchedAt": "2026-09-22T07:01:18.496Z"
       },
       "limits": {
         "streams": 2,
@@ -5556,7 +5643,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_lu",
-        "fetchedAt": "2026-09-18T19:54:49.463Z"
+        "fetchedAt": "2026-09-22T07:01:18.543Z"
       },
       "limits": {
         "streams": 2,
@@ -5603,7 +5690,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_supersports_ch",
-        "fetchedAt": "2026-09-18T19:54:49.481Z"
+        "fetchedAt": "2026-09-22T07:01:18.581Z"
       },
       "limits": {
         "streams": 2,
@@ -5649,7 +5736,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_ch",
-        "fetchedAt": "2026-09-18T19:54:49.481Z"
+        "fetchedAt": "2026-09-22T07:01:18.581Z"
       },
       "limits": {
         "streams": 2,
@@ -5695,7 +5782,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_ch",
-        "fetchedAt": "2026-09-18T19:54:49.481Z"
+        "fetchedAt": "2026-09-22T07:01:18.581Z"
       },
       "limits": {
         "streams": 2,
@@ -5739,7 +5826,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_wc_2_ch",
-        "fetchedAt": "2026-09-18T19:54:49.481Z"
+        "fetchedAt": "2026-09-22T07:01:18.581Z"
       },
       "limits": {
         "streams": 3,
@@ -5772,7 +5859,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_ch",
-        "fetchedAt": "2026-09-18T19:54:49.481Z",
+        "fetchedAt": "2026-09-22T07:01:18.581Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5807,7 +5894,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_ch",
-        "fetchedAt": "2026-09-18T19:54:49.481Z",
+        "fetchedAt": "2026-09-22T07:01:18.581Z",
         "copy": "atlas"
       },
       "limits": {
@@ -5849,7 +5936,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_leagueoneplus_fr",
-        "fetchedAt": "2026-09-18T19:54:49.501Z"
+        "fetchedAt": "2026-09-22T07:01:18.605Z"
       },
       "limits": {
         "streams": 2,
@@ -5893,7 +5980,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_fr",
-        "fetchedAt": "2026-09-18T19:54:49.501Z"
+        "fetchedAt": "2026-09-22T07:01:18.605Z"
       },
       "limits": {
         "streams": 2,
@@ -5933,7 +6020,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflpro_fr",
-        "fetchedAt": "2026-09-18T19:54:49.501Z"
+        "fetchedAt": "2026-09-22T07:01:18.605Z"
       },
       "limits": {
         "streams": null,
@@ -5977,7 +6064,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_unlimited_yp_fr",
-        "fetchedAt": "2026-09-18T19:54:49.501Z"
+        "fetchedAt": "2026-09-22T07:01:18.605Z"
       },
       "limits": {
         "streams": 1,
@@ -6023,7 +6110,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_super_sports_fr",
-        "fetchedAt": "2026-09-18T19:54:49.501Z"
+        "fetchedAt": "2026-09-22T07:01:18.605Z"
       },
       "limits": {
         "streams": 1,
@@ -6062,7 +6149,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_ul_nflult_fr",
-        "fetchedAt": "2026-09-18T19:54:49.501Z"
+        "fetchedAt": "2026-09-22T07:01:18.605Z"
       },
       "limits": {
         "streams": null,
@@ -6118,7 +6205,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_it",
-        "fetchedAt": "2026-09-18T19:54:49.519Z"
+        "fetchedAt": "2026-09-22T07:01:18.625Z"
       },
       "limits": {
         "streams": 2,
@@ -6163,7 +6250,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bronze_it",
-        "fetchedAt": "2026-09-18T19:54:49.519Z"
+        "fetchedAt": "2026-09-22T07:01:18.625Z"
       },
       "limits": {
         "streams": 2,
@@ -6205,7 +6292,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_goalpass_it",
-        "fetchedAt": "2026-09-18T19:54:49.519Z"
+        "fetchedAt": "2026-09-22T07:01:18.625Z"
       },
       "limits": {
         "streams": 2,
@@ -6240,7 +6327,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_mobile_it",
-        "fetchedAt": "2026-09-18T19:54:49.519Z",
+        "fetchedAt": "2026-09-22T07:01:18.625Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6278,7 +6365,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_myclubpass_it",
-        "fetchedAt": "2026-09-18T19:54:49.519Z",
+        "fetchedAt": "2026-09-22T07:01:18.625Z",
         "copy": "atlas"
       },
       "limits": {
@@ -6333,7 +6420,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_gold_it",
-        "fetchedAt": "2026-09-18T19:54:49.519Z"
+        "fetchedAt": "2026-09-22T07:01:18.625Z"
       },
       "limits": {
         "streams": 2,
@@ -6372,7 +6459,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_full_nflpro_it",
-        "fetchedAt": "2026-09-18T19:54:49.519Z"
+        "fetchedAt": "2026-09-22T07:01:18.625Z"
       },
       "limits": {
         "streams": null,
@@ -6411,7 +6498,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_full_nflult_it",
-        "fetchedAt": "2026-09-18T19:54:49.519Z"
+        "fetchedAt": "2026-09-22T07:01:18.625Z"
       },
       "limits": {
         "streams": null,
@@ -6445,7 +6532,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_vito_jp",
-        "fetchedAt": "2026-09-18T19:54:49.540Z"
+        "fetchedAt": "2026-09-22T07:01:18.646Z"
       },
       "limits": {
         "streams": 2,
@@ -6481,7 +6568,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baseball_jp",
-        "fetchedAt": "2026-09-18T19:54:49.540Z"
+        "fetchedAt": "2026-09-22T07:01:18.646Z"
       },
       "limits": {
         "streams": 2,
@@ -6519,7 +6606,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_jp",
-        "fetchedAt": "2026-09-18T19:54:49.540Z"
+        "fetchedAt": "2026-09-22T07:01:18.646Z"
       },
       "limits": {
         "streams": 2,
@@ -6559,7 +6646,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_std_nflpro_jp",
-        "fetchedAt": "2026-09-18T19:54:49.540Z"
+        "fetchedAt": "2026-09-22T07:01:18.646Z"
       },
       "limits": {
         "streams": null,
@@ -6598,7 +6685,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bundle_std_nflult_jp",
-        "fetchedAt": "2026-09-18T19:54:49.540Z"
+        "fetchedAt": "2026-09-22T07:01:18.646Z"
       },
       "limits": {
         "streams": null,
@@ -6645,7 +6732,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_bronze_pt",
-        "fetchedAt": "2026-09-18T19:54:49.563Z"
+        "fetchedAt": "2026-09-22T07:01:18.672Z"
       },
       "limits": {
         "streams": 2,
@@ -6692,7 +6779,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_silver_pt",
-        "fetchedAt": "2026-09-18T19:54:49.563Z"
+        "fetchedAt": "2026-09-22T07:01:18.672Z"
       },
       "limits": {
         "streams": 2,
@@ -6733,7 +6820,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_pt",
-        "fetchedAt": "2026-09-18T19:54:49.563Z"
+        "fetchedAt": "2026-09-22T07:01:18.672Z"
       },
       "limits": {
         "streams": 2,
@@ -6771,7 +6858,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_us_es_yp",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -6816,7 +6903,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_es_yp",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -6859,7 +6946,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baloncesto_es_yp",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -6904,7 +6991,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_futbol_es_yp",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -6952,7 +7039,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_futbol_es",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -7002,7 +7089,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_premium_es_yp",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -7054,7 +7141,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_premium_es",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -7097,7 +7184,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_us_es",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -7147,7 +7234,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_motor_es",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -7191,7 +7278,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_baloncesto_es",
-        "fetchedAt": "2026-09-18T19:54:49.581Z"
+        "fetchedAt": "2026-09-22T07:01:18.694Z"
       },
       "limits": {
         "streams": 2,
@@ -7352,7 +7439,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "base_ent_set",
-        "fetchedAt": "2026-09-18T19:54:49.759Z",
+        "fetchedAt": "2026-09-22T07:01:18.892Z",
         "copy": "atlas"
       },
       "limits": {
@@ -7395,7 +7482,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_ca_ul",
-        "fetchedAt": "2026-09-18T19:54:49.618Z"
+        "fetchedAt": "2026-09-22T07:01:18.741Z"
       },
       "limits": {
         "streams": 3,
@@ -7443,7 +7530,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_daznplus_ca_ul",
-        "fetchedAt": "2026-09-18T19:54:49.618Z"
+        "fetchedAt": "2026-09-22T07:01:18.741Z"
       },
       "limits": {
         "streams": 3,
@@ -7488,7 +7575,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_dazn_ca",
-        "fetchedAt": "2026-09-18T19:54:49.618Z"
+        "fetchedAt": "2026-09-22T07:01:18.741Z"
       },
       "limits": {
         "streams": 2,
@@ -7536,7 +7623,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_daznplus_ca",
-        "fetchedAt": "2026-09-18T19:54:49.618Z"
+        "fetchedAt": "2026-09-22T07:01:18.741Z"
       },
       "limits": {
         "streams": 2,
@@ -7592,7 +7679,7 @@
       "source": {
         "product": "DAZN",
         "entitlementSetId": "tier_ult",
-        "fetchedAt": "2026-09-18T19:54:49.759Z"
+        "fetchedAt": "2026-09-22T07:01:18.892Z"
       },
       "limits": {
         "streams": 2,
@@ -20890,27 +20977,27 @@
   "stepId": "",
   "device": "mobile",
   "live": {
-    "be": "2026-09-18T19:54:49.284Z",
-    "at": "2026-09-18T19:54:49.359Z",
-    "de": "2026-09-18T19:54:49.408Z",
-    "li": "2026-09-18T19:54:49.442Z",
-    "lu": "2026-09-18T19:54:49.463Z",
-    "ch": "2026-09-18T19:54:49.481Z",
-    "fr": "2026-09-18T19:54:49.501Z",
-    "it": "2026-09-18T19:54:49.519Z",
-    "jp": "2026-09-18T19:54:49.540Z",
-    "pt": "2026-09-18T19:54:49.563Z",
-    "es": "2026-09-18T19:54:49.581Z",
-    "tw": "2026-09-18T19:54:49.601Z",
-    "ca": "2026-09-18T19:54:49.618Z",
-    "ie": "2026-09-18T19:54:49.634Z",
-    "mx": "2026-09-18T19:54:49.653Z",
-    "nl": "2026-09-18T19:54:49.670Z",
-    "pl": "2026-09-18T19:54:49.687Z",
-    "gb": "2026-09-18T19:54:49.705Z",
-    "us": "2026-09-18T19:54:49.721Z",
-    "au": "2026-09-18T19:54:49.738Z",
-    "br": "2026-09-18T19:54:49.759Z"
+    "be": "2026-09-22T07:01:18.308Z",
+    "at": "2026-09-22T07:01:18.394Z",
+    "de": "2026-09-22T07:01:18.444Z",
+    "li": "2026-09-22T07:01:18.496Z",
+    "lu": "2026-09-22T07:01:18.543Z",
+    "ch": "2026-09-22T07:01:18.581Z",
+    "fr": "2026-09-22T07:01:18.605Z",
+    "it": "2026-09-22T07:01:18.625Z",
+    "jp": "2026-09-22T07:01:18.646Z",
+    "pt": "2026-09-22T07:01:18.672Z",
+    "es": "2026-09-22T07:01:18.694Z",
+    "tw": "2026-09-22T07:01:18.720Z",
+    "ca": "2026-09-22T07:01:18.741Z",
+    "ie": "2026-09-22T07:01:18.760Z",
+    "mx": "2026-09-22T07:01:18.781Z",
+    "nl": "2026-09-22T07:01:18.797Z",
+    "pl": "2026-09-22T07:01:18.815Z",
+    "gb": "2026-09-22T07:01:18.833Z",
+    "us": "2026-09-22T07:01:18.852Z",
+    "au": "2026-09-22T07:01:18.873Z",
+    "br": "2026-09-22T07:01:18.892Z"
   },
   "planTabsByMarket": {
     "es": [
@@ -20937,6 +21024,1205 @@
         "name": "Ultimate",
         "style": "celebratory",
         "preselected": true
+      }
+    ]
+  },
+  "planTabsByChannel": {
+    "be|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "be|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "be|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "at|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "at|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "at|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "de|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "de|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "de|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "li|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "li|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "li|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "lu|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "lu|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "lu|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "ch|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "ch|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "ch|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "fr|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "fr|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "fr|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "it|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "it|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "it|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "jp|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "jp|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "jp|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "pt|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "pt|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "pt|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "es|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "es|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "es|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "tw|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "tw|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "tw|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "ca|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "ca|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "ca|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "ie|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "ie|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "ie|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "mx|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "mx|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "mx|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "nl|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "nl|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "nl|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "pl|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "pl|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "pl|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "gb|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "gb|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "gb|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "us|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "us|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "us|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "au|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "au|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "au|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      }
+    ],
+    "br|nfl": [
+      {
+        "id": "billing-upfront",
+        "name": "Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
+      },
+      {
+        "id": "billing-weekly",
+        "name": "Weekly",
+        "style": "plain",
+        "cadence": "Weekly"
+      }
+    ],
+    "br|nhl": [
+      {
+        "id": "season",
+        "name": "Season",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "monthly",
+        "name": "Monthly",
+        "style": "plain",
+        "cadence": "Monthly"
+      }
+    ],
+    "br|fiba": [
+      {
+        "id": "billing-monthly",
+        "name": "Monthly Flex",
+        "style": "plain",
+        "cadence": "Monthly"
+      },
+      {
+        "id": "billing-upfront",
+        "name": "Pay Upfront",
+        "style": "plain",
+        "cadence": "Yearly",
+        "preselected": true
+      },
+      {
+        "id": "billing-instalments",
+        "name": "Pay Monthly",
+        "style": "plain",
+        "cadence": "Yearly Instalments"
       }
     ]
   }

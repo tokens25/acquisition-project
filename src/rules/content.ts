@@ -94,6 +94,17 @@ export interface PlanTab {
   style?: 'plain' | 'celebratory'
   /** The tab the picker opens on. Absent on every tab means the first. */
   preselected?: boolean
+  /**
+   * The way of paying this tab prices the cards at — "Monthly", "Yearly",
+   * "Yearly Instalments", "Weekly", "Seasonal".
+   *
+   * A tab with a cadence is a different kind of tab from one without. One
+   * without shows a set of plans (Spain's Standard and Youth −30 — the plans
+   * name it in `Tier.tabs`); one with shows every plan of the picker, priced
+   * the way its name says — NHL.TV's Monthly and Season, Game Pass's Upfront,
+   * Monthly and Weekly. A plan not sold that way is not on that tab.
+   */
+  cadence?: string
 }
 
 /**
@@ -515,6 +526,13 @@ export interface CardSet {
    * from then on.
    */
   planTabsByMarket?: Record<string, PlanTab[]>
+  /**
+   * The tabs over a league's picker in a market, keyed `${market}|${channel}`.
+   * A league's page has its own switcher — NHL.TV in Germany pays monthly or
+   * by the season, DAZN in Germany has no tabs at all — so a channel's tabs
+   * cannot be the market's.
+   */
+  planTabsByChannel?: Record<string, PlanTab[]>
 
   context: Context
   journeyId: string

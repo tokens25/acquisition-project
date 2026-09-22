@@ -1,4 +1,4 @@
-import type { CardSet, PlanTab, Tier } from './content'
+import type { CardSet, Context, PlanTab, Tier } from './content'
 import type { Step } from './journey'
 
 /**
@@ -30,6 +30,13 @@ const FIGMA_TABS: PlanTab[] = [
  * by a distinction they do not have.
  */
 export function tabsOf(set: CardSet, market = set.context.market): PlanTab[] {
+  // A league's own tabs first: NHL.TV's Monthly and Season are its page's,
+  // whichever market it is sold in.
+  const channel = set.context.subscription ?? ''
+  if (channel && channel !== 'rsns') {
+    const league = set.planTabsByChannel?.[`${market}|${channel}`]
+    if (league !== undefined) return league
+  }
   const own = set.planTabsByMarket?.[market]
   if (own !== undefined) {
     // A market's tabs are DAZN's own storefront's — Spain's Standard and
@@ -65,19 +72,62 @@ function placesOnTabs(set: CardSet, market: string, channel: string, tabs: PlanT
  * make.
  */
 export function writeTabs(set: CardSet, tabs: PlanTab[], market = set.context.market) {
+  const key = channelKey(set, market)
+  if (key) return { planTabsByChannel: { ...set.planTabsByChannel, [key]: tabs } }
   return { planTabsByMarket: { ...set.planTabsByMarket, [market]: tabs } }
+}
+
+/** The key a league's tabs are kept under here, or null when the DAZN page is on screen. */
+function channelKey(set: CardSet, market: string): string | null {
+  const channel = set.context.subscription ?? ''
+  return channel && channel !== 'rsns' ? `${market}|${channel}` : null
 }
 
 /** Whether this market has taken its tabs rather than reading the shared ones. */
 export function ownsTabs(set: CardSet, market = set.context.market): boolean {
+  const key = channelKey(set, market)
+  if (key) return set.planTabsByChannel?.[key] !== undefined
   return set.planTabsByMarket?.[market] !== undefined
 }
 
 /** Hands a market's tabs back, so it reads the shared ones again. */
 export function shareTabs(set: CardSet, market = set.context.market) {
+  const key = channelKey(set, market)
+  if (key) {
+    const rest = { ...set.planTabsByChannel }
+    delete rest[key]
+    return { planTabsByChannel: rest }
+  }
   const rest = { ...set.planTabsByMarket }
   delete rest[market]
   return { planTabsByMarket: rest }
+}
+
+/**
+ * The tab on screen, when it prices the cards rather than picking among them.
+ *
+ * The context names the tab; the tab names the cadence. Absent when no tab is
+ * on screen, when the tab shows a set of plans instead, or when the market
+ * has no tabs at all.
+ */
+export function cadenceTabOf(set: CardSet, context: Context = set.context): PlanTab | null {
+  if (!context.tab) return null
+  const tab = tabsOf(set, context.market).find((t) => t.id === context.tab)
+  return tab?.cadence ? tab : null
+}
+
+/**
+ * The way of paying a card on this tab is priced at, or null when the plan is
+ * not sold that way here — a plan with no weekly pass is not on the Weekly
+ * tab. Instalments match instalments of any term: the CMS's "Monthly" tab on
+ * Game Pass is twelve payments in one market and five in another.
+ */
+export function cadenceOnTab(tab: PlanTab, sold: string[]): string | null {
+  const want = tab.cadence ?? ''
+  if (!want) return null
+  if (sold.includes(want)) return want
+  if (/instalments/i.test(want)) return sold.find((c) => /instalments/i.test(c)) ?? null
+  return null
 }
 
 /**

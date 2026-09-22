@@ -285,6 +285,68 @@ function tabsOf(content: Content | null, market: string): { tabs: PlanTab[]; onT
   return tabs.length > 1 ? { tabs, onTab } : null
 }
 
+/** A CMS billing period, as the tool names the way of paying. */
+function cadenceOfPeriod(period: string): string | null {
+  const p = period.toLowerCase()
+  if (/week/.test(p)) return 'Weekly'
+  if (/^month/.test(p)) return 'Monthly'
+  if (/instal/.test(p)) return 'Yearly Instalments'
+  if (/annual|year/.test(p)) return 'Yearly'
+  if (/season/.test(p)) return 'Seasonal'
+  return null
+}
+
+/**
+ * The billing tabs over a product's picker in a market, as the CMS draws them.
+ *
+ * A tier group with `showBillingPeriodSwicther` lists `billingPlans`: each a
+ * tab with a label and a billing period — NHL.TV's "Monthly" and "Season",
+ * Game Pass's "Upfront", "Monthly" and "Weekly", Courtside's "Monthly Flex",
+ * "Pay Upfront" and "Pay Monthly". The cards under it are the same plans
+ * priced that way, so the tab carries a cadence rather than a set of plans.
+ * `defaultBillingPlan` names the period the picker opens on.
+ */
+function billingTabsOf(content: Content | null, market: string, page: string): PlanTab[] | null {
+  if (!content) return null
+  let best: { score: number; group: ContentfulEntry } | null = null
+  for (const g of content.groups) {
+    const f = g.fields
+    if (!arr<string>(f.env).includes('production')) continue
+    if (!arr<string>(f.pageIds).some((p) => norm(p) === norm(page))) continue
+    if (!f.showBillingPeriodSwicther) continue
+    const tags = arr<string>(f.tags).map(norm)
+    const name = norm(f.displayName)
+    let score = 0
+    if (tags.includes(market)) score += 100
+    else if (tags.some((t) => t === 'common' || t.endsWith('common'))) score += 40
+    else continue
+    if (/exclude|promo|test|black ?friday|stag/.test(name)) score -= 30
+    if (/prod|use this/.test(name)) score += 10
+    if (!best || score > best.score) best = { score, group: g }
+  }
+  if (!best) return null
+  const f = best.group.fields
+  const opening = str(f.defaultBillingPlan)
+  const tabs: PlanTab[] = []
+  for (const link of arr<ContentfulLink>(f.billingPlans)) {
+    const plan = content.entries.get(link.sys.id)
+    if (!plan || plan.sys.contentType.sys.id !== 'LPBillingPlans') continue
+    const pf = plan.fields
+    const cadence = cadenceOfPeriod(str(pf.billingPeriodType))
+    if (!cadence) continue
+    const id = slug(str(pf.itemId) || label(pf.label) || cadence)
+    if (tabs.some((t) => t.id === id || t.cadence === cadence)) continue
+    tabs.push({
+      id,
+      name: label(pf.label) || cadence,
+      style: 'plain',
+      cadence,
+      ...(opening && norm(str(pf.billingPeriodType)) === norm(opening) ? { preselected: true } : {}),
+    })
+  }
+  return tabs.length > 1 ? tabs : null
+}
+
 /**
  * Terms the CMS attaches to a way of paying for a plan.
  *
@@ -392,6 +454,8 @@ export interface LiveMarket {
   fetchedAt: string
   /** The tabs the CMS draws over this market's picker; absent for one row. */
   tabs?: PlanTab[]
+  /** The billing tabs over each league's picker here, by channel id; a league in one row is absent. */
+  channelTabs?: Record<string, PlanTab[]>
   /** What the words fell back on, per plan, for the report. */
   notes: string[]
 }
@@ -653,11 +717,33 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
      are sold from their own tab, not tucked behind the standard ones. */
   // English labels, with the market's own kept for the translator.
   const tabbed = tabsOf(base, market) ?? tabsOf(local, market)
+  let daznBillingTabs: PlanTab[] | null = null
   const nativeTabs = local && local !== base ? tabsOf(local, market) : null
   if (tabbed && nativeTabs) {
     for (const tab of tabbed.tabs) {
       const own = nativeTabs.tabs.find((t) => t.id === tab.id)
       if (own && own.name !== tab.name) words[`planTabs.${tab.id}.name`] = own.name
+    }
+  }
+  // The billing tabs each league's page draws here — the DAZN page's own
+  // switcher too, where a market has one and no tier-type tabs.
+  const channelTabs: Record<string, PlanTab[]> = {}
+  for (const product of products) {
+    const channel = CHANNEL_OF[product]
+    const page = product === 'DAZN' ? 'DAZN' : product
+    const found = billingTabsOf(base, market, page) ?? billingTabsOf(local, market, page)
+    if (!found) continue
+    if (!channel) {
+      if (!tabbed) daznBillingTabs = found
+      continue
+    }
+    channelTabs[channel] = found
+    const own = local && local !== base ? billingTabsOf(local, market, page) : null
+    if (own) {
+      for (const tab of found) {
+        const native = own.find((t) => t.id === tab.id)
+        if (native && native.name !== tab.name) words[`planTabs.${tab.id}.name`] = native.name
+      }
     }
   }
   const onATab = new Set<string>()
@@ -810,7 +896,8 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
     logoCatalog: [...logos.values()],
     addOnCatalog: [...addOns.values()],
     fetchedAt: pull.fetchedAt,
-    ...(tabbed ? { tabs: tabbed.tabs } : {}),
+    ...(tabbed ? { tabs: tabbed.tabs } : daznBillingTabs ? { tabs: daznBillingTabs } : {}),
+    ...(Object.keys(channelTabs).length ? { channelTabs } : {}),
     notes,
   }
 }
@@ -881,11 +968,19 @@ export function mergeLive(set: CardSet, live: LiveMarket): CardSet {
   const planTabsByMarket = live.tabs
     ? { ...(set.planTabsByMarket ?? {}), [market]: live.tabs }
     : set.planTabsByMarket
+  // Each league's billing tabs here, replacing what the tool held for it;
+  // a league the CMS draws in one row drops any it had.
+  const planTabsByChannel = { ...(set.planTabsByChannel ?? {}) }
+  for (const key of Object.keys(planTabsByChannel)) {
+    if (key.startsWith(`${market}|`)) delete planTabsByChannel[key]
+  }
+  for (const [channel, tabs] of Object.entries(live.channelTabs ?? {})) planTabsByChannel[`${market}|${channel}`] = tabs
 
   return {
     ...set,
     markets,
     ...(planTabsByMarket ? { planTabsByMarket } : {}),
+    ...(Object.keys(planTabsByChannel).length ? { planTabsByChannel } : {}),
     // In the tool's order — shortest commitment first — with anything a set
     // names that DAZN does not after.
     cadences: [...CADENCES, ...set.cadences.filter((c) => !CADENCES.includes(c))],

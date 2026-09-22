@@ -11,6 +11,7 @@ import type {
 } from './content'
 import { DIRECT } from './content'
 import { channelsFor } from './catalogue'
+import { cadenceOnTab, cadenceTabOf } from './tabs'
 
 /**
  * Base plus differences, then joined to a way of paying.
@@ -167,6 +168,15 @@ export function offerForCard(set: CardSet, tierId: string, context: Context): Ca
  * where MSG+ starts. The checkout keeps reading the cadence on screen.
  */
 function entryOffer(set: CardSet, tierId: string, context: Context): CadenceOffer | null {
+  // A tab that names the way of paying prices every card its way, and a
+  // plan not sold that way is not on it: the Weekly tab shows the weekly
+  // passes, the Season tab the season prices.
+  const tab = cadenceTabOf(set, context)
+  if (tab) {
+    const sold = set.cadences.filter((cadence) => resolveOffer(set, tierId, { ...context, cadence }))
+    const cadence = cadenceOnTab(tab, sold)
+    return cadence ? resolveOffer(set, tierId, { ...context, cadence }) : null
+  }
   if (/year|season|annual/i.test(context.cadence)) {
     const monthly = resolveOffer(set, tierId, { ...context, cadence: 'Monthly' })
     if (monthly) return monthly
