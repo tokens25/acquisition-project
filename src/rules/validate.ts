@@ -82,7 +82,9 @@ function checkTier(set: CardSet, tier: Tier, offer: CadenceOffer, context: Conte
   if (!tier.planName.trim()) {
     out.push({ rule: 'C-name', severity: 'error', message: 'Plan Name is required — it feeds the header, the CTA and the add-on label.', tierId: tier.id })
   }
-  if (!tier.description.trim()) {
+  // A description is DAZN's to write. A plan from the catalogue without one
+  // draws its title alone, as dazn.com does; only an authored plan owes one.
+  if (!tier.description.trim() && !tier.source) {
     out.push({ rule: 'C-desc', severity: 'error', message: 'Description is required.', tierId: tier.id })
   }
   if (tier.features.length === 0) {

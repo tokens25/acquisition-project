@@ -835,10 +835,9 @@ export function buildMarket(pull: MarketPull): LiveMarket | null {
         const gaps = missingFrom(o.features)
         if (gaps.length) o.features = uniq([...o.features, ...gaps.map(feature)])
       }
-      if (!tier.description.trim()) {
-        tier.description = limitLines(tier.limits).slice(0, 3).join(' · ')
-        tier.source!.copy = 'entitlements'
-      }
+      // A plan DAZN writes no description for has none. The limits it would
+      // have been built from are already in the feature list, and a line
+      // made of them under the title said the same thing twice.
     }
   }
   /* Add-on names: the add-on's set is usually a plan of its own. */

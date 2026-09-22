@@ -609,7 +609,7 @@ export function EditPanel({ store }: { store: CardSetStore }) {
           <p className="ed-absent ed-live">
             <strong>Live from DAZN</strong> — {tier.source.product} · <code>{tier.source.entitlementSetId}</code>
             {tier.source.copy === 'atlas' && ' · words from the Atlas'}
-            {tier.source.copy === 'entitlements' && ' · description built from its limits'}
+            {tier.source.copy === 'entitlements' && ' · DAZN writes no description for it, so the title stands alone'}
             {tier.source.copy === 'id' && ' · named from its id'}
             . Name, description, benefits, badges and prices are DAZN's; a refresh writes over
             edits to them. Highlighting, "Starts at", rows and tabs are yours and stay.
